@@ -4,7 +4,7 @@
 /*                                                                         */
 /*    Additional Mac-specific API.                                         */
 /*                                                                         */
-/*  Copyright 1996-2001, 2004, 2006, 2007, 2013 by                         */
+/*  Copyright 1996-2015 by                                                 */
 /*  Just van Rossum, David Turner, Robert Wilhelm, and Werner Lemberg.     */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -18,7 +18,7 @@
 
 /***************************************************************************/
 /*                                                                         */
-/* NOTE: Include this file after <freetype/freetype.h> and after any       */
+/* NOTE: Include this file after FT_FREETYPE_H and after any               */
 /*       Mac-specific headers (because this header uses Mac types such as  */
 /*       Handle, FSSpec, FSRef, etc.)                                      */
 /*                                                                         */

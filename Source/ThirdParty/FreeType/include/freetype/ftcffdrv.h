@@ -4,7 +4,7 @@
 /*                                                                         */
 /*    FreeType API for controlling the CFF driver (specification only).    */
 /*                                                                         */
-/*  Copyright 2013 by                                                      */
+/*  Copyright 2013-2015 by                                                 */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -108,6 +108,12 @@ FT_BEGIN_HEADER
    *   in one of four ways, top edge up or down, bottom edge up or down.
    *   Unless there are conflicting hstems, the smallest movement is taken
    *   to minimize distortion.
+   *
+   * @order:
+   *   hinting-engine
+   *   no-stem-darkening
+   *   darkening-parameters
+   *
    */
 
 
@@ -173,8 +179,9 @@ FT_BEGIN_HEADER
    *
    * @description:
    *   By default, the Adobe CFF engine darkens stems at smaller sizes,
-   *   regardless of hinting, to enhance contrast.  Setting this property,
-   *   stem darkening gets switched off.
+   *   regardless of hinting, to enhance contrast.  This feature requires
+   *   a rendering system with proper gamma correction.  Setting this
+   *   property, stem darkening gets switched off.
    *
    *   Note that stem darkening is never applied if @FT_LOAD_NO_SCALE is set.
    *
@@ -211,9 +218,11 @@ FT_BEGIN_HEADER
    *     stem width >= 2.333px: darkening amount = 0px
    *   }
    *
-   *   and piecewise linear in-between.  Using the `darkening-parameters'
-   *   property, these four control points can be changed, as the following
-   *   example demonstrates.
+   *   and piecewise linear in-between.  At configuration time, these four
+   *   control points can be set with the macro
+   *   `CFF_CONFIG_OPTION_DARKENING_PARAMETERS'.  At runtime, the control
+   *   points can be changed using the `darkening-parameters' property, as
+   *   the following example demonstrates.
    *
    *   {
    *     FT_Library  library;
@@ -231,17 +240,18 @@ FT_BEGIN_HEADER
    *
    *   The x~values give the stem width, and the y~values the darkening
    *   amount.  The unit is 1000th of pixels.  All coordinate values must be
-   *   positive; the x~values must be monotonically increasing, and the
-   *   y~values smaller than or equal to 500 (corresponding to half a
-   *   pixel).
+   *   positive; the x~values must be monotonically increasing; the
+   *   y~values must be monotonically decreasing and smaller than or
+   *   equal to 500 (corresponding to half a pixel); the slope of each
+   *   linear piece must be shallower than -1 (e.g., -.4).
    *
    * @note:
    *   This property can be used with @FT_Property_Get also.
    *
    */
 
+  /* */
 
- /* */
 
 FT_END_HEADER
 
