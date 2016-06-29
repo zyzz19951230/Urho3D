@@ -77,6 +77,11 @@ extern int tolua_LuaScriptLuaAPI_open(lua_State*);
 namespace Urho3D
 {
 
+Context* globalContext = 0;
+
+extern void KaguyaRegisterLuaAPI(lua_State* state);
+extern void SolRegisterLuaAPI(lua_State* state);
+
 LuaScript::LuaScript(Context* context) :
     Object(context),
     luaState_(0),
@@ -125,6 +130,11 @@ LuaScript::LuaScript(Context* context) :
     tolua_LuaScriptLuaAPI_open(luaState_);
 
     SetContext(luaState_, context_);
+
+	globalContext = context_;
+
+	KaguyaRegisterLuaAPI(luaState_);
+	SolRegisterLuaAPI(luaState_);
 
     eventInvoker_ = new LuaScriptEventInvoker(context_);
     coroutineUpdate_ = GetFunction("coroutine.update");

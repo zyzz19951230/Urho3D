@@ -46,6 +46,61 @@ end
 
 function HandleUpdate(eventType, eventData)
     -- Do nothing for now, could be extended to eg. animate the display
+    
+    -- TestKaguyaImage() -- result: no memory leak
+    -- TestSolImage() -- result: no memory leak, can not work with shared ptr
+    -- TestToluaImage() -- result: memory leak
+
+    -- TestKaguyaVector3() -- fps: 36
+    -- TestSolVector3() -- fps: 34
+    -- TestToluaVector3() -- fps: 20
+end
+
+function TestKaguyaImage()
+    local image = KImage.new()
+    image:SetSize(1024, 1024, 4)
+    image = nil
+end
+
+function TestSolImage()
+    local image = SImage.new()
+    image:SetSize(1024, 1024, 4)
+    image = nil
+end
+
+function TestToluaImage()
+    local image = Image:new()
+    image:SetSize(1024, 1024, 4)
+    image = nil
+end
+
+local COUNT = 10000
+
+function TestKaguyaVector3()
+    for i=1,COUNT do
+        local a = KVector3.new(1, 2, 3)
+        local b = KVector3.new(9, 8, 7)
+        c = a * b
+    end
+    print(c.x, c.y, c.z)
+end
+
+function TestSolVector3()
+    for i=1,COUNT do
+        local a = SVector3.new(1, 2, 3)
+        local b = SVector3.new(9, 8, 7)
+        c = a * b
+    end
+    print(c.x, c.y, c.z)
+end
+
+function TestToluaVector3()
+    for i=1,COUNT do
+        local a = Vector3:new(1, 2, 3)
+        local b = Vector3:new(9, 8, 7)
+        c = a * b
+    end
+    print(c.x, c.y, c.z)
 end
 
 -- Create XML patch instructions for screen joystick layout specific to this sample app
