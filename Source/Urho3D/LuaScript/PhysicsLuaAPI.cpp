@@ -31,7 +31,7 @@
 
 //     );
 //     lua["KTriangleMeshData"].setClass(UserdataMetatable<TriangleMeshData, CollisionGeometryData>()
-//         .setConstructors<TriangleMeshData(Model*, unsigned int),
+//         .setConstructors<TriangleMeshData(Model*, unsigned),
 //             TriangleMeshData(CustomGeometry*)>()
 
 //         .addProperty("meshInterface", &TriangleMeshData::meshInterface_)
@@ -39,7 +39,7 @@
 //         .addProperty("infoMap", &TriangleMeshData::infoMap_)
 //     );
 //     lua["KConvexData"].setClass(UserdataMetatable<ConvexData, CollisionGeometryData>()
-//         .setConstructors<ConvexData(Model*, unsigned int),
+//         .setConstructors<ConvexData(Model*, unsigned),
 //             ConvexData(CustomGeometry*)>()
 
 //         .addFunction("BuildHull", &ConvexData::BuildHull)
@@ -49,7 +49,7 @@
 //         .addProperty("indexCount", &ConvexData::indexCount_)
 //     );
 //     lua["KHeightfieldData"].setClass(UserdataMetatable<HeightfieldData, CollisionGeometryData>()
-//         .setConstructors<HeightfieldData(Terrain*, unsigned int)>()
+//         .setConstructors<HeightfieldData(Terrain*, unsigned)>()
 
 //         .addProperty("heightData", &HeightfieldData::heightData_)
 //         .addProperty("spacing", &HeightfieldData::spacing_)
@@ -287,14 +287,14 @@
 //         .addFunction("SphereCast", &PhysicsWorld::SphereCast)
 
 //         .addOverloadedFunctions("ConvexCast",
-//             static_cast<void(PhysicsWorld::*)(PhysicsRaycastResult&, CollisionShape*, const Vector3&, const Quaternion&, const Vector3&, const Quaternion&, unsigned int)>(&PhysicsWorld::ConvexCast),
-//             static_cast<void(PhysicsWorld::*)(PhysicsRaycastResult&, btCollisionShape*, const Vector3&, const Quaternion&, const Vector3&, const Quaternion&, unsigned int)>(&PhysicsWorld::ConvexCast))
+//             static_cast<void(PhysicsWorld::*)(PhysicsRaycastResult&, CollisionShape*, const Vector3&, const Quaternion&, const Vector3&, const Quaternion&, unsigned)>(&PhysicsWorld::ConvexCast),
+//             static_cast<void(PhysicsWorld::*)(PhysicsRaycastResult&, btCollisionShape*, const Vector3&, const Quaternion&, const Vector3&, const Quaternion&, unsigned)>(&PhysicsWorld::ConvexCast))
 
 //         .addFunction("RemoveCachedGeometry", &PhysicsWorld::RemoveCachedGeometry)
 
 //         .addOverloadedFunctions("GetRigidBodies",
-//             static_cast<void(PhysicsWorld::*)(PODVector<RigidBody*>&, const Sphere&, unsigned int)>(&PhysicsWorld::GetRigidBodies),
-//             static_cast<void(PhysicsWorld::*)(PODVector<RigidBody*>&, const BoundingBox&, unsigned int)>(&PhysicsWorld::GetRigidBodies),
+//             static_cast<void(PhysicsWorld::*)(PODVector<RigidBody*>&, const Sphere&, unsigned)>(&PhysicsWorld::GetRigidBodies),
+//             static_cast<void(PhysicsWorld::*)(PODVector<RigidBody*>&, const BoundingBox&, unsigned)>(&PhysicsWorld::GetRigidBodies),
 //             static_cast<void(PhysicsWorld::*)(PODVector<RigidBody*>&, const RigidBody*)>(&PhysicsWorld::GetRigidBodies))
 
 //         .addFunction("GetCollidingBodies", &PhysicsWorld::GetCollidingBodies)

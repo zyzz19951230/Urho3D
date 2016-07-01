@@ -81,14 +81,14 @@ static void RegisterAnimatedModel(kaguya::State& lua)
             static_cast<void(AnimatedModel::*)(const String&)>(&AnimatedModel::RemoveAnimationState),
             static_cast<void(AnimatedModel::*)(StringHash)>(&AnimatedModel::RemoveAnimationState),
             static_cast<void(AnimatedModel::*)(AnimationState*)>(&AnimatedModel::RemoveAnimationState),
-            static_cast<void(AnimatedModel::*)(unsigned int)>(&AnimatedModel::RemoveAnimationState))
+            static_cast<void(AnimatedModel::*)(unsigned)>(&AnimatedModel::RemoveAnimationState))
 
         .addFunction("RemoveAllAnimationStates", &AnimatedModel::RemoveAllAnimationStates)
         .addFunction("SetAnimationLodBias", &AnimatedModel::SetAnimationLodBias)
         .addFunction("SetUpdateInvisible", &AnimatedModel::SetUpdateInvisible)
 
         .addOverloadedFunctions("SetMorphWeight",
-            static_cast<void(AnimatedModel::*)(unsigned int, float)>(&AnimatedModel::SetMorphWeight),
+            static_cast<void(AnimatedModel::*)(unsigned, float)>(&AnimatedModel::SetMorphWeight),
             static_cast<void(AnimatedModel::*)(const String&, float)>(&AnimatedModel::SetMorphWeight),
             static_cast<void(AnimatedModel::*)(StringHash, float)>(&AnimatedModel::SetMorphWeight))
 
@@ -101,7 +101,7 @@ static void RegisterAnimatedModel(kaguya::State& lua)
             static_cast<AnimationState*(AnimatedModel::*)(Animation*) const>(&AnimatedModel::GetAnimationState),
             static_cast<AnimationState*(AnimatedModel::*)(const String&) const>(&AnimatedModel::GetAnimationState),
             static_cast<AnimationState*(AnimatedModel::*)(const StringHash) const>(&AnimatedModel::GetAnimationState),
-            static_cast<AnimationState*(AnimatedModel::*)(unsigned int) const>(&AnimatedModel::GetAnimationState))
+            static_cast<AnimationState*(AnimatedModel::*)(unsigned) const>(&AnimatedModel::GetAnimationState))
 
         .addFunction("GetAnimationLodBias", &AnimatedModel::GetAnimationLodBias)
         .addFunction("GetUpdateInvisible", &AnimatedModel::GetUpdateInvisible)
@@ -110,7 +110,7 @@ static void RegisterAnimatedModel(kaguya::State& lua)
         .addFunction("GetNumMorphs", &AnimatedModel::GetNumMorphs)
 
         .addOverloadedFunctions("GetMorphWeight",
-            static_cast<float(AnimatedModel::*)(unsigned int) const>(&AnimatedModel::GetMorphWeight),
+            static_cast<float(AnimatedModel::*)(unsigned) const>(&AnimatedModel::GetMorphWeight),
             static_cast<float(AnimatedModel::*)(const String&) const>(&AnimatedModel::GetMorphWeight),
             static_cast<float(AnimatedModel::*)(StringHash) const>(&AnimatedModel::GetMorphWeight))
 
@@ -295,7 +295,7 @@ static void RegisterAnimationState(kaguya::State& lua)
         .addFunction("SetTime", &AnimationState::SetTime)
 
         .addOverloadedFunctions("SetBoneWeight",
-            static_cast<void(AnimationState::*)(unsigned int, float, bool)>(&AnimationState::SetBoneWeight),
+            static_cast<void(AnimationState::*)(unsigned, float, bool)>(&AnimationState::SetBoneWeight),
             static_cast<void(AnimationState::*)(const String&, float, bool)>(&AnimationState::SetBoneWeight))
 
         .addFunction("AddWeight", &AnimationState::AddWeight)
@@ -307,14 +307,14 @@ static void RegisterAnimationState(kaguya::State& lua)
         .addFunction("GetStartBone", &AnimationState::GetStartBone)
 
         .addOverloadedFunctions("GetBoneWeight",
-            static_cast<float(AnimationState::*)(unsigned int) const>(&AnimationState::GetBoneWeight),
+            static_cast<float(AnimationState::*)(unsigned) const>(&AnimationState::GetBoneWeight),
             static_cast<float(AnimationState::*)(const String&) const>(&AnimationState::GetBoneWeight))
 
 
         /*
         .addOverloadedFunctions("GetTrackIndex",
-            static_cast<unsigned int(AnimationState::*)(int*) const>(&AnimationState::GetTrackIndex),
-            static_cast<unsigned int(AnimationState::*)(const String&) const>(&AnimationState::GetTrackIndex))
+            static_cast<unsigned(AnimationState::*)(int*) const>(&AnimationState::GetTrackIndex),
+            static_cast<unsigned(AnimationState::*)(const String&) const>(&AnimationState::GetTrackIndex))
             */
 
         .addFunction("IsEnabled", &AnimationState::IsEnabled)
@@ -557,7 +557,7 @@ static void RegisterCustomGeometry(kaguya::State& lua)
 
         .addOverloadedFunctions("SetMaterial",
             static_cast<void(CustomGeometry::*)(Material*)>(&CustomGeometry::SetMaterial),
-            static_cast<bool(CustomGeometry::*)(unsigned int, Material*)>(&CustomGeometry::SetMaterial))
+            static_cast<bool(CustomGeometry::*)(unsigned, Material*)>(&CustomGeometry::SetMaterial))
 
         .addFunction("GetNumGeometries", &CustomGeometry::GetNumGeometries)
         .addFunction("GetNumVertices", &CustomGeometry::GetNumVertices)
@@ -595,12 +595,12 @@ static void RegisterDebugRenderer(kaguya::State& lua)
 
         .addOverloadedFunctions("AddLine",
             static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, const Color&, bool)>(&DebugRenderer::AddLine),
-            static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, unsigned int, bool)>(&DebugRenderer::AddLine))
+            static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, unsigned, bool)>(&DebugRenderer::AddLine))
 
 
         .addOverloadedFunctions("AddTriangle",
             static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, const Vector3&, const Color&, bool)>(&DebugRenderer::AddTriangle),
-            static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, const Vector3&, unsigned int, bool)>(&DebugRenderer::AddTriangle))
+            static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, const Vector3&, unsigned, bool)>(&DebugRenderer::AddTriangle))
 
         .addFunction("AddNode", &DebugRenderer::AddNode)
 
@@ -760,7 +760,7 @@ static void RegisterDrawable(kaguya::State& lua)
 
         .addOverloadedFunctions("MarkInView",
             static_cast<void(Drawable::*)(const FrameInfo&)>(&Drawable::MarkInView),
-            static_cast<void(Drawable::*)(unsigned int)>(&Drawable::MarkInView))
+            static_cast<void(Drawable::*)(unsigned)>(&Drawable::MarkInView))
 
         .addFunction("LimitLights", &Drawable::LimitLights)
         .addFunction("LimitVertexLights", &Drawable::LimitVertexLights)
@@ -847,8 +847,8 @@ static void RegisterGeometry(kaguya::State& lua)
         .addFunction("SetIndexBuffer", &Geometry::SetIndexBuffer)
 
         .addOverloadedFunctions("SetDrawRange",
-            static_cast<bool(Geometry::*)(PrimitiveType, unsigned int, unsigned int, bool)>(&Geometry::SetDrawRange),
-            static_cast<bool(Geometry::*)(PrimitiveType, unsigned int, unsigned int, unsigned int, unsigned int, bool)>(&Geometry::SetDrawRange))
+            static_cast<bool(Geometry::*)(PrimitiveType, unsigned, unsigned, bool)>(&Geometry::SetDrawRange),
+            static_cast<bool(Geometry::*)(PrimitiveType, unsigned, unsigned, unsigned, unsigned, bool)>(&Geometry::SetDrawRange))
 
         .addFunction("SetLodDistance", &Geometry::SetLodDistance)
 
@@ -1667,7 +1667,7 @@ static void RegisterModel(kaguya::State& lua)
         .addFunction("GetNumMorphs", &Model::GetNumMorphs)
 
         .addOverloadedFunctions("GetMorph",
-            static_cast<const ModelMorph*(Model::*)(unsigned int) const>(&Model::GetMorph),
+            static_cast<const ModelMorph*(Model::*)(unsigned) const>(&Model::GetMorph),
             static_cast<const ModelMorph*(Model::*)(const String&) const>(&Model::GetMorph),
             static_cast<const ModelMorph*(Model::*)(StringHash) const>(&Model::GetMorph))
 
@@ -1691,7 +1691,7 @@ static void RegisterModel(kaguya::State& lua)
 //     lua["KNUM_OCTANTS"] = NUM_OCTANTS;
 //     lua["KROOT_INDEX"] = ROOT_INDEX;
 //     lua["KOctant"].setClass(UserdataMetatable<Octant>()
-//         .setConstructors<Octant(const BoundingBox&, unsigned int, Octant*, Octree*, unsigned int)>()
+//         .setConstructors<Octant(const BoundingBox&, unsigned, Octant*, Octree*, unsigned)>()
 
 //         .addFunction("GetOrCreateChild", &Octant::GetOrCreateChild)
 //         .addFunction("DeleteChild", &Octant::DeleteChild)
@@ -1756,7 +1756,7 @@ static void RegisterModel(kaguya::State& lua)
 //     using namespace kaguya;
 
 //     lua["KOctreeQuery"].setClass(UserdataMetatable<OctreeQuery>()
-//         .setConstructors<OctreeQuery(PODVector<Drawable*>&, unsigned char, unsigned int),
+//         .setConstructors<OctreeQuery(PODVector<Drawable*>&, unsigned char, unsigned),
 //             OctreeQuery(const OctreeQuery&)>()
 
 //         .addFunction("TestOctant", &OctreeQuery::TestOctant)
@@ -1766,28 +1766,28 @@ static void RegisterModel(kaguya::State& lua)
 //         .addProperty("viewMask", &OctreeQuery::viewMask_)
 //     );
 //     lua["KPointOctreeQuery"].setClass(UserdataMetatable<PointOctreeQuery, OctreeQuery>()
-//         .setConstructors<PointOctreeQuery(PODVector<Drawable*>&, const Vector3&, unsigned char, unsigned int)>()
+//         .setConstructors<PointOctreeQuery(PODVector<Drawable*>&, const Vector3&, unsigned char, unsigned)>()
 
 //         .addFunction("TestOctant", &PointOctreeQuery::TestOctant)
 //         .addFunction("TestDrawables", &PointOctreeQuery::TestDrawables)
 //         .addProperty("point", &PointOctreeQuery::point_)
 //     );
 //     lua["KSphereOctreeQuery"].setClass(UserdataMetatable<SphereOctreeQuery, OctreeQuery>()
-//         .setConstructors<SphereOctreeQuery(PODVector<Drawable*>&, const Sphere&, unsigned char, unsigned int)>()
+//         .setConstructors<SphereOctreeQuery(PODVector<Drawable*>&, const Sphere&, unsigned char, unsigned)>()
 
 //         .addFunction("TestOctant", &SphereOctreeQuery::TestOctant)
 //         .addFunction("TestDrawables", &SphereOctreeQuery::TestDrawables)
 //         .addProperty("sphere", &SphereOctreeQuery::sphere_)
 //     );
 //     lua["KBoxOctreeQuery"].setClass(UserdataMetatable<BoxOctreeQuery, OctreeQuery>()
-//         .setConstructors<BoxOctreeQuery(PODVector<Drawable*>&, const BoundingBox&, unsigned char, unsigned int)>()
+//         .setConstructors<BoxOctreeQuery(PODVector<Drawable*>&, const BoundingBox&, unsigned char, unsigned)>()
 
 //         .addFunction("TestOctant", &BoxOctreeQuery::TestOctant)
 //         .addFunction("TestDrawables", &BoxOctreeQuery::TestDrawables)
 //         .addProperty("box", &BoxOctreeQuery::box_)
 //     );
 //     lua["KFrustumOctreeQuery"].setClass(UserdataMetatable<FrustumOctreeQuery, OctreeQuery>()
-//         .setConstructors<FrustumOctreeQuery(PODVector<Drawable*>&, const Frustum&, unsigned char, unsigned int)>()
+//         .setConstructors<FrustumOctreeQuery(PODVector<Drawable*>&, const Frustum&, unsigned char, unsigned)>()
 
 //         .addFunction("TestOctant", &FrustumOctreeQuery::TestOctant)
 //         .addFunction("TestDrawables", &FrustumOctreeQuery::TestDrawables)
@@ -1817,7 +1817,7 @@ static void RegisterModel(kaguya::State& lua)
 //         .addProperty("subObject", &RayQueryResult::subObject_)
 //     );
 //     lua["KRayOctreeQuery"].setClass(UserdataMetatable<RayOctreeQuery>()
-//         .setConstructors<RayOctreeQuery(PODVector<RayQueryResult>&, const Ray&, RayQueryLevel, float, unsigned char, unsigned int),
+//         .setConstructors<RayOctreeQuery(PODVector<RayQueryResult>&, const Ray&, RayQueryLevel, float, unsigned char, unsigned),
 //             RayOctreeQuery(const RayOctreeQuery&)>()
 
 //         .addProperty("result", &RayOctreeQuery::result_)
@@ -1828,7 +1828,7 @@ static void RegisterModel(kaguya::State& lua)
 //         .addProperty("level", &RayOctreeQuery::level_)
 //     );
 //     lua["KAllContentOctreeQuery"].setClass(UserdataMetatable<AllContentOctreeQuery, OctreeQuery>()
-//         .setConstructors<AllContentOctreeQuery(PODVector<Drawable*>&, unsigned char, unsigned int)>()
+//         .setConstructors<AllContentOctreeQuery(PODVector<Drawable*>&, unsigned char, unsigned)>()
 
 //         .addFunction("TestOctant", &AllContentOctreeQuery::TestOctant)
 //         .addFunction("TestDrawables", &AllContentOctreeQuery::TestDrawables)
@@ -2420,7 +2420,7 @@ static void RegisterModel(kaguya::State& lua)
 //         .addFunction("AddRenderTarget", &RenderPath::AddRenderTarget)
 
 //         .addOverloadedFunctions("RemoveRenderTarget",
-//             static_cast<void(RenderPath::*)(unsigned int)>(&RenderPath::RemoveRenderTarget),
+//             static_cast<void(RenderPath::*)(unsigned)>(&RenderPath::RemoveRenderTarget),
 //             static_cast<void(RenderPath::*)(const String&)>(&RenderPath::RemoveRenderTarget))
 
 //         .addFunction("RemoveRenderTargets", &RenderPath::RemoveRenderTargets)
@@ -2729,7 +2729,7 @@ static void RegisterModel(kaguya::State& lua)
 //         .addFunction("GetRootBone", &Skeleton::GetRootBone)
 
 //         .addOverloadedFunctions("GetBone",
-//             static_cast<Bone*(Skeleton::*)(unsigned int)>(&Skeleton::GetBone),
+//             static_cast<Bone*(Skeleton::*)(unsigned)>(&Skeleton::GetBone),
 //             static_cast<Bone*(Skeleton::*)(const String&)>(&Skeleton::GetBone),
 //             static_cast<Bone*(Skeleton::*)(const char*)>(&Skeleton::GetBone),
 //             static_cast<Bone*(Skeleton::*)(StringHash)>(&Skeleton::GetBone))
@@ -2795,7 +2795,7 @@ static void RegisterModel(kaguya::State& lua)
 
 //         .addOverloadedFunctions("SetMaterial",
 //             static_cast<void(StaticModel::*)(Material*)>(&StaticModel::SetMaterial),
-//             static_cast<bool(StaticModel::*)(unsigned int, Material*)>(&StaticModel::SetMaterial))
+//             static_cast<bool(StaticModel::*)(unsigned, Material*)>(&StaticModel::SetMaterial))
 
 //         .addFunction("SetOcclusionLodLevel", &StaticModel::SetOcclusionLodLevel)
 //         .addFunction("ApplyMaterialList", &StaticModel::ApplyMaterialList)
@@ -2936,17 +2936,17 @@ static void RegisterModel(kaguya::State& lua)
 //         .addFunction("IsSupported", &Technique::IsSupported)
 
 //         .addOverloadedFunctions("HasPass",
-//             static_cast<bool(Technique::*)(unsigned int) const>(&Technique::HasPass),
+//             static_cast<bool(Technique::*)(unsigned) const>(&Technique::HasPass),
 //             static_cast<bool(Technique::*)(const String&) const>(&Technique::HasPass))
 
 
 //         .addOverloadedFunctions("GetPass",
-//             static_cast<Pass*(Technique::*)(unsigned int) const>(&Technique::GetPass),
+//             static_cast<Pass*(Technique::*)(unsigned) const>(&Technique::GetPass),
 //             static_cast<Pass*(Technique::*)(const String&) const>(&Technique::GetPass))
 
 
 //         .addOverloadedFunctions("GetSupportedPass",
-//             static_cast<Pass*(Technique::*)(unsigned int) const>(&Technique::GetSupportedPass),
+//             static_cast<Pass*(Technique::*)(unsigned) const>(&Technique::GetSupportedPass),
 //             static_cast<Pass*(Technique::*)(const String&) const>(&Technique::GetSupportedPass))
 
 //         .addFunction("GetNumPasses", &Technique::GetNumPasses)
@@ -3021,7 +3021,7 @@ static void RegisterModel(kaguya::State& lua)
 //         .addFunction("GetMaterial", &Terrain::GetMaterial)
 
 //         .addOverloadedFunctions("GetPatch",
-//             static_cast<TerrainPatch*(Terrain::*)(unsigned int) const>(&Terrain::GetPatch),
+//             static_cast<TerrainPatch*(Terrain::*)(unsigned) const>(&Terrain::GetPatch),
 //             static_cast<TerrainPatch*(Terrain::*)(int, int) const>(&Terrain::GetPatch))
 
 //         .addFunction("GetHeight", &Terrain::GetHeight)
@@ -3158,8 +3158,8 @@ static void RegisterModel(kaguya::State& lua)
 //         .addFunction("GetUsage", &Texture::GetUsage)
 
 //         .addOverloadedFunctions("GetDataSize",
-//             static_cast<unsigned int(Texture::*)(int, int) const>(&Texture::GetDataSize),
-//             static_cast<unsigned int(Texture::*)(int, int, int) const>(&Texture::GetDataSize))
+//             static_cast<unsigned(Texture::*)(int, int) const>(&Texture::GetDataSize),
+//             static_cast<unsigned(Texture::*)(int, int, int) const>(&Texture::GetDataSize))
 
 //         .addFunction("GetRowDataSize", &Texture::GetRowDataSize)
 //         .addFunction("GetComponents", &Texture::GetComponents)
@@ -3213,7 +3213,7 @@ static void RegisterModel(kaguya::State& lua)
 //         .addFunction("SetSize", &Texture2D::SetSize)
 
 //         .addOverloadedFunctions("SetData",
-//             static_cast<bool(Texture2D::*)(unsigned int, int, int, int, int, const void*)>(&Texture2D::SetData),
+//             static_cast<bool(Texture2D::*)(unsigned, int, int, int, int, const void*)>(&Texture2D::SetData),
 //             static_cast<bool(Texture2D::*)(Image*, bool)>(&Texture2D::SetData))
 
 //         .addFunction("GetData", &Texture2D::GetData)
@@ -3249,9 +3249,9 @@ static void RegisterModel(kaguya::State& lua)
 //         .addFunction("SetSize", &Texture2DArray::SetSize)
 
 //         .addOverloadedFunctions("SetData",
-//             static_cast<bool(Texture2DArray::*)(unsigned int, unsigned int, int, int, int, int, const void*)>(&Texture2DArray::SetData),
-//             static_cast<bool(Texture2DArray::*)(unsigned int, Deserializer&)>(&Texture2DArray::SetData),
-//             static_cast<bool(Texture2DArray::*)(unsigned int, Image*, bool)>(&Texture2DArray::SetData))
+//             static_cast<bool(Texture2DArray::*)(unsigned, unsigned, int, int, int, int, const void*)>(&Texture2DArray::SetData),
+//             static_cast<bool(Texture2DArray::*)(unsigned, Deserializer&)>(&Texture2DArray::SetData),
+//             static_cast<bool(Texture2DArray::*)(unsigned, Image*, bool)>(&Texture2DArray::SetData))
 
 //         .addFunction("GetLayers", &Texture2DArray::GetLayers)
 //         .addFunction("GetData", &Texture2DArray::GetData)
@@ -3287,7 +3287,7 @@ static void RegisterModel(kaguya::State& lua)
 //         .addFunction("SetSize", &Texture3D::SetSize)
 
 //         .addOverloadedFunctions("SetData",
-//             static_cast<bool(Texture3D::*)(unsigned int, int, int, int, int, int, int, const void*)>(&Texture3D::SetData),
+//             static_cast<bool(Texture3D::*)(unsigned, int, int, int, int, int, int, const void*)>(&Texture3D::SetData),
 //             static_cast<bool(Texture3D::*)(Image*, bool)>(&Texture3D::SetData))
 
 //         .addFunction("GetData", &Texture3D::GetData)
@@ -3320,7 +3320,7 @@ static void RegisterModel(kaguya::State& lua)
 //         .addFunction("SetSize", &TextureCube::SetSize)
 
 //         .addOverloadedFunctions("SetData",
-//             static_cast<bool(TextureCube::*)(CubeMapFace, unsigned int, int, int, int, int, const void*)>(&TextureCube::SetData),
+//             static_cast<bool(TextureCube::*)(CubeMapFace, unsigned, int, int, int, int, const void*)>(&TextureCube::SetData),
 //             static_cast<bool(TextureCube::*)(CubeMapFace, Deserializer&)>(&TextureCube::SetData),
 //             static_cast<bool(TextureCube::*)(CubeMapFace, Image*, bool)>(&TextureCube::SetData))
 
@@ -3345,8 +3345,8 @@ static void RegisterModel(kaguya::State& lua)
 //         .addFunction("SetShadowed", &VertexBuffer::SetShadowed)
 
 //         .addOverloadedFunctions("SetSize",
-//             static_cast<bool(VertexBuffer::*)(unsigned int, const PODVector<VertexElement>&, bool)>(&VertexBuffer::SetSize),
-//             static_cast<bool(VertexBuffer::*)(unsigned int, unsigned int, bool)>(&VertexBuffer::SetSize))
+//             static_cast<bool(VertexBuffer::*)(unsigned, const PODVector<VertexElement>&, bool)>(&VertexBuffer::SetSize),
+//             static_cast<bool(VertexBuffer::*)(unsigned, unsigned, bool)>(&VertexBuffer::SetSize))
 
 //         .addFunction("SetData", &VertexBuffer::SetData)
 //         .addFunction("SetDataRange", &VertexBuffer::SetDataRange)
@@ -3358,14 +3358,14 @@ static void RegisterModel(kaguya::State& lua)
 //         .addFunction("GetVertexCount", &VertexBuffer::GetVertexCount)
 
 //         .addOverloadedFunctions("GetVertexSize",
-//             static_cast<unsigned int(VertexBuffer::*)() const>(&VertexBuffer::GetVertexSize),
-//             static_cast<unsigned int(VertexBuffer::*)(const PODVector<VertexElement>&)>(&VertexBuffer::GetVertexSize),
-//             static_cast<unsigned int(VertexBuffer::*)(unsigned int)>(&VertexBuffer::GetVertexSize))
+//             static_cast<unsigned(VertexBuffer::*)() const>(&VertexBuffer::GetVertexSize),
+//             static_cast<unsigned(VertexBuffer::*)(const PODVector<VertexElement>&)>(&VertexBuffer::GetVertexSize),
+//             static_cast<unsigned(VertexBuffer::*)(unsigned)>(&VertexBuffer::GetVertexSize))
 
 
 //         .addOverloadedFunctions("GetElements",
 //             static_cast<const PODVector<VertexElement>&(VertexBuffer::*)() const>(&VertexBuffer::GetElements),
-//             static_cast<PODVector<VertexElement>(VertexBuffer::*)(unsigned int)>(&VertexBuffer::GetElements))
+//             static_cast<PODVector<VertexElement>(VertexBuffer::*)(unsigned)>(&VertexBuffer::GetElements))
 
 
 //         .addOverloadedFunctions("GetElement",
@@ -3381,9 +3381,9 @@ static void RegisterModel(kaguya::State& lua)
 
 
 //         .addOverloadedFunctions("GetElementOffset",
-//             static_cast<unsigned int(VertexBuffer::*)(VertexElementSemantic, unsigned char) const>(&VertexBuffer::GetElementOffset),
-//             static_cast<unsigned int(VertexBuffer::*)(VertexElementType, VertexElementSemantic, unsigned char) const>(&VertexBuffer::GetElementOffset),
-//             static_cast<unsigned int(VertexBuffer::*)(const PODVector<VertexElement>&, VertexElementType, VertexElementSemantic, unsigned char)>(&VertexBuffer::GetElementOffset))
+//             static_cast<unsigned(VertexBuffer::*)(VertexElementSemantic, unsigned char) const>(&VertexBuffer::GetElementOffset),
+//             static_cast<unsigned(VertexBuffer::*)(VertexElementType, VertexElementSemantic, unsigned char) const>(&VertexBuffer::GetElementOffset),
+//             static_cast<unsigned(VertexBuffer::*)(const PODVector<VertexElement>&, VertexElementType, VertexElementSemantic, unsigned char)>(&VertexBuffer::GetElementOffset))
 
 //         .addFunction("GetElementMask", &VertexBuffer::GetElementMask)
 //         .addFunction("GetShadowData", &VertexBuffer::GetShadowData)

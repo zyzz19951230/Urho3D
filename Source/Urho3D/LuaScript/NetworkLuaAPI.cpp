@@ -57,8 +57,8 @@
 //         .addStaticFunction("GetTypeInfoStatic", &Connection::GetTypeInfoStatic)
 
 //         .addOverloadedFunctions("SendMessage",
-//             static_cast<void(Connection::*)(int, bool, bool, const VectorBuffer&, unsigned int)>(&Connection::SendMessage),
-//             static_cast<void(Connection::*)(int, bool, bool, const unsigned char*, unsigned int, unsigned int)>(&Connection::SendMessage))
+//             static_cast<void(Connection::*)(int, bool, bool, const VectorBuffer&, unsigned)>(&Connection::SendMessage),
+//             static_cast<void(Connection::*)(int, bool, bool, const unsigned char*, unsigned, unsigned)>(&Connection::SendMessage))
 
 
 //         .addOverloadedFunctions("SendRemoteEvent",
@@ -196,8 +196,8 @@
 //         .addFunction("StopServer", &Network::StopServer)
 
 //         .addOverloadedFunctions("BroadcastMessage",
-//             static_cast<void(Network::*)(int, bool, bool, const VectorBuffer&, unsigned int)>(&Network::BroadcastMessage),
-//             static_cast<void(Network::*)(int, bool, bool, const unsigned char*, unsigned int, unsigned int)>(&Network::BroadcastMessage))
+//             static_cast<void(Network::*)(int, bool, bool, const VectorBuffer&, unsigned)>(&Network::BroadcastMessage),
+//             static_cast<void(Network::*)(int, bool, bool, const unsigned char*, unsigned, unsigned)>(&Network::BroadcastMessage))
 
 
 //         .addOverloadedFunctions("BroadcastRemoteEvent",

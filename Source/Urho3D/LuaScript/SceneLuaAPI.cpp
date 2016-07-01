@@ -255,8 +255,8 @@ static void RegisterLogicComponent(kaguya::State& lua)
          .addFunction("MarkDirty", &Node::MarkDirty)
 
          .addOverloadedFunctions("CreateChild",
-             static_cast<Node*(Node::*)(const String&, CreateMode, unsigned int)>(&Node::CreateChild),
-             static_cast<Node*(Node::*)(unsigned int, CreateMode)>(&Node::CreateChild))
+             static_cast<Node*(Node::*)(const String&, CreateMode, unsigned)>(&Node::CreateChild),
+             static_cast<Node*(Node::*)(unsigned, CreateMode)>(&Node::CreateChild))
 
          .addFunction("AddChild", &Node::AddChild)
          .addFunction("RemoveChild", static_cast<void(Node::*)(Node*)>(&Node::RemoveChild))
@@ -268,8 +268,8 @@ static void RegisterLogicComponent(kaguya::State& lua)
          */
 
          .addOverloadedFunctions("CloneComponent",
-             static_cast<Component*(Node::*)(Component*, unsigned int)>(&Node::CloneComponent),
-             static_cast<Component*(Node::*)(Component*, CreateMode, unsigned int)>(&Node::CloneComponent))
+             static_cast<Component*(Node::*)(Component*, unsigned)>(&Node::CloneComponent),
+             static_cast<Component*(Node::*)(Component*, CreateMode, unsigned)>(&Node::CloneComponent))
 
 
          .addOverloadedFunctions("RemoveComponent",
@@ -343,7 +343,7 @@ static void RegisterLogicComponent(kaguya::State& lua)
          */
 
          .addOverloadedFunctions("GetChild",
-             static_cast<Node*(Node::*)(unsigned int) const>(&Node::GetChild),
+             static_cast<Node*(Node::*)(unsigned) const>(&Node::GetChild),
              static_cast<Node*(Node::*)(const String&, bool) const>(&Node::GetChild),
              static_cast<Node*(Node::*)(const char*, bool) const>(&Node::GetChild),
              static_cast<Node*(Node::*)(StringHash, bool) const>(&Node::GetChild))
@@ -668,7 +668,7 @@ static void RegisterSerializable(kaguya::State& lua)
         */
 
         .addOverloadedFunctions("SetAttribute",
-            static_cast<bool(Serializable::*)(unsigned int, const Variant&)>(&Serializable::SetAttribute),
+            static_cast<bool(Serializable::*)(unsigned, const Variant&)>(&Serializable::SetAttribute),
             static_cast<bool(Serializable::*)(const String&, const Variant&)>(&Serializable::SetAttribute))
 
         .addFunction("ResetToDefault", &Serializable::ResetToDefault)
@@ -683,12 +683,12 @@ static void RegisterSerializable(kaguya::State& lua)
         .addFunction("ReadLatestDataUpdate", &Serializable::ReadLatestDataUpdate)
 
         .addOverloadedFunctions("GetAttribute",
-            static_cast<Variant(Serializable::*)(unsigned int) const>(&Serializable::GetAttribute),
+            static_cast<Variant(Serializable::*)(unsigned) const>(&Serializable::GetAttribute),
             static_cast<Variant(Serializable::*)(const String&) const>(&Serializable::GetAttribute))
 
 
         .addOverloadedFunctions("GetAttributeDefault",
-            static_cast<Variant(Serializable::*)(unsigned int) const>(&Serializable::GetAttributeDefault),
+            static_cast<Variant(Serializable::*)(unsigned) const>(&Serializable::GetAttributeDefault),
             static_cast<Variant(Serializable::*)(const String&) const>(&Serializable::GetAttributeDefault))
 
         .addFunction("GetNumAttributes", &Serializable::GetNumAttributes)

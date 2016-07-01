@@ -257,7 +257,7 @@
 
 //         .addOverloadedFunctions("RemoveItem",
 //             static_cast<void(DropDownList::*)(UIElement*)>(&DropDownList::RemoveItem),
-//             static_cast<void(DropDownList::*)(unsigned int)>(&DropDownList::RemoveItem))
+//             static_cast<void(DropDownList::*)(unsigned)>(&DropDownList::RemoveItem))
 
 //         .addFunction("RemoveAllItems", &DropDownList::RemoveAllItems)
 //         .addFunction("SetSelection", &DropDownList::SetSelection)
@@ -441,7 +441,7 @@
 
 
 //         .addOverloadedFunctions("Load",
-//             static_cast<bool(FontFaceBitmap::*)(const unsigned char*, unsigned int, int)>(&FontFaceBitmap::Load),
+//             static_cast<bool(FontFaceBitmap::*)(const unsigned char*, unsigned, int)>(&FontFaceBitmap::Load),
 //             static_cast<bool(FontFaceBitmap::*)(FontFace*, bool)>(&FontFaceBitmap::Load))
 
 //         .addFunction("Save", &FontFaceBitmap::Save)
@@ -545,8 +545,8 @@
 //         .addFunction("InsertItem", &ListView::InsertItem)
 
 //         .addOverloadedFunctions("RemoveItem",
-//             static_cast<void(ListView::*)(UIElement*, unsigned int)>(&ListView::RemoveItem),
-//             static_cast<void(ListView::*)(unsigned int)>(&ListView::RemoveItem))
+//             static_cast<void(ListView::*)(UIElement*, unsigned)>(&ListView::RemoveItem),
+//             static_cast<void(ListView::*)(unsigned)>(&ListView::RemoveItem))
 
 //         .addFunction("RemoveAllItems", &ListView::RemoveAllItems)
 //         .addFunction("SetSelection", &ListView::SetSelection)
@@ -583,7 +583,7 @@
 //         .addFunction("GetBaseIndent", &ListView::GetBaseIndent)
 
 //         .addOverloadedFunctions("EnsureItemVisibility",
-//             static_cast<void(ListView::*)(unsigned int)>(&ListView::EnsureItemVisibility),
+//             static_cast<void(ListView::*)(unsigned)>(&ListView::EnsureItemVisibility),
 //             static_cast<void(ListView::*)(UIElement*)>(&ListView::EnsureItemVisibility))
 
 
@@ -1517,7 +1517,7 @@
 //         .addFunction("GetNumChildren", &UIElement::GetNumChildren)
 
 //         .addOverloadedFunctions("GetChild",
-//             static_cast<UIElement*(UIElement::*)(unsigned int) const>(&UIElement::GetChild),
+//             static_cast<UIElement*(UIElement::*)(unsigned) const>(&UIElement::GetChild),
 //             static_cast<UIElement*(UIElement::*)(const String&, bool) const>(&UIElement::GetChild),
 //             static_cast<UIElement*(UIElement::*)(const StringHash&, const Variant&, bool) const>(&UIElement::GetChild))
 

@@ -1065,8 +1065,8 @@
 //         .addFunction("RaycastSingle", &PhysicsWorld2D::RaycastSingle)
 
 //         .addOverloadedFunctions("GetRigidBody",
-//             static_cast<RigidBody2D*(PhysicsWorld2D::*)(const Vector2&, unsigned int)>(&PhysicsWorld2D::GetRigidBody),
-//             static_cast<RigidBody2D*(PhysicsWorld2D::*)(int, int, unsigned int)>(&PhysicsWorld2D::GetRigidBody))
+//             static_cast<RigidBody2D*(PhysicsWorld2D::*)(const Vector2&, unsigned)>(&PhysicsWorld2D::GetRigidBody),
+//             static_cast<RigidBody2D*(PhysicsWorld2D::*)(int, int, unsigned)>(&PhysicsWorld2D::GetRigidBody))
 
 //         .addFunction("GetRigidBodies", &PhysicsWorld2D::GetRigidBodies)
 //         .addFunction("IsUpdateEnabled", &PhysicsWorld2D::IsUpdateEnabled)
@@ -1614,7 +1614,7 @@
 //         .addFunction("SetInfo", &TmxFile2D::SetInfo)
 
 //         .addOverloadedFunctions("AddLayer",
-//             static_cast<void(TmxFile2D::*)(unsigned int, TmxLayer2D*)>(&TmxFile2D::AddLayer),
+//             static_cast<void(TmxFile2D::*)(unsigned, TmxLayer2D*)>(&TmxFile2D::AddLayer),
 //             static_cast<void(TmxFile2D::*)(TmxLayer2D*)>(&TmxFile2D::AddLayer))
 
 //         .addFunction("GetInfo", &TmxFile2D::GetInfo)
