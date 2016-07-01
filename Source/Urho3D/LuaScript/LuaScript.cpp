@@ -42,6 +42,8 @@ extern "C"
 #include <lualib.h>
 }
 
+#include <kaguya.hpp>
+
 #include <toluapp/tolua++.h>
 #include "../LuaScript/ToluaUtils.h"
 
@@ -79,7 +81,7 @@ namespace Urho3D
 
 Context* globalContext = 0;
 
-extern void KaguyaRegisterLuaAPI(lua_State* state);
+extern void RegisterMathLuaAPI(kaguya::State& lua);
 
 LuaScript::LuaScript(Context* context) :
     Object(context),
@@ -132,7 +134,9 @@ LuaScript::LuaScript(Context* context) :
 
 	globalContext = context_;
 
-	KaguyaRegisterLuaAPI(luaState_);
+    kaguya::State lua(luaState_);
+    
+    RegisterMathLuaAPI(lua);
 	
     eventInvoker_ = new LuaScriptEventInvoker(context_);
     coroutineUpdate_ = GetFunction("coroutine.update");
