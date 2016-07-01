@@ -392,15 +392,6 @@ static void RegisterMatrix3(kaguya::State& lua)
     );
 }
 
-static std::tuple<Vector3, Quaternion, Vector3> Matrix3x4Decompose(const Matrix3x4& matrix3x4)
-{
-    Vector3 translation;
-    Quaternion rotation;
-    Vector3 scale;
-    matrix3x4.Decompose(translation, rotation, scale);
-    return std::make_tuple(translation, rotation, scale);
-}
-
 static void RegisterMatrix3x4(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -440,7 +431,14 @@ static void RegisterMatrix3x4(kaguya::State& lua)
         .addFunction("Scale", &Matrix3x4::Scale)
         .addFunction("Equals", &Matrix3x4::Equals)
         
-        .addStaticFunction("Decompose", &Matrix3x4Decompose)
+        .addStaticFunction("Decompose", [](const Matrix3x4& matrix3x4)
+            {
+                Vector3 translation;
+                Quaternion rotation;
+                Vector3 scale;
+                matrix3x4.Decompose(translation, rotation, scale);
+                return std::make_tuple(translation, rotation, scale);
+            })
 
         .addFunction("Inverse", &Matrix3x4::Inverse)
         .addFunction("ToString", &Matrix3x4::ToString)
@@ -462,15 +460,6 @@ static void RegisterMatrix3x4(kaguya::State& lua)
         .addStaticField("ZERO", &Matrix3x4::ZERO)
         .addStaticField("IDENTITY", &Matrix3x4::IDENTITY)
     );
-}
-
-static std::tuple<Vector3, Quaternion, Vector3> Matrix4Decompose(const Matrix4& matrix4)
-{
-    Vector3 translation;
-    Quaternion rotation;
-    Vector3 scale;
-    matrix4.Decompose(translation, rotation, scale);
-    return std::make_tuple(translation, rotation, scale);
 }
 
 static void RegisterMatrix4(kaguya::State& lua)
@@ -509,7 +498,14 @@ static void RegisterMatrix4(kaguya::State& lua)
         .addFunction("Transpose", &Matrix4::Transpose)
         .addFunction("Equals", &Matrix4::Equals)
         
-        .addStaticFunction("Decompose", Matrix4Decompose)
+        .addStaticFunction("Decompose", [](const Matrix4& matrix4)
+            {
+                Vector3 translation;
+                Quaternion rotation;
+                Vector3 scale;
+                matrix4.Decompose(translation, rotation, scale);
+                return std::make_tuple(translation, rotation, scale);
+            })
 
         .addFunction("Inverse", &Matrix4::Inverse)
         .addFunction("ToString", &Matrix4::ToString)
@@ -709,13 +705,13 @@ static void RegisterRay(kaguya::State& lua)
             static_cast<float(Ray::*)(const Frustum&, bool) const>(&Ray::HitDistance),
             static_cast<float(Ray::*)(const Sphere&) const>(&Ray::HitDistance),
             static_cast<float(Ray::*)(const Vector3&, const Vector3&, const Vector3&, Vector3*, Vector3*) const>(&Ray::HitDistance),
-            static_cast<float(Ray::*)(const void*, unsigned int, unsigned int, unsigned int, Vector3*, Vector2*, unsigned int) const>(&Ray::HitDistance),
-            static_cast<float(Ray::*)(const void*, unsigned int, const void*, unsigned int, unsigned int, unsigned int, Vector3*, Vector2*, unsigned int) const>(&Ray::HitDistance))
+            static_cast<float(Ray::*)(const void*, unsigned, unsigned, unsigned, Vector3*, Vector2*, unsigned) const>(&Ray::HitDistance),
+            static_cast<float(Ray::*)(const void*, unsigned, const void*, unsigned, unsigned, unsigned, Vector3*, Vector2*, unsigned) const>(&Ray::HitDistance))
 
 
         .addOverloadedFunctions("InsideGeometry",
-            static_cast<bool(Ray::*)(const void*, unsigned int, unsigned int, unsigned int) const>(&Ray::InsideGeometry),
-            static_cast<bool(Ray::*)(const void*, unsigned int, const void*, unsigned int, unsigned int, unsigned int) const>(&Ray::InsideGeometry))
+            static_cast<bool(Ray::*)(const void*, unsigned, unsigned, unsigned) const>(&Ray::InsideGeometry),
+            static_cast<bool(Ray::*)(const void*, unsigned, const void*, unsigned, unsigned, unsigned) const>(&Ray::InsideGeometry))
 
         .addFunction("Transformed", &Ray::Transformed)
         .addProperty("origin", &Ray::origin_)
@@ -789,7 +785,7 @@ static void RegisterSphere(kaguya::State& lua)
         .setConstructors<Sphere(),
             Sphere(const Sphere&),
             Sphere(const Vector3&, float),
-            Sphere(const Vector3*, unsigned int),
+            Sphere(const Vector3*, unsigned),
             Sphere(const BoundingBox&),
             Sphere(const Frustum&),
             Sphere(const Polyhedron&)>()
@@ -799,7 +795,7 @@ static void RegisterSphere(kaguya::State& lua)
         .addOverloadedFunctions("Define",
             static_cast<void(Sphere::*)(const Sphere&)>(&Sphere::Define),
             static_cast<void(Sphere::*)(const Vector3&, float)>(&Sphere::Define),
-            static_cast<void(Sphere::*)(const Vector3*, unsigned int)>(&Sphere::Define),
+            static_cast<void(Sphere::*)(const Vector3*, unsigned)>(&Sphere::Define),
             static_cast<void(Sphere::*)(const BoundingBox&)>(&Sphere::Define),
             static_cast<void(Sphere::*)(const Frustum&)>(&Sphere::Define),
             static_cast<void(Sphere::*)(const Polyhedron&)>(&Sphere::Define))
@@ -807,7 +803,7 @@ static void RegisterSphere(kaguya::State& lua)
 
         .addOverloadedFunctions("Merge",
             static_cast<void(Sphere::*)(const Vector3&)>(&Sphere::Merge),
-            static_cast<void(Sphere::*)(const Vector3*, unsigned int)>(&Sphere::Merge),
+            static_cast<void(Sphere::*)(const Vector3*, unsigned)>(&Sphere::Merge),
             static_cast<void(Sphere::*)(const BoundingBox&)>(&Sphere::Merge),
             static_cast<void(Sphere::*)(const Frustum&)>(&Sphere::Merge),
             static_cast<void(Sphere::*)(const Polyhedron&)>(&Sphere::Merge),
@@ -839,7 +835,7 @@ static void RegisterStringHash(kaguya::State& lua)
     lua["KStringHash"].setClass(UserdataMetatable<StringHash>()
         .setConstructors<StringHash(),
             StringHash(const StringHash&),
-            StringHash(unsigned int),
+            StringHash(unsigned),
             StringHash(const char*),
             StringHash(const String&)>()
 
