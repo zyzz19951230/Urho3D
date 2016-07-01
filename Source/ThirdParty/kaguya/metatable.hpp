@@ -227,6 +227,25 @@ namespace kaguya
 			return *this;
 		}
 
+        /**
+        * @name addProperty
+        * @brief add member property with setter, getter functions.(experimental)
+        * @param name function name for lua
+        * @param setter setter function
+        * @param getter getter function        
+        */
+        template<typename SetType, typename GetType>
+        UserdataMetatable& addProperty(const char* name, void (class_type::*setter)(SetType), GetType(class_type::*getter)()const)
+        {
+            if (has_key(name))
+            {
+                throw KaguyaException("already registered.");
+                return *this;
+            }
+            property_map_[name] = AnyDataPusher(overload(setter, getter));
+            return *this;
+        }
+
 		template<typename Fun>
 		UserdataMetatable& addStaticFunction(const char* name, Fun f)
 		{

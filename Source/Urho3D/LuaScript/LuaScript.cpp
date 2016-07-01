@@ -82,6 +82,7 @@ namespace Urho3D
 Context* globalContext = 0;
 
 extern void RegisterMathLuaAPI(kaguya::State& lua);
+extern void RegisterCoreLuaAPI(kaguya::State& lua);
 
 LuaScript::LuaScript(Context* context) :
     Object(context),
@@ -137,7 +138,8 @@ LuaScript::LuaScript(Context* context) :
     kaguya::State lua(luaState_);
     
     RegisterMathLuaAPI(lua);
-	
+    RegisterCoreLuaAPI(lua);
+
     eventInvoker_ = new LuaScriptEventInvoker(context_);
     coroutineUpdate_ = GetFunction("coroutine.update");
 
