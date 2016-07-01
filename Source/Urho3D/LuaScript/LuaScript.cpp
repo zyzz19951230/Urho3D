@@ -84,6 +84,7 @@ Context* globalContext = 0;
 extern void RegisterMathLuaAPI(kaguya::State& lua);
 extern void RegisterCoreLuaAPI(kaguya::State& lua);
 extern void RegisterIOLuaAPI(kaguya::State& lua);
+extern void RegisterResourceLuaAPI(kaguya::State& lua);
 
 LuaScript::LuaScript(Context* context) :
     Object(context),
@@ -141,6 +142,7 @@ LuaScript::LuaScript(Context* context) :
     RegisterMathLuaAPI(lua);
     RegisterCoreLuaAPI(lua);
     RegisterIOLuaAPI(lua);
+    RegisterResourceLuaAPI(lua);
 
     eventInvoker_ = new LuaScriptEventInvoker(context_);
     coroutineUpdate_ = GetFunction("coroutine.update");

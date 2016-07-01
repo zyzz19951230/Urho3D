@@ -8,6 +8,7 @@
 namespace Urho3D
 {
     class Context;
+    
     extern Context* globalContext;
 
     template<typename T>
