@@ -81,10 +81,32 @@ namespace Urho3D
 
 Context* globalContext = 0;
 
-extern void RegisterMathLuaAPI(kaguya::State& lua);
-extern void RegisterCoreLuaAPI(kaguya::State& lua);
-extern void RegisterIOLuaAPI(kaguya::State& lua);
-extern void RegisterResourceLuaAPI(kaguya::State& lua);
+extern void RegisterAudioLuaAPI(kaguya::State&);
+extern void RegisterCoreLuaAPI(kaguya::State&);
+extern void RegisterEngineLuaAPI(kaguya::State&);
+extern void RegisterGraphicsLuaAPI(kaguya::State&);
+extern void RegisterInputLuaAPI(kaguya::State&);
+extern void RegisterIOLuaAPI(kaguya::State&);
+extern void RegisterMathLuaAPI(kaguya::State&);
+#ifdef URHO3D_NAVIGATION
+extern void RegisterNavigationLuaAPI(kaguya::State&);
+#endif
+#ifdef URHO3D_NETWORK
+extern void RegisterNetworkLuaAPI(kaguya::State&);
+#endif
+#ifdef URHO3D_DATABASE
+extern void RegisterDatabaseLuaAPI(kaguya::State&);
+#endif
+#ifdef URHO3D_PHYSICS
+extern void RegisterPhysicsLuaAPI(kaguya::State&);
+#endif
+extern void RegisterResourceLuaAPI(kaguya::State&);
+extern void RegisterSceneLuaAPI(kaguya::State&);
+extern void RegisterUILuaAPI(kaguya::State&);
+#ifdef URHO3D_URHO2D
+extern void RegisterUrho2DLuaAPI(kaguya::State&);
+#endif
+extern void RegisterLuaScriptLuaAPI(kaguya::State&);
 
 LuaScript::LuaScript(Context* context) :
     Object(context),
@@ -138,11 +160,33 @@ LuaScript::LuaScript(Context* context) :
 	globalContext = context_;
 
     kaguya::State lua(luaState_);
-    
+
     RegisterMathLuaAPI(lua);
     RegisterCoreLuaAPI(lua);
     RegisterIOLuaAPI(lua);
     RegisterResourceLuaAPI(lua);
+//    RegisterSceneLuaAPI(lua);
+//    RegisterAudioLuaAPI(lua);
+//    RegisterEngineLuaAPI(lua);
+//    RegisterGraphicsLuaAPI(lua);
+//    RegisterInputLuaAPI(lua);
+//#ifdef URHO3D_NAVIGATION
+//    RegisterNavigationLuaAPI(lua);
+//#endif
+//#ifdef URHO3D_NETWORK
+//    RegisterNetworkLuaAPI(lua);
+//#endif
+//#ifdef URHO3D_DATABASE
+//    RegisterDatabaseLuaAPI(lua);
+//#endif
+//#ifdef URHO3D_PHYSICS
+//    RegisterPhysicsLuaAPI(lua);
+//#endif
+//    RegisterUILuaAPI(lua);
+//#ifdef URHO3D_URHO2D
+//    RegisterUrho2DLuaAPI(lua);
+//#endif
+//    RegisterLuaScriptLuaAPI(lua);
 
     eventInvoker_ = new LuaScriptEventInvoker(context_);
     coroutineUpdate_ = GetFunction("coroutine.update");
