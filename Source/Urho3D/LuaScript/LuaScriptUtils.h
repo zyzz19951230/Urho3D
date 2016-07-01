@@ -11,9 +11,10 @@ namespace Urho3D
     extern Context* globalContext;
 
     template<typename T>
-    T* KCreateObject()
+    SharedPtr<T> KCreateObject()
     {
-        return new T(globalContext);
+        SharedPtr<T> sharedPtr(new T(globalContext));
+        return sharedPtr;
     }
 
     template<typename T>
@@ -59,12 +60,11 @@ namespace kaguya
     {
         typedef const Urho3D::SharedPtr<T>& push_type;
 
-        static int push(lua_State* l, push_type p)
+        static int push(lua_State* l, push_type sharedPtr)
         {
-            T* o = p;
-            o->AddRef();
-
-            return util::push_args(l, o);
+            T* object = sharedPtr;
+            object->AddRef();
+            return util::push_args(l, object);
         }
     };
 }
