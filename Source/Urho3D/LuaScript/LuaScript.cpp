@@ -165,10 +165,11 @@ LuaScript::LuaScript(Context* context) :
     RegisterCoreLuaAPI(lua);
     RegisterIOLuaAPI(lua);
     RegisterResourceLuaAPI(lua);
-//    RegisterSceneLuaAPI(lua);
-//    RegisterAudioLuaAPI(lua);
-//    RegisterEngineLuaAPI(lua);
-//    RegisterGraphicsLuaAPI(lua);
+    RegisterSceneLuaAPI(lua);
+    RegisterAudioLuaAPI(lua);
+    RegisterEngineLuaAPI(lua);
+    //RegisterGraphicsLuaAPI(lua);
+
 //    RegisterInputLuaAPI(lua);
 //#ifdef URHO3D_NAVIGATION
 //    RegisterNavigationLuaAPI(lua);

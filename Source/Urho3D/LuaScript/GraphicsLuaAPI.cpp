@@ -1,1482 +1,1042 @@
-// #include "../Graphics/AnimatedModel.h"
-// #include "../Graphics/Animation.h"
-// #include "../Graphics/AnimationController.h"
-// #include "../Graphics/AnimationState.h"
-// #include "../Graphics/Batch.h"
-// #include "../Graphics/BillboardSet.h"
-// #include "../Graphics/Camera.h"
-// #include "../Graphics/ConstantBuffer.h"
-// #include "../Graphics/CustomGeometry.h"
-// #include "../Graphics/DebugRenderer.h"
-// #include "../Graphics/DecalSet.h"
-// #include "../Graphics/Direct3D11"
-// #include "../Graphics/Direct3D9"
-// #include "../Graphics/Drawable.h"
-// #include "../Graphics/DrawableEvents.h"
-// #include "../Graphics/Geometry.h"
-// #include "../Graphics/GPUObject.h"
-// #include "../Graphics/Graphics.h"
-// #include "../Graphics/GraphicsDefs.h"
-// #include "../Graphics/GraphicsEvents.h"
-// #include "../Graphics/GraphicsImpl.h"
-// #include "../Graphics/IndexBuffer.h"
-// #include "../Graphics/Light.h"
-// #include "../Graphics/Material.h"
-// #include "../Graphics/Model.h"
-// #include "../Graphics/OcclusionBuffer.h"
-// #include "../Graphics/Octree.h"
-// #include "../Graphics/OctreeQuery.h"
-// #include "../Graphics/OpenGL"
-// #include "../Graphics/ParticleEffect.h"
-// #include "../Graphics/ParticleEmitter.h"
-// #include "../Graphics/Renderer.h"
-// #include "../Graphics/RenderPath.h"
-// #include "../Graphics/RenderSurface.h"
-// #include "../Graphics/RibbonTrail.h"
-// #include "../Graphics/Shader.h"
-// #include "../Graphics/ShaderPrecache.h"
-// #include "../Graphics/ShaderProgram.h"
-// #include "../Graphics/ShaderVariation.h"
-// #include "../Graphics/Skeleton.h"
-// #include "../Graphics/Skybox.h"
-// #include "../Graphics/StaticModel.h"
-// #include "../Graphics/StaticModelGroup.h"
-// #include "../Graphics/Tangent.h"
-// #include "../Graphics/Technique.h"
-// #include "../Graphics/Terrain.h"
-// #include "../Graphics/TerrainPatch.h"
-// #include "../Graphics/Texture.h"
-// #include "../Graphics/Texture2D.h"
-// #include "../Graphics/Texture2DArray.h"
-// #include "../Graphics/Texture3D.h"
-// #include "../Graphics/TextureCube.h"
-// #include "../Graphics/VertexBuffer.h"
-// #include "../Graphics/VertexDeclaration.h"
-// #include "../Graphics/View.h"
-// #include "../Graphics/Viewport.h"
-// #include "../Graphics/Zone.h"
-
-// #include "../LuaScript/LuaScriptUtils.h"
-
-// #include <kaguya.hpp>
-
-// namespace Urho3D
-// {
-
-// static void RegisterAnimatedModel(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KAnimatedModel"].setClass(UserdataMetatable<AnimatedModel, StaticModel>(false)
-//         .addStaticFunction("new", &KCreateObject<AnimatedModel>)
-//         .addStaticFunction("__gc", &KReleaseObject<AnimatedModel>)
-
-//         .addFunction("GetType", &AnimatedModel::GetType)
-//         .addFunction("GetTypeName", &AnimatedModel::GetTypeName)
-//         .addFunction("GetTypeInfo", &AnimatedModel::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &AnimatedModel::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &AnimatedModel::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &AnimatedModel::GetTypeInfoStatic)
-//         .addFunction("Load", &AnimatedModel::Load)
-//         .addFunction("LoadXML", &AnimatedModel::LoadXML)
-//         .addFunction("LoadJSON", &AnimatedModel::LoadJSON)
-//         .addFunction("ApplyAttributes", &AnimatedModel::ApplyAttributes)
-//         .addFunction("ProcessRayQuery", &AnimatedModel::ProcessRayQuery)
-//         .addFunction("Update", &AnimatedModel::Update)
-//         .addFunction("UpdateBatches", &AnimatedModel::UpdateBatches)
-//         .addFunction("UpdateGeometry", &AnimatedModel::UpdateGeometry)
-//         .addFunction("GetUpdateGeometryType", &AnimatedModel::GetUpdateGeometryType)
-//         .addFunction("DrawDebugGeometry", &AnimatedModel::DrawDebugGeometry)
-//         .addFunction("SetModel", &AnimatedModel::SetModel)
-//         .addFunction("AddAnimationState", &AnimatedModel::AddAnimationState)
-
-//         .addOverloadedFunctions("RemoveAnimationState",
-//             static_cast<void(AnimatedModel::*)(Animation*)>(&AnimatedModel::RemoveAnimationState),
-//             static_cast<void(AnimatedModel::*)(const String&)>(&AnimatedModel::RemoveAnimationState),
-//             static_cast<void(AnimatedModel::*)(StringHash)>(&AnimatedModel::RemoveAnimationState),
-//             static_cast<void(AnimatedModel::*)(AnimationState*)>(&AnimatedModel::RemoveAnimationState),
-//             static_cast<void(AnimatedModel::*)(unsigned int)>(&AnimatedModel::RemoveAnimationState))
-
-//         .addFunction("RemoveAllAnimationStates", &AnimatedModel::RemoveAllAnimationStates)
-//         .addFunction("SetAnimationLodBias", &AnimatedModel::SetAnimationLodBias)
-//         .addFunction("SetUpdateInvisible", &AnimatedModel::SetUpdateInvisible)
-
-//         .addOverloadedFunctions("SetMorphWeight",
-//             static_cast<void(AnimatedModel::*)(unsigned int, float)>(&AnimatedModel::SetMorphWeight),
-//             static_cast<void(AnimatedModel::*)(const String&, float)>(&AnimatedModel::SetMorphWeight),
-//             static_cast<void(AnimatedModel::*)(StringHash, float)>(&AnimatedModel::SetMorphWeight))
-
-//         .addFunction("ResetMorphWeights", &AnimatedModel::ResetMorphWeights)
-//         .addFunction("GetSkeleton", &AnimatedModel::GetSkeleton)
-//         .addFunction("GetAnimationStates", &AnimatedModel::GetAnimationStates)
-//         .addFunction("GetNumAnimationStates", &AnimatedModel::GetNumAnimationStates)
-
-//         .addOverloadedFunctions("GetAnimationState",
-//             static_cast<AnimationState*(AnimatedModel::*)(Animation*) const>(&AnimatedModel::GetAnimationState),
-//             static_cast<AnimationState*(AnimatedModel::*)(const String&) const>(&AnimatedModel::GetAnimationState),
-//             static_cast<AnimationState*(AnimatedModel::*)(const StringHash) const>(&AnimatedModel::GetAnimationState),
-//             static_cast<AnimationState*(AnimatedModel::*)(unsigned int) const>(&AnimatedModel::GetAnimationState))
-
-//         .addFunction("GetAnimationLodBias", &AnimatedModel::GetAnimationLodBias)
-//         .addFunction("GetUpdateInvisible", &AnimatedModel::GetUpdateInvisible)
-//         .addFunction("GetMorphs", &AnimatedModel::GetMorphs)
-//         .addFunction("GetMorphVertexBuffers", &AnimatedModel::GetMorphVertexBuffers)
-//         .addFunction("GetNumMorphs", &AnimatedModel::GetNumMorphs)
-
-//         .addOverloadedFunctions("GetMorphWeight",
-//             static_cast<float(AnimatedModel::*)(unsigned int) const>(&AnimatedModel::GetMorphWeight),
-//             static_cast<float(AnimatedModel::*)(const String&) const>(&AnimatedModel::GetMorphWeight),
-//             static_cast<float(AnimatedModel::*)(StringHash) const>(&AnimatedModel::GetMorphWeight))
-
-//         .addFunction("IsMaster", &AnimatedModel::IsMaster)
-//         .addFunction("GetGeometryBoneMappings", &AnimatedModel::GetGeometryBoneMappings)
-//         .addFunction("GetGeometrySkinMatrices", &AnimatedModel::GetGeometrySkinMatrices)
-//         .addFunction("UpdateBoneBoundingBox", &AnimatedModel::UpdateBoneBoundingBox)
-
-//         .addProperty("type", &AnimatedModel::GetType)
-//         .addProperty("typeName", &AnimatedModel::GetTypeName)
-//         .addProperty("typeInfo", &AnimatedModel::GetTypeInfo)
-//         .addProperty("updateGeometryType", &AnimatedModel::GetUpdateGeometryType)
-//         .addProperty("skeleton", &AnimatedModel::GetSkeleton)
-//         .addProperty("animationStates", &AnimatedModel::GetAnimationStates)
-//         .addProperty("numAnimationStates", &AnimatedModel::GetNumAnimationStates)
-//         .addProperty("animationLodBias", &AnimatedModel::GetAnimationLodBias, &AnimatedModel::SetAnimationLodBias)
-//         .addProperty("updateInvisible", &AnimatedModel::GetUpdateInvisible, &AnimatedModel::SetUpdateInvisible)
-//         .addProperty("morphs", &AnimatedModel::GetMorphs)
-//         .addProperty("morphVertexBuffers", &AnimatedModel::GetMorphVertexBuffers)
-//         .addProperty("numMorphs", &AnimatedModel::GetNumMorphs)
-//         .addProperty("master", &AnimatedModel::IsMaster)
-//         .addProperty("geometryBoneMappings", &AnimatedModel::GetGeometryBoneMappings)
-//         .addProperty("geometrySkinMatrices", &AnimatedModel::GetGeometrySkinMatrices)
-//     );
-// }
-
-// static void RegisterAnimation(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KAnimationKeyFrame"].setClass(UserdataMetatable<AnimationKeyFrame>()
-//         .setConstructors<AnimationKeyFrame()>()
-
-//         .addProperty("time", &AnimationKeyFrame::time_)
-//         .addProperty("position", &AnimationKeyFrame::position_)
-//         .addProperty("rotation", &AnimationKeyFrame::rotation_)
-//         .addProperty("scale", &AnimationKeyFrame::scale_)
-//     );
-//     lua["KAnimationTrack"].setClass(UserdataMetatable<AnimationTrack>()
-//         .setConstructors<AnimationTrack()>()
-
-//         .addFunction("SetKeyFrame", &AnimationTrack::SetKeyFrame)
-//         .addFunction("AddKeyFrame", &AnimationTrack::AddKeyFrame)
-//         .addFunction("InsertKeyFrame", &AnimationTrack::InsertKeyFrame)
-//         .addFunction("RemoveKeyFrame", &AnimationTrack::RemoveKeyFrame)
-//         .addFunction("RemoveAllKeyFrames", &AnimationTrack::RemoveAllKeyFrames)
-//         .addFunction("GetKeyFrame", &AnimationTrack::GetKeyFrame)
-//         .addFunction("GetNumKeyFrames", &AnimationTrack::GetNumKeyFrames)
-//         .addFunction("GetKeyFrameIndex", &AnimationTrack::GetKeyFrameIndex)
-
-//         .addProperty("numKeyFrames", &AnimationTrack::GetNumKeyFrames)
-//         .addProperty("name", &AnimationTrack::name_)
-//         .addProperty("nameHash", &AnimationTrack::nameHash_)
-//         .addProperty("channelMask", &AnimationTrack::channelMask_)
-//         .addProperty("keyFrames", &AnimationTrack::keyFrames_)
-//     );
-//     lua["KAnimationTriggerPoint"].setClass(UserdataMetatable<AnimationTriggerPoint>()
-//         .setConstructors<AnimationTriggerPoint()>()
-
-//         .addProperty("time", &AnimationTriggerPoint::time_)
-//         .addProperty("data", &AnimationTriggerPoint::data_)
-//     );
-//     lua["KCHANNEL_POSITION"] = CHANNEL_POSITION;
-//     lua["KCHANNEL_ROTATION"] = CHANNEL_ROTATION;
-//     lua["KCHANNEL_SCALE"] = CHANNEL_SCALE;
-//     lua["KAnimation"].setClass(UserdataMetatable<Animation, Resource>(false)
-//         .addStaticFunction("new", &KCreateObject<Animation>)
-//         .addStaticFunction("__gc", &KReleaseObject<Animation>)
-
-//         .addFunction("GetType", &Animation::GetType)
-//         .addFunction("GetTypeName", &Animation::GetTypeName)
-//         .addFunction("GetTypeInfo", &Animation::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &Animation::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &Animation::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &Animation::GetTypeInfoStatic)
-//         .addFunction("BeginLoad", &Animation::BeginLoad)
-//         .addFunction("Save", &Animation::Save)
-//         .addFunction("SetAnimationName", &Animation::SetAnimationName)
-//         .addFunction("SetLength", &Animation::SetLength)
-//         .addFunction("CreateTrack", &Animation::CreateTrack)
-//         .addFunction("RemoveTrack", &Animation::RemoveTrack)
-//         .addFunction("RemoveAllTracks", &Animation::RemoveAllTracks)
-//         .addFunction("SetTrigger", &Animation::SetTrigger)
-
-//         .addOverloadedFunctions("AddTrigger",
-//             static_cast<void(Animation::*)(const AnimationTriggerPoint&)>(&Animation::AddTrigger),
-//             static_cast<void(Animation::*)(float, bool, const Variant&)>(&Animation::AddTrigger))
-
-//         .addFunction("RemoveTrigger", &Animation::RemoveTrigger)
-//         .addFunction("RemoveAllTriggers", &Animation::RemoveAllTriggers)
-//         .addFunction("SetNumTriggers", &Animation::SetNumTriggers)
-//         .addFunction("Clone", &Animation::Clone)
-//         .addFunction("GetAnimationName", &Animation::GetAnimationName)
-//         .addFunction("GetAnimationNameHash", &Animation::GetAnimationNameHash)
-//         .addFunction("GetLength", &Animation::GetLength)
-//         .addFunction("GetTracks", &Animation::GetTracks)
-//         .addFunction("GetNumTracks", &Animation::GetNumTracks)
-
-//         .addOverloadedFunctions("GetTrack",
-//             static_cast<AnimationTrack*(Animation::*)(const String&)>(&Animation::GetTrack),
-//             static_cast<AnimationTrack*(Animation::*)(StringHash)>(&Animation::GetTrack))
-
-//         .addFunction("GetTriggers", &Animation::GetTriggers)
-//         .addFunction("GetNumTriggers", &Animation::GetNumTriggers)
-//         .addFunction("GetTrigger", &Animation::GetTrigger)
-
-//         .addProperty("type", &Animation::GetType)
-//         .addProperty("typeName", &Animation::GetTypeName)
-//         .addProperty("typeInfo", &Animation::GetTypeInfo)
-//         .addProperty("animationName", &Animation::GetAnimationName, &Animation::SetAnimationName)
-//         .addProperty("animationNameHash", &Animation::GetAnimationNameHash)
-//         .addProperty("length", &Animation::GetLength, &Animation::SetLength)
-//         .addProperty("tracks", &Animation::GetTracks)
-//         .addProperty("numTracks", &Animation::GetNumTracks)
-//         .addProperty("triggers", &Animation::GetTriggers)
-//         .addProperty("numTriggers", &Animation::GetNumTriggers, &Animation::SetNumTriggers)
-//     );
-// }
-
-// static void RegisterAnimationController(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KAnimationControl"].setClass(UserdataMetatable<AnimationControl>()
-//         .setConstructors<AnimationControl()>()
-
-//         .addProperty("name", &AnimationControl::name_)
-//         .addProperty("hash", &AnimationControl::hash_)
-//         .addProperty("speed", &AnimationControl::speed_)
-//         .addProperty("targetWeight", &AnimationControl::targetWeight_)
-//         .addProperty("fadeTime", &AnimationControl::fadeTime_)
-//         .addProperty("autoFadeTime", &AnimationControl::autoFadeTime_)
-//         .addProperty("setTimeTtl", &AnimationControl::setTimeTtl_)
-//         .addProperty("setWeightTtl", &AnimationControl::setWeightTtl_)
-//         .addProperty("setTime", &AnimationControl::setTime_)
-//         .addProperty("setWeight", &AnimationControl::setWeight_)
-//         .addProperty("setTimeRev", &AnimationControl::setTimeRev_)
-//         .addProperty("setWeightRev", &AnimationControl::setWeightRev_)
-//         .addProperty("removeOnCompletion", &AnimationControl::removeOnCompletion_)
-//     );
-//     lua["KAnimationController"].setClass(UserdataMetatable<AnimationController, Component>(false)
-//         .addStaticFunction("new", &KCreateObject<AnimationController>)
-//         .addStaticFunction("__gc", &KReleaseObject<AnimationController>)
-
-//         .addFunction("GetType", &AnimationController::GetType)
-//         .addFunction("GetTypeName", &AnimationController::GetTypeName)
-//         .addFunction("GetTypeInfo", &AnimationController::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &AnimationController::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &AnimationController::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &AnimationController::GetTypeInfoStatic)
-//         .addFunction("OnSetEnabled", &AnimationController::OnSetEnabled)
-//         .addFunction("Update", &AnimationController::Update)
-//         .addFunction("Play", &AnimationController::Play)
-//         .addFunction("PlayExclusive", &AnimationController::PlayExclusive)
-//         .addFunction("Stop", &AnimationController::Stop)
-//         .addFunction("StopLayer", &AnimationController::StopLayer)
-//         .addFunction("StopAll", &AnimationController::StopAll)
-//         .addFunction("Fade", &AnimationController::Fade)
-//         .addFunction("FadeOthers", &AnimationController::FadeOthers)
-//         .addFunction("SetLayer", &AnimationController::SetLayer)
-//         .addFunction("SetStartBone", &AnimationController::SetStartBone)
-//         .addFunction("SetTime", &AnimationController::SetTime)
-//         .addFunction("SetWeight", &AnimationController::SetWeight)
-//         .addFunction("SetLooped", &AnimationController::SetLooped)
-//         .addFunction("SetSpeed", &AnimationController::SetSpeed)
-//         .addFunction("SetAutoFade", &AnimationController::SetAutoFade)
-//         .addFunction("SetRemoveOnCompletion", &AnimationController::SetRemoveOnCompletion)
-//         .addFunction("SetBlendMode", &AnimationController::SetBlendMode)
-//         .addFunction("IsPlaying", &AnimationController::IsPlaying)
-//         .addFunction("IsFadingIn", &AnimationController::IsFadingIn)
-//         .addFunction("IsFadingOut", &AnimationController::IsFadingOut)
-//         .addFunction("IsAtEnd", &AnimationController::IsAtEnd)
-//         .addFunction("GetLayer", &AnimationController::GetLayer)
-//         .addFunction("GetStartBone", &AnimationController::GetStartBone)
-//         .addFunction("GetStartBoneName", &AnimationController::GetStartBoneName)
-//         .addFunction("GetTime", &AnimationController::GetTime)
-//         .addFunction("GetWeight", &AnimationController::GetWeight)
-//         .addFunction("IsLooped", &AnimationController::IsLooped)
-//         .addFunction("GetBlendMode", &AnimationController::GetBlendMode)
-//         .addFunction("GetLength", &AnimationController::GetLength)
-//         .addFunction("GetSpeed", &AnimationController::GetSpeed)
-//         .addFunction("GetFadeTarget", &AnimationController::GetFadeTarget)
-//         .addFunction("GetFadeTime", &AnimationController::GetFadeTime)
-//         .addFunction("GetAutoFade", &AnimationController::GetAutoFade)
-//         .addFunction("GetRemoveOnCompletion", &AnimationController::GetRemoveOnCompletion)
-
-//         .addOverloadedFunctions("GetAnimationState",
-//             static_cast<AnimationState*(AnimationController::*)(const String&) const>(&AnimationController::GetAnimationState),
-//             static_cast<AnimationState*(AnimationController::*)(StringHash) const>(&AnimationController::GetAnimationState))
-
-
-//         .addProperty("type", &AnimationController::GetType)
-//         .addProperty("typeName", &AnimationController::GetTypeName)
-//         .addProperty("typeInfo", &AnimationController::GetTypeInfo)
-//     );
-// }
-
-// static void RegisterAnimationState(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     // enum AnimationBlendMode;
-//     lua["KABM_LERP"] = ABM_LERP;
-//     lua["KABM_ADDITIVE"] = ABM_ADDITIVE;
-
-//     lua["KAnimationStateTrack"].setClass(UserdataMetatable<AnimationStateTrack>()
-//         .setConstructors<AnimationStateTrack()>()
-
-//         .addProperty("track", &AnimationStateTrack::track_)
-//         .addProperty("bone", &AnimationStateTrack::bone_)
-//         .addProperty("node", &AnimationStateTrack::node_)
-//         .addProperty("weight", &AnimationStateTrack::weight_)
-//         .addProperty("keyFrame", &AnimationStateTrack::keyFrame_)
-//     );
-//     lua["KAnimationState"].setClass(UserdataMetatable<AnimationState, RefCounted>()
-//         .setConstructors<AnimationState(AnimatedModel*, Animation*)>()
-
-//         .addFunction("SetStartBone", &AnimationState::SetStartBone)
-//         .addFunction("SetLooped", &AnimationState::SetLooped)
-//         .addFunction("SetWeight", &AnimationState::SetWeight)
-//         .addFunction("SetBlendMode", &AnimationState::SetBlendMode)
-//         .addFunction("SetTime", &AnimationState::SetTime)
-
-//         .addOverloadedFunctions("SetBoneWeight",
-//             static_cast<void(AnimationState::*)(unsigned int, float, bool)>(&AnimationState::SetBoneWeight),
-//             static_cast<void(AnimationState::*)(const String&, float, bool)>(&AnimationState::SetBoneWeight))
-
-//         .addFunction("AddWeight", &AnimationState::AddWeight)
-//         .addFunction("AddTime", &AnimationState::AddTime)
-//         .addFunction("SetLayer", &AnimationState::SetLayer)
-//         .addFunction("GetAnimation", &AnimationState::GetAnimation)
-//         .addFunction("GetModel", &AnimationState::GetModel)
-//         .addFunction("GetNode", &AnimationState::GetNode)
-//         .addFunction("GetStartBone", &AnimationState::GetStartBone)
-
-//         .addOverloadedFunctions("GetBoneWeight",
-//             static_cast<float(AnimationState::*)(unsigned int) const>(&AnimationState::GetBoneWeight),
-//             static_cast<float(AnimationState::*)(const String&) const>(&AnimationState::GetBoneWeight))
-
-
-//         .addOverloadedFunctions("GetTrackIndex",
-//             static_cast<unsigned int(AnimationState::*)(int*) const>(&AnimationState::GetTrackIndex),
-//             static_cast<unsigned int(AnimationState::*)(const String&) const>(&AnimationState::GetTrackIndex))
-
-//         .addFunction("IsEnabled", &AnimationState::IsEnabled)
-//         .addFunction("IsLooped", &AnimationState::IsLooped)
-//         .addFunction("GetWeight", &AnimationState::GetWeight)
-//         .addFunction("GetBlendMode", &AnimationState::GetBlendMode)
-//         .addFunction("GetTime", &AnimationState::GetTime)
-//         .addFunction("GetLength", &AnimationState::GetLength)
-//         .addFunction("GetLayer", &AnimationState::GetLayer)
-//         .addFunction("Apply", &AnimationState::Apply)
-
-//         .addProperty("animation", &AnimationState::GetAnimation)
-//         .addProperty("model", &AnimationState::GetModel)
-//         .addProperty("node", &AnimationState::GetNode)
-//         .addProperty("startBone", &AnimationState::GetStartBone, &AnimationState::SetStartBone)
-//         .addProperty("enabled", &AnimationState::IsEnabled)
-//         .addProperty("looped", &AnimationState::IsLooped, &AnimationState::SetLooped)
-//         .addProperty("weight", &AnimationState::GetWeight, &AnimationState::SetWeight)
-//         .addProperty("blendMode", &AnimationState::GetBlendMode, &AnimationState::SetBlendMode)
-//         .addProperty("time", &AnimationState::GetTime, &AnimationState::SetTime)
-//         .addProperty("length", &AnimationState::GetLength)
-//         .addProperty("layer", &AnimationState::GetLayer, &AnimationState::SetLayer)
-//     );
-// }
-
-// static void RegisterBatch(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KBatch"].setClass(UserdataMetatable<Batch>()
-//         .setConstructors<Batch(),
-//             Batch(const SourceBatch&)>()
-
-//         .addFunction("CalculateSortKey", &Batch::CalculateSortKey)
-//         .addFunction("Prepare", &Batch::Prepare)
-//         .addFunction("Draw", &Batch::Draw)
-//         .addProperty("sortKey", &Batch::sortKey_)
-//         .addProperty("distance", &Batch::distance_)
-//         .addProperty("renderOrder", &Batch::renderOrder_)
-//         .addProperty("lightMask", &Batch::lightMask_)
-//         .addProperty("isBase", &Batch::isBase_)
-//         .addProperty("geometry", &Batch::geometry_)
-//         .addProperty("material", &Batch::material_)
-//         .addProperty("worldTransform", &Batch::worldTransform_)
-//         .addProperty("numWorldTransforms", &Batch::numWorldTransforms_)
-//         .addProperty("instancingData", &Batch::instancingData_)
-//         .addProperty("zone", &Batch::zone_)
-//         .addProperty("lightQueue", &Batch::lightQueue_)
-//         .addProperty("pass", &Batch::pass_)
-//         .addProperty("vertexShader", &Batch::vertexShader_)
-//         .addProperty("pixelShader", &Batch::pixelShader_)
-//         .addProperty("geometryType", &Batch::geometryType_)
-//     );
-//     lua["KInstanceData"].setClass(UserdataMetatable<InstanceData>()
-//         .setConstructors<InstanceData(),
-//             InstanceData(const Matrix3x4*, const void*, float)>()
-
-//         .addProperty("worldTransform", &InstanceData::worldTransform_)
-//         .addProperty("instancingData", &InstanceData::instancingData_)
-//         .addProperty("distance", &InstanceData::distance_)
-//     );
-//     lua["KBatchGroup"].setClass(UserdataMetatable<BatchGroup, Batch>()
-//         .setConstructors<BatchGroup(),
-//             BatchGroup(const Batch&)>()
-
-//         .addFunction("AddTransforms", &BatchGroup::AddTransforms)
-//         .addFunction("SetInstancingData", &BatchGroup::SetInstancingData)
-//         .addFunction("Draw", &BatchGroup::Draw)
-//         .addProperty("instances", &BatchGroup::instances_)
-//         .addProperty("startIndex", &BatchGroup::startIndex_)
-//     );
-//     lua["KBatchGroupKey"].setClass(UserdataMetatable<BatchGroupKey>()
-//         .setConstructors<BatchGroupKey(),
-//             BatchGroupKey(const Batch&)>()
-
-//         .addFunction("__eq", &BatchGroupKey::operator==)
-//         .addFunction("ToHash", &BatchGroupKey::ToHash)
-//         .addProperty("zone", &BatchGroupKey::zone_)
-//         .addProperty("lightQueue", &BatchGroupKey::lightQueue_)
-//         .addProperty("pass", &BatchGroupKey::pass_)
-//         .addProperty("material", &BatchGroupKey::material_)
-//         .addProperty("geometry", &BatchGroupKey::geometry_)
-//         .addProperty("renderOrder", &BatchGroupKey::renderOrder_)
-//     );
-//     lua["KBatchQueue"].setClass(UserdataMetatable<BatchQueue>()
-
-//         .addFunction("Clear", &BatchQueue::Clear)
-//         .addFunction("SortBackToFront", &BatchQueue::SortBackToFront)
-//         .addFunction("SortFrontToBack", &BatchQueue::SortFrontToBack)
-//         .addFunction("SortFrontToBack2Pass", &BatchQueue::SortFrontToBack2Pass)
-//         .addFunction("SetInstancingData", &BatchQueue::SetInstancingData)
-//         .addFunction("Draw", &BatchQueue::Draw)
-//         .addFunction("GetNumInstances", &BatchQueue::GetNumInstances)
-//         .addFunction("IsEmpty", &BatchQueue::IsEmpty)
-
-//         .addProperty("numInstances", &BatchQueue::GetNumInstances)
-//         .addProperty("empty", &BatchQueue::IsEmpty)
-//         .addProperty("batchGroups", &BatchQueue::batchGroups_)
-//         .addProperty("shaderRemapping", &BatchQueue::shaderRemapping_)
-//         .addProperty("materialRemapping", &BatchQueue::materialRemapping_)
-//         .addProperty("geometryRemapping", &BatchQueue::geometryRemapping_)
-//         .addProperty("batches", &BatchQueue::batches_)
-//         .addProperty("sortedBatches", &BatchQueue::sortedBatches_)
-//         .addProperty("sortedBatchGroups", &BatchQueue::sortedBatchGroups_)
-//         .addProperty("maxSortedInstances", &BatchQueue::maxSortedInstances_)
-//     );
-//     lua["KShadowBatchQueue"].setClass(UserdataMetatable<ShadowBatchQueue>()
-
-//         .addProperty("shadowCamera", &ShadowBatchQueue::shadowCamera_)
-//         .addProperty("shadowViewport", &ShadowBatchQueue::shadowViewport_)
-//         .addProperty("shadowBatches", &ShadowBatchQueue::shadowBatches_)
-//         .addProperty("nearSplit", &ShadowBatchQueue::nearSplit_)
-//         .addProperty("farSplit", &ShadowBatchQueue::farSplit_)
-//     );
-//     lua["KLightBatchQueue"].setClass(UserdataMetatable<LightBatchQueue>()
-
-//         .addProperty("light", &LightBatchQueue::light_)
-//         .addProperty("negative", &LightBatchQueue::negative_)
-//         .addProperty("shadowMap", &LightBatchQueue::shadowMap_)
-//         .addProperty("litBaseBatches", &LightBatchQueue::litBaseBatches_)
-//         .addProperty("litBatches", &LightBatchQueue::litBatches_)
-//         .addProperty("shadowSplits", &LightBatchQueue::shadowSplits_)
-//         .addProperty("vertexLights", &LightBatchQueue::vertexLights_)
-//         .addProperty("volumeBatches", &LightBatchQueue::volumeBatches_)
-//     );
-// }
-
-// static void RegisterBillboardSet(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KBillboard"].setClass(UserdataMetatable<Billboard>()
-
-//         .addProperty("position", &Billboard::position_)
-//         .addProperty("size", &Billboard::size_)
-//         .addProperty("uv", &Billboard::uv_)
-//         .addProperty("color", &Billboard::color_)
-//         .addProperty("rotation", &Billboard::rotation_)
-//         .addProperty("direction", &Billboard::direction_)
-//         .addProperty("enabled", &Billboard::enabled_)
-//         .addProperty("sortDistance", &Billboard::sortDistance_)
-//         .addProperty("screenScaleFactor", &Billboard::screenScaleFactor_)
-//     );
-//     lua["KMAX_BILLBOARDS"] = MAX_BILLBOARDS;
-//     lua["KBillboardSet"].setClass(UserdataMetatable<BillboardSet, Drawable>(false)
-//         .addStaticFunction("new", &KCreateObject<BillboardSet>)
-//         .addStaticFunction("__gc", &KReleaseObject<BillboardSet>)
-
-//         .addFunction("GetType", &BillboardSet::GetType)
-//         .addFunction("GetTypeName", &BillboardSet::GetTypeName)
-//         .addFunction("GetTypeInfo", &BillboardSet::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &BillboardSet::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &BillboardSet::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &BillboardSet::GetTypeInfoStatic)
-//         .addFunction("ProcessRayQuery", &BillboardSet::ProcessRayQuery)
-//         .addFunction("UpdateBatches", &BillboardSet::UpdateBatches)
-//         .addFunction("UpdateGeometry", &BillboardSet::UpdateGeometry)
-//         .addFunction("GetUpdateGeometryType", &BillboardSet::GetUpdateGeometryType)
-//         .addFunction("SetMaterial", &BillboardSet::SetMaterial)
-//         .addFunction("SetNumBillboards", &BillboardSet::SetNumBillboards)
-//         .addFunction("SetRelative", &BillboardSet::SetRelative)
-//         .addFunction("SetScaled", &BillboardSet::SetScaled)
-//         .addFunction("SetSorted", &BillboardSet::SetSorted)
-//         .addFunction("SetFixedScreenSize", &BillboardSet::SetFixedScreenSize)
-//         .addFunction("SetFaceCameraMode", &BillboardSet::SetFaceCameraMode)
-//         .addFunction("SetAnimationLodBias", &BillboardSet::SetAnimationLodBias)
-//         .addFunction("Commit", &BillboardSet::Commit)
-//         .addFunction("GetMaterial", &BillboardSet::GetMaterial)
-//         .addFunction("GetNumBillboards", &BillboardSet::GetNumBillboards)
-//         .addFunction("GetBillboards", &BillboardSet::GetBillboards)
-//         .addFunction("GetBillboard", &BillboardSet::GetBillboard)
-//         .addFunction("IsRelative", &BillboardSet::IsRelative)
-//         .addFunction("IsScaled", &BillboardSet::IsScaled)
-//         .addFunction("IsSorted", &BillboardSet::IsSorted)
-//         .addFunction("IsFixedScreenSize", &BillboardSet::IsFixedScreenSize)
-//         .addFunction("GetFaceCameraMode", &BillboardSet::GetFaceCameraMode)
-//         .addFunction("GetAnimationLodBias", &BillboardSet::GetAnimationLodBias)
-
-//         .addProperty("type", &BillboardSet::GetType)
-//         .addProperty("typeName", &BillboardSet::GetTypeName)
-//         .addProperty("typeInfo", &BillboardSet::GetTypeInfo)
-//         .addProperty("updateGeometryType", &BillboardSet::GetUpdateGeometryType)
-//         .addProperty("material", &BillboardSet::GetMaterial, &BillboardSet::SetMaterial)
-//         .addProperty("numBillboards", &BillboardSet::GetNumBillboards, &BillboardSet::SetNumBillboards)
-//         .addProperty("billboards", &BillboardSet::GetBillboards)
-//         .addProperty("relative", &BillboardSet::IsRelative, &BillboardSet::SetRelative)
-//         .addProperty("scaled", &BillboardSet::IsScaled, &BillboardSet::SetScaled)
-//         .addProperty("sorted", &BillboardSet::IsSorted, &BillboardSet::SetSorted)
-//         .addProperty("fixedScreenSize", &BillboardSet::IsFixedScreenSize, &BillboardSet::SetFixedScreenSize)
-//         .addProperty("faceCameraMode", &BillboardSet::GetFaceCameraMode, &BillboardSet::SetFaceCameraMode)
-//         .addProperty("animationLodBias", &BillboardSet::GetAnimationLodBias, &BillboardSet::SetAnimationLodBias)
-//     );
-// }
-
-// static void RegisterCamera(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KDEFAULT_NEARCLIP"] = DEFAULT_NEARCLIP;
-//     lua["KDEFAULT_FARCLIP"] = DEFAULT_FARCLIP;
-//     lua["KDEFAULT_CAMERA_FOV"] = DEFAULT_CAMERA_FOV;
-//     lua["KDEFAULT_ORTHOSIZE"] = DEFAULT_ORTHOSIZE;
-//     lua["KVO_NONE"] = VO_NONE;
-//     lua["KVO_LOW_MATERIAL_QUALITY"] = VO_LOW_MATERIAL_QUALITY;
-//     lua["KVO_DISABLE_SHADOWS"] = VO_DISABLE_SHADOWS;
-//     lua["KVO_DISABLE_OCCLUSION"] = VO_DISABLE_OCCLUSION;
-//     lua["KCamera"].setClass(UserdataMetatable<Camera, Component>(false)
-//         .addStaticFunction("new", &KCreateObject<Camera>)
-//         .addStaticFunction("__gc", &KReleaseObject<Camera>)
-
-//         .addFunction("GetType", &Camera::GetType)
-//         .addFunction("GetTypeName", &Camera::GetTypeName)
-//         .addFunction("GetTypeInfo", &Camera::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &Camera::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &Camera::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &Camera::GetTypeInfoStatic)
-//         .addFunction("DrawDebugGeometry", &Camera::DrawDebugGeometry)
-//         .addFunction("SetNearClip", &Camera::SetNearClip)
-//         .addFunction("SetFarClip", &Camera::SetFarClip)
-//         .addFunction("SetFov", &Camera::SetFov)
-
-//         .addOverloadedFunctions("SetOrthoSize",
-//             static_cast<void(Camera::*)(float)>(&Camera::SetOrthoSize),
-//             static_cast<void(Camera::*)(const Vector2&)>(&Camera::SetOrthoSize))
-
-//         .addFunction("SetAspectRatio", &Camera::SetAspectRatio)
-//         .addFunction("SetFillMode", &Camera::SetFillMode)
-//         .addFunction("SetZoom", &Camera::SetZoom)
-//         .addFunction("SetLodBias", &Camera::SetLodBias)
-//         .addFunction("SetViewMask", &Camera::SetViewMask)
-//         .addFunction("SetViewOverrideFlags", &Camera::SetViewOverrideFlags)
-//         .addFunction("SetOrthographic", &Camera::SetOrthographic)
-//         .addFunction("SetAutoAspectRatio", &Camera::SetAutoAspectRatio)
-//         .addFunction("SetProjectionOffset", &Camera::SetProjectionOffset)
-//         .addFunction("SetUseReflection", &Camera::SetUseReflection)
-//         .addFunction("SetReflectionPlane", &Camera::SetReflectionPlane)
-//         .addFunction("SetUseClipping", &Camera::SetUseClipping)
-//         .addFunction("SetClipPlane", &Camera::SetClipPlane)
-//         .addFunction("SetFlipVertical", &Camera::SetFlipVertical)
-//         .addFunction("GetFarClip", &Camera::GetFarClip)
-//         .addFunction("GetNearClip", &Camera::GetNearClip)
-//         .addFunction("GetFov", &Camera::GetFov)
-//         .addFunction("GetOrthoSize", &Camera::GetOrthoSize)
-//         .addFunction("GetAspectRatio", &Camera::GetAspectRatio)
-//         .addFunction("GetZoom", &Camera::GetZoom)
-//         .addFunction("GetLodBias", &Camera::GetLodBias)
-//         .addFunction("GetViewMask", &Camera::GetViewMask)
-//         .addFunction("GetViewOverrideFlags", &Camera::GetViewOverrideFlags)
-//         .addFunction("GetFillMode", &Camera::GetFillMode)
-//         .addFunction("IsOrthographic", &Camera::IsOrthographic)
-//         .addFunction("GetAutoAspectRatio", &Camera::GetAutoAspectRatio)
-//         .addFunction("GetFrustum", &Camera::GetFrustum)
-
-//         .addOverloadedFunctions("GetProjection",
-//             static_cast<const Matrix4&(Camera::*)() const>(&Camera::GetProjection),
-//             static_cast<Matrix4(Camera::*)(bool) const>(&Camera::GetProjection))
-
-//         .addFunction("GetView", &Camera::GetView)
-//         .addFunction("GetFrustumSize", &Camera::GetFrustumSize)
-//         .addFunction("GetHalfViewSize", &Camera::GetHalfViewSize)
-//         .addFunction("GetSplitFrustum", &Camera::GetSplitFrustum)
-//         .addFunction("GetViewSpaceFrustum", &Camera::GetViewSpaceFrustum)
-//         .addFunction("GetViewSpaceSplitFrustum", &Camera::GetViewSpaceSplitFrustum)
-//         .addFunction("GetScreenRay", &Camera::GetScreenRay)
-//         .addFunction("WorldToScreenPoint", &Camera::WorldToScreenPoint)
-//         .addFunction("ScreenToWorldPoint", &Camera::ScreenToWorldPoint)
-//         .addFunction("GetProjectionOffset", &Camera::GetProjectionOffset)
-//         .addFunction("GetUseReflection", &Camera::GetUseReflection)
-//         .addFunction("GetReflectionPlane", &Camera::GetReflectionPlane)
-//         .addFunction("GetUseClipping", &Camera::GetUseClipping)
-//         .addFunction("GetClipPlane", &Camera::GetClipPlane)
-//         .addFunction("GetFlipVertical", &Camera::GetFlipVertical)
-//         .addFunction("GetReverseCulling", &Camera::GetReverseCulling)
-//         .addFunction("GetDistance", &Camera::GetDistance)
-//         .addFunction("GetDistanceSquared", &Camera::GetDistanceSquared)
-//         .addFunction("GetLodDistance", &Camera::GetLodDistance)
-//         .addFunction("GetFaceCameraRotation", &Camera::GetFaceCameraRotation)
-//         .addFunction("GetEffectiveWorldTransform", &Camera::GetEffectiveWorldTransform)
-//         .addFunction("IsProjectionValid", &Camera::IsProjectionValid)
-//         .addFunction("SetAspectRatioInternal", &Camera::SetAspectRatioInternal)
-
-//         .addProperty("type", &Camera::GetType)
-//         .addProperty("typeName", &Camera::GetTypeName)
-//         .addProperty("typeInfo", &Camera::GetTypeInfo)
-//         .addProperty("farClip", &Camera::GetFarClip, &Camera::SetFarClip)
-//         .addProperty("nearClip", &Camera::GetNearClip, &Camera::SetNearClip)
-//         .addProperty("fov", &Camera::GetFov, &Camera::SetFov)
-//         .addProperty("orthoSize", &Camera::GetOrthoSize)
-//         .addProperty("aspectRatio", &Camera::GetAspectRatio, &Camera::SetAspectRatio)
-//         .addProperty("zoom", &Camera::GetZoom, &Camera::SetZoom)
-//         .addProperty("lodBias", &Camera::GetLodBias, &Camera::SetLodBias)
-//         .addProperty("viewMask", &Camera::GetViewMask, &Camera::SetViewMask)
-//         .addProperty("viewOverrideFlags", &Camera::GetViewOverrideFlags, &Camera::SetViewOverrideFlags)
-//         .addProperty("fillMode", &Camera::GetFillMode, &Camera::SetFillMode)
-//         .addProperty("orthographic", &Camera::IsOrthographic, &Camera::SetOrthographic)
-//         .addProperty("autoAspectRatio", &Camera::GetAutoAspectRatio, &Camera::SetAutoAspectRatio)
-//         .addProperty("frustum", &Camera::GetFrustum)
-//         .addProperty("view", &Camera::GetView)
-//         .addProperty("halfViewSize", &Camera::GetHalfViewSize)
-//         .addProperty("viewSpaceFrustum", &Camera::GetViewSpaceFrustum)
-//         .addProperty("projectionOffset", &Camera::GetProjectionOffset, &Camera::SetProjectionOffset)
-//         .addProperty("useReflection", &Camera::GetUseReflection, &Camera::SetUseReflection)
-//         .addProperty("reflectionPlane", &Camera::GetReflectionPlane, &Camera::SetReflectionPlane)
-//         .addProperty("useClipping", &Camera::GetUseClipping, &Camera::SetUseClipping)
-//         .addProperty("clipPlane", &Camera::GetClipPlane, &Camera::SetClipPlane)
-//         .addProperty("flipVertical", &Camera::GetFlipVertical, &Camera::SetFlipVertical)
-//         .addProperty("reverseCulling", &Camera::GetReverseCulling)
-//         .addProperty("effectiveWorldTransform", &Camera::GetEffectiveWorldTransform)
-//         .addProperty("projectionValid", &Camera::IsProjectionValid)
-//         .addProperty("aspectRatioInternal", &Camera::SetAspectRatioInternal)
-//     );
-// }
-
-// static void RegisterConstantBuffer(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KConstantBuffer"].setClass(UserdataMetatable<ConstantBuffer, Object, GPUObject>(false)
-//         .addStaticFunction("new", &KCreateObject<ConstantBuffer>)
-//         .addStaticFunction("__gc", &KReleaseObject<ConstantBuffer>)
-
-//         .addFunction("GetType", &ConstantBuffer::GetType)
-//         .addFunction("GetTypeName", &ConstantBuffer::GetTypeName)
-//         .addFunction("GetTypeInfo", &ConstantBuffer::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &ConstantBuffer::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &ConstantBuffer::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &ConstantBuffer::GetTypeInfoStatic)
-//         .addFunction("OnDeviceReset", &ConstantBuffer::OnDeviceReset)
-//         .addFunction("Release", &ConstantBuffer::Release)
-//         .addFunction("SetSize", &ConstantBuffer::SetSize)
-//         .addFunction("SetParameter", &ConstantBuffer::SetParameter)
-//         .addFunction("SetVector3ArrayParameter", &ConstantBuffer::SetVector3ArrayParameter)
-//         .addFunction("Apply", &ConstantBuffer::Apply)
-//         .addFunction("GetSize", &ConstantBuffer::GetSize)
-//         .addFunction("IsDirty", &ConstantBuffer::IsDirty)
-
-//         .addProperty("type", &ConstantBuffer::GetType)
-//         .addProperty("typeName", &ConstantBuffer::GetTypeName)
-//         .addProperty("typeInfo", &ConstantBuffer::GetTypeInfo)
-//         .addProperty("size", &ConstantBuffer::GetSize, &ConstantBuffer::SetSize)
-//         .addProperty("dirty", &ConstantBuffer::IsDirty)
-//     );
-// }
-
-// static void RegisterCustomGeometry(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KCustomGeometryVertex"].setClass(UserdataMetatable<CustomGeometryVertex>()
-
-//         .addProperty("position", &CustomGeometryVertex::position_)
-//         .addProperty("normal", &CustomGeometryVertex::normal_)
-//         .addProperty("color", &CustomGeometryVertex::color_)
-//         .addProperty("texCoord", &CustomGeometryVertex::texCoord_)
-//         .addProperty("tangent", &CustomGeometryVertex::tangent_)
-//     );
-//     lua["KCustomGeometry"].setClass(UserdataMetatable<CustomGeometry, Drawable>(false)
-//         .addStaticFunction("new", &KCreateObject<CustomGeometry>)
-//         .addStaticFunction("__gc", &KReleaseObject<CustomGeometry>)
-
-//         .addFunction("GetType", &CustomGeometry::GetType)
-//         .addFunction("GetTypeName", &CustomGeometry::GetTypeName)
-//         .addFunction("GetTypeInfo", &CustomGeometry::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &CustomGeometry::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &CustomGeometry::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &CustomGeometry::GetTypeInfoStatic)
-//         .addFunction("ProcessRayQuery", &CustomGeometry::ProcessRayQuery)
-//         .addFunction("GetLodGeometry", &CustomGeometry::GetLodGeometry)
-//         .addFunction("GetNumOccluderTriangles", &CustomGeometry::GetNumOccluderTriangles)
-//         .addFunction("DrawOcclusion", &CustomGeometry::DrawOcclusion)
-//         .addFunction("Clear", &CustomGeometry::Clear)
-//         .addFunction("SetNumGeometries", &CustomGeometry::SetNumGeometries)
-//         .addFunction("SetDynamic", &CustomGeometry::SetDynamic)
-//         .addFunction("BeginGeometry", &CustomGeometry::BeginGeometry)
-//         .addFunction("DefineVertex", &CustomGeometry::DefineVertex)
-//         .addFunction("DefineNormal", &CustomGeometry::DefineNormal)
-//         .addFunction("DefineColor", &CustomGeometry::DefineColor)
-//         .addFunction("DefineTexCoord", &CustomGeometry::DefineTexCoord)
-//         .addFunction("DefineTangent", &CustomGeometry::DefineTangent)
-//         .addFunction("DefineGeometry", &CustomGeometry::DefineGeometry)
-//         .addFunction("Commit", &CustomGeometry::Commit)
-
-//         .addOverloadedFunctions("SetMaterial",
-//             static_cast<void(CustomGeometry::*)(Material*)>(&CustomGeometry::SetMaterial),
-//             static_cast<bool(CustomGeometry::*)(unsigned int, Material*)>(&CustomGeometry::SetMaterial))
-
-//         .addFunction("GetNumGeometries", &CustomGeometry::GetNumGeometries)
-//         .addFunction("GetNumVertices", &CustomGeometry::GetNumVertices)
-//         .addFunction("IsDynamic", &CustomGeometry::IsDynamic)
-//         .addFunction("GetMaterial", &CustomGeometry::GetMaterial)
-//         .addFunction("GetVertices", &CustomGeometry::GetVertices)
-//         .addFunction("GetVertex", &CustomGeometry::GetVertex)
-
-//         .addProperty("type", &CustomGeometry::GetType)
-//         .addProperty("typeName", &CustomGeometry::GetTypeName)
-//         .addProperty("typeInfo", &CustomGeometry::GetTypeInfo)
-//         .addProperty("numOccluderTriangles", &CustomGeometry::GetNumOccluderTriangles)
-//         .addProperty("numGeometries", &CustomGeometry::GetNumGeometries, &CustomGeometry::SetNumGeometries)
-//         .addProperty("dynamic", &CustomGeometry::IsDynamic, &CustomGeometry::SetDynamic)
-//         .addProperty("vertices", &CustomGeometry::GetVertices)
-//     );
-// }
-
-// static void RegisterDebugRenderer(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KDebugLine"].setClass(UserdataMetatable<DebugLine>()
-//         .setConstructors<DebugLine(),
-//             DebugLine(const Vector3&, const Vector3&, unsigned int)>()
-
-//         .addProperty("start", &DebugLine::start_)
-//         .addProperty("end", &DebugLine::end_)
-//         .addProperty("color", &DebugLine::color_)
-//     );
-//     lua["KDebugTriangle"].setClass(UserdataMetatable<DebugTriangle>()
-//         .setConstructors<DebugTriangle(),
-//             DebugTriangle(const Vector3&, const Vector3&, const Vector3&, unsigned int)>()
-
-//         .addProperty("v1", &DebugTriangle::v1_)
-//         .addProperty("v2", &DebugTriangle::v2_)
-//         .addProperty("v3", &DebugTriangle::v3_)
-//         .addProperty("color", &DebugTriangle::color_)
-//     );
-//     lua["KDebugRenderer"].setClass(UserdataMetatable<DebugRenderer, Component>(false)
-//         .addStaticFunction("new", &KCreateObject<DebugRenderer>)
-//         .addStaticFunction("__gc", &KReleaseObject<DebugRenderer>)
-
-//         .addFunction("GetType", &DebugRenderer::GetType)
-//         .addFunction("GetTypeName", &DebugRenderer::GetTypeName)
-//         .addFunction("GetTypeInfo", &DebugRenderer::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &DebugRenderer::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &DebugRenderer::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &DebugRenderer::GetTypeInfoStatic)
-//         .addFunction("SetView", &DebugRenderer::SetView)
-
-//         .addOverloadedFunctions("AddLine",
-//             static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, const Color&, bool)>(&DebugRenderer::AddLine),
-//             static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, unsigned int, bool)>(&DebugRenderer::AddLine))
-
-
-//         .addOverloadedFunctions("AddTriangle",
-//             static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, const Vector3&, const Color&, bool)>(&DebugRenderer::AddTriangle),
-//             static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, const Vector3&, unsigned int, bool)>(&DebugRenderer::AddTriangle))
-
-//         .addFunction("AddNode", &DebugRenderer::AddNode)
-
-//         .addOverloadedFunctions("AddBoundingBox",
-//             static_cast<void(DebugRenderer::*)(const BoundingBox&, const Color&, bool)>(&DebugRenderer::AddBoundingBox),
-//             static_cast<void(DebugRenderer::*)(const BoundingBox&, const Matrix3x4&, const Color&, bool)>(&DebugRenderer::AddBoundingBox))
-
-//         .addFunction("AddFrustum", &DebugRenderer::AddFrustum)
-//         .addFunction("AddPolyhedron", &DebugRenderer::AddPolyhedron)
-//         .addFunction("AddSphere", &DebugRenderer::AddSphere)
-//         .addFunction("AddCylinder", &DebugRenderer::AddCylinder)
-//         .addFunction("AddSkeleton", &DebugRenderer::AddSkeleton)
-//         .addFunction("AddTriangleMesh", &DebugRenderer::AddTriangleMesh)
-//         .addFunction("AddCircle", &DebugRenderer::AddCircle)
-//         .addFunction("AddCross", &DebugRenderer::AddCross)
-//         .addFunction("AddQuad", &DebugRenderer::AddQuad)
-//         .addFunction("Render", &DebugRenderer::Render)
-//         .addFunction("GetView", &DebugRenderer::GetView)
-//         .addFunction("GetProjection", &DebugRenderer::GetProjection)
-//         .addFunction("GetFrustum", &DebugRenderer::GetFrustum)
-//         .addFunction("IsInside", &DebugRenderer::IsInside)
-//         .addFunction("HasContent", &DebugRenderer::HasContent)
-
-//         .addProperty("type", &DebugRenderer::GetType)
-//         .addProperty("typeName", &DebugRenderer::GetTypeName)
-//         .addProperty("typeInfo", &DebugRenderer::GetTypeInfo)
-//         .addProperty("view", &DebugRenderer::GetView, &DebugRenderer::SetView)
-//         .addProperty("projection", &DebugRenderer::GetProjection)
-//         .addProperty("frustum", &DebugRenderer::GetFrustum)
-//     );
-// }
-
-// static void RegisterDecalSet(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KDecalVertex"].setClass(UserdataMetatable<DecalVertex>()
-//         .setConstructors<DecalVertex(),
-//             DecalVertex(const Vector3&, const Vector3&),
-//             DecalVertex(const Vector3&, const Vector3&, const float*, const unsigned char*)>()
-
-//         .addProperty("position", &DecalVertex::position_)
-//         .addProperty("normal", &DecalVertex::normal_)
-//         .addProperty("texCoord", &DecalVertex::texCoord_)
-//         .addProperty("tangent", &DecalVertex::tangent_)
-//         .addProperty("blendWeights", &DecalVertex::blendWeights_)
-//         .addProperty("blendIndices", &DecalVertex::blendIndices_)
-//     );
-//     lua["KDecal"].setClass(UserdataMetatable<Decal>()
-//         .setConstructors<Decal()>()
-
-//         .addFunction("AddVertex", &Decal::AddVertex)
-//         .addFunction("CalculateBoundingBox", &Decal::CalculateBoundingBox)
-//         .addProperty("timer", &Decal::timer_)
-//         .addProperty("timeToLive", &Decal::timeToLive_)
-//         .addProperty("boundingBox", &Decal::boundingBox_)
-//         .addProperty("vertices", &Decal::vertices_)
-//         .addProperty("indices", &Decal::indices_)
-//     );
-//     lua["KDecalSet"].setClass(UserdataMetatable<DecalSet, Drawable>(false)
-//         .addStaticFunction("new", &KCreateObject<DecalSet>)
-//         .addStaticFunction("__gc", &KReleaseObject<DecalSet>)
-
-//         .addFunction("GetType", &DecalSet::GetType)
-//         .addFunction("GetTypeName", &DecalSet::GetTypeName)
-//         .addFunction("GetTypeInfo", &DecalSet::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &DecalSet::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &DecalSet::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &DecalSet::GetTypeInfoStatic)
-//         .addFunction("ApplyAttributes", &DecalSet::ApplyAttributes)
-//         .addFunction("OnSetEnabled", &DecalSet::OnSetEnabled)
-//         .addFunction("ProcessRayQuery", &DecalSet::ProcessRayQuery)
-//         .addFunction("UpdateBatches", &DecalSet::UpdateBatches)
-//         .addFunction("UpdateGeometry", &DecalSet::UpdateGeometry)
-//         .addFunction("GetUpdateGeometryType", &DecalSet::GetUpdateGeometryType)
-//         .addFunction("SetMaterial", &DecalSet::SetMaterial)
-//         .addFunction("SetMaxVertices", &DecalSet::SetMaxVertices)
-//         .addFunction("SetMaxIndices", &DecalSet::SetMaxIndices)
-//         .addFunction("AddDecal", &DecalSet::AddDecal)
-//         .addFunction("RemoveDecals", &DecalSet::RemoveDecals)
-//         .addFunction("RemoveAllDecals", &DecalSet::RemoveAllDecals)
-//         .addFunction("GetMaterial", &DecalSet::GetMaterial)
-//         .addFunction("GetNumDecals", &DecalSet::GetNumDecals)
-//         .addFunction("GetNumVertices", &DecalSet::GetNumVertices)
-//         .addFunction("GetNumIndices", &DecalSet::GetNumIndices)
-//         .addFunction("GetMaxVertices", &DecalSet::GetMaxVertices)
-//         .addFunction("GetMaxIndices", &DecalSet::GetMaxIndices)
-
-//         .addProperty("type", &DecalSet::GetType)
-//         .addProperty("typeName", &DecalSet::GetTypeName)
-//         .addProperty("typeInfo", &DecalSet::GetTypeInfo)
-//         .addProperty("updateGeometryType", &DecalSet::GetUpdateGeometryType)
-//         .addProperty("material", &DecalSet::GetMaterial, &DecalSet::SetMaterial)
-//         .addProperty("numDecals", &DecalSet::GetNumDecals)
-//         .addProperty("numVertices", &DecalSet::GetNumVertices)
-//         .addProperty("numIndices", &DecalSet::GetNumIndices)
-//         .addProperty("maxVertices", &DecalSet::GetMaxVertices, &DecalSet::SetMaxVertices)
-//         .addProperty("maxIndices", &DecalSet::GetMaxIndices, &DecalSet::SetMaxIndices)
-//     );
-// }
-
-// static void RegisterDrawable(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KDRAWABLE_GEOMETRY"] = DRAWABLE_GEOMETRY;
-//     lua["KDRAWABLE_LIGHT"] = DRAWABLE_LIGHT;
-//     lua["KDRAWABLE_ZONE"] = DRAWABLE_ZONE;
-//     lua["KDRAWABLE_GEOMETRY2D"] = DRAWABLE_GEOMETRY2D;
-//     lua["KDRAWABLE_ANY"] = DRAWABLE_ANY;
-//     lua["KDEFAULT_VIEWMASK"] = DEFAULT_VIEWMASK;
-//     lua["KDEFAULT_LIGHTMASK"] = DEFAULT_LIGHTMASK;
-//     lua["KDEFAULT_SHADOWMASK"] = DEFAULT_SHADOWMASK;
-//     lua["KDEFAULT_ZONEMASK"] = DEFAULT_ZONEMASK;
-//     lua["KMAX_VERTEX_LIGHTS"] = MAX_VERTEX_LIGHTS;
-//     lua["KANIMATION_LOD_BASESCALE"] = ANIMATION_LOD_BASESCALE;
-//     // enum UpdateGeometryType;
-//     lua["KUPDATE_NONE"] = UPDATE_NONE;
-//     lua["KUPDATE_MAIN_THREAD"] = UPDATE_MAIN_THREAD;
-//     lua["KUPDATE_WORKER_THREAD"] = UPDATE_WORKER_THREAD;
-
-//     lua["KFrameInfo"].setClass(UserdataMetatable<FrameInfo>()
-
-//         .addProperty("frameNumber", &FrameInfo::frameNumber_)
-//         .addProperty("timeStep", &FrameInfo::timeStep_)
-//         .addProperty("viewSize", &FrameInfo::viewSize_)
-//         .addProperty("camera", &FrameInfo::camera_)
-//     );
-//     lua["KSourceBatch"].setClass(UserdataMetatable<SourceBatch>()
-//         .setConstructors<SourceBatch(),
-//             SourceBatch(const SourceBatch&)>()
-
-//         .addProperty("distance", &SourceBatch::distance_)
-//         .addProperty("geometry", &SourceBatch::geometry_)
-//         .addProperty("material", &SourceBatch::material_)
-//         .addProperty("worldTransform", &SourceBatch::worldTransform_)
-//         .addProperty("numWorldTransforms", &SourceBatch::numWorldTransforms_)
-//         .addProperty("instancingData", &SourceBatch::instancingData_)
-//         .addProperty("geometryType", &SourceBatch::geometryType_)
-//     );
-//     lua["KDrawable"].setClass(UserdataMetatable<Drawable, Component>(false)
-//         .addStaticFunction("new", &KCreateObject<Drawable>)
-//         .addStaticFunction("__gc", &KReleaseObject<Drawable>)
-
-//         .addFunction("GetType", &Drawable::GetType)
-//         .addFunction("GetTypeName", &Drawable::GetTypeName)
-//         .addFunction("GetTypeInfo", &Drawable::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &Drawable::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &Drawable::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &Drawable::GetTypeInfoStatic)
-//         .addFunction("OnSetEnabled", &Drawable::OnSetEnabled)
-//         .addFunction("ProcessRayQuery", &Drawable::ProcessRayQuery)
-//         .addFunction("Update", &Drawable::Update)
-//         .addFunction("UpdateBatches", &Drawable::UpdateBatches)
-//         .addFunction("UpdateGeometry", &Drawable::UpdateGeometry)
-//         .addFunction("GetUpdateGeometryType", &Drawable::GetUpdateGeometryType)
-//         .addFunction("GetLodGeometry", &Drawable::GetLodGeometry)
-//         .addFunction("GetNumOccluderTriangles", &Drawable::GetNumOccluderTriangles)
-//         .addFunction("DrawOcclusion", &Drawable::DrawOcclusion)
-//         .addFunction("DrawDebugGeometry", &Drawable::DrawDebugGeometry)
-//         .addFunction("SetDrawDistance", &Drawable::SetDrawDistance)
-//         .addFunction("SetShadowDistance", &Drawable::SetShadowDistance)
-//         .addFunction("SetLodBias", &Drawable::SetLodBias)
-//         .addFunction("SetViewMask", &Drawable::SetViewMask)
-//         .addFunction("SetLightMask", &Drawable::SetLightMask)
-//         .addFunction("SetShadowMask", &Drawable::SetShadowMask)
-//         .addFunction("SetZoneMask", &Drawable::SetZoneMask)
-//         .addFunction("SetMaxLights", &Drawable::SetMaxLights)
-//         .addFunction("SetCastShadows", &Drawable::SetCastShadows)
-//         .addFunction("SetOccluder", &Drawable::SetOccluder)
-//         .addFunction("SetOccludee", &Drawable::SetOccludee)
-//         .addFunction("MarkForUpdate", &Drawable::MarkForUpdate)
-//         .addFunction("GetBoundingBox", &Drawable::GetBoundingBox)
-//         .addFunction("GetWorldBoundingBox", &Drawable::GetWorldBoundingBox)
-//         .addFunction("GetDrawableFlags", &Drawable::GetDrawableFlags)
-//         .addFunction("GetDrawDistance", &Drawable::GetDrawDistance)
-//         .addFunction("GetShadowDistance", &Drawable::GetShadowDistance)
-//         .addFunction("GetLodBias", &Drawable::GetLodBias)
-//         .addFunction("GetViewMask", &Drawable::GetViewMask)
-//         .addFunction("GetLightMask", &Drawable::GetLightMask)
-//         .addFunction("GetShadowMask", &Drawable::GetShadowMask)
-//         .addFunction("GetZoneMask", &Drawable::GetZoneMask)
-//         .addFunction("GetMaxLights", &Drawable::GetMaxLights)
-//         .addFunction("GetCastShadows", &Drawable::GetCastShadows)
-//         .addFunction("IsOccluder", &Drawable::IsOccluder)
-//         .addFunction("IsOccludee", &Drawable::IsOccludee)
-
-//         .addOverloadedFunctions("IsInView",
-//             static_cast<bool(Drawable::*)() const>(&Drawable::IsInView),
-//             static_cast<bool(Drawable::*)(Camera*) const>(&Drawable::IsInView),
-//             static_cast<bool(Drawable::*)(const FrameInfo&, bool) const>(&Drawable::IsInView))
-
-//         .addFunction("GetBatches", &Drawable::GetBatches)
-//         .addFunction("SetZone", &Drawable::SetZone)
-//         .addFunction("SetSortValue", &Drawable::SetSortValue)
-//         .addFunction("SetMinMaxZ", &Drawable::SetMinMaxZ)
-
-//         .addOverloadedFunctions("MarkInView",
-//             static_cast<void(Drawable::*)(const FrameInfo&)>(&Drawable::MarkInView),
-//             static_cast<void(Drawable::*)(unsigned int)>(&Drawable::MarkInView))
-
-//         .addFunction("LimitLights", &Drawable::LimitLights)
-//         .addFunction("LimitVertexLights", &Drawable::LimitVertexLights)
-//         .addFunction("SetBasePass", &Drawable::SetBasePass)
-//         .addFunction("GetOctant", &Drawable::GetOctant)
-//         .addFunction("GetZone", &Drawable::GetZone)
-//         .addFunction("IsZoneDirty", &Drawable::IsZoneDirty)
-//         .addFunction("GetDistance", &Drawable::GetDistance)
-//         .addFunction("GetLodDistance", &Drawable::GetLodDistance)
-//         .addFunction("GetSortValue", &Drawable::GetSortValue)
-//         .addFunction("HasBasePass", &Drawable::HasBasePass)
-//         .addFunction("GetLights", &Drawable::GetLights)
-//         .addFunction("GetVertexLights", &Drawable::GetVertexLights)
-//         .addFunction("GetFirstLight", &Drawable::GetFirstLight)
-//         .addFunction("GetMinZ", &Drawable::GetMinZ)
-//         .addFunction("GetMaxZ", &Drawable::GetMaxZ)
-//         .addFunction("AddLight", &Drawable::AddLight)
-//         .addFunction("AddVertexLight", &Drawable::AddVertexLight)
-
-//         .addProperty("type", &Drawable::GetType)
-//         .addProperty("typeName", &Drawable::GetTypeName)
-//         .addProperty("typeInfo", &Drawable::GetTypeInfo)
-//         .addProperty("updateGeometryType", &Drawable::GetUpdateGeometryType)
-//         .addProperty("numOccluderTriangles", &Drawable::GetNumOccluderTriangles)
-//         .addProperty("boundingBox", &Drawable::GetBoundingBox)
-//         .addProperty("worldBoundingBox", &Drawable::GetWorldBoundingBox)
-//         .addProperty("drawableFlags", &Drawable::GetDrawableFlags)
-//         .addProperty("drawDistance", &Drawable::GetDrawDistance, &Drawable::SetDrawDistance)
-//         .addProperty("shadowDistance", &Drawable::GetShadowDistance, &Drawable::SetShadowDistance)
-//         .addProperty("lodBias", &Drawable::GetLodBias, &Drawable::SetLodBias)
-//         .addProperty("viewMask", &Drawable::GetViewMask, &Drawable::SetViewMask)
-//         .addProperty("lightMask", &Drawable::GetLightMask, &Drawable::SetLightMask)
-//         .addProperty("shadowMask", &Drawable::GetShadowMask, &Drawable::SetShadowMask)
-//         .addProperty("zoneMask", &Drawable::GetZoneMask, &Drawable::SetZoneMask)
-//         .addProperty("maxLights", &Drawable::GetMaxLights, &Drawable::SetMaxLights)
-//         .addProperty("castShadows", &Drawable::GetCastShadows, &Drawable::SetCastShadows)
-//         .addProperty("occluder", &Drawable::IsOccluder, &Drawable::SetOccluder)
-//         .addProperty("occludee", &Drawable::IsOccludee, &Drawable::SetOccludee)
-//         .addProperty("batches", &Drawable::GetBatches)
-//         .addProperty("octant", &Drawable::GetOctant)
-//         .addProperty("zone", &Drawable::GetZone)
-//         .addProperty("zoneDirty", &Drawable::IsZoneDirty)
-//         .addProperty("distance", &Drawable::GetDistance)
-//         .addProperty("lodDistance", &Drawable::GetLodDistance)
-//         .addProperty("sortValue", &Drawable::GetSortValue, &Drawable::SetSortValue)
-//         .addProperty("lights", &Drawable::GetLights)
-//         .addProperty("vertexLights", &Drawable::GetVertexLights)
-//         .addProperty("firstLight", &Drawable::GetFirstLight)
-//         .addProperty("minZ", &Drawable::GetMinZ)
-//         .addProperty("maxZ", &Drawable::GetMaxZ)
-//         .addProperty("basePass", &Drawable::SetBasePass)
-//     );
-//     lua["KCompareDrawables"] = function(&CompareDrawables);
-//     lua["KWriteDrawablesToOBJ"] = function(&WriteDrawablesToOBJ);
-// }
-
-// static void RegisterDrawableEvents(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KE_BONEHIERARCHYCREATED"] = E_BONEHIERARCHYCREATED;
-//     lua["KE_ANIMATIONTRIGGER"] = E_ANIMATIONTRIGGER;
-//     lua["KE_ANIMATIONFINISHED"] = E_ANIMATIONFINISHED;
-//     lua["KE_PARTICLEEFFECTFINISHED"] = E_PARTICLEEFFECTFINISHED;
-//     lua["KE_TERRAINCREATED"] = E_TERRAINCREATED;
-// }
-
-// static void RegisterGeometry(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KGeometry"].setClass(UserdataMetatable<Geometry, Object>(false)
-//         .addStaticFunction("new", &KCreateObject<Geometry>)
-//         .addStaticFunction("__gc", &KReleaseObject<Geometry>)
-
-//         .addFunction("GetType", &Geometry::GetType)
-//         .addFunction("GetTypeName", &Geometry::GetTypeName)
-//         .addFunction("GetTypeInfo", &Geometry::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &Geometry::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &Geometry::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &Geometry::GetTypeInfoStatic)
-//         .addFunction("SetNumVertexBuffers", &Geometry::SetNumVertexBuffers)
-//         .addFunction("SetVertexBuffer", &Geometry::SetVertexBuffer)
-//         .addFunction("SetIndexBuffer", &Geometry::SetIndexBuffer)
-
-//         .addOverloadedFunctions("SetDrawRange",
-//             static_cast<bool(Geometry::*)(PrimitiveType, unsigned int, unsigned int, bool)>(&Geometry::SetDrawRange),
-//             static_cast<bool(Geometry::*)(PrimitiveType, unsigned int, unsigned int, unsigned int, unsigned int, bool)>(&Geometry::SetDrawRange))
-
-//         .addFunction("SetLodDistance", &Geometry::SetLodDistance)
-
-//         .addOverloadedFunctions("SetRawVertexData",
-//             static_cast<void(Geometry::*)(SharedArrayPtr<unsigned char>, const PODVector<VertexElement>&)>(&Geometry::SetRawVertexData),
-//             static_cast<void(Geometry::*)(SharedArrayPtr<unsigned char>, unsigned int)>(&Geometry::SetRawVertexData))
-
-//         .addFunction("SetRawIndexData", &Geometry::SetRawIndexData)
-//         .addFunction("Draw", &Geometry::Draw)
-//         .addFunction("GetVertexBuffers", &Geometry::GetVertexBuffers)
-//         .addFunction("GetNumVertexBuffers", &Geometry::GetNumVertexBuffers)
-//         .addFunction("GetVertexBuffer", &Geometry::GetVertexBuffer)
-//         .addFunction("GetIndexBuffer", &Geometry::GetIndexBuffer)
-//         .addFunction("GetPrimitiveType", &Geometry::GetPrimitiveType)
-//         .addFunction("GetIndexStart", &Geometry::GetIndexStart)
-//         .addFunction("GetIndexCount", &Geometry::GetIndexCount)
-//         .addFunction("GetVertexStart", &Geometry::GetVertexStart)
-//         .addFunction("GetVertexCount", &Geometry::GetVertexCount)
-//         .addFunction("GetLodDistance", &Geometry::GetLodDistance)
-//         .addFunction("GetBufferHash", &Geometry::GetBufferHash)
-//         .addFunction("GetRawData", &Geometry::GetRawData)
-//         .addFunction("GetRawDataShared", &Geometry::GetRawDataShared)
-//         .addFunction("GetHitDistance", &Geometry::GetHitDistance)
-//         .addFunction("IsInside", &Geometry::IsInside)
-//         .addFunction("IsEmpty", &Geometry::IsEmpty)
-
-//         .addProperty("type", &Geometry::GetType)
-//         .addProperty("typeName", &Geometry::GetTypeName)
-//         .addProperty("typeInfo", &Geometry::GetTypeInfo)
-//         .addProperty("vertexBuffers", &Geometry::GetVertexBuffers)
-//         .addProperty("numVertexBuffers", &Geometry::GetNumVertexBuffers, &Geometry::SetNumVertexBuffers)
-//         .addProperty("indexBuffer", &Geometry::GetIndexBuffer, &Geometry::SetIndexBuffer)
-//         .addProperty("primitiveType", &Geometry::GetPrimitiveType)
-//         .addProperty("indexStart", &Geometry::GetIndexStart)
-//         .addProperty("indexCount", &Geometry::GetIndexCount)
-//         .addProperty("vertexStart", &Geometry::GetVertexStart)
-//         .addProperty("vertexCount", &Geometry::GetVertexCount)
-//         .addProperty("lodDistance", &Geometry::GetLodDistance, &Geometry::SetLodDistance)
-//         .addProperty("bufferHash", &Geometry::GetBufferHash)
-//         .addProperty("empty", &Geometry::IsEmpty)
-//     );
-// }
-
-// static void RegisterGPUObject(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KGPUObject"].setClass(UserdataMetatable<GPUObject>()
-//         .setConstructors<GPUObject(Graphics*)>()
-
-//         .addFunction("OnDeviceLost", &GPUObject::OnDeviceLost)
-//         .addFunction("OnDeviceReset", &GPUObject::OnDeviceReset)
-//         .addFunction("Release", &GPUObject::Release)
-//         .addFunction("ClearDataLost", &GPUObject::ClearDataLost)
-//         .addFunction("GetGraphics", &GPUObject::GetGraphics)
-//         .addFunction("GetGPUObject", &GPUObject::GetGPUObject)
-//         .addFunction("IsDataLost", &GPUObject::IsDataLost)
-//         .addFunction("HasPendingData", &GPUObject::HasPendingData)
-
-//         .addProperty("graphics", &GPUObject::GetGraphics)
-//         .addProperty("gPUObject", &GPUObject::GetGPUObject)
-//         .addProperty("dataLost", &GPUObject::IsDataLost)
-//     );
-// }
-
-// static void RegisterGraphics(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KNUM_SCREEN_BUFFERS"] = NUM_SCREEN_BUFFERS;
-//     lua["KScratchBuffer"].setClass(UserdataMetatable<ScratchBuffer>()
-//         .setConstructors<ScratchBuffer()>()
-
-//         .addProperty("data", &ScratchBuffer::data_)
-//         .addProperty("size", &ScratchBuffer::size_)
-//         .addProperty("reserved", &ScratchBuffer::reserved_)
-//     );
-//     lua["KGraphics"].setClass(UserdataMetatable<Graphics, Object>(false)
-//         .addStaticFunction("new", &KCreateObject<Graphics>)
-//         .addStaticFunction("__gc", &KReleaseObject<Graphics>)
-
-//         .addFunction("GetType", &Graphics::GetType)
-//         .addFunction("GetTypeName", &Graphics::GetTypeName)
-//         .addFunction("GetTypeInfo", &Graphics::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &Graphics::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &Graphics::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &Graphics::GetTypeInfoStatic)
-//         .addFunction("SetExternalWindow", &Graphics::SetExternalWindow)
-//         .addFunction("SetWindowIcon", &Graphics::SetWindowIcon)
-//         .addFunction("SetWindowTitle", &Graphics::SetWindowTitle)
-
-//         .addOverloadedFunctions("SetWindowPosition",
-//             static_cast<void(Graphics::*)(const IntVector2&)>(&Graphics::SetWindowPosition),
-//             static_cast<void(Graphics::*)(int, int)>(&Graphics::SetWindowPosition))
-
-
-//         .addOverloadedFunctions("SetMode",
-//             static_cast<bool(Graphics::*)(int, int, bool, bool, bool, bool, bool, bool, int)>(&Graphics::SetMode),
-//             static_cast<bool(Graphics::*)(int, int)>(&Graphics::SetMode))
-
-//         .addFunction("SetSRGB", &Graphics::SetSRGB)
-//         .addFunction("SetFlushGPU", &Graphics::SetFlushGPU)
-//         .addFunction("SetForceGL2", &Graphics::SetForceGL2)
-//         .addFunction("SetOrientations", &Graphics::SetOrientations)
-//         .addFunction("ToggleFullscreen", &Graphics::ToggleFullscreen)
-//         .addFunction("Close", &Graphics::Close)
-//         .addFunction("TakeScreenShot", &Graphics::TakeScreenShot)
-//         .addFunction("BeginFrame", &Graphics::BeginFrame)
-//         .addFunction("EndFrame", &Graphics::EndFrame)
-//         .addFunction("Clear", &Graphics::Clear)
-//         .addFunction("ResolveToTexture", &Graphics::ResolveToTexture)
-
-//         .addOverloadedFunctions("Draw",
-//             static_cast<void(Graphics::*)(PrimitiveType, unsigned int, unsigned int)>(&Graphics::Draw),
-//             static_cast<void(Graphics::*)(PrimitiveType, unsigned int, unsigned int, unsigned int, unsigned int)>(&Graphics::Draw),
-//             static_cast<void(Graphics::*)(PrimitiveType, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int)>(&Graphics::Draw))
-
-
-//         .addOverloadedFunctions("DrawInstanced",
-//             static_cast<void(Graphics::*)(PrimitiveType, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int)>(&Graphics::DrawInstanced),
-//             static_cast<void(Graphics::*)(PrimitiveType, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int)>(&Graphics::DrawInstanced))
-
-//         .addFunction("SetVertexBuffer", &Graphics::SetVertexBuffer)
-
-//         .addOverloadedFunctions("SetVertexBuffers",
-//             static_cast<bool(Graphics::*)(const PODVector<VertexBuffer*>&, unsigned int)>(&Graphics::SetVertexBuffers),
-//             static_cast<bool(Graphics::*)(const Vector<SharedPtr<VertexBuffer> >&, unsigned int)>(&Graphics::SetVertexBuffers))
-
-//         .addFunction("SetIndexBuffer", &Graphics::SetIndexBuffer)
-//         .addFunction("SetShaders", &Graphics::SetShaders)
-
-//         .addOverloadedFunctions("SetShaderParameter",
-//             static_cast<void(Graphics::*)(StringHash, const float*, unsigned int)>(&Graphics::SetShaderParameter),
-//             static_cast<void(Graphics::*)(StringHash, float)>(&Graphics::SetShaderParameter),
-//             static_cast<void(Graphics::*)(StringHash, const Color&)>(&Graphics::SetShaderParameter),
-//             static_cast<void(Graphics::*)(StringHash, const Vector2&)>(&Graphics::SetShaderParameter),
-//             static_cast<void(Graphics::*)(StringHash, const Matrix3&)>(&Graphics::SetShaderParameter),
-//             static_cast<void(Graphics::*)(StringHash, const Vector3&)>(&Graphics::SetShaderParameter),
-//             static_cast<void(Graphics::*)(StringHash, const Matrix4&)>(&Graphics::SetShaderParameter),
-//             static_cast<void(Graphics::*)(StringHash, const Vector4&)>(&Graphics::SetShaderParameter),
-//             static_cast<void(Graphics::*)(StringHash, const Matrix3x4&)>(&Graphics::SetShaderParameter),
-//             static_cast<void(Graphics::*)(StringHash, const Variant&)>(&Graphics::SetShaderParameter))
-
-//         .addFunction("NeedParameterUpdate", &Graphics::NeedParameterUpdate)
-//         .addFunction("HasShaderParameter", &Graphics::HasShaderParameter)
-//         .addFunction("HasTextureUnit", &Graphics::HasTextureUnit)
-//         .addFunction("ClearParameterSource", &Graphics::ClearParameterSource)
-//         .addFunction("ClearParameterSources", &Graphics::ClearParameterSources)
-//         .addFunction("ClearTransformSources", &Graphics::ClearTransformSources)
-//         .addFunction("SetTexture", &Graphics::SetTexture)
-//         .addFunction("SetTextureForUpdate", &Graphics::SetTextureForUpdate)
-//         .addFunction("SetDefaultTextureFilterMode", &Graphics::SetDefaultTextureFilterMode)
-//         .addFunction("SetTextureAnisotropy", &Graphics::SetTextureAnisotropy)
-//         .addFunction("SetTextureParametersDirty", &Graphics::SetTextureParametersDirty)
-//         .addFunction("ResetRenderTargets", &Graphics::ResetRenderTargets)
-//         .addFunction("ResetRenderTarget", &Graphics::ResetRenderTarget)
-//         .addFunction("ResetDepthStencil", &Graphics::ResetDepthStencil)
-
-//         .addOverloadedFunctions("SetRenderTarget",
-//             static_cast<void(Graphics::*)(unsigned int, RenderSurface*)>(&Graphics::SetRenderTarget),
-//             static_cast<void(Graphics::*)(unsigned int, Texture2D*)>(&Graphics::SetRenderTarget))
-
-
-//         .addOverloadedFunctions("SetDepthStencil",
-//             static_cast<void(Graphics::*)(RenderSurface*)>(&Graphics::SetDepthStencil),
-//             static_cast<void(Graphics::*)(Texture2D*)>(&Graphics::SetDepthStencil))
-
-//         .addFunction("SetViewport", &Graphics::SetViewport)
-//         .addFunction("SetBlendMode", &Graphics::SetBlendMode)
-//         .addFunction("SetColorWrite", &Graphics::SetColorWrite)
-//         .addFunction("SetCullMode", &Graphics::SetCullMode)
-//         .addFunction("SetDepthBias", &Graphics::SetDepthBias)
-//         .addFunction("SetDepthTest", &Graphics::SetDepthTest)
-//         .addFunction("SetDepthWrite", &Graphics::SetDepthWrite)
-//         .addFunction("SetFillMode", &Graphics::SetFillMode)
-
-//         .addOverloadedFunctions("SetScissorTest",
-//             static_cast<void(Graphics::*)(bool, const Rect&, bool)>(&Graphics::SetScissorTest),
-//             static_cast<void(Graphics::*)(bool, const IntRect&)>(&Graphics::SetScissorTest))
-
-//         .addFunction("SetStencilTest", &Graphics::SetStencilTest)
-//         .addFunction("SetClipPlane", &Graphics::SetClipPlane)
-//         .addFunction("BeginDumpShaders", &Graphics::BeginDumpShaders)
-//         .addFunction("EndDumpShaders", &Graphics::EndDumpShaders)
-//         .addFunction("PrecacheShaders", &Graphics::PrecacheShaders)
-//         .addFunction("IsInitialized", &Graphics::IsInitialized)
-//         .addFunction("GetImpl", &Graphics::GetImpl)
-//         .addFunction("GetExternalWindow", &Graphics::GetExternalWindow)
-//         .addFunction("GetWindowTitle", &Graphics::GetWindowTitle)
-//         .addFunction("GetApiName", &Graphics::GetApiName)
-//         .addFunction("GetWindowPosition", &Graphics::GetWindowPosition)
-//         .addFunction("GetWidth", &Graphics::GetWidth)
-//         .addFunction("GetHeight", &Graphics::GetHeight)
-//         .addFunction("GetMultiSample", &Graphics::GetMultiSample)
-//         .addFunction("GetFullscreen", &Graphics::GetFullscreen)
-//         .addFunction("GetBorderless", &Graphics::GetBorderless)
-//         .addFunction("GetResizable", &Graphics::GetResizable)
-//         .addFunction("GetHighDPI", &Graphics::GetHighDPI)
-//         .addFunction("GetVSync", &Graphics::GetVSync)
-//         .addFunction("GetTripleBuffer", &Graphics::GetTripleBuffer)
-//         .addFunction("GetSRGB", &Graphics::GetSRGB)
-//         .addFunction("GetFlushGPU", &Graphics::GetFlushGPU)
-//         .addFunction("GetForceGL2", &Graphics::GetForceGL2)
-//         .addFunction("GetOrientations", &Graphics::GetOrientations)
-//         .addFunction("IsDeviceLost", &Graphics::IsDeviceLost)
-//         .addFunction("GetNumPrimitives", &Graphics::GetNumPrimitives)
-//         .addFunction("GetNumBatches", &Graphics::GetNumBatches)
-//         .addFunction("GetDummyColorFormat", &Graphics::GetDummyColorFormat)
-//         .addFunction("GetShadowMapFormat", &Graphics::GetShadowMapFormat)
-//         .addFunction("GetHiresShadowMapFormat", &Graphics::GetHiresShadowMapFormat)
-//         .addFunction("GetInstancingSupport", &Graphics::GetInstancingSupport)
-//         .addFunction("GetLightPrepassSupport", &Graphics::GetLightPrepassSupport)
-//         .addFunction("GetDeferredSupport", &Graphics::GetDeferredSupport)
-//         .addFunction("GetAnisotropySupport", &Graphics::GetAnisotropySupport)
-//         .addFunction("GetHardwareShadowSupport", &Graphics::GetHardwareShadowSupport)
-//         .addFunction("GetReadableDepthSupport", &Graphics::GetReadableDepthSupport)
-//         .addFunction("GetSRGBSupport", &Graphics::GetSRGBSupport)
-//         .addFunction("GetSRGBWriteSupport", &Graphics::GetSRGBWriteSupport)
-//         .addFunction("GetResolutions", &Graphics::GetResolutions)
-//         .addFunction("GetMultiSampleLevels", &Graphics::GetMultiSampleLevels)
-//         .addFunction("GetDesktopResolution", &Graphics::GetDesktopResolution)
-
-//         .addOverloadedFunctions("GetFormat",
-//             static_cast<unsigned int(Graphics::*)(CompressedFormat) const>(&Graphics::GetFormat),
-//             static_cast<unsigned int(Graphics::*)(const String&)>(&Graphics::GetFormat))
-
-
-//         .addOverloadedFunctions("GetShader",
-//             static_cast<ShaderVariation*(Graphics::*)(ShaderType, const String&, const String&) const>(&Graphics::GetShader),
-//             static_cast<ShaderVariation*(Graphics::*)(ShaderType, const char*, const char*) const>(&Graphics::GetShader))
-
-//         .addFunction("GetVertexBuffer", &Graphics::GetVertexBuffer)
-//         .addFunction("GetIndexBuffer", &Graphics::GetIndexBuffer)
-//         .addFunction("GetVertexShader", &Graphics::GetVertexShader)
-//         .addFunction("GetPixelShader", &Graphics::GetPixelShader)
-//         .addFunction("GetShaderProgram", &Graphics::GetShaderProgram)
-//         .addFunction("GetTextureUnit", &Graphics::GetTextureUnit)
-//         .addFunction("GetTextureUnitName", &Graphics::GetTextureUnitName)
-//         .addFunction("GetTexture", &Graphics::GetTexture)
-//         .addFunction("GetDefaultTextureFilterMode", &Graphics::GetDefaultTextureFilterMode)
-//         .addFunction("GetRenderTarget", &Graphics::GetRenderTarget)
-//         .addFunction("GetDepthStencil", &Graphics::GetDepthStencil)
-//         .addFunction("GetDepthTexture", &Graphics::GetDepthTexture)
-//         .addFunction("GetViewport", &Graphics::GetViewport)
-//         .addFunction("GetTextureAnisotropy", &Graphics::GetTextureAnisotropy)
-//         .addFunction("GetBlendMode", &Graphics::GetBlendMode)
-//         .addFunction("GetColorWrite", &Graphics::GetColorWrite)
-//         .addFunction("GetCullMode", &Graphics::GetCullMode)
-//         .addFunction("GetDepthConstantBias", &Graphics::GetDepthConstantBias)
-//         .addFunction("GetDepthSlopeScaledBias", &Graphics::GetDepthSlopeScaledBias)
-//         .addFunction("GetDepthTest", &Graphics::GetDepthTest)
-//         .addFunction("GetDepthWrite", &Graphics::GetDepthWrite)
-//         .addFunction("GetFillMode", &Graphics::GetFillMode)
-//         .addFunction("GetStencilTest", &Graphics::GetStencilTest)
-//         .addFunction("GetScissorTest", &Graphics::GetScissorTest)
-//         .addFunction("GetScissorRect", &Graphics::GetScissorRect)
-//         .addFunction("GetStencilTestMode", &Graphics::GetStencilTestMode)
-//         .addFunction("GetStencilPass", &Graphics::GetStencilPass)
-//         .addFunction("GetStencilFail", &Graphics::GetStencilFail)
-//         .addFunction("GetStencilZFail", &Graphics::GetStencilZFail)
-//         .addFunction("GetStencilRef", &Graphics::GetStencilRef)
-//         .addFunction("GetStencilCompareMask", &Graphics::GetStencilCompareMask)
-//         .addFunction("GetStencilWriteMask", &Graphics::GetStencilWriteMask)
-//         .addFunction("GetUseClipPlane", &Graphics::GetUseClipPlane)
-//         .addFunction("GetRenderTargetDimensions", &Graphics::GetRenderTargetDimensions)
-//         .addFunction("WindowResized", &Graphics::WindowResized)
-//         .addFunction("WindowMoved", &Graphics::WindowMoved)
-//         .addFunction("AddGPUObject", &Graphics::AddGPUObject)
-//         .addFunction("RemoveGPUObject", &Graphics::RemoveGPUObject)
-//         .addFunction("ReserveScratchBuffer", &Graphics::ReserveScratchBuffer)
-//         .addFunction("FreeScratchBuffer", &Graphics::FreeScratchBuffer)
-//         .addFunction("CleanupScratchBuffers", &Graphics::CleanupScratchBuffers)
-//         .addFunction("CleanupRenderSurface", &Graphics::CleanupRenderSurface)
-//         .addFunction("CleanupShaderPrograms", &Graphics::CleanupShaderPrograms)
-//         .addFunction("GetOrCreateConstantBuffer", &Graphics::GetOrCreateConstantBuffer)
-//         .addFunction("Release", &Graphics::Release)
-//         .addFunction("Restore", &Graphics::Restore)
-//         .addFunction("Maximize", &Graphics::Maximize)
-//         .addFunction("Minimize", &Graphics::Minimize)
-//         .addFunction("MarkFBODirty", &Graphics::MarkFBODirty)
-//         .addFunction("SetVBO", &Graphics::SetVBO)
-//         .addFunction("SetUBO", &Graphics::SetUBO)
-//         .addStaticFunction("GetAlphaFormat", &Graphics::GetAlphaFormat)
-//         .addStaticFunction("GetLuminanceFormat", &Graphics::GetLuminanceFormat)
-//         .addStaticFunction("GetLuminanceAlphaFormat", &Graphics::GetLuminanceAlphaFormat)
-//         .addStaticFunction("GetRGBFormat", &Graphics::GetRGBFormat)
-//         .addStaticFunction("GetRGBAFormat", &Graphics::GetRGBAFormat)
-//         .addStaticFunction("GetRGBA16Format", &Graphics::GetRGBA16Format)
-//         .addStaticFunction("GetRGBAFloat16Format", &Graphics::GetRGBAFloat16Format)
-//         .addStaticFunction("GetRGBAFloat32Format", &Graphics::GetRGBAFloat32Format)
-//         .addStaticFunction("GetRG16Format", &Graphics::GetRG16Format)
-//         .addStaticFunction("GetRGFloat16Format", &Graphics::GetRGFloat16Format)
-//         .addStaticFunction("GetRGFloat32Format", &Graphics::GetRGFloat32Format)
-//         .addStaticFunction("GetFloat16Format", &Graphics::GetFloat16Format)
-//         .addStaticFunction("GetFloat32Format", &Graphics::GetFloat32Format)
-//         .addStaticFunction("GetLinearDepthFormat", &Graphics::GetLinearDepthFormat)
-//         .addStaticFunction("GetDepthStencilFormat", &Graphics::GetDepthStencilFormat)
-//         .addStaticFunction("GetReadableDepthFormat", &Graphics::GetReadableDepthFormat)
-//         .addStaticFunction("GetPixelUVOffset", &Graphics::GetPixelUVOffset)
-//         .addStaticFunction("GetMaxBones", &Graphics::GetMaxBones)
-//         .addStaticFunction("GetGL3Support", &Graphics::GetGL3Support)
-
-//         .addProperty("type", &Graphics::GetType)
-//         .addProperty("typeName", &Graphics::GetTypeName)
-//         .addProperty("typeInfo", &Graphics::GetTypeInfo)
-//         .addProperty("initialized", &Graphics::IsInitialized)
-//         .addProperty("impl", &Graphics::GetImpl)
-//         .addProperty("externalWindow", &Graphics::GetExternalWindow, &Graphics::SetExternalWindow)
-//         .addProperty("windowTitle", &Graphics::GetWindowTitle, &Graphics::SetWindowTitle)
-//         .addProperty("apiName", &Graphics::GetApiName)
-//         .addProperty("windowPosition", &Graphics::GetWindowPosition)
-//         .addProperty("width", &Graphics::GetWidth)
-//         .addProperty("height", &Graphics::GetHeight)
-//         .addProperty("multiSample", &Graphics::GetMultiSample)
-//         .addProperty("fullscreen", &Graphics::GetFullscreen)
-//         .addProperty("borderless", &Graphics::GetBorderless)
-//         .addProperty("resizable", &Graphics::GetResizable)
-//         .addProperty("highDPI", &Graphics::GetHighDPI)
-//         .addProperty("vSync", &Graphics::GetVSync)
-//         .addProperty("tripleBuffer", &Graphics::GetTripleBuffer)
-//         .addProperty("sRGB", &Graphics::GetSRGB, &Graphics::SetSRGB)
-//         .addProperty("flushGPU", &Graphics::GetFlushGPU, &Graphics::SetFlushGPU)
-//         .addProperty("forceGL2", &Graphics::GetForceGL2, &Graphics::SetForceGL2)
-//         .addProperty("orientations", &Graphics::GetOrientations, &Graphics::SetOrientations)
-//         .addProperty("deviceLost", &Graphics::IsDeviceLost)
-//         .addProperty("numPrimitives", &Graphics::GetNumPrimitives)
-//         .addProperty("numBatches", &Graphics::GetNumBatches)
-//         .addProperty("dummyColorFormat", &Graphics::GetDummyColorFormat)
-//         .addProperty("shadowMapFormat", &Graphics::GetShadowMapFormat)
-//         .addProperty("hiresShadowMapFormat", &Graphics::GetHiresShadowMapFormat)
-//         .addProperty("instancingSupport", &Graphics::GetInstancingSupport)
-//         .addProperty("lightPrepassSupport", &Graphics::GetLightPrepassSupport)
-//         .addProperty("deferredSupport", &Graphics::GetDeferredSupport)
-//         .addProperty("anisotropySupport", &Graphics::GetAnisotropySupport)
-//         .addProperty("hardwareShadowSupport", &Graphics::GetHardwareShadowSupport)
-//         .addProperty("readableDepthSupport", &Graphics::GetReadableDepthSupport)
-//         .addProperty("sRGBSupport", &Graphics::GetSRGBSupport)
-//         .addProperty("sRGBWriteSupport", &Graphics::GetSRGBWriteSupport)
-//         .addProperty("resolutions", &Graphics::GetResolutions)
-//         .addProperty("multiSampleLevels", &Graphics::GetMultiSampleLevels)
-//         .addProperty("desktopResolution", &Graphics::GetDesktopResolution)
-//         .addProperty("indexBuffer", &Graphics::GetIndexBuffer, &Graphics::SetIndexBuffer)
-//         .addProperty("vertexShader", &Graphics::GetVertexShader)
-//         .addProperty("pixelShader", &Graphics::GetPixelShader)
-//         .addProperty("shaderProgram", &Graphics::GetShaderProgram)
-//         .addProperty("defaultTextureFilterMode", &Graphics::GetDefaultTextureFilterMode, &Graphics::SetDefaultTextureFilterMode)
-//         .addProperty("depthStencil", &Graphics::GetDepthStencil)
-//         .addProperty("depthTexture", &Graphics::GetDepthTexture)
-//         .addProperty("viewport", &Graphics::GetViewport, &Graphics::SetViewport)
-//         .addProperty("textureAnisotropy", &Graphics::GetTextureAnisotropy, &Graphics::SetTextureAnisotropy)
-//         .addProperty("blendMode", &Graphics::GetBlendMode, &Graphics::SetBlendMode)
-//         .addProperty("colorWrite", &Graphics::GetColorWrite, &Graphics::SetColorWrite)
-//         .addProperty("cullMode", &Graphics::GetCullMode, &Graphics::SetCullMode)
-//         .addProperty("depthConstantBias", &Graphics::GetDepthConstantBias)
-//         .addProperty("depthSlopeScaledBias", &Graphics::GetDepthSlopeScaledBias)
-//         .addProperty("depthTest", &Graphics::GetDepthTest, &Graphics::SetDepthTest)
-//         .addProperty("depthWrite", &Graphics::GetDepthWrite, &Graphics::SetDepthWrite)
-//         .addProperty("fillMode", &Graphics::GetFillMode, &Graphics::SetFillMode)
-//         .addProperty("stencilTest", &Graphics::GetStencilTest)
-//         .addProperty("scissorTest", &Graphics::GetScissorTest)
-//         .addProperty("scissorRect", &Graphics::GetScissorRect)
-//         .addProperty("stencilTestMode", &Graphics::GetStencilTestMode)
-//         .addProperty("stencilPass", &Graphics::GetStencilPass)
-//         .addProperty("stencilFail", &Graphics::GetStencilFail)
-//         .addProperty("stencilZFail", &Graphics::GetStencilZFail)
-//         .addProperty("stencilRef", &Graphics::GetStencilRef)
-//         .addProperty("stencilCompareMask", &Graphics::GetStencilCompareMask)
-//         .addProperty("stencilWriteMask", &Graphics::GetStencilWriteMask)
-//         .addProperty("useClipPlane", &Graphics::GetUseClipPlane)
-//         .addProperty("renderTargetDimensions", &Graphics::GetRenderTargetDimensions)
-//         .addProperty("windowIcon", &Graphics::SetWindowIcon)
-//         .addProperty("vertexBuffer", &Graphics::SetVertexBuffer)
-//         .addProperty("textureForUpdate", &Graphics::SetTextureForUpdate)
-//         .addProperty("vBO", &Graphics::SetVBO)
-//         .addProperty("uBO", &Graphics::SetUBO)
-//     );
-//     lua["KRegisterGraphicsLibrary"] = function(&RegisterGraphicsLibrary);
-// }
+#include "../Graphics/AnimatedModel.h"
+#include "../Graphics/Animation.h"
+#include "../Graphics/AnimationController.h"
+#include "../Graphics/AnimationState.h"
+#include "../Graphics/BillboardSet.h"
+#include "../Graphics/Camera.h"
+#include "../Graphics/CustomGeometry.h"
+#include "../Graphics/DebugRenderer.h"
+#include "../Graphics/DecalSet.h"
+#include "../Graphics/Drawable.h"
+#include "../Graphics/DrawableEvents.h"
+#include "../Graphics/Geometry.h"
+#include "../Graphics/GPUObject.h"
+#include "../Graphics/Graphics.h"
+#include "../Graphics/GraphicsDefs.h"
+#include "../Graphics/GraphicsEvents.h"
+#include "../Graphics/GraphicsImpl.h"
+#include "../Graphics/IndexBuffer.h"
+#include "../Graphics/Light.h"
+#include "../Graphics/Material.h"
+#include "../Graphics/Model.h"
+#include "../Graphics/OcclusionBuffer.h"
+#include "../Graphics/Octree.h"
+#include "../Graphics/OctreeQuery.h"
+#include "../Graphics/ParticleEffect.h"
+#include "../Graphics/ParticleEmitter.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/RenderPath.h"
+#include "../Graphics/RenderSurface.h"
+#include "../Graphics/RibbonTrail.h"
+#include "../Graphics/Shader.h"
+#include "../Graphics/ShaderPrecache.h"
+#include "../Graphics/ShaderProgram.h"
+#include "../Graphics/ShaderVariation.h"
+#include "../Graphics/Skeleton.h"
+#include "../Graphics/Skybox.h"
+#include "../Graphics/StaticModel.h"
+#include "../Graphics/StaticModelGroup.h"
+#include "../Graphics/Tangent.h"
+#include "../Graphics/Technique.h"
+#include "../Graphics/Terrain.h"
+#include "../Graphics/TerrainPatch.h"
+#include "../Graphics/Texture.h"
+#include "../Graphics/Texture2D.h"
+#include "../Graphics/Texture2DArray.h"
+#include "../Graphics/Texture3D.h"
+#include "../Graphics/TextureCube.h"
+#include "../Graphics/VertexBuffer.h"
+#include "../Graphics/VertexDeclaration.h"
+#include "../Graphics/View.h"
+#include "../Graphics/Viewport.h"
+#include "../Graphics/Zone.h"
+#include "../LuaScript/LuaScriptUtils.h"
+
+#include <kaguya.hpp>
+
+namespace Urho3D
+{
+
+static void RegisterAnimatedModel(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KAnimatedModel"].setClass(UserdataMetatable<AnimatedModel, StaticModel>(false)
+        .addStaticFunction("new", &KCreateObject<AnimatedModel>)
+        .addStaticFunction("__gc", &KReleaseObject<AnimatedModel>)
+
+        .addFunction("GetType", &AnimatedModel::GetType)
+        .addFunction("GetTypeName", &AnimatedModel::GetTypeName)
+        .addFunction("GetTypeInfo", &AnimatedModel::GetTypeInfo)
+
+        .addStaticFunction("GetTypeStatic", &AnimatedModel::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &AnimatedModel::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &AnimatedModel::GetTypeInfoStatic)
+
+        .addFunction("SetModel", &AnimatedModel::SetModel)
+        .addFunction("AddAnimationState", &AnimatedModel::AddAnimationState)
+
+        .addOverloadedFunctions("RemoveAnimationState",
+            static_cast<void(AnimatedModel::*)(Animation*)>(&AnimatedModel::RemoveAnimationState),
+            static_cast<void(AnimatedModel::*)(const String&)>(&AnimatedModel::RemoveAnimationState),
+            static_cast<void(AnimatedModel::*)(StringHash)>(&AnimatedModel::RemoveAnimationState),
+            static_cast<void(AnimatedModel::*)(AnimationState*)>(&AnimatedModel::RemoveAnimationState),
+            static_cast<void(AnimatedModel::*)(unsigned int)>(&AnimatedModel::RemoveAnimationState))
+
+        .addFunction("RemoveAllAnimationStates", &AnimatedModel::RemoveAllAnimationStates)
+        .addFunction("SetAnimationLodBias", &AnimatedModel::SetAnimationLodBias)
+        .addFunction("SetUpdateInvisible", &AnimatedModel::SetUpdateInvisible)
+
+        .addOverloadedFunctions("SetMorphWeight",
+            static_cast<void(AnimatedModel::*)(unsigned int, float)>(&AnimatedModel::SetMorphWeight),
+            static_cast<void(AnimatedModel::*)(const String&, float)>(&AnimatedModel::SetMorphWeight),
+            static_cast<void(AnimatedModel::*)(StringHash, float)>(&AnimatedModel::SetMorphWeight))
+
+        .addFunction("ResetMorphWeights", &AnimatedModel::ResetMorphWeights)
+        .addFunction("GetSkeleton", &AnimatedModel::GetSkeleton)
+        .addFunction("GetAnimationStates", &AnimatedModel::GetAnimationStates)
+        .addFunction("GetNumAnimationStates", &AnimatedModel::GetNumAnimationStates)
+
+        .addOverloadedFunctions("GetAnimationState",
+            static_cast<AnimationState*(AnimatedModel::*)(Animation*) const>(&AnimatedModel::GetAnimationState),
+            static_cast<AnimationState*(AnimatedModel::*)(const String&) const>(&AnimatedModel::GetAnimationState),
+            static_cast<AnimationState*(AnimatedModel::*)(const StringHash) const>(&AnimatedModel::GetAnimationState),
+            static_cast<AnimationState*(AnimatedModel::*)(unsigned int) const>(&AnimatedModel::GetAnimationState))
+
+        .addFunction("GetAnimationLodBias", &AnimatedModel::GetAnimationLodBias)
+        .addFunction("GetUpdateInvisible", &AnimatedModel::GetUpdateInvisible)
+        .addFunction("GetMorphs", &AnimatedModel::GetMorphs)
+        .addFunction("GetMorphVertexBuffers", &AnimatedModel::GetMorphVertexBuffers)
+        .addFunction("GetNumMorphs", &AnimatedModel::GetNumMorphs)
+
+        .addOverloadedFunctions("GetMorphWeight",
+            static_cast<float(AnimatedModel::*)(unsigned int) const>(&AnimatedModel::GetMorphWeight),
+            static_cast<float(AnimatedModel::*)(const String&) const>(&AnimatedModel::GetMorphWeight),
+            static_cast<float(AnimatedModel::*)(StringHash) const>(&AnimatedModel::GetMorphWeight))
+
+        .addFunction("IsMaster", &AnimatedModel::IsMaster)
+        .addFunction("GetGeometryBoneMappings", &AnimatedModel::GetGeometryBoneMappings)
+        .addFunction("GetGeometrySkinMatrices", &AnimatedModel::GetGeometrySkinMatrices)
+        .addFunction("UpdateBoneBoundingBox", &AnimatedModel::UpdateBoneBoundingBox)
+
+        .addProperty("type", &AnimatedModel::GetType)
+        .addProperty("typeName", &AnimatedModel::GetTypeName)
+        .addProperty("typeInfo", &AnimatedModel::GetTypeInfo)
+        .addProperty("updateGeometryType", &AnimatedModel::GetUpdateGeometryType)
+        .addProperty("skeleton", &AnimatedModel::GetSkeleton)
+        .addProperty("animationStates", &AnimatedModel::GetAnimationStates)
+        .addProperty("numAnimationStates", &AnimatedModel::GetNumAnimationStates)
+        .addProperty("animationLodBias", &AnimatedModel::GetAnimationLodBias, &AnimatedModel::SetAnimationLodBias)
+        .addProperty("updateInvisible", &AnimatedModel::GetUpdateInvisible, &AnimatedModel::SetUpdateInvisible)
+        .addProperty("morphs", &AnimatedModel::GetMorphs)
+        .addProperty("morphVertexBuffers", &AnimatedModel::GetMorphVertexBuffers)
+        .addProperty("numMorphs", &AnimatedModel::GetNumMorphs)
+        .addProperty("master", &AnimatedModel::IsMaster)
+        .addProperty("geometryBoneMappings", &AnimatedModel::GetGeometryBoneMappings)
+        .addProperty("geometrySkinMatrices", &AnimatedModel::GetGeometrySkinMatrices)
+        );
+}
+
+static void RegisterAnimation(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KAnimationTrack"].setClass(UserdataMetatable<AnimationTrack>()
+        .setConstructors<AnimationTrack()>()
+
+        .addFunction("SetKeyFrame", &AnimationTrack::SetKeyFrame)
+        .addFunction("AddKeyFrame", &AnimationTrack::AddKeyFrame)
+        .addFunction("InsertKeyFrame", &AnimationTrack::InsertKeyFrame)
+        .addFunction("RemoveKeyFrame", &AnimationTrack::RemoveKeyFrame)
+        .addFunction("RemoveAllKeyFrames", &AnimationTrack::RemoveAllKeyFrames)
+        .addFunction("GetKeyFrame", &AnimationTrack::GetKeyFrame)
+        .addFunction("GetNumKeyFrames", &AnimationTrack::GetNumKeyFrames)
+        .addFunction("GetKeyFrameIndex", &AnimationTrack::GetKeyFrameIndex)
+
+        .addProperty("numKeyFrames", &AnimationTrack::GetNumKeyFrames)
+        .addProperty("name", &AnimationTrack::name_)
+        .addProperty("nameHash", &AnimationTrack::nameHash_)
+        .addProperty("channelMask", &AnimationTrack::channelMask_)
+        .addProperty("keyFrames", &AnimationTrack::keyFrames_)
+        );
+
+    lua["KCHANNEL_POSITION"] = CHANNEL_POSITION;
+    lua["KCHANNEL_ROTATION"] = CHANNEL_ROTATION;
+    lua["KCHANNEL_SCALE"] = CHANNEL_SCALE;
+
+    lua["KAnimation"].setClass(UserdataMetatable<Animation, Resource>(false)
+        .addStaticFunction("new", &KCreateObject<Animation>)
+        .addStaticFunction("__gc", &KReleaseObject<Animation>)
+
+        .addFunction("GetType", &Animation::GetType)
+        .addFunction("GetTypeName", &Animation::GetTypeName)
+        .addFunction("GetTypeInfo", &Animation::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &Animation::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &Animation::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &Animation::GetTypeInfoStatic)
+
+        .addFunction("SetAnimationName", &Animation::SetAnimationName)
+        .addFunction("SetLength", &Animation::SetLength)
+        .addFunction("CreateTrack", &Animation::CreateTrack)
+        .addFunction("RemoveTrack", &Animation::RemoveTrack)
+        .addFunction("RemoveAllTracks", &Animation::RemoveAllTracks)
+        .addFunction("SetTrigger", &Animation::SetTrigger)
+
+        .addOverloadedFunctions("AddTrigger",
+            static_cast<void(Animation::*)(const AnimationTriggerPoint&)>(&Animation::AddTrigger),
+            static_cast<void(Animation::*)(float, bool, const Variant&)>(&Animation::AddTrigger))
+
+        .addFunction("RemoveTrigger", &Animation::RemoveTrigger)
+        .addFunction("RemoveAllTriggers", &Animation::RemoveAllTriggers)
+        .addFunction("SetNumTriggers", &Animation::SetNumTriggers)
+        .addFunction("Clone", &Animation::Clone)
+        .addFunction("GetAnimationName", &Animation::GetAnimationName)
+        .addFunction("GetAnimationNameHash", &Animation::GetAnimationNameHash)
+        .addFunction("GetLength", &Animation::GetLength)
+        .addFunction("GetTracks", &Animation::GetTracks)
+        .addFunction("GetNumTracks", &Animation::GetNumTracks)
+
+        .addOverloadedFunctions("GetTrack",
+            static_cast<AnimationTrack*(Animation::*)(const String&)>(&Animation::GetTrack),
+            static_cast<AnimationTrack*(Animation::*)(StringHash)>(&Animation::GetTrack))
+
+        .addFunction("GetTriggers", &Animation::GetTriggers)
+        .addFunction("GetNumTriggers", &Animation::GetNumTriggers)
+        .addFunction("GetTrigger", &Animation::GetTrigger)
+
+        .addProperty("type", &Animation::GetType)
+        .addProperty("typeName", &Animation::GetTypeName)
+        .addProperty("typeInfo", &Animation::GetTypeInfo)
+        .addProperty("animationName", &Animation::GetAnimationName, &Animation::SetAnimationName)
+        .addProperty("animationNameHash", &Animation::GetAnimationNameHash)
+        .addProperty("length", &Animation::GetLength, &Animation::SetLength)
+        .addProperty("tracks", &Animation::GetTracks)
+        .addProperty("numTracks", &Animation::GetNumTracks)
+        .addProperty("triggers", &Animation::GetTriggers)
+        .addProperty("numTriggers", &Animation::GetNumTriggers, &Animation::SetNumTriggers)
+        );
+}
+
+static void RegisterAnimationController(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KAnimationController"].setClass(UserdataMetatable<AnimationController, Component>(false)
+        .addStaticFunction("new", &KCreateObject<AnimationController>)
+        .addStaticFunction("__gc", &KReleaseObject<AnimationController>)
+
+        .addFunction("GetType", &AnimationController::GetType)
+        .addFunction("GetTypeName", &AnimationController::GetTypeName)
+        .addFunction("GetTypeInfo", &AnimationController::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &AnimationController::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &AnimationController::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &AnimationController::GetTypeInfoStatic)
+
+        .addFunction("Play", &AnimationController::Play)
+        .addFunction("PlayExclusive", &AnimationController::PlayExclusive)
+        .addFunction("Stop", &AnimationController::Stop)
+        .addFunction("StopLayer", &AnimationController::StopLayer)
+        .addFunction("StopAll", &AnimationController::StopAll)
+        .addFunction("Fade", &AnimationController::Fade)
+        .addFunction("FadeOthers", &AnimationController::FadeOthers)
+        .addFunction("SetLayer", &AnimationController::SetLayer)
+        .addFunction("SetStartBone", &AnimationController::SetStartBone)
+        .addFunction("SetTime", &AnimationController::SetTime)
+        .addFunction("SetWeight", &AnimationController::SetWeight)
+        .addFunction("SetLooped", &AnimationController::SetLooped)
+        .addFunction("SetSpeed", &AnimationController::SetSpeed)
+        .addFunction("SetAutoFade", &AnimationController::SetAutoFade)
+        .addFunction("SetRemoveOnCompletion", &AnimationController::SetRemoveOnCompletion)
+        .addFunction("SetBlendMode", &AnimationController::SetBlendMode)
+        .addFunction("IsPlaying", &AnimationController::IsPlaying)
+        .addFunction("IsFadingIn", &AnimationController::IsFadingIn)
+        .addFunction("IsFadingOut", &AnimationController::IsFadingOut)
+        .addFunction("IsAtEnd", &AnimationController::IsAtEnd)
+        .addFunction("GetLayer", &AnimationController::GetLayer)
+        .addFunction("GetStartBone", &AnimationController::GetStartBone)
+        .addFunction("GetStartBoneName", &AnimationController::GetStartBoneName)
+        .addFunction("GetTime", &AnimationController::GetTime)
+        .addFunction("GetWeight", &AnimationController::GetWeight)
+        .addFunction("IsLooped", &AnimationController::IsLooped)
+        .addFunction("GetBlendMode", &AnimationController::GetBlendMode)
+        .addFunction("GetLength", &AnimationController::GetLength)
+        .addFunction("GetSpeed", &AnimationController::GetSpeed)
+        .addFunction("GetFadeTarget", &AnimationController::GetFadeTarget)
+        .addFunction("GetFadeTime", &AnimationController::GetFadeTime)
+        .addFunction("GetAutoFade", &AnimationController::GetAutoFade)
+        .addFunction("GetRemoveOnCompletion", &AnimationController::GetRemoveOnCompletion)
+
+        .addOverloadedFunctions("GetAnimationState",
+            static_cast<AnimationState*(AnimationController::*)(const String&) const>(&AnimationController::GetAnimationState),
+            static_cast<AnimationState*(AnimationController::*)(StringHash) const>(&AnimationController::GetAnimationState))
+
+
+        .addProperty("type", &AnimationController::GetType)
+        .addProperty("typeName", &AnimationController::GetTypeName)
+        .addProperty("typeInfo", &AnimationController::GetTypeInfo)
+        );
+}
+
+static void RegisterAnimationState(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    // enum AnimationBlendMode;
+    lua["KABM_LERP"] = ABM_LERP;
+    lua["KABM_ADDITIVE"] = ABM_ADDITIVE;
+
+    lua["KAnimationState"].setClass(UserdataMetatable<AnimationState, RefCounted>()
+        .setConstructors<AnimationState(AnimatedModel*, Animation*)>()
+
+        .addFunction("SetStartBone", &AnimationState::SetStartBone)
+        .addFunction("SetLooped", &AnimationState::SetLooped)
+        .addFunction("SetWeight", &AnimationState::SetWeight)
+        .addFunction("SetBlendMode", &AnimationState::SetBlendMode)
+        .addFunction("SetTime", &AnimationState::SetTime)
+
+        .addOverloadedFunctions("SetBoneWeight",
+            static_cast<void(AnimationState::*)(unsigned int, float, bool)>(&AnimationState::SetBoneWeight),
+            static_cast<void(AnimationState::*)(const String&, float, bool)>(&AnimationState::SetBoneWeight))
+
+        .addFunction("AddWeight", &AnimationState::AddWeight)
+        .addFunction("AddTime", &AnimationState::AddTime)
+        .addFunction("SetLayer", &AnimationState::SetLayer)
+        .addFunction("GetAnimation", &AnimationState::GetAnimation)
+        .addFunction("GetModel", &AnimationState::GetModel)
+        .addFunction("GetNode", &AnimationState::GetNode)
+        .addFunction("GetStartBone", &AnimationState::GetStartBone)
+
+        .addOverloadedFunctions("GetBoneWeight",
+            static_cast<float(AnimationState::*)(unsigned int) const>(&AnimationState::GetBoneWeight),
+            static_cast<float(AnimationState::*)(const String&) const>(&AnimationState::GetBoneWeight))
+
+
+        /*
+        .addOverloadedFunctions("GetTrackIndex",
+            static_cast<unsigned int(AnimationState::*)(int*) const>(&AnimationState::GetTrackIndex),
+            static_cast<unsigned int(AnimationState::*)(const String&) const>(&AnimationState::GetTrackIndex))
+            */
+
+        .addFunction("IsEnabled", &AnimationState::IsEnabled)
+        .addFunction("IsLooped", &AnimationState::IsLooped)
+        .addFunction("GetWeight", &AnimationState::GetWeight)
+        .addFunction("GetBlendMode", &AnimationState::GetBlendMode)
+        .addFunction("GetTime", &AnimationState::GetTime)
+        .addFunction("GetLength", &AnimationState::GetLength)
+        .addFunction("GetLayer", &AnimationState::GetLayer)
+        .addFunction("Apply", &AnimationState::Apply)
+
+        .addProperty("animation", &AnimationState::GetAnimation)
+        .addProperty("model", &AnimationState::GetModel)
+        .addProperty("node", &AnimationState::GetNode)
+        .addProperty("startBone", &AnimationState::GetStartBone, &AnimationState::SetStartBone)
+        .addProperty("enabled", &AnimationState::IsEnabled)
+        .addProperty("looped", &AnimationState::IsLooped, &AnimationState::SetLooped)
+        .addProperty("weight", &AnimationState::GetWeight, &AnimationState::SetWeight)
+        .addProperty("blendMode", &AnimationState::GetBlendMode, &AnimationState::SetBlendMode)
+        .addProperty("time", &AnimationState::GetTime, &AnimationState::SetTime)
+        .addProperty("length", &AnimationState::GetLength)
+        .addProperty("layer", &AnimationState::GetLayer, &AnimationState::SetLayer)
+        );
+}
+
+static void RegisterBillboardSet(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KBillboard"].setClass(UserdataMetatable<Billboard>()
+
+        .addProperty("position", &Billboard::position_)
+        .addProperty("size", &Billboard::size_)
+        .addProperty("uv", &Billboard::uv_)
+        .addProperty("color", &Billboard::color_)
+        .addProperty("rotation", &Billboard::rotation_)
+        .addProperty("direction", &Billboard::direction_)
+        .addProperty("enabled", &Billboard::enabled_)
+        .addProperty("sortDistance", &Billboard::sortDistance_)
+        .addProperty("screenScaleFactor", &Billboard::screenScaleFactor_)
+        );
+
+    lua["KMAX_BILLBOARDS"] = MAX_BILLBOARDS;
+
+    lua["KBillboardSet"].setClass(UserdataMetatable<BillboardSet, Drawable>(false)
+        .addStaticFunction("new", &KCreateObject<BillboardSet>)
+        .addStaticFunction("__gc", &KReleaseObject<BillboardSet>)
+
+        .addFunction("GetType", &BillboardSet::GetType)
+        .addFunction("GetTypeName", &BillboardSet::GetTypeName)
+        .addFunction("GetTypeInfo", &BillboardSet::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &BillboardSet::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &BillboardSet::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &BillboardSet::GetTypeInfoStatic)
+
+        .addFunction("SetMaterial", &BillboardSet::SetMaterial)
+        .addFunction("SetNumBillboards", &BillboardSet::SetNumBillboards)
+        .addFunction("SetRelative", &BillboardSet::SetRelative)
+        .addFunction("SetScaled", &BillboardSet::SetScaled)
+        .addFunction("SetSorted", &BillboardSet::SetSorted)
+        .addFunction("SetFixedScreenSize", &BillboardSet::SetFixedScreenSize)
+        .addFunction("SetFaceCameraMode", &BillboardSet::SetFaceCameraMode)
+        .addFunction("SetAnimationLodBias", &BillboardSet::SetAnimationLodBias)
+        .addFunction("Commit", &BillboardSet::Commit)
+        .addFunction("GetMaterial", &BillboardSet::GetMaterial)
+        .addFunction("GetNumBillboards", &BillboardSet::GetNumBillboards)
+        .addFunction("GetBillboards", &BillboardSet::GetBillboards)
+        .addFunction("GetBillboard", &BillboardSet::GetBillboard)
+        .addFunction("IsRelative", &BillboardSet::IsRelative)
+        .addFunction("IsScaled", &BillboardSet::IsScaled)
+        .addFunction("IsSorted", &BillboardSet::IsSorted)
+        .addFunction("IsFixedScreenSize", &BillboardSet::IsFixedScreenSize)
+        .addFunction("GetFaceCameraMode", &BillboardSet::GetFaceCameraMode)
+        .addFunction("GetAnimationLodBias", &BillboardSet::GetAnimationLodBias)
+
+        .addProperty("type", &BillboardSet::GetType)
+        .addProperty("typeName", &BillboardSet::GetTypeName)
+        .addProperty("typeInfo", &BillboardSet::GetTypeInfo)
+        .addProperty("material", &BillboardSet::GetMaterial, &BillboardSet::SetMaterial)
+        .addProperty("numBillboards", &BillboardSet::GetNumBillboards, &BillboardSet::SetNumBillboards)
+        .addProperty("billboards", &BillboardSet::GetBillboards)
+        .addProperty("relative", &BillboardSet::IsRelative, &BillboardSet::SetRelative)
+        .addProperty("scaled", &BillboardSet::IsScaled, &BillboardSet::SetScaled)
+        .addProperty("sorted", &BillboardSet::IsSorted, &BillboardSet::SetSorted)
+        .addProperty("fixedScreenSize", &BillboardSet::IsFixedScreenSize, &BillboardSet::SetFixedScreenSize)
+        .addProperty("faceCameraMode", &BillboardSet::GetFaceCameraMode, &BillboardSet::SetFaceCameraMode)
+        .addProperty("animationLodBias", &BillboardSet::GetAnimationLodBias, &BillboardSet::SetAnimationLodBias)
+        );
+}
+
+static void RegisterCamera(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KDEFAULT_NEARCLIP"] = DEFAULT_NEARCLIP;
+    lua["KDEFAULT_FARCLIP"] = DEFAULT_FARCLIP;
+    lua["KDEFAULT_CAMERA_FOV"] = DEFAULT_CAMERA_FOV;
+    lua["KDEFAULT_ORTHOSIZE"] = DEFAULT_ORTHOSIZE;
+    lua["KVO_NONE"] = VO_NONE;
+    lua["KVO_LOW_MATERIAL_QUALITY"] = VO_LOW_MATERIAL_QUALITY;
+    lua["KVO_DISABLE_SHADOWS"] = VO_DISABLE_SHADOWS;
+    lua["KVO_DISABLE_OCCLUSION"] = VO_DISABLE_OCCLUSION;
+
+    lua["KCamera"].setClass(UserdataMetatable<Camera, Component>(false)
+        .addStaticFunction("new", &KCreateObject<Camera>)
+        .addStaticFunction("__gc", &KReleaseObject<Camera>)
+
+        .addFunction("GetType", &Camera::GetType)
+        .addFunction("GetTypeName", &Camera::GetTypeName)
+        .addFunction("GetTypeInfo", &Camera::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &Camera::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &Camera::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &Camera::GetTypeInfoStatic)
+
+        .addFunction("SetNearClip", &Camera::SetNearClip)
+        .addFunction("SetFarClip", &Camera::SetFarClip)
+        .addFunction("SetFov", &Camera::SetFov)
+
+        .addOverloadedFunctions("SetOrthoSize",
+            static_cast<void(Camera::*)(float)>(&Camera::SetOrthoSize),
+            static_cast<void(Camera::*)(const Vector2&)>(&Camera::SetOrthoSize))
+
+        .addFunction("SetAspectRatio", &Camera::SetAspectRatio)
+        .addFunction("SetFillMode", &Camera::SetFillMode)
+        .addFunction("SetZoom", &Camera::SetZoom)
+        .addFunction("SetLodBias", &Camera::SetLodBias)
+        .addFunction("SetViewMask", &Camera::SetViewMask)
+        .addFunction("SetViewOverrideFlags", &Camera::SetViewOverrideFlags)
+        .addFunction("SetOrthographic", &Camera::SetOrthographic)
+        .addFunction("SetAutoAspectRatio", &Camera::SetAutoAspectRatio)
+        .addFunction("SetProjectionOffset", &Camera::SetProjectionOffset)
+        .addFunction("SetUseReflection", &Camera::SetUseReflection)
+        .addFunction("SetReflectionPlane", &Camera::SetReflectionPlane)
+        .addFunction("SetUseClipping", &Camera::SetUseClipping)
+        .addFunction("SetClipPlane", &Camera::SetClipPlane)
+        .addFunction("SetFlipVertical", &Camera::SetFlipVertical)
+        .addFunction("GetFarClip", &Camera::GetFarClip)
+        .addFunction("GetNearClip", &Camera::GetNearClip)
+        .addFunction("GetFov", &Camera::GetFov)
+        .addFunction("GetOrthoSize", &Camera::GetOrthoSize)
+        .addFunction("GetAspectRatio", &Camera::GetAspectRatio)
+        .addFunction("GetZoom", &Camera::GetZoom)
+        .addFunction("GetLodBias", &Camera::GetLodBias)
+        .addFunction("GetViewMask", &Camera::GetViewMask)
+        .addFunction("GetViewOverrideFlags", &Camera::GetViewOverrideFlags)
+        .addFunction("GetFillMode", &Camera::GetFillMode)
+        .addFunction("IsOrthographic", &Camera::IsOrthographic)
+        .addFunction("GetAutoAspectRatio", &Camera::GetAutoAspectRatio)
+        .addFunction("GetFrustum", &Camera::GetFrustum)
+
+        .addOverloadedFunctions("GetProjection",
+            static_cast<const Matrix4&(Camera::*)() const>(&Camera::GetProjection),
+            static_cast<Matrix4(Camera::*)(bool) const>(&Camera::GetProjection))
+
+        .addFunction("GetView", &Camera::GetView)
+        .addFunction("GetFrustumSize", &Camera::GetFrustumSize)
+        .addFunction("GetHalfViewSize", &Camera::GetHalfViewSize)
+        .addFunction("GetSplitFrustum", &Camera::GetSplitFrustum)
+        .addFunction("GetViewSpaceFrustum", &Camera::GetViewSpaceFrustum)
+        .addFunction("GetViewSpaceSplitFrustum", &Camera::GetViewSpaceSplitFrustum)
+        .addFunction("GetScreenRay", &Camera::GetScreenRay)
+        .addFunction("WorldToScreenPoint", &Camera::WorldToScreenPoint)
+        .addFunction("ScreenToWorldPoint", &Camera::ScreenToWorldPoint)
+        .addFunction("GetProjectionOffset", &Camera::GetProjectionOffset)
+        .addFunction("GetUseReflection", &Camera::GetUseReflection)
+        .addFunction("GetReflectionPlane", &Camera::GetReflectionPlane)
+        .addFunction("GetUseClipping", &Camera::GetUseClipping)
+        .addFunction("GetClipPlane", &Camera::GetClipPlane)
+        .addFunction("GetFlipVertical", &Camera::GetFlipVertical)
+        .addFunction("GetReverseCulling", &Camera::GetReverseCulling)
+        .addFunction("GetDistance", &Camera::GetDistance)
+        .addFunction("GetDistanceSquared", &Camera::GetDistanceSquared)
+        .addFunction("GetLodDistance", &Camera::GetLodDistance)
+        .addFunction("GetFaceCameraRotation", &Camera::GetFaceCameraRotation)
+        .addFunction("GetEffectiveWorldTransform", &Camera::GetEffectiveWorldTransform)
+        .addFunction("IsProjectionValid", &Camera::IsProjectionValid)
+        .addFunction("SetAspectRatioInternal", &Camera::SetAspectRatioInternal)
+
+        .addProperty("type", &Camera::GetType)
+        .addProperty("typeName", &Camera::GetTypeName)
+        .addProperty("typeInfo", &Camera::GetTypeInfo)
+        .addProperty("farClip", &Camera::GetFarClip, &Camera::SetFarClip)
+        .addProperty("nearClip", &Camera::GetNearClip, &Camera::SetNearClip)
+        .addProperty("fov", &Camera::GetFov, &Camera::SetFov)
+        .addProperty("orthoSize", &Camera::GetOrthoSize)
+        .addProperty("aspectRatio", &Camera::GetAspectRatio, &Camera::SetAspectRatio)
+        .addProperty("zoom", &Camera::GetZoom, &Camera::SetZoom)
+        .addProperty("lodBias", &Camera::GetLodBias, &Camera::SetLodBias)
+        .addProperty("viewMask", &Camera::GetViewMask, &Camera::SetViewMask)
+        .addProperty("viewOverrideFlags", &Camera::GetViewOverrideFlags, &Camera::SetViewOverrideFlags)
+        .addProperty("fillMode", &Camera::GetFillMode, &Camera::SetFillMode)
+        .addProperty("orthographic", &Camera::IsOrthographic, &Camera::SetOrthographic)
+        .addProperty("autoAspectRatio", &Camera::GetAutoAspectRatio, &Camera::SetAutoAspectRatio)
+        .addProperty("frustum", &Camera::GetFrustum)
+        .addProperty("view", &Camera::GetView)
+        .addProperty("halfViewSize", &Camera::GetHalfViewSize)
+        .addProperty("viewSpaceFrustum", &Camera::GetViewSpaceFrustum)
+        .addProperty("projectionOffset", &Camera::GetProjectionOffset, &Camera::SetProjectionOffset)
+        .addProperty("useReflection", &Camera::GetUseReflection, &Camera::SetUseReflection)
+        .addProperty("reflectionPlane", &Camera::GetReflectionPlane, &Camera::SetReflectionPlane)
+        .addProperty("useClipping", &Camera::GetUseClipping, &Camera::SetUseClipping)
+        .addProperty("clipPlane", &Camera::GetClipPlane, &Camera::SetClipPlane)
+        .addProperty("flipVertical", &Camera::GetFlipVertical, &Camera::SetFlipVertical)
+        .addProperty("reverseCulling", &Camera::GetReverseCulling)
+        .addProperty("effectiveWorldTransform", &Camera::GetEffectiveWorldTransform)
+        .addProperty("projectionValid", &Camera::IsProjectionValid)
+        .addProperty("aspectRatioInternal", &Camera::SetAspectRatioInternal)
+        );
+}
+
+static void RegisterCustomGeometry(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KCustomGeometry"].setClass(UserdataMetatable<CustomGeometry, Drawable>(false)
+        .addStaticFunction("new", &KCreateObject<CustomGeometry>)
+        .addStaticFunction("__gc", &KReleaseObject<CustomGeometry>)
+
+        .addFunction("GetType", &CustomGeometry::GetType)
+        .addFunction("GetTypeName", &CustomGeometry::GetTypeName)
+        .addFunction("GetTypeInfo", &CustomGeometry::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &CustomGeometry::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &CustomGeometry::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &CustomGeometry::GetTypeInfoStatic)
+
+        .addFunction("GetLodGeometry", &CustomGeometry::GetLodGeometry)
+        .addFunction("GetNumOccluderTriangles", &CustomGeometry::GetNumOccluderTriangles)
+        .addFunction("DrawOcclusion", &CustomGeometry::DrawOcclusion)
+        .addFunction("Clear", &CustomGeometry::Clear)
+        .addFunction("SetNumGeometries", &CustomGeometry::SetNumGeometries)
+        .addFunction("SetDynamic", &CustomGeometry::SetDynamic)
+        .addFunction("BeginGeometry", &CustomGeometry::BeginGeometry)
+        .addFunction("DefineVertex", &CustomGeometry::DefineVertex)
+        .addFunction("DefineNormal", &CustomGeometry::DefineNormal)
+        .addFunction("DefineColor", &CustomGeometry::DefineColor)
+        .addFunction("DefineTexCoord", &CustomGeometry::DefineTexCoord)
+        .addFunction("DefineTangent", &CustomGeometry::DefineTangent)
+        .addFunction("DefineGeometry", &CustomGeometry::DefineGeometry)
+        .addFunction("Commit", &CustomGeometry::Commit)
+
+        .addOverloadedFunctions("SetMaterial",
+            static_cast<void(CustomGeometry::*)(Material*)>(&CustomGeometry::SetMaterial),
+            static_cast<bool(CustomGeometry::*)(unsigned int, Material*)>(&CustomGeometry::SetMaterial))
+
+        .addFunction("GetNumGeometries", &CustomGeometry::GetNumGeometries)
+        .addFunction("GetNumVertices", &CustomGeometry::GetNumVertices)
+        .addFunction("IsDynamic", &CustomGeometry::IsDynamic)
+        .addFunction("GetMaterial", &CustomGeometry::GetMaterial)
+        .addFunction("GetVertices", &CustomGeometry::GetVertices)
+        .addFunction("GetVertex", &CustomGeometry::GetVertex)
+
+        .addProperty("type", &CustomGeometry::GetType)
+        .addProperty("typeName", &CustomGeometry::GetTypeName)
+        .addProperty("typeInfo", &CustomGeometry::GetTypeInfo)
+        .addProperty("numOccluderTriangles", &CustomGeometry::GetNumOccluderTriangles)
+        .addProperty("numGeometries", &CustomGeometry::GetNumGeometries, &CustomGeometry::SetNumGeometries)
+        .addProperty("dynamic", &CustomGeometry::IsDynamic, &CustomGeometry::SetDynamic)
+        .addProperty("vertices", &CustomGeometry::GetVertices)
+        );
+}
+
+static void RegisterDebugRenderer(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KDebugRenderer"].setClass(UserdataMetatable<DebugRenderer, Component>(false)
+        .addStaticFunction("new", &KCreateObject<DebugRenderer>)
+        .addStaticFunction("__gc", &KReleaseObject<DebugRenderer>)
+
+        .addFunction("GetType", &DebugRenderer::GetType)
+        .addFunction("GetTypeName", &DebugRenderer::GetTypeName)
+        .addFunction("GetTypeInfo", &DebugRenderer::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &DebugRenderer::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &DebugRenderer::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &DebugRenderer::GetTypeInfoStatic)
+
+        .addFunction("SetView", &DebugRenderer::SetView)
+
+        .addOverloadedFunctions("AddLine",
+            static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, const Color&, bool)>(&DebugRenderer::AddLine),
+            static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, unsigned int, bool)>(&DebugRenderer::AddLine))
+
+
+        .addOverloadedFunctions("AddTriangle",
+            static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, const Vector3&, const Color&, bool)>(&DebugRenderer::AddTriangle),
+            static_cast<void(DebugRenderer::*)(const Vector3&, const Vector3&, const Vector3&, unsigned int, bool)>(&DebugRenderer::AddTriangle))
+
+        .addFunction("AddNode", &DebugRenderer::AddNode)
+
+        .addOverloadedFunctions("AddBoundingBox",
+            static_cast<void(DebugRenderer::*)(const BoundingBox&, const Color&, bool)>(&DebugRenderer::AddBoundingBox),
+            static_cast<void(DebugRenderer::*)(const BoundingBox&, const Matrix3x4&, const Color&, bool)>(&DebugRenderer::AddBoundingBox))
+
+        .addFunction("AddFrustum", &DebugRenderer::AddFrustum)
+        .addFunction("AddPolyhedron", &DebugRenderer::AddPolyhedron)
+        .addFunction("AddSphere", &DebugRenderer::AddSphere)
+        .addFunction("AddCylinder", &DebugRenderer::AddCylinder)
+        .addFunction("AddSkeleton", &DebugRenderer::AddSkeleton)
+        .addFunction("AddTriangleMesh", &DebugRenderer::AddTriangleMesh)
+        .addFunction("AddCircle", &DebugRenderer::AddCircle)
+        .addFunction("AddCross", &DebugRenderer::AddCross)
+        .addFunction("AddQuad", &DebugRenderer::AddQuad)
+        .addFunction("Render", &DebugRenderer::Render)
+        .addFunction("GetView", &DebugRenderer::GetView)
+        .addFunction("GetProjection", &DebugRenderer::GetProjection)
+        .addFunction("GetFrustum", &DebugRenderer::GetFrustum)
+        .addFunction("IsInside", &DebugRenderer::IsInside)
+        .addFunction("HasContent", &DebugRenderer::HasContent)
+
+        .addProperty("type", &DebugRenderer::GetType)
+        .addProperty("typeName", &DebugRenderer::GetTypeName)
+        .addProperty("typeInfo", &DebugRenderer::GetTypeInfo)
+        .addProperty("view", &DebugRenderer::GetView, &DebugRenderer::SetView)
+        .addProperty("projection", &DebugRenderer::GetProjection)
+        .addProperty("frustum", &DebugRenderer::GetFrustum)
+        );
+}
+
+static void RegisterDecalSet(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KDecalSet"].setClass(UserdataMetatable<DecalSet, Drawable>(false)
+        .addStaticFunction("new", &KCreateObject<DecalSet>)
+        .addStaticFunction("__gc", &KReleaseObject<DecalSet>)
+
+        .addFunction("GetType", &DecalSet::GetType)
+        .addFunction("GetTypeName", &DecalSet::GetTypeName)
+        .addFunction("GetTypeInfo", &DecalSet::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &DecalSet::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &DecalSet::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &DecalSet::GetTypeInfoStatic)
+
+        .addFunction("SetMaterial", &DecalSet::SetMaterial)
+        .addFunction("SetMaxVertices", &DecalSet::SetMaxVertices)
+        .addFunction("SetMaxIndices", &DecalSet::SetMaxIndices)
+        .addFunction("AddDecal", &DecalSet::AddDecal)
+        .addFunction("RemoveDecals", &DecalSet::RemoveDecals)
+        .addFunction("RemoveAllDecals", &DecalSet::RemoveAllDecals)
+        .addFunction("GetMaterial", &DecalSet::GetMaterial)
+        .addFunction("GetNumDecals", &DecalSet::GetNumDecals)
+        .addFunction("GetNumVertices", &DecalSet::GetNumVertices)
+        .addFunction("GetNumIndices", &DecalSet::GetNumIndices)
+        .addFunction("GetMaxVertices", &DecalSet::GetMaxVertices)
+        .addFunction("GetMaxIndices", &DecalSet::GetMaxIndices)
+
+        .addProperty("type", &DecalSet::GetType)
+        .addProperty("typeName", &DecalSet::GetTypeName)
+        .addProperty("typeInfo", &DecalSet::GetTypeInfo)
+        .addProperty("updateGeometryType", &DecalSet::GetUpdateGeometryType)
+        .addProperty("material", &DecalSet::GetMaterial, &DecalSet::SetMaterial)
+        .addProperty("numDecals", &DecalSet::GetNumDecals)
+        .addProperty("numVertices", &DecalSet::GetNumVertices)
+        .addProperty("numIndices", &DecalSet::GetNumIndices)
+        .addProperty("maxVertices", &DecalSet::GetMaxVertices, &DecalSet::SetMaxVertices)
+        .addProperty("maxIndices", &DecalSet::GetMaxIndices, &DecalSet::SetMaxIndices)
+        );
+}
+
+static void RegisterDrawable(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KDRAWABLE_GEOMETRY"] = DRAWABLE_GEOMETRY;
+    lua["KDRAWABLE_LIGHT"] = DRAWABLE_LIGHT;
+    lua["KDRAWABLE_ZONE"] = DRAWABLE_ZONE;
+    lua["KDRAWABLE_GEOMETRY2D"] = DRAWABLE_GEOMETRY2D;
+    lua["KDRAWABLE_ANY"] = DRAWABLE_ANY;
+    lua["KDEFAULT_VIEWMASK"] = DEFAULT_VIEWMASK;
+    lua["KDEFAULT_LIGHTMASK"] = DEFAULT_LIGHTMASK;
+    lua["KDEFAULT_SHADOWMASK"] = DEFAULT_SHADOWMASK;
+    lua["KDEFAULT_ZONEMASK"] = DEFAULT_ZONEMASK;
+    lua["KMAX_VERTEX_LIGHTS"] = MAX_VERTEX_LIGHTS;
+    lua["KANIMATION_LOD_BASESCALE"] = ANIMATION_LOD_BASESCALE;
+
+    // enum UpdateGeometryType;
+    lua["KUPDATE_NONE"] = UPDATE_NONE;
+    lua["KUPDATE_MAIN_THREAD"] = UPDATE_MAIN_THREAD;
+    lua["KUPDATE_WORKER_THREAD"] = UPDATE_WORKER_THREAD;
+
+    lua["KSourceBatch"].setClass(UserdataMetatable<SourceBatch>()
+        .setConstructors<SourceBatch(),
+        SourceBatch(const SourceBatch&)>()
+
+        .addProperty("distance", &SourceBatch::distance_)
+        .addProperty("geometry", &SourceBatch::geometry_)
+        /*
+        .addProperty("material", &SourceBatch::material_)
+        .addProperty("worldTransform", &SourceBatch::worldTransform_)
+        .addProperty("numWorldTransforms", &SourceBatch::numWorldTransforms_)
+        .addProperty("geometryType", &SourceBatch::geometryType_)
+        */
+        );
+
+    lua["KDrawable"].setClass(UserdataMetatable<Drawable, Component>(false)
+        .addStaticFunction("__gc", &KReleaseObject<Drawable>)
+
+        .addFunction("GetType", &Drawable::GetType)
+        .addFunction("GetTypeName", &Drawable::GetTypeName)
+        .addFunction("GetTypeInfo", &Drawable::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &Drawable::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &Drawable::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &Drawable::GetTypeInfoStatic)
+
+        .addFunction("SetDrawDistance", &Drawable::SetDrawDistance)
+        .addFunction("SetShadowDistance", &Drawable::SetShadowDistance)
+        .addFunction("SetLodBias", &Drawable::SetLodBias)
+        .addFunction("SetViewMask", &Drawable::SetViewMask)
+        .addFunction("SetLightMask", &Drawable::SetLightMask)
+        .addFunction("SetShadowMask", &Drawable::SetShadowMask)
+        .addFunction("SetZoneMask", &Drawable::SetZoneMask)
+        .addFunction("SetMaxLights", &Drawable::SetMaxLights)
+        .addFunction("SetCastShadows", &Drawable::SetCastShadows)
+
+        .addFunction("SetOccluder", &Drawable::SetOccluder)
+        .addFunction("SetOccludee", &Drawable::SetOccludee)
+
+        .addFunction("MarkForUpdate", &Drawable::MarkForUpdate)
+        .addFunction("GetBoundingBox", &Drawable::GetBoundingBox)
+        .addFunction("GetWorldBoundingBox", &Drawable::GetWorldBoundingBox)
+        .addFunction("GetDrawableFlags", &Drawable::GetDrawableFlags)
+        .addFunction("GetDrawDistance", &Drawable::GetDrawDistance)
+        .addFunction("GetShadowDistance", &Drawable::GetShadowDistance)
+        .addFunction("GetLodBias", &Drawable::GetLodBias)
+        .addFunction("GetViewMask", &Drawable::GetViewMask)
+        .addFunction("GetLightMask", &Drawable::GetLightMask)
+        .addFunction("GetShadowMask", &Drawable::GetShadowMask)
+        .addFunction("GetZoneMask", &Drawable::GetZoneMask)
+        .addFunction("GetMaxLights", &Drawable::GetMaxLights)
+        .addFunction("GetCastShadows", &Drawable::GetCastShadows)
+        .addFunction("IsOccluder", &Drawable::IsOccluder)
+        .addFunction("IsOccludee", &Drawable::IsOccludee)
+
+        .addOverloadedFunctions("IsInView",
+            static_cast<bool(Drawable::*)() const>(&Drawable::IsInView),
+            static_cast<bool(Drawable::*)(Camera*) const>(&Drawable::IsInView),
+            static_cast<bool(Drawable::*)(const FrameInfo&, bool) const>(&Drawable::IsInView))
+
+        .addFunction("GetBatches", &Drawable::GetBatches)
+        .addFunction("SetZone", &Drawable::SetZone)
+        .addFunction("SetSortValue", &Drawable::SetSortValue)
+        .addFunction("SetMinMaxZ", &Drawable::SetMinMaxZ)
+
+        .addOverloadedFunctions("MarkInView",
+            static_cast<void(Drawable::*)(const FrameInfo&)>(&Drawable::MarkInView),
+            static_cast<void(Drawable::*)(unsigned int)>(&Drawable::MarkInView))
+
+        .addFunction("LimitLights", &Drawable::LimitLights)
+        .addFunction("LimitVertexLights", &Drawable::LimitVertexLights)
+        .addFunction("SetBasePass", &Drawable::SetBasePass)
+        .addFunction("GetOctant", &Drawable::GetOctant)
+        .addFunction("GetZone", &Drawable::GetZone)
+        .addFunction("IsZoneDirty", &Drawable::IsZoneDirty)
+        .addFunction("GetDistance", &Drawable::GetDistance)
+        .addFunction("GetLodDistance", &Drawable::GetLodDistance)
+        .addFunction("GetSortValue", &Drawable::GetSortValue)
+        .addFunction("HasBasePass", &Drawable::HasBasePass)
+        .addFunction("GetLights", &Drawable::GetLights)
+        .addFunction("GetVertexLights", &Drawable::GetVertexLights)
+        .addFunction("GetFirstLight", &Drawable::GetFirstLight)
+        .addFunction("GetMinZ", &Drawable::GetMinZ)
+        .addFunction("GetMaxZ", &Drawable::GetMaxZ)
+        .addFunction("AddLight", &Drawable::AddLight)
+        .addFunction("AddVertexLight", &Drawable::AddVertexLight)
+
+        .addProperty("type", &Drawable::GetType)
+        .addProperty("typeName", &Drawable::GetTypeName)
+        .addProperty("typeInfo", &Drawable::GetTypeInfo)
+        .addProperty("updateGeometryType", &Drawable::GetUpdateGeometryType)
+        .addProperty("numOccluderTriangles", &Drawable::GetNumOccluderTriangles)
+        .addProperty("boundingBox", &Drawable::GetBoundingBox)
+        .addProperty("worldBoundingBox", &Drawable::GetWorldBoundingBox)
+        .addProperty("drawableFlags", &Drawable::GetDrawableFlags)
+        .addProperty("drawDistance", &Drawable::GetDrawDistance, &Drawable::SetDrawDistance)
+        .addProperty("shadowDistance", &Drawable::GetShadowDistance, &Drawable::SetShadowDistance)
+        .addProperty("lodBias", &Drawable::GetLodBias, &Drawable::SetLodBias)
+        .addProperty("viewMask", &Drawable::GetViewMask, &Drawable::SetViewMask)
+        .addProperty("lightMask", &Drawable::GetLightMask, &Drawable::SetLightMask)
+        .addProperty("shadowMask", &Drawable::GetShadowMask, &Drawable::SetShadowMask)
+        .addProperty("zoneMask", &Drawable::GetZoneMask, &Drawable::SetZoneMask)
+        .addProperty("maxLights", &Drawable::GetMaxLights, &Drawable::SetMaxLights)
+        .addProperty("castShadows", &Drawable::GetCastShadows, &Drawable::SetCastShadows)
+
+        .addProperty("occluder", &Drawable::IsOccluder, &Drawable::SetOccluder)
+        .addProperty("occludee", &Drawable::IsOccludee, &Drawable::SetOccludee)
+
+        .addProperty("batches", &Drawable::GetBatches)
+        .addProperty("octant", &Drawable::GetOctant)
+        .addProperty("zone", &Drawable::GetZone)
+        .addProperty("zoneDirty", &Drawable::IsZoneDirty)
+        .addProperty("distance", &Drawable::GetDistance)
+        .addProperty("lodDistance", &Drawable::GetLodDistance)
+        .addProperty("sortValue", &Drawable::GetSortValue, &Drawable::SetSortValue)
+        .addProperty("lights", &Drawable::GetLights)
+        .addProperty("vertexLights", &Drawable::GetVertexLights)
+        .addProperty("firstLight", &Drawable::GetFirstLight)
+        .addProperty("minZ", &Drawable::GetMinZ)
+        .addProperty("maxZ", &Drawable::GetMaxZ)
+        .addProperty("basePass", &Drawable::SetBasePass)
+        );
+}
+
+static void RegisterDrawableEvents(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KE_BONEHIERARCHYCREATED"] = E_BONEHIERARCHYCREATED;
+    lua["KE_ANIMATIONTRIGGER"] = E_ANIMATIONTRIGGER;
+    lua["KE_ANIMATIONFINISHED"] = E_ANIMATIONFINISHED;
+    lua["KE_PARTICLEEFFECTFINISHED"] = E_PARTICLEEFFECTFINISHED;
+    lua["KE_TERRAINCREATED"] = E_TERRAINCREATED;
+}
+
+static void RegisterGeometry(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KGeometry"].setClass(UserdataMetatable<Geometry, Object>(false)
+        .addStaticFunction("new", &KCreateObject<Geometry>)
+        .addStaticFunction("__gc", &KReleaseObject<Geometry>)
+
+        .addFunction("GetType", &Geometry::GetType)
+        .addFunction("GetTypeName", &Geometry::GetTypeName)
+        .addFunction("GetTypeInfo", &Geometry::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &Geometry::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &Geometry::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &Geometry::GetTypeInfoStatic)
+        .addFunction("SetNumVertexBuffers", &Geometry::SetNumVertexBuffers)
+        .addFunction("SetVertexBuffer", &Geometry::SetVertexBuffer)
+        .addFunction("SetIndexBuffer", &Geometry::SetIndexBuffer)
+
+        .addOverloadedFunctions("SetDrawRange",
+            static_cast<bool(Geometry::*)(PrimitiveType, unsigned int, unsigned int, bool)>(&Geometry::SetDrawRange),
+            static_cast<bool(Geometry::*)(PrimitiveType, unsigned int, unsigned int, unsigned int, unsigned int, bool)>(&Geometry::SetDrawRange))
+
+        .addFunction("SetLodDistance", &Geometry::SetLodDistance)
+
+        .addFunction("GetVertexBuffers", &Geometry::GetVertexBuffers)
+        .addFunction("GetNumVertexBuffers", &Geometry::GetNumVertexBuffers)
+        .addFunction("GetVertexBuffer", &Geometry::GetVertexBuffer)
+        .addFunction("GetIndexBuffer", &Geometry::GetIndexBuffer)
+        .addFunction("GetPrimitiveType", &Geometry::GetPrimitiveType)
+        .addFunction("GetIndexStart", &Geometry::GetIndexStart)
+        .addFunction("GetIndexCount", &Geometry::GetIndexCount)
+        .addFunction("GetVertexStart", &Geometry::GetVertexStart)
+        .addFunction("GetVertexCount", &Geometry::GetVertexCount)
+        .addFunction("GetLodDistance", &Geometry::GetLodDistance)
+        .addFunction("GetBufferHash", &Geometry::GetBufferHash)
+
+        .addFunction("GetHitDistance", &Geometry::GetHitDistance)
+        .addFunction("IsInside", &Geometry::IsInside)
+        .addFunction("IsEmpty", &Geometry::IsEmpty)
+
+        .addProperty("type", &Geometry::GetType)
+        .addProperty("typeName", &Geometry::GetTypeName)
+        .addProperty("typeInfo", &Geometry::GetTypeInfo)
+
+        .addProperty("indexBuffer", &Geometry::GetIndexBuffer, &Geometry::SetIndexBuffer)
+        .addProperty("primitiveType", &Geometry::GetPrimitiveType)
+        .addProperty("indexStart", &Geometry::GetIndexStart)
+        .addProperty("indexCount", &Geometry::GetIndexCount)
+        .addProperty("vertexStart", &Geometry::GetVertexStart)
+        .addProperty("vertexCount", &Geometry::GetVertexCount)
+        .addProperty("lodDistance", &Geometry::GetLodDistance, &Geometry::SetLodDistance)
+        .addProperty("empty", &Geometry::IsEmpty)
+        );
+}
+
+static void RegisterGraphics(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KNUM_SCREEN_BUFFERS"] = NUM_SCREEN_BUFFERS;
+
+    lua["KGraphics"].setClass(UserdataMetatable<Graphics, Object>(false)
+        .addStaticFunction("__gc", &KReleaseObject<Graphics>)
+
+        .addFunction("GetType", &Graphics::GetType)
+        .addFunction("GetTypeName", &Graphics::GetTypeName)
+        .addFunction("GetTypeInfo", &Graphics::GetTypeInfo)
+
+        .addStaticFunction("GetTypeStatic", &Graphics::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &Graphics::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &Graphics::GetTypeInfoStatic)
+
+        .addFunction("SetExternalWindow", &Graphics::SetExternalWindow)
+        .addFunction("SetWindowIcon", &Graphics::SetWindowIcon)
+        .addFunction("SetWindowTitle", &Graphics::SetWindowTitle)
+
+        .addOverloadedFunctions("SetWindowPosition",
+            static_cast<void(Graphics::*)(const IntVector2&)>(&Graphics::SetWindowPosition),
+            static_cast<void(Graphics::*)(int, int)>(&Graphics::SetWindowPosition))
+
+        .addOverloadedFunctions("SetMode",
+            static_cast<bool(Graphics::*)(int, int, bool, bool, bool, bool, bool, bool, int)>(&Graphics::SetMode),
+            static_cast<bool(Graphics::*)(int, int)>(&Graphics::SetMode))
+
+        .addFunction("SetSRGB", &Graphics::SetSRGB)
+        .addFunction("SetOrientations", &Graphics::SetOrientations)
+        .addFunction("ToggleFullscreen", &Graphics::ToggleFullscreen)
+        .addFunction("Close", &Graphics::Close)
+        .addFunction("TakeScreenShot", &Graphics::TakeScreenShot)
+
+        .addFunction("SetViewport", &Graphics::SetViewport)
+
+        .addFunction("IsInitialized", &Graphics::IsInitialized)
+        .addFunction("GetExternalWindow", &Graphics::GetExternalWindow)
+        .addFunction("GetWindowTitle", &Graphics::GetWindowTitle)
+        .addFunction("GetApiName", &Graphics::GetApiName)
+        .addFunction("GetWindowPosition", &Graphics::GetWindowPosition)
+        .addFunction("GetWidth", &Graphics::GetWidth)
+        .addFunction("GetHeight", &Graphics::GetHeight)
+        .addFunction("GetMultiSample", &Graphics::GetMultiSample)
+        .addFunction("GetFullscreen", &Graphics::GetFullscreen)
+        .addFunction("GetBorderless", &Graphics::GetBorderless)
+        .addFunction("GetResizable", &Graphics::GetResizable)
+        .addFunction("GetHighDPI", &Graphics::GetHighDPI)
+        .addFunction("GetVSync", &Graphics::GetVSync)
+        .addFunction("GetTripleBuffer", &Graphics::GetTripleBuffer)
+        .addFunction("GetSRGB", &Graphics::GetSRGB)
+        .addFunction("GetOrientations", &Graphics::GetOrientations)
+
+        .addFunction("GetNumPrimitives", &Graphics::GetNumPrimitives)
+        .addFunction("GetNumBatches", &Graphics::GetNumBatches)
+        .addFunction("GetDummyColorFormat", &Graphics::GetDummyColorFormat)
+        .addFunction("GetShadowMapFormat", &Graphics::GetShadowMapFormat)
+        .addFunction("GetHiresShadowMapFormat", &Graphics::GetHiresShadowMapFormat)
+        .addFunction("GetInstancingSupport", &Graphics::GetInstancingSupport)
+        .addFunction("GetLightPrepassSupport", &Graphics::GetLightPrepassSupport)
+        .addFunction("GetDeferredSupport", &Graphics::GetDeferredSupport)
+        .addFunction("GetAnisotropySupport", &Graphics::GetAnisotropySupport)
+        .addFunction("GetHardwareShadowSupport", &Graphics::GetHardwareShadowSupport)
+        .addFunction("GetReadableDepthSupport", &Graphics::GetReadableDepthSupport)
+        .addFunction("GetSRGBSupport", &Graphics::GetSRGBSupport)
+        .addFunction("GetSRGBWriteSupport", &Graphics::GetSRGBWriteSupport)
+        .addFunction("GetResolutions", &Graphics::GetResolutions)
+        .addFunction("GetMultiSampleLevels", &Graphics::GetMultiSampleLevels)
+        .addFunction("GetDesktopResolution", &Graphics::GetDesktopResolution)
+
+        .addFunction("GetDefaultTextureFilterMode", &Graphics::GetDefaultTextureFilterMode)
+
+        .addFunction("GetViewport", &Graphics::GetViewport)
+        .addFunction("GetTextureAnisotropy", &Graphics::GetTextureAnisotropy)
+
+        .addFunction("GetStencilCompareMask", &Graphics::GetStencilCompareMask)
+        .addFunction("GetStencilWriteMask", &Graphics::GetStencilWriteMask)
+        .addFunction("GetUseClipPlane", &Graphics::GetUseClipPlane)
+        .addFunction("GetRenderTargetDimensions", &Graphics::GetRenderTargetDimensions)
+
+        .addFunction("Restore", &Graphics::Restore)
+        .addFunction("Maximize", &Graphics::Maximize)
+        .addFunction("Minimize", &Graphics::Minimize)
+
+        .addStaticFunction("GetAlphaFormat", &Graphics::GetAlphaFormat)
+        .addStaticFunction("GetLuminanceFormat", &Graphics::GetLuminanceFormat)
+        .addStaticFunction("GetLuminanceAlphaFormat", &Graphics::GetLuminanceAlphaFormat)
+        .addStaticFunction("GetRGBFormat", &Graphics::GetRGBFormat)
+        .addStaticFunction("GetRGBAFormat", &Graphics::GetRGBAFormat)
+        .addStaticFunction("GetRGBA16Format", &Graphics::GetRGBA16Format)
+        .addStaticFunction("GetRGBAFloat16Format", &Graphics::GetRGBAFloat16Format)
+        .addStaticFunction("GetRGBAFloat32Format", &Graphics::GetRGBAFloat32Format)
+        .addStaticFunction("GetRG16Format", &Graphics::GetRG16Format)
+        .addStaticFunction("GetRGFloat16Format", &Graphics::GetRGFloat16Format)
+        .addStaticFunction("GetRGFloat32Format", &Graphics::GetRGFloat32Format)
+        .addStaticFunction("GetFloat16Format", &Graphics::GetFloat16Format)
+        .addStaticFunction("GetFloat32Format", &Graphics::GetFloat32Format)
+        .addStaticFunction("GetLinearDepthFormat", &Graphics::GetLinearDepthFormat)
+        .addStaticFunction("GetDepthStencilFormat", &Graphics::GetDepthStencilFormat)
+        .addStaticFunction("GetReadableDepthFormat", &Graphics::GetReadableDepthFormat)
+        .addStaticFunction("GetPixelUVOffset", &Graphics::GetPixelUVOffset)
+        .addStaticFunction("GetMaxBones", &Graphics::GetMaxBones)
+        .addStaticFunction("GetGL3Support", &Graphics::GetGL3Support)
+
+        .addProperty("type", &Graphics::GetType)
+        .addProperty("typeName", &Graphics::GetTypeName)
+        .addProperty("typeInfo", &Graphics::GetTypeInfo)
+        .addProperty("initialized", &Graphics::IsInitialized)
+        .addProperty("externalWindow", &Graphics::GetExternalWindow, &Graphics::SetExternalWindow)
+        .addProperty("windowTitle", &Graphics::GetWindowTitle, &Graphics::SetWindowTitle)
+        .addProperty("apiName", &Graphics::GetApiName)
+        .addProperty("windowPosition", &Graphics::GetWindowPosition)
+        .addProperty("width", &Graphics::GetWidth)
+        .addProperty("height", &Graphics::GetHeight)
+        .addProperty("multiSample", &Graphics::GetMultiSample)
+
+        .addProperty("fullscreen", &Graphics::GetFullscreen)
+        .addProperty("borderless", &Graphics::GetBorderless)
+        .addProperty("resizable", &Graphics::GetResizable)
+
+        .addProperty("highDPI", &Graphics::GetHighDPI)
+        .addProperty("vSync", &Graphics::GetVSync)
+        .addProperty("tripleBuffer", &Graphics::GetTripleBuffer)
+        .addProperty("sRGB", &Graphics::GetSRGB, &Graphics::SetSRGB)
+        .addProperty("orientations", &Graphics::GetOrientations, &Graphics::SetOrientations)
+
+        .addProperty("numPrimitives", &Graphics::GetNumPrimitives)
+        .addProperty("numBatches", &Graphics::GetNumBatches)
+        .addProperty("dummyColorFormat", &Graphics::GetDummyColorFormat)
+        .addProperty("shadowMapFormat", &Graphics::GetShadowMapFormat)
+        .addProperty("hiresShadowMapFormat", &Graphics::GetHiresShadowMapFormat)
+        .addProperty("instancingSupport", &Graphics::GetInstancingSupport)
+        .addProperty("lightPrepassSupport", &Graphics::GetLightPrepassSupport)
+        .addProperty("deferredSupport", &Graphics::GetDeferredSupport)
+        .addProperty("anisotropySupport", &Graphics::GetAnisotropySupport)
+        .addProperty("hardwareShadowSupport", &Graphics::GetHardwareShadowSupport)
+        .addProperty("readableDepthSupport", &Graphics::GetReadableDepthSupport)
+        .addProperty("sRGBSupport", &Graphics::GetSRGBSupport)
+        .addProperty("sRGBWriteSupport", &Graphics::GetSRGBWriteSupport)
+        .addProperty("resolutions", &Graphics::GetResolutions)
+        .addProperty("multiSampleLevels", &Graphics::GetMultiSampleLevels)
+        .addProperty("desktopResolution", &Graphics::GetDesktopResolution)
+
+        .addProperty("defaultTextureFilterMode", &Graphics::GetDefaultTextureFilterMode, &Graphics::SetDefaultTextureFilterMode)
+
+        .addProperty("viewport", &Graphics::GetViewport, &Graphics::SetViewport)
+        .addProperty("textureAnisotropy", &Graphics::GetTextureAnisotropy, &Graphics::SetTextureAnisotropy)
+
+        .addProperty("useClipPlane", &Graphics::GetUseClipPlane)
+        .addProperty("renderTargetDimensions", &Graphics::GetRenderTargetDimensions)
+        .addProperty("windowIcon", &Graphics::SetWindowIcon)
+        );
+}
 
 // static void RegisterGraphicsDefs(kaguya::State& lua)
 // {
@@ -1780,538 +1340,349 @@
 //     lua["KBITS_PER_COMPONENT"] = BITS_PER_COMPONENT;
 // }
 
-// static void RegisterGraphicsEvents(kaguya::State& lua)
-// {
-//     using namespace kaguya;
+static void RegisterGraphicsEvents(kaguya::State& lua)
+{
+    using namespace kaguya;
 
-//     lua["KE_SCREENMODE"] = E_SCREENMODE;
-//     lua["KE_WINDOWPOS"] = E_WINDOWPOS;
-//     lua["KE_RENDERSURFACEUPDATE"] = E_RENDERSURFACEUPDATE;
-//     lua["KE_BEGINRENDERING"] = E_BEGINRENDERING;
-//     lua["KE_ENDRENDERING"] = E_ENDRENDERING;
-//     lua["KE_BEGINVIEWUPDATE"] = E_BEGINVIEWUPDATE;
-//     lua["KE_ENDVIEWUPDATE"] = E_ENDVIEWUPDATE;
-//     lua["KE_BEGINVIEWRENDER"] = E_BEGINVIEWRENDER;
-//     lua["KE_ENDVIEWRENDER"] = E_ENDVIEWRENDER;
-//     lua["KE_RENDERPATHEVENT"] = E_RENDERPATHEVENT;
-//     lua["KE_DEVICELOST"] = E_DEVICELOST;
-//     lua["KE_DEVICERESET"] = E_DEVICERESET;
-// }
+    lua["KE_SCREENMODE"] = E_SCREENMODE;
+    lua["KE_WINDOWPOS"] = E_WINDOWPOS;
+    lua["KE_RENDERSURFACEUPDATE"] = E_RENDERSURFACEUPDATE;
+    lua["KE_BEGINRENDERING"] = E_BEGINRENDERING;
+    lua["KE_ENDRENDERING"] = E_ENDRENDERING;
+    lua["KE_BEGINVIEWUPDATE"] = E_BEGINVIEWUPDATE;
+    lua["KE_ENDVIEWUPDATE"] = E_ENDVIEWUPDATE;
+    lua["KE_BEGINVIEWRENDER"] = E_BEGINVIEWRENDER;
+    lua["KE_ENDVIEWRENDER"] = E_ENDVIEWRENDER;
+    lua["KE_RENDERPATHEVENT"] = E_RENDERPATHEVENT;
+    lua["KE_DEVICELOST"] = E_DEVICELOST;
+    lua["KE_DEVICERESET"] = E_DEVICERESET;
+}
 
-// static void RegisterGraphicsImpl(kaguya::State& lua)
-// {
-//     using namespace kaguya;
+static void RegisterIndexBuffer(kaguya::State& lua)
+{
+    using namespace kaguya;
 
-//     lua["KFrameBufferObject"].setClass(UserdataMetatable<FrameBufferObject>()
-//         .setConstructors<FrameBufferObject()>()
+    lua["KIndexBuffer"].setClass(UserdataMetatable<IndexBuffer, Object>(false)
+        .addStaticFunction("new", &KCreateObject<IndexBuffer>)
+        .addStaticFunction("__gc", &KReleaseObject<IndexBuffer>)
 
-//         .addProperty("fbo", &FrameBufferObject::fbo_)
-//         .addProperty("colorAttachments", &FrameBufferObject::colorAttachments_)
-//         .addProperty("depthAttachment", &FrameBufferObject::depthAttachment_)
-//         .addProperty("readBuffers", &FrameBufferObject::readBuffers_)
-//         .addProperty("drawBuffers", &FrameBufferObject::drawBuffers_)
-//     );
-//     lua["KGraphicsImpl"].setClass(UserdataMetatable<GraphicsImpl>()
-//         .setConstructors<GraphicsImpl()>()
+        .addFunction("GetType", &IndexBuffer::GetType)
+        .addFunction("GetTypeName", &IndexBuffer::GetTypeName)
+        .addFunction("GetTypeInfo", &IndexBuffer::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &IndexBuffer::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &IndexBuffer::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &IndexBuffer::GetTypeInfoStatic)
 
-//         .addFunction("GetWindow", &GraphicsImpl::GetWindow)
-//         .addFunction("GetGLContext", &GraphicsImpl::GetGLContext)
+        .addFunction("SetShadowed", &IndexBuffer::SetShadowed)
+        .addFunction("SetSize", &IndexBuffer::SetSize)
+        .addFunction("SetDataRange", &IndexBuffer::SetDataRange)
 
-//         .addProperty("window", &GraphicsImpl::GetWindow)
-//         .addProperty("gLContext", &GraphicsImpl::GetGLContext)
-//     );
-// }
+        .addFunction("IsShadowed", &IndexBuffer::IsShadowed)
+        .addFunction("IsDynamic", &IndexBuffer::IsDynamic)
+        .addFunction("IsLocked", &IndexBuffer::IsLocked)
 
-// static void RegisterIndexBuffer(kaguya::State& lua)
-// {
-//     using namespace kaguya;
+        .addFunction("GetIndexCount", &IndexBuffer::GetIndexCount)
+        .addFunction("GetIndexSize", &IndexBuffer::GetIndexSize)
+        .addFunction("GetUsedVertexRange", &IndexBuffer::GetUsedVertexRange)
 
-//     lua["KIndexBuffer"].setClass(UserdataMetatable<IndexBuffer, Object, GPUObject>(false)
-//         .addStaticFunction("new", &KCreateObject<IndexBuffer>)
-//         .addStaticFunction("__gc", &KReleaseObject<IndexBuffer>)
+        .addProperty("type", &IndexBuffer::GetType)
+        .addProperty("typeName", &IndexBuffer::GetTypeName)
+        .addProperty("typeInfo", &IndexBuffer::GetTypeInfo)
 
-//         .addFunction("GetType", &IndexBuffer::GetType)
-//         .addFunction("GetTypeName", &IndexBuffer::GetTypeName)
-//         .addFunction("GetTypeInfo", &IndexBuffer::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &IndexBuffer::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &IndexBuffer::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &IndexBuffer::GetTypeInfoStatic)
-//         .addFunction("OnDeviceReset", &IndexBuffer::OnDeviceReset)
-//         .addFunction("Release", &IndexBuffer::Release)
-//         .addFunction("SetShadowed", &IndexBuffer::SetShadowed)
-//         .addFunction("SetSize", &IndexBuffer::SetSize)
-//         .addFunction("SetData", &IndexBuffer::SetData)
-//         .addFunction("SetDataRange", &IndexBuffer::SetDataRange)
-//         .addFunction("Lock", &IndexBuffer::Lock)
-//         .addFunction("Unlock", &IndexBuffer::Unlock)
-//         .addFunction("IsShadowed", &IndexBuffer::IsShadowed)
-//         .addFunction("IsDynamic", &IndexBuffer::IsDynamic)
-//         .addFunction("IsLocked", &IndexBuffer::IsLocked)
-//         .addFunction("GetIndexCount", &IndexBuffer::GetIndexCount)
-//         .addFunction("GetIndexSize", &IndexBuffer::GetIndexSize)
-//         .addFunction("GetUsedVertexRange", &IndexBuffer::GetUsedVertexRange)
-//         .addFunction("GetShadowData", &IndexBuffer::GetShadowData)
-//         .addFunction("GetShadowDataShared", &IndexBuffer::GetShadowDataShared)
+        .addProperty("shadowed", &IndexBuffer::IsShadowed, &IndexBuffer::SetShadowed)
+        .addProperty("dynamic", &IndexBuffer::IsDynamic)
+        .addProperty("locked", &IndexBuffer::IsLocked)
+        .addProperty("indexCount", &IndexBuffer::GetIndexCount)
+        .addProperty("indexSize", &IndexBuffer::GetIndexSize)
+        );
+}
 
-//         .addProperty("type", &IndexBuffer::GetType)
-//         .addProperty("typeName", &IndexBuffer::GetTypeName)
-//         .addProperty("typeInfo", &IndexBuffer::GetTypeInfo)
-//         .addProperty("shadowed", &IndexBuffer::IsShadowed, &IndexBuffer::SetShadowed)
-//         .addProperty("dynamic", &IndexBuffer::IsDynamic)
-//         .addProperty("locked", &IndexBuffer::IsLocked)
-//         .addProperty("indexCount", &IndexBuffer::GetIndexCount)
-//         .addProperty("indexSize", &IndexBuffer::GetIndexSize)
-//         .addProperty("shadowData", &IndexBuffer::GetShadowData)
-//         .addProperty("shadowDataShared", &IndexBuffer::GetShadowDataShared)
-//         .addProperty("data", &IndexBuffer::SetData)
-//     );
-// }
+static void RegisterLight(kaguya::State& lua)
+{
+    using namespace kaguya;
 
-// static void RegisterLight(kaguya::State& lua)
-// {
-//     using namespace kaguya;
+    // enum LightType;
+    lua["KLIGHT_DIRECTIONAL"] = LIGHT_DIRECTIONAL;
+    lua["KLIGHT_SPOT"] = LIGHT_SPOT;
+    lua["KLIGHT_POINT"] = LIGHT_POINT;
 
-//     // enum LightType;
-//     lua["KLIGHT_DIRECTIONAL"] = LIGHT_DIRECTIONAL;
-//     lua["KLIGHT_SPOT"] = LIGHT_SPOT;
-//     lua["KLIGHT_POINT"] = LIGHT_POINT;
+    lua["KSHADOW_MIN_QUANTIZE"] = SHADOW_MIN_QUANTIZE;
+    lua["KSHADOW_MIN_VIEW"] = SHADOW_MIN_VIEW;
+    lua["KMAX_LIGHT_SPLITS"] = MAX_LIGHT_SPLITS;
+    lua["KMAX_CASCADE_SPLITS"] = MAX_CASCADE_SPLITS;
 
-//     lua["KSHADOW_MIN_QUANTIZE"] = SHADOW_MIN_QUANTIZE;
-//     lua["KSHADOW_MIN_VIEW"] = SHADOW_MIN_VIEW;
-//     lua["KMAX_LIGHT_SPLITS"] = MAX_LIGHT_SPLITS;
-//     lua["KMAX_CASCADE_SPLITS"] = MAX_CASCADE_SPLITS;
-//     lua["KBiasParameters"].setClass(UserdataMetatable<BiasParameters>()
-//         .setConstructors<BiasParameters(),
-//             BiasParameters(float, float, float)>()
+    lua["KBiasParameters"].setClass(UserdataMetatable<BiasParameters>()
+        .setConstructors<BiasParameters(),
+        BiasParameters(float, float, float)>()
 
-//         .addFunction("Validate", &BiasParameters::Validate)
-//         .addProperty("constantBias", &BiasParameters::constantBias_)
-//         .addProperty("slopeScaledBias", &BiasParameters::slopeScaledBias_)
-//         .addProperty("normalOffset", &BiasParameters::normalOffset_)
-//     );
-//     lua["KCascadeParameters"].setClass(UserdataMetatable<CascadeParameters>()
-//         .setConstructors<CascadeParameters(),
-//             CascadeParameters(float, float, float, float, float, float)>()
+        .addFunction("Validate", &BiasParameters::Validate)
+        .addProperty("constantBias", &BiasParameters::constantBias_)
+        .addProperty("slopeScaledBias", &BiasParameters::slopeScaledBias_)
+        .addProperty("normalOffset", &BiasParameters::normalOffset_)
+        );
 
-//         .addFunction("Validate", &CascadeParameters::Validate)
-//         .addFunction("GetShadowRange", &CascadeParameters::GetShadowRange)
+    lua["KCascadeParameters"].setClass(UserdataMetatable<CascadeParameters>()
+        .setConstructors<CascadeParameters(),
+        CascadeParameters(float, float, float, float, float, float)>()
 
-//         .addProperty("shadowRange", &CascadeParameters::GetShadowRange)
-//         .addProperty("splits", &CascadeParameters::splits_)
-//         .addProperty("fadeStart", &CascadeParameters::fadeStart_)
-//         .addProperty("biasAutoAdjust", &CascadeParameters::biasAutoAdjust_)
-//     );
-//     lua["KFocusParameters"].setClass(UserdataMetatable<FocusParameters>()
-//         .setConstructors<FocusParameters(),
-//             FocusParameters(bool, bool, bool, float, float)>()
+        .addFunction("Validate", &CascadeParameters::Validate)
+        .addFunction("GetShadowRange", &CascadeParameters::GetShadowRange)
 
-//         .addFunction("Validate", &FocusParameters::Validate)
-//         .addProperty("focus", &FocusParameters::focus_)
-//         .addProperty("nonUniform", &FocusParameters::nonUniform_)
-//         .addProperty("autoSize", &FocusParameters::autoSize_)
-//         .addProperty("quantize", &FocusParameters::quantize_)
-//         .addProperty("minView", &FocusParameters::minView_)
-//     );
-//     lua["KLight"].setClass(UserdataMetatable<Light, Drawable>(false)
-//         .addStaticFunction("new", &KCreateObject<Light>)
-//         .addStaticFunction("__gc", &KReleaseObject<Light>)
+        .addProperty("shadowRange", &CascadeParameters::GetShadowRange)
+        .addProperty("fadeStart", &CascadeParameters::fadeStart_)
+        .addProperty("biasAutoAdjust", &CascadeParameters::biasAutoAdjust_)
+        );
 
-//         .addFunction("GetType", &Light::GetType)
-//         .addFunction("GetTypeName", &Light::GetTypeName)
-//         .addFunction("GetTypeInfo", &Light::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &Light::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &Light::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &Light::GetTypeInfoStatic)
-//         .addFunction("OnSetAttribute", &Light::OnSetAttribute)
-//         .addFunction("ProcessRayQuery", &Light::ProcessRayQuery)
-//         .addFunction("UpdateBatches", &Light::UpdateBatches)
-//         .addFunction("DrawDebugGeometry", &Light::DrawDebugGeometry)
-//         .addFunction("SetLightType", &Light::SetLightType)
-//         .addFunction("SetPerVertex", &Light::SetPerVertex)
-//         .addFunction("SetColor", &Light::SetColor)
-//         .addFunction("SetSpecularIntensity", &Light::SetSpecularIntensity)
-//         .addFunction("SetBrightness", &Light::SetBrightness)
-//         .addFunction("SetRange", &Light::SetRange)
-//         .addFunction("SetFov", &Light::SetFov)
-//         .addFunction("SetAspectRatio", &Light::SetAspectRatio)
-//         .addFunction("SetFadeDistance", &Light::SetFadeDistance)
-//         .addFunction("SetShadowFadeDistance", &Light::SetShadowFadeDistance)
-//         .addFunction("SetShadowBias", &Light::SetShadowBias)
-//         .addFunction("SetShadowCascade", &Light::SetShadowCascade)
-//         .addFunction("SetShadowFocus", &Light::SetShadowFocus)
-//         .addFunction("SetShadowIntensity", &Light::SetShadowIntensity)
-//         .addFunction("SetShadowResolution", &Light::SetShadowResolution)
-//         .addFunction("SetShadowNearFarRatio", &Light::SetShadowNearFarRatio)
-//         .addFunction("SetRampTexture", &Light::SetRampTexture)
-//         .addFunction("SetShapeTexture", &Light::SetShapeTexture)
-//         .addFunction("GetLightType", &Light::GetLightType)
-//         .addFunction("GetPerVertex", &Light::GetPerVertex)
-//         .addFunction("GetColor", &Light::GetColor)
-//         .addFunction("GetSpecularIntensity", &Light::GetSpecularIntensity)
-//         .addFunction("GetBrightness", &Light::GetBrightness)
-//         .addFunction("GetEffectiveColor", &Light::GetEffectiveColor)
-//         .addFunction("GetEffectiveSpecularIntensity", &Light::GetEffectiveSpecularIntensity)
-//         .addFunction("GetRange", &Light::GetRange)
-//         .addFunction("GetFov", &Light::GetFov)
-//         .addFunction("GetAspectRatio", &Light::GetAspectRatio)
-//         .addFunction("GetFadeDistance", &Light::GetFadeDistance)
-//         .addFunction("GetShadowFadeDistance", &Light::GetShadowFadeDistance)
-//         .addFunction("GetShadowBias", &Light::GetShadowBias)
-//         .addFunction("GetShadowCascade", &Light::GetShadowCascade)
-//         .addFunction("GetShadowFocus", &Light::GetShadowFocus)
-//         .addFunction("GetShadowIntensity", &Light::GetShadowIntensity)
-//         .addFunction("GetShadowResolution", &Light::GetShadowResolution)
-//         .addFunction("GetShadowNearFarRatio", &Light::GetShadowNearFarRatio)
-//         .addFunction("GetRampTexture", &Light::GetRampTexture)
-//         .addFunction("GetShapeTexture", &Light::GetShapeTexture)
-//         .addFunction("GetFrustum", &Light::GetFrustum)
-//         .addFunction("GetViewSpaceFrustum", &Light::GetViewSpaceFrustum)
-//         .addFunction("GetNumShadowSplits", &Light::GetNumShadowSplits)
-//         .addFunction("IsNegative", &Light::IsNegative)
+    lua["KFocusParameters"].setClass(UserdataMetatable<FocusParameters>()
+        .setConstructors<FocusParameters(),
+        FocusParameters(bool, bool, bool, float, float)>()
 
-//         .addOverloadedFunctions("SetIntensitySortValue",
-//             static_cast<void(Light::*)(float)>(&Light::SetIntensitySortValue),
-//             static_cast<void(Light::*)(const BoundingBox&)>(&Light::SetIntensitySortValue))
+        .addFunction("Validate", &FocusParameters::Validate)
+        .addProperty("focus", &FocusParameters::focus_)
+        .addProperty("nonUniform", &FocusParameters::nonUniform_)
+        .addProperty("autoSize", &FocusParameters::autoSize_)
+        .addProperty("quantize", &FocusParameters::quantize_)
+        .addProperty("minView", &FocusParameters::minView_)
+        );
 
-//         .addFunction("SetLightQueue", &Light::SetLightQueue)
-//         .addFunction("GetVolumeTransform", &Light::GetVolumeTransform)
-//         .addFunction("GetLightQueue", &Light::GetLightQueue)
-//         .addFunction("GetIntensityDivisor", &Light::GetIntensityDivisor)
-//         .addStaticFunction("GetFullscreenQuadTransform", &Light::GetFullscreenQuadTransform)
+    lua["KLight"].setClass(UserdataMetatable<Light, Drawable>(false)
+        .addStaticFunction("new", &KCreateObject<Light>)
+        .addStaticFunction("__gc", &KReleaseObject<Light>)
 
-//         .addProperty("type", &Light::GetType)
-//         .addProperty("typeName", &Light::GetTypeName)
-//         .addProperty("typeInfo", &Light::GetTypeInfo)
-//         .addProperty("lightType", &Light::GetLightType, &Light::SetLightType)
-//         .addProperty("perVertex", &Light::GetPerVertex, &Light::SetPerVertex)
-//         .addProperty("color", &Light::GetColor, &Light::SetColor)
-//         .addProperty("specularIntensity", &Light::GetSpecularIntensity, &Light::SetSpecularIntensity)
-//         .addProperty("brightness", &Light::GetBrightness, &Light::SetBrightness)
-//         .addProperty("effectiveColor", &Light::GetEffectiveColor)
-//         .addProperty("effectiveSpecularIntensity", &Light::GetEffectiveSpecularIntensity)
-//         .addProperty("range", &Light::GetRange, &Light::SetRange)
-//         .addProperty("fov", &Light::GetFov, &Light::SetFov)
-//         .addProperty("aspectRatio", &Light::GetAspectRatio, &Light::SetAspectRatio)
-//         .addProperty("fadeDistance", &Light::GetFadeDistance, &Light::SetFadeDistance)
-//         .addProperty("shadowFadeDistance", &Light::GetShadowFadeDistance, &Light::SetShadowFadeDistance)
-//         .addProperty("shadowBias", &Light::GetShadowBias, &Light::SetShadowBias)
-//         .addProperty("shadowCascade", &Light::GetShadowCascade, &Light::SetShadowCascade)
-//         .addProperty("shadowFocus", &Light::GetShadowFocus, &Light::SetShadowFocus)
-//         .addProperty("shadowIntensity", &Light::GetShadowIntensity, &Light::SetShadowIntensity)
-//         .addProperty("shadowResolution", &Light::GetShadowResolution, &Light::SetShadowResolution)
-//         .addProperty("shadowNearFarRatio", &Light::GetShadowNearFarRatio, &Light::SetShadowNearFarRatio)
-//         .addProperty("rampTexture", &Light::GetRampTexture, &Light::SetRampTexture)
-//         .addProperty("shapeTexture", &Light::GetShapeTexture, &Light::SetShapeTexture)
-//         .addProperty("frustum", &Light::GetFrustum)
-//         .addProperty("numShadowSplits", &Light::GetNumShadowSplits)
-//         .addProperty("negative", &Light::IsNegative)
-//         .addProperty("lightQueue", &Light::GetLightQueue, &Light::SetLightQueue)
-//     );
-//     lua["KCompareLights"] = function(&CompareLights);
-// }
+        .addFunction("GetType", &Light::GetType)
+        .addFunction("GetTypeName", &Light::GetTypeName)
+        .addFunction("GetTypeInfo", &Light::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &Light::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &Light::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &Light::GetTypeInfoStatic)
 
-// static void RegisterMaterial(kaguya::State& lua)
-// {
-//     using namespace kaguya;
+        .addFunction("SetLightType", &Light::SetLightType)
+        .addFunction("SetPerVertex", &Light::SetPerVertex)
+        .addFunction("SetColor", &Light::SetColor)
+        .addFunction("SetSpecularIntensity", &Light::SetSpecularIntensity)
+        .addFunction("SetBrightness", &Light::SetBrightness)
+        .addFunction("SetRange", &Light::SetRange)
+        .addFunction("SetFov", &Light::SetFov)
+        .addFunction("SetAspectRatio", &Light::SetAspectRatio)
+        .addFunction("SetFadeDistance", &Light::SetFadeDistance)
+        .addFunction("SetShadowFadeDistance", &Light::SetShadowFadeDistance)
+        .addFunction("SetShadowBias", &Light::SetShadowBias)
+        .addFunction("SetShadowCascade", &Light::SetShadowCascade)
+        .addFunction("SetShadowFocus", &Light::SetShadowFocus)
+        .addFunction("SetShadowIntensity", &Light::SetShadowIntensity)
+        .addFunction("SetShadowResolution", &Light::SetShadowResolution)
+        .addFunction("SetShadowNearFarRatio", &Light::SetShadowNearFarRatio)
+        .addFunction("SetRampTexture", &Light::SetRampTexture)
+        .addFunction("SetShapeTexture", &Light::SetShapeTexture)
+        .addFunction("GetLightType", &Light::GetLightType)
+        .addFunction("GetPerVertex", &Light::GetPerVertex)
+        .addFunction("GetColor", &Light::GetColor)
+        .addFunction("GetSpecularIntensity", &Light::GetSpecularIntensity)
+        .addFunction("GetBrightness", &Light::GetBrightness)
+        .addFunction("GetEffectiveColor", &Light::GetEffectiveColor)
+        .addFunction("GetEffectiveSpecularIntensity", &Light::GetEffectiveSpecularIntensity)
+        .addFunction("GetRange", &Light::GetRange)
+        .addFunction("GetFov", &Light::GetFov)
+        .addFunction("GetAspectRatio", &Light::GetAspectRatio)
+        .addFunction("GetFadeDistance", &Light::GetFadeDistance)
+        .addFunction("GetShadowFadeDistance", &Light::GetShadowFadeDistance)
+        .addFunction("GetShadowBias", &Light::GetShadowBias)
+        .addFunction("GetShadowCascade", &Light::GetShadowCascade)
+        .addFunction("GetShadowFocus", &Light::GetShadowFocus)
+        .addFunction("GetShadowIntensity", &Light::GetShadowIntensity)
+        .addFunction("GetShadowResolution", &Light::GetShadowResolution)
+        .addFunction("GetShadowNearFarRatio", &Light::GetShadowNearFarRatio)
+        .addFunction("GetRampTexture", &Light::GetRampTexture)
+        .addFunction("GetShapeTexture", &Light::GetShapeTexture)
+        .addFunction("GetFrustum", &Light::GetFrustum)
+        .addFunction("GetViewSpaceFrustum", &Light::GetViewSpaceFrustum)
+        .addFunction("GetNumShadowSplits", &Light::GetNumShadowSplits)
+        .addFunction("IsNegative", &Light::IsNegative)
 
-//     lua["KDEFAULT_RENDER_ORDER"] = DEFAULT_RENDER_ORDER;
-//     lua["KMaterialShaderParameter"].setClass(UserdataMetatable<MaterialShaderParameter>()
+        .addOverloadedFunctions("SetIntensitySortValue",
+            static_cast<void(Light::*)(float)>(&Light::SetIntensitySortValue),
+            static_cast<void(Light::*)(const BoundingBox&)>(&Light::SetIntensitySortValue))
 
-//         .addProperty("name", &MaterialShaderParameter::name_)
-//         .addProperty("value", &MaterialShaderParameter::value_)
-//     );
-//     lua["KTechniqueEntry"].setClass(UserdataMetatable<TechniqueEntry>()
-//         .setConstructors<TechniqueEntry(),
-//             TechniqueEntry(Technique*, unsigned int, float)>()
+        .addFunction("SetLightQueue", &Light::SetLightQueue)
+        .addFunction("GetVolumeTransform", &Light::GetVolumeTransform)
+        .addFunction("GetLightQueue", &Light::GetLightQueue)
+        .addFunction("GetIntensityDivisor", &Light::GetIntensityDivisor)
+        .addStaticFunction("GetFullscreenQuadTransform", &Light::GetFullscreenQuadTransform)
 
-//         .addProperty("technique", &TechniqueEntry::technique_)
-//         .addProperty("qualityLevel", &TechniqueEntry::qualityLevel_)
-//         .addProperty("lodDistance", &TechniqueEntry::lodDistance_)
-//     );
-//     lua["KShaderParameterAnimationInfo"].setClass(UserdataMetatable<ShaderParameterAnimationInfo, ValueAnimationInfo>()
-//         .setConstructors<ShaderParameterAnimationInfo(Material*, const String&, ValueAnimation*, WrapMode, float),
-//             ShaderParameterAnimationInfo(const ShaderParameterAnimationInfo&)>()
+        .addProperty("type", &Light::GetType)
+        .addProperty("typeName", &Light::GetTypeName)
+        .addProperty("typeInfo", &Light::GetTypeInfo)
+        .addProperty("lightType", &Light::GetLightType, &Light::SetLightType)
+        .addProperty("perVertex", &Light::GetPerVertex, &Light::SetPerVertex)
+        .addProperty("color", &Light::GetColor, &Light::SetColor)
+        .addProperty("specularIntensity", &Light::GetSpecularIntensity, &Light::SetSpecularIntensity)
+        .addProperty("brightness", &Light::GetBrightness, &Light::SetBrightness)
+        .addProperty("effectiveColor", &Light::GetEffectiveColor)
+        .addProperty("effectiveSpecularIntensity", &Light::GetEffectiveSpecularIntensity)
+        .addProperty("range", &Light::GetRange, &Light::SetRange)
+        .addProperty("fov", &Light::GetFov, &Light::SetFov)
+        .addProperty("aspectRatio", &Light::GetAspectRatio, &Light::SetAspectRatio)
+        .addProperty("fadeDistance", &Light::GetFadeDistance, &Light::SetFadeDistance)
+        .addProperty("shadowFadeDistance", &Light::GetShadowFadeDistance, &Light::SetShadowFadeDistance)
+        .addProperty("shadowBias", &Light::GetShadowBias, &Light::SetShadowBias)
+        .addProperty("shadowCascade", &Light::GetShadowCascade, &Light::SetShadowCascade)
+        .addProperty("shadowFocus", &Light::GetShadowFocus, &Light::SetShadowFocus)
+        .addProperty("shadowIntensity", &Light::GetShadowIntensity, &Light::SetShadowIntensity)
+        .addProperty("shadowResolution", &Light::GetShadowResolution, &Light::SetShadowResolution)
+        .addProperty("shadowNearFarRatio", &Light::GetShadowNearFarRatio, &Light::SetShadowNearFarRatio)
+        .addProperty("rampTexture", &Light::GetRampTexture, &Light::SetRampTexture)
+        .addProperty("shapeTexture", &Light::GetShapeTexture, &Light::SetShapeTexture)
+        .addProperty("frustum", &Light::GetFrustum)
+        .addProperty("numShadowSplits", &Light::GetNumShadowSplits)
+        .addProperty("negative", &Light::IsNegative)
+        .addProperty("lightQueue", &Light::GetLightQueue, &Light::SetLightQueue)
+        );
+    lua["KCompareLights"] = function(&CompareLights);
+}
 
-//         .addFunction("GetName", &ShaderParameterAnimationInfo::GetName)
+static void RegisterMaterial(kaguya::State& lua)
+{
+    using namespace kaguya;
 
-//         .addProperty("name", &ShaderParameterAnimationInfo::GetName)
-//     );
-//     lua["KMaterial"].setClass(UserdataMetatable<Material, Resource>(false)
-//         .addStaticFunction("new", &KCreateObject<Material>)
-//         .addStaticFunction("__gc", &KReleaseObject<Material>)
+    lua["KDEFAULT_RENDER_ORDER"] = DEFAULT_RENDER_ORDER;
 
-//         .addFunction("GetType", &Material::GetType)
-//         .addFunction("GetTypeName", &Material::GetTypeName)
-//         .addFunction("GetTypeInfo", &Material::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &Material::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &Material::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &Material::GetTypeInfoStatic)
-//         .addFunction("BeginLoad", &Material::BeginLoad)
-//         .addFunction("EndLoad", &Material::EndLoad)
+    lua["KMaterial"].setClass(UserdataMetatable<Material, Resource>(false)
+        .addStaticFunction("new", &KCreateObject<Material>)
+        .addStaticFunction("__gc", &KReleaseObject<Material>)
 
-//         .addOverloadedFunctions("Save",
-//             static_cast<bool(Material::*)(Serializer&) const>(&Material::Save),
-//             static_cast<bool(Material::*)(XMLElement&) const>(&Material::Save),
-//             static_cast<bool(Material::*)(JSONValue&) const>(&Material::Save))
+        .addFunction("GetType", &Material::GetType)
+        .addFunction("GetTypeName", &Material::GetTypeName)
+        .addFunction("GetTypeInfo", &Material::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &Material::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &Material::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &Material::GetTypeInfoStatic)
 
+        .addFunction("SetNumTechniques", &Material::SetNumTechniques)
+        .addFunction("SetTechnique", &Material::SetTechnique)
+        .addFunction("SetShaderParameter", &Material::SetShaderParameter)
+        .addFunction("SetShaderParameterAnimation", &Material::SetShaderParameterAnimation)
+        .addFunction("SetShaderParameterAnimationWrapMode", &Material::SetShaderParameterAnimationWrapMode)
+        .addFunction("SetShaderParameterAnimationSpeed", &Material::SetShaderParameterAnimationSpeed)
+        .addFunction("SetTexture", &Material::SetTexture)
 
-//         .addOverloadedFunctions("Load",
-//             static_cast<bool(Material::*)(const XMLElement&)>(&Material::Load),
-//             static_cast<bool(Material::*)(const JSONValue&)>(&Material::Load))
+        .addOverloadedFunctions("SetUVTransform",
+            static_cast<void(Material::*)(const Vector2&, float, const Vector2&)>(&Material::SetUVTransform),
+            static_cast<void(Material::*)(const Vector2&, float, float)>(&Material::SetUVTransform))
 
-//         .addFunction("SetNumTechniques", &Material::SetNumTechniques)
-//         .addFunction("SetTechnique", &Material::SetTechnique)
-//         .addFunction("SetShaderParameter", &Material::SetShaderParameter)
-//         .addFunction("SetShaderParameterAnimation", &Material::SetShaderParameterAnimation)
-//         .addFunction("SetShaderParameterAnimationWrapMode", &Material::SetShaderParameterAnimationWrapMode)
-//         .addFunction("SetShaderParameterAnimationSpeed", &Material::SetShaderParameterAnimationSpeed)
-//         .addFunction("SetTexture", &Material::SetTexture)
+        .addFunction("SetCullMode", &Material::SetCullMode)
+        .addFunction("SetShadowCullMode", &Material::SetShadowCullMode)
+        .addFunction("SetFillMode", &Material::SetFillMode)
+        .addFunction("SetDepthBias", &Material::SetDepthBias)
+        .addFunction("SetRenderOrder", &Material::SetRenderOrder)
+        .addFunction("SetScene", &Material::SetScene)
+        .addFunction("RemoveShaderParameter", &Material::RemoveShaderParameter)
+        .addFunction("ReleaseShaders", &Material::ReleaseShaders)
+        .addFunction("Clone", &Material::Clone)
+        .addFunction("SortTechniques", &Material::SortTechniques)
+        .addFunction("MarkForAuxView", &Material::MarkForAuxView)
+        .addFunction("GetNumTechniques", &Material::GetNumTechniques)
+        .addFunction("GetTechniques", &Material::GetTechniques)
+        .addFunction("GetTechniqueEntry", &Material::GetTechniqueEntry)
+        .addFunction("GetTechnique", &Material::GetTechnique)
+        .addFunction("GetPass", &Material::GetPass)
+        .addFunction("GetTexture", &Material::GetTexture)
+        .addFunction("GetTextures", &Material::GetTextures)
+        .addFunction("GetShaderParameter", &Material::GetShaderParameter)
+        .addFunction("GetShaderParameterAnimation", &Material::GetShaderParameterAnimation)
+        .addFunction("GetShaderParameterAnimationWrapMode", &Material::GetShaderParameterAnimationWrapMode)
+        .addFunction("GetShaderParameterAnimationSpeed", &Material::GetShaderParameterAnimationSpeed)
+        .addFunction("GetShaderParameters", &Material::GetShaderParameters)
+        .addFunction("GetCullMode", &Material::GetCullMode)
+        .addFunction("GetShadowCullMode", &Material::GetShadowCullMode)
+        .addFunction("GetFillMode", &Material::GetFillMode)
+        .addFunction("GetDepthBias", &Material::GetDepthBias)
+        .addFunction("GetRenderOrder", &Material::GetRenderOrder)
+        .addFunction("GetAuxViewFrameNumber", &Material::GetAuxViewFrameNumber)
+        .addFunction("GetOcclusion", &Material::GetOcclusion)
+        .addFunction("GetSpecular", &Material::GetSpecular)
+        .addFunction("GetScene", &Material::GetScene)
+        .addFunction("GetShaderParameterHash", &Material::GetShaderParameterHash)
+        .addStaticFunction("GetTextureUnitName", &Material::GetTextureUnitName)
+        .addStaticFunction("ParseShaderParameterValue", &Material::ParseShaderParameterValue)
 
-//         .addOverloadedFunctions("SetUVTransform",
-//             static_cast<void(Material::*)(const Vector2&, float, const Vector2&)>(&Material::SetUVTransform),
-//             static_cast<void(Material::*)(const Vector2&, float, float)>(&Material::SetUVTransform))
+        .addProperty("type", &Material::GetType)
+        .addProperty("typeName", &Material::GetTypeName)
+        .addProperty("typeInfo", &Material::GetTypeInfo)
+        .addProperty("numTechniques", &Material::GetNumTechniques, &Material::SetNumTechniques)
+        .addProperty("techniques", &Material::GetTechniques)
+        .addProperty("textures", &Material::GetTextures)
+        .addProperty("shaderParameters", &Material::GetShaderParameters)
+        .addProperty("cullMode", &Material::GetCullMode, &Material::SetCullMode)
+        .addProperty("shadowCullMode", &Material::GetShadowCullMode, &Material::SetShadowCullMode)
+        .addProperty("fillMode", &Material::GetFillMode, &Material::SetFillMode)
+        .addProperty("depthBias", &Material::GetDepthBias, &Material::SetDepthBias)
+        .addProperty("renderOrder", &Material::GetRenderOrder, &Material::SetRenderOrder)
+        .addProperty("auxViewFrameNumber", &Material::GetAuxViewFrameNumber)
+        .addProperty("occlusion", &Material::GetOcclusion)
+        .addProperty("specular", &Material::GetSpecular)
+        .addProperty("scene", &Material::GetScene, &Material::SetScene)
+        .addProperty("shaderParameterHash", &Material::GetShaderParameterHash)
+        );
+}
 
-//         .addFunction("SetCullMode", &Material::SetCullMode)
-//         .addFunction("SetShadowCullMode", &Material::SetShadowCullMode)
-//         .addFunction("SetFillMode", &Material::SetFillMode)
-//         .addFunction("SetDepthBias", &Material::SetDepthBias)
-//         .addFunction("SetRenderOrder", &Material::SetRenderOrder)
-//         .addFunction("SetScene", &Material::SetScene)
-//         .addFunction("RemoveShaderParameter", &Material::RemoveShaderParameter)
-//         .addFunction("ReleaseShaders", &Material::ReleaseShaders)
-//         .addFunction("Clone", &Material::Clone)
-//         .addFunction("SortTechniques", &Material::SortTechniques)
-//         .addFunction("MarkForAuxView", &Material::MarkForAuxView)
-//         .addFunction("GetNumTechniques", &Material::GetNumTechniques)
-//         .addFunction("GetTechniques", &Material::GetTechniques)
-//         .addFunction("GetTechniqueEntry", &Material::GetTechniqueEntry)
-//         .addFunction("GetTechnique", &Material::GetTechnique)
-//         .addFunction("GetPass", &Material::GetPass)
-//         .addFunction("GetTexture", &Material::GetTexture)
-//         .addFunction("GetTextures", &Material::GetTextures)
-//         .addFunction("GetShaderParameter", &Material::GetShaderParameter)
-//         .addFunction("GetShaderParameterAnimation", &Material::GetShaderParameterAnimation)
-//         .addFunction("GetShaderParameterAnimationWrapMode", &Material::GetShaderParameterAnimationWrapMode)
-//         .addFunction("GetShaderParameterAnimationSpeed", &Material::GetShaderParameterAnimationSpeed)
-//         .addFunction("GetShaderParameters", &Material::GetShaderParameters)
-//         .addFunction("GetCullMode", &Material::GetCullMode)
-//         .addFunction("GetShadowCullMode", &Material::GetShadowCullMode)
-//         .addFunction("GetFillMode", &Material::GetFillMode)
-//         .addFunction("GetDepthBias", &Material::GetDepthBias)
-//         .addFunction("GetRenderOrder", &Material::GetRenderOrder)
-//         .addFunction("GetAuxViewFrameNumber", &Material::GetAuxViewFrameNumber)
-//         .addFunction("GetOcclusion", &Material::GetOcclusion)
-//         .addFunction("GetSpecular", &Material::GetSpecular)
-//         .addFunction("GetScene", &Material::GetScene)
-//         .addFunction("GetShaderParameterHash", &Material::GetShaderParameterHash)
-//         .addStaticFunction("GetTextureUnitName", &Material::GetTextureUnitName)
-//         .addStaticFunction("ParseShaderParameterValue", &Material::ParseShaderParameterValue)
+static void RegisterModel(kaguya::State& lua)
+{
+    using namespace kaguya;
 
-//         .addProperty("type", &Material::GetType)
-//         .addProperty("typeName", &Material::GetTypeName)
-//         .addProperty("typeInfo", &Material::GetTypeInfo)
-//         .addProperty("numTechniques", &Material::GetNumTechniques, &Material::SetNumTechniques)
-//         .addProperty("techniques", &Material::GetTechniques)
-//         .addProperty("textures", &Material::GetTextures)
-//         .addProperty("shaderParameters", &Material::GetShaderParameters)
-//         .addProperty("cullMode", &Material::GetCullMode, &Material::SetCullMode)
-//         .addProperty("shadowCullMode", &Material::GetShadowCullMode, &Material::SetShadowCullMode)
-//         .addProperty("fillMode", &Material::GetFillMode, &Material::SetFillMode)
-//         .addProperty("depthBias", &Material::GetDepthBias, &Material::SetDepthBias)
-//         .addProperty("renderOrder", &Material::GetRenderOrder, &Material::SetRenderOrder)
-//         .addProperty("auxViewFrameNumber", &Material::GetAuxViewFrameNumber)
-//         .addProperty("occlusion", &Material::GetOcclusion)
-//         .addProperty("specular", &Material::GetSpecular)
-//         .addProperty("scene", &Material::GetScene, &Material::SetScene)
-//         .addProperty("shaderParameterHash", &Material::GetShaderParameterHash)
-//     );
-// }
+    lua["KModel"].setClass(UserdataMetatable<Model, Resource>(false)
+        .addStaticFunction("new", &KCreateObject<Model>)
+        .addStaticFunction("__gc", &KReleaseObject<Model>)
 
-// static void RegisterModel(kaguya::State& lua)
-// {
-//     using namespace kaguya;
+        .addFunction("GetType", &Model::GetType)
+        .addFunction("GetTypeName", &Model::GetTypeName)
+        .addFunction("GetTypeInfo", &Model::GetTypeInfo)
+        .addStaticFunction("GetTypeStatic", &Model::GetTypeStatic)
+        .addStaticFunction("GetTypeNameStatic", &Model::GetTypeNameStatic)
+        .addStaticFunction("GetTypeInfoStatic", &Model::GetTypeInfoStatic)
 
-//     lua["KVertexBufferMorph"].setClass(UserdataMetatable<VertexBufferMorph>()
+        .addFunction("SetBoundingBox", &Model::SetBoundingBox)
+        .addFunction("SetVertexBuffers", &Model::SetVertexBuffers)
+        .addFunction("SetIndexBuffers", &Model::SetIndexBuffers)
+        .addFunction("SetNumGeometries", &Model::SetNumGeometries)
+        .addFunction("SetNumGeometryLodLevels", &Model::SetNumGeometryLodLevels)
+        .addFunction("SetGeometry", &Model::SetGeometry)
+        .addFunction("SetGeometryCenter", &Model::SetGeometryCenter)
+        .addFunction("SetSkeleton", &Model::SetSkeleton)
+        .addFunction("SetGeometryBoneMappings", &Model::SetGeometryBoneMappings)
+        .addFunction("SetMorphs", &Model::SetMorphs)
+        .addFunction("Clone", &Model::Clone)
 
-//         .addProperty("elementMask", &VertexBufferMorph::elementMask_)
-//         .addProperty("vertexCount", &VertexBufferMorph::vertexCount_)
-//         .addProperty("dataSize", &VertexBufferMorph::dataSize_)
-//         .addProperty("morphData", &VertexBufferMorph::morphData_)
-//     );
-//     lua["KModelMorph"].setClass(UserdataMetatable<ModelMorph>()
+        .addFunction("GetBoundingBox", &Model::GetBoundingBox)
+        .addFunction("GetSkeleton", &Model::GetSkeleton)
+        .addFunction("GetVertexBuffers", &Model::GetVertexBuffers)
+        .addFunction("GetIndexBuffers", &Model::GetIndexBuffers)
+        .addFunction("GetNumGeometries", &Model::GetNumGeometries)
+        .addFunction("GetNumGeometryLodLevels", &Model::GetNumGeometryLodLevels)
+        .addFunction("GetGeometries", &Model::GetGeometries)
+        .addFunction("GetGeometryCenters", &Model::GetGeometryCenters)
+        .addFunction("GetGeometry", &Model::GetGeometry)
+        .addFunction("GetGeometryCenter", &Model::GetGeometryCenter)
+        .addFunction("GetGeometryBoneMappings", &Model::GetGeometryBoneMappings)
+        .addFunction("GetMorphs", &Model::GetMorphs)
+        .addFunction("GetNumMorphs", &Model::GetNumMorphs)
 
-//         .addProperty("name", &ModelMorph::name_)
-//         .addProperty("nameHash", &ModelMorph::nameHash_)
-//         .addProperty("weight", &ModelMorph::weight_)
-//         .addProperty("buffers", &ModelMorph::buffers_)
-//     );
-//     lua["KVertexBufferDesc"].setClass(UserdataMetatable<VertexBufferDesc>()
+        .addOverloadedFunctions("GetMorph",
+            static_cast<const ModelMorph*(Model::*)(unsigned int) const>(&Model::GetMorph),
+            static_cast<const ModelMorph*(Model::*)(const String&) const>(&Model::GetMorph),
+            static_cast<const ModelMorph*(Model::*)(StringHash) const>(&Model::GetMorph))
 
-//         .addProperty("vertexCount", &VertexBufferDesc::vertexCount_)
-//         .addProperty("vertexElements", &VertexBufferDesc::vertexElements_)
-//         .addProperty("dataSize", &VertexBufferDesc::dataSize_)
-//         .addProperty("data", &VertexBufferDesc::data_)
-//     );
-//     lua["KIndexBufferDesc"].setClass(UserdataMetatable<IndexBufferDesc>()
+        .addFunction("GetMorphRangeStart", &Model::GetMorphRangeStart)
+        .addFunction("GetMorphRangeCount", &Model::GetMorphRangeCount)
 
-//         .addProperty("indexCount", &IndexBufferDesc::indexCount_)
-//         .addProperty("indexSize", &IndexBufferDesc::indexSize_)
-//         .addProperty("dataSize", &IndexBufferDesc::dataSize_)
-//         .addProperty("data", &IndexBufferDesc::data_)
-//     );
-//     lua["KGeometryDesc"].setClass(UserdataMetatable<GeometryDesc>()
+        .addProperty("type", &Model::GetType)
+        .addProperty("typeName", &Model::GetTypeName)
+        .addProperty("typeInfo", &Model::GetTypeInfo)
 
-//         .addProperty("type", &GeometryDesc::type_)
-//         .addProperty("vbRef", &GeometryDesc::vbRef_)
-//         .addProperty("ibRef", &GeometryDesc::ibRef_)
-//         .addProperty("indexStart", &GeometryDesc::indexStart_)
-//         .addProperty("indexCount", &GeometryDesc::indexCount_)
-//     );
-//     lua["KModel"].setClass(UserdataMetatable<Model, Resource>(false)
-//         .addStaticFunction("new", &KCreateObject<Model>)
-//         .addStaticFunction("__gc", &KReleaseObject<Model>)
-
-//         .addFunction("GetType", &Model::GetType)
-//         .addFunction("GetTypeName", &Model::GetTypeName)
-//         .addFunction("GetTypeInfo", &Model::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &Model::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &Model::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &Model::GetTypeInfoStatic)
-//         .addFunction("BeginLoad", &Model::BeginLoad)
-//         .addFunction("EndLoad", &Model::EndLoad)
-//         .addFunction("Save", &Model::Save)
-//         .addFunction("SetBoundingBox", &Model::SetBoundingBox)
-//         .addFunction("SetVertexBuffers", &Model::SetVertexBuffers)
-//         .addFunction("SetIndexBuffers", &Model::SetIndexBuffers)
-//         .addFunction("SetNumGeometries", &Model::SetNumGeometries)
-//         .addFunction("SetNumGeometryLodLevels", &Model::SetNumGeometryLodLevels)
-//         .addFunction("SetGeometry", &Model::SetGeometry)
-//         .addFunction("SetGeometryCenter", &Model::SetGeometryCenter)
-//         .addFunction("SetSkeleton", &Model::SetSkeleton)
-//         .addFunction("SetGeometryBoneMappings", &Model::SetGeometryBoneMappings)
-//         .addFunction("SetMorphs", &Model::SetMorphs)
-//         .addFunction("Clone", &Model::Clone)
-//         .addFunction("GetBoundingBox", &Model::GetBoundingBox)
-//         .addFunction("GetSkeleton", &Model::GetSkeleton)
-//         .addFunction("GetVertexBuffers", &Model::GetVertexBuffers)
-//         .addFunction("GetIndexBuffers", &Model::GetIndexBuffers)
-//         .addFunction("GetNumGeometries", &Model::GetNumGeometries)
-//         .addFunction("GetNumGeometryLodLevels", &Model::GetNumGeometryLodLevels)
-//         .addFunction("GetGeometries", &Model::GetGeometries)
-//         .addFunction("GetGeometryCenters", &Model::GetGeometryCenters)
-//         .addFunction("GetGeometry", &Model::GetGeometry)
-//         .addFunction("GetGeometryCenter", &Model::GetGeometryCenter)
-//         .addFunction("GetGeometryBoneMappings", &Model::GetGeometryBoneMappings)
-//         .addFunction("GetMorphs", &Model::GetMorphs)
-//         .addFunction("GetNumMorphs", &Model::GetNumMorphs)
-
-//         .addOverloadedFunctions("GetMorph",
-//             static_cast<const ModelMorph*(Model::*)(unsigned int) const>(&Model::GetMorph),
-//             static_cast<const ModelMorph*(Model::*)(const String&) const>(&Model::GetMorph),
-//             static_cast<const ModelMorph*(Model::*)(StringHash) const>(&Model::GetMorph))
-
-//         .addFunction("GetMorphRangeStart", &Model::GetMorphRangeStart)
-//         .addFunction("GetMorphRangeCount", &Model::GetMorphRangeCount)
-
-//         .addProperty("type", &Model::GetType)
-//         .addProperty("typeName", &Model::GetTypeName)
-//         .addProperty("typeInfo", &Model::GetTypeInfo)
-//         .addProperty("boundingBox", &Model::GetBoundingBox, &Model::SetBoundingBox)
-//         .addProperty("skeleton", &Model::GetSkeleton, &Model::SetSkeleton)
-//         .addProperty("vertexBuffers", &Model::GetVertexBuffers)
-//         .addProperty("indexBuffers", &Model::GetIndexBuffers, &Model::SetIndexBuffers)
-//         .addProperty("numGeometries", &Model::GetNumGeometries, &Model::SetNumGeometries)
-//         .addProperty("geometries", &Model::GetGeometries)
-//         .addProperty("geometryCenters", &Model::GetGeometryCenters)
-//         .addProperty("geometryBoneMappings", &Model::GetGeometryBoneMappings, &Model::SetGeometryBoneMappings)
-//         .addProperty("morphs", &Model::GetMorphs, &Model::SetMorphs)
-//         .addProperty("numMorphs", &Model::GetNumMorphs)
-//     );
-// }
-
-// static void RegisterOcclusionBuffer(kaguya::State& lua)
-// {
-//     using namespace kaguya;
-
-//     lua["KDepthValue"].setClass(UserdataMetatable<DepthValue>()
-
-//         .addProperty("min", &DepthValue::min_)
-//         .addProperty("max", &DepthValue::max_)
-//     );
-//     lua["KOcclusionBufferData"].setClass(UserdataMetatable<OcclusionBufferData>()
-
-//         .addProperty("dataWithSafety", &OcclusionBufferData::dataWithSafety_)
-//         .addProperty("data", &OcclusionBufferData::data_)
-//         .addProperty("used", &OcclusionBufferData::used_)
-//     );
-//     lua["KOcclusionBatch"].setClass(UserdataMetatable<OcclusionBatch>()
-
-//         .addProperty("model", &OcclusionBatch::model_)
-//         .addProperty("vertexData", &OcclusionBatch::vertexData_)
-//         .addProperty("vertexSize", &OcclusionBatch::vertexSize_)
-//         .addProperty("indexData", &OcclusionBatch::indexData_)
-//         .addProperty("indexSize", &OcclusionBatch::indexSize_)
-//         .addProperty("drawStart", &OcclusionBatch::drawStart_)
-//         .addProperty("drawCount", &OcclusionBatch::drawCount_)
-//     );
-//     lua["KOCCLUSION_MIN_SIZE"] = OCCLUSION_MIN_SIZE;
-//     lua["KOCCLUSION_DEFAULT_MAX_TRIANGLES"] = OCCLUSION_DEFAULT_MAX_TRIANGLES;
-//     lua["KOCCLUSION_RELATIVE_BIAS"] = OCCLUSION_RELATIVE_BIAS;
-//     lua["KOCCLUSION_FIXED_BIAS"] = OCCLUSION_FIXED_BIAS;
-//     lua["KOCCLUSION_X_SCALE"] = OCCLUSION_X_SCALE;
-//     lua["KOCCLUSION_Z_SCALE"] = OCCLUSION_Z_SCALE;
-//     lua["KOcclusionBuffer"].setClass(UserdataMetatable<OcclusionBuffer, Object>(false)
-//         .addStaticFunction("new", &KCreateObject<OcclusionBuffer>)
-//         .addStaticFunction("__gc", &KReleaseObject<OcclusionBuffer>)
-
-//         .addFunction("GetType", &OcclusionBuffer::GetType)
-//         .addFunction("GetTypeName", &OcclusionBuffer::GetTypeName)
-//         .addFunction("GetTypeInfo", &OcclusionBuffer::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &OcclusionBuffer::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &OcclusionBuffer::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &OcclusionBuffer::GetTypeInfoStatic)
-//         .addFunction("SetSize", &OcclusionBuffer::SetSize)
-//         .addFunction("SetView", &OcclusionBuffer::SetView)
-//         .addFunction("SetMaxTriangles", &OcclusionBuffer::SetMaxTriangles)
-//         .addFunction("SetCullMode", &OcclusionBuffer::SetCullMode)
-//         .addFunction("Reset", &OcclusionBuffer::Reset)
-//         .addFunction("Clear", &OcclusionBuffer::Clear)
-
-//         .addOverloadedFunctions("AddTriangles",
-//             static_cast<bool(OcclusionBuffer::*)(const Matrix3x4&, const void*, unsigned int, unsigned int, unsigned int)>(&OcclusionBuffer::AddTriangles),
-//             static_cast<bool(OcclusionBuffer::*)(const Matrix3x4&, const void*, unsigned int, const void*, unsigned int, unsigned int, unsigned int)>(&OcclusionBuffer::AddTriangles))
-
-//         .addFunction("DrawTriangles", &OcclusionBuffer::DrawTriangles)
-//         .addFunction("BuildDepthHierarchy", &OcclusionBuffer::BuildDepthHierarchy)
-//         .addFunction("ResetUseTimer", &OcclusionBuffer::ResetUseTimer)
-//         .addFunction("GetBuffer", &OcclusionBuffer::GetBuffer)
-//         .addFunction("GetView", &OcclusionBuffer::GetView)
-//         .addFunction("GetProjection", &OcclusionBuffer::GetProjection)
-//         .addFunction("GetWidth", &OcclusionBuffer::GetWidth)
-//         .addFunction("GetHeight", &OcclusionBuffer::GetHeight)
-//         .addFunction("GetNumTriangles", &OcclusionBuffer::GetNumTriangles)
-//         .addFunction("GetMaxTriangles", &OcclusionBuffer::GetMaxTriangles)
-//         .addFunction("GetCullMode", &OcclusionBuffer::GetCullMode)
-//         .addFunction("IsThreaded", &OcclusionBuffer::IsThreaded)
-//         .addFunction("IsVisible", &OcclusionBuffer::IsVisible)
-//         .addFunction("GetUseTimer", &OcclusionBuffer::GetUseTimer)
-//         .addFunction("DrawBatch", &OcclusionBuffer::DrawBatch)
-
-//         .addProperty("type", &OcclusionBuffer::GetType)
-//         .addProperty("typeName", &OcclusionBuffer::GetTypeName)
-//         .addProperty("typeInfo", &OcclusionBuffer::GetTypeInfo)
-//         .addProperty("buffer", &OcclusionBuffer::GetBuffer)
-//         .addProperty("view", &OcclusionBuffer::GetView, &OcclusionBuffer::SetView)
-//         .addProperty("projection", &OcclusionBuffer::GetProjection)
-//         .addProperty("width", &OcclusionBuffer::GetWidth)
-//         .addProperty("height", &OcclusionBuffer::GetHeight)
-//         .addProperty("numTriangles", &OcclusionBuffer::GetNumTriangles)
-//         .addProperty("maxTriangles", &OcclusionBuffer::GetMaxTriangles, &OcclusionBuffer::SetMaxTriangles)
-//         .addProperty("cullMode", &OcclusionBuffer::GetCullMode, &OcclusionBuffer::SetCullMode)
-//         .addProperty("threaded", &OcclusionBuffer::IsThreaded)
-//         .addProperty("useTimer", &OcclusionBuffer::GetUseTimer)
-//     );
-// }
+        .addProperty("boundingBox", &Model::GetBoundingBox, &Model::SetBoundingBox)
+        .addProperty("numGeometries", &Model::GetNumGeometries, &Model::SetNumGeometries)
+        .addProperty("numMorphs", &Model::GetNumMorphs)
+        );
+}
 
 // static void RegisterOctree(kaguya::State& lua)
 // {
@@ -4243,6 +3614,9 @@
 
 // void RegisterGraphicsLuaAPI(kaguya::State& lua)
 // {
+//     RegisterStaticModel(lua);
+
+
 //     RegisterAnimatedModel(lua);
 //     RegisterAnimation(lua);
 //     RegisterAnimationController(lua);
@@ -4281,7 +3655,7 @@
 //     RegisterShaderVariation(lua);
 //     RegisterSkeleton(lua);
 //     RegisterSkybox(lua);
-//     RegisterStaticModel(lua);
+
 //     RegisterStaticModelGroup(lua);
 //     RegisterTangent(lua);
 //     RegisterTechnique(lua);
@@ -4298,4 +3672,4 @@
 //     RegisterViewport(lua);
 //     RegisterZone(lua);
 // }
-// }
+}
