@@ -410,6 +410,11 @@ static void RegisterResource(kaguya::State& lua)
     );
 }
 
+static ResourceCache* GetResourceCache()
+{
+	return globalContext->GetSubsystem<ResourceCache>();
+}
+
 static void RegisterResourceCache(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -420,7 +425,7 @@ static void RegisterResourceCache(kaguya::State& lua)
     lua["KRESOURCE_CHECKEXISTS"] = RESOURCE_CHECKEXISTS;
     lua["KRESOURCE_GETFILE"] = RESOURCE_GETFILE;
 
-    lua["KResourceCache"].setClass(UserdataMetatable<ResourceCache, Object>(false)
+	lua["KResourceCache"].setClass(UserdataMetatable<ResourceCache, Object>(false)
         
         .addFunction("GetType", &ResourceCache::GetType)
         .addFunction("GetTypeName", &ResourceCache::GetTypeName)
@@ -429,7 +434,7 @@ static void RegisterResourceCache(kaguya::State& lua)
         .addStaticFunction("GetTypeStatic", &ResourceCache::GetTypeStatic)
         .addStaticFunction("GetTypeNameStatic", &ResourceCache::GetTypeNameStatic)
         .addStaticFunction("GetTypeInfoStatic", &ResourceCache::GetTypeInfoStatic)
-        
+
         .addFunction("AddResourceDir", &ResourceCache::AddResourceDir)
 
         .addOverloadedFunctions("AddPackageFile",
@@ -493,6 +498,12 @@ static void RegisterResourceCache(kaguya::State& lua)
         .addProperty("typeName", &ResourceCache::GetTypeName)
         .addProperty("typeInfo", &ResourceCache::GetTypeInfo)
     );
+
+	// Register as a variable
+	lua["kcache"] = GetResourceCache();
+
+	// Register as a function
+	lua["KGetCache"] = function(GetResourceCache);
 }
 
 static void RegisterResourceEvents(kaguya::State& lua)
