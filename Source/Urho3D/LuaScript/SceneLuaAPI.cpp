@@ -50,9 +50,6 @@ static void RegisterAnimatable(kaguya::State& lua)
         .addFunction("GetAttributeAnimationSpeed", &Animatable::GetAttributeAnimationSpeed)
         .addFunction("GetAttributeAnimationTime", &Animatable::GetAttributeAnimationTime)
 
-        .addProperty("type", &Animatable::GetType)
-        .addProperty("typeName", &Animatable::GetTypeName)
-        .addProperty("typeInfo", &Animatable::GetTypeInfo)
         .addProperty("animationEnabled", &Animatable::GetAnimationEnabled, &Animatable::SetAnimationEnabled)
         .addProperty("objectAnimation", &Animatable::GetObjectAnimation, &Animatable::SetObjectAnimation)
         .addProperty("animationTime", &Animatable::SetAnimationTime)
@@ -117,21 +114,9 @@ static void RegisterLogicComponent(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<LogicComponent>)
         .addStaticFunction("__gc", &KReleaseObject<LogicComponent>)
 
-        .addFunction("GetType", &LogicComponent::GetType)
-        .addFunction("GetTypeName", &LogicComponent::GetTypeName)
-        .addFunction("GetTypeInfo", &LogicComponent::GetTypeInfo)
-
-        .addStaticFunction("GetTypeStatic", &LogicComponent::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &LogicComponent::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &LogicComponent::GetTypeInfoStatic)
-
         .addFunction("SetUpdateEventMask", &LogicComponent::SetUpdateEventMask)
         .addFunction("GetUpdateEventMask", &LogicComponent::GetUpdateEventMask)
         .addFunction("IsDelayedStartCalled", &LogicComponent::IsDelayedStartCalled)
-
-        .addProperty("type", &LogicComponent::GetType)
-        .addProperty("typeName", &LogicComponent::GetTypeName)
-        .addProperty("typeInfo", &LogicComponent::GetTypeInfo)
 
         .addProperty("updateEventMask", &LogicComponent::GetUpdateEventMask, &LogicComponent::SetUpdateEventMask)
         .addProperty("delayedStartCalled", &LogicComponent::IsDelayedStartCalled)
@@ -154,14 +139,6 @@ static void RegisterLogicComponent(kaguya::State& lua)
      lua["KNode"].setClass(UserdataMetatable<Node, Animatable>(false)
          .addStaticFunction("new", &KCreateObject<Node>)
          .addStaticFunction("__gc", &KReleaseObject<Node>)
-
-         .addFunction("GetType", &Node::GetType)
-         .addFunction("GetTypeName", &Node::GetTypeName)
-         .addFunction("GetTypeInfo", &Node::GetTypeInfo)
-
-         .addStaticFunction("GetTypeStatic", &Node::GetTypeStatic)
-         .addStaticFunction("GetTypeNameStatic", &Node::GetTypeNameStatic)
-         .addStaticFunction("GetTypeInfoStatic", &Node::GetTypeInfoStatic)
 
          .addFunction("SetName", &Node::SetName)
          .addFunction("SetTags", &Node::SetTags)
@@ -376,10 +353,6 @@ static void RegisterLogicComponent(kaguya::State& lua)
          .addFunction("SetRotationSilent", &Node::SetRotationSilent)
          .addFunction("SetScaleSilent", &Node::SetScaleSilent)
          .addFunction("SetTransformSilent", &Node::SetTransformSilent)
-
-         .addProperty("type", &Node::GetType)
-         .addProperty("typeName", &Node::GetTypeName)
-         .addProperty("typeInfo", &Node::GetTypeInfo)
          .addProperty("iD", &Node::GetID, &Node::SetID)
          .addProperty("name", &Node::GetName, &Node::SetName)
          .addProperty("nameHash", &Node::GetNameHash)
@@ -433,14 +406,6 @@ static void RegisterObjectAnimation(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<ObjectAnimation>)
         .addStaticFunction("__gc", &KReleaseObject<ObjectAnimation>)
 
-        .addFunction("GetType", &ObjectAnimation::GetType)
-        .addFunction("GetTypeName", &ObjectAnimation::GetTypeName)
-        .addFunction("GetTypeInfo", &ObjectAnimation::GetTypeInfo)
-
-        .addStaticFunction("GetTypeStatic", &ObjectAnimation::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &ObjectAnimation::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &ObjectAnimation::GetTypeInfoStatic)
-
         .addFunction("AddAttributeAnimation", &ObjectAnimation::AddAttributeAnimation)
 
         .addOverloadedFunctions("RemoveAttributeAnimation",
@@ -452,10 +417,6 @@ static void RegisterObjectAnimation(kaguya::State& lua)
         .addFunction("GetAttributeAnimationSpeed", &ObjectAnimation::GetAttributeAnimationSpeed)
         // .addFunction("GetAttributeAnimationInfos", &ObjectAnimation::GetAttributeAnimationInfos)
         .addFunction("GetAttributeAnimationInfo", &ObjectAnimation::GetAttributeAnimationInfo)
-
-        .addProperty("type", &ObjectAnimation::GetType)
-        .addProperty("typeName", &ObjectAnimation::GetTypeName)
-        .addProperty("typeInfo", &ObjectAnimation::GetTypeInfo)
         );
 }
 
@@ -535,14 +496,6 @@ static void RegisterScene(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<Scene>)
         .addStaticFunction("__gc", &KReleaseObject<Scene>)
 
-        .addFunction("GetType", &Scene::GetType)
-        .addFunction("GetTypeName", &Scene::GetTypeName)
-        .addFunction("GetTypeInfo", &Scene::GetTypeInfo)
-
-        .addStaticFunction("GetTypeStatic", &Scene::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &Scene::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &Scene::GetTypeInfoStatic)
-
         .addStaticFunction("LoadFromFile", [](Scene& scene, const char* filepath)
             {
                 SharedPtr<File> file(new File(globalContext, filepath));
@@ -604,10 +557,6 @@ static void RegisterScene(kaguya::State& lua)
         .addFunction("PrepareNetworkUpdate", &Scene::PrepareNetworkUpdate)
         .addFunction("CleanupConnection", &Scene::CleanupConnection)
         .addFunction("MarkReplicationDirty", &Scene::MarkReplicationDirty)
-
-        .addProperty("type", &Scene::GetType)
-        .addProperty("typeName", &Scene::GetTypeName)
-        .addProperty("typeInfo", &Scene::GetTypeInfo)
         .addProperty("updateEnabled", &Scene::IsUpdateEnabled, &Scene::SetUpdateEnabled)
         .addProperty("asyncLoading", &Scene::IsAsyncLoading)
         .addProperty("fileName", &Scene::GetFileName)
@@ -711,14 +660,6 @@ static void RegisterSmoothedTransform(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<SmoothedTransform>)
         .addStaticFunction("__gc", &KReleaseObject<SmoothedTransform>)
 
-        .addFunction("GetType", &SmoothedTransform::GetType)
-        .addFunction("GetTypeName", &SmoothedTransform::GetTypeName)
-        .addFunction("GetTypeInfo", &SmoothedTransform::GetTypeInfo)
-
-        .addStaticFunction("GetTypeStatic", &SmoothedTransform::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &SmoothedTransform::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &SmoothedTransform::GetTypeInfoStatic)
-
         .addFunction("SetTargetPosition", &SmoothedTransform::SetTargetPosition)
         .addFunction("SetTargetRotation", &SmoothedTransform::SetTargetRotation)
         .addFunction("SetTargetWorldPosition", &SmoothedTransform::SetTargetWorldPosition)
@@ -728,10 +669,6 @@ static void RegisterSmoothedTransform(kaguya::State& lua)
         .addFunction("GetTargetWorldPosition", &SmoothedTransform::GetTargetWorldPosition)
         .addFunction("GetTargetWorldRotation", &SmoothedTransform::GetTargetWorldRotation)
         .addFunction("IsInProgress", &SmoothedTransform::IsInProgress)
-
-        .addProperty("type", &SmoothedTransform::GetType)
-        .addProperty("typeName", &SmoothedTransform::GetTypeName)
-        .addProperty("typeInfo", &SmoothedTransform::GetTypeInfo)
 
         .addProperty("targetPosition", &SmoothedTransform::GetTargetPosition, &SmoothedTransform::SetTargetPosition)
         .addProperty("targetRotation", &SmoothedTransform::GetTargetRotation, &SmoothedTransform::SetTargetRotation)
@@ -748,14 +685,6 @@ static void RegisterSplinePath(kaguya::State& lua)
     lua["KSplinePath"].setClass(UserdataMetatable<SplinePath, Component>(false)
         .addStaticFunction("new", &KCreateObject<SplinePath>)
         .addStaticFunction("__gc", &KReleaseObject<SplinePath>)
-
-        .addFunction("GetType", &SplinePath::GetType)
-        .addFunction("GetTypeName", &SplinePath::GetTypeName)
-        .addFunction("GetTypeInfo", &SplinePath::GetTypeInfo)
-
-        .addStaticFunction("GetTypeStatic", &SplinePath::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &SplinePath::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &SplinePath::GetTypeInfoStatic)
         
         .addFunction("AddControlPoint", &SplinePath::AddControlPoint)
         .addFunction("RemoveControlPoint", &SplinePath::RemoveControlPoint)
@@ -773,10 +702,6 @@ static void RegisterSplinePath(kaguya::State& lua)
         .addFunction("Move", &SplinePath::Move)
         .addFunction("Reset", &SplinePath::Reset)
         .addFunction("IsFinished", &SplinePath::IsFinished)
-
-        .addProperty("type", &SplinePath::GetType)
-        .addProperty("typeName", &SplinePath::GetTypeName)
-        .addProperty("typeInfo", &SplinePath::GetTypeInfo)
         
         .addProperty("interpolationMode", &SplinePath::GetInterpolationMode, &SplinePath::SetInterpolationMode)
         .addProperty("speed", &SplinePath::GetSpeed, &SplinePath::SetSpeed)
@@ -818,14 +743,6 @@ static void RegisterUnknownComponent(kaguya::State& lua)
          .addStaticFunction("new", &KCreateObject<ValueAnimation>)
          .addStaticFunction("__gc", &KReleaseObject<ValueAnimation>)
 
-         .addFunction("GetType", &ValueAnimation::GetType)
-         .addFunction("GetTypeName", &ValueAnimation::GetTypeName)
-         .addFunction("GetTypeInfo", &ValueAnimation::GetTypeInfo)
-
-         .addStaticFunction("GetTypeStatic", &ValueAnimation::GetTypeStatic)
-         .addStaticFunction("GetTypeNameStatic", &ValueAnimation::GetTypeNameStatic)
-         .addStaticFunction("GetTypeInfoStatic", &ValueAnimation::GetTypeInfoStatic)
-
          .addFunction("SetInterpolationMethod", &ValueAnimation::SetInterpolationMethod)
          .addFunction("SetSplineTension", &ValueAnimation::SetSplineTension)
          .addFunction("SetValueType", &ValueAnimation::SetValueType)
@@ -841,10 +758,6 @@ static void RegisterUnknownComponent(kaguya::State& lua)
          .addFunction("GetAnimationValue", &ValueAnimation::GetAnimationValue)
          .addFunction("HasEventFrames", &ValueAnimation::HasEventFrames)
          .addFunction("GetEventFrames", &ValueAnimation::GetEventFrames)
-
-         .addProperty("type", &ValueAnimation::GetType)
-         .addProperty("typeName", &ValueAnimation::GetTypeName)
-         .addProperty("typeInfo", &ValueAnimation::GetTypeInfo)
          
          .addProperty("valid", &ValueAnimation::IsValid)
          .addProperty("owner", &ValueAnimation::GetOwner, &ValueAnimation::SetOwner)

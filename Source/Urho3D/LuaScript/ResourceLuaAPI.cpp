@@ -40,12 +40,6 @@ static void RegisterImage(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<Image>)
         .addStaticFunction("__gc", &KReleaseObject<Image>)
 
-        .addFunction("GetType", &Image::GetType)
-        .addFunction("GetTypeName", &Image::GetTypeName)
-        .addFunction("GetTypeInfo", &Image::GetTypeInfo)
-        .addStaticFunction("GetTypeStatic", &Image::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &Image::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &Image::GetTypeInfoStatic)
         .addFunction("BeginLoad", &Image::BeginLoad)
         .addFunction("Save", &Image::Save)
 
@@ -101,9 +95,6 @@ static void RegisterImage(kaguya::State& lua)
         .addFunction("GetSDLSurface", &Image::GetSDLSurface)
         .addFunction("PrecalculateLevels", &Image::PrecalculateLevels)
 
-        .addProperty("type", &Image::GetType)
-        .addProperty("typeName", &Image::GetTypeName)
-        .addProperty("typeInfo", &Image::GetTypeInfo)
         .addProperty("cubemap", &Image::IsCubemap)
         .addProperty("array", &Image::IsArray)
         .addProperty("sRGB", &Image::IsSRGB)
@@ -128,12 +119,6 @@ static void RegisterJSONFile(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<JSONFile>)
         .addStaticFunction("__gc", &KReleaseObject<JSONFile>)
 
-        .addFunction("GetType", &JSONFile::GetType)
-        .addFunction("GetTypeName", &JSONFile::GetTypeName)
-        .addFunction("GetTypeInfo", &JSONFile::GetTypeInfo)
-        .addStaticFunction("GetTypeStatic", &JSONFile::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &JSONFile::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &JSONFile::GetTypeInfoStatic)
         
         // .addFunction("Save", static_cast<bool(JSONFile::*)(Serializer&, const String&) const>(&JSONFile::Save))
         .addFunction("FromString", &JSONFile::FromString)
@@ -143,9 +128,6 @@ static void RegisterJSONFile(kaguya::State& lua)
 
         .addFunction("GetRoot", static_cast<const JSONValue&(JSONFile::*)() const>(&JSONFile::GetRoot))
 
-        .addProperty("type", &JSONFile::GetType)
-        .addProperty("typeName", &JSONFile::GetTypeName)
-        .addProperty("typeInfo", &JSONFile::GetTypeInfo)
         );
 }
 
@@ -253,13 +235,7 @@ static void RegisterLocalization(kaguya::State& lua)
     using namespace kaguya;
 
     lua["KLocalization"].setClass(UserdataMetatable<Localization, Object>(false)
-        
-        .addFunction("GetType", &Localization::GetType)
-        .addFunction("GetTypeName", &Localization::GetTypeName)
-        .addFunction("GetTypeInfo", &Localization::GetTypeInfo)
-        .addStaticFunction("GetTypeStatic", &Localization::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &Localization::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &Localization::GetTypeInfoStatic)
+
         
         .addFunction("GetNumLanguages", &Localization::GetNumLanguages)
 
@@ -280,9 +256,6 @@ static void RegisterLocalization(kaguya::State& lua)
         .addFunction("LoadJSON", &Localization::LoadJSON)
         .addFunction("LoadJSONFile", &Localization::LoadJSONFile)
 
-        .addProperty("type", &Localization::GetType)
-        .addProperty("typeName", &Localization::GetTypeName)
-        .addProperty("typeInfo", &Localization::GetTypeInfo)
         .addProperty("numLanguages", &Localization::GetNumLanguages)
     );
 }
@@ -336,19 +309,10 @@ static void RegisterPListFile(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<PListFile>)
         .addStaticFunction("__gc", &KReleaseObject<PListFile>)
 
-        .addFunction("GetType", &PListFile::GetType)
-        .addFunction("GetTypeName", &PListFile::GetTypeName)
-        .addFunction("GetTypeInfo", &PListFile::GetTypeInfo)
 
-        .addStaticFunction("GetTypeStatic", &PListFile::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &PListFile::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &PListFile::GetTypeInfoStatic)
 
         .addFunction("GetRoot", &PListFile::GetRoot)
 
-        .addProperty("type", &PListFile::GetType)
-        .addProperty("typeName", &PListFile::GetTypeName)
-        .addProperty("typeInfo", &PListFile::GetTypeInfo)
         .addProperty("root", &PListFile::GetRoot)
     );
 }
@@ -368,13 +332,7 @@ static void RegisterResource(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<Resource>)
         .addStaticFunction("__gc", &KReleaseObject<Resource>)
 
-        .addFunction("GetType", &Resource::GetType)
-        .addFunction("GetTypeName", &Resource::GetTypeName)
-        .addFunction("GetTypeInfo", &Resource::GetTypeInfo)
 
-        .addStaticFunction("GetTypeStatic", &Resource::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &Resource::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &Resource::GetTypeInfoStatic)
 
         .addStaticFunction("LoadFromFile", [](Resource& resouce, const char* filepath)
             {
@@ -398,9 +356,6 @@ static void RegisterResource(kaguya::State& lua)
         .addFunction("GetUseTimer", &Resource::GetUseTimer)
         .addFunction("GetAsyncLoadState", &Resource::GetAsyncLoadState)
 
-        .addProperty("type", &Resource::GetType)
-        .addProperty("typeName", &Resource::GetTypeName)
-        .addProperty("typeInfo", &Resource::GetTypeInfo)
         
         .addProperty("name", &Resource::GetName, &Resource::SetName)
         .addProperty("nameHash", &Resource::GetNameHash)
@@ -427,13 +382,7 @@ static void RegisterResourceCache(kaguya::State& lua)
 
 	lua["KResourceCache"].setClass(UserdataMetatable<ResourceCache, Object>(false)
         
-        .addFunction("GetType", &ResourceCache::GetType)
-        .addFunction("GetTypeName", &ResourceCache::GetTypeName)
-        .addFunction("GetTypeInfo", &ResourceCache::GetTypeInfo)
-        
-        .addStaticFunction("GetTypeStatic", &ResourceCache::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &ResourceCache::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &ResourceCache::GetTypeInfoStatic)
+
 
         .addFunction("AddResourceDir", &ResourceCache::AddResourceDir)
 
@@ -494,9 +443,6 @@ static void RegisterResourceCache(kaguya::State& lua)
         .addFunction("ResetDependencies", &ResourceCache::ResetDependencies)
         .addFunction("PrintMemoryUsage", &ResourceCache::PrintMemoryUsage)
 
-        .addProperty("type", &ResourceCache::GetType)
-        .addProperty("typeName", &ResourceCache::GetTypeName)
-        .addProperty("typeInfo", &ResourceCache::GetTypeInfo)
     );
 
 	// Register as a variable
@@ -710,13 +656,7 @@ static void RegisterXMLFile(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<XMLFile>)
         .addStaticFunction("__gc", &KReleaseObject<XMLFile>)
 
-        .addFunction("GetType", &XMLFile::GetType)
-        .addFunction("GetTypeName", &XMLFile::GetTypeName)
-        .addFunction("GetTypeInfo", &XMLFile::GetTypeInfo)
 
-        .addStaticFunction("GetTypeStatic", &XMLFile::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &XMLFile::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &XMLFile::GetTypeInfoStatic)
         .addFunction("BeginLoad", &XMLFile::BeginLoad)
 
         .addFunction("Save", static_cast<bool(XMLFile::*)(Serializer&, const String&) const>(&XMLFile::Save))
@@ -733,9 +673,6 @@ static void RegisterXMLFile(kaguya::State& lua)
             static_cast<void(XMLFile::*)(XMLFile*)>(&XMLFile::Patch),
             static_cast<void(XMLFile::*)(XMLElement)>(&XMLFile::Patch))
 
-        .addProperty("type", &XMLFile::GetType)
-        .addProperty("typeName", &XMLFile::GetTypeName)
-        .addProperty("typeInfo", &XMLFile::GetTypeInfo)
         );
 }
 
