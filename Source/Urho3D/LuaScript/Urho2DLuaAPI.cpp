@@ -1229,6 +1229,11 @@ static void RegisterTmxFile2D(kaguya::State& lua)
 
 void RegisterUrho2DLuaAPI(kaguya::State& lua)
 {
+	RegisterStaticSprite2D(lua);
+	RegisterCollisionShape2D(lua);
+	RegisterConstraint2D(lua);
+	RegisterDrawable2D(lua);
+
 	RegisterAnimatedSprite2D(lua);
 	RegisterAnimationSet2D(lua);
 	RegisterCollisionBox2D(lua);
@@ -1236,8 +1241,6 @@ void RegisterUrho2DLuaAPI(kaguya::State& lua)
 	RegisterCollisionCircle2D(lua);
 	RegisterCollisionEdge2D(lua);
 	RegisterCollisionPolygon2D(lua);
-	RegisterCollisionShape2D(lua);
-	RegisterConstraint2D(lua);
 	RegisterConstraintDistance2D(lua);
 	RegisterConstraintFriction2D(lua);
 	RegisterConstraintGear2D(lua);
@@ -1248,8 +1251,7 @@ void RegisterUrho2DLuaAPI(kaguya::State& lua)
 	RegisterConstraintRevolute2D(lua);
 	RegisterConstraintRope2D(lua);
 	RegisterConstraintWeld2D(lua);
-	RegisterConstraintWheel2D(lua);
-	RegisterDrawable2D(lua);
+	RegisterConstraintWheel2D(lua);	
 	RegisterParticleEffect2D(lua);
 	RegisterParticleEmitter2D(lua);
 	RegisterPhysicsEvents2D(lua);
@@ -1257,8 +1259,7 @@ void RegisterUrho2DLuaAPI(kaguya::State& lua)
 	RegisterRenderer2D(lua);
 	RegisterRigidBody2D(lua);
 	RegisterSprite2D(lua);
-	RegisterSpriteSheet2D(lua);
-	RegisterStaticSprite2D(lua);
+	RegisterSpriteSheet2D(lua);	
 	RegisterTileMap2D(lua);
 	RegisterTileMapDefs2D(lua);
 	RegisterTileMapLayer2D(lua);

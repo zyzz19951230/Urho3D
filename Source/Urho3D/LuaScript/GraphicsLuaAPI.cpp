@@ -2779,7 +2779,10 @@ namespace Urho3D
 	
 	void RegisterGraphicsLuaAPI(kaguya::State& lua)
 	{
+		RegisterDrawable(lua); 
+		RegisterStaticModel(lua);
 		RegisterAnimatedModel(lua);
+
 		RegisterAnimation(lua);
 		RegisterAnimationController(lua);
 		RegisterAnimationState(lua);
@@ -2788,7 +2791,6 @@ namespace Urho3D
 		RegisterCustomGeometry(lua);
 		RegisterDebugRenderer(lua);
 		RegisterDecalSet(lua);
-		RegisterDrawable(lua);
 		RegisterDrawableEvents(lua);
 		RegisterGeometry(lua);
 		RegisterGraphics(lua);
@@ -2809,8 +2811,7 @@ namespace Urho3D
 		RegisterShader(lua);
 		RegisterShaderVariation(lua);
 		RegisterSkeleton(lua);
-		RegisterSkybox(lua);
-		RegisterStaticModel(lua);
+		RegisterSkybox(lua);		
 		RegisterStaticModelGroup(lua);
 		RegisterTechnique(lua);
 		RegisterTerrain(lua);
