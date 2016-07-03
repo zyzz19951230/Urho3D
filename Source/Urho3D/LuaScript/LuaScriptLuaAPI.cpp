@@ -5,7 +5,6 @@
 // #include "../LuaScript/LuaScriptEventListener.h"
 // #include "../LuaScript/LuaScriptInstance.h"
 // #include "../LuaScript/ToluaUtils.h"
-
 // #include "../LuaScript/LuaScriptUtils.h"
 
 // #include <kaguya.hpp>
@@ -21,20 +20,10 @@
 //         .addStaticFunction("new", &KCreateObject<LuaFile>)
 //         .addStaticFunction("__gc", &KReleaseObject<LuaFile>)
 
-//         .addFunction("GetType", &LuaFile::GetType)
-//         .addFunction("GetTypeName", &LuaFile::GetTypeName)
-//         .addFunction("GetTypeInfo", &LuaFile::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &LuaFile::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &LuaFile::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &LuaFile::GetTypeInfoStatic)
 //         .addFunction("BeginLoad", &LuaFile::BeginLoad)
 //         .addFunction("Save", &LuaFile::Save)
 //         .addFunction("LoadChunk", &LuaFile::LoadChunk)
 //         .addFunction("LoadAndExecute", &LuaFile::LoadAndExecute)
-
-//         .addProperty("type", &LuaFile::GetType)
-//         .addProperty("typeName", &LuaFile::GetTypeName)
-//         .addProperty("typeInfo", &LuaFile::GetTypeInfo)
 //     );
 // }
 
@@ -73,13 +62,6 @@
 //         .addStaticFunction("new", &KCreateObject<LuaScript>)
 //         .addStaticFunction("__gc", &KReleaseObject<LuaScript>)
 
-//         .addFunction("GetType", &LuaScript::GetType)
-//         .addFunction("GetTypeName", &LuaScript::GetTypeName)
-//         .addFunction("GetTypeInfo", &LuaScript::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &LuaScript::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &LuaScript::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &LuaScript::GetTypeInfoStatic)
-
 //         .addOverloadedFunctions("AddEventHandler",
 //             static_cast<void(LuaScript::*)(const String&, int)>(&LuaScript::AddEventHandler),
 //             static_cast<void(LuaScript::*)(const String&, const String&)>(&LuaScript::AddEventHandler),
@@ -114,9 +96,6 @@
 //         .addFunction("GetExecuteConsoleCommands", &LuaScript::GetExecuteConsoleCommands)
 //         .addStaticFunction("PushLuaFunction", &LuaScript::PushLuaFunction)
 
-//         .addProperty("type", &LuaScript::GetType)
-//         .addProperty("typeName", &LuaScript::GetTypeName)
-//         .addProperty("typeInfo", &LuaScript::GetTypeInfo)
 //         .addProperty("state", &LuaScript::GetState)
 //         .addProperty("executeConsoleCommands", &LuaScript::GetExecuteConsoleCommands, &LuaScript::SetExecuteConsoleCommands)
 //     );
@@ -131,17 +110,7 @@
 //         .addStaticFunction("new", &KCreateObject<LuaScriptEventInvoker>)
 //         .addStaticFunction("__gc", &KReleaseObject<LuaScriptEventInvoker>)
 
-//         .addFunction("GetType", &LuaScriptEventInvoker::GetType)
-//         .addFunction("GetTypeName", &LuaScriptEventInvoker::GetTypeName)
-//         .addFunction("GetTypeInfo", &LuaScriptEventInvoker::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &LuaScriptEventInvoker::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &LuaScriptEventInvoker::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &LuaScriptEventInvoker::GetTypeInfoStatic)
 //         .addFunction("AddEventHandler", &LuaScriptEventInvoker::AddEventHandler)
-
-//         .addProperty("type", &LuaScriptEventInvoker::GetType)
-//         .addProperty("typeName", &LuaScriptEventInvoker::GetTypeName)
-//         .addProperty("typeInfo", &LuaScriptEventInvoker::GetTypeInfo)
 //     );
 // }
 
@@ -198,12 +167,6 @@
 //         .addStaticFunction("new", &KCreateObject<LuaScriptInstance>)
 //         .addStaticFunction("__gc", &KReleaseObject<LuaScriptInstance>)
 
-//         .addFunction("GetType", &LuaScriptInstance::GetType)
-//         .addFunction("GetTypeName", &LuaScriptInstance::GetTypeName)
-//         .addFunction("GetTypeInfo", &LuaScriptInstance::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &LuaScriptInstance::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &LuaScriptInstance::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &LuaScriptInstance::GetTypeInfoStatic)
 //         .addFunction("OnSetAttribute", &LuaScriptInstance::OnSetAttribute)
 //         .addFunction("OnGetAttribute", &LuaScriptInstance::OnGetAttribute)
 //         .addFunction("GetAttributes", &LuaScriptInstance::GetAttributes)
@@ -241,9 +204,6 @@
 //         .addFunction("GetScriptObjectRef", &LuaScriptInstance::GetScriptObjectRef)
 //         .addFunction("GetScriptObjectFunction", &LuaScriptInstance::GetScriptObjectFunction)
 
-//         .addProperty("type", &LuaScriptInstance::GetType)
-//         .addProperty("typeName", &LuaScriptInstance::GetTypeName)
-//         .addProperty("typeInfo", &LuaScriptInstance::GetTypeInfo)
 //         .addProperty("attributes", &LuaScriptInstance::GetAttributes)
 //         .addProperty("scriptFile", &LuaScriptInstance::GetScriptFile, &LuaScriptInstance::SetScriptFile)
 //         .addProperty("scriptObjectType", &LuaScriptInstance::GetScriptObjectType, &LuaScriptInstance::SetScriptObjectType)

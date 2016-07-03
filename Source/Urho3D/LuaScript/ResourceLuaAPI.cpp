@@ -1,3 +1,4 @@
+#include "../Core/Context.h"
 #include "../IO/File.h"
 #include "../Resource/BackgroundLoader.h"
 #include "../Resource/Decompress.h"
@@ -18,6 +19,18 @@
 
 namespace Urho3D
 {
+extern Context* globalContext;
+
+static ResourceCache* GetResourceCache()
+{
+    return globalContext->GetSubsystem<ResourceCache>();
+}
+
+static Localization* GetLocalization()
+{
+    return globalContext->GetSubsystem<Localization>();
+}
+
 static void RegisterImage(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -119,7 +132,7 @@ static void RegisterJSONFile(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<JSONFile>)
         .addStaticFunction("__gc", &KReleaseObject<JSONFile>)
 
-        
+
         // .addFunction("Save", static_cast<bool(JSONFile::*)(Serializer&, const String&) const>(&JSONFile::Save))
         .addFunction("FromString", &JSONFile::FromString)
 
@@ -128,7 +141,7 @@ static void RegisterJSONFile(kaguya::State& lua)
 
         .addFunction("GetRoot", static_cast<const JSONValue&(JSONFile::*)() const>(&JSONFile::GetRoot))
 
-        );
+    );
 }
 
 static void RegisterJSONValue(kaguya::State& lua)
@@ -161,7 +174,7 @@ static void RegisterJSONValue(kaguya::State& lua)
 
         .addFunction("GetValueType", &JSONValue::GetValueType)
         .addFunction("GetNumberType", &JSONValue::GetNumberType)
-        
+
         .addFunction("IsNull", &JSONValue::IsNull)
         .addFunction("IsBool", &JSONValue::IsBool)
         .addFunction("IsNumber", &JSONValue::IsNumber)
@@ -194,8 +207,8 @@ static void RegisterJSONValue(kaguya::State& lua)
         .addFunction("Push", &JSONValue::Push)
         .addFunction("Pop", &JSONValue::Pop)
         .addFunction("Insert", &JSONValue::Insert)
-        
-        .addOverloadedFunctions("Erase", 
+
+        .addOverloadedFunctions("Erase",
             static_cast<void(JSONValue::*)(unsigned, unsigned)>(&JSONValue::Erase),
             static_cast<bool(JSONValue::*)(const String&)>(&JSONValue::Erase))
 
@@ -227,7 +240,7 @@ static void RegisterJSONValue(kaguya::State& lua)
         .addProperty("isObject", &JSONValue::IsObject)
 
         .addStaticField("EMPTY", &JSONValue::EMPTY)
-        );
+    );
 }
 
 static void RegisterLocalization(kaguya::State& lua)
@@ -236,7 +249,7 @@ static void RegisterLocalization(kaguya::State& lua)
 
     lua["KLocalization"].setClass(UserdataMetatable<Localization, Object>(false)
 
-        
+
         .addFunction("GetNumLanguages", &Localization::GetNumLanguages)
 
         .addOverloadedFunctions("GetLanguageIndex",
@@ -275,13 +288,13 @@ static void RegisterPListFile(kaguya::State& lua)
 
     lua["KPListValue"].setClass(UserdataMetatable<PListValue>()
         .setConstructors<PListValue(),
-            PListValue(int),
-            PListValue(bool),
-            PListValue(float),
-            PListValue(const String&),
-            PListValue(PListValueMap&),
-            PListValue(PListValueVector&),
-            PListValue(const PListValue&)>()
+        PListValue(int),
+        PListValue(bool),
+        PListValue(float),
+        PListValue(const String&),
+        PListValue(PListValueMap&),
+        PListValue(PListValueVector&),
+        PListValue(const PListValue&)>()
 
         .addFunction("SetInt", &PListValue::SetInt)
         .addFunction("SetBool", &PListValue::SetBool)
@@ -289,9 +302,9 @@ static void RegisterPListFile(kaguya::State& lua)
         .addFunction("SetString", &PListValue::SetString)
         .addFunction("SetValueMap", &PListValue::SetValueMap)
         .addFunction("SetValueVector", &PListValue::SetValueVector)
-        
+
         .addFunction("GetType", &PListValue::GetType)
-        
+
         .addFunction("GetInt", &PListValue::GetInt)
         .addFunction("GetBool", &PListValue::GetBool)
         .addFunction("GetFloat", &PListValue::GetFloat)
@@ -302,7 +315,7 @@ static void RegisterPListFile(kaguya::State& lua)
         .addFunction("GetValueVector", &PListValue::GetValueVector)
 
 
-        .addProperty("type", &PListValue::GetType)        
+        .addProperty("type", &PListValue::GetType)
     );
 
     lua["KPListFile"].setClass(UserdataMetatable<PListFile, Resource>(false)
@@ -335,16 +348,16 @@ static void RegisterResource(kaguya::State& lua)
 
 
         .addStaticFunction("LoadFromFile", [](Resource& resouce, const char* filepath)
-            {
-                SharedPtr<File> file(new File(globalContext, filepath));
-                return resouce.Load(*file);
-            })
+    {
+        SharedPtr<File> file(new File(globalContext, filepath));
+        return resouce.Load(*file);
+    })
 
         .addStaticFunction("SaveToFile", [](const Resource& resource, const char* filepath)
-            {
-                SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
-                return resource.Save(*file);
-            })
+    {
+        SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+        return resource.Save(*file);
+    })
 
         .addFunction("SetName", &Resource::SetName)
         .addFunction("SetMemoryUse", &Resource::SetMemoryUse)
@@ -356,18 +369,13 @@ static void RegisterResource(kaguya::State& lua)
         .addFunction("GetUseTimer", &Resource::GetUseTimer)
         .addFunction("GetAsyncLoadState", &Resource::GetAsyncLoadState)
 
-        
+
         .addProperty("name", &Resource::GetName, &Resource::SetName)
         .addProperty("nameHash", &Resource::GetNameHash)
         .addProperty("memoryUse", &Resource::GetMemoryUse, &Resource::SetMemoryUse)
         .addProperty("useTimer", &Resource::GetUseTimer)
         .addProperty("asyncLoadState", &Resource::GetAsyncLoadState, &Resource::SetAsyncLoadState)
-    );
-}
-
-static ResourceCache* GetResourceCache()
-{
-	return globalContext->GetSubsystem<ResourceCache>();
+        );
 }
 
 static void RegisterResourceCache(kaguya::State& lua)
@@ -375,14 +383,13 @@ static void RegisterResourceCache(kaguya::State& lua)
     using namespace kaguya;
 
     lua["KPRIORITY_LAST"] = PRIORITY_LAST;
-    
+
     // enum ResourceRequest;
     lua["KRESOURCE_CHECKEXISTS"] = RESOURCE_CHECKEXISTS;
     lua["KRESOURCE_GETFILE"] = RESOURCE_GETFILE;
 
-	lua["KResourceCache"].setClass(UserdataMetatable<ResourceCache, Object>(false)
-        
-
+    // GC is disable for subsystem object
+    lua["KResourceCache"].setClass(UserdataMetatable<ResourceCache, Object>(false)
 
         .addFunction("AddResourceDir", &ResourceCache::AddResourceDir)
 
@@ -415,7 +422,7 @@ static void RegisterResourceCache(kaguya::State& lua)
         .addFunction("AddResourceRouter", &ResourceCache::AddResourceRouter)
         .addFunction("RemoveResourceRouter", &ResourceCache::RemoveResourceRouter)
         .addFunction("GetFile", &ResourceCache::GetFile)
-        
+
         .addFunction("GetResource", static_cast<Resource*(ResourceCache::*)(StringHash, const String&, bool)>(&ResourceCache::GetResource))
         .addFunction("GetTempResource", static_cast<SharedPtr<Resource>(ResourceCache::*)(StringHash, const String&, bool)>(&ResourceCache::GetTempResource))
 
@@ -442,14 +449,9 @@ static void RegisterResourceCache(kaguya::State& lua)
         .addFunction("StoreResourceDependency", &ResourceCache::StoreResourceDependency)
         .addFunction("ResetDependencies", &ResourceCache::ResetDependencies)
         .addFunction("PrintMemoryUsage", &ResourceCache::PrintMemoryUsage)
-
     );
 
-	// Register as a variable
-	lua["kcache"] = GetResourceCache();
 
-	// Register as a function
-	lua["KGetCache"] = function(GetResourceCache);
 }
 
 static void RegisterResourceEvents(kaguya::State& lua)
@@ -473,7 +475,7 @@ static void RegisterXMLElement(kaguya::State& lua)
 
     lua["KXMLElement"].setClass(UserdataMetatable<XMLElement>()
         .setConstructors<XMLElement(),
-            XMLElement(const XMLElement&)>()
+        XMLElement(const XMLElement&)>()
 
         .addOverloadedFunctions("CreateChild",
             static_cast<XMLElement(XMLElement::*)(const String&)>(&XMLElement::CreateChild),
@@ -612,7 +614,7 @@ static void RegisterXMLElement(kaguya::State& lua)
 
     lua["KXPathResultSet"].setClass(UserdataMetatable<XPathResultSet>()
         .setConstructors<XPathResultSet(),
-            XPathResultSet(const XPathResultSet&)>()
+        XPathResultSet(const XPathResultSet&)>()
 
         .addFunction("__index", &XPathResultSet::operator[])
 
@@ -623,7 +625,7 @@ static void RegisterXMLElement(kaguya::State& lua)
 
     lua["KXPathQuery"].setClass(UserdataMetatable<XPathQuery>()
         .setConstructors<XPathQuery(),
-            XPathQuery(const String&, const String&)>()
+        XPathQuery(const String&, const String&)>()
 
         .addFunction("Bind", &XPathQuery::Bind)
 
@@ -634,7 +636,7 @@ static void RegisterXMLElement(kaguya::State& lua)
             static_cast<bool(XPathQuery::*)(const String&, const XPathResultSet&)>(&XPathQuery::SetVariable))
 
         .addFunction("SetQuery", &XPathQuery::SetQuery)
-        
+
         .addFunction("Clear", &XPathQuery::Clear)
         .addFunction("EvaluateToBool", &XPathQuery::EvaluateToBool)
         .addFunction("EvaluateToFloat", &XPathQuery::EvaluateToFloat)
@@ -662,7 +664,7 @@ static void RegisterXMLFile(kaguya::State& lua)
         .addFunction("Save", static_cast<bool(XMLFile::*)(Serializer&, const String&) const>(&XMLFile::Save))
 
         .addFunction("FromString", &XMLFile::FromString)
-        
+
         .addFunction("CreateRoot", &XMLFile::CreateRoot)
         .addFunction("GetRoot", &XMLFile::GetRoot)
         .addFunction("GetDocument", &XMLFile::GetDocument)
@@ -673,13 +675,13 @@ static void RegisterXMLFile(kaguya::State& lua)
             static_cast<void(XMLFile::*)(XMLFile*)>(&XMLFile::Patch),
             static_cast<void(XMLFile::*)(XMLElement)>(&XMLFile::Patch))
 
-        );
+    );
 }
 
 void RegisterResourceLuaAPI(kaguya::State& lua)
 {
-    RegisterResource(lua); 
-    
+    RegisterResource(lua);
+
     RegisterImage(lua);
     RegisterJSONFile(lua);
     RegisterJSONValue(lua);
@@ -689,5 +691,11 @@ void RegisterResourceLuaAPI(kaguya::State& lua)
     RegisterResourceEvents(lua);
     RegisterXMLElement(lua);
     RegisterXMLFile(lua);
+
+    lua["kcache"] = GetResourceCache();
+    lua["KGetCache"] = GetResourceCache;
+
+    lua["klocalization"] = GetLocalization();
+    lua["KGetLocalization"] = GetLocalization;
 }
 }

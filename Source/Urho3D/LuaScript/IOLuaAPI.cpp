@@ -1,3 +1,4 @@
+#include "../Core/Context.h"
 #include "../IO/Deserializer.h"
 #include "../IO/File.h"
 #include "../IO/FileSystem.h"
@@ -18,6 +19,17 @@
 
 namespace Urho3D
 {
+extern Context* globalContext;
+
+static FileSystem* GetFileSystem()
+{
+    return globalContext->GetSubsystem<FileSystem>();
+}
+
+static Log* GetLog()
+{
+    return globalContext->GetSubsystem<Log>();
+}
 
 template<typename class_type, typename base_class_type = void>
 void RegisterDeserializer(kaguya::UserdataMetatable<class_type, base_class_type>& deserializer)
@@ -137,13 +149,6 @@ static void RegisterFile(kaguya::State& lua)
     file.addStaticFunction("new", &KCreateObject<File>)
         .addStaticFunction("__gc", &KReleaseObject<File>)
 
-        .addFunction("GetType", &File::GetType)
-        .addFunction("GetTypeName", &File::GetTypeName)
-        .addFunction("GetTypeInfo", &File::GetTypeInfo)
-        .addStaticFunction("GetTypeStatic", &File::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &File::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &File::GetTypeInfoStatic)
-        
         .addOverloadedFunctions("Open",
             static_cast<bool(File::*)(const String&, FileMode)>(&File::Open),
             static_cast<bool(File::*)(PackageFile*, const String&)>(&File::Open))
@@ -156,14 +161,11 @@ static void RegisterFile(kaguya::State& lua)
         .addFunction("GetHandle", &File::GetHandle)
         .addFunction("IsPackaged", &File::IsPackaged)
 
-        .addProperty("type", &File::GetType)
-        .addProperty("typeName", &File::GetTypeName)
-        .addProperty("typeInfo", &File::GetTypeInfo)
         .addProperty("mode", &File::GetMode)
         .addProperty("open", &File::IsOpen)
         .addProperty("handle", &File::GetHandle)
         .addProperty("packaged", &File::IsPackaged);
-    
+
     RegisterDeserializer(file);
     RegisterSerializer(file);
 
@@ -178,15 +180,8 @@ static void RegisterFileSystem(kaguya::State& lua)
     lua["KSCAN_DIRS"] = SCAN_DIRS;
     lua["KSCAN_HIDDEN"] = SCAN_HIDDEN;
 
+    // GC is disable for subsystem object
     lua["KFileSystem"].setClass(UserdataMetatable<FileSystem, Object>(false)
-
-        .addFunction("GetType", &FileSystem::GetType)
-        .addFunction("GetTypeName", &FileSystem::GetTypeName)
-        .addFunction("GetTypeInfo", &FileSystem::GetTypeInfo)
-        
-        .addStaticFunction("GetTypeStatic", &FileSystem::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &FileSystem::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &FileSystem::GetTypeInfoStatic)
 
         .addFunction("SetCurrentDir", &FileSystem::SetCurrentDir)
         .addFunction("CreateDir", &FileSystem::CreateDir)
@@ -213,9 +208,6 @@ static void RegisterFileSystem(kaguya::State& lua)
         .addFunction("GetUserDocumentsDir", &FileSystem::GetUserDocumentsDir)
         .addFunction("GetAppPreferencesDir", &FileSystem::GetAppPreferencesDir)
 
-        .addProperty("type", &FileSystem::GetType)
-        .addProperty("typeName", &FileSystem::GetTypeName)
-        .addProperty("typeInfo", &FileSystem::GetTypeInfo)
         .addProperty("executeConsoleCommands", &FileSystem::GetExecuteConsoleCommands, &FileSystem::SetExecuteConsoleCommands)
         .addProperty("programDir", &FileSystem::GetProgramDir)
         .addProperty("userDocumentsDir", &FileSystem::GetUserDocumentsDir)
@@ -255,16 +247,9 @@ static void RegisterLog(kaguya::State& lua)
     lua["KLOG_ERROR"] = LOG_ERROR;
     lua["KLOG_NONE"] = LOG_NONE;
 
+    // GC is disable for subsystem object
     lua["KLog"].setClass(UserdataMetatable<Log, Object>(false)
-        
-        .addFunction("GetType", &Log::GetType)
-        .addFunction("GetTypeName", &Log::GetTypeName)
-        .addFunction("GetTypeInfo", &Log::GetTypeInfo)
-        
-        .addStaticFunction("GetTypeStatic", &Log::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &Log::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &Log::GetTypeInfoStatic)
-        
+
         .addFunction("Open", &Log::Open)
         .addFunction("Close", &Log::Close)
         .addFunction("SetLevel", &Log::SetLevel)
@@ -277,14 +262,11 @@ static void RegisterLog(kaguya::State& lua)
         .addStaticFunction("Write", &Log::Write)
         .addStaticFunction("WriteRaw", &Log::WriteRaw)
 
-        .addProperty("type", &Log::GetType)
-        .addProperty("typeName", &Log::GetTypeName)
-        .addProperty("typeInfo", &Log::GetTypeInfo)
         .addProperty("level", &Log::GetLevel, &Log::SetLevel)
         .addProperty("timeStamp", &Log::GetTimeStamp, &Log::SetTimeStamp)
         .addProperty("lastMessage", &Log::GetLastMessage)
         .addProperty("quiet", &Log::IsQuiet, &Log::SetQuiet)
-        );
+    );
 }
 
 static void RegisterPackageFile(kaguya::State& lua)
@@ -295,14 +277,6 @@ static void RegisterPackageFile(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<PackageFile>)
         .addStaticFunction("__gc", &KReleaseObject<PackageFile>)
 
-        .addFunction("GetType", &PackageFile::GetType)
-        .addFunction("GetTypeName", &PackageFile::GetTypeName)
-        .addFunction("GetTypeInfo", &PackageFile::GetTypeInfo)
-        
-        .addStaticFunction("GetTypeStatic", &PackageFile::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &PackageFile::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &PackageFile::GetTypeInfoStatic)
-        
         .addFunction("Open", &PackageFile::Open)
         .addFunction("Exists", &PackageFile::Exists)
         .addFunction("GetEntry", &PackageFile::GetEntry)
@@ -316,9 +290,6 @@ static void RegisterPackageFile(kaguya::State& lua)
         .addFunction("IsCompressed", &PackageFile::IsCompressed)
         .addFunction("GetEntryNames", &PackageFile::GetEntryNames)
 
-        .addProperty("type", &PackageFile::GetType)
-        .addProperty("typeName", &PackageFile::GetTypeName)
-        .addProperty("typeInfo", &PackageFile::GetTypeInfo)
         .addProperty("entries", &PackageFile::GetEntries)
         .addProperty("name", &PackageFile::GetName)
         .addProperty("nameHash", &PackageFile::GetNameHash)
@@ -328,7 +299,7 @@ static void RegisterPackageFile(kaguya::State& lua)
         .addProperty("checksum", &PackageFile::GetChecksum)
         .addProperty("compressed", &PackageFile::IsCompressed)
         .addProperty("entryNames", &PackageFile::GetEntryNames)
-        );
+    );
 }
 
 static void RegisterVectorBuffer(kaguya::State& lua)
@@ -371,6 +342,12 @@ void RegisterIOLuaAPI(kaguya::State& lua)
     RegisterLog(lua);
     RegisterPackageFile(lua);
     RegisterVectorBuffer(lua);
+
+    lua["kfileSystem"] = GetFileSystem();
+    lua["KGetFileSystem"] = GetFileSystem;
+
+    lua["klog"] = GetLog();
+    lua["KGetLog"] = GetLog;
 }
 
 }

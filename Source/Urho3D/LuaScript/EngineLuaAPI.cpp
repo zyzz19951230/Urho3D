@@ -10,208 +10,202 @@
 
 namespace Urho3D
 {
- static void RegisterConsole(kaguya::State& lua)
- {
-     using namespace kaguya;
 
-     lua["KConsole"].setClass(UserdataMetatable<Console, Object>(false)
-         .addStaticFunction("new", &KCreateObject<Console>)
-         .addStaticFunction("__gc", &KReleaseObject<Console>)
+extern Context* globalContext;
 
-         .addFunction("GetType", &Console::GetType)
-         .addFunction("GetTypeName", &Console::GetTypeName)
-         .addFunction("GetTypeInfo", &Console::GetTypeInfo)
+static Engine* GetEngine()
+{
+    return globalContext->GetSubsystem<Engine>();
+}
 
-         .addStaticFunction("GetTypeStatic", &Console::GetTypeStatic)
-         .addStaticFunction("GetTypeNameStatic", &Console::GetTypeNameStatic)
-         .addStaticFunction("GetTypeInfoStatic", &Console::GetTypeInfoStatic)
+static Console* GetConsole()
+{
+    // Create console automaticlly
+    return GetEngine()->CreateConsole();
+}
 
-         .addFunction("SetDefaultStyle", &Console::SetDefaultStyle)
-         .addFunction("SetVisible", &Console::SetVisible)
-         .addFunction("Toggle", &Console::Toggle)
-         .addFunction("SetAutoVisibleOnError", &Console::SetAutoVisibleOnError)
-         .addFunction("SetCommandInterpreter", &Console::SetCommandInterpreter)
-         .addFunction("SetNumBufferedRows", &Console::SetNumBufferedRows)
-         .addFunction("SetNumRows", &Console::SetNumRows)
-         .addFunction("SetNumHistoryRows", &Console::SetNumHistoryRows)
-         .addFunction("SetFocusOnShow", &Console::SetFocusOnShow)
-         
-         .addFunction("UpdateElements", &Console::UpdateElements)
-         
-         .addFunction("GetDefaultStyle", &Console::GetDefaultStyle)
-         .addFunction("GetBackground", &Console::GetBackground)
-         .addFunction("GetLineEdit", &Console::GetLineEdit)
-         .addFunction("GetCloseButton", &Console::GetCloseButton)
-         .addFunction("IsVisible", &Console::IsVisible)
-         .addFunction("IsAutoVisibleOnError", &Console::IsAutoVisibleOnError)
-         .addFunction("GetCommandInterpreter", &Console::GetCommandInterpreter)
-         .addFunction("GetNumBufferedRows", &Console::GetNumBufferedRows)
-         .addFunction("GetNumRows", &Console::GetNumRows)
-         
-         .addFunction("CopySelectedRows", &Console::CopySelectedRows)
-         .addFunction("GetNumHistoryRows", &Console::GetNumHistoryRows)
-         .addFunction("GetHistoryPosition", &Console::GetHistoryPosition)
-         .addFunction("GetHistoryRow", &Console::GetHistoryRow)
-         .addFunction("GetFocusOnShow", &Console::GetFocusOnShow)
+static DebugHud* GetDebugHud()
+{
+    // Create debug hud automaticlly
+    return GetEngine()->CreateDebugHud();
+}
 
-         .addProperty("type", &Console::GetType)
-         .addProperty("typeName", &Console::GetTypeName)
-         .addProperty("typeInfo", &Console::GetTypeInfo)
-         .addProperty("defaultStyle", &Console::GetDefaultStyle, &Console::SetDefaultStyle)
-         .addProperty("background", &Console::GetBackground)
-         .addProperty("lineEdit", &Console::GetLineEdit)
-         .addProperty("closeButton", &Console::GetCloseButton)
-         .addProperty("visible", &Console::IsVisible, &Console::SetVisible)
-         .addProperty("autoVisibleOnError", &Console::IsAutoVisibleOnError, &Console::SetAutoVisibleOnError)
-         .addProperty("commandInterpreter", &Console::GetCommandInterpreter, &Console::SetCommandInterpreter)
-         .addProperty("numBufferedRows", &Console::GetNumBufferedRows, &Console::SetNumBufferedRows)
-         .addProperty("numRows", &Console::GetNumRows, &Console::SetNumRows)
-         .addProperty("numHistoryRows", &Console::GetNumHistoryRows, &Console::SetNumHistoryRows)
-         .addProperty("historyPosition", &Console::GetHistoryPosition)
-         .addProperty("focusOnShow", &Console::GetFocusOnShow, &Console::SetFocusOnShow)
-     );
- }
+static void RegisterConsole(kaguya::State& lua)
+{
+    using namespace kaguya;
 
- static void RegisterDebugHud(kaguya::State& lua)
- {
-     using namespace kaguya;
+    // GC is disable for subsystem object
+    lua["KConsole"].setClass(UserdataMetatable<Console, Object>(false)
 
-     lua["KDEBUGHUD_SHOW_NONE"] = DEBUGHUD_SHOW_NONE;
-     lua["KDEBUGHUD_SHOW_STATS"] = DEBUGHUD_SHOW_STATS;
-     lua["KDEBUGHUD_SHOW_MODE"] = DEBUGHUD_SHOW_MODE;
-     lua["KDEBUGHUD_SHOW_PROFILER"] = DEBUGHUD_SHOW_PROFILER;
-     lua["KDEBUGHUD_SHOW_MEMORY"] = DEBUGHUD_SHOW_MEMORY;
-     lua["KDEBUGHUD_SHOW_ALL"] = DEBUGHUD_SHOW_ALL;
-     lua["KDEBUGHUD_SHOW_ALL_MEMORY"] = DEBUGHUD_SHOW_ALL_MEMORY;
-     lua["KDEBUGHUD_SHOW_EVENTPROFILER"] = DEBUGHUD_SHOW_EVENTPROFILER;
-     
-     lua["KDebugHud"].setClass(UserdataMetatable<DebugHud, Object>(false)
-         .addStaticFunction("new", &KCreateObject<DebugHud>)
-         .addStaticFunction("__gc", &KReleaseObject<DebugHud>)
+        .addFunction("SetDefaultStyle", &Console::SetDefaultStyle)
+        .addFunction("SetVisible", &Console::SetVisible)
+        .addFunction("Toggle", &Console::Toggle)
+        .addFunction("SetAutoVisibleOnError", &Console::SetAutoVisibleOnError)
+        .addFunction("SetCommandInterpreter", &Console::SetCommandInterpreter)
+        .addFunction("SetNumBufferedRows", &Console::SetNumBufferedRows)
+        .addFunction("SetNumRows", &Console::SetNumRows)
+        .addFunction("SetNumHistoryRows", &Console::SetNumHistoryRows)
+        .addFunction("SetFocusOnShow", &Console::SetFocusOnShow)
 
-         .addFunction("GetType", &DebugHud::GetType)
-         .addFunction("GetTypeName", &DebugHud::GetTypeName)
-         .addFunction("GetTypeInfo", &DebugHud::GetTypeInfo)
+        .addFunction("UpdateElements", &Console::UpdateElements)
 
-         .addStaticFunction("GetTypeStatic", &DebugHud::GetTypeStatic)
-         .addStaticFunction("GetTypeNameStatic", &DebugHud::GetTypeNameStatic)
-         .addStaticFunction("GetTypeInfoStatic", &DebugHud::GetTypeInfoStatic)
-         
-         .addFunction("SetDefaultStyle", &DebugHud::SetDefaultStyle)
-         .addFunction("SetMode", &DebugHud::SetMode)
-         .addFunction("SetProfilerMaxDepth", &DebugHud::SetProfilerMaxDepth)
-         .addFunction("SetProfilerInterval", &DebugHud::SetProfilerInterval)
-         .addFunction("SetUseRendererStats", &DebugHud::SetUseRendererStats)
-         .addFunction("Toggle", &DebugHud::Toggle)
-         .addFunction("ToggleAll", &DebugHud::ToggleAll)
-         
-         .addFunction("GetDefaultStyle", &DebugHud::GetDefaultStyle)
-         .addFunction("GetStatsText", &DebugHud::GetStatsText)
-         .addFunction("GetModeText", &DebugHud::GetModeText)
-         .addFunction("GetProfilerText", &DebugHud::GetProfilerText)
-         .addFunction("GetMemoryText", &DebugHud::GetMemoryText)
-         .addFunction("GetMode", &DebugHud::GetMode)
-         .addFunction("GetProfilerMaxDepth", &DebugHud::GetProfilerMaxDepth)
-         .addFunction("GetProfilerInterval", &DebugHud::GetProfilerInterval)
-         .addFunction("GetUseRendererStats", &DebugHud::GetUseRendererStats)
+        .addFunction("GetDefaultStyle", &Console::GetDefaultStyle)
+        .addFunction("GetBackground", &Console::GetBackground)
+        .addFunction("GetLineEdit", &Console::GetLineEdit)
+        .addFunction("GetCloseButton", &Console::GetCloseButton)
+        .addFunction("IsVisible", &Console::IsVisible)
+        .addFunction("IsAutoVisibleOnError", &Console::IsAutoVisibleOnError)
+        .addFunction("GetCommandInterpreter", &Console::GetCommandInterpreter)
+        .addFunction("GetNumBufferedRows", &Console::GetNumBufferedRows)
+        .addFunction("GetNumRows", &Console::GetNumRows)
 
-         .addOverloadedFunctions("SetAppStats",
-             static_cast<void(DebugHud::*)(const String&, const Variant&)>(&DebugHud::SetAppStats),
-             static_cast<void(DebugHud::*)(const String&, const String&)>(&DebugHud::SetAppStats))
+        .addFunction("CopySelectedRows", &Console::CopySelectedRows)
+        .addFunction("GetNumHistoryRows", &Console::GetNumHistoryRows)
+        .addFunction("GetHistoryPosition", &Console::GetHistoryPosition)
+        .addFunction("GetHistoryRow", &Console::GetHistoryRow)
+        .addFunction("GetFocusOnShow", &Console::GetFocusOnShow)
 
-         .addFunction("ResetAppStats", &DebugHud::ResetAppStats)
-         .addFunction("ClearAppStats", &DebugHud::ClearAppStats)
+        .addProperty("defaultStyle", &Console::GetDefaultStyle, &Console::SetDefaultStyle)
+        .addProperty("background", &Console::GetBackground)
+        .addProperty("lineEdit", &Console::GetLineEdit)
+        .addProperty("closeButton", &Console::GetCloseButton)
+        .addProperty("visible", &Console::IsVisible, &Console::SetVisible)
+        .addProperty("autoVisibleOnError", &Console::IsAutoVisibleOnError, &Console::SetAutoVisibleOnError)
+        .addProperty("commandInterpreter", &Console::GetCommandInterpreter, &Console::SetCommandInterpreter)
+        .addProperty("numBufferedRows", &Console::GetNumBufferedRows, &Console::SetNumBufferedRows)
+        .addProperty("numRows", &Console::GetNumRows, &Console::SetNumRows)
+        .addProperty("numHistoryRows", &Console::GetNumHistoryRows, &Console::SetNumHistoryRows)
+        .addProperty("historyPosition", &Console::GetHistoryPosition)
+        .addProperty("focusOnShow", &Console::GetFocusOnShow, &Console::SetFocusOnShow)
+    );
+}
 
-         .addProperty("type", &DebugHud::GetType)
-         .addProperty("typeName", &DebugHud::GetTypeName)
-         .addProperty("typeInfo", &DebugHud::GetTypeInfo)
-         .addProperty("defaultStyle", &DebugHud::GetDefaultStyle, &DebugHud::SetDefaultStyle)
-         .addProperty("statsText", &DebugHud::GetStatsText)
-         .addProperty("modeText", &DebugHud::GetModeText)
-         .addProperty("profilerText", &DebugHud::GetProfilerText)
-         .addProperty("memoryText", &DebugHud::GetMemoryText)
-         .addProperty("mode", &DebugHud::GetMode, &DebugHud::SetMode)
-         .addProperty("profilerMaxDepth", &DebugHud::GetProfilerMaxDepth, &DebugHud::SetProfilerMaxDepth)
-         .addProperty("profilerInterval", &DebugHud::GetProfilerInterval, &DebugHud::SetProfilerInterval)
-         .addProperty("useRendererStats", &DebugHud::GetUseRendererStats, &DebugHud::SetUseRendererStats)
-     );
- }
+static void RegisterDebugHud(kaguya::State& lua)
+{
+    using namespace kaguya;
 
- static void RegisterEngine(kaguya::State& lua)
- {
-     using namespace kaguya;
+    lua["KDEBUGHUD_SHOW_NONE"] = DEBUGHUD_SHOW_NONE;
+    lua["KDEBUGHUD_SHOW_STATS"] = DEBUGHUD_SHOW_STATS;
+    lua["KDEBUGHUD_SHOW_MODE"] = DEBUGHUD_SHOW_MODE;
+    lua["KDEBUGHUD_SHOW_PROFILER"] = DEBUGHUD_SHOW_PROFILER;
+    lua["KDEBUGHUD_SHOW_MEMORY"] = DEBUGHUD_SHOW_MEMORY;
+    lua["KDEBUGHUD_SHOW_ALL"] = DEBUGHUD_SHOW_ALL;
+    lua["KDEBUGHUD_SHOW_ALL_MEMORY"] = DEBUGHUD_SHOW_ALL_MEMORY;
+    lua["KDEBUGHUD_SHOW_EVENTPROFILER"] = DEBUGHUD_SHOW_EVENTPROFILER;
 
-     lua["KEngine"].setClass(UserdataMetatable<Engine, Object>(false)
-         .addStaticFunction("new", &KCreateObject<Engine>)
-         .addStaticFunction("__gc", &KReleaseObject<Engine>)
+    // GC is disable for subsystem object
+    lua["KDebugHud"].setClass(UserdataMetatable<DebugHud, Object>(false)
 
-         .addFunction("GetType", &Engine::GetType)
-         .addFunction("GetTypeName", &Engine::GetTypeName)
-         .addFunction("GetTypeInfo", &Engine::GetTypeInfo)
+        .addFunction("SetDefaultStyle", &DebugHud::SetDefaultStyle)
+        .addFunction("SetMode", &DebugHud::SetMode)
+        .addFunction("SetProfilerMaxDepth", &DebugHud::SetProfilerMaxDepth)
+        .addFunction("SetProfilerInterval", &DebugHud::SetProfilerInterval)
+        .addFunction("SetUseRendererStats", &DebugHud::SetUseRendererStats)
+        .addFunction("Toggle", &DebugHud::Toggle)
+        .addFunction("ToggleAll", &DebugHud::ToggleAll)
 
-         .addStaticFunction("GetTypeStatic", &Engine::GetTypeStatic)
-         .addStaticFunction("GetTypeNameStatic", &Engine::GetTypeNameStatic)
-         .addStaticFunction("GetTypeInfoStatic", &Engine::GetTypeInfoStatic)
+        .addFunction("GetDefaultStyle", &DebugHud::GetDefaultStyle)
+        .addFunction("GetStatsText", &DebugHud::GetStatsText)
+        .addFunction("GetModeText", &DebugHud::GetModeText)
+        .addFunction("GetProfilerText", &DebugHud::GetProfilerText)
+        .addFunction("GetMemoryText", &DebugHud::GetMemoryText)
+        .addFunction("GetMode", &DebugHud::GetMode)
+        .addFunction("GetProfilerMaxDepth", &DebugHud::GetProfilerMaxDepth)
+        .addFunction("GetProfilerInterval", &DebugHud::GetProfilerInterval)
+        .addFunction("GetUseRendererStats", &DebugHud::GetUseRendererStats)
 
-         .addFunction("CreateConsole", &Engine::CreateConsole)
-         .addFunction("CreateDebugHud", &Engine::CreateDebugHud)
+        .addOverloadedFunctions("SetAppStats",
+            static_cast<void(DebugHud::*)(const String&, const Variant&)>(&DebugHud::SetAppStats),
+            static_cast<void(DebugHud::*)(const String&, const String&)>(&DebugHud::SetAppStats))
 
-         .addFunction("SetMinFps", &Engine::SetMinFps)
-         .addFunction("SetMaxFps", &Engine::SetMaxFps)
-         .addFunction("SetMaxInactiveFps", &Engine::SetMaxInactiveFps)
-         .addFunction("SetTimeStepSmoothing", &Engine::SetTimeStepSmoothing)
-         .addFunction("SetPauseMinimized", &Engine::SetPauseMinimized)
-         .addFunction("SetAutoExit", &Engine::SetAutoExit)
-         .addFunction("SetNextTimeStep", &Engine::SetNextTimeStep)
-         
-         .addFunction("Exit", &Engine::Exit)
+        .addFunction("ResetAppStats", &DebugHud::ResetAppStats)
+        .addFunction("ClearAppStats", &DebugHud::ClearAppStats)
 
-         .addFunction("DumpProfiler", &Engine::DumpProfiler)
-         .addFunction("DumpResources", &Engine::DumpResources)
-         .addFunction("DumpMemory", &Engine::DumpMemory)
+        .addProperty("defaultStyle", &DebugHud::GetDefaultStyle, &DebugHud::SetDefaultStyle)
+        .addProperty("statsText", &DebugHud::GetStatsText)
+        .addProperty("modeText", &DebugHud::GetModeText)
+        .addProperty("profilerText", &DebugHud::GetProfilerText)
+        .addProperty("memoryText", &DebugHud::GetMemoryText)
+        .addProperty("mode", &DebugHud::GetMode, &DebugHud::SetMode)
+        .addProperty("profilerMaxDepth", &DebugHud::GetProfilerMaxDepth, &DebugHud::SetProfilerMaxDepth)
+        .addProperty("profilerInterval", &DebugHud::GetProfilerInterval, &DebugHud::SetProfilerInterval)
+        .addProperty("useRendererStats", &DebugHud::GetUseRendererStats, &DebugHud::SetUseRendererStats)
+    );
+}
 
-         .addFunction("GetNextTimeStep", &Engine::GetNextTimeStep)
-         .addFunction("GetMinFps", &Engine::GetMinFps)
-         .addFunction("GetMaxFps", &Engine::GetMaxFps)
-         .addFunction("GetMaxInactiveFps", &Engine::GetMaxInactiveFps)
-         .addFunction("GetTimeStepSmoothing", &Engine::GetTimeStepSmoothing)
-         .addFunction("GetPauseMinimized", &Engine::GetPauseMinimized)
-         .addFunction("GetAutoExit", &Engine::GetAutoExit)
-         .addFunction("IsInitialized", &Engine::IsInitialized)
-         .addFunction("IsExiting", &Engine::IsExiting)
-         .addFunction("IsHeadless", &Engine::IsHeadless)
-         
-         .addFunction("ApplyFrameLimit", &Engine::ApplyFrameLimit)
 
-         .addProperty("type", &Engine::GetType)
-         .addProperty("typeName", &Engine::GetTypeName)
-         .addProperty("typeInfo", &Engine::GetTypeInfo)
-         
-         .addProperty("nextTimeStep", &Engine::GetNextTimeStep, &Engine::SetNextTimeStep)         
-         .addProperty("minFps", &Engine::GetMinFps, &Engine::SetMinFps)
-         .addProperty("maxFps", &Engine::GetMaxFps, &Engine::SetMaxFps)
-         .addProperty("maxInactiveFps", &Engine::GetMaxInactiveFps, &Engine::SetMaxInactiveFps)
-         .addProperty("timeStepSmoothing", &Engine::GetTimeStepSmoothing, &Engine::SetTimeStepSmoothing)
-         .addProperty("pauseMinimized", &Engine::GetPauseMinimized, &Engine::SetPauseMinimized)
-         .addProperty("autoExit", &Engine::GetAutoExit, &Engine::SetAutoExit)
-         .addProperty("initialized", &Engine::IsInitialized)
-         .addProperty("exiting", &Engine::IsExiting)
-         .addProperty("headless", &Engine::IsHeadless)
-     );
- }
+static void RegisterEngine(kaguya::State& lua)
+{
+    using namespace kaguya;
 
- static void RegisterEngineEvents(kaguya::State& lua)
- {
-     using namespace kaguya;
+    // GC is disable for subsystem object
+    lua["KEngine"].setClass(UserdataMetatable<Engine, Object>(false)
 
-     lua["KE_CONSOLECOMMAND"] = E_CONSOLECOMMAND;
- }
+        .addFunction("RunFrame", &Engine::RunFrame)
+        .addFunction("CreateConsole", &Engine::CreateConsole)
+        .addFunction("CreateDebugHud", &Engine::CreateDebugHud)
 
- void RegisterEngineLuaAPI(kaguya::State& lua)
- {
-     RegisterConsole(lua);
-     RegisterDebugHud(lua);
-     RegisterEngine(lua);
-     RegisterEngineEvents(lua);
- }
+        .addFunction("SetMinFps", &Engine::SetMinFps)
+        .addFunction("SetMaxFps", &Engine::SetMaxFps)
+        .addFunction("SetMaxInactiveFps", &Engine::SetMaxInactiveFps)
+        .addFunction("SetTimeStepSmoothing", &Engine::SetTimeStepSmoothing)
+        .addFunction("SetPauseMinimized", &Engine::SetPauseMinimized)
+        .addFunction("SetAutoExit", &Engine::SetAutoExit)
+        .addFunction("SetNextTimeStep", &Engine::SetNextTimeStep)
+
+        .addFunction("Exit", &Engine::Exit)
+
+        .addFunction("DumpProfiler", &Engine::DumpProfiler)
+        .addFunction("DumpResources", &Engine::DumpResources)
+        .addFunction("DumpMemory", &Engine::DumpMemory)
+
+        .addFunction("GetNextTimeStep", &Engine::GetNextTimeStep)
+        .addFunction("GetMinFps", &Engine::GetMinFps)
+        .addFunction("GetMaxFps", &Engine::GetMaxFps)
+        .addFunction("GetMaxInactiveFps", &Engine::GetMaxInactiveFps)
+        .addFunction("GetTimeStepSmoothing", &Engine::GetTimeStepSmoothing)
+        .addFunction("GetPauseMinimized", &Engine::GetPauseMinimized)
+        .addFunction("GetAutoExit", &Engine::GetAutoExit)
+        .addFunction("IsInitialized", &Engine::IsInitialized)
+        .addFunction("IsExiting", &Engine::IsExiting)
+        .addFunction("IsHeadless", &Engine::IsHeadless)
+
+        .addFunction("ApplyFrameLimit", &Engine::ApplyFrameLimit)
+
+        .addProperty("nextTimeStep", &Engine::GetNextTimeStep, &Engine::SetNextTimeStep)
+        .addProperty("minFps", &Engine::GetMinFps, &Engine::SetMinFps)
+        .addProperty("maxFps", &Engine::GetMaxFps, &Engine::SetMaxFps)
+        .addProperty("maxInactiveFps", &Engine::GetMaxInactiveFps, &Engine::SetMaxInactiveFps)
+        .addProperty("timeStepSmoothing", &Engine::GetTimeStepSmoothing, &Engine::SetTimeStepSmoothing)
+        .addProperty("pauseMinimized", &Engine::GetPauseMinimized, &Engine::SetPauseMinimized)
+        .addProperty("autoExit", &Engine::GetAutoExit, &Engine::SetAutoExit)
+        .addProperty("initialized", &Engine::IsInitialized)
+        .addProperty("exiting", &Engine::IsExiting)
+        .addProperty("headless", &Engine::IsHeadless)
+    );
+}
+
+static void RegisterEngineEvents(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KE_CONSOLECOMMAND"] = E_CONSOLECOMMAND;
+}
+
+void RegisterEngineLuaAPI(kaguya::State& lua)
+{
+    RegisterConsole(lua);
+    RegisterDebugHud(lua);
+    RegisterEngine(lua);
+    RegisterEngineEvents(lua);
+
+    lua["kengine"] = GetEngine();
+    lua["KGetEngine"] = GetEngine;
+
+    // lua["kconsole"] = GetConsole();
+    lua["KGetConsole"] = GetConsole;
+
+    // lua["kdebugHud"] = GetDebugHud();
+    lua["GetDebugHud"] = GetDebugHud;
+}
 }

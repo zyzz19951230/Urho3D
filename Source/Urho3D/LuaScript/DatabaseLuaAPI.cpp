@@ -1,113 +1,122 @@
-// #include "../Database/Database.h"
-// #include "../Database/DatabaseEvents.h"
-// #include "../Database/DbConnection.h"
-// #include "../Database/DbResult.h"
-// #include "../Database/ODBC"
-// #include "../Database/SQLite"
+//
+// Copyright (c) 2008-2016 the Urho3D project.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
 
-// #include "../LuaScript/LuaScriptUtils.h"
+#ifdef URHO3D_DATABASE
 
-// #include <kaguya.hpp>
+#include "../Core/Context.h"
+#include "../Database/Database.h"
+#include "../Database/DatabaseEvents.h"
+#include "../Database/DbConnection.h"
+#include "../Database/DbResult.h"
+#include "../LuaScript/LuaScriptUtils.h"
 
-// namespace Urho3D
-// {
+#include <kaguya.hpp>
 
-// static void RegisterDatabase(kaguya::State& lua)
-// {
-//     using namespace kaguya;
+namespace Urho3D
+{
 
-//     // enum DBAPI;
-//     lua["KDBAPI_SQLITE"] = DBAPI_SQLITE;
-//     lua["KDBAPI_ODBC"] = DBAPI_ODBC;
+extern Context* globalContext;
 
-//     lua["KDatabase"].setClass(UserdataMetatable<Database, Object>(false)
-//         .addStaticFunction("new", &KCreateObject<Database>)
-//         .addStaticFunction("__gc", &KReleaseObject<Database>)
+static Database* GetDataBase()
+{
+    return globalContext->GetSubsystem<Database>();
+}
 
-//         .addFunction("GetType", &Database::GetType)
-//         .addFunction("GetTypeName", &Database::GetTypeName)
-//         .addFunction("GetTypeInfo", &Database::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &Database::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &Database::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &Database::GetTypeInfoStatic)
-//         .addStaticFunction("GetAPI", &Database::GetAPI)
-//         .addFunction("Connect", &Database::Connect)
-//         .addFunction("Disconnect", &Database::Disconnect)
-//         .addFunction("IsPooling", &Database::IsPooling)
-//         .addFunction("GetPoolSize", &Database::GetPoolSize)
-//         .addFunction("SetPoolSize", &Database::SetPoolSize)
+static void RegisterDatabase(kaguya::State& lua)
+{
+    using namespace kaguya;
 
-//         .addProperty("type", &Database::GetType)
-//         .addProperty("typeName", &Database::GetTypeName)
-//         .addProperty("typeInfo", &Database::GetTypeInfo)
-//         .addProperty("pooling", &Database::IsPooling)
-//         .addProperty("poolSize", &Database::GetPoolSize, &Database::SetPoolSize)
-//     );
-// }
+    // enum DBAPI;
+    lua["KDBAPI_SQLITE"] = DBAPI_SQLITE;
+    lua["KDBAPI_ODBC"] = DBAPI_ODBC;
 
-// static void RegisterDatabaseEvents(kaguya::State& lua)
-// {
-//     using namespace kaguya;
+    // GC is disable for subsystem object
+    lua["KDatabase"].setClass(UserdataMetatable<Database, Object>(false)
 
-//     lua["KE_DBCURSOR"] = E_DBCURSOR;
-// }
+        .addStaticFunction("GetAPI", &Database::GetAPI)
 
-// static void RegisterDbConnection(kaguya::State& lua)
-// {
-//     using namespace kaguya;
+        .addFunction("Connect", &Database::Connect)
+        .addFunction("Disconnect", &Database::Disconnect)
+        .addFunction("IsPooling", &Database::IsPooling)
+        .addFunction("GetPoolSize", &Database::GetPoolSize)
+        .addFunction("SetPoolSize", &Database::SetPoolSize)
 
-//     lua["KDbConnection"].setClass(UserdataMetatable<DbConnection, Object>()
-//         .setConstructors<DbConnection(Context*, const String&)>()
+        .addProperty("pooling", &Database::IsPooling)
+        .addProperty("poolSize", &Database::GetPoolSize, &Database::SetPoolSize)
+    );    
+}
 
-//         .addFunction("GetType", &DbConnection::GetType)
-//         .addFunction("GetTypeName", &DbConnection::GetTypeName)
-//         .addFunction("GetTypeInfo", &DbConnection::GetTypeInfo)
-//         .addStaticFunction("GetTypeStatic", &DbConnection::GetTypeStatic)
-//         .addStaticFunction("GetTypeNameStatic", &DbConnection::GetTypeNameStatic)
-//         .addStaticFunction("GetTypeInfoStatic", &DbConnection::GetTypeInfoStatic)
-//         .addFunction("Finalize", &DbConnection::Finalize)
-//         .addFunction("Execute", &DbConnection::Execute)
-//         .addFunction("GetConnectionString", &DbConnection::GetConnectionString)
-//         .addFunction("GetConnectionImpl", &DbConnection::GetConnectionImpl)
-//         .addFunction("IsConnected", &DbConnection::IsConnected)
+static void RegisterDatabaseEvents(kaguya::State& lua)
+{
+    using namespace kaguya;
 
-//         .addProperty("type", &DbConnection::GetType)
-//         .addProperty("typeName", &DbConnection::GetTypeName)
-//         .addProperty("typeInfo", &DbConnection::GetTypeInfo)
-//         .addProperty("connectionString", &DbConnection::GetConnectionString)
-//         .addProperty("connectionImpl", &DbConnection::GetConnectionImpl)
-//         .addProperty("connected", &DbConnection::IsConnected)
-//     );
-// }
+    lua["KE_DBCURSOR"] = E_DBCURSOR;
+}
 
-// static void RegisterDbResult(kaguya::State& lua)
-// {
-//     using namespace kaguya;
+static void RegisterDbConnection(kaguya::State& lua)
+{
+    using namespace kaguya;
 
-//     lua["KDbResult"].setClass(UserdataMetatable<DbResult>()
-//         .setConstructors<DbResult()>()
+    lua["KDbConnection"].setClass(UserdataMetatable<DbConnection, Object>()
+        .setConstructors<DbConnection(Context*, const String&)>()
 
-//         .addFunction("GetNumColumns", &DbResult::GetNumColumns)
-//         .addFunction("GetNumRows", &DbResult::GetNumRows)
-//         .addFunction("GetNumAffectedRows", &DbResult::GetNumAffectedRows)
-//         .addFunction("GetResultImpl", &DbResult::GetResultImpl)
-//         .addFunction("GetColumns", &DbResult::GetColumns)
-//         .addFunction("GetRows", &DbResult::GetRows)
+        .addFunction("Execute", &DbConnection::Execute)
+        .addFunction("GetConnectionString", &DbConnection::GetConnectionString)
+        .addFunction("IsConnected", &DbConnection::IsConnected)
 
-//         .addProperty("numColumns", &DbResult::GetNumColumns)
-//         .addProperty("numRows", &DbResult::GetNumRows)
-//         .addProperty("numAffectedRows", &DbResult::GetNumAffectedRows)
-//         .addProperty("resultImpl", &DbResult::GetResultImpl)
-//         .addProperty("columns", &DbResult::GetColumns)
-//         .addProperty("rows", &DbResult::GetRows)
-//     );
-// }
+        .addProperty("connectionString", &DbConnection::GetConnectionString)
+        .addProperty("connected", &DbConnection::IsConnected)
+    );
+}
 
-// void RegisterDatabaseLuaAPI(kaguya::State& lua)
-// {
-//     RegisterDatabase(lua);
-//     RegisterDatabaseEvents(lua);
-//     RegisterDbConnection(lua);
-//     RegisterDbResult(lua);
-// }
-// }
+static void RegisterDbResult(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KDbResult"].setClass(UserdataMetatable<DbResult>()
+        .setConstructors<DbResult()>()
+
+        .addFunction("GetNumColumns", &DbResult::GetNumColumns)
+        .addFunction("GetNumRows", &DbResult::GetNumRows)
+        .addFunction("GetNumAffectedRows", &DbResult::GetNumAffectedRows)
+        .addFunction("GetColumns", &DbResult::GetColumns)
+        .addFunction("GetRows", &DbResult::GetRows)
+
+        .addProperty("numColumns", &DbResult::GetNumColumns)
+        .addProperty("numRows", &DbResult::GetNumRows)
+        .addProperty("numAffectedRows", &DbResult::GetNumAffectedRows)
+    );
+}
+
+void RegisterDatabaseLuaAPI(kaguya::State& lua)
+{
+    RegisterDbResult(lua);
+    RegisterDatabaseEvents(lua);
+    RegisterDbConnection(lua);
+    RegisterDatabase(lua);
+
+    lua["kdatabase"] = GetDataBase();
+    lua["KGetDatabase"] = GetDataBase;
+}
+}
+
+#endif

@@ -1,3 +1,4 @@
+#include "../Core/Context.h"
 #include "../Network/Connection.h"
 #include "../Network/HttpRequest.h"
 #include "../Network/Network.h"
@@ -11,6 +12,13 @@
 
 namespace Urho3D
 {
+
+extern Context* globalContext;
+
+static Network* GetNetwork()
+{
+    return globalContext->GetSubsystem<Network>();
+}
 
 static void RegisterConnection(kaguya::State& lua)
 {
@@ -93,9 +101,11 @@ static void RegisterConnection(kaguya::State& lua)
 		.addProperty("numDownloads", &Connection::GetNumDownloads)
 		.addProperty("downloadName", &Connection::GetDownloadName)
 		.addProperty("downloadProgress", &Connection::GetDownloadProgress)
-		.addProperty("controls", &Connection::controls_)
+		/*
+        .addProperty("controls", &Connection::controls_)
 		.addProperty("timeStamp", &Connection::timeStamp_)
 		.addProperty("identity", &Connection::identity_)
+        */
 	);
 }
 
@@ -133,6 +143,7 @@ static void RegisterNetwork(kaguya::State& lua)
 {
 	using namespace kaguya;
 
+    // GC is disable for subsystem object
 	lua["KNetwork"].setClass(UserdataMetatable<Network, Object>(false)
 
 		.addFunction("Connect", &Network::Connect)
@@ -258,5 +269,8 @@ void RegisterNetworkLuaAPI(kaguya::State& lua)
 	RegisterNetworkEvents(lua);
 	RegisterNetworkPriority(lua);
 	RegisterProtocol(lua);
+
+    lua["knetwork"] = GetNetwork();
+    lua["KGetNetwork"] = GetNetwork;
 }
 }

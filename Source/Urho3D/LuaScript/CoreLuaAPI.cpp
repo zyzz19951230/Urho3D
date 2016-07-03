@@ -13,6 +13,12 @@
 
 namespace Urho3D
 {
+extern Context* globalContext;
+
+static Time* GetTime()
+{
+    return globalContext->GetSubsystem<Time>();
+}
 
 static void RegisterAttribute(kaguya::State& lua)
 {
@@ -39,7 +45,7 @@ static void RegisterAttribute(kaguya::State& lua)
         .addProperty("enumNames", &AttributeInfo::enumNames_)
         .addProperty("defaultValue", &AttributeInfo::defaultValue_)
         .addProperty("mode", &AttributeInfo::mode_)
-        );
+    );
 }
 
 static void RegisterContext(kaguya::State& lua)
@@ -60,7 +66,7 @@ static void RegisterContext(kaguya::State& lua)
         .addProperty("globalVars", &Context::GetGlobalVars)
         .addProperty("eventSender", &Context::GetEventSender)
         .addProperty("eventHandler", &Context::GetEventHandler)
-        );
+    );
 }
 
 static void RegisterCoreEvents(kaguya::State& lua)
@@ -83,9 +89,7 @@ static void RegisterObject(kaguya::State& lua)
         .addFunction("GetType", &Object::GetType)
         .addFunction("GetTypeName", &Object::GetTypeName)
         .addFunction("GetTypeInfo", &Object::GetTypeInfo)
-
-        .addStaticFunction("GetTypeInfoStatic", &Object::GetTypeInfoStatic)
-
+        
         /*
         .addOverloadedFunctions("IsTypeOf",
             static_cast<bool(Object::*)(StringHash)>(&Object::IsTypeOf),
@@ -139,7 +143,7 @@ static void RegisterObject(kaguya::State& lua)
         .addProperty("eventSender", &Object::GetEventSender)
         .addProperty("eventHandler", &Object::GetEventHandler)
         .addProperty("category", &Object::GetCategory)
-        );
+    );
 }
 
 static void RegisterProcessUtils(kaguya::State& lua)
@@ -200,7 +204,7 @@ static void RegisterSpline(kaguya::State& lua)
 
         .addProperty("interpolationMode", &Spline::GetInterpolationMode, &Spline::SetInterpolationMode)
         .addProperty("knots", &Spline::GetKnots, &Spline::SetKnots)
-        );
+    );
 }
 
 static void RegisterStringUtils(kaguya::State& lua)
@@ -243,16 +247,11 @@ static void RegisterTimer(kaguya::State& lua)
 
         .addFunction("GetMSec", &Timer::GetMSec)
         .addFunction("Reset", &Timer::Reset)
-        );
+    );
 
+    // GC is disable for subsystem object
     lua["KTime"].setClass(UserdataMetatable<Time, Object>(false)
-        .addFunction("GetType", &Time::GetType)
-        .addFunction("GetTypeName", &Time::GetTypeName)
-        .addFunction("GetTypeInfo", &Time::GetTypeInfo)
-        .addStaticFunction("GetTypeStatic", &Time::GetTypeStatic)
-        .addStaticFunction("GetTypeNameStatic", &Time::GetTypeNameStatic)
-        .addStaticFunction("GetTypeInfoStatic", &Time::GetTypeInfoStatic)
-
+        
         .addFunction("GetFrameNumber", &Time::GetFrameNumber)
         .addFunction("GetTimeStep", &Time::GetTimeStep)
         .addFunction("GetElapsedTime", &Time::GetElapsedTime)
@@ -260,13 +259,10 @@ static void RegisterTimer(kaguya::State& lua)
         .addStaticFunction("GetTimeSinceEpoch", &Time::GetTimeSinceEpoch)
         .addStaticFunction("GetTimeStamp", &Time::GetTimeStamp)
 
-        .addProperty("type", &Time::GetType)
-        .addProperty("typeName", &Time::GetTypeName)
-        .addProperty("typeInfo", &Time::GetTypeInfo)
         .addProperty("frameNumber", &Time::GetFrameNumber)
         .addProperty("timeStep", &Time::GetTimeStep)
         .addProperty("elapsedTime", &Time::GetElapsedTime)
-        );
+    );
 }
 
 static void RegisterVariant(kaguya::State& lua)
@@ -311,7 +307,7 @@ static void RegisterVariant(kaguya::State& lua)
 
         .addProperty("type", &ResourceRef::type_)
         .addProperty("name", &ResourceRef::name_)
-        );
+    );
 
     lua["KResourceRefList"].setClass(UserdataMetatable<ResourceRefList>()
         .setConstructors<ResourceRefList(),
@@ -322,7 +318,7 @@ static void RegisterVariant(kaguya::State& lua)
 
         .addProperty("type", &ResourceRefList::type_)
         .addProperty("names", &ResourceRefList::names_)
-        );
+    );
 
     lua["KVariant"].setClass(UserdataMetatable<Variant>()
         .setConstructors < Variant(),
@@ -456,7 +452,7 @@ static void RegisterVariant(kaguya::State& lua)
         .addStaticField("emptyVariantMap", &Variant::emptyVariantMap)
         .addStaticField("emptyVariantVector", &Variant::emptyVariantVector)
         .addStaticField("emptyStringVector", &Variant::emptyStringVector)
-        );
+    );
 }
 
 void RegisterCoreLuaAPI(kaguya::State& lua)
@@ -470,5 +466,8 @@ void RegisterCoreLuaAPI(kaguya::State& lua)
     RegisterStringUtils(lua);
     RegisterTimer(lua);
     RegisterVariant(lua);
+
+    lua["ktime"] = GetTime();
+    lua["KGetTime"] = GetTime;
 }
 }

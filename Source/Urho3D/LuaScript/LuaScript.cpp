@@ -84,6 +84,7 @@ Context* globalContext = 0;
 extern void RegisterAudioLuaAPI(kaguya::State&);
 extern void RegisterCoreLuaAPI(kaguya::State&);
 extern void RegisterEngineLuaAPI(kaguya::State&);
+extern void RegisterRendererLuaAPI(kaguya::State&);
 extern void RegisterGraphicsLuaAPI(kaguya::State&);
 extern void RegisterInputLuaAPI(kaguya::State&);
 extern void RegisterIOLuaAPI(kaguya::State&);
@@ -168,26 +169,26 @@ LuaScript::LuaScript(Context* context) :
     RegisterSceneLuaAPI(lua);
     RegisterAudioLuaAPI(lua);
     RegisterEngineLuaAPI(lua);
-    //RegisterGraphicsLuaAPI(lua);
-
-//    RegisterInputLuaAPI(lua);
-//#ifdef URHO3D_NAVIGATION
-//    RegisterNavigationLuaAPI(lua);
-//#endif
-//#ifdef URHO3D_NETWORK
-//    RegisterNetworkLuaAPI(lua);
-//#endif
-//#ifdef URHO3D_DATABASE
-//    RegisterDatabaseLuaAPI(lua);
-//#endif
-//#ifdef URHO3D_PHYSICS
-//    RegisterPhysicsLuaAPI(lua);
-//#endif
-//    RegisterUILuaAPI(lua);
-//#ifdef URHO3D_URHO2D
-//    RegisterUrho2DLuaAPI(lua);
-//#endif
-//    RegisterLuaScriptLuaAPI(lua);
+    RegisterRendererLuaAPI(lua);
+    RegisterGraphicsLuaAPI(lua);
+    RegisterInputLuaAPI(lua);
+#ifdef URHO3D_NAVIGATION
+    RegisterNavigationLuaAPI(lua);
+#endif
+#ifdef URHO3D_NETWORK
+    RegisterNetworkLuaAPI(lua);
+#endif
+#ifdef URHO3D_DATABASE
+    RegisterDatabaseLuaAPI(lua);
+#endif
+#ifdef URHO3D_PHYSICS
+    RegisterPhysicsLuaAPI(lua);
+#endif
+    RegisterUILuaAPI(lua);
+#ifdef URHO3D_URHO2D
+    RegisterUrho2DLuaAPI(lua);
+#endif
+    // RegisterLuaScriptLuaAPI(lua);
 
     eventInvoker_ = new LuaScriptEventInvoker(context_);
     coroutineUpdate_ = GetFunction("coroutine.update");
