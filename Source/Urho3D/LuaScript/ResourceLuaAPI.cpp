@@ -19,17 +19,6 @@
 
 namespace Urho3D
 {
-extern Context* globalContext;
-
-static ResourceCache* GetResourceCache()
-{
-    return globalContext->GetSubsystem<ResourceCache>();
-}
-
-static Localization* GetLocalization()
-{
-    return globalContext->GetSubsystem<Localization>();
-}
 
 static void RegisterImage(kaguya::State& lua)
 {
@@ -49,10 +38,9 @@ static void RegisterImage(kaguya::State& lua)
     lua["KCF_PVRTC_RGB_4BPP"] = CF_PVRTC_RGB_4BPP;
     lua["KCF_PVRTC_RGBA_4BPP"] = CF_PVRTC_RGBA_4BPP;
 
-    lua["KImage"].setClass(UserdataMetatable<Image, Resource>(false)
+    lua["KImage"].setClass(UserdataMetatable<Image, Resource>()
         .addStaticFunction("new", &KCreateObject<Image>)
-        .addStaticFunction("__gc", &KReleaseObject<Image>)
-
+        
         .addFunction("BeginLoad", &Image::BeginLoad)
         .addFunction("Save", &Image::Save)
 
@@ -128,10 +116,9 @@ static void RegisterJSONFile(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KJSONFile"].setClass(UserdataMetatable<JSONFile, Resource>(false)
+    lua["KJSONFile"].setClass(UserdataMetatable<JSONFile, Resource>()
         .addStaticFunction("new", &KCreateObject<JSONFile>)
-        .addStaticFunction("__gc", &KReleaseObject<JSONFile>)
-
+        
 
         // .addFunction("Save", static_cast<bool(JSONFile::*)(Serializer&, const String&) const>(&JSONFile::Save))
         .addFunction("FromString", &JSONFile::FromString)
@@ -247,7 +234,7 @@ static void RegisterLocalization(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KLocalization"].setClass(UserdataMetatable<Localization, Object>(false)
+    lua["KLocalization"].setClass(UserdataMetatable<Localization, Object>()
 
 
         .addFunction("GetNumLanguages", &Localization::GetNumLanguages)
@@ -318,10 +305,9 @@ static void RegisterPListFile(kaguya::State& lua)
         .addProperty("type", &PListValue::GetType)
     );
 
-    lua["KPListFile"].setClass(UserdataMetatable<PListFile, Resource>(false)
+    lua["KPListFile"].setClass(UserdataMetatable<PListFile, Resource>()
         .addStaticFunction("new", &KCreateObject<PListFile>)
-        .addStaticFunction("__gc", &KReleaseObject<PListFile>)
-
+        
 
 
         .addFunction("GetRoot", &PListFile::GetRoot)
@@ -341,10 +327,9 @@ static void RegisterResource(kaguya::State& lua)
     lua["KASYNC_SUCCESS"] = ASYNC_SUCCESS;
     lua["KASYNC_FAIL"] = ASYNC_FAIL;
 
-    lua["KResource"].setClass(UserdataMetatable<Resource, Object>(false)
+    lua["KResource"].setClass(UserdataMetatable<Resource, Object>()
         .addStaticFunction("new", &KCreateObject<Resource>)
-        .addStaticFunction("__gc", &KReleaseObject<Resource>)
-
+        
 
 
         .addStaticFunction("LoadFromFile", [](Resource& resouce, const char* filepath)
@@ -389,7 +374,7 @@ static void RegisterResourceCache(kaguya::State& lua)
     lua["KRESOURCE_GETFILE"] = RESOURCE_GETFILE;
 
     // GC is disable for subsystem object
-    lua["KResourceCache"].setClass(UserdataMetatable<ResourceCache, Object>(false)
+    lua["KResourceCache"].setClass(UserdataMetatable<ResourceCache, Object>()
 
         .addFunction("AddResourceDir", &ResourceCache::AddResourceDir)
 
@@ -654,10 +639,9 @@ static void RegisterXMLFile(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KXMLFile"].setClass(UserdataMetatable<XMLFile, Resource>(false)
+    lua["KXMLFile"].setClass(UserdataMetatable<XMLFile, Resource>()
         .addStaticFunction("new", &KCreateObject<XMLFile>)
-        .addStaticFunction("__gc", &KReleaseObject<XMLFile>)
-
+        
 
         .addFunction("BeginLoad", &XMLFile::BeginLoad)
 
@@ -692,10 +676,10 @@ void RegisterResourceLuaAPI(kaguya::State& lua)
     RegisterXMLElement(lua);
     RegisterXMLFile(lua);
 
-    lua["kcache"] = GetResourceCache();
-    lua["KGetCache"] = GetResourceCache;
+    lua["kcache"] = KGetSubsystem<ResourceCache>();
+    lua["KGetCache"] = KGetSubsystem<ResourceCache>;
 
-    lua["klocalization"] = GetLocalization();
-    lua["KGetLocalization"] = GetLocalization;
+    lua["klocalization"] = KGetSubsystem<Localization>();
+    lua["KGetLocalization"] = KGetSubsystem<Localization>;
 }
 }

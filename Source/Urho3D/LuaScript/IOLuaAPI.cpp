@@ -19,17 +19,6 @@
 
 namespace Urho3D
 {
-extern Context* globalContext;
-
-static FileSystem* GetFileSystem()
-{
-    return globalContext->GetSubsystem<FileSystem>();
-}
-
-static Log* GetLog()
-{
-    return globalContext->GetSubsystem<Log>();
-}
 
 template<typename class_type, typename base_class_type = void>
 void RegisterDeserializer(kaguya::UserdataMetatable<class_type, base_class_type>& deserializer)
@@ -144,11 +133,9 @@ static void RegisterFile(kaguya::State& lua)
     lua["KFILE_WRITE"] = FILE_WRITE;
     lua["KFILE_READWRITE"] = FILE_READWRITE;
 
-    UserdataMetatable<File, Object> file(false);
+    UserdataMetatable<File, Object> file;
 
     file.addStaticFunction("new", &KCreateObject<File>)
-        .addStaticFunction("__gc", &KReleaseObject<File>)
-
         .addOverloadedFunctions("Open",
             static_cast<bool(File::*)(const String&, FileMode)>(&File::Open),
             static_cast<bool(File::*)(PackageFile*, const String&)>(&File::Open))
@@ -181,7 +168,7 @@ static void RegisterFileSystem(kaguya::State& lua)
     lua["KSCAN_HIDDEN"] = SCAN_HIDDEN;
 
     // GC is disable for subsystem object
-    lua["KFileSystem"].setClass(UserdataMetatable<FileSystem, Object>(false)
+    lua["KFileSystem"].setClass(UserdataMetatable<FileSystem, Object>()
 
         .addFunction("SetCurrentDir", &FileSystem::SetCurrentDir)
         .addFunction("CreateDir", &FileSystem::CreateDir)
@@ -248,7 +235,7 @@ static void RegisterLog(kaguya::State& lua)
     lua["KLOG_NONE"] = LOG_NONE;
 
     // GC is disable for subsystem object
-    lua["KLog"].setClass(UserdataMetatable<Log, Object>(false)
+    lua["KLog"].setClass(UserdataMetatable<Log, Object>()
 
         .addFunction("Open", &Log::Open)
         .addFunction("Close", &Log::Close)
@@ -273,10 +260,9 @@ static void RegisterPackageFile(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KPackageFile"].setClass(UserdataMetatable<PackageFile, Object>(false)
+    lua["KPackageFile"].setClass(UserdataMetatable<PackageFile, Object>()
         .addStaticFunction("new", &KCreateObject<PackageFile>)
-        .addStaticFunction("__gc", &KReleaseObject<PackageFile>)
-
+        
         .addFunction("Open", &PackageFile::Open)
         .addFunction("Exists", &PackageFile::Exists)
         .addFunction("GetEntry", &PackageFile::GetEntry)
@@ -343,11 +329,11 @@ void RegisterIOLuaAPI(kaguya::State& lua)
     RegisterPackageFile(lua);
     RegisterVectorBuffer(lua);
 
-    lua["kfileSystem"] = GetFileSystem();
-    lua["KGetFileSystem"] = GetFileSystem;
+    lua["kfileSystem"] = KGetSubsystem<FileSystem>();
+    lua["KGetFileSystem"] = KGetSubsystem<FileSystem>;
 
-    lua["klog"] = GetLog();
-    lua["KGetLog"] = GetLog;
+    lua["klog"] = KGetSubsystem<Log>();
+    lua["KGetLog"] = KGetSubsystem<Log>;
 }
 
 }

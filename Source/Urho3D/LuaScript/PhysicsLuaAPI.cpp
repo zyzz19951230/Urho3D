@@ -28,10 +28,9 @@ static void RegisterCollisionShape(kaguya::State& lua)
     lua["KSHAPE_CONVEXHULL"] = SHAPE_CONVEXHULL;
     lua["KSHAPE_TERRAIN"] = SHAPE_TERRAIN;
 
-    lua["KCollisionShape"].setClass(UserdataMetatable<CollisionShape, Component>(false)
+    lua["KCollisionShape"].setClass(UserdataMetatable<CollisionShape, Component>()
         .addStaticFunction("new", &KCreateObject<CollisionShape>)
-        .addStaticFunction("__gc", &KReleaseObject<CollisionShape>)
-
+        
         .addFunction("SetBox", &CollisionShape::SetBox)
         .addFunction("SetSphere", &CollisionShape::SetSphere)
         .addFunction("SetStaticPlane", &CollisionShape::SetStaticPlane)
@@ -90,10 +89,9 @@ static void RegisterConstraint(kaguya::State& lua)
     lua["KCONSTRAINT_SLIDER"] = CONSTRAINT_SLIDER;
     lua["KCONSTRAINT_CONETWIST"] = CONSTRAINT_CONETWIST;
 
-    lua["KConstraint"].setClass(UserdataMetatable<Constraint, Component>(false)
+    lua["KConstraint"].setClass(UserdataMetatable<Constraint, Component>()
         .addStaticFunction("new", &KCreateObject<Constraint>)
-        .addStaticFunction("__gc", &KReleaseObject<Constraint>)
-
+        
         .addFunction("SetConstraintType", &Constraint::SetConstraintType)
         .addFunction("SetOtherBody", &Constraint::SetOtherBody)
         .addFunction("SetPosition", &Constraint::SetPosition)
@@ -176,10 +174,9 @@ static void RegisterPhysicsWorld(kaguya::State& lua)
 
     lua["KDEFAULT_MAX_NETWORK_ANGULAR_VELOCITY"] = DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY;
 
-    lua["KPhysicsWorld"].setClass(UserdataMetatable<PhysicsWorld, Component>(false)
+    lua["KPhysicsWorld"].setClass(UserdataMetatable<PhysicsWorld, Component>()
         .addStaticFunction("new", &KCreateObject<PhysicsWorld>)
-        .addStaticFunction("__gc", &KReleaseObject<PhysicsWorld>)
-
+        
         .addFunction("DrawDebugGeometry", static_cast<void(PhysicsWorld::*)(bool)>(&PhysicsWorld::DrawDebugGeometry))
 
         .addFunction("SetFps", &PhysicsWorld::SetFps)
@@ -264,10 +261,9 @@ static void RegisterRigidBody(kaguya::State& lua)
     lua["KCOLLISION_ACTIVE"] = COLLISION_ACTIVE;
     lua["KCOLLISION_ALWAYS"] = COLLISION_ALWAYS;
 
-    lua["KRigidBody"].setClass(UserdataMetatable<RigidBody, Component>(false)
+    lua["KRigidBody"].setClass(UserdataMetatable<RigidBody, Component>()
         .addStaticFunction("new", &KCreateObject<RigidBody>)
-        .addStaticFunction("__gc", &KReleaseObject<RigidBody>)
-
+        
         .addFunction("SetMass", &RigidBody::SetMass)
         .addFunction("SetPosition", &RigidBody::SetPosition)
         .addFunction("SetRotation", &RigidBody::SetRotation)

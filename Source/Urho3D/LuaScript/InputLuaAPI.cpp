@@ -8,12 +8,6 @@
 
 namespace Urho3D
 {
-extern Context* globalContext;
-
-static Input* GetInput()
-{
-    return globalContext->GetSubsystem<Input>();
-}
 
 static void RegisterControls(kaguya::State& lua)
 {
@@ -92,7 +86,7 @@ static void RegisterInput(kaguya::State& lua)
     );
 
     // GC is disable for subsystem object
-    lua["KInput"].setClass(UserdataMetatable<Input, Object>(false)
+    lua["KInput"].setClass(UserdataMetatable<Input, Object>()
 
         .addFunction("SetToggleFullscreen", &Input::SetToggleFullscreen)
         .addFunction("SetMouseVisible", &Input::SetMouseVisible)
@@ -597,7 +591,7 @@ void RegisterInputLuaAPI(kaguya::State& lua)
     RegisterInput(lua);
     RegisterInputEvents(lua);
 
-    lua["kinput"] = GetInput();
-    lua["KGetInput"] = GetInput;
+    lua["kinput"] = KGetSubsystem<Input>();
+    lua["KGetInput"] = KGetSubsystem<Input>;
 }
 }

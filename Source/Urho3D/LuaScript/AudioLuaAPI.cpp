@@ -15,19 +15,11 @@
 
 namespace Urho3D
 {
-extern Context* globalContext;
-
-static Audio* GetAudio()
-{
-    return globalContext->GetSubsystem<Audio>();
-}
-
 static void RegisterAudio(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // GC is disable for subsystem object
-    lua["KAudio"].setClass(UserdataMetatable<Audio, Object>(false)
+    lua["KAudio"].setClass(UserdataMetatable<Audio, Object>()
 
         .addFunction("SetMode", &Audio::SetMode)
         .addFunction("Update", &Audio::Update)
@@ -87,10 +79,9 @@ static void RegisterBufferedSoundStream(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KBufferedSoundStream"].setClass(UserdataMetatable<BufferedSoundStream, SoundStream>(false)
+    lua["KBufferedSoundStream"].setClass(UserdataMetatable<BufferedSoundStream, SoundStream>()
         .setConstructors<BufferedSoundStream()>()
-        .addStaticFunction("__gc", &KReleaseObject<BufferedSoundStream>)
-
+        
         .addFunction("Clear", &BufferedSoundStream::Clear)
         .addFunction("GetBufferNumBytes", &BufferedSoundStream::GetBufferNumBytes)
         .addFunction("GetBufferLength", &BufferedSoundStream::GetBufferLength)
@@ -104,20 +95,18 @@ static void RegisterOggVorbisSoundStream(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KOggVorbisSoundStream"].setClass(UserdataMetatable<OggVorbisSoundStream, SoundStream>(false)
+    lua["KOggVorbisSoundStream"].setClass(UserdataMetatable<OggVorbisSoundStream, SoundStream>()
         .setConstructors<OggVorbisSoundStream(const Sound*)>()
-        .addStaticFunction("__gc", &KReleaseObject<OggVorbisSoundStream>)
-    );
+        );        
 }
 
 static void RegisterSound(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSound"].setClass(UserdataMetatable<Sound, Resource>(false)
+    lua["KSound"].setClass(UserdataMetatable<Sound, Resource>()
         .addStaticFunction("new", &KCreateObject<Sound>)
-        .addStaticFunction("__gc", &KReleaseObject<Sound>)
-
+        
         .addFunction("SetSize", &Sound::SetSize)
 
         .addFunction("SetFormat", &Sound::SetFormat)
@@ -159,10 +148,9 @@ static void RegisterSoundListener(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSoundListener"].setClass(UserdataMetatable<SoundListener, Component>(false)
+    lua["KSoundListener"].setClass(UserdataMetatable<SoundListener, Component>()
         .addStaticFunction("new", &KCreateObject<SoundListener>)
-        .addStaticFunction("__gc", &KReleaseObject<SoundListener>)
-    );
+        );
 }
 
 static void RegisterSoundSource(kaguya::State& lua)
@@ -170,10 +158,9 @@ static void RegisterSoundSource(kaguya::State& lua)
     using namespace kaguya;
 
     lua["KSTREAM_BUFFER_LENGTH"] = STREAM_BUFFER_LENGTH;
-    lua["KSoundSource"].setClass(UserdataMetatable<SoundSource, Component>(false)
+    lua["KSoundSource"].setClass(UserdataMetatable<SoundSource, Component>()
         .addStaticFunction("new", &KCreateObject<SoundSource>)
-        .addStaticFunction("__gc", &KReleaseObject<SoundSource>)
-
+        
         .addOverloadedFunctions("Play",
             static_cast<void(SoundSource::*)(Sound*)>(&SoundSource::Play),
             static_cast<void(SoundSource::*)(Sound*, float)>(&SoundSource::Play),
@@ -215,10 +202,9 @@ static void RegisterSoundSource3D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSoundSource3D"].setClass(UserdataMetatable<SoundSource3D, SoundSource>(false)
+    lua["KSoundSource3D"].setClass(UserdataMetatable<SoundSource3D, SoundSource>()
         .addStaticFunction("new", &KCreateObject<SoundSource3D>)
-        .addStaticFunction("__gc", &KReleaseObject<SoundSource3D>)
-
+        
         .addFunction("SetDistanceAttenuation", &SoundSource3D::SetDistanceAttenuation)
         .addFunction("SetAngleAttenuation", &SoundSource3D::SetAngleAttenuation)
         .addFunction("SetNearDistance", &SoundSource3D::SetNearDistance)
@@ -247,7 +233,7 @@ static void RegisterSoundStream(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSoundStream"].setClass(UserdataMetatable<SoundStream, RefCounted>(false)
+    lua["KSoundStream"].setClass(UserdataMetatable<SoundStream, RefCounted>()
 
         .addFunction("GetData", &SoundStream::GetData)
         .addFunction("SetFormat", &SoundStream::SetFormat)
@@ -282,7 +268,7 @@ void RegisterAudioLuaAPI(kaguya::State& lua)
     RegisterSoundSource(lua);
     RegisterSoundSource3D(lua);
 
-    lua["kaudio"] = GetAudio();
-    lua["KGetAudio"] = GetAudio;
+    lua["kaudio"] = KGetSubsystem<Audio>();
+    lua["KGetAudio"] = KGetSubsystem<Audio>;
 }
 }

@@ -13,12 +13,6 @@
 
 namespace Urho3D
 {
-extern Context* globalContext;
-
-static Time* GetTime()
-{
-    return globalContext->GetSubsystem<Time>();
-}
 
 static void RegisterAttribute(kaguya::State& lua)
 {
@@ -85,7 +79,7 @@ static void RegisterObject(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KObject"].setClass(UserdataMetatable<Object, RefCounted>(false)
+    lua["KObject"].setClass(UserdataMetatable<Object, RefCounted>()
         .addFunction("GetType", &Object::GetType)
         .addFunction("GetTypeName", &Object::GetTypeName)
         .addFunction("GetTypeInfo", &Object::GetTypeInfo)
@@ -249,8 +243,7 @@ static void RegisterTimer(kaguya::State& lua)
         .addFunction("Reset", &Timer::Reset)
     );
 
-    // GC is disable for subsystem object
-    lua["KTime"].setClass(UserdataMetatable<Time, Object>(false)
+    lua["KTime"].setClass(UserdataMetatable<Time, Object>()
         
         .addFunction("GetFrameNumber", &Time::GetFrameNumber)
         .addFunction("GetTimeStep", &Time::GetTimeStep)
@@ -467,7 +460,7 @@ void RegisterCoreLuaAPI(kaguya::State& lua)
     RegisterTimer(lua);
     RegisterVariant(lua);
 
-    lua["ktime"] = GetTime();
-    lua["KGetTime"] = GetTime;
+    lua["ktime"] = KGetSubsystem<Time>();
+    lua["KGetTime"] = KGetSubsystem<Time>;
 }
 }

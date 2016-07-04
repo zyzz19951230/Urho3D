@@ -67,12 +67,9 @@ namespace kaguya
 		typedef std::map<std::string, AnyDataPusher> MemberMapType;
 	public:
 
-		UserdataMetatable(bool add_gc_function = true)
+		UserdataMetatable()
 		{
-			if (add_gc_function)
-			{
-				addStaticFunction("__gc", &class_userdata::destructor<ObjectWrapperBase>);
-			}
+			addStaticFunction("__gc", &class_userdata::destructor<ObjectWrapperBase>);
 
 			KAGUYA_STATIC_ASSERT(is_registerable<class_type>::value || !traits::is_std_vector<class_type>::value, "std::vector is binding to lua-table by default.If you wants register for std::vector yourself,"
 				"please define KAGUYA_NO_STD_VECTOR_TO_TABLE");
@@ -191,26 +188,7 @@ namespace kaguya
 
 		/**
 		* @name addProperty
-		* @brief add member property with setter function.(experimental)
-		* @param name function name for lua
-		* @param setter setter function
-		*/
-		template<typename SetType>
-		UserdataMetatable& addProperty(const char* name, void (class_type::*setter)(SetType))
-		{
-			if (has_key(name))
-			{
-				throw KaguyaException("already registered.");
-				return *this;
-			}
-			property_map_[name] = AnyDataPusher(function(setter));
-			return *this;
-		}
-
-
-		/**
-		* @name addProperty
-		* @brief add member property with getter, setter functions.(experimental)
+		* @brief add member property with setter, getter functions.(experimental)
 		* @param name function name for lua
 		* @param getter getter function
 		* @param setter setter function
@@ -227,25 +205,13 @@ namespace kaguya
 			return *this;
 		}
 
-        /**
-        * @name addProperty
-        * @brief add member property with setter, getter functions.(experimental)
-        * @param name function name for lua
-        * @param setter setter function
-        * @param getter getter function        
-        */
-        template<typename SetType, typename GetType>
-        UserdataMetatable& addProperty(const char* name, void (class_type::*setter)(SetType), GetType(class_type::*getter)()const)
-        {
-            if (has_key(name))
-            {
-                throw KaguyaException("already registered.");
-                return *this;
-            }
-            property_map_[name] = AnyDataPusher(overload(setter, getter));
-            return *this;
-        }
 
+		/**
+		* @name addStaticFunction
+		* @brief add non member function
+		* @param name function name for lua
+		* @param f function
+		*/
 		template<typename Fun>
 		UserdataMetatable& addStaticFunction(const char* name, Fun f)
 		{

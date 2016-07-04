@@ -45,10 +45,9 @@ static void RegisterAnimatedSprite2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KAnimatedSprite2D"].setClass(UserdataMetatable<AnimatedSprite2D, StaticSprite2D>(false)
+    lua["KAnimatedSprite2D"].setClass(UserdataMetatable<AnimatedSprite2D, StaticSprite2D>()
         .addStaticFunction("new", &KCreateObject<AnimatedSprite2D>)
-        .addStaticFunction("__gc", &KReleaseObject<AnimatedSprite2D>)
-
+        
         .addFunction("SetAnimationSet", &AnimatedSprite2D::SetAnimationSet)
         .addFunction("SetEntity", &AnimatedSprite2D::SetEntity)
         .addFunction("SetAnimation", &AnimatedSprite2D::SetAnimation)
@@ -72,10 +71,9 @@ static void RegisterAnimationSet2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KAnimationSet2D"].setClass(UserdataMetatable<AnimationSet2D, Resource>(false)
+    lua["KAnimationSet2D"].setClass(UserdataMetatable<AnimationSet2D, Resource>()
         .addStaticFunction("new", &KCreateObject<AnimationSet2D>)
-        .addStaticFunction("__gc", &KReleaseObject<AnimationSet2D>)
-
+        
         .addFunction("GetNumAnimations", &AnimationSet2D::GetNumAnimations)
         .addFunction("GetAnimation", &AnimationSet2D::GetAnimation)
         .addFunction("HasAnimation", &AnimationSet2D::HasAnimation)
@@ -95,10 +93,9 @@ static void RegisterCollisionBox2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KCollisionBox2D"].setClass(UserdataMetatable<CollisionBox2D, CollisionShape2D>(false)
+    lua["KCollisionBox2D"].setClass(UserdataMetatable<CollisionBox2D, CollisionShape2D>()
         .addStaticFunction("new", &KCreateObject<CollisionBox2D>)
-        .addStaticFunction("__gc", &KReleaseObject<CollisionBox2D>)
-
+        
 
         .addOverloadedFunctions("SetSize",
             static_cast<void(CollisionBox2D::*)(const Vector2&)>(&CollisionBox2D::SetSize),
@@ -124,10 +121,9 @@ static void RegisterCollisionChain2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KCollisionChain2D"].setClass(UserdataMetatable<CollisionChain2D, CollisionShape2D>(false)
+    lua["KCollisionChain2D"].setClass(UserdataMetatable<CollisionChain2D, CollisionShape2D>()
         .addStaticFunction("new", &KCreateObject<CollisionChain2D>)
-        .addStaticFunction("__gc", &KReleaseObject<CollisionChain2D>)
-
+        
         .addFunction("SetLoop", &CollisionChain2D::SetLoop)
         .addFunction("SetVertexCount", &CollisionChain2D::SetVertexCount)
         .addFunction("SetVertex", &CollisionChain2D::SetVertex)
@@ -147,10 +143,9 @@ static void RegisterCollisionCircle2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KCollisionCircle2D"].setClass(UserdataMetatable<CollisionCircle2D, CollisionShape2D>(false)
+    lua["KCollisionCircle2D"].setClass(UserdataMetatable<CollisionCircle2D, CollisionShape2D>()
         .addStaticFunction("new", &KCreateObject<CollisionCircle2D>)
-        .addStaticFunction("__gc", &KReleaseObject<CollisionCircle2D>)
-
+        
         .addFunction("SetRadius", &CollisionCircle2D::SetRadius)
 
         .addOverloadedFunctions("SetCenter",
@@ -169,10 +164,9 @@ static void RegisterCollisionEdge2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KCollisionEdge2D"].setClass(UserdataMetatable<CollisionEdge2D, CollisionShape2D>(false)
+    lua["KCollisionEdge2D"].setClass(UserdataMetatable<CollisionEdge2D, CollisionShape2D>()
         .addStaticFunction("new", &KCreateObject<CollisionEdge2D>)
-        .addStaticFunction("__gc", &KReleaseObject<CollisionEdge2D>)
-
+        
         .addFunction("SetVertex1", &CollisionEdge2D::SetVertex1)
         .addFunction("SetVertex2", &CollisionEdge2D::SetVertex2)
         .addFunction("SetVertices", &CollisionEdge2D::SetVertices)
@@ -188,10 +182,9 @@ static void RegisterCollisionPolygon2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KCollisionPolygon2D"].setClass(UserdataMetatable<CollisionPolygon2D, CollisionShape2D>(false)
+    lua["KCollisionPolygon2D"].setClass(UserdataMetatable<CollisionPolygon2D, CollisionShape2D>()
         .addStaticFunction("new", &KCreateObject<CollisionPolygon2D>)
-        .addStaticFunction("__gc", &KReleaseObject<CollisionPolygon2D>)
-
+        
         .addFunction("SetVertexCount", &CollisionPolygon2D::SetVertexCount)
         .addFunction("SetVertex", &CollisionPolygon2D::SetVertex)
         .addFunction("SetVertices", &CollisionPolygon2D::SetVertices)
@@ -208,7 +201,7 @@ static void RegisterCollisionShape2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KCollisionShape2D"].setClass(UserdataMetatable<CollisionShape2D, Component>(false)
+    lua["KCollisionShape2D"].setClass(UserdataMetatable<CollisionShape2D, Component>()
 
         .addFunction("SetTrigger", &CollisionShape2D::SetTrigger)
         .addFunction("SetCategoryBits", &CollisionShape2D::SetCategoryBits)
@@ -249,10 +242,9 @@ static void RegisterConstraint2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConstraint2D"].setClass(UserdataMetatable<Constraint2D, Component>(false)
+    lua["KConstraint2D"].setClass(UserdataMetatable<Constraint2D, Component>()
         .addStaticFunction("new", &KCreateObject<Constraint2D>)
-        .addStaticFunction("__gc", &KReleaseObject<Constraint2D>)
-
+        
         .addFunction("CreateJoint", &Constraint2D::CreateJoint)
         .addFunction("ReleaseJoint", &Constraint2D::ReleaseJoint)
         .addFunction("SetOtherBody", &Constraint2D::SetOtherBody)
@@ -276,10 +268,9 @@ static void RegisterConstraintDistance2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConstraintDistance2D"].setClass(UserdataMetatable<ConstraintDistance2D, Constraint2D>(false)
+    lua["KConstraintDistance2D"].setClass(UserdataMetatable<ConstraintDistance2D, Constraint2D>()
         .addStaticFunction("new", &KCreateObject<ConstraintDistance2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ConstraintDistance2D>)
-
+        
         .addFunction("SetOwnerBodyAnchor", &ConstraintDistance2D::SetOwnerBodyAnchor)
         .addFunction("SetOtherBodyAnchor", &ConstraintDistance2D::SetOtherBodyAnchor)
         .addFunction("SetFrequencyHz", &ConstraintDistance2D::SetFrequencyHz)
@@ -300,10 +291,9 @@ static void RegisterConstraintFriction2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConstraintFriction2D"].setClass(UserdataMetatable<ConstraintFriction2D, Constraint2D>(false)
+    lua["KConstraintFriction2D"].setClass(UserdataMetatable<ConstraintFriction2D, Constraint2D>()
         .addStaticFunction("new", &KCreateObject<ConstraintFriction2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ConstraintFriction2D>)
-
+        
         .addFunction("SetAnchor", &ConstraintFriction2D::SetAnchor)
         .addFunction("SetMaxForce", &ConstraintFriction2D::SetMaxForce)
         .addFunction("SetMaxTorque", &ConstraintFriction2D::SetMaxTorque)
@@ -321,10 +311,9 @@ static void RegisterConstraintGear2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConstraintGear2D"].setClass(UserdataMetatable<ConstraintGear2D, Constraint2D>(false)
+    lua["KConstraintGear2D"].setClass(UserdataMetatable<ConstraintGear2D, Constraint2D>()
         .addStaticFunction("new", &KCreateObject<ConstraintGear2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ConstraintGear2D>)
-
+        
         .addFunction("SetOwnerConstraint", &ConstraintGear2D::SetOwnerConstraint)
         .addFunction("SetOtherConstraint", &ConstraintGear2D::SetOtherConstraint)
         .addFunction("SetRatio", &ConstraintGear2D::SetRatio)
@@ -342,10 +331,9 @@ static void RegisterConstraintMotor2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConstraintMotor2D"].setClass(UserdataMetatable<ConstraintMotor2D, Constraint2D>(false)
+    lua["KConstraintMotor2D"].setClass(UserdataMetatable<ConstraintMotor2D, Constraint2D>()
         .addStaticFunction("new", &KCreateObject<ConstraintMotor2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ConstraintMotor2D>)
-
+        
         .addFunction("SetLinearOffset", &ConstraintMotor2D::SetLinearOffset)
         .addFunction("SetAngularOffset", &ConstraintMotor2D::SetAngularOffset)
         .addFunction("SetMaxForce", &ConstraintMotor2D::SetMaxForce)
@@ -369,10 +357,9 @@ static void RegisterConstraintMouse2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConstraintMouse2D"].setClass(UserdataMetatable<ConstraintMouse2D, Constraint2D>(false)
+    lua["KConstraintMouse2D"].setClass(UserdataMetatable<ConstraintMouse2D, Constraint2D>()
         .addStaticFunction("new", &KCreateObject<ConstraintMouse2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ConstraintMouse2D>)
-
+        
         .addFunction("SetTarget", &ConstraintMouse2D::SetTarget)
         .addFunction("SetMaxForce", &ConstraintMouse2D::SetMaxForce)
         .addFunction("SetFrequencyHz", &ConstraintMouse2D::SetFrequencyHz)
@@ -393,10 +380,9 @@ static void RegisterConstraintPrismatic2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConstraintPrismatic2D"].setClass(UserdataMetatable<ConstraintPrismatic2D, Constraint2D>(false)
+    lua["KConstraintPrismatic2D"].setClass(UserdataMetatable<ConstraintPrismatic2D, Constraint2D>()
         .addStaticFunction("new", &KCreateObject<ConstraintPrismatic2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ConstraintPrismatic2D>)
-
+        
         .addFunction("SetAnchor", &ConstraintPrismatic2D::SetAnchor)
         .addFunction("SetAxis", &ConstraintPrismatic2D::SetAxis)
         .addFunction("SetEnableLimit", &ConstraintPrismatic2D::SetEnableLimit)
@@ -429,10 +415,9 @@ static void RegisterConstraintPulley2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConstraintPulley2D"].setClass(UserdataMetatable<ConstraintPulley2D, Constraint2D>(false)
+    lua["KConstraintPulley2D"].setClass(UserdataMetatable<ConstraintPulley2D, Constraint2D>()
         .addStaticFunction("new", &KCreateObject<ConstraintPulley2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ConstraintPulley2D>)
-
+        
         .addFunction("SetOwnerBodyGroundAnchor", &ConstraintPulley2D::SetOwnerBodyGroundAnchor)
         .addFunction("SetOtherBodyGroundAnchor", &ConstraintPulley2D::SetOtherBodyGroundAnchor)
         .addFunction("SetOwnerBodyAnchor", &ConstraintPulley2D::SetOwnerBodyAnchor)
@@ -456,10 +441,9 @@ static void RegisterConstraintRevolute2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConstraintRevolute2D"].setClass(UserdataMetatable<ConstraintRevolute2D, Constraint2D>(false)
+    lua["KConstraintRevolute2D"].setClass(UserdataMetatable<ConstraintRevolute2D, Constraint2D>()
         .addStaticFunction("new", &KCreateObject<ConstraintRevolute2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ConstraintRevolute2D>)
-
+        
         .addFunction("SetAnchor", &ConstraintRevolute2D::SetAnchor)
         .addFunction("SetEnableLimit", &ConstraintRevolute2D::SetEnableLimit)
         .addFunction("SetLowerAngle", &ConstraintRevolute2D::SetLowerAngle)
@@ -489,10 +473,9 @@ static void RegisterConstraintRope2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConstraintRope2D"].setClass(UserdataMetatable<ConstraintRope2D, Constraint2D>(false)
+    lua["KConstraintRope2D"].setClass(UserdataMetatable<ConstraintRope2D, Constraint2D>()
         .addStaticFunction("new", &KCreateObject<ConstraintRope2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ConstraintRope2D>)
-
+        
         .addFunction("SetOwnerBodyAnchor", &ConstraintRope2D::SetOwnerBodyAnchor)
         .addFunction("SetOtherBodyAnchor", &ConstraintRope2D::SetOtherBodyAnchor)
         .addFunction("SetMaxLength", &ConstraintRope2D::SetMaxLength)
@@ -510,10 +493,9 @@ static void RegisterConstraintWeld2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConstraintWeld2D"].setClass(UserdataMetatable<ConstraintWeld2D, Constraint2D>(false)
+    lua["KConstraintWeld2D"].setClass(UserdataMetatable<ConstraintWeld2D, Constraint2D>()
         .addStaticFunction("new", &KCreateObject<ConstraintWeld2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ConstraintWeld2D>)
-
+        
         .addFunction("SetAnchor", &ConstraintWeld2D::SetAnchor)
         .addFunction("SetFrequencyHz", &ConstraintWeld2D::SetFrequencyHz)
         .addFunction("SetDampingRatio", &ConstraintWeld2D::SetDampingRatio)
@@ -531,10 +513,9 @@ static void RegisterConstraintWheel2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConstraintWheel2D"].setClass(UserdataMetatable<ConstraintWheel2D, Constraint2D>(false)
+    lua["KConstraintWheel2D"].setClass(UserdataMetatable<ConstraintWheel2D, Constraint2D>()
         .addStaticFunction("new", &KCreateObject<ConstraintWheel2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ConstraintWheel2D>)
-
+        
         .addFunction("SetAnchor", &ConstraintWheel2D::SetAnchor)
         .addFunction("SetAxis", &ConstraintWheel2D::SetAxis)
         .addFunction("SetEnableMotor", &ConstraintWheel2D::SetEnableMotor)
@@ -566,7 +547,7 @@ static void RegisterDrawable2D(kaguya::State& lua)
 
     lua["KPIXEL_SIZE"] = PIXEL_SIZE;
 
-    lua["KDrawable2D"].setClass(UserdataMetatable<Drawable2D, Drawable>(false)
+    lua["KDrawable2D"].setClass(UserdataMetatable<Drawable2D, Drawable>()
         .addFunction("OnSetEnabled", &Drawable2D::OnSetEnabled)
         .addFunction("SetLayer", &Drawable2D::SetLayer)
         .addFunction("SetOrderInLayer", &Drawable2D::SetOrderInLayer)
@@ -588,10 +569,9 @@ static void RegisterParticleEffect2D(kaguya::State& lua)
     lua["KEMITTER_TYPE_GRAVITY"] = EMITTER_TYPE_GRAVITY;
     lua["KEMITTER_TYPE_RADIAL"] = EMITTER_TYPE_RADIAL;
 
-    lua["KParticleEffect2D"].setClass(UserdataMetatable<ParticleEffect2D, Resource>(false)
+    lua["KParticleEffect2D"].setClass(UserdataMetatable<ParticleEffect2D, Resource>()
         .addStaticFunction("new", &KCreateObject<ParticleEffect2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ParticleEffect2D>)
-
+        
         .addFunction("BeginLoad", &ParticleEffect2D::BeginLoad)
         .addFunction("EndLoad", &ParticleEffect2D::EndLoad)
         .addFunction("Save", &ParticleEffect2D::Save)
@@ -708,10 +688,9 @@ static void RegisterParticleEmitter2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KParticleEmitter2D"].setClass(UserdataMetatable<ParticleEmitter2D, Drawable2D>(false)
+    lua["KParticleEmitter2D"].setClass(UserdataMetatable<ParticleEmitter2D, Drawable2D>()
         .addStaticFunction("new", &KCreateObject<ParticleEmitter2D>)
-        .addStaticFunction("__gc", &KReleaseObject<ParticleEmitter2D>)
-
+        
         .addFunction("OnSetEnabled", &ParticleEmitter2D::OnSetEnabled)
         .addFunction("SetEffect", &ParticleEmitter2D::SetEffect)
         .addFunction("SetSprite", &ParticleEmitter2D::SetSprite)
@@ -750,10 +729,9 @@ static void RegisterPhysicsWorld2D(kaguya::State& lua)
         .addProperty("body", &PhysicsRaycastResult2D::body_)
     );
 
-    lua["KPhysicsWorld2D"].setClass(UserdataMetatable<PhysicsWorld2D, Component>(false)
+    lua["KPhysicsWorld2D"].setClass(UserdataMetatable<PhysicsWorld2D, Component>()
         .addStaticFunction("new", &KCreateObject<PhysicsWorld2D>)
-        .addStaticFunction("__gc", &KReleaseObject<PhysicsWorld2D>)
-
+        
         .addFunction("DrawDebugGeometry", static_cast<void(PhysicsWorld2D::*)()>(&PhysicsWorld2D::DrawDebugGeometry))
 
         .addFunction("SetUpdateEnabled", &PhysicsWorld2D::SetUpdateEnabled)
@@ -822,10 +800,9 @@ static void RegisterRenderer2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KRenderer2D"].setClass(UserdataMetatable<Renderer2D, Drawable>(false)
+    lua["KRenderer2D"].setClass(UserdataMetatable<Renderer2D, Drawable>()
         .addStaticFunction("new", &KCreateObject<Renderer2D>)
-        .addStaticFunction("__gc", &KReleaseObject<Renderer2D>)
-    );
+        );
 }
 
 static void RegisterRigidBody2D(kaguya::State& lua)
@@ -837,10 +814,9 @@ static void RegisterRigidBody2D(kaguya::State& lua)
     lua["KBT_KINEMATIC"] = BT_KINEMATIC;
     lua["KBT_DYNAMIC"] = BT_DYNAMIC;
 
-    lua["KRigidBody2D"].setClass(UserdataMetatable<RigidBody2D, Component>(false)
+    lua["KRigidBody2D"].setClass(UserdataMetatable<RigidBody2D, Component>()
         .addStaticFunction("new", &KCreateObject<RigidBody2D>)
-        .addStaticFunction("__gc", &KReleaseObject<RigidBody2D>)
-
+        
         .addFunction("SetBodyType", &RigidBody2D::SetBodyType)
         .addFunction("SetMass", &RigidBody2D::SetMass)
         .addFunction("SetInertia", &RigidBody2D::SetInertia)
@@ -903,10 +879,9 @@ static void RegisterSprite2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSprite2D"].setClass(UserdataMetatable<Sprite2D, Resource>(false)
+    lua["KSprite2D"].setClass(UserdataMetatable<Sprite2D, Resource>()
         .addStaticFunction("new", &KCreateObject<Sprite2D>)
-        .addStaticFunction("__gc", &KReleaseObject<Sprite2D>)
-
+        
         .addFunction("BeginLoad", &Sprite2D::BeginLoad)
         .addFunction("EndLoad", &Sprite2D::EndLoad)
         .addFunction("SetTexture", &Sprite2D::SetTexture)
@@ -943,10 +918,9 @@ static void RegisterSpriteSheet2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSpriteSheet2D"].setClass(UserdataMetatable<SpriteSheet2D, Resource>(false)
+    lua["KSpriteSheet2D"].setClass(UserdataMetatable<SpriteSheet2D, Resource>()
         .addStaticFunction("new", &KCreateObject<SpriteSheet2D>)
-        .addStaticFunction("__gc", &KReleaseObject<SpriteSheet2D>)
-
+        
         .addFunction("SetTexture", &SpriteSheet2D::SetTexture)
         .addFunction("DefineSprite", &SpriteSheet2D::DefineSprite)
         .addFunction("GetTexture", &SpriteSheet2D::GetTexture)
@@ -962,10 +936,9 @@ static void RegisterStaticSprite2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KStaticSprite2D"].setClass(UserdataMetatable<StaticSprite2D, Drawable2D>(false)
+    lua["KStaticSprite2D"].setClass(UserdataMetatable<StaticSprite2D, Drawable2D>()
         .addStaticFunction("new", &KCreateObject<StaticSprite2D>)
-        .addStaticFunction("__gc", &KReleaseObject<StaticSprite2D>)
-
+        
         .addFunction("SetSprite", &StaticSprite2D::SetSprite)
         .addFunction("SetBlendMode", &StaticSprite2D::SetBlendMode)
         .addFunction("SetFlip", &StaticSprite2D::SetFlip)
@@ -1002,10 +975,9 @@ static void RegisterTileMap2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KTileMap2D"].setClass(UserdataMetatable<TileMap2D, Component>(false)
+    lua["KTileMap2D"].setClass(UserdataMetatable<TileMap2D, Component>()
         .addStaticFunction("new", &KCreateObject<TileMap2D>)
-        .addStaticFunction("__gc", &KReleaseObject<TileMap2D>)
-
+        
 
         .addOverloadedFunctions("DrawDebugGeometry",
             static_cast<void(TileMap2D::*)(DebugRenderer*, bool)>(&TileMap2D::DrawDebugGeometry),
@@ -1116,10 +1088,9 @@ static void RegisterTileMapLayer2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KTileMapLayer2D"].setClass(UserdataMetatable<TileMapLayer2D, Component>(false)
+    lua["KTileMapLayer2D"].setClass(UserdataMetatable<TileMapLayer2D, Component>()
         .addStaticFunction("new", &KCreateObject<TileMapLayer2D>)
-        .addStaticFunction("__gc", &KReleaseObject<TileMapLayer2D>)
-
+        
         .addFunction("Initialize", &TileMapLayer2D::Initialize)
         .addFunction("SetDrawOrder", &TileMapLayer2D::SetDrawOrder)
         .addFunction("SetVisible", &TileMapLayer2D::SetVisible)
@@ -1205,10 +1176,9 @@ static void RegisterTmxFile2D(kaguya::State& lua)
         .addProperty("sprite", &TmxImageLayer2D::GetSprite)
     );
 
-    lua["KTmxFile2D"].setClass(UserdataMetatable<TmxFile2D, Resource>(false)
+    lua["KTmxFile2D"].setClass(UserdataMetatable<TmxFile2D, Resource>()
         .addStaticFunction("new", &KCreateObject<TmxFile2D>)
-        .addStaticFunction("__gc", &KReleaseObject<TmxFile2D>)
-
+        
         .addFunction("BeginLoad", &TmxFile2D::BeginLoad)
         .addFunction("EndLoad", &TmxFile2D::EndLoad)
         .addFunction("SetInfo", &TmxFile2D::SetInfo)

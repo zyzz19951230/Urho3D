@@ -27,7 +27,7 @@ static void RegisterAnimatable(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KAnimatable"].setClass(UserdataMetatable<Animatable, Serializable>(false)
+    lua["KAnimatable"].setClass(UserdataMetatable<Animatable, Serializable>()
 
         .addFunction("LoadXML", &Animatable::LoadXML)
         .addFunction("SaveXML", &Animatable::SaveXML)
@@ -71,10 +71,9 @@ static void RegisterComponent(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KComponent"].setClass(UserdataMetatable<Component, Animatable>(false)
+    lua["KComponent"].setClass(UserdataMetatable<Component, Animatable>()
         .addStaticFunction("new", &KCreateObject<Component>)
-        .addStaticFunction("__gc", &KReleaseObject<Component>)
-
+        
         .addFunction("DrawDebugGeometry", &Component::DrawDebugGeometry)
 
         .addFunction("SetEnabled", &Component::SetEnabled)
@@ -110,10 +109,9 @@ static void RegisterLogicComponent(kaguya::State& lua)
     lua["KUSE_FIXEDUPDATE"] = USE_FIXEDUPDATE;
     lua["KUSE_FIXEDPOSTUPDATE"] = USE_FIXEDPOSTUPDATE;
 
-    lua["KLogicComponent"].setClass(UserdataMetatable<LogicComponent, Component>(false)
+    lua["KLogicComponent"].setClass(UserdataMetatable<LogicComponent, Component>()
         .addStaticFunction("new", &KCreateObject<LogicComponent>)
-        .addStaticFunction("__gc", &KReleaseObject<LogicComponent>)
-
+        
         .addFunction("SetUpdateEventMask", &LogicComponent::SetUpdateEventMask)
         .addFunction("GetUpdateEventMask", &LogicComponent::GetUpdateEventMask)
         .addFunction("IsDelayedStartCalled", &LogicComponent::IsDelayedStartCalled)
@@ -136,10 +134,9 @@ static void RegisterLogicComponent(kaguya::State& lua)
      lua["KTS_PARENT"] = TS_PARENT;
      lua["KTS_WORLD"] = TS_WORLD;
 
-     lua["KNode"].setClass(UserdataMetatable<Node, Animatable>(false)
+     lua["KNode"].setClass(UserdataMetatable<Node, Animatable>()
          .addStaticFunction("new", &KCreateObject<Node>)
-         .addStaticFunction("__gc", &KReleaseObject<Node>)
-
+         
          .addFunction("SetName", &Node::SetName)
          .addFunction("SetTags", &Node::SetTags)
          .addFunction("AddTag", &Node::AddTag)
@@ -402,10 +399,9 @@ static void RegisterObjectAnimation(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KObjectAnimation"].setClass(UserdataMetatable<ObjectAnimation, Resource>(false)
+    lua["KObjectAnimation"].setClass(UserdataMetatable<ObjectAnimation, Resource>()
         .addStaticFunction("new", &KCreateObject<ObjectAnimation>)
-        .addStaticFunction("__gc", &KReleaseObject<ObjectAnimation>)
-
+        
         .addFunction("AddAttributeAnimation", &ObjectAnimation::AddAttributeAnimation)
 
         .addOverloadedFunctions("RemoveAttributeAnimation",
@@ -492,10 +488,9 @@ static void RegisterScene(kaguya::State& lua)
     lua["KLOAD_SCENE"] = LOAD_SCENE;
     lua["KLOAD_SCENE_AND_RESOURCES"] = LOAD_SCENE_AND_RESOURCES;
 
-    lua["KScene"].setClass(UserdataMetatable<Scene, Node>(false)
+    lua["KScene"].setClass(UserdataMetatable<Scene, Node>()
         .addStaticFunction("new", &KCreateObject<Scene>)
-        .addStaticFunction("__gc", &KReleaseObject<Scene>)
-
+        
         .addStaticFunction("LoadFromFile", [](Scene& scene, const char* filepath)
             {
                 SharedPtr<File> file(new File(globalContext, filepath));
@@ -605,7 +600,7 @@ static void RegisterSerializable(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSerializable"].setClass(UserdataMetatable<Serializable, Object>(false)
+    lua["KSerializable"].setClass(UserdataMetatable<Serializable, Object>()
 
         /*
         .addFunction("Load", &Serializable::Load)
@@ -656,10 +651,9 @@ static void RegisterSmoothedTransform(kaguya::State& lua)
     lua["KSMOOTH_POSITION"] = SMOOTH_POSITION;
     lua["KSMOOTH_ROTATION"] = SMOOTH_ROTATION;
 
-    lua["KSmoothedTransform"].setClass(UserdataMetatable<SmoothedTransform, Component>(false)
+    lua["KSmoothedTransform"].setClass(UserdataMetatable<SmoothedTransform, Component>()
         .addStaticFunction("new", &KCreateObject<SmoothedTransform>)
-        .addStaticFunction("__gc", &KReleaseObject<SmoothedTransform>)
-
+        
         .addFunction("SetTargetPosition", &SmoothedTransform::SetTargetPosition)
         .addFunction("SetTargetRotation", &SmoothedTransform::SetTargetRotation)
         .addFunction("SetTargetWorldPosition", &SmoothedTransform::SetTargetWorldPosition)
@@ -682,9 +676,8 @@ static void RegisterSplinePath(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSplinePath"].setClass(UserdataMetatable<SplinePath, Component>(false)
+    lua["KSplinePath"].setClass(UserdataMetatable<SplinePath, Component>()
         .addStaticFunction("new", &KCreateObject<SplinePath>)
-        .addStaticFunction("__gc", &KReleaseObject<SplinePath>)
         
         .addFunction("AddControlPoint", &SplinePath::AddControlPoint)
         .addFunction("RemoveControlPoint", &SplinePath::RemoveControlPoint)
@@ -716,10 +709,9 @@ static void RegisterUnknownComponent(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KUnknownComponent"].setClass(UserdataMetatable<UnknownComponent, Component>(false)
+    lua["KUnknownComponent"].setClass(UserdataMetatable<UnknownComponent, Component>()
         .addStaticFunction("new", &KCreateObject<UnknownComponent>)
-        .addStaticFunction("__gc", &KReleaseObject<UnknownComponent>)
-
+        
         .addFunction("GetType", &UnknownComponent::GetType)
         .addFunction("GetTypeName", &UnknownComponent::GetTypeName)
         .addFunction("GetAttributes", &UnknownComponent::GetAttributes)
@@ -739,10 +731,9 @@ static void RegisterUnknownComponent(kaguya::State& lua)
      lua["KIM_LINEAR"] = IM_LINEAR;
      lua["KIM_SPLINE"] = IM_SPLINE;
 
-     lua["KValueAnimation"].setClass(UserdataMetatable<ValueAnimation, Resource>(false)
+     lua["KValueAnimation"].setClass(UserdataMetatable<ValueAnimation, Resource>()
          .addStaticFunction("new", &KCreateObject<ValueAnimation>)
-         .addStaticFunction("__gc", &KReleaseObject<ValueAnimation>)
-
+         
          .addFunction("SetInterpolationMethod", &ValueAnimation::SetInterpolationMethod)
          .addFunction("SetSplineTension", &ValueAnimation::SetSplineTension)
          .addFunction("SetValueType", &ValueAnimation::SetValueType)

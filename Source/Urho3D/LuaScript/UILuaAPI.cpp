@@ -29,22 +29,14 @@
 
 namespace Urho3D
 {
-extern Context* globalContext;
-
-static UI* GetUI()
-{
-    return globalContext->GetSubsystem<UI>();
-}
-
 
 static void RegisterBorderImage(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KBorderImage"].setClass(UserdataMetatable<BorderImage, UIElement>(false)
+    lua["KBorderImage"].setClass(UserdataMetatable<BorderImage, UIElement>()
         .addStaticFunction("new", &KCreateObject<BorderImage>)
-        .addStaticFunction("__gc", &KReleaseObject<BorderImage>)
-
+        
         .addFunction("SetTexture", &BorderImage::SetTexture)
         .addFunction("SetImageRect", &BorderImage::SetImageRect)
         .addFunction("SetFullImageRect", &BorderImage::SetFullImageRect)
@@ -79,10 +71,9 @@ static void RegisterButton(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KButton"].setClass(UserdataMetatable<Button, BorderImage>(false)
+    lua["KButton"].setClass(UserdataMetatable<Button, BorderImage>()
         .addStaticFunction("new", &KCreateObject<Button>)
-        .addStaticFunction("__gc", &KReleaseObject<Button>)
-
+        
         .addOverloadedFunctions("SetPressedOffset",
             static_cast<void(Button::*)(const IntVector2&)>(&Button::SetPressedOffset),
             static_cast<void(Button::*)(int, int)>(&Button::SetPressedOffset))
@@ -113,10 +104,9 @@ static void RegisterCheckBox(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KCheckBox"].setClass(UserdataMetatable<CheckBox, BorderImage>(false)
+    lua["KCheckBox"].setClass(UserdataMetatable<CheckBox, BorderImage>()
         .addStaticFunction("new", &KCreateObject<CheckBox>)
-        .addStaticFunction("__gc", &KReleaseObject<CheckBox>)
-
+        
         .addFunction("SetChecked", &CheckBox::SetChecked)
 
         .addOverloadedFunctions("SetCheckedOffset",
@@ -161,10 +151,9 @@ static void RegisterCursor(kaguya::State& lua)
         );
         */
 
-    lua["KCursor"].setClass(UserdataMetatable<Cursor, BorderImage>(false)
+    lua["KCursor"].setClass(UserdataMetatable<Cursor, BorderImage>()
         .addStaticFunction("new", &KCreateObject<Cursor>)
-        .addStaticFunction("__gc", &KReleaseObject<Cursor>)
-
+        
         .addOverloadedFunctions("DefineShape",
             static_cast<void(Cursor::*)(const String&, Image*, const IntRect&, const IntVector2&)>(&Cursor::DefineShape),
             static_cast<void(Cursor::*)(CursorShape, Image*, const IntRect&, const IntVector2&)>(&Cursor::DefineShape))
@@ -187,10 +176,9 @@ static void RegisterDropDownList(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KDropDownList"].setClass(UserdataMetatable<DropDownList, Menu>(false)
+    lua["KDropDownList"].setClass(UserdataMetatable<DropDownList, Menu>()
         .addStaticFunction("new", &KCreateObject<DropDownList>)
-        .addStaticFunction("__gc", &KReleaseObject<DropDownList>)
-
+        
         .addFunction("AddItem", &DropDownList::AddItem)
         .addFunction("InsertItem", &DropDownList::InsertItem)
 
@@ -227,9 +215,8 @@ static void RegisterFileSelector(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KFileSelector"].setClass(UserdataMetatable<FileSelector, Object>(false)
+    lua["KFileSelector"].setClass(UserdataMetatable<FileSelector, Object>()
         .addStaticFunction("new", &KCreateObject<FileSelector>)
-        .addStaticFunction("__gc", &KReleaseObject<FileSelector>)
         .addFunction("SetDefaultStyle", &FileSelector::SetDefaultStyle)
         .addFunction("SetTitle", &FileSelector::SetTitle)
         .addFunction("SetButtonTexts", &FileSelector::SetButtonTexts)
@@ -286,9 +273,8 @@ static void RegisterFont(kaguya::State& lua)
     lua["KFONT_BITMAP"] = FONT_BITMAP;
     lua["KMAX_FONT_TYPES"] = MAX_FONT_TYPES;
 
-    lua["KFont"].setClass(UserdataMetatable<Font, Resource>(false)
+    lua["KFont"].setClass(UserdataMetatable<Font, Resource>()
         .addStaticFunction("new", &KCreateObject<Font>)
-        .addStaticFunction("__gc", &KReleaseObject<Font>)
         .addFunction("BeginLoad", &Font::BeginLoad)
         .addFunction("SaveXML", &Font::SaveXML)
         .addFunction("SetAbsoluteGlyphOffset", &Font::SetAbsoluteGlyphOffset)
@@ -310,10 +296,9 @@ static void RegisterLineEdit(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KLineEdit"].setClass(UserdataMetatable<LineEdit, BorderImage>(false)
+    lua["KLineEdit"].setClass(UserdataMetatable<LineEdit, BorderImage>()
         .addStaticFunction("new", &KCreateObject<LineEdit>)
-        .addStaticFunction("__gc", &KReleaseObject<LineEdit>)
-
+        
         .addFunction("SetText", &LineEdit::SetText)
         .addFunction("SetCursorPosition", &LineEdit::SetCursorPosition)
         .addFunction("SetCursorBlinkRate", &LineEdit::SetCursorBlinkRate)
@@ -355,10 +340,9 @@ static void RegisterListView(kaguya::State& lua)
     lua["KHM_FOCUS"] = HM_FOCUS;
     lua["KHM_ALWAYS"] = HM_ALWAYS;
 
-    lua["KListView"].setClass(UserdataMetatable<ListView, ScrollView>(false)
+    lua["KListView"].setClass(UserdataMetatable<ListView, ScrollView>()
         .addStaticFunction("new", &KCreateObject<ListView>)
-        .addStaticFunction("__gc", &KReleaseObject<ListView>)
-
+        
         .addFunction("AddItem", &ListView::AddItem)
         .addFunction("InsertItem", &ListView::InsertItem)
 
@@ -424,10 +408,9 @@ static void RegisterMenu(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KMenu"].setClass(UserdataMetatable<Menu, Button>(false)
+    lua["KMenu"].setClass(UserdataMetatable<Menu, Button>()
         .addStaticFunction("new", &KCreateObject<Menu>)
-        .addStaticFunction("__gc", &KReleaseObject<Menu>)
-
+        
         .addFunction("SetPopup", &Menu::SetPopup)
 
         .addOverloadedFunctions("SetPopupOffset",
@@ -454,10 +437,9 @@ static void RegisterMessageBox(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KMessageBox"].setClass(UserdataMetatable<MessageBox, Object>(false)
+    lua["KMessageBox"].setClass(UserdataMetatable<MessageBox, Object>()
         .addStaticFunction("new", &KCreateObject<MessageBox>)
-        .addStaticFunction("__gc", &KReleaseObject<MessageBox>)
-
+        
         .addFunction("SetTitle", &MessageBox::SetTitle)
         .addFunction("SetMessage", &MessageBox::SetMessage)
         .addFunction("GetTitle", &MessageBox::GetTitle)
@@ -474,10 +456,9 @@ static void RegisterScrollBar(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KScrollBar"].setClass(UserdataMetatable<ScrollBar, BorderImage>(false)
+    lua["KScrollBar"].setClass(UserdataMetatable<ScrollBar, BorderImage>()
         .addStaticFunction("new", &KCreateObject<FileSelector>)
-        .addStaticFunction("__gc", &KReleaseObject<FileSelector>)
-
+        
         .addFunction("SetOrientation", &ScrollBar::SetOrientation)
         .addFunction("SetRange", &ScrollBar::SetRange)
         .addFunction("SetValue", &ScrollBar::SetValue)
@@ -512,10 +493,9 @@ static void RegisterScrollView(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KScrollView"].setClass(UserdataMetatable<ScrollView, UIElement>(false)
+    lua["KScrollView"].setClass(UserdataMetatable<ScrollView, UIElement>()
         .addStaticFunction("new", &KCreateObject<ScrollView>)
-        .addStaticFunction("__gc", &KReleaseObject<ScrollView>)
-
+        
         .addFunction("SetContentElement", &ScrollView::SetContentElement)
 
         .addOverloadedFunctions("SetViewPosition",
@@ -562,10 +542,9 @@ static void RegisterSlider(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSlider"].setClass(UserdataMetatable<Slider, BorderImage>(false)
+    lua["KSlider"].setClass(UserdataMetatable<Slider, BorderImage>()
         .addStaticFunction("new", &KCreateObject<Slider>)
-        .addStaticFunction("__gc", &KReleaseObject<Slider>)
-
+        
         .addFunction("SetOrientation", &Slider::SetOrientation)
         .addFunction("SetRange", &Slider::SetRange)
         .addFunction("SetValue", &Slider::SetValue)
@@ -589,9 +568,8 @@ static void RegisterSprite(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSprite"].setClass(UserdataMetatable<Sprite, UIElement>(false)
+    lua["KSprite"].setClass(UserdataMetatable<Sprite, UIElement>()
         .addStaticFunction("new", &KCreateObject<Sprite>)
-        .addStaticFunction("__gc", &KReleaseObject<Sprite>)
         .addFunction("IsWithinScissor", &Sprite::IsWithinScissor)
         .addFunction("GetScreenPosition", &Sprite::GetScreenPosition)
 
@@ -661,10 +639,9 @@ static void RegisterText(kaguya::State& lua)
         .addProperty("y", &GlyphLocation::y_)
         .addProperty("glyph", &GlyphLocation::glyph_)
     );
-    lua["KText"].setClass(UserdataMetatable<Text, UIElement>(false)
+    lua["KText"].setClass(UserdataMetatable<Text, UIElement>()
         .addStaticFunction("new", &KCreateObject<Text>)
-        .addStaticFunction("__gc", &KReleaseObject<Text>)
-
+        
         .addOverloadedFunctions("SetFont",
             static_cast<bool(Text::*)(const String&, int)>(&Text::SetFont),
             static_cast<bool(Text::*)(Font*, int)>(&Text::SetFont))
@@ -735,10 +712,9 @@ static void RegisterText3D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KText3D"].setClass(UserdataMetatable<Text3D, Drawable>(false)
+    lua["KText3D"].setClass(UserdataMetatable<Text3D, Drawable>()
         .addStaticFunction("new", &KCreateObject<Text3D>)
-        .addStaticFunction("__gc", &KReleaseObject<Text3D>)
-
+        
         .addOverloadedFunctions("SetFont",
             static_cast<bool(Text3D::*)(const String&, int)>(&Text3D::SetFont),
             static_cast<bool(Text3D::*)(Font*, int)>(&Text3D::SetFont))
@@ -822,10 +798,9 @@ static void RegisterToolTip(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KToolTip"].setClass(UserdataMetatable<ToolTip, UIElement>(false)
+    lua["KToolTip"].setClass(UserdataMetatable<ToolTip, UIElement>()
         .addStaticFunction("new", &KCreateObject<ToolTip>)
-        .addStaticFunction("__gc", &KReleaseObject<ToolTip>)
-
+        
         .addFunction("SetDelay", &ToolTip::SetDelay)
         .addFunction("GetDelay", &ToolTip::GetDelay)
 
@@ -838,7 +813,7 @@ static void RegisterUI(kaguya::State& lua)
     using namespace kaguya;
 
     // GC is disable for subsystem object
-    lua["KUI"].setClass(UserdataMetatable<UI, Object>(false)
+    lua["KUI"].setClass(UserdataMetatable<UI, Object>()
         .addFunction("SetCursor", &UI::SetCursor)
         .addFunction("SetFocusElement", &UI::SetFocusElement)
         .addFunction("SetModalElement", &UI::SetModalElement)
@@ -966,10 +941,9 @@ static void RegisterUIElement(kaguya::State& lua)
     lua["KDD_TARGET"] = DD_TARGET;
     lua["KDD_SOURCE_AND_TARGET"] = DD_SOURCE_AND_TARGET;
 
-    /*lua["KUIElement"].setClass(UserdataMetatable<UIElement, Animatable>(false)
+    /*lua["KUIElement"].setClass(UserdataMetatable<UIElement, Animatable>()
         .addStaticFunction("new", &KCreateObject<UIElement>)
-        .addStaticFunction("__gc", &KReleaseObject<UIElement>)
-
+        
         .addFunction("IsWithinScissor", &UIElement::IsWithinScissor)
         .addFunction("GetScreenPosition", &UIElement::GetScreenPosition)
 
@@ -1280,10 +1254,9 @@ static void RegisterView3D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KView3D"].setClass(UserdataMetatable<View3D, Window>(false)
+    lua["KView3D"].setClass(UserdataMetatable<View3D, Window>()
         .addStaticFunction("new", &KCreateObject<View3D>)
-        .addStaticFunction("__gc", &KReleaseObject<View3D>)
-
+        
         .addFunction("SetView", &View3D::SetView)
         .addFunction("SetFormat", &View3D::SetFormat)
         .addFunction("SetAutoUpdate", &View3D::SetAutoUpdate)
@@ -1322,10 +1295,9 @@ static void RegisterWindow(kaguya::State& lua)
     lua["KDRAG_RESIZE_BOTTOMLEFT"] = DRAG_RESIZE_BOTTOMLEFT;
     lua["KDRAG_RESIZE_LEFT"] = DRAG_RESIZE_LEFT;
 
-    lua["KWindow"].setClass(UserdataMetatable<Window, BorderImage>(false)
+    lua["KWindow"].setClass(UserdataMetatable<Window, BorderImage>()
         .addStaticFunction("new", &KCreateObject<Window>)
-        .addStaticFunction("__gc", &KReleaseObject<Window>)
-
+        
         .addFunction("SetMovable", &Window::SetMovable)
         .addFunction("SetResizable", &Window::SetResizable)
         .addFunction("SetFixedWidthResizing", &Window::SetFixedWidthResizing)
@@ -1394,7 +1366,7 @@ void RegisterUILuaAPI(kaguya::State& lua)
     RegisterWindow(lua);
     RegisterView3D(lua);
 
-    lua["kui"] = GetUI();
-    lua["KGetUI"] = GetUI;
+    lua["kui"] = KGetSubsystem<UI>();
+    lua["KGetUI"] = KGetSubsystem<UI>;
 }
 }

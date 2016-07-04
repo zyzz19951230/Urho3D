@@ -34,8 +34,6 @@
 namespace Urho3D
 {
 
-extern Context* globalContext;
-
 static Database* GetDataBase()
 {
     return globalContext->GetSubsystem<Database>();
@@ -49,8 +47,7 @@ static void RegisterDatabase(kaguya::State& lua)
     lua["KDBAPI_SQLITE"] = DBAPI_SQLITE;
     lua["KDBAPI_ODBC"] = DBAPI_ODBC;
 
-    // GC is disable for subsystem object
-    lua["KDatabase"].setClass(UserdataMetatable<Database, Object>(false)
+    lua["KDatabase"].setClass(UserdataMetatable<Database, Object>()
 
         .addStaticFunction("GetAPI", &Database::GetAPI)
 

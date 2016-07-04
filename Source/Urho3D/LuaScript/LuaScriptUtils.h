@@ -7,18 +7,70 @@
 
 namespace kaguya
 {
-	// Urho3D::SharedPtr<T>
-	template<typename T> struct lua_type_traits<Urho3D::SharedPtr<T>>
-	{
-		typedef const Urho3D::SharedPtr<T>& push_type;
+	template<class T>
+    struct Urho3DSharedPtrWrapper : ObjectWrapperBase
+    {
+        Urho3DSharedPtrWrapper(T* ptr) :object_(ptr)
+        {
+            if (object_)
+            {
+                object_->AddRef();
+            }
+        }
+        
+        ~Urho3DSharedPtrWrapper()
+        {
+            if (object_)
+            {
+                object_->ReleaseRef();
+            }
+        }
+        
+        virtual const std::type_info& type()
+        {
+            return metatableType<T>();
+        }
 
-		static int push(lua_State* l, push_type p)
-		{
-			T* o = p;
-			o->AddRef();
-			return util::push_args(l, o);
-		}
-	};
+        virtual void* get()
+        {
+            if (traits::is_const<T>::value)
+            {
+                return 0;
+            }
+            return const_cast<void*>(static_cast<const void*>(object_));
+        }
+
+        virtual const void* cget()
+        {
+            return object_;
+        }
+
+    private:
+        T* object_;
+    };
+
+    // Urho3D::SharedPtr<T>
+    template<typename T> struct lua_type_traits<Urho3D::SharedPtr<T>>
+    {
+        typedef const Urho3D::SharedPtr<T>& push_type;
+
+        static int push(lua_State* l, push_type p)
+        {
+            if (!p)
+            {
+                lua_pushnil(l);
+            }
+            else
+            {
+                typedef Urho3DSharedPtrWrapper<T> wrapper_type;
+                void *storage = lua_newuserdata(l, sizeof(wrapper_type));
+                new(storage) wrapper_type(p);
+                class_userdata::setmetatable<T>(l);
+            }
+
+            return 1;
+        }
+    };
 
 	// Urho3D::String
 	template<> struct lua_type_traits<Urho3D::String>
@@ -65,9 +117,8 @@ namespace Urho3D
 	}
 
     template<typename T>
-    void KReleaseObject(T* t)
+    SharedPtr<T> KGetSubsystem()
     {
-        if (t)
-            t->ReleaseRef();
+        return SharedPtr<T>(globalContext->GetSubsystem<T>());
     }
 }

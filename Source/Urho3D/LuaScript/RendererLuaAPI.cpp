@@ -26,18 +26,6 @@
 
 namespace Urho3D
 {
-extern Context* globalContext;
-
-static Graphics* GetGraphics()
-{
-    return globalContext->GetSubsystem<Graphics>();
-}
-
-static Renderer* GetRenderer()
-{
-    return globalContext->GetSubsystem<Renderer>();
-}
-
 
 static void RegisterCamera(kaguya::State& lua)
 {
@@ -52,10 +40,9 @@ static void RegisterCamera(kaguya::State& lua)
     lua["KVO_DISABLE_SHADOWS"] = VO_DISABLE_SHADOWS;
     lua["KVO_DISABLE_OCCLUSION"] = VO_DISABLE_OCCLUSION;
 
-    lua["KCamera"].setClass(UserdataMetatable<Camera, Component>(false)
+    lua["KCamera"].setClass(UserdataMetatable<Camera, Component>()
         .addStaticFunction("new", &KCreateObject<Camera>)
-        .addStaticFunction("__gc", &KReleaseObject<Camera>)
-
+        
         .addFunction("SetNearClip", &Camera::SetNearClip)
         .addFunction("SetFarClip", &Camera::SetFarClip)
         .addFunction("SetFov", &Camera::SetFov)
@@ -154,10 +141,9 @@ static void RegisterDebugRenderer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KDebugRenderer"].setClass(UserdataMetatable<DebugRenderer, Component>(false)
+    lua["KDebugRenderer"].setClass(UserdataMetatable<DebugRenderer, Component>()
         .addStaticFunction("new", &KCreateObject<DebugRenderer>)
-        .addStaticFunction("__gc", &KReleaseObject<DebugRenderer>)
-
+        
         .addFunction("SetView", &DebugRenderer::SetView)
 
         .addOverloadedFunctions("AddLine",
@@ -201,10 +187,9 @@ static void RegisterGeometry(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KGeometry"].setClass(UserdataMetatable<Geometry, Object>(false)
+    lua["KGeometry"].setClass(UserdataMetatable<Geometry, Object>()
         .addStaticFunction("new", &KCreateObject<Geometry>)
-        .addStaticFunction("__gc", &KReleaseObject<Geometry>)
-
+        
         .addFunction("SetNumVertexBuffers", &Geometry::SetNumVertexBuffers)
         .addFunction("SetVertexBuffer", &Geometry::SetVertexBuffer)
         .addFunction("SetIndexBuffer", &Geometry::SetIndexBuffer)
@@ -248,7 +233,7 @@ static void RegisterGraphics(kaguya::State& lua)
     using namespace kaguya;
 
     // GC is disable for subsystem object
-    lua["KGraphics"].setClass(UserdataMetatable<Graphics, Object>(false)
+    lua["KGraphics"].setClass(UserdataMetatable<Graphics, Object>()
 
         .addFunction("SetExternalWindow", &Graphics::SetExternalWindow)
         .addFunction("SetWindowIcon", &Graphics::SetWindowIcon)
@@ -713,10 +698,9 @@ static void RegisterIndexBuffer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KIndexBuffer"].setClass(UserdataMetatable<IndexBuffer, Object>(false)
+    lua["KIndexBuffer"].setClass(UserdataMetatable<IndexBuffer, Object>()
         .addStaticFunction("new", &KCreateObject<IndexBuffer>)
-        .addStaticFunction("__gc", &KReleaseObject<IndexBuffer>)
-
+        
         .addFunction("SetShadowed", &IndexBuffer::SetShadowed)
         .addFunction("SetSize", &IndexBuffer::SetSize)
         .addFunction("SetDataRange", &IndexBuffer::SetDataRange)
@@ -745,10 +729,9 @@ static void RegisterMaterial(kaguya::State& lua)
 
     lua["KDEFAULT_RENDER_ORDER"] = DEFAULT_RENDER_ORDER;
 
-    lua["KMaterial"].setClass(UserdataMetatable<Material, Resource>(false)
+    lua["KMaterial"].setClass(UserdataMetatable<Material, Resource>()
         .addStaticFunction("new", &KCreateObject<Material>)
-        .addStaticFunction("__gc", &KReleaseObject<Material>)
-
+        
         .addFunction("SetNumTechniques", &Material::SetNumTechniques)
         .addFunction("SetTechnique", &Material::SetTechnique)
         .addFunction("SetShaderParameter", &Material::SetShaderParameter)
@@ -819,7 +802,7 @@ static void RegisterRenderer(kaguya::State& lua)
     using namespace kaguya;
 
     // GC is disable for subsystem object
-    lua["KRenderer"].setClass(UserdataMetatable<Renderer, Object>(false)
+    lua["KRenderer"].setClass(UserdataMetatable<Renderer, Object>()
 
         .addFunction("SetNumViewports", &Renderer::SetNumViewports)
         .addFunction("SetViewport", &Renderer::SetViewport)
@@ -1089,10 +1072,9 @@ static void RegisterRenderSurface(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KRenderSurface"].setClass(UserdataMetatable<RenderSurface, RefCounted>(false)
+    lua["KRenderSurface"].setClass(UserdataMetatable<RenderSurface, RefCounted>()
         .setConstructors<RenderSurface(Texture*)>()
-        .addStaticFunction("__gc", &KReleaseObject<RenderSurface>)
-
+        
         .addFunction("SetNumViewports", &RenderSurface::SetNumViewports)
         .addFunction("SetViewport", &RenderSurface::SetViewport)
         .addFunction("SetUpdateMode", &RenderSurface::SetUpdateMode)
@@ -1128,10 +1110,9 @@ static void RegisterShader(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KShader"].setClass(UserdataMetatable<Shader, Resource>(false)
+    lua["KShader"].setClass(UserdataMetatable<Shader, Resource>()
         .addStaticFunction("new", &KCreateObject<Shader>)
-        .addStaticFunction("__gc", &KReleaseObject<Shader>)
-
+        
         // .addFunction("GetVariation", &Shader::GetVariation)
         // .addFunction("GetSourceCode", &Shader::GetSourceCode)
         // .addFunction("GetTimeStamp", &Shader::GetTimeStamp)
@@ -1175,10 +1156,9 @@ static void RegisterTechnique(kaguya::State& lua)
     lua["KLIGHTING_PERVERTEX"] = LIGHTING_PERVERTEX;
     lua["KLIGHTING_PERPIXEL"] = LIGHTING_PERPIXEL;
 
-    lua["KPass"].setClass(UserdataMetatable<Pass, RefCounted>(false)
+    lua["KPass"].setClass(UserdataMetatable<Pass, RefCounted>()
         .setConstructors<Pass(const String&)>()
-        .addStaticFunction("__gc", &KReleaseObject<Pass>)
-
+        
         .addFunction("SetBlendMode", &Pass::SetBlendMode)
         .addFunction("SetCullMode", &Pass::SetCullMode)
         .addFunction("SetDepthTestMode", &Pass::SetDepthTestMode)
@@ -1228,10 +1208,9 @@ static void RegisterTechnique(kaguya::State& lua)
         .addProperty("isDesktop", &Pass::SetIsDesktop)
     );
 
-    lua["KTechnique"].setClass(UserdataMetatable<Technique, Resource>(false)
+    lua["KTechnique"].setClass(UserdataMetatable<Technique, Resource>()
         .addStaticFunction("new", &KCreateObject<Technique>)
-        .addStaticFunction("__gc", &KReleaseObject<Technique>)
-
+        
         .addFunction("BeginLoad", &Technique::BeginLoad)
         .addFunction("SetIsDesktop", &Technique::SetIsDesktop)
         .addFunction("CreatePass", &Technique::CreatePass)
@@ -1284,10 +1263,9 @@ static void RegisterTexture(kaguya::State& lua)
 
     lua["KMAX_TEXTURE_QUALITY_LEVELS"] = MAX_TEXTURE_QUALITY_LEVELS;
 
-    lua["KTexture"].setClass(UserdataMetatable<Texture, Resource>(false)
+    lua["KTexture"].setClass(UserdataMetatable<Texture, Resource>()
         .addStaticFunction("new", &KCreateObject<Texture>)
-        .addStaticFunction("__gc", &KReleaseObject<Texture>)
-
+        
         .addFunction("SetNumLevels", &Texture::SetNumLevels)
         .addFunction("SetFilterMode", &Texture::SetFilterMode)
         .addFunction("SetAddressMode", &Texture::SetAddressMode)
@@ -1347,10 +1325,9 @@ static void RegisterTexture2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KTexture2D"].setClass(UserdataMetatable<Texture2D, Texture>(false)
+    lua["KTexture2D"].setClass(UserdataMetatable<Texture2D, Texture>()
         .addStaticFunction("new", &KCreateObject<Texture2D>)
-        .addStaticFunction("__gc", &KReleaseObject<Texture2D>)
-
+        
         .addFunction("SetSize", &Texture2D::SetSize)
         .addFunction("SetData", static_cast<bool(Texture2D::*)(Image*, bool)>(&Texture2D::SetData))
     );
@@ -1360,10 +1337,9 @@ static void RegisterTexture2DArray(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KTexture2DArray"].setClass(UserdataMetatable<Texture2DArray, Texture>(false)
+    lua["KTexture2DArray"].setClass(UserdataMetatable<Texture2DArray, Texture>()
         .addStaticFunction("new", &KCreateObject<Texture2DArray>)
-        .addStaticFunction("__gc", &KReleaseObject<Texture2DArray>)
-
+        
         .addFunction("SetLayers", &Texture2DArray::SetLayers)
         .addFunction("SetSize", &Texture2DArray::SetSize)
         .addFunction("SetData", static_cast<bool(Texture2DArray::*)(unsigned, Image*, bool)>(&Texture2DArray::SetData))
@@ -1378,10 +1354,9 @@ static void RegisterTexture3D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KTexture3D"].setClass(UserdataMetatable<Texture3D, Texture>(false)
+    lua["KTexture3D"].setClass(UserdataMetatable<Texture3D, Texture>()
         .addStaticFunction("new", &KCreateObject<Texture3D>)
-        .addStaticFunction("__gc", &KReleaseObject<Texture3D>)
-
+        
         .addFunction("SetSize", &Texture3D::SetSize)
         .addFunction("SetData", static_cast<bool(Texture3D::*)(Image*, bool)>(&Texture3D::SetData))
     );
@@ -1391,10 +1366,9 @@ static void RegisterTextureCube(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KTextureCube"].setClass(UserdataMetatable<TextureCube, Texture>(false)
+    lua["KTextureCube"].setClass(UserdataMetatable<TextureCube, Texture>()
         .addStaticFunction("new", &KCreateObject<TextureCube>)
-        .addStaticFunction("__gc", &KReleaseObject<TextureCube>)
-
+        
         .addFunction("SetSize", &TextureCube::SetSize)
         .addFunction("SetData", static_cast<bool(TextureCube::*)(CubeMapFace, Image*, bool)>(&TextureCube::SetData))
 
@@ -1432,10 +1406,9 @@ static void RegisterViewport(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KViewport"].setClass(UserdataMetatable<Viewport, Object>(false)
+    lua["KViewport"].setClass(UserdataMetatable<Viewport, Object>()
         .addStaticFunction("new", &KCreateObject<Viewport>)
-        .addStaticFunction("__gc", &KReleaseObject<Viewport>)
-
+        
         .addFunction("SetScene", &Viewport::SetScene)
         .addFunction("SetCamera", &Viewport::SetCamera)
         .addFunction("SetRect", &Viewport::SetRect)
@@ -1492,10 +1465,10 @@ void RegisterRendererLuaAPI(kaguya::State& lua)
     RegisterVertexBuffer(lua);
     RegisterViewport(lua);
 
-    lua["kgraphics"] = GetGraphics();
-    lua["KGetGraphics"] = GetGraphics;
+    lua["kgraphics"] = KGetSubsystem<Graphics>();
+    lua["KGetGraphics"] = KGetSubsystem<Graphics>();
 
-    lua["krenderer"] = GetRenderer();
-    lua["KGetRenderer"] = GetRenderer;
+    lua["krenderer"] = KGetSubsystem<Renderer>();
+    lua["KGetRenderer"] = KGetSubsystem<Renderer>;
 }
 }

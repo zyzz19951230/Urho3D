@@ -11,31 +11,12 @@
 namespace Urho3D
 {
 
-extern Context* globalContext;
-
-static Engine* GetEngine()
-{
-    return globalContext->GetSubsystem<Engine>();
-}
-
-static Console* GetConsole()
-{
-    // Create console automaticlly
-    return GetEngine()->CreateConsole();
-}
-
-static DebugHud* GetDebugHud()
-{
-    // Create debug hud automaticlly
-    return GetEngine()->CreateDebugHud();
-}
-
 static void RegisterConsole(kaguya::State& lua)
 {
     using namespace kaguya;
 
     // GC is disable for subsystem object
-    lua["KConsole"].setClass(UserdataMetatable<Console, Object>(false)
+    lua["KConsole"].setClass(UserdataMetatable<Console, Object>()
 
         .addFunction("SetDefaultStyle", &Console::SetDefaultStyle)
         .addFunction("SetVisible", &Console::SetVisible)
@@ -94,7 +75,7 @@ static void RegisterDebugHud(kaguya::State& lua)
     lua["KDEBUGHUD_SHOW_EVENTPROFILER"] = DEBUGHUD_SHOW_EVENTPROFILER;
 
     // GC is disable for subsystem object
-    lua["KDebugHud"].setClass(UserdataMetatable<DebugHud, Object>(false)
+    lua["KDebugHud"].setClass(UserdataMetatable<DebugHud, Object>()
 
         .addFunction("SetDefaultStyle", &DebugHud::SetDefaultStyle)
         .addFunction("SetMode", &DebugHud::SetMode)
@@ -139,7 +120,7 @@ static void RegisterEngine(kaguya::State& lua)
     using namespace kaguya;
 
     // GC is disable for subsystem object
-    lua["KEngine"].setClass(UserdataMetatable<Engine, Object>(false)
+    lua["KEngine"].setClass(UserdataMetatable<Engine, Object>()
 
         .addFunction("RunFrame", &Engine::RunFrame)
         .addFunction("CreateConsole", &Engine::CreateConsole)
@@ -199,13 +180,10 @@ void RegisterEngineLuaAPI(kaguya::State& lua)
     RegisterEngine(lua);
     RegisterEngineEvents(lua);
 
-    lua["kengine"] = GetEngine();
-    lua["KGetEngine"] = GetEngine;
+    lua["kengine"] = KGetSubsystem<Engine>();
+    lua["KGetEngine"] = KGetSubsystem<Engine>;
 
-    // lua["kconsole"] = GetConsole();
-    lua["KGetConsole"] = GetConsole;
-
-    // lua["kdebugHud"] = GetDebugHud();
-    lua["GetDebugHud"] = GetDebugHud;
+    lua["KGetConsole"] = KGetSubsystem<Console>;
+    lua["GetDebugHud"] = KGetSubsystem<DebugHud>;
 }
 }

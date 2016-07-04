@@ -13,13 +13,6 @@
 namespace Urho3D
 {
 
-extern Context* globalContext;
-
-static Network* GetNetwork()
-{
-    return globalContext->GetSubsystem<Network>();
-}
-
 static void RegisterConnection(kaguya::State& lua)
 {
 	using namespace kaguya;
@@ -29,7 +22,7 @@ static void RegisterConnection(kaguya::State& lua)
 	lua["KOPSM_POSITION"] = OPSM_POSITION;
 	lua["KOPSM_POSITION_ROTATION"] = OPSM_POSITION_ROTATION;
 
-	lua["KConnection"].setClass(UserdataMetatable<Connection, Object>(false)
+	lua["KConnection"].setClass(UserdataMetatable<Connection, Object>()
 
 		.addOverloadedFunctions("SendMessage",
 			static_cast<void(Connection::*)(int, bool, bool, const VectorBuffer&, unsigned)>(&Connection::SendMessage),
@@ -144,7 +137,7 @@ static void RegisterNetwork(kaguya::State& lua)
 	using namespace kaguya;
 
     // GC is disable for subsystem object
-	lua["KNetwork"].setClass(UserdataMetatable<Network, Object>(false)
+	lua["KNetwork"].setClass(UserdataMetatable<Network, Object>()
 
 		.addFunction("Connect", &Network::Connect)
 		.addFunction("Disconnect", &Network::Disconnect)
@@ -214,10 +207,9 @@ static void RegisterNetworkPriority(kaguya::State& lua)
 {
 	using namespace kaguya;
 
-	lua["KNetworkPriority"].setClass(UserdataMetatable<NetworkPriority, Component>(false)
+	lua["KNetworkPriority"].setClass(UserdataMetatable<NetworkPriority, Component>()
 		.addStaticFunction("new", &KCreateObject<NetworkPriority>)
-		.addStaticFunction("__gc", &KReleaseObject<NetworkPriority>)
-
+		
 		.addFunction("SetBasePriority", &NetworkPriority::SetBasePriority)
 		.addFunction("SetDistanceFactor", &NetworkPriority::SetDistanceFactor)
 		.addFunction("SetMinPriority", &NetworkPriority::SetMinPriority)
@@ -270,7 +262,7 @@ void RegisterNetworkLuaAPI(kaguya::State& lua)
 	RegisterNetworkPriority(lua);
 	RegisterProtocol(lua);
 
-    lua["knetwork"] = GetNetwork();
-    lua["KGetNetwork"] = GetNetwork;
+    lua["knetwork"] = KGetSubsystem<Network>();
+    lua["KGetNetwork"] = KGetSubsystem<Network>;
 }
 }
