@@ -363,6 +363,16 @@ static void RegisterResource(kaguya::State& lua)
         );
 }
 
+static SharedPtr<Resource> ResourceCacheGetResource(ResourceCache* cache, const char* type, const char* name, bool sendEventOnFailure = true)
+{
+    return SharedPtr<Resource>(cache->GetResource(StringHash(type), String(name), sendEventOnFailure));
+}
+
+static SharedPtr<Resource> ResourceCacheGetTempResource(ResourceCache* cache, const char* type, const char* name, bool sendEventOnFailure = true)
+{
+    return SharedPtr<Resource>(cache->GetTempResource(StringHash(type), String(name), sendEventOnFailure));
+}
+
 static void RegisterResourceCache(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -407,8 +417,8 @@ static void RegisterResourceCache(kaguya::State& lua)
         .addFunction("RemoveResourceRouter", &ResourceCache::RemoveResourceRouter)
         .addFunction("GetFile", &ResourceCache::GetFile)
 
-        .addFunction("GetResource", static_cast<Resource*(ResourceCache::*)(StringHash, const String&, bool)>(&ResourceCache::GetResource))
-        .addFunction("GetTempResource", static_cast<SharedPtr<Resource>(ResourceCache::*)(StringHash, const String&, bool)>(&ResourceCache::GetTempResource))
+        .addStaticFunction("GetResource", &ResourceCacheGetResource)
+        .addStaticFunction("GetTempResource", &ResourceCacheGetTempResource)
 
         //.addFunction("BackgroundLoadResource", &ResourceCache::BackgroundLoadResource)
         .addFunction("GetNumBackgroundLoadResources", &ResourceCache::GetNumBackgroundLoadResources)

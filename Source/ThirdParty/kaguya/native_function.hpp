@@ -14,6 +14,9 @@
 #include "kaguya/lua_ref.hpp"
 
 
+#ifdef max
+#undef max
+#endif
 
 namespace kaguya
 {
@@ -257,6 +260,7 @@ namespace kaguya
 			return VariadicArgType(l, index);
 		}
 	};
+
 
 	namespace nativefunction
 	{

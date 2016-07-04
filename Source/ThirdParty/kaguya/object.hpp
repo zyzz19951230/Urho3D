@@ -598,7 +598,7 @@ namespace kaguya
 			return type != LUA_TNIL;
 		}
         // Add by Aster Jian for Urho3D.
-        bool get_metatable(lua_State* l, const std::type_info& type_info)
+        inline bool get_metatable(lua_State* l, const std::type_info& type_info)
         {
             int ttype = lua_rawgetp_rtype(l, LUA_REGISTRYINDEX, metatable_type_table_key());//get metatable registry table
             if (ttype != LUA_TTABLE)
@@ -664,7 +664,7 @@ namespace kaguya
 			lua_setmetatable(l, -2);
 		}
         // Add by Aster Jian for Urho3D.
-        void setmetatable(lua_State* l, const std::type_info& type_info)
+        inline void setmetatable(lua_State* l, const std::type_info& type_info)
         {
             //if not available metatable, set unknown class metatable
             if (!get_metatable(l, type_info))

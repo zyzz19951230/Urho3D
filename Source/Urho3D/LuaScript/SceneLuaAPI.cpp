@@ -53,7 +53,7 @@ static void RegisterAnimatable(kaguya::State& lua)
         .addProperty("animationEnabled", &Animatable::GetAnimationEnabled, &Animatable::SetAnimationEnabled)
         .addProperty("objectAnimation", &Animatable::GetObjectAnimation, &Animatable::SetObjectAnimation)
         .addProperty("animationTime", &Animatable::SetAnimationTime)
-        );
+    );
 }
 
 static void RegisterAnimationDefs(kaguya::State& lua)
@@ -73,7 +73,7 @@ static void RegisterComponent(kaguya::State& lua)
 
     lua["KComponent"].setClass(UserdataMetatable<Component, Animatable>()
         .addStaticFunction("new", &KCreateObject<Component>)
-        
+
         .addFunction("DrawDebugGeometry", &Component::DrawDebugGeometry)
 
         .addFunction("SetEnabled", &Component::SetEnabled)
@@ -97,7 +97,7 @@ static void RegisterComponent(kaguya::State& lua)
         .addProperty("scene", &Component::GetScene)
         .addProperty("enabled", &Component::IsEnabled, &Component::SetEnabled)
         .addProperty("enabledEffective", &Component::IsEnabledEffective)
-        );
+    );
 }
 
 static void RegisterLogicComponent(kaguya::State& lua)
@@ -111,289 +111,297 @@ static void RegisterLogicComponent(kaguya::State& lua)
 
     lua["KLogicComponent"].setClass(UserdataMetatable<LogicComponent, Component>()
         .addStaticFunction("new", &KCreateObject<LogicComponent>)
-        
+
         .addFunction("SetUpdateEventMask", &LogicComponent::SetUpdateEventMask)
         .addFunction("GetUpdateEventMask", &LogicComponent::GetUpdateEventMask)
         .addFunction("IsDelayedStartCalled", &LogicComponent::IsDelayedStartCalled)
 
         .addProperty("updateEventMask", &LogicComponent::GetUpdateEventMask, &LogicComponent::SetUpdateEventMask)
         .addProperty("delayedStartCalled", &LogicComponent::IsDelayedStartCalled)
-        );
+    );
 }
 
- static void RegisterNode(kaguya::State& lua)
- {
-     using namespace kaguya;
+static SharedPtr<Component> NodeCreateComponent(Node* node, const char* type, CreateMode mode = REPLICATED, unsigned id = 0)
+{
+    return SharedPtr<Component>(node->CreateComponent(StringHash(type), mode, id));
+}
 
-     // enum CreateMode;
-     lua["KREPLICATED"] = REPLICATED;
-     lua["KLOCAL"] = LOCAL;
+static SharedPtr<Component> NodeGetOrCreateComponent(Node* node, const char* type, CreateMode mode = REPLICATED, unsigned id = 0)
+{
+    return SharedPtr<Component>(node->GetOrCreateComponent(StringHash(type), mode, id));
+}
 
-     // enum TransformSpace;
-     lua["KTS_LOCAL"] = TS_LOCAL;
-     lua["KTS_PARENT"] = TS_PARENT;
-     lua["KTS_WORLD"] = TS_WORLD;
+static void RegisterNode(kaguya::State& lua)
+{
+    using namespace kaguya;
 
-     lua["KNode"].setClass(UserdataMetatable<Node, Animatable>()
-         .addStaticFunction("new", &KCreateObject<Node>)
-         
-         .addFunction("SetName", &Node::SetName)
-         .addFunction("SetTags", &Node::SetTags)
-         .addFunction("AddTag", &Node::AddTag)
+    // enum CreateMode;
+    lua["KREPLICATED"] = REPLICATED;
+    lua["KLOCAL"] = LOCAL;
 
-         .addOverloadedFunctions("AddTags",
-             static_cast<void(Node::*)(const String&, char)>(&Node::AddTags),
-             static_cast<void(Node::*)(const StringVector&)>(&Node::AddTags))
+    // enum TransformSpace;
+    lua["KTS_LOCAL"] = TS_LOCAL;
+    lua["KTS_PARENT"] = TS_PARENT;
+    lua["KTS_WORLD"] = TS_WORLD;
 
-         .addFunction("RemoveTag", &Node::RemoveTag)
-         .addFunction("RemoveAllTags", &Node::RemoveAllTags)
-         .addFunction("SetPosition", &Node::SetPosition)
+    lua["KNode"].setClass(UserdataMetatable<Node, Animatable>()
+        .addStaticFunction("new", &KCreateObject<Node>)
 
-         .addOverloadedFunctions("SetPosition2D",
-             static_cast<void(Node::*)(const Vector2&)>(&Node::SetPosition2D),
-             static_cast<void(Node::*)(float, float)>(&Node::SetPosition2D))
+        .addFunction("SetName", &Node::SetName)
+        .addFunction("SetTags", &Node::SetTags)
+        .addFunction("AddTag", &Node::AddTag)
 
-         .addFunction("SetRotation", &Node::SetRotation)
-         .addFunction("SetRotation2D", &Node::SetRotation2D)
-         .addFunction("SetDirection", &Node::SetDirection)
+        .addOverloadedFunctions("AddTags",
+            static_cast<void(Node::*)(const String&, char)>(&Node::AddTags),
+            static_cast<void(Node::*)(const StringVector&)>(&Node::AddTags))
 
-         .addOverloadedFunctions("SetScale",
-             static_cast<void(Node::*)(float)>(&Node::SetScale),
-             static_cast<void(Node::*)(const Vector3&)>(&Node::SetScale))
+        .addFunction("RemoveTag", &Node::RemoveTag)
+        .addFunction("RemoveAllTags", &Node::RemoveAllTags)
+        .addFunction("SetPosition", &Node::SetPosition)
 
-         .addOverloadedFunctions("SetScale2D",
-             static_cast<void(Node::*)(const Vector2&)>(&Node::SetScale2D),
-             static_cast<void(Node::*)(float, float)>(&Node::SetScale2D))
+        .addOverloadedFunctions("SetPosition2D",
+            static_cast<void(Node::*)(const Vector2&)>(&Node::SetPosition2D),
+            static_cast<void(Node::*)(float, float)>(&Node::SetPosition2D))
 
-         .addOverloadedFunctions("SetTransform",
-             static_cast<void(Node::*)(const Vector3&, const Quaternion&)>(&Node::SetTransform),
-             static_cast<void(Node::*)(const Vector3&, const Quaternion&, float)>(&Node::SetTransform),
-             static_cast<void(Node::*)(const Vector3&, const Quaternion&, const Vector3&)>(&Node::SetTransform))
+        .addFunction("SetRotation", &Node::SetRotation)
+        .addFunction("SetRotation2D", &Node::SetRotation2D)
+        .addFunction("SetDirection", &Node::SetDirection)
 
-         .addOverloadedFunctions("SetTransform2D",
-             static_cast<void(Node::*)(const Vector2&, float)>(&Node::SetTransform2D),
-             static_cast<void(Node::*)(const Vector2&, float, float)>(&Node::SetTransform2D),
-             static_cast<void(Node::*)(const Vector2&, float, const Vector2&)>(&Node::SetTransform2D))
+        .addOverloadedFunctions("SetScale",
+            static_cast<void(Node::*)(float)>(&Node::SetScale),
+            static_cast<void(Node::*)(const Vector3&)>(&Node::SetScale))
 
-         .addFunction("SetWorldPosition", &Node::SetWorldPosition)
+        .addOverloadedFunctions("SetScale2D",
+            static_cast<void(Node::*)(const Vector2&)>(&Node::SetScale2D),
+            static_cast<void(Node::*)(float, float)>(&Node::SetScale2D))
 
-         .addOverloadedFunctions("SetWorldPosition2D",
-             static_cast<void(Node::*)(const Vector2&)>(&Node::SetWorldPosition2D),
-             static_cast<void(Node::*)(float, float)>(&Node::SetWorldPosition2D))
+        .addOverloadedFunctions("SetTransform",
+            static_cast<void(Node::*)(const Vector3&, const Quaternion&)>(&Node::SetTransform),
+            static_cast<void(Node::*)(const Vector3&, const Quaternion&, float)>(&Node::SetTransform),
+            static_cast<void(Node::*)(const Vector3&, const Quaternion&, const Vector3&)>(&Node::SetTransform))
 
-         .addFunction("SetWorldRotation", &Node::SetWorldRotation)
-         .addFunction("SetWorldRotation2D", &Node::SetWorldRotation2D)
-         .addFunction("SetWorldDirection", &Node::SetWorldDirection)
+        .addOverloadedFunctions("SetTransform2D",
+            static_cast<void(Node::*)(const Vector2&, float)>(&Node::SetTransform2D),
+            static_cast<void(Node::*)(const Vector2&, float, float)>(&Node::SetTransform2D),
+            static_cast<void(Node::*)(const Vector2&, float, const Vector2&)>(&Node::SetTransform2D))
 
-         .addOverloadedFunctions("SetWorldScale",
-             static_cast<void(Node::*)(float)>(&Node::SetWorldScale),
-             static_cast<void(Node::*)(const Vector3&)>(&Node::SetWorldScale))
+        .addFunction("SetWorldPosition", &Node::SetWorldPosition)
 
-         .addOverloadedFunctions("SetWorldScale2D",
-             static_cast<void(Node::*)(const Vector2&)>(&Node::SetWorldScale2D),
-             static_cast<void(Node::*)(float, float)>(&Node::SetWorldScale2D))
+        .addOverloadedFunctions("SetWorldPosition2D",
+            static_cast<void(Node::*)(const Vector2&)>(&Node::SetWorldPosition2D),
+            static_cast<void(Node::*)(float, float)>(&Node::SetWorldPosition2D))
 
-         .addOverloadedFunctions("SetWorldTransform",
-             static_cast<void(Node::*)(const Vector3&, const Quaternion&)>(&Node::SetWorldTransform),
-             static_cast<void(Node::*)(const Vector3&, const Quaternion&, float)>(&Node::SetWorldTransform),
-             static_cast<void(Node::*)(const Vector3&, const Quaternion&, const Vector3&)>(&Node::SetWorldTransform))
+        .addFunction("SetWorldRotation", &Node::SetWorldRotation)
+        .addFunction("SetWorldRotation2D", &Node::SetWorldRotation2D)
+        .addFunction("SetWorldDirection", &Node::SetWorldDirection)
 
-         .addOverloadedFunctions("SetWorldTransform2D",
-             static_cast<void(Node::*)(const Vector2&, float)>(&Node::SetWorldTransform2D),
-             static_cast<void(Node::*)(const Vector2&, float, float)>(&Node::SetWorldTransform2D),
-             static_cast<void(Node::*)(const Vector2&, float, const Vector2&)>(&Node::SetWorldTransform2D))
+        .addOverloadedFunctions("SetWorldScale",
+            static_cast<void(Node::*)(float)>(&Node::SetWorldScale),
+            static_cast<void(Node::*)(const Vector3&)>(&Node::SetWorldScale))
 
-         .addFunction("Translate", &Node::Translate)
-         .addFunction("Translate2D", &Node::Translate2D)
-         .addFunction("Rotate", &Node::Rotate)
-         .addFunction("Rotate2D", &Node::Rotate2D)
-         .addFunction("RotateAround", &Node::RotateAround)
-         .addFunction("RotateAround2D", &Node::RotateAround2D)
-         .addFunction("Pitch", &Node::Pitch)
-         .addFunction("Yaw", &Node::Yaw)
-         .addFunction("Roll", &Node::Roll)
-         .addFunction("LookAt", &Node::LookAt)
+        .addOverloadedFunctions("SetWorldScale2D",
+            static_cast<void(Node::*)(const Vector2&)>(&Node::SetWorldScale2D),
+            static_cast<void(Node::*)(float, float)>(&Node::SetWorldScale2D))
 
-         .addOverloadedFunctions("Scale",
-             static_cast<void(Node::*)(float)>(&Node::Scale),
-             static_cast<void(Node::*)(const Vector3&)>(&Node::Scale))
+        .addOverloadedFunctions("SetWorldTransform",
+            static_cast<void(Node::*)(const Vector3&, const Quaternion&)>(&Node::SetWorldTransform),
+            static_cast<void(Node::*)(const Vector3&, const Quaternion&, float)>(&Node::SetWorldTransform),
+            static_cast<void(Node::*)(const Vector3&, const Quaternion&, const Vector3&)>(&Node::SetWorldTransform))
 
-         .addFunction("Scale2D", &Node::Scale2D)
+        .addOverloadedFunctions("SetWorldTransform2D",
+            static_cast<void(Node::*)(const Vector2&, float)>(&Node::SetWorldTransform2D),
+            static_cast<void(Node::*)(const Vector2&, float, float)>(&Node::SetWorldTransform2D),
+            static_cast<void(Node::*)(const Vector2&, float, const Vector2&)>(&Node::SetWorldTransform2D))
 
-         .addFunction("SetEnabled", static_cast<void(Node::*)(bool)>(&Node::SetEnabled))
+        .addFunction("Translate", &Node::Translate)
+        .addFunction("Translate2D", &Node::Translate2D)
+        .addFunction("Rotate", &Node::Rotate)
+        .addFunction("Rotate2D", &Node::Rotate2D)
+        .addFunction("RotateAround", &Node::RotateAround)
+        .addFunction("RotateAround2D", &Node::RotateAround2D)
+        .addFunction("Pitch", &Node::Pitch)
+        .addFunction("Yaw", &Node::Yaw)
+        .addFunction("Roll", &Node::Roll)
+        .addFunction("LookAt", &Node::LookAt)
 
-         .addFunction("SetDeepEnabled", &Node::SetDeepEnabled)
-         .addFunction("ResetDeepEnabled", &Node::ResetDeepEnabled)
-         .addFunction("SetEnabledRecursive", &Node::SetEnabledRecursive)
-         .addFunction("SetOwner", &Node::SetOwner)
-         .addFunction("MarkDirty", &Node::MarkDirty)
+        .addOverloadedFunctions("Scale",
+            static_cast<void(Node::*)(float)>(&Node::Scale),
+            static_cast<void(Node::*)(const Vector3&)>(&Node::Scale))
 
-         .addOverloadedFunctions("CreateChild",
-             static_cast<Node*(Node::*)(const String&, CreateMode, unsigned)>(&Node::CreateChild),
-             static_cast<Node*(Node::*)(unsigned, CreateMode)>(&Node::CreateChild))
+        .addFunction("Scale2D", &Node::Scale2D)
 
-         .addFunction("AddChild", &Node::AddChild)
-         .addFunction("RemoveChild", static_cast<void(Node::*)(Node*)>(&Node::RemoveChild))
-         .addFunction("RemoveAllChildren", &Node::RemoveAllChildren)
-         .addFunction("RemoveChildren", &Node::RemoveChildren)
-         /*
-         .addFunction("CreateComponent", &Node::CreateComponent)
-         .addFunction("GetOrCreateComponent", &Node::GetOrCreateComponent)
-         */
+        .addFunction("SetEnabled", static_cast<void(Node::*)(bool)>(&Node::SetEnabled))
 
-         .addOverloadedFunctions("CloneComponent",
-             static_cast<Component*(Node::*)(Component*, unsigned)>(&Node::CloneComponent),
-             static_cast<Component*(Node::*)(Component*, CreateMode, unsigned)>(&Node::CloneComponent))
+        .addFunction("SetDeepEnabled", &Node::SetDeepEnabled)
+        .addFunction("ResetDeepEnabled", &Node::ResetDeepEnabled)
+        .addFunction("SetEnabledRecursive", &Node::SetEnabledRecursive)
+        .addFunction("SetOwner", &Node::SetOwner)
+        .addFunction("MarkDirty", &Node::MarkDirty)
+
+        .addOverloadedFunctions("CreateChild",
+            static_cast<Node*(Node::*)(const String&, CreateMode, unsigned)>(&Node::CreateChild),
+            static_cast<Node*(Node::*)(unsigned, CreateMode)>(&Node::CreateChild))
+
+        .addFunction("AddChild", &Node::AddChild)
+        .addFunction("RemoveChild", static_cast<void(Node::*)(Node*)>(&Node::RemoveChild))
+        .addFunction("RemoveAllChildren", &Node::RemoveAllChildren)
+        .addFunction("RemoveChildren", &Node::RemoveChildren)
+        
+        .addStaticFunction("CreateComponent", &NodeCreateComponent)
+        .addStaticFunction("GetOrCreateComponent", &NodeGetOrCreateComponent)
+
+        .addOverloadedFunctions("CloneComponent",
+            static_cast<Component*(Node::*)(Component*, unsigned)>(&Node::CloneComponent),
+            static_cast<Component*(Node::*)(Component*, CreateMode, unsigned)>(&Node::CloneComponent))
+
+        .addOverloadedFunctions("RemoveComponent",
+            static_cast<void(Node::*)(Component*)>(&Node::RemoveComponent),
+            static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponent))
 
 
-         .addOverloadedFunctions("RemoveComponent",
-             static_cast<void(Node::*)(Component*)>(&Node::RemoveComponent),
-             static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponent))
+        .addOverloadedFunctions("RemoveComponents",
+            static_cast<void(Node::*)(bool, bool)>(&Node::RemoveComponents),
+            static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponents))
 
+        .addFunction("RemoveAllComponents", &Node::RemoveAllComponents)
+        .addFunction("Clone", &Node::Clone)
+        .addFunction("Remove", &Node::Remove)
+        .addFunction("SetParent", &Node::SetParent)
+        .addFunction("SetVar", &Node::SetVar)
+        .addFunction("AddListener", &Node::AddListener)
+        .addFunction("RemoveListener", &Node::RemoveListener)
+        .addFunction("GetID", &Node::GetID)
+        .addFunction("GetName", &Node::GetName)
+        .addFunction("GetNameHash", &Node::GetNameHash)
+        .addFunction("GetTags", &Node::GetTags)
+        .addFunction("HasTag", &Node::HasTag)
+        .addFunction("GetParent", &Node::GetParent)
+        .addFunction("GetScene", &Node::GetScene)
+        .addFunction("IsEnabled", &Node::IsEnabled)
+        .addFunction("IsEnabledSelf", &Node::IsEnabledSelf)
+        .addFunction("GetOwner", &Node::GetOwner)
+        .addFunction("GetPosition", &Node::GetPosition)
+        .addFunction("GetPosition2D", &Node::GetPosition2D)
+        .addFunction("GetRotation", &Node::GetRotation)
+        .addFunction("GetRotation2D", &Node::GetRotation2D)
+        .addFunction("GetDirection", &Node::GetDirection)
+        .addFunction("GetUp", &Node::GetUp)
+        .addFunction("GetRight", &Node::GetRight)
+        .addFunction("GetScale", &Node::GetScale)
+        .addFunction("GetScale2D", &Node::GetScale2D)
+        .addFunction("GetTransform", &Node::GetTransform)
+        .addFunction("GetWorldPosition", &Node::GetWorldPosition)
+        .addFunction("GetWorldPosition2D", &Node::GetWorldPosition2D)
+        .addFunction("GetWorldRotation", &Node::GetWorldRotation)
+        .addFunction("GetWorldRotation2D", &Node::GetWorldRotation2D)
+        .addFunction("GetWorldDirection", &Node::GetWorldDirection)
+        .addFunction("GetWorldUp", &Node::GetWorldUp)
+        .addFunction("GetWorldRight", &Node::GetWorldRight)
+        .addFunction("GetWorldScale", &Node::GetWorldScale)
+        .addFunction("GetWorldScale2D", &Node::GetWorldScale2D)
+        .addFunction("GetWorldTransform", &Node::GetWorldTransform)
 
-         .addOverloadedFunctions("RemoveComponents",
-             static_cast<void(Node::*)(bool, bool)>(&Node::RemoveComponents),
-             static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponents))
+        .addOverloadedFunctions("LocalToWorld",
+            static_cast<Vector3(Node::*)(const Vector3&) const>(&Node::LocalToWorld),
+            static_cast<Vector3(Node::*)(const Vector4&) const>(&Node::LocalToWorld))
 
-         .addFunction("RemoveAllComponents", &Node::RemoveAllComponents)
-         .addFunction("Clone", &Node::Clone)
-         .addFunction("Remove", &Node::Remove)
-         .addFunction("SetParent", &Node::SetParent)
-         .addFunction("SetVar", &Node::SetVar)
-         .addFunction("AddListener", &Node::AddListener)
-         .addFunction("RemoveListener", &Node::RemoveListener)
-         .addFunction("GetID", &Node::GetID)
-         .addFunction("GetName", &Node::GetName)
-         .addFunction("GetNameHash", &Node::GetNameHash)
-         .addFunction("GetTags", &Node::GetTags)
-         .addFunction("HasTag", &Node::HasTag)
-         .addFunction("GetParent", &Node::GetParent)
-         .addFunction("GetScene", &Node::GetScene)
-         .addFunction("IsEnabled", &Node::IsEnabled)
-         .addFunction("IsEnabledSelf", &Node::IsEnabledSelf)
-         .addFunction("GetOwner", &Node::GetOwner)
-         .addFunction("GetPosition", &Node::GetPosition)
-         .addFunction("GetPosition2D", &Node::GetPosition2D)
-         .addFunction("GetRotation", &Node::GetRotation)
-         .addFunction("GetRotation2D", &Node::GetRotation2D)
-         .addFunction("GetDirection", &Node::GetDirection)
-         .addFunction("GetUp", &Node::GetUp)
-         .addFunction("GetRight", &Node::GetRight)
-         .addFunction("GetScale", &Node::GetScale)
-         .addFunction("GetScale2D", &Node::GetScale2D)
-         .addFunction("GetTransform", &Node::GetTransform)
-         .addFunction("GetWorldPosition", &Node::GetWorldPosition)
-         .addFunction("GetWorldPosition2D", &Node::GetWorldPosition2D)
-         .addFunction("GetWorldRotation", &Node::GetWorldRotation)
-         .addFunction("GetWorldRotation2D", &Node::GetWorldRotation2D)
-         .addFunction("GetWorldDirection", &Node::GetWorldDirection)
-         .addFunction("GetWorldUp", &Node::GetWorldUp)
-         .addFunction("GetWorldRight", &Node::GetWorldRight)
-         .addFunction("GetWorldScale", &Node::GetWorldScale)
-         .addFunction("GetWorldScale2D", &Node::GetWorldScale2D)
-         .addFunction("GetWorldTransform", &Node::GetWorldTransform)
+        .addFunction("LocalToWorld2D", &Node::LocalToWorld2D)
 
-         .addOverloadedFunctions("LocalToWorld",
-             static_cast<Vector3(Node::*)(const Vector3&) const>(&Node::LocalToWorld),
-             static_cast<Vector3(Node::*)(const Vector4&) const>(&Node::LocalToWorld))
+        .addOverloadedFunctions("WorldToLocal",
+            static_cast<Vector3(Node::*)(const Vector3&) const>(&Node::WorldToLocal),
+            static_cast<Vector3(Node::*)(const Vector4&) const>(&Node::WorldToLocal))
 
-         .addFunction("LocalToWorld2D", &Node::LocalToWorld2D)
+        .addFunction("WorldToLocal2D", &Node::WorldToLocal2D)
+        .addFunction("IsDirty", &Node::IsDirty)
+        .addFunction("GetNumChildren", &Node::GetNumChildren)
 
-         .addOverloadedFunctions("WorldToLocal",
-             static_cast<Vector3(Node::*)(const Vector3&) const>(&Node::WorldToLocal),
-             static_cast<Vector3(Node::*)(const Vector4&) const>(&Node::WorldToLocal))
+        .addOverloadedFunctions("GetChildren",
+            static_cast<const Vector<SharedPtr<Node> >&(Node::*)() const>(&Node::GetChildren),
+            static_cast<void(Node::*)(PODVector<Node*>&, bool) const>(&Node::GetChildren))
 
-         .addFunction("WorldToLocal2D", &Node::WorldToLocal2D)
-         .addFunction("IsDirty", &Node::IsDirty)
-         .addFunction("GetNumChildren", &Node::GetNumChildren)
+        /*
+        .addFunction("GetChildrenWithComponent", &Node::GetChildrenWithComponent)
+        .addFunction("GetChildrenWithTag", &Node::GetChildrenWithTag)
+        */
 
-         .addOverloadedFunctions("GetChildren",
-             static_cast<const Vector<SharedPtr<Node> >&(Node::*)() const>(&Node::GetChildren),
-             static_cast<void(Node::*)(PODVector<Node*>&, bool) const>(&Node::GetChildren))
+        .addOverloadedFunctions("GetChild",
+            static_cast<Node*(Node::*)(unsigned) const>(&Node::GetChild),
+            static_cast<Node*(Node::*)(const String&, bool) const>(&Node::GetChild),
+            static_cast<Node*(Node::*)(const char*, bool) const>(&Node::GetChild),
+            static_cast<Node*(Node::*)(StringHash, bool) const>(&Node::GetChild))
 
-         /*
-         .addFunction("GetChildrenWithComponent", &Node::GetChildrenWithComponent)
-         .addFunction("GetChildrenWithTag", &Node::GetChildrenWithTag)
-         */
+        .addFunction("GetNumComponents", &Node::GetNumComponents)
+        .addFunction("GetNumNetworkComponents", &Node::GetNumNetworkComponents)
 
-         .addOverloadedFunctions("GetChild",
-             static_cast<Node*(Node::*)(unsigned) const>(&Node::GetChild),
-             static_cast<Node*(Node::*)(const String&, bool) const>(&Node::GetChild),
-             static_cast<Node*(Node::*)(const char*, bool) const>(&Node::GetChild),
-             static_cast<Node*(Node::*)(StringHash, bool) const>(&Node::GetChild))
+        .addOverloadedFunctions("GetComponents",
+            static_cast<const Vector<SharedPtr<Component> >&(Node::*)() const>(&Node::GetComponents),
+            static_cast<void(Node::*)(PODVector<Component*>&, StringHash, bool) const>(&Node::GetComponents))
 
-         .addFunction("GetNumComponents", &Node::GetNumComponents)
-         .addFunction("GetNumNetworkComponents", &Node::GetNumNetworkComponents)
+        // .addFunction("GetComponent", &Node::GetComponent)
+        // .addFunction("GetParentComponent", &Node::GetParentComponent)
+        // .addFunction("HasComponent", &Node::HasComponent)
 
-         .addOverloadedFunctions("GetComponents",
-             static_cast<const Vector<SharedPtr<Component> >&(Node::*)() const>(&Node::GetComponents),
-             static_cast<void(Node::*)(PODVector<Component*>&, StringHash, bool) const>(&Node::GetComponents))
-
-         // .addFunction("GetComponent", &Node::GetComponent)
-         // .addFunction("GetParentComponent", &Node::GetParentComponent)
-         // .addFunction("HasComponent", &Node::HasComponent)
-
-         .addFunction("GetListeners", &Node::GetListeners)
-         .addFunction("GetVar", &Node::GetVar)
-         .addFunction("GetVars", &Node::GetVars)
-         .addFunction("SetID", &Node::SetID)
-         .addFunction("SetScene", &Node::SetScene)
-         .addFunction("ResetScene", &Node::ResetScene)
-         .addFunction("GetDependencyNodes", &Node::GetDependencyNodes)
-         .addFunction("PrepareNetworkUpdate", &Node::PrepareNetworkUpdate)
-         .addFunction("CleanupConnection", &Node::CleanupConnection)
-         .addFunction("MarkReplicationDirty", &Node::MarkReplicationDirty)
-         .addFunction("AddComponent", &Node::AddComponent)
-         .addFunction("GetNumPersistentChildren", &Node::GetNumPersistentChildren)
-         .addFunction("GetNumPersistentComponents", &Node::GetNumPersistentComponents)
-         .addFunction("SetPositionSilent", &Node::SetPositionSilent)
-         .addFunction("SetRotationSilent", &Node::SetRotationSilent)
-         .addFunction("SetScaleSilent", &Node::SetScaleSilent)
-         .addFunction("SetTransformSilent", &Node::SetTransformSilent)
-         .addProperty("iD", &Node::GetID, &Node::SetID)
-         .addProperty("name", &Node::GetName, &Node::SetName)
-         .addProperty("nameHash", &Node::GetNameHash)
-         .addProperty("tags", &Node::GetTags, &Node::SetTags)
-         .addProperty("parent", &Node::GetParent, &Node::SetParent)
-         .addProperty("scene", &Node::GetScene, &Node::SetScene)
-         .addProperty("enabled", &Node::IsEnabled)
-         .addProperty("enabledSelf", &Node::IsEnabledSelf)
-         .addProperty("owner", &Node::GetOwner, &Node::SetOwner)
-         .addProperty("position", &Node::GetPosition, &Node::SetPosition)
-         .addProperty("position2D", &Node::GetPosition2D)
-         .addProperty("rotation", &Node::GetRotation, &Node::SetRotation)
-         .addProperty("rotation2D", &Node::GetRotation2D, &Node::SetRotation2D)
-         .addProperty("direction", &Node::GetDirection, &Node::SetDirection)
-         .addProperty("up", &Node::GetUp)
-         .addProperty("right", &Node::GetRight)
-         .addProperty("scale", &Node::GetScale)
-         .addProperty("scale2D", &Node::GetScale2D)
-         .addProperty("transform", &Node::GetTransform)
-         .addProperty("worldPosition", &Node::GetWorldPosition, &Node::SetWorldPosition)
-         .addProperty("worldPosition2D", &Node::GetWorldPosition2D)
-         .addProperty("worldRotation", &Node::GetWorldRotation, &Node::SetWorldRotation)
-         .addProperty("worldRotation2D", &Node::GetWorldRotation2D, &Node::SetWorldRotation2D)
-         .addProperty("worldDirection", &Node::GetWorldDirection, &Node::SetWorldDirection)
-         .addProperty("worldUp", &Node::GetWorldUp)
-         .addProperty("worldRight", &Node::GetWorldRight)
-         .addProperty("worldScale", &Node::GetWorldScale)
-         .addProperty("worldScale2D", &Node::GetWorldScale2D)
-         .addProperty("worldTransform", &Node::GetWorldTransform)
-         .addProperty("dirty", &Node::IsDirty)
-         .addProperty("numComponents", &Node::GetNumComponents)
-         .addProperty("numNetworkComponents", &Node::GetNumNetworkComponents)
-         .addProperty("listeners", &Node::GetListeners)
-         .addProperty("vars", &Node::GetVars)
-         .addProperty("dependencyNodes", &Node::GetDependencyNodes)
-         .addProperty("numPersistentChildren", &Node::GetNumPersistentChildren)
-         .addProperty("numPersistentComponents", &Node::GetNumPersistentComponents)
-         .addProperty("deepEnabled", &Node::SetDeepEnabled)
-         .addProperty("enabledRecursive", &Node::SetEnabledRecursive)
-         .addProperty("positionSilent", &Node::SetPositionSilent)
-         .addProperty("rotationSilent", &Node::SetRotationSilent)
-         .addProperty("scaleSilent", &Node::SetScaleSilent)
-     );
- }
+        .addFunction("GetListeners", &Node::GetListeners)
+        .addFunction("GetVar", &Node::GetVar)
+        .addFunction("GetVars", &Node::GetVars)
+        .addFunction("SetID", &Node::SetID)
+        .addFunction("SetScene", &Node::SetScene)
+        .addFunction("ResetScene", &Node::ResetScene)
+        .addFunction("GetDependencyNodes", &Node::GetDependencyNodes)
+        .addFunction("PrepareNetworkUpdate", &Node::PrepareNetworkUpdate)
+        .addFunction("CleanupConnection", &Node::CleanupConnection)
+        .addFunction("MarkReplicationDirty", &Node::MarkReplicationDirty)
+        .addFunction("AddComponent", &Node::AddComponent)
+        .addFunction("GetNumPersistentChildren", &Node::GetNumPersistentChildren)
+        .addFunction("GetNumPersistentComponents", &Node::GetNumPersistentComponents)
+        .addFunction("SetPositionSilent", &Node::SetPositionSilent)
+        .addFunction("SetRotationSilent", &Node::SetRotationSilent)
+        .addFunction("SetScaleSilent", &Node::SetScaleSilent)
+        .addFunction("SetTransformSilent", &Node::SetTransformSilent)
+        .addProperty("iD", &Node::GetID, &Node::SetID)
+        .addProperty("name", &Node::GetName, &Node::SetName)
+        .addProperty("nameHash", &Node::GetNameHash)
+        .addProperty("tags", &Node::GetTags, &Node::SetTags)
+        .addProperty("parent", &Node::GetParent, &Node::SetParent)
+        .addProperty("scene", &Node::GetScene, &Node::SetScene)
+        .addProperty("enabled", &Node::IsEnabled)
+        .addProperty("enabledSelf", &Node::IsEnabledSelf)
+        .addProperty("owner", &Node::GetOwner, &Node::SetOwner)
+        .addProperty("position", &Node::GetPosition, &Node::SetPosition)
+        .addProperty("position2D", &Node::GetPosition2D)
+        .addProperty("rotation", &Node::GetRotation, &Node::SetRotation)
+        .addProperty("rotation2D", &Node::GetRotation2D, &Node::SetRotation2D)
+        .addProperty("direction", &Node::GetDirection, &Node::SetDirection)
+        .addProperty("up", &Node::GetUp)
+        .addProperty("right", &Node::GetRight)
+        .addProperty("scale", &Node::GetScale)
+        .addProperty("scale2D", &Node::GetScale2D)
+        .addProperty("transform", &Node::GetTransform)
+        .addProperty("worldPosition", &Node::GetWorldPosition, &Node::SetWorldPosition)
+        .addProperty("worldPosition2D", &Node::GetWorldPosition2D)
+        .addProperty("worldRotation", &Node::GetWorldRotation, &Node::SetWorldRotation)
+        .addProperty("worldRotation2D", &Node::GetWorldRotation2D, &Node::SetWorldRotation2D)
+        .addProperty("worldDirection", &Node::GetWorldDirection, &Node::SetWorldDirection)
+        .addProperty("worldUp", &Node::GetWorldUp)
+        .addProperty("worldRight", &Node::GetWorldRight)
+        .addProperty("worldScale", &Node::GetWorldScale)
+        .addProperty("worldScale2D", &Node::GetWorldScale2D)
+        .addProperty("worldTransform", &Node::GetWorldTransform)
+        .addProperty("dirty", &Node::IsDirty)
+        .addProperty("numComponents", &Node::GetNumComponents)
+        .addProperty("numNetworkComponents", &Node::GetNumNetworkComponents)
+        .addProperty("listeners", &Node::GetListeners)
+        .addProperty("vars", &Node::GetVars)
+        .addProperty("dependencyNodes", &Node::GetDependencyNodes)
+        .addProperty("numPersistentChildren", &Node::GetNumPersistentChildren)
+        .addProperty("numPersistentComponents", &Node::GetNumPersistentComponents)
+        .addProperty("deepEnabled", &Node::SetDeepEnabled)
+        .addProperty("enabledRecursive", &Node::SetEnabledRecursive)
+        .addProperty("positionSilent", &Node::SetPositionSilent)
+        .addProperty("rotationSilent", &Node::SetRotationSilent)
+        .addProperty("scaleSilent", &Node::SetScaleSilent)
+    );
+}
 
 static void RegisterObjectAnimation(kaguya::State& lua)
 {
@@ -401,7 +409,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
 
     lua["KObjectAnimation"].setClass(UserdataMetatable<ObjectAnimation, Resource>()
         .addStaticFunction("new", &KCreateObject<ObjectAnimation>)
-        
+
         .addFunction("AddAttributeAnimation", &ObjectAnimation::AddAttributeAnimation)
 
         .addOverloadedFunctions("RemoveAttributeAnimation",
@@ -413,7 +421,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
         .addFunction("GetAttributeAnimationSpeed", &ObjectAnimation::GetAttributeAnimationSpeed)
         // .addFunction("GetAttributeAnimationInfos", &ObjectAnimation::GetAttributeAnimationInfos)
         .addFunction("GetAttributeAnimationInfo", &ObjectAnimation::GetAttributeAnimationInfo)
-        );
+    );
 }
 
 //static void RegisterReplicationState(kaguya::State& lua)
@@ -490,18 +498,18 @@ static void RegisterScene(kaguya::State& lua)
 
     lua["KScene"].setClass(UserdataMetatable<Scene, Node>()
         .addStaticFunction("new", &KCreateObject<Scene>)
-        
+
         .addStaticFunction("LoadFromFile", [](Scene& scene, const char* filepath)
-            {
-                SharedPtr<File> file(new File(globalContext, filepath));
-                return scene.Load(*file);
-            })
+    {
+        SharedPtr<File> file(new File(globalContext, filepath));
+        return scene.Load(*file);
+    })
 
         .addStaticFunction("SaveToFile", [](const Scene& scene, const char* filepath)
-            {
-                SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
-                return scene.Save(*file);
-            })
+    {
+        SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+        return scene.Save(*file);
+    })
 
         // .addFunction("Instantiate", &Scene::Instantiate)
 
@@ -640,7 +648,7 @@ static void RegisterSerializable(kaguya::State& lua)
         .addFunction("IsTemporary", &Serializable::IsTemporary)
         .addFunction("GetInterceptNetworkUpdate", &Serializable::GetInterceptNetworkUpdate)
         .addFunction("GetNetworkState", &Serializable::GetNetworkState)
-        );
+    );
 }
 
 static void RegisterSmoothedTransform(kaguya::State& lua)
@@ -653,7 +661,7 @@ static void RegisterSmoothedTransform(kaguya::State& lua)
 
     lua["KSmoothedTransform"].setClass(UserdataMetatable<SmoothedTransform, Component>()
         .addStaticFunction("new", &KCreateObject<SmoothedTransform>)
-        
+
         .addFunction("SetTargetPosition", &SmoothedTransform::SetTargetPosition)
         .addFunction("SetTargetRotation", &SmoothedTransform::SetTargetRotation)
         .addFunction("SetTargetWorldPosition", &SmoothedTransform::SetTargetWorldPosition)
@@ -669,7 +677,7 @@ static void RegisterSmoothedTransform(kaguya::State& lua)
         .addProperty("targetWorldPosition", &SmoothedTransform::GetTargetWorldPosition, &SmoothedTransform::SetTargetWorldPosition)
         .addProperty("targetWorldRotation", &SmoothedTransform::GetTargetWorldRotation, &SmoothedTransform::SetTargetWorldRotation)
         .addProperty("inProgress", &SmoothedTransform::IsInProgress)
-        );
+    );
 }
 
 static void RegisterSplinePath(kaguya::State& lua)
@@ -678,7 +686,7 @@ static void RegisterSplinePath(kaguya::State& lua)
 
     lua["KSplinePath"].setClass(UserdataMetatable<SplinePath, Component>()
         .addStaticFunction("new", &KCreateObject<SplinePath>)
-        
+
         .addFunction("AddControlPoint", &SplinePath::AddControlPoint)
         .addFunction("RemoveControlPoint", &SplinePath::RemoveControlPoint)
         .addFunction("ClearControlPoints", &SplinePath::ClearControlPoints)
@@ -695,14 +703,14 @@ static void RegisterSplinePath(kaguya::State& lua)
         .addFunction("Move", &SplinePath::Move)
         .addFunction("Reset", &SplinePath::Reset)
         .addFunction("IsFinished", &SplinePath::IsFinished)
-        
+
         .addProperty("interpolationMode", &SplinePath::GetInterpolationMode, &SplinePath::SetInterpolationMode)
         .addProperty("speed", &SplinePath::GetSpeed, &SplinePath::SetSpeed)
         .addProperty("length", &SplinePath::GetLength)
         .addProperty("position", &SplinePath::GetPosition, &SplinePath::SetPosition)
         .addProperty("controlledNode", &SplinePath::GetControlledNode, &SplinePath::SetControlledNode)
         .addProperty("finished", &SplinePath::IsFinished)
-        );
+    );
 }
 
 static void RegisterUnknownComponent(kaguya::State& lua)
@@ -711,7 +719,7 @@ static void RegisterUnknownComponent(kaguya::State& lua)
 
     lua["KUnknownComponent"].setClass(UserdataMetatable<UnknownComponent, Component>()
         .addStaticFunction("new", &KCreateObject<UnknownComponent>)
-        
+
         .addFunction("GetType", &UnknownComponent::GetType)
         .addFunction("GetTypeName", &UnknownComponent::GetTypeName)
         .addFunction("GetAttributes", &UnknownComponent::GetAttributes)
@@ -719,60 +727,60 @@ static void RegisterUnknownComponent(kaguya::State& lua)
         .addProperty("type", &UnknownComponent::GetType, &UnknownComponent::SetType)
         .addProperty("typeName", &UnknownComponent::GetTypeName, &UnknownComponent::SetTypeName)
         .addProperty("attributes", &UnknownComponent::GetAttributes)
-        );
+    );
 }
 
- static void RegisterValueAnimation(kaguya::State& lua)
- {
-     using namespace kaguya;
+static void RegisterValueAnimation(kaguya::State& lua)
+{
+    using namespace kaguya;
 
-     // enum InterpMethod;
-     lua["KIM_NONE"] = IM_NONE;
-     lua["KIM_LINEAR"] = IM_LINEAR;
-     lua["KIM_SPLINE"] = IM_SPLINE;
+    // enum InterpMethod;
+    lua["KIM_NONE"] = IM_NONE;
+    lua["KIM_LINEAR"] = IM_LINEAR;
+    lua["KIM_SPLINE"] = IM_SPLINE;
 
-     lua["KValueAnimation"].setClass(UserdataMetatable<ValueAnimation, Resource>()
-         .addStaticFunction("new", &KCreateObject<ValueAnimation>)
-         
-         .addFunction("SetInterpolationMethod", &ValueAnimation::SetInterpolationMethod)
-         .addFunction("SetSplineTension", &ValueAnimation::SetSplineTension)
-         .addFunction("SetValueType", &ValueAnimation::SetValueType)
-         .addFunction("SetKeyFrame", &ValueAnimation::SetKeyFrame)
-         .addFunction("SetEventFrame", &ValueAnimation::SetEventFrame)
-         .addFunction("IsValid", &ValueAnimation::IsValid)
-         .addFunction("GetOwner", &ValueAnimation::GetOwner)
-         .addFunction("GetInterpolationMethod", &ValueAnimation::GetInterpolationMethod)
-         .addFunction("GetSplineTension", &ValueAnimation::GetSplineTension)
-         .addFunction("GetValueType", &ValueAnimation::GetValueType)
-         .addFunction("GetBeginTime", &ValueAnimation::GetBeginTime)
-         .addFunction("GetEndTime", &ValueAnimation::GetEndTime)
-         .addFunction("GetAnimationValue", &ValueAnimation::GetAnimationValue)
-         .addFunction("HasEventFrames", &ValueAnimation::HasEventFrames)
-         .addFunction("GetEventFrames", &ValueAnimation::GetEventFrames)
-         
-         .addProperty("valid", &ValueAnimation::IsValid)
-         .addProperty("owner", &ValueAnimation::GetOwner, &ValueAnimation::SetOwner)
-         .addProperty("interpolationMethod", &ValueAnimation::GetInterpolationMethod, &ValueAnimation::SetInterpolationMethod)
-         .addProperty("splineTension", &ValueAnimation::GetSplineTension, &ValueAnimation::SetSplineTension)
-         .addProperty("valueType", &ValueAnimation::GetValueType, &ValueAnimation::SetValueType)
-     );
- }
+    lua["KValueAnimation"].setClass(UserdataMetatable<ValueAnimation, Resource>()
+        .addStaticFunction("new", &KCreateObject<ValueAnimation>)
 
- void RegisterSceneLuaAPI(kaguya::State& lua)
- {
-     RegisterSerializable(lua); 
+        .addFunction("SetInterpolationMethod", &ValueAnimation::SetInterpolationMethod)
+        .addFunction("SetSplineTension", &ValueAnimation::SetSplineTension)
+        .addFunction("SetValueType", &ValueAnimation::SetValueType)
+        .addFunction("SetKeyFrame", &ValueAnimation::SetKeyFrame)
+        .addFunction("SetEventFrame", &ValueAnimation::SetEventFrame)
+        .addFunction("IsValid", &ValueAnimation::IsValid)
+        .addFunction("GetOwner", &ValueAnimation::GetOwner)
+        .addFunction("GetInterpolationMethod", &ValueAnimation::GetInterpolationMethod)
+        .addFunction("GetSplineTension", &ValueAnimation::GetSplineTension)
+        .addFunction("GetValueType", &ValueAnimation::GetValueType)
+        .addFunction("GetBeginTime", &ValueAnimation::GetBeginTime)
+        .addFunction("GetEndTime", &ValueAnimation::GetEndTime)
+        .addFunction("GetAnimationValue", &ValueAnimation::GetAnimationValue)
+        .addFunction("HasEventFrames", &ValueAnimation::HasEventFrames)
+        .addFunction("GetEventFrames", &ValueAnimation::GetEventFrames)
 
-     RegisterAnimatable(lua);
-     RegisterAnimationDefs(lua);
-     RegisterComponent(lua);
-     RegisterLogicComponent(lua);
-     RegisterNode(lua);
-     RegisterObjectAnimation(lua);
-     RegisterScene(lua);
-     RegisterSceneEvents(lua);     
-     RegisterSmoothedTransform(lua);
-     RegisterSplinePath(lua);
-     RegisterUnknownComponent(lua);
-     RegisterValueAnimation(lua);
- }
+        .addProperty("valid", &ValueAnimation::IsValid)
+        .addProperty("owner", &ValueAnimation::GetOwner, &ValueAnimation::SetOwner)
+        .addProperty("interpolationMethod", &ValueAnimation::GetInterpolationMethod, &ValueAnimation::SetInterpolationMethod)
+        .addProperty("splineTension", &ValueAnimation::GetSplineTension, &ValueAnimation::SetSplineTension)
+        .addProperty("valueType", &ValueAnimation::GetValueType, &ValueAnimation::SetValueType)
+    );
+}
+
+void RegisterSceneLuaAPI(kaguya::State& lua)
+{
+    RegisterSerializable(lua);
+
+    RegisterAnimatable(lua);
+    RegisterAnimationDefs(lua);
+    RegisterComponent(lua);
+    RegisterLogicComponent(lua);
+    RegisterNode(lua);
+    RegisterObjectAnimation(lua);
+    RegisterScene(lua);
+    RegisterSceneEvents(lua);
+    RegisterSmoothedTransform(lua);
+    RegisterSplinePath(lua);
+    RegisterUnknownComponent(lua);
+    RegisterValueAnimation(lua);
+}
 }

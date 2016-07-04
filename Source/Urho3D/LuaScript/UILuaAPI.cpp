@@ -895,6 +895,11 @@ static void RegisterUI(kaguya::State& lua)
     lua["KRegisterUILibrary"] = function(&RegisterUILibrary);
 }
 
+static SharedPtr<UIElement> UIElementCreateChild(UIElement* uiElement, const char* type, const char* name = "", unsigned index = M_MAX_UNSIGNED)
+{
+    return SharedPtr<UIElement>(uiElement->CreateChild(StringHash(type), name, index));
+}
+
 static void RegisterUIElement(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -1027,7 +1032,9 @@ static void RegisterUIElement(kaguya::State& lua)
         .addFunction("DisableLayoutUpdate", &UIElement::DisableLayoutUpdate)
         .addFunction("EnableLayoutUpdate", &UIElement::EnableLayoutUpdate)
         .addFunction("BringToFront", &UIElement::BringToFront)
-        .addFunction("CreateChild", &UIElement::CreateChild)
+        
+        .addStaticFunction("CreateChild", &UIElementCreateChild)
+
         .addFunction("AddChild", &UIElement::AddChild)
         .addFunction("InsertChild", &UIElement::InsertChild)
         .addFunction("RemoveChild", &UIElement::RemoveChild)
