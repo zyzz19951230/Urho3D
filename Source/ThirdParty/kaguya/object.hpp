@@ -597,6 +597,20 @@ namespace kaguya
 			lua_remove(l, -2);//remove metatable registry table
 			return type != LUA_TNIL;
 		}
+        // Add by Aster Jian for Urho3D.
+        bool get_metatable(lua_State* l, const std::type_info& type_info)
+        {
+            int ttype = lua_rawgetp_rtype(l, LUA_REGISTRYINDEX, metatable_type_table_key());//get metatable registry table
+            if (ttype != LUA_TTABLE)
+            {
+                lua_newtable(l);
+                lua_rawsetp(l, LUA_REGISTRYINDEX, metatable_type_table_key());
+                return false;
+            }
+            int type = lua_rawgetp_rtype(l, -1, &type_info);
+            lua_remove(l, -2);//remove metatable registry table
+            return type != LUA_TNIL;
+        }
 		template<typename T>bool available_metatable(lua_State* l)
 		{
 			util::ScopedSavedStack save(l);
@@ -649,6 +663,23 @@ namespace kaguya
 			}
 			lua_setmetatable(l, -2);
 		}
+        // Add by Aster Jian for Urho3D.
+        void setmetatable(lua_State* l, const std::type_info& type_info)
+        {
+            //if not available metatable, set unknown class metatable
+            if (!get_metatable(l, type_info))
+            {
+                lua_pop(l, 1);
+                if (!get_metatable<UnknownType>(l))
+                {
+                    lua_pop(l, 1);
+                    newmetatable<UnknownType>(l);
+                    lua_pushcclosure(l, &deleter<ObjectWrapperBase>, 0);
+                    lua_setfield(l, -2, "__gc");
+                }
+            }
+            lua_setmetatable(l, -2);
+        }
 	}
 	template<typename T>
 	bool available_metatable(lua_State* l, types::typetag<T> type = types::typetag<T>())
