@@ -27,6 +27,7 @@
 #if URHO3D_CXX11
 #include <functional>
 #endif
+#include <typeinfo>
 
 namespace Urho3D
 {
@@ -73,6 +74,7 @@ private:
         virtual Urho3D::StringHash GetType() const { return GetTypeInfoStatic()->GetType(); } \
         virtual const Urho3D::String& GetTypeName() const { return GetTypeInfoStatic()->GetTypeName(); } \
         virtual const Urho3D::TypeInfo* GetTypeInfo() const { return GetTypeInfoStatic(); } \
+        virtual const std::type_info& GetStdTypeInfo() const { return typeid(ClassName); } \
         static Urho3D::StringHash GetTypeStatic() { return GetTypeInfoStatic()->GetType(); } \
         static const Urho3D::String& GetTypeNameStatic() { return GetTypeInfoStatic()->GetTypeName(); } \
         static const Urho3D::TypeInfo* GetTypeInfoStatic() { static const Urho3D::TypeInfo typeInfoStatic(#typeName, BaseClassName::GetTypeInfoStatic()); return &typeInfoStatic; } \
@@ -94,6 +96,8 @@ public:
     virtual const String& GetTypeName() const = 0;
     /// Return type info.
     virtual const TypeInfo* GetTypeInfo() const = 0;
+    /// Return std type info.
+    virtual const std::type_info& GetStdTypeInfo() const = 0;
     /// Handle event.
     virtual void OnEvent(Object* sender, StringHash eventType, VariantMap& eventData);
 
