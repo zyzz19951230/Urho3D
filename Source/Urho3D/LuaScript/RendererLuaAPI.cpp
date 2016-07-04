@@ -232,7 +232,6 @@ static void RegisterGraphics(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // GC is disable for subsystem object
     lua["KGraphics"].setClass(UserdataMetatable<Graphics, Object>()
 
         .addFunction("SetExternalWindow", &Graphics::SetExternalWindow)
@@ -801,7 +800,6 @@ static void RegisterRenderer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // GC is disable for subsystem object
     lua["KRenderer"].setClass(UserdataMetatable<Renderer, Object>()
 
         .addFunction("SetNumViewports", &Renderer::SetNumViewports)

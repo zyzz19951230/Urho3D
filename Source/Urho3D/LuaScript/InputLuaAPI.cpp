@@ -85,7 +85,6 @@ static void RegisterInput(kaguya::State& lua)
         */
     );
 
-    // GC is disable for subsystem object
     lua["KInput"].setClass(UserdataMetatable<Input, Object>()
 
         .addFunction("SetToggleFullscreen", &Input::SetToggleFullscreen)

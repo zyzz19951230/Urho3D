@@ -15,7 +15,6 @@ static void RegisterConsole(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // GC is disable for subsystem object
     lua["KConsole"].setClass(UserdataMetatable<Console, Object>()
 
         .addFunction("SetDefaultStyle", &Console::SetDefaultStyle)
@@ -74,7 +73,6 @@ static void RegisterDebugHud(kaguya::State& lua)
     lua["KDEBUGHUD_SHOW_ALL_MEMORY"] = DEBUGHUD_SHOW_ALL_MEMORY;
     lua["KDEBUGHUD_SHOW_EVENTPROFILER"] = DEBUGHUD_SHOW_EVENTPROFILER;
 
-    // GC is disable for subsystem object
     lua["KDebugHud"].setClass(UserdataMetatable<DebugHud, Object>()
 
         .addFunction("SetDefaultStyle", &DebugHud::SetDefaultStyle)
@@ -119,7 +117,6 @@ static void RegisterEngine(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // GC is disable for subsystem object
     lua["KEngine"].setClass(UserdataMetatable<Engine, Object>()
 
         .addFunction("RunFrame", &Engine::RunFrame)

@@ -136,8 +136,7 @@ static void RegisterNetwork(kaguya::State& lua)
 {
 	using namespace kaguya;
 
-    // GC is disable for subsystem object
-	lua["KNetwork"].setClass(UserdataMetatable<Network, Object>()
+    lua["KNetwork"].setClass(UserdataMetatable<Network, Object>()
 
 		.addFunction("Connect", &Network::Connect)
 		.addFunction("Disconnect", &Network::Disconnect)

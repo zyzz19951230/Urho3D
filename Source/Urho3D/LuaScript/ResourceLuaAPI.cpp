@@ -373,7 +373,6 @@ static void RegisterResourceCache(kaguya::State& lua)
     lua["KRESOURCE_CHECKEXISTS"] = RESOURCE_CHECKEXISTS;
     lua["KRESOURCE_GETFILE"] = RESOURCE_GETFILE;
 
-    // GC is disable for subsystem object
     lua["KResourceCache"].setClass(UserdataMetatable<ResourceCache, Object>()
 
         .addFunction("AddResourceDir", &ResourceCache::AddResourceDir)

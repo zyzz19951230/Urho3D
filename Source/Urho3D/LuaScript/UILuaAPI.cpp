@@ -812,7 +812,6 @@ static void RegisterUI(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // GC is disable for subsystem object
     lua["KUI"].setClass(UserdataMetatable<UI, Object>()
         .addFunction("SetCursor", &UI::SetCursor)
         .addFunction("SetFocusElement", &UI::SetFocusElement)

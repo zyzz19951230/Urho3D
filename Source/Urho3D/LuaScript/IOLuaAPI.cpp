@@ -167,7 +167,6 @@ static void RegisterFileSystem(kaguya::State& lua)
     lua["KSCAN_DIRS"] = SCAN_DIRS;
     lua["KSCAN_HIDDEN"] = SCAN_HIDDEN;
 
-    // GC is disable for subsystem object
     lua["KFileSystem"].setClass(UserdataMetatable<FileSystem, Object>()
 
         .addFunction("SetCurrentDir", &FileSystem::SetCurrentDir)
@@ -234,7 +233,6 @@ static void RegisterLog(kaguya::State& lua)
     lua["KLOG_ERROR"] = LOG_ERROR;
     lua["KLOG_NONE"] = LOG_NONE;
 
-    // GC is disable for subsystem object
     lua["KLog"].setClass(UserdataMetatable<Log, Object>()
 
         .addFunction("Open", &Log::Open)
