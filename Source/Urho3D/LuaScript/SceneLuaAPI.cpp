@@ -513,7 +513,8 @@ static void RegisterScene(kaguya::State& lua)
         .addStaticFunction("SaveToFile", [](const Scene& scene, const char* filepath)
     {
         SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
-        return scene.Save(*file);
+        return scene.SaveXML(*file);
+
     })
 
         // .addFunction("Instantiate", &Scene::Instantiate)
