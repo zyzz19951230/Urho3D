@@ -112,7 +112,6 @@ static void RegisterDebugHud(kaguya::State& lua)
     );
 }
 
-
 static void RegisterEngine(kaguya::State& lua)
 {
     using namespace kaguya;

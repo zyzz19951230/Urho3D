@@ -34,11 +34,6 @@
 namespace Urho3D
 {
 
-static Database* GetDataBase()
-{
-    return globalContext->GetSubsystem<Database>();
-}
-
 static void RegisterDatabase(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -74,8 +69,8 @@ static void RegisterDbConnection(kaguya::State& lua)
     using namespace kaguya;
 
     lua["KDbConnection"].setClass(UserdataMetatable<DbConnection, Object>()
-        .setConstructors<DbConnection(Context*, const String&)>()
-
+        
+        .addFunction("Finalize", &DbConnection::Finalize)
         .addFunction("Execute", &DbConnection::Execute)
         .addFunction("GetConnectionString", &DbConnection::GetConnectionString)
         .addFunction("IsConnected", &DbConnection::IsConnected)
@@ -90,8 +85,7 @@ static void RegisterDbResult(kaguya::State& lua)
     using namespace kaguya;
 
     lua["KDbResult"].setClass(UserdataMetatable<DbResult>()
-        .setConstructors<DbResult()>()
-
+        
         .addFunction("GetNumColumns", &DbResult::GetNumColumns)
         .addFunction("GetNumRows", &DbResult::GetNumRows)
         .addFunction("GetNumAffectedRows", &DbResult::GetNumAffectedRows)
@@ -111,8 +105,8 @@ void RegisterDatabaseLuaAPI(kaguya::State& lua)
     RegisterDbConnection(lua);
     RegisterDatabase(lua);
 
-    lua["kdatabase"] = GetDataBase();
-    lua["KGetDatabase"] = GetDataBase;
+    lua["kdatabase"] = KGetSubsystem<Database>();
+    lua["KGetDatabase"] = KGetSubsystem<Database>;
 }
 }
 
