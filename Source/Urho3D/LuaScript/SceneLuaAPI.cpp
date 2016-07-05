@@ -243,9 +243,7 @@ static void RegisterNode(kaguya::State& lua)
         .addFunction("SetOwner", &Node::SetOwner)
         .addFunction("MarkDirty", &Node::MarkDirty)
 
-        .addOverloadedFunctions("CreateChild",
-            static_cast<Node*(Node::*)(const String&, CreateMode, unsigned)>(&Node::CreateChild),
-            static_cast<Node*(Node::*)(unsigned, CreateMode)>(&Node::CreateChild))
+        .addFunction("CreateChild", static_cast<Node*(Node::*)(const String&, CreateMode, unsigned)>(&Node::CreateChild))
 
         .addFunction("AddChild", &Node::AddChild)
         .addFunction("RemoveChild", static_cast<void(Node::*)(Node*)>(&Node::RemoveChild))
@@ -436,7 +434,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
 //    lua["KMAX_NETWORK_ATTRIBUTES"] = MAX_NETWORK_ATTRIBUTES;
 //    lua["KDirtyBits"].setClass(UserdataMetatable<DirtyBits>()
 //        .setConstructors<DirtyBits(),
-//        DirtyBits(const DirtyBits&)>()
+//        DirtyBits(const DirtyBits&)()
 //
 //        .addFunction("Set", &DirtyBits::Set)
 //        .addFunction("Clear", &DirtyBits::Clear)
@@ -449,7 +447,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
 //        .addProperty("count", &DirtyBits::count_)
 //        );
 //    lua["KNetworkState"].setClass(UserdataMetatable<NetworkState>()
-//        .setConstructors<NetworkState()>()
+//        .setConstructors<NetworkState()()
 //
 //        .addProperty("attributes", &NetworkState::attributes_)
 //        .addProperty("currentValues", &NetworkState::currentValues_)
@@ -469,7 +467,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
 //        .addProperty("dirtyAttributes", &ComponentReplicationState::dirtyAttributes_)
 //        );
 //    lua["KNodeReplicationState"].setClass(UserdataMetatable<NodeReplicationState, ReplicationState>()
-//        .setConstructors<NodeReplicationState()>()
+//        .setConstructors<NodeReplicationState()()
 //
 //        .addProperty("sceneState", &NodeReplicationState::sceneState_)
 //        .addProperty("node", &NodeReplicationState::node_)
@@ -486,6 +484,38 @@ static void RegisterObjectAnimation(kaguya::State& lua)
 //        .addProperty("dirtyNodes", &SceneReplicationState::dirtyNodes_)
 //        );
 //}
+
+static bool SceneLoadXML(Scene* scene, const char* filepath)
+{
+    SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
+    return scene->LoadXML(*file);
+}
+
+static bool SceneLoadJSON(Scene* scene, const char* filepath)
+{
+    SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
+    return scene->LoadJSON(*file);
+}
+
+static bool SceneSaveXML(const Scene* scene, const char* filepath, const String& indentation = "\t")
+{
+    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    if (!file->IsOpen())
+        return false;
+    return scene->SaveXML(*file, indentation);
+}
+
+static bool SceneSaveJSON(const Scene* scene, const char* filepath, const String& indentation = "\t")
+{
+    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    if (!file->IsOpen())
+        return false;
+    return scene->SaveJSON(*file, indentation);
+}
 
 static void RegisterScene(kaguya::State& lua)
 {
@@ -504,19 +534,11 @@ static void RegisterScene(kaguya::State& lua)
     lua["KScene"].setClass(UserdataMetatable<Scene, Node>()
         .addStaticFunction("new", &KCreateObject<Scene>)
 
-        .addStaticFunction("LoadFromFile", [](Scene& scene, const char* filepath)
-    {
-        SharedPtr<File> file(new File(globalContext, filepath));
-        return scene.Load(*file);
-    })
-
-        .addStaticFunction("SaveToFile", [](const Scene& scene, const char* filepath)
-    {
-        SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
-        return scene.SaveXML(*file);
-
-    })
-
+        .addStaticFunction("LoadXML", &SceneLoadXML)
+        .addStaticFunction("LoadJSON", &SceneLoadJSON)
+        .addStaticFunction("SaveXML", &SceneSaveXML)
+        .addStaticFunction("SaveJSON", &SceneSaveJSON)
+        
         // .addFunction("Instantiate", &Scene::Instantiate)
 
         .addFunction("Clear", &Scene::Clear)

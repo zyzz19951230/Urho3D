@@ -1065,12 +1065,17 @@ static void RegisterStaticModel(kaguya::State& lua)
         .addFunction("ApplyMaterialList", &StaticModel::ApplyMaterialList)
         .addFunction("GetModel", &StaticModel::GetModel)
         .addFunction("GetNumGeometries", &StaticModel::GetNumGeometries)
-        .addFunction("GetMaterial", &StaticModel::GetMaterial)
+        
+        .addFunction("GetMaterial",&StaticModel::GetMaterial)
+
         .addFunction("GetOcclusionLodLevel", &StaticModel::GetOcclusionLodLevel)
         .addFunction("IsInside", &StaticModel::IsInside)
         .addFunction("IsInsideLocal", &StaticModel::IsInsideLocal)
 
         .addProperty("model", &StaticModel::GetModel, &StaticModel::SetModel)
+        
+        .addProperty("material", (Material*(StaticModel::*)() const)(&StaticModel::GetMaterial), static_cast<void(StaticModel::*)(Material*)>(&StaticModel::SetMaterial))
+
         .addProperty("numGeometries", &StaticModel::GetNumGeometries)
         .addProperty("occlusionLodLevel", &StaticModel::GetOcclusionLodLevel, &StaticModel::SetOcclusionLodLevel)
     );
