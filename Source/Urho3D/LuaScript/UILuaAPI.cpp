@@ -938,6 +938,11 @@ static SharedPtr<UIElement> UIElementCreateChild(UIElement* uiElement, const cha
     return SharedPtr<UIElement>(uiElement->CreateChild(StringHash(type), name, index));
 }
 
+static const Color& UIElementGetColor(const UIElement* uiElement)
+{
+    return uiElement->GetColor(C_TOPLEFT);
+}
+
 static void RegisterUIElement(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -1146,7 +1151,6 @@ static void RegisterUIElement(kaguya::State& lua)
             static_cast<UIElement*(UIElement::*)(const String&, bool) const>(&UIElement::GetChild),
             static_cast<UIElement*(UIElement::*)(const StringHash&, const Variant&, bool) const>(&UIElement::GetChild))
 
-
         /*
         .addOverloadedFunctions("GetChildren",
             static_cast<const Vector<SharedPtr<UIElement> >&(UIElement::*)() const>(&UIElement::GetChildren),
@@ -1198,7 +1202,7 @@ static void RegisterUIElement(kaguya::State& lua)
         .addProperty("childOffset", &UIElement::GetChildOffset, &UIElement::SetChildOffset)
         .addProperty("horizontalAlignment", &UIElement::GetHorizontalAlignment, &UIElement::SetHorizontalAlignment)
         .addProperty("verticalAlignment", &UIElement::GetVerticalAlignment, &UIElement::SetVerticalAlignment)
-        .addProperty("clipBorder", &UIElement::GetClipBorder, &UIElement::SetClipBorder)
+        .addProperty("clipBorder", &UIElement::GetClipBorder, &UIElement::SetClipBorder)        
         .addProperty("priority", &UIElement::GetPriority, &UIElement::SetPriority)
         .addProperty("opacity", &UIElement::GetOpacity, &UIElement::SetOpacity)
         .addProperty("derivedOpacity", &UIElement::GetDerivedOpacity)

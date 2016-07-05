@@ -131,6 +131,11 @@ static SharedPtr<Component> NodeGetOrCreateComponent(Node* node, const char* typ
     return SharedPtr<Component>(node->GetOrCreateComponent(StringHash(type), mode, id));
 }
 
+static SharedPtr<Component> NodeGetComponent(const Node* node, const char* type, bool recursive = false)
+{
+    return SharedPtr<Component>(node->GetComponent(StringHash(type), recursive));
+}
+
 static void RegisterNode(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -337,7 +342,7 @@ static void RegisterNode(kaguya::State& lua)
             static_cast<const Vector<SharedPtr<Component> >&(Node::*)() const>(&Node::GetComponents),
             static_cast<void(Node::*)(PODVector<Component*>&, StringHash, bool) const>(&Node::GetComponents))
 
-        // .addFunction("GetComponent", &Node::GetComponent)
+        .addStaticFunction("GetComponent", &NodeGetComponent)
         // .addFunction("GetParentComponent", &Node::GetParentComponent)
         // .addFunction("HasComponent", &Node::HasComponent)
 
@@ -374,8 +379,8 @@ static void RegisterNode(kaguya::State& lua)
         .addProperty("direction", &Node::GetDirection, &Node::SetDirection)
         .addProperty("up", &Node::GetUp)
         .addProperty("right", &Node::GetRight)
-        .addProperty("scale", &Node::GetScale)
-        .addProperty("scale2D", &Node::GetScale2D)
+        .addProperty("scale", &Node::GetScale, static_cast<void(Node::*)(const Vector3&)>(&Node::SetScale))
+        .addProperty("scale2D", &Node::GetScale2D, static_cast<void(Node::*)(const Vector2&)>(&Node::SetScale2D))
         .addProperty("transform", &Node::GetTransform)
         .addProperty("worldPosition", &Node::GetWorldPosition, &Node::SetWorldPosition)
         .addProperty("worldPosition2D", &Node::GetWorldPosition2D)
