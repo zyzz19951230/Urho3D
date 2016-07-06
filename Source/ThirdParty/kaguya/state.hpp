@@ -413,6 +413,11 @@ namespace kaguya
 		//! return element reference from global table
 		TableKeyReference<const char*> operator[](const char* str)
 		{
+			// Hack for Urho3D by Aster Jian
+			if (str[0] == 'k' || str[0] == 'K')
+			{
+				str++;
+			}
 			int stack_top = lua_gettop(state_);
 			util::push_args(state_, GlobalTable());
 			int table_index = stack_top + 1;
