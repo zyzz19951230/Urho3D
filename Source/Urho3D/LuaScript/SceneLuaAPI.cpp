@@ -140,10 +140,11 @@ static SharedPtr<Component> NodeGetComponent(const Node* node, const char* type,
 
 static kaguya::LuaTable NodeCreateScriptObject1(Node* node, const char* scriptObjectType)
 {
-    LuaScriptInstance* instance = node->CreateComponent<LuaScriptInstance>();
+    LuaScriptInstance* instance = node->CreateComponent<LuaScriptInstance>();    
     instance->CreateObject(scriptObjectType);
+    return instance->GetLuaTableObject();
     // lua_rawgeti(tolua_S, LUA_REGISTRYINDEX, instance->GetScriptObjectRef());    
-    return kaguya::LuaTable(instance->GetLuaState());
+    // return kaguya::LuaTable(instance->GetLuaState());
 }
 
 

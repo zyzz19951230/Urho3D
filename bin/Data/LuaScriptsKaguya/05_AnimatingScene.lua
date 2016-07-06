@@ -59,10 +59,8 @@ function CreateScene()
         -- Add the Rotator script object which will rotate the scene node each frame, when the scene sends its update event.
         -- This requires the C++ component LuaScriptInstance in the scene node, which acts as a container. We need to tell the
         -- class name to instantiate the object
-
-
-        -- local object = boxNode:CreateScriptObject("Rotator")
-        -- object.rotationSpeed = {10.0, 20.0, 30.0}
+        local object = boxNode:CreateScriptObject("Rotator")
+        object.rotationSpeed = {10.0, 20.0, 30.0}
     end
 
     -- Create the camera. Let the starting position be at the world origin. As the fog limits maximum visible distance, we can
@@ -119,16 +117,16 @@ function MoveCamera(timeStep)
 
     -- Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
     if input:GetKeyDown(KEY_W) then
-        cameraNode:Translate(Vector3(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3.new(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_S) then
-        cameraNode:Translate(Vector3(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3.new(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_A) then
-        cameraNode:Translate(Vector3(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3.new(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_D) then
-        cameraNode:Translate(Vector3(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3.new(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
 end
 
@@ -146,15 +144,15 @@ function HandleUpdate(eventType, eventData)
 end
 
 -- Rotator script object class. Script objects to be added to a scene node must implement the empty ScriptObject interface
--- Rotator = ScriptObject()
+Rotator = ScriptObject()
 
--- function Rotator:Start()
---     self.rotationSpeed = {0.0, 0.0, 0.0}
--- end
+function Rotator:Start()
+    self.rotationSpeed = {0.0, 0.0, 0.0}
+end
 
--- function Rotator:Update(timeStep)
---     local x = self.rotationSpeed[1] * timeStep
---     local y = self.rotationSpeed[2] * timeStep
---     local z = self.rotationSpeed[3] * timeStep
---     self.node:Rotate(Quaternion(x, y, z))
--- end
+function Rotator:Update(timeStep)
+	local x = self.rotationSpeed[1] * timeStep
+    local y = self.rotationSpeed[2] * timeStep
+    local z = self.rotationSpeed[3] * timeStep
+    self.node:Rotate(Quaternion.new(x, y, z))
+end

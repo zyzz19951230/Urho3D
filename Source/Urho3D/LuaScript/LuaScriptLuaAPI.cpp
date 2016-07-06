@@ -7,9 +7,174 @@
 namespace Urho3D
 {
 
-void RegisterLuaScriptInstance(kaguya::State &lua)
+static void RegisterCoroutine(kaguya::State &lua)
+{
+    // The following code copy from Coroutine.pkg file
+    lua.dostring(
+        "local totalTime_ = 0                                                \n"
+        "local sleepedCoroutines_ = {}                                       \n"
+        "local waitEventCoroutines_ = {}                                     \n"
+        "function coroutine.start(func)                                      \n"
+        "    if func == nil then                                             \n"
+        "        return nil                                                  \n"
+        "    end                                                             \n"
+        "    local co = coroutine.create(func)                               \n"
+        "    return coroutine.resume(co)                                     \n"
+        "end                                                                 \n"
+        "function coroutine.sleep(time)                                      \n"
+        "    local co = coroutine.running()                                  \n"
+        "    if co == nil then                                               \n"
+        "        return                                                      \n"
+        "    end                                                             \n"
+        "    sleepedCoroutines_[co] = totalTime_ + time                      \n"
+        "    return coroutine.yield(co)                                      \n"
+        "end                                                                 \n"
+        "function coroutine.update(steptime)                                 \n"
+        "    totalTime_ = totalTime_ + steptime                              \n"
+        "    local coroutines = {}                                           \n"
+        "    for co, wakeupTime in pairs(sleepedCoroutines_) do              \n"
+        "        if wakeupTime < totalTime_ then                             \n"
+        "            table.insert(coroutines, co)                            \n"
+        "        end                                                         \n"
+        "    end                                                             \n"
+        "    for _, co in ipairs(coroutines) do                              \n"
+        "        sleepedCoroutines_[co] = nil                                \n"
+        "        coroutine.resume(co)                                        \n"
+        "    end                                                             \n"
+        "end                                                                 \n"
+        "function coroutine.waitevent(event)                                 \n"
+        "    local co = coroutine.running()                                  \n"
+        "    if co == nil then                                               \n"
+        "        return                                                      \n"
+        "    end                                                             \n"
+        "    if waitEventCoroutines_[event] == nil then                      \n"
+        "        waitEventCoroutines_[event] = { co }                        \n"
+        "    else                                                            \n"
+        "        table.insert(waitEventCoroutines_[event], co)               \n"
+        "    end                                                             \n"
+        "    return coroutine.yield(co)                                      \n"
+        "end                                                                 \n"
+        "function coroutine.sendevent(event)                                 \n"
+        "    local coroutines = waitEventCoroutines_[event]                  \n"
+        "    if coroutines == nil then                                       \n"
+        "        return                                                      \n"
+        "    end                                                             \n"
+        "    waitEventCoroutines_[event] = nil                               \n"
+        "                                                                    \n"
+        "    for _, co in ipairs(coroutines) do                              \n"
+        "        coroutine.resume(co)                                        \n"
+        "    end                                                             \n"
+        "end                                                                 \n"
+    );
+}
+
+static void RegisterLuaScriptInstance(kaguya::State &lua)
 {
     using namespace kaguya;
+
+    // The following code copy from LuaScriptInstance.pkg file
+    lua.dostring(
+        "LuaScriptObject = {}                                                \n"
+        "function LuaScriptObject:Start()                                    \n"
+        "end                                                                 \n"
+        "function LuaScriptObject:Stop()                                     \n"
+        "end                                                                 \n"
+        "function LuaScriptObject:GetNode()                                  \n"
+        "    return self.node                                                \n"
+        "end                                                                 \n"
+        "function LuaScriptObject:SubscribeToEvent(param1, param2, param3)   \n"
+        "    local instance = self.instance                                  \n"
+        "    if instance == nil then                                         \n"
+        "        return                                                      \n"
+        "    end                                                             \n"
+        "    if param3 == nil then                                           \n"
+        "        instance:SubscribeToEvent(param1, param2)                   \n"
+        "    else                                                            \n"
+        "        instance:SubscribeToEvent(param1, param2, param3)           \n"
+        "    end                                                             \n"
+        "end                                                                 \n"
+        "function LuaScriptObject:UnsubscribeFromEvent(param1, param2)       \n"
+        "    local instance = self.instance                                  \n"
+        "    if instance == nil then                                         \n"
+        "        return                                                      \n"
+        "    end                                                             \n"
+        "    if param2 == nil then                                           \n"
+        "        instance:UnsubscribeFromEvent(param1)                       \n"
+        "    else                                                            \n"
+        "        instance:UnsubscribeFromEvent(param1, param2)               \n"
+        "    end                                                             \n"
+        "end                                                                 \n"
+        "function LuaScriptObject:UnsubscribeFromEvents(sender)              \n"
+        "    local instance = self.instance                                  \n"
+        "    if instance == nil then                                         \n"
+        "        return                                                      \n"
+        "    end                                                             \n"
+        "    instance:UnsubscribeFromEvents(sender)                          \n"
+        "end                                                                 \n"
+        "function LuaScriptObject:UnsubscribeFromAllEvents()                 \n"
+        "    local instance = self.instance                                  \n"
+        "    if instance == nil then                                         \n"
+        "        return                                                      \n"
+        "    end                                                             \n"
+        "    instance:UnsubscribeFromAllEvents()                             \n"
+        "end                                                                 \n"
+        "function LuaScriptObject:UnsubscribeFromAllEventsExcept()           \n"
+        "    local instance = self.instance                                  \n"
+        "    if instance == nil then                                         \n"
+        "        return                                                      \n"
+        "    end                                                             \n"
+        "    instance:UnsubscribeFromAllEventsExcept()                       \n"
+        "end                                                                 \n"
+        "function LuaScriptObject:HasSubscribedToEvent(param1, param2)       \n"
+        "    local instance = self.instance                                  \n"
+        "    if instance == nil then                                         \n"
+        "        return                                                      \n"
+        "    end                                                             \n"
+        "    if param2 == nil then                                           \n"
+        "        return instance:HasSubscribedToEvent(param1)                \n"
+        "    else                                                            \n"
+        "        return instance:HasSubscribedToEvent(param1, param2)        \n"
+        "    end                                                             \n"
+        "end                                                                 \n"
+        "function ScriptObject()                                             \n"
+        "    local o = {}                                                    \n"
+        "    setmetatable(o, LuaScriptObject)                                \n"
+        "    LuaScriptObject.__index = LuaScriptObject                       \n"
+        "    return o                                                        \n"
+        "end                                                                 \n"
+        "function CreateScriptObjectInstance(object, instance)               \n"
+        "    local o = {}                                                    \n"
+        "    setmetatable(o, object)                                         \n"
+        "    object.__index = object                                         \n"
+        "    instance.object = o                                             \n"
+        "    o.instance = instance                                           \n"
+        "    o.node = instance:GetNode()                                     \n"
+        "    local keys = {}                                                 \n"
+        "    for k, v in pairs(o) do                                         \n"
+        "        keys[k] = true                                              \n"
+        "    end                                                             \n"
+        "    -- Call start function                                          \n"
+        "    o:Start()                                                       \n"
+        "    local attrNames = {}                                            \n"
+        "    for k, v in pairs(o) do                                         \n"
+        "        if keys[k] == nil then                                      \n"
+        "            table.insert(attrNames, k)                              \n"
+        "        end                                                         \n"
+        "    end                                                             \n"
+        "    return o, attrNames                                             \n"
+        "end                                                                 \n"
+        "function DestroyScriptObjectInstance(instance)                      \n"
+        "    local object = instance.object                                  \n"
+        "    if object == nil then                                           \n"
+        "        return                                                      \n"
+        "    end                                                             \n"
+        "    -- Call stop function                                           \n"
+        "    object:Stop()                                                   \n"
+        "    object.node = nil                                               \n"
+        "    object.instance = nil                                           \n"
+        "    instance.object = nil                                           \n"
+        "end                                                                 \n"
+    );
 
     lua["KLuaScriptInstance"].setClass(UserdataMetatable<LuaScriptInstance, Component>()
 
@@ -20,11 +185,9 @@ void RegisterLuaScriptInstance(kaguya::State &lua)
         .addFunction("SetScriptFile", &LuaScriptInstance::SetScriptFile)
         .addFunction("SetScriptObjectType", &LuaScriptInstance::SetScriptObjectType)
         
-        .addOverloadedFunctions("SubscribeToEvent", 
-            // static_cast<void (LuaScriptInstance::*)(const String&, kaguya::LuaFunction)>(&LuaScriptInstance::AddEventHandler),
+        .addOverloadedFunctions("SubscribeToEvent",
             static_cast<void (LuaScriptInstance::*)(const String&, const String&)>(&LuaScriptInstance::AddEventHandler),
-            // static_cast<void (LuaScriptInstance::*)(void* sender, const String&, kaguya::LuaFunction)>(&LuaScriptInstance::AddEventHandler),
-            static_cast<void (LuaScriptInstance::*)(void* sender, const String&, const String&)>(&LuaScriptInstance::AddEventHandler))
+            static_cast<void (LuaScriptInstance::*)(Object*, const String&, const String&)>(&LuaScriptInstance::AddEventHandler))
 
         .addOverloadedFunctions("UnsubscribeFromEvent", 
                 static_cast<void (LuaScriptInstance::*)(const String&)>(&LuaScriptInstance::RemoveEventHandler),
@@ -40,176 +203,46 @@ void RegisterLuaScriptInstance(kaguya::State &lua)
 
         .addFunction("GetScriptFile", &LuaScriptInstance::GetScriptObjectType)
         .addFunction("GetScriptObjectType", &LuaScriptInstance::GetScriptObjectType)
-        );
 
-    lua.dostring(
-        "LuaScriptObject = {}                                                  "
-        "                                                                      "
-        "function LuaScriptObject:Start()                                      "
-        "end                                                                   "
-        "                                                                      "
-        "function LuaScriptObject:Stop()                                       "
-        "end                                                                   "
-        "                                                                      "
-        "function LuaScriptObject:GetNode()                                    "
-        "    return self.node                                                  "
-        "end                                                                   "
-        "                                                                      "
-        "function LuaScriptObject:SubscribeToEvent(param1, param2, param3)     "
-        "    local instance = self.instance                                    "
-        "    if instance == nil then                                           "
-        "        return                                                        "
-        "    end                                                               "
-        "                                                                      "
-        "    if param3 == nil then                                             "
-        "        instance:SubscribeToEvent(param1, param2)                     "
-        "    else                                                              "
-        "        instance:SubscribeToEvent(param1, param2, param3)             "
-        "    end                                                               "
-        "end                                                                   "
-        "                                                                      "
-        "function LuaScriptObject:UnsubscribeFromEvent(param1, param2)         "
-        "    local instance = self.instance                                    "
-        "    if instance == nil then                                           "
-        "        return                                                        "
-        "    end                                                               "
-        "                                                                      "
-        "    if param2 == nil then                                             "
-        "        instance:UnsubscribeFromEvent(param1)                         "
-        "    else                                                              "
-        "        instance:UnsubscribeFromEvent(param1, param2)                 "
-        "    end                                                               "
-        "end                                                                   "
-        "                                                                      "
-        "function LuaScriptObject:UnsubscribeFromEvents(sender)                "
-        "    local instance = self.instance                                    "
-        "    if instance == nil then                                           "
-        "        return                                                        "
-        "    end                                                               "
-        "    instance:UnsubscribeFromEvents(sender)                            "
-        "end                                                                   "
-        "                                                                      "
-        "function LuaScriptObject:UnsubscribeFromAllEvents()                   "
-        "    local instance = self.instance                                    "
-        "    if instance == nil then                                           "
-        "        return                                                        "
-        "    end                                                               "
-        "    instance:UnsubscribeFromAllEvents()                               "
-        "end                                                                   "
-        "                                                                      "
-        "function LuaScriptObject:UnsubscribeFromAllEventsExcept()             "
-        "    local instance = self.instance                                    "
-        "    if instance == nil then                                           "
-        "        return                                                        "
-        "    end                                                               "
-        "    instance:UnsubscribeFromAllEventsExcept()                         "
-        "end                                                                   "
-        "                                                                      "
-        "function LuaScriptObject:HasSubscribedToEvent(param1, param2)         "
-        "    local instance = self.instance                                    "
-        "    if instance == nil then                                           "
-        "        return                                                        "
-        "    end                                                               "
-        "                                                                      "
-        "    if param2 == nil then                                             "
-        "        return instance:HasSubscribedToEvent(param1)                  "
-        "    else                                                              "
-        "        return instance:HasSubscribedToEvent(param1, param2)          "
-        "    end                                                               "
-        "end                                                                   "
-        "                                                                      "
-        "function ScriptObject()                                               "
-        "    local o = {}                                                      "
-        "    setmetatable(o, LuaScriptObject)                                  "
-        "    LuaScriptObject.__index = LuaScriptObject                         "
-        "    return o                                                          "
-        "end                                                                   "
-        "                                                                      "
-        "function CreateScriptObjectInstance(object, instance)                 "
-        "    local o = {}                                                      "
-        "    setmetatable(o, object)                                           "
-        "    object.__index = object                                           "
-        "                                                                      "
-        "    instance.object = o                                               "
-        "    o.instance = instance                                             "
-        "    o.node = instance:GetNode()                                       "
-        "                                                                      "
-        "    local keys = {}                                                   "
-        "    for k, v in pairs(o) do                                           "
-        "        keys[k] = true                                                "
-        "    end                                                               "
-        "                                                                      "
-        "    -- Call start function                                            "
-        "    o:Start()                                                         "
-        "                                                                      "
-        "    local attrNames = {}                                              "
-        "    for k, v in pairs(o) do                                           "
-        "        if keys[k] == nil then                                        "
-        "            table.insert(attrNames, k)                                "
-        "        end                                                           "
-        "    end                                                               "
-        "                                                                      "
-        "    return o, attrNames                                               "
-        "end                                                                   "
-        "                                                                      "
-        "function DestroyScriptObjectInstance(instance)                        "
-        "    local object = instance.object                                    "
-        "    if object == nil then                                             "
-        "        return                                                        "
-        "    end                                                               "
-        "                                                                      "
-        "    -- Call stop function                                             "
-        "    object:Stop()                                                     "
-        "                                                                      "
-        "    object.node = nil                                                 "
-        "    object.instance = nil                                             "
-        "    instance.object = nil                                             "
-        "end                                                                   "
+        .addProperty("object", &LuaScriptInstance::GetLuaTableObject, &LuaScriptInstance::SetLuaTableObject)
         );
 }
 
-static void LuaScriptSubscribeToEvent(const String& eventName, const String& functionName)
+static void LuaScriptSubscribeToEvent1(const String& eventName, const String& functionName)
 {
     LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
     luaScript->AddEventHandler(eventName, functionName);
 }
 
-static void LuaScriptUnsubscribeFromEvent(const String& eventName, const String& functionName)
+static void LuaScriptUnsubscribeFromEvent1(const String& eventName, const String& functionName)
 {
     LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
     luaScript->RemoveEventHandler(eventName);
 }
 
-static void LuaScriptSubscribeToEvent(const String& eventName, const kaguya::LuaFunction& luaFunction)
-{
-    // LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-    // luaScript->AddEventHandler(eventName, luaFunction);
-}
-
-static void LuaScriptUnsubscribeFromEvent(const String& eventName, const kaguya::LuaFunction& luaFunction)
-{
-    // LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-    // luaScript->RemoveEventHandler(eventName, luaFunction);
-}
-
+//static void LuaScriptSubscribeToEvent2(const String& eventName, const kaguya::LuaFunction& luaFunction)
+//{
+//    // TODO:
+//}
+//
+//static void LuaScriptUnsubscribeFromEvent2(const String& eventName, const kaguya::LuaFunction& luaFunction)
+//{
+//    // TODO:
+//}
 
 void RegisterLuaScript(kaguya::State &lua)
 {
     using namespace kaguya;
 
-    lua["KSubscribeToEvent"] = overload(
-        (void(*)(const String&, const String&))&LuaScriptSubscribeToEvent,
-        (void(*)(const String&, const kaguya::LuaFunction&))&LuaScriptSubscribeToEvent);
-
-    lua["KUnsubscribeFromEvent"] = overload(
-        (void(*)(const String&, const String&))&LuaScriptUnsubscribeFromEvent,
-        (void(*)(const String&, const kaguya::LuaFunction&))&LuaScriptUnsubscribeFromEvent);    
+    lua["KSubscribeToEvent"] = &LuaScriptSubscribeToEvent1;
+    lua["KUnsubscribeFromEvent"] = &LuaScriptUnsubscribeFromEvent1;
 }
 
 void RegisterLuaScriptLuaAPI(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    RegisterCoroutine(lua);
     RegisterLuaScriptInstance(lua);
     RegisterLuaScript(lua);
 

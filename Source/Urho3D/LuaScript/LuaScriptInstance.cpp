@@ -408,17 +408,52 @@ void LuaScriptInstance::SetScriptObjectType(const String& scriptObjectType)
 
     ReleaseObject();
 
+    bool usingKaguya_ = true;
+    if (usingKaguya_)
+    {
+        LuaFunction* function = luaScript_->GetFunction("CreateScriptObjectInstance");
+        if (!function || !function->BeginCall())
+            return;
+
+        function->PushLuaTable(scriptObjectType);
+        kaguya::util::push_args(luaScript_->GetState(), this);
+
+        if (!function->EndCall(2, 2))
+            return;
+    }
+    else
+    {
+        LuaFunction* function = luaScript_->GetFunction("CreateScriptObjectInstance");
+        if (!function || !function->BeginCall())
+            return;
+
+        function->PushLuaTable(scriptObjectType);
+        function->PushUserType((void*)this, "LuaScriptInstance");
+
+        // Return script object and attribute names
+        if (!function->EndCall(2))
+            return;
+    }   
+
     LuaFunction* function = luaScript_->GetFunction("CreateScriptObjectInstance");
     if (!function || !function->BeginCall())
         return;
 
-    function->PushLuaTable(scriptObjectType);
-    // function->PushUserType((void*)this, "LuaScriptInstance");
-    kaguya::util::push_args(luaState_, this);
-
-    // Return script object and attribute names
-    if (!function->EndCall(2))
-        return;
+    //function->PushLuaTable(scriptObjectType);
+    //
+    //if (usingKaguya_)
+    //{
+    //    kaguya::util::push_args(luaState_, this);
+    //    if (!function->EndCall(2, 2))
+    //        return;
+    //}
+    //else
+    //{
+    //    function->PushUserType((void*)this, "LuaScriptInstance");
+    //    // Return script object and attribute names
+    //    if (!function->EndCall(2))
+    //        return;
+    //}
 
     GetScriptAttributes();
     scriptObjectType_ = scriptObjectType;

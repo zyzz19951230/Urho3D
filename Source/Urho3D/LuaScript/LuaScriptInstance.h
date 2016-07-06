@@ -24,6 +24,7 @@
 
 #include "../LuaScript/LuaScriptEventListener.h"
 #include "../Scene/Component.h"
+#include <kaguya.hpp>
 
 struct lua_State;
 
@@ -81,13 +82,11 @@ public:
     virtual void OnSetEnabled();
 
     /// Add a scripted event handler by function.
-    // virtual void AddEventHandler(const String& eventName, int functionIndex);
-    virtual void AddEventHandler(const String& eventName, const kaguya::LuaFunction& function);
-    /// Add a scripted event handler by function name.
+    virtual void AddEventHandler(const String& eventName, int functionIndex);
+	/// Add a scripted event handler by function name.
     virtual void AddEventHandler(const String& eventName, const String& functionName);
     /// Add a scripted event handler by function for a specific sender.
-    // virtual void AddEventHandler(Object* sender, const String& eventName, int functionIndex);
-    virtual void AddEventHandler(Object* sender, const String& eventName, const kaguya::LuaFunction& function);
+    virtual void AddEventHandler(Object* sender, const String& eventName, int functionIndex);
     /// Add a scripted event handler by function name for a specific sender.
     virtual void AddEventHandler(Object* sender, const String& eventName, const String& functionName);
     /// Remove a scripted event handler.
@@ -120,12 +119,19 @@ public:
 
     /// Return script file.
     LuaFile* GetScriptFile() const;
-
     /// Return script object type.
     const String& GetScriptObjectType() const { return scriptObjectType_; }
-
     /// Return Lua reference to script object.
     int GetScriptObjectRef() const { return scriptObjectRef_; }
+
+    kaguya::LuaTable GetLuaTableObject() const
+    {
+        return luaTableObject_;
+    }
+    void SetLuaTableObject(kaguya::LuaTable luaTableObject)
+    {
+        luaTableObject_ = luaTableObject;
+    }
 
     /// Get script file serialization attribute by calling a script function.
     PODVector<unsigned char> GetScriptDataAttr() const;
@@ -182,6 +188,9 @@ private:
     Vector<AttributeInfo> attributeInfos_;
     /// Lua reference to script object.
     int scriptObjectRef_;
+
+    kaguya::LuaTable luaTableObject_;
+
     /// Script object method.
     LuaFunction* scriptObjectMethods_[MAX_LUA_SCRIPT_OBJECT_METHODS];
 };
