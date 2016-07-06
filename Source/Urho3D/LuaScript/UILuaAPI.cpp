@@ -588,21 +588,18 @@ static void RegisterSprite(kaguya::State& lua)
     lua["KSprite"].setClass(UserdataMetatable<Sprite, UIElement>()
         .addStaticFunction("new", &KCreateObject<Sprite>)
         
-        // .addOverloadedFunctions("SetPosition",
-        //     static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetPosition),
-        //     static_cast<void(Sprite::*)(float, float)>(&Sprite::SetPosition))
-        .addFunction("SetPosition", static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetPosition))
+         .addOverloadedFunctions("SetPosition",
+             static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetPosition),
+             static_cast<void(Sprite::*)(float, float)>(&Sprite::SetPosition))
         
-        // .addOverloadedFunctions("SetHotSpot",
-        //     static_cast<void(Sprite::*)(const IntVector2&)>(&Sprite::SetHotSpot),
-        //     static_cast<void(Sprite::*)(int, int)>(&Sprite::SetHotSpot))
-        .addFunction("SetHotSpot", static_cast<void(Sprite::*)(const IntVector2&)>(&Sprite::SetHotSpot))
-        
-        // .addOverloadedFunctions("SetScale",
-        //     static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetScale),
-        //     static_cast<void(Sprite::*)(float, float)>(&Sprite::SetScale),
-        //     static_cast<void(Sprite::*)(float)>(&Sprite::SetScale))
-        .addFunction("SetScale", static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetScale))
+        .addOverloadedFunctions("SetHotSpot",
+             static_cast<void(Sprite::*)(const IntVector2&)>(&Sprite::SetHotSpot),
+             static_cast<void(Sprite::*)(int, int)>(&Sprite::SetHotSpot))
+
+         .addOverloadedFunctions("SetScale",
+             static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetScale),
+             static_cast<void(Sprite::*)(float, float)>(&Sprite::SetScale),
+             static_cast<void(Sprite::*)(float)>(&Sprite::SetScale))
 
         .addFunction("SetRotation", &Sprite::SetRotation)
         .addFunction("SetTexture", &Sprite::SetTexture)

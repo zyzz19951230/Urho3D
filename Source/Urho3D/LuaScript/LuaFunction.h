@@ -50,7 +50,7 @@ public:
     /// Begin function call. When a script object is given then pass it as self argument (first parameter) to the function call.
     bool BeginCall(const LuaScriptInstance* instance = 0);
     /// End call and actually execute the function. The return values, if any, are still left in the stack when this call returns.
-    bool EndCall(int numReturns = 0);
+    bool EndCall(int numReturns = 0, int numArguments = -1);
     /// Push int to stack.
     void PushInt(int value);
     /// Push bool to stack.
@@ -95,6 +95,8 @@ public:
     /// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.
     void PushLuaTable(const String& tableName) { PushLuaTable(tableName.CString()); }
 
+    /// Return lua state.
+    lua_State* GetLuaState() const { return luaState_; }
     /// Return function ref.
     int GetFunctionRef() const { return functionRef_; }
 

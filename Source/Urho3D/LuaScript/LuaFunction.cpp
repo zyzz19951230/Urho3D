@@ -82,10 +82,13 @@ bool LuaFunction::BeginCall(const LuaScriptInstance* instance)
     return true;
 }
 
-bool LuaFunction::EndCall(int numReturns)
+bool LuaFunction::EndCall(int numReturns, int numArguments)
 {
     assert(numArguments_ >= 0);
-    int numArguments = numArguments_;
+
+    if (numArguments < 0)
+        numArguments = numArguments_;
+
     numArguments_ = -1;
 
     if (lua_pcall(luaState_, numArguments, numReturns, 0) != 0)

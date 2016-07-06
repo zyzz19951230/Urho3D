@@ -129,66 +129,75 @@ LuaScript::LuaScript(Context* context) :
     RegisterLoader();
     ReplacePrint();
 
-    tolua_MathLuaAPI_open(luaState_);
-    tolua_CoreLuaAPI_open(luaState_);
-    tolua_IOLuaAPI_open(luaState_);
-    tolua_ResourceLuaAPI_open(luaState_);
-    tolua_SceneLuaAPI_open(luaState_);
-    tolua_AudioLuaAPI_open(luaState_);
-    tolua_EngineLuaAPI_open(luaState_);
-    tolua_GraphicsLuaAPI_open(luaState_);
-    tolua_InputLuaAPI_open(luaState_);
-#ifdef URHO3D_NAVIGATION
-    tolua_NavigationLuaAPI_open(luaState_);
-#endif
-#ifdef URHO3D_NETWORK
-    tolua_NetworkLuaAPI_open(luaState_);
-#endif
-#ifdef URHO3D_DATABASE
-    tolua_DatabaseLuaAPI_open(luaState_);
-#endif
-#ifdef URHO3D_PHYSICS
-    tolua_PhysicsLuaAPI_open(luaState_);
-#endif
-    tolua_UILuaAPI_open(luaState_);
-#ifdef URHO3D_URHO2D
-    tolua_Urho2DLuaAPI_open(luaState_);
-#endif
-    tolua_LuaScriptLuaAPI_open(luaState_);
+    // Using kaguya or not
+    usingKaguya_ = true;
+    
+    if (usingKaguya_)
+    {
+        globalContext = context_;
+        kaguya::State lua(luaState_);
 
-    SetContext(luaState_, context_);
+        // lua.setErrorHandler(KaguyaErrorHandler);
 
-	globalContext = context_;
+        RegisterMathLuaAPI(lua);
+        RegisterCoreLuaAPI(lua);
+        RegisterIOLuaAPI(lua);
+        RegisterResourceLuaAPI(lua);
+        RegisterSceneLuaAPI(lua);
+        RegisterAudioLuaAPI(lua);
+        RegisterEngineLuaAPI(lua);
+        RegisterRendererLuaAPI(lua);
+        RegisterGraphicsLuaAPI(lua);
+        RegisterInputLuaAPI(lua);
+    #ifdef URHO3D_NAVIGATION
+        RegisterNavigationLuaAPI(lua);
+    #endif
+    #ifdef URHO3D_NETWORK
+        RegisterNetworkLuaAPI(lua);
+    #endif
+    #ifdef URHO3D_DATABASE
+        RegisterDatabaseLuaAPI(lua);
+    #endif
+    #ifdef URHO3D_PHYSICS
+        RegisterPhysicsLuaAPI(lua);
+    #endif
+        RegisterUILuaAPI(lua);
+    #ifdef URHO3D_URHO2D
+        RegisterUrho2DLuaAPI(lua);
+    #endif
+        RegisterLuaScriptLuaAPI(lua);
+    }
+    else
+    {
+        tolua_MathLuaAPI_open(luaState_);
+        tolua_CoreLuaAPI_open(luaState_);
+        tolua_IOLuaAPI_open(luaState_);
+        tolua_ResourceLuaAPI_open(luaState_);
+        tolua_SceneLuaAPI_open(luaState_);
+        tolua_AudioLuaAPI_open(luaState_);
+        tolua_EngineLuaAPI_open(luaState_);
+        tolua_GraphicsLuaAPI_open(luaState_);
+        tolua_InputLuaAPI_open(luaState_);
+    #ifdef URHO3D_NAVIGATION
+        tolua_NavigationLuaAPI_open(luaState_);
+    #endif
+    #ifdef URHO3D_NETWORK
+        tolua_NetworkLuaAPI_open(luaState_);
+    #endif
+    #ifdef URHO3D_DATABASE
+        tolua_DatabaseLuaAPI_open(luaState_);
+    #endif
+    #ifdef URHO3D_PHYSICS
+        tolua_PhysicsLuaAPI_open(luaState_);
+    #endif
+        tolua_UILuaAPI_open(luaState_);
+    #ifdef URHO3D_URHO2D
+        tolua_Urho2DLuaAPI_open(luaState_);
+    #endif
+        tolua_LuaScriptLuaAPI_open(luaState_);
 
-    kaguya::State lua(luaState_);
-
-    RegisterMathLuaAPI(lua);
-    RegisterCoreLuaAPI(lua);
-    RegisterIOLuaAPI(lua);
-    RegisterResourceLuaAPI(lua);
-    RegisterSceneLuaAPI(lua);
-    RegisterAudioLuaAPI(lua);
-    RegisterEngineLuaAPI(lua);
-    RegisterRendererLuaAPI(lua);
-    RegisterGraphicsLuaAPI(lua);
-    RegisterInputLuaAPI(lua);
-#ifdef URHO3D_NAVIGATION
-    RegisterNavigationLuaAPI(lua);
-#endif
-#ifdef URHO3D_NETWORK
-    RegisterNetworkLuaAPI(lua);
-#endif
-#ifdef URHO3D_DATABASE
-    RegisterDatabaseLuaAPI(lua);
-#endif
-#ifdef URHO3D_PHYSICS
-    RegisterPhysicsLuaAPI(lua);
-#endif
-    RegisterUILuaAPI(lua);
-#ifdef URHO3D_URHO2D
-    RegisterUrho2DLuaAPI(lua);
-#endif
-    // RegisterLuaScriptLuaAPI(lua);
+        SetContext(luaState_, context_);
+    }
 
     eventInvoker_ = new LuaScriptEventInvoker(context_);
     coroutineUpdate_ = GetFunction("coroutine.update");
@@ -423,7 +432,8 @@ int LuaScript::Loader(lua_State* L)
         return 1;
 #endif
 
-    ResourceCache* cache = ::GetContext(L)->GetSubsystem<ResourceCache>();
+    ResourceCache* cache = globalContext->GetSubsystem<ResourceCache>();
+    // ResourceCache* cache = ::GetContext(L)->GetSubsystem<ResourceCache>();
 
     // Attempt to get .luc file first
     LuaFile* lucFile = cache->GetResource<LuaFile>(fileName + ".luc", false);
@@ -478,6 +488,11 @@ int LuaScript::Print(lua_State* L)
 
     URHO3D_LOGRAWF("%s\n", String::Joined(strings, "    ").CString());
     return 0;
+}
+
+void LuaScript::KaguyaErrorHandler(int statusCode, const char* errorMessage)
+{
+    URHO3D_LOGERRORF("Lua error: Error Code %d, Error message = %s", statusCode, errorMessage);
 }
 
 LuaFunction* LuaScript::GetFunction(int index)
@@ -584,6 +599,8 @@ bool LuaScript::PushLuaFunction(lua_State* L, const String& functionName)
 
     return true;
 }
+
+
 
 void RegisterLuaScriptLibrary(Context* context)
 {

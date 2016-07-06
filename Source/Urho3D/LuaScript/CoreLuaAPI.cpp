@@ -448,6 +448,36 @@ static void RegisterVariant(kaguya::State& lua)
     );
 }
 
+static const Variant& VariantMapGetVariant(const VariantMap& variantMap, const String& key)
+{
+    VariantMap::ConstIterator i = variantMap.Find(StringHash(key));
+    if (i == variantMap.End())
+        return Variant::EMPTY;
+
+    return i->second_;
+}
+
+static void VariantMapSetVariant(VariantMap& variantMap, const String& key, const Variant& value)
+{
+    variantMap[StringHash(key)] = value;
+}
+
+static void RegisterVariantMap(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["KVariantMap"].setClass(UserdataMetatable<VariantMap>()
+        .setConstructors<VariantMap()>()
+
+        // Can not work in kaguya
+        // .addStaticFunction("__index", &VariantMapGetVariant)
+        // .addStaticFunction("__newindex", &VariantMapSetVariant)
+
+        .addStaticFunction("Get", &VariantMapGetVariant)
+        .addStaticFunction("Set", &VariantMapSetVariant)
+        );
+}
+
 void RegisterCoreLuaAPI(kaguya::State& lua)
 {
     RegisterAttribute(lua);
@@ -459,6 +489,7 @@ void RegisterCoreLuaAPI(kaguya::State& lua)
     RegisterStringUtils(lua);
     RegisterTimer(lua);
     RegisterVariant(lua);
+    RegisterVariantMap(lua);
 
     lua["ktime"] = KGetSubsystem<Time>();
     lua["KGetTime"] = KGetSubsystem<Time>;

@@ -86,6 +86,8 @@ public:
 
     /// Return Lua state.
     lua_State* GetState() const { return luaState_; }
+    /// Return Using kaguya.
+    bool IsUsingKaguya() const { return usingKaguya_; }
 
     /// Return Lua function at the given stack index.
     LuaFunction* GetFunction(int index);
@@ -114,9 +116,13 @@ private:
     static int Loader(lua_State* L);
     /// Print function.
     static int Print(lua_State* L);
+    /// Kaguya error handler.
+    static void KaguyaErrorHandler(int statusCode, const char* errorMessage);
 
     /// Lua state.
     lua_State* luaState_;
+    /// Using kaguya.
+    bool usingKaguya_;
     /// Procedural event invoker.
     SharedPtr<LuaScriptEventInvoker> eventInvoker_;
     /// Coroutine update function.

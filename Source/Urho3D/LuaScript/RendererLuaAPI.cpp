@@ -1366,17 +1366,17 @@ static void RegisterVertexBuffer(kaguya::State& lua)
 
 extern Context* globalContext;
 
-SharedPtr<Viewport> ViewportNew1()
+SharedPtr<Viewport> KCreateViewport1()
 {
     return SharedPtr<Viewport>(new Viewport(globalContext));
 }
 
-SharedPtr<Viewport> ViewportNew2(Scene* scene, Camera* camera, RenderPath* renderPath = 0)
+SharedPtr<Viewport> KCreateViewport2(Scene* scene, Camera* camera, RenderPath* renderPath = 0)
 {
     return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera, renderPath));
 }
 
-SharedPtr<Viewport> ViewportNew3(Scene* scene, Camera* camera, const IntRect& rect, RenderPath* renderPath = 0)
+SharedPtr<Viewport> KCreateViewport3(Scene* scene, Camera* camera, const IntRect& rect, RenderPath* renderPath = 0)
 {
     return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera, rect, renderPath));
 }
@@ -1386,10 +1386,8 @@ static void RegisterViewport(kaguya::State& lua)
     using namespace kaguya;
 
     lua["KViewport"].setClass(UserdataMetatable<Viewport, Object>()
-        //.addStaticFunction("new", &KCreateObject<Viewport>)
-        .addStaticFunction("new1", &ViewportNew1)
-        .addStaticFunction("new2", &ViewportNew2)
-        .addStaticFunction("new3", &ViewportNew3)
+        // .addStaticFunction("new", overload(&KCreateViewport1, &KCreateViewport2, &KCreateViewport3))
+        .addStaticFunction("new", &KCreateViewport2)
 
         .addFunction("SetScene", &Viewport::SetScene)
         .addFunction("SetCamera", &Viewport::SetCamera)
