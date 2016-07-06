@@ -42,6 +42,8 @@
 #include <toluapp/tolua++.h>
 #include "../LuaScript/ToluaUtils.h"
 
+#include <kaguya.hpp>
+
 #include "../DebugNew.h"
 
 namespace Urho3D
@@ -411,7 +413,8 @@ void LuaScriptInstance::SetScriptObjectType(const String& scriptObjectType)
         return;
 
     function->PushLuaTable(scriptObjectType);
-    function->PushUserType((void*)this, "LuaScriptInstance");
+    // function->PushUserType((void*)this, "LuaScriptInstance");
+    kaguya::util::push_args(luaState_, this);
 
     // Return script object and attribute names
     if (!function->EndCall(2))

@@ -81,11 +81,13 @@ public:
     virtual void OnSetEnabled();
 
     /// Add a scripted event handler by function.
-    virtual void AddEventHandler(const String& eventName, int functionIndex);
+    // virtual void AddEventHandler(const String& eventName, int functionIndex);
+    virtual void AddEventHandler(const String& eventName, const kaguya::LuaFunction& function);
     /// Add a scripted event handler by function name.
     virtual void AddEventHandler(const String& eventName, const String& functionName);
     /// Add a scripted event handler by function for a specific sender.
-    virtual void AddEventHandler(Object* sender, const String& eventName, int functionIndex);
+    // virtual void AddEventHandler(Object* sender, const String& eventName, int functionIndex);
+    virtual void AddEventHandler(Object* sender, const String& eventName, const kaguya::LuaFunction& function);
     /// Add a scripted event handler by function name for a specific sender.
     virtual void AddEventHandler(Object* sender, const String& eventName, const String& functionName);
     /// Remove a scripted event handler.
@@ -129,9 +131,10 @@ public:
     PODVector<unsigned char> GetScriptDataAttr() const;
     /// Get script network serialization attribute by calling a script function.
     PODVector<unsigned char> GetScriptNetworkDataAttr() const;
+    /// Return lua state.
+    lua_State* GetLuaState() const { return luaState_; }
     /// Return script object's funcition.
     LuaFunction* GetScriptObjectFunction(const String& functionName) const;
-
     /// Set script file attribute.
     void SetScriptFileAttr(const ResourceRef& value);
     /// Return script file attribute.

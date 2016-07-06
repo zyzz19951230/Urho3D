@@ -1,4 +1,5 @@
 #include "../IO/File.h"
+#include "../Resource/ResourceCache.h"
 #include "../Scene/Animatable.h"
 #include "../Scene/AnimationDefs.h"
 #include "../Scene/Component.h"
@@ -15,7 +16,8 @@
 #include "../Scene/UnknownComponent.h"
 #include "../Scene/ValueAnimation.h"
 #include "../Scene/ValueAnimationInfo.h"
-
+#include "../LuaScript/LuaFile.h"
+#include "../LuaScript/LuaScriptInstance.h"
 #include "../LuaScript/LuaScriptUtils.h"
 
 #include <kaguya.hpp>
@@ -136,6 +138,31 @@ static SharedPtr<Component> NodeGetComponent(const Node* node, const char* type,
     return SharedPtr<Component>(node->GetComponent(StringHash(type), recursive));
 }
 
+static kaguya::LuaTable NodeCreateScriptObject1(Node* node, const char* scriptObjectType)
+{
+    LuaScriptInstance* instance = node->CreateComponent<LuaScriptInstance>();
+    instance->CreateObject(scriptObjectType);
+    // lua_rawgeti(tolua_S, LUA_REGISTRYINDEX, instance->GetScriptObjectRef());    
+    return kaguya::LuaTable(instance->GetLuaState());
+}
+
+
+
+static kaguya::LuaTable NodeCreateScriptObject2(Node* node, const char* fileName, const char* scriptObjectType)
+{
+    ResourceCache* cache = node->GetSubsystem<ResourceCache>();
+    LuaFile* scriptFile = cache->GetResource<LuaFile>(fileName);
+    if (!scriptFile)
+    {
+        return 0;
+    }
+    
+    LuaScriptInstance* instance = node->CreateComponent<LuaScriptInstance>();
+    instance->CreateObject(scriptFile, scriptObjectType);
+    // lua_rawgeti(tolua_S, LUA_REGISTRYINDEX, instance->GetScriptObjectRef());
+    return kaguya::LuaTable(instance->GetLuaState());
+}
+
 static void RegisterNode(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -252,6 +279,9 @@ static void RegisterNode(kaguya::State& lua)
         
         .addStaticFunction("CreateComponent", &NodeCreateComponent)
         .addStaticFunction("GetOrCreateComponent", &NodeGetOrCreateComponent)
+
+        .addStaticFunction("CreateScriptObject", &NodeCreateScriptObject1)
+        .addStaticFunction("CreateScriptObject2", &NodeCreateScriptObject2)
 
         .addOverloadedFunctions("CloneComponent",
             static_cast<Component*(Node::*)(Component*, unsigned)>(&Node::CloneComponent),
