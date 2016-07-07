@@ -67,10 +67,10 @@ void LuaScriptEventInvoker::HandleLuaScriptEvent(StringHash eventType, VariantMa
 
     // Keep instance alive during invoking
     SharedPtr<LuaScriptInstance> instance(instance_);
-    if (function->BeginCall(instance))      // instance may be null when invoking a procedural event handler
+    if (function->BeginCall(instance))
     {
-        function->PushUserType(eventType, "StringHash");
-        function->PushUserType(eventData, "VariantMap");
+        function->PushUserType(eventType);
+        function->PushUserType(eventData);
         function->EndCall();
     }
 }

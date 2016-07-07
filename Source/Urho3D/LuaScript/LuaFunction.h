@@ -62,40 +62,13 @@ public:
     /// Push string to stack.
     void PushString(const String& string);
     /// Push user type to stack.
-    void PushUserType(void* userType, const char* typeName);
-
-    /// Push user type to stack.
-    template <typename T> void PushUserType(const T* userType)
-    {
-        PushUserType((void*)userType, T::GetTypeName().CString());
-    }
-
-    /// Push user type to stack.
     template <typename T> void PushUserType(const T& userType)
     {
-        PushUserType((void*)&userType, T::GetTypeName().CString());
-    }
-
-    /// Push user type to stack.
-    template <typename T> void PushUserType(const T* userType, const char* typeName)
-    {
+        // PushUserType((void*)&userType, T::GetTypeName().CString());
         assert(numArguments_ >= 0);
         ++numArguments_;
         kaguya::util::push_args(luaState_, userType);
-        // PushUserType((void*)userType, typeName);
     }
-
-    /// Push user type to stack.
-    template <typename T> void PushUserType(const T& userType, const char* typeName)
-    {
-        assert(numArguments_ >= 0);
-        ++numArguments_;
-        kaguya::util::push_args(luaState_, userType);
-        // PushUserType((void*)&userType, typeName);
-    }
-
-    /// Push variant to stack.
-    void PushVariant(const Variant& variant, const char* asType = 0);
     /// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.
     void PushLuaTable(const char* tableName);
     /// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.

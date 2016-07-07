@@ -70,9 +70,11 @@ bool LuaFunction::BeginCall(const LuaScriptInstance* instance)
     if (!IsValid())
         return false;
 
+    // Push function on stack
     lua_rawgeti(luaState_, LUA_REGISTRYINDEX, functionRef_);
     if (instance)
     {
+        // Push script object on stack
         lua_rawgeti(luaState_, LUA_REGISTRYINDEX, instance->GetScriptObjectRef()); // Will get a nil when reference is invalid
         numArguments_ = 1;
     }
@@ -132,21 +134,7 @@ void LuaFunction::PushString(const String& string)
 {
     assert(numArguments_ >= 0);
     ++numArguments_;
-    tolua_pushurho3dstring(luaState_, string);
-}
-
-void LuaFunction::PushUserType(void* userType, const char* typeName)
-{
-    assert(numArguments_ >= 0);
-    ++numArguments_;
-    tolua_pushusertype(luaState_, userType, typeName);
-}
-
-void LuaFunction::PushVariant(const Variant& variant, const char* asType)
-{
-    assert(numArguments_ >= 0);
-    ++numArguments_;
-    ToluaPushVariant(luaState_, &variant, asType);
+    kaguya::util::push_args(luaState_, string);
 }
 
 void LuaFunction::PushLuaTable(const char* tableName)
@@ -155,7 +143,7 @@ void LuaFunction::PushLuaTable(const char* tableName)
     ++numArguments_;
     lua_getglobal(luaState_, tableName);
     if (!lua_istable(luaState_, -1))
-        URHO3D_LOGERRORF("Could not find lua table %s", tableName);      // nil is pushed instead
+        URHO3D_LOGERRORF("Could not find lua table %s", tableName); // nil is pushed instead
 }
 
 }

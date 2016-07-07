@@ -122,8 +122,8 @@ void LuaScriptInstance::OnSetAttribute(const AttributeInfo& attr, const Variant&
     if (function)
     {
         if (function->BeginCall(this))
-        {
-            function->PushVariant(src);
+        {   
+            function->PushUserType(src);
             function->EndCall();
         }
     }
@@ -434,7 +434,7 @@ void LuaScriptInstance::SetScriptObjectType(const String& scriptObjectType)
         return;
 
     function->PushLuaTable(scriptObjectType);
-    function->PushUserType(this, "LuaScriptInstance");
+    function->PushUserType(this);
 
     // Return script object and attribute names
     if (!function->EndCall(2))
@@ -457,7 +457,7 @@ void LuaScriptInstance::SetScriptDataAttr(const PODVector<unsigned char>& data)
     if (function && function->BeginCall(this))
     {
         MemoryBuffer buf(data);
-        function->PushUserType(buf, "Deserializer");
+        function->PushUserType(buf);
         function->EndCall();
     }
 }
@@ -471,7 +471,7 @@ void LuaScriptInstance::SetScriptNetworkDataAttr(const PODVector<unsigned char>&
     if (function && function->BeginCall(this))
     {
         MemoryBuffer buf(data);
-        function->PushUserType(buf, "Deserializer");
+        function->PushUserType(buf);
         function->EndCall();
     }
 }
@@ -491,7 +491,7 @@ PODVector<unsigned char> LuaScriptInstance::GetScriptDataAttr() const
     LuaFunction* function = scriptObjectMethods_[LSOM_SAVE];
     if (function && function->BeginCall(this))
     {
-        function->PushUserType(buf, "Serializer");
+        function->PushUserType(buf);
         function->EndCall();
     }
 
@@ -508,7 +508,7 @@ PODVector<unsigned char> LuaScriptInstance::GetScriptNetworkDataAttr() const
     LuaFunction* function = scriptObjectMethods_[LSOM_WRITENETWORKUPDATE];
     if (function && function->BeginCall(this))
     {
-        function->PushUserType(buf, "Serializer");
+        function->PushUserType(buf);
         function->EndCall();
     }
 
@@ -757,7 +757,7 @@ void LuaScriptInstance::ReleaseObject()
     LuaFunction* function = luaScript_->GetFunction("DestroyScriptObjectInstance");
     if (function && function->BeginCall())
     {
-        function->PushUserType(this, "LuaScriptInstance");
+        function->PushUserType(this);
         lua_rawgeti(luaState_, LUA_REGISTRYINDEX, scriptObjectRef_);
 
         function->EndCall();
