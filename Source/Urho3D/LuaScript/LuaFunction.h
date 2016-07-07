@@ -40,8 +40,6 @@ class URHO3D_API LuaFunction : public RefCounted
 public:
     /// Construct from a Lua function object at the specified stack index.
     LuaFunction(lua_State* L, int index);
-    /// Construct from a C function.
-    LuaFunction(lua_State* L, lua_CFunction func);
     /// Destruct.
     ~LuaFunction();
 

@@ -42,15 +42,6 @@ LuaFunction::LuaFunction(lua_State* L, int index) :
     functionRef_ = luaL_ref(L, LUA_REGISTRYINDEX);
 }
 
-LuaFunction::LuaFunction(lua_State* L, lua_CFunction func) :
-    luaState_(L),
-    numArguments_(-1)
-{
-    assert(L);
-    lua_pushcfunction(L, func);
-    functionRef_ = luaL_ref(L, LUA_REGISTRYINDEX);
-}
-
 LuaFunction::~LuaFunction()
 {
     luaL_unref(luaState_, LUA_REGISTRYINDEX, functionRef_);
