@@ -51,6 +51,7 @@ extern void RegisterCoreLuaAPI(kaguya::State&);
 extern void RegisterEngineLuaAPI(kaguya::State&);
 extern void RegisterRendererLuaAPI(kaguya::State&);
 extern void RegisterGraphicsLuaAPI(kaguya::State&);
+extern void RegisterDrawableLuaAPI(kaguya::State&);
 extern void RegisterInputLuaAPI(kaguya::State&);
 extern void RegisterIOLuaAPI(kaguya::State&);
 extern void RegisterMathLuaAPI(kaguya::State&);
@@ -108,6 +109,7 @@ LuaScript::LuaScript(Context* context) :
     RegisterEngineLuaAPI(lua);
     RegisterRendererLuaAPI(lua);
     RegisterGraphicsLuaAPI(lua);
+    RegisterDrawableLuaAPI(lua);
     RegisterInputLuaAPI(lua);
 #ifdef URHO3D_NAVIGATION
     RegisterNavigationLuaAPI(lua);
