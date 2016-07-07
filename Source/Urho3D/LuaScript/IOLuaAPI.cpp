@@ -20,12 +20,12 @@
 namespace Urho3D
 {
 
-template<typename class_type, typename base_class_type = void>
-void RegisterDeserializer(kaguya::UserdataMetatable<class_type, base_class_type>& deserializer)
+static void RegisterDeserializer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    deserializer.addFunction("Seek", &Deserializer::Seek)
+    lua["KDeserializer"].setClass(UserdataMetatable<Deserializer>()
+        .addFunction("Seek", &Deserializer::Seek)
         .addFunction("GetName", &Deserializer::GetName)
         .addFunction("GetChecksum", &Deserializer::GetChecksum)
         .addFunction("IsEof", &Deserializer::IsEof)
@@ -76,16 +76,16 @@ void RegisterDeserializer(kaguya::UserdataMetatable<class_type, base_class_type>
         .addProperty("checksum", &Deserializer::GetChecksum)
         .addProperty("eof", &Deserializer::IsEof)
         .addProperty("position", &Deserializer::GetPosition)
-        .addProperty("size", &Deserializer::GetSize);
+        .addProperty("size", &Deserializer::GetSize)
+        );
 }
 
-
-template<typename class_type, typename base_class_type = void>
-void RegisterSerializer(kaguya::UserdataMetatable<class_type, base_class_type>& serializer)
+static void RegisterSerializer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    serializer.addFunction("WriteInt", &Serializer::WriteInt)
+    lua["KSerializer"].setClass(UserdataMetatable<Serializer>()
+        .addFunction("WriteInt", &Serializer::WriteInt)
         .addFunction("WriteShort", &Serializer::WriteShort)
         .addFunction("WriteByte", &Serializer::WriteByte)
         .addFunction("WriteUInt", &Serializer::WriteUInt)
@@ -121,7 +121,8 @@ void RegisterSerializer(kaguya::UserdataMetatable<class_type, base_class_type>& 
         .addFunction("WriteVariantMap", &Serializer::WriteVariantMap)
         .addFunction("WriteVLE", &Serializer::WriteVLE)
         .addFunction("WriteNetID", &Serializer::WriteNetID)
-        .addFunction("WriteLine", &Serializer::WriteLine);
+        .addFunction("WriteLine", &Serializer::WriteLine)
+        );
 }
 
 static void RegisterFile(kaguya::State& lua)
@@ -133,9 +134,9 @@ static void RegisterFile(kaguya::State& lua)
     lua["KFILE_WRITE"] = FILE_WRITE;
     lua["KFILE_READWRITE"] = FILE_READWRITE;
 
-    UserdataMetatable<File, Object> file;
+    lua["KFile"].setClass(UserdataMetatable<File, MultipleBase<Object, Deserializer, Serializer>>()
+        .addStaticFunction("new", &KCreateObject<File>)
 
-    file.addStaticFunction("new", &KCreateObject<File>)
         .addOverloadedFunctions("Open",
             static_cast<bool(File::*)(const String&, FileMode)>(&File::Open),
             static_cast<bool(File::*)(PackageFile*, const String&)>(&File::Open))
@@ -151,12 +152,8 @@ static void RegisterFile(kaguya::State& lua)
         .addProperty("mode", &File::GetMode)
         .addProperty("open", &File::IsOpen)
         .addProperty("handle", &File::GetHandle)
-        .addProperty("packaged", &File::IsPackaged);
-
-    RegisterDeserializer(file);
-    RegisterSerializer(file);
-
-    lua["KFile"].setClass(file);
+        .addProperty("packaged", &File::IsPackaged)
+        );
 }
 
 static void RegisterFileSystem(kaguya::State& lua)
@@ -290,12 +287,11 @@ static void RegisterVectorBuffer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    UserdataMetatable<VectorBuffer> vectorBuffer;
-
-    vectorBuffer.setConstructors<VectorBuffer(),
-        VectorBuffer(const PODVector<unsigned char>&),
-        VectorBuffer(const void*, unsigned),
-        VectorBuffer(Deserializer&, unsigned)>()
+    lua["KVectorBuffer"].setClass(UserdataMetatable<VectorBuffer, MultipleBase<Deserializer, Serializer>>()
+        .setConstructors<VectorBuffer(),
+            VectorBuffer(const PODVector<unsigned char>&),
+            VectorBuffer(const void*, unsigned),
+            VectorBuffer(Deserializer&, unsigned)>()
 
         .addOverloadedFunctions("SetData",
             static_cast<void(VectorBuffer::*)(const PODVector<unsigned char>&)>(&VectorBuffer::SetData),
@@ -310,16 +306,14 @@ static void RegisterVectorBuffer(kaguya::State& lua)
 
         .addProperty("data", &VectorBuffer::GetData)
         .addProperty("modifiableData", &VectorBuffer::GetModifiableData)
-        .addProperty("buffer", &VectorBuffer::GetBuffer);
-
-    RegisterDeserializer(vectorBuffer);
-    RegisterSerializer(vectorBuffer);
-
-    lua["KVectorBuffer"].setClass(vectorBuffer);
+        .addProperty("buffer", &VectorBuffer::GetBuffer)
+        );
 }
 
 void RegisterIOLuaAPI(kaguya::State& lua)
 {
+    RegisterDeserializer(lua);
+    RegisterDeserializer(lua);
     RegisterFile(lua);
     RegisterFileSystem(lua);
     RegisterIOEvents(lua);
