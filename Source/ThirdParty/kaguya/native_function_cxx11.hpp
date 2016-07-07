@@ -249,11 +249,12 @@ namespace kaguya
 				}
 				else
 				{
-					if (!this_ || !lua_type_traits<MemType>::checkType(state, 2))
+					optional<MemType> opt = lua_type_traits<optional<MemType> >::get(state, 2);
+					if (!this_ || !opt)
 					{
 						throw LuaTypeMismatch("type mismatch!!");
 					}
-					this_->*m = lua_type_traits<MemType>::get(state, 2);
+					this_->*m = *opt;
 					return 0;
 				}
 			}
@@ -364,12 +365,12 @@ namespace kaguya
 				!traits::is_same<void, typename f_signature<T>::type>::value
 				, void>::type > : traits::integral_constant<bool, true> {};
 
-			template<typename ClassType, typename... Args> struct functionToConstructorSignature;
-			template<typename ClassType, typename... Args> struct functionToConstructorSignature<ClassType(Args...) >
+			template<typename ClassType, typename... Args> struct ConstructorFunction;
+			template<typename ClassType, typename... Args> struct ConstructorFunction<ClassType(Args...) >
 			{
 				typedef constructor_signature_type<ClassType, Args...> type;
 			};
-			template<typename ClassType, typename... Args> struct functionToConstructorSignature<ClassType, ClassType(Args...) >//class type check version
+			template<typename ClassType, typename... Args> struct ConstructorFunction<ClassType, ClassType(Args...) >//class type check version
 			{
 				typedef constructor_signature_type<ClassType, Args...> type;
 			};
@@ -380,7 +381,8 @@ namespace kaguya
 		using cpp11impl::argTypesName;
 		using cpp11impl::argCount;
 		using cpp11impl::constructor_signature_type;
-		using cpp11impl::functionToConstructorSignature;
+		using cpp11impl::ConstructorFunction;
 		using cpp11impl::is_callable;
 	}
+	using nativefunction::ConstructorFunction;
 }

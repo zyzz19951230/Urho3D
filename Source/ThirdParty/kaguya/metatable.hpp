@@ -134,12 +134,12 @@ namespace kaguya
 		template<typename... ArgTypes>
 		UserdataMetatable& setConstructors()
 		{
-			addOverloadedFunctions("new", typename nativefunction::functionToConstructorSignature<class_type, ArgTypes>::type()...);
+			addOverloadedFunctions("new", typename ConstructorFunction<class_type, ArgTypes>::type()...);
 			return *this;
 		}
 #else
 #define KAGUYA_TEMPLATE_PARAMETER(N) template<KAGUYA_PP_TEMPLATE_DEF_REPEAT(N)>		
-#define KAGUYA_SET_CON_TYPE_DEF(N) typename nativefunction::functionToConstructorSignature<class_type,KAGUYA_PP_CAT(A,N)>::type()
+#define KAGUYA_SET_CON_TYPE_DEF(N) typename ConstructorFunction<class_type,KAGUYA_PP_CAT(A,N)>::type()
 #define KAGUYA_SET_CON_FN_DEF(N) \
 	KAGUYA_TEMPLATE_PARAMETER(N)\
 	inline UserdataMetatable& setConstructors()\
@@ -186,6 +186,24 @@ namespace kaguya
 			return *this;
 		}
 
+        /**
+        * @name addProperty
+        * @brief add member property with external getter function.(experimental)
+        * @param name function name for lua
+        * @param getter getter function
+        */
+        template<typename GetType>
+        UserdataMetatable& addProperty(const char* name, GetType(*getter)(const class_type*))
+        {
+            if (has_key(name))
+            {
+                throw KaguyaException("already registered.");
+                return *this;
+            }
+            property_map_[name] = AnyDataPusher(function(getter));
+            return *this;
+        }
+
 		/**
 		* @name addProperty
 		* @brief add member property with setter, getter functions.(experimental)
@@ -205,6 +223,24 @@ namespace kaguya
 			return *this;
 		}
 
+        /**
+        * @name addProperty
+        * @brief add member property with external setter, getter functions.(experimental)
+        * @param name function name for lua
+        * @param getter getter function
+        * @param setter setter function
+        */
+        template<typename GetType, typename SetType>
+        UserdataMetatable& addProperty(const char* name, GetType(*getter)(const class_type*), void (*setter)(class_type*, SetType))
+        {
+            if (has_key(name))
+            {
+                throw KaguyaException("already registered.");
+                return *this;
+            }
+            property_map_[name] = AnyDataPusher(overload(getter, setter));
+            return *this;
+        }
 
 		/**
 		* @name addStaticFunction

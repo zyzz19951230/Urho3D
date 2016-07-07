@@ -296,11 +296,12 @@ namespace kaguya
 				}
 				else
 				{
-					if (!this_ || !lua_type_traits<MemType>::checkType(state, 2))
+					optional<MemType> opt = lua_type_traits<optional<MemType> >::get(state, 2);
+					if (!this_ || !opt)
 					{
 						throw LuaTypeMismatch("type mismatch!!");
 					}
-					this_->*m = lua_type_traits<MemType>::get(state, 2);
+					this_->*m = *opt;
 					return 0;
 				}
 			}
@@ -313,12 +314,13 @@ namespace kaguya
 			template<class MemType, class T>
 			bool checkArgTypes(lua_State* state, MemType T::* m)
 			{
-				bool thistypecheck = lua_type_traits<T>::checkType(state, 1);
-				if (thistypecheck && lua_gettop(state) == 2)
+				if (lua_gettop(state) >= 2)
 				{
-					return lua_type_traits<MemType>::checkType(state, 2);
+					//setter typecheck
+					return lua_type_traits<MemType>::checkType(state, 2) && lua_type_traits<T>::checkType(state, 1);
 				}
-				return thistypecheck;
+				//getter typecheck
+				return  lua_type_traits<T>::checkType(state, 1);
 			}
 			template<class MemType, class T>
 			bool strictCheckArgTypes(lua_State* state, MemType T::* m)
@@ -392,17 +394,17 @@ namespace kaguya
 
 
 				//@}
-			template<class ClassType, class FunType=void> struct functionToConstructorSignature;
+			template<class ClassType, class FunType=void> struct ConstructorFunction;
 			
 #define KAGUYA_F_TO_CONSIG_TYPE_DEF(N)  constructor_signature_type<ClassType KAGUYA_PP_TEMPLATE_ARG_REPEAT_CONCAT(N)>
 #define KAGUYA_F_TO_CONSIG_DEF(N) \
 			template<typename ClassType KAGUYA_PP_TEMPLATE_DEF_REPEAT_CONCAT(N)>\
-			struct functionToConstructorSignature<ClassType(KAGUYA_PP_TEMPLATE_ARG_REPEAT(N))>\
+			struct ConstructorFunction<ClassType(KAGUYA_PP_TEMPLATE_ARG_REPEAT(N))>\
 			{\
 				typedef KAGUYA_F_TO_CONSIG_TYPE_DEF(N) type;\
 			};\
 			template<typename ClassType KAGUYA_PP_TEMPLATE_DEF_REPEAT_CONCAT(N)>\
-			struct functionToConstructorSignature<ClassType,ClassType(KAGUYA_PP_TEMPLATE_ARG_REPEAT(N))>\
+			struct ConstructorFunction<ClassType,ClassType(KAGUYA_PP_TEMPLATE_ARG_REPEAT(N))>\
 			{\
 				typedef KAGUYA_F_TO_CONSIG_TYPE_DEF(N) type;\
 			};
@@ -416,7 +418,8 @@ namespace kaguya
 		using cpp03impl::argTypesName;
 		using cpp03impl::argCount;
 		using cpp03impl::constructor_signature_type;
-		using cpp03impl::functionToConstructorSignature;
+		using cpp03impl::ConstructorFunction;
 		using cpp03impl::is_callable;
 	}
+	using nativefunction::ConstructorFunction;
 }
