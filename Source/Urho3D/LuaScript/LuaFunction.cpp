@@ -73,10 +73,7 @@ bool LuaFunction::BeginCall(const LuaScriptInstance* instance)
     lua_rawgeti(luaState_, LUA_REGISTRYINDEX, functionRef_);
     if (instance)
     {
-        // Using kaguya
-        kaguya::util::push_args(luaState_, instance->GetLuaTableObject());
-        // lua_rawgeti(luaState_, LUA_REGISTRYINDEX, instance->GetScriptObjectRef());      // Will get a nil when reference is invalid
-
+        lua_rawgeti(luaState_, LUA_REGISTRYINDEX, instance->GetScriptObjectRef()); // Will get a nil when reference is invalid
         numArguments_ = 1;
     }
     else
@@ -85,13 +82,11 @@ bool LuaFunction::BeginCall(const LuaScriptInstance* instance)
     return true;
 }
 
-bool LuaFunction::EndCall(int numReturns, int numArguments)
+bool LuaFunction::EndCall(int numReturns)
 {
     assert(numArguments_ >= 0);
 
-    if (numArguments < 0)
-        numArguments = numArguments_;
-
+    int numArguments = numArguments_;
     numArguments_ = -1;
 
     if (lua_pcall(luaState_, numArguments, numReturns, 0) != 0)

@@ -142,12 +142,13 @@ static kaguya::LuaTable NodeCreateScriptObject1(Node* node, const char* scriptOb
 {
     LuaScriptInstance* instance = node->CreateComponent<LuaScriptInstance>();    
     instance->CreateObject(scriptObjectType);
-    return instance->GetLuaTableObject();
-    // lua_rawgeti(tolua_S, LUA_REGISTRYINDEX, instance->GetScriptObjectRef());    
-    // return kaguya::LuaTable(instance->GetLuaState());
+
+    // Push Script object to stack
+    lua_rawgeti(instance->GetLuaState(), LUA_REGISTRYINDEX, instance->GetScriptObjectRef());
+    
+    // return Lua table Object.
+    return kaguya::LuaTable(instance->GetLuaState(), kaguya::StackTop());
 }
-
-
 
 static kaguya::LuaTable NodeCreateScriptObject2(Node* node, const char* fileName, const char* scriptObjectType)
 {
@@ -157,11 +158,12 @@ static kaguya::LuaTable NodeCreateScriptObject2(Node* node, const char* fileName
     {
         return 0;
     }
-    
+
     LuaScriptInstance* instance = node->CreateComponent<LuaScriptInstance>();
     instance->CreateObject(scriptFile, scriptObjectType);
-    // lua_rawgeti(tolua_S, LUA_REGISTRYINDEX, instance->GetScriptObjectRef());
-    return kaguya::LuaTable(instance->GetLuaState());
+
+    lua_rawgeti(instance->GetLuaState(), LUA_REGISTRYINDEX, instance->GetScriptObjectRef());
+    return kaguya::LuaTable(instance->GetLuaState(), kaguya::StackTop());
 }
 
 static void RegisterNode(kaguya::State& lua)

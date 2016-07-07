@@ -50,7 +50,7 @@ public:
     /// Begin function call. When a script object is given then pass it as self argument (first parameter) to the function call.
     bool BeginCall(const LuaScriptInstance* instance = 0);
     /// End call and actually execute the function. The return values, if any, are still left in the stack when this call returns.
-    bool EndCall(int numReturns = 0, int numArguments = -1);
+    bool EndCall(int numReturns = 0);
     /// Push int to stack.
     void PushInt(int value);
     /// Push bool to stack.
@@ -79,13 +79,19 @@ public:
     /// Push user type to stack.
     template <typename T> void PushUserType(const T* userType, const char* typeName)
     {
-        PushUserType((void*)userType, typeName);
+        assert(numArguments_ >= 0);
+        ++numArguments_;
+        kaguya::util::push_args(luaState_, userType);
+        // PushUserType((void*)userType, typeName);
     }
 
     /// Push user type to stack.
     template <typename T> void PushUserType(const T& userType, const char* typeName)
     {
-        PushUserType((void*)&userType, typeName);
+        assert(numArguments_ >= 0);
+        ++numArguments_;
+        kaguya::util::push_args(luaState_, userType);
+        // PushUserType((void*)&userType, typeName);
     }
 
     /// Push variant to stack.

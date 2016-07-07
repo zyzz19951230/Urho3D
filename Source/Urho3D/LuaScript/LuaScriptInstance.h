@@ -124,15 +124,6 @@ public:
     /// Return Lua reference to script object.
     int GetScriptObjectRef() const { return scriptObjectRef_; }
 
-    kaguya::LuaTable GetLuaTableObject() const
-    {
-        return luaTableObject_;
-    }
-    void SetLuaTableObject(kaguya::LuaTable luaTableObject)
-    {
-        luaTableObject_ = luaTableObject;
-    }
-
     /// Get script file serialization attribute by calling a script function.
     PODVector<unsigned char> GetScriptDataAttr() const;
     /// Get script network serialization attribute by calling a script function.
@@ -188,8 +179,6 @@ private:
     Vector<AttributeInfo> attributeInfos_;
     /// Lua reference to script object.
     int scriptObjectRef_;
-
-    kaguya::LuaTable luaTableObject_;
 
     /// Script object method.
     LuaFunction* scriptObjectMethods_[MAX_LUA_SCRIPT_OBJECT_METHODS];

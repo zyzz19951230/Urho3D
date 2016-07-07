@@ -145,51 +145,72 @@ void LuaScriptInstance::OnSetAttribute(const AttributeInfo& attr, const Variant&
             break;
         case VAR_VECTOR2:
             {
+                /*
                 Vector2* value = new Vector2(src.GetVector2());
                 tolua_pushusertype(luaState_, value, "Vector2");
                 tolua_register_gc(luaState_, lua_gettop(luaState_));
+                */
+                kaguya::util::push_args(luaState_, src.GetVector2());
             }
             break;
         case VAR_VECTOR3:
             {
+                /*
                 Vector3* value = new Vector3(src.GetVector3());
                 tolua_pushusertype(luaState_, value, "Vector3");
                 tolua_register_gc(luaState_, lua_gettop(luaState_));
+                */
+                kaguya::util::push_args(luaState_, src.GetVector3());
             }
             break;
         case VAR_VECTOR4:
             {
+                /*
                 Vector4* value = new Vector4(src.GetVector4());
                 tolua_pushusertype(luaState_, value, "Vector4");
                 tolua_register_gc(luaState_, lua_gettop(luaState_));
+                */
+                kaguya::util::push_args(luaState_, src.GetVector4());
             }
             break;
         case VAR_QUATERNION:
             {
+                /*
                 Quaternion* value = new Quaternion(src.GetQuaternion());
                 tolua_pushusertype(luaState_, value, "Quaternion");
                 tolua_register_gc(luaState_, lua_gettop(luaState_));
+                */
+                kaguya::util::push_args(luaState_, src.GetQuaternion());
             }
             break;
         case VAR_COLOR:
             {
+                /*
                 Color* value = new Color(src.GetColor());
                 tolua_pushusertype(luaState_, value, "Color");
                 tolua_register_gc(luaState_, lua_gettop(luaState_));
+                */
+                kaguya::util::push_args(luaState_, src.GetColor());
             }
             break;
         case VAR_INTRECT:
             {
+                /*
                 IntRect* value = new IntRect(src.GetIntRect());
                 tolua_pushusertype(luaState_, value, "IntRect");
                 tolua_register_gc(luaState_, lua_gettop(luaState_));
+                */
+                kaguya::util::push_args(luaState_, src.GetIntRect());
             }
             break;
         case VAR_INTVECTOR2:
             {
+                /*
                 IntVector2* value = new IntVector2(src.GetIntVector2());
                 tolua_pushusertype(luaState_, value, "IntVector2");
                 tolua_register_gc(luaState_, lua_gettop(luaState_));
+                */
+                kaguya::util::push_args(luaState_, src.GetIntVector2());
             }
             break;
         default:
@@ -408,52 +429,16 @@ void LuaScriptInstance::SetScriptObjectType(const String& scriptObjectType)
 
     ReleaseObject();
 
-    bool usingKaguya_ = true;
-    if (usingKaguya_)
-    {
-        LuaFunction* function = luaScript_->GetFunction("CreateScriptObjectInstance");
-        if (!function || !function->BeginCall())
-            return;
-
-        function->PushLuaTable(scriptObjectType);
-        kaguya::util::push_args(luaScript_->GetState(), this);
-
-        if (!function->EndCall(2, 2))
-            return;
-    }
-    else
-    {
-        LuaFunction* function = luaScript_->GetFunction("CreateScriptObjectInstance");
-        if (!function || !function->BeginCall())
-            return;
-
-        function->PushLuaTable(scriptObjectType);
-        function->PushUserType((void*)this, "LuaScriptInstance");
-
-        // Return script object and attribute names
-        if (!function->EndCall(2))
-            return;
-    }   
-
     LuaFunction* function = luaScript_->GetFunction("CreateScriptObjectInstance");
     if (!function || !function->BeginCall())
         return;
 
-    //function->PushLuaTable(scriptObjectType);
-    //
-    //if (usingKaguya_)
-    //{
-    //    kaguya::util::push_args(luaState_, this);
-    //    if (!function->EndCall(2, 2))
-    //        return;
-    //}
-    //else
-    //{
-    //    function->PushUserType((void*)this, "LuaScriptInstance");
-    //    // Return script object and attribute names
-    //    if (!function->EndCall(2))
-    //        return;
-    //}
+    function->PushLuaTable(scriptObjectType);
+    function->PushUserType(this, "LuaScriptInstance");
+
+    // Return script object and attribute names
+    if (!function->EndCall(2))
+        return;
 
     GetScriptAttributes();
     scriptObjectType_ = scriptObjectType;
@@ -472,7 +457,7 @@ void LuaScriptInstance::SetScriptDataAttr(const PODVector<unsigned char>& data)
     if (function && function->BeginCall(this))
     {
         MemoryBuffer buf(data);
-        function->PushUserType((Deserializer&)buf, "Deserializer");
+        function->PushUserType(buf, "Deserializer");
         function->EndCall();
     }
 }
@@ -486,7 +471,7 @@ void LuaScriptInstance::SetScriptNetworkDataAttr(const PODVector<unsigned char>&
     if (function && function->BeginCall(this))
     {
         MemoryBuffer buf(data);
-        function->PushUserType((Deserializer&)buf, "Deserializer");
+        function->PushUserType(buf, "Deserializer");
         function->EndCall();
     }
 }
@@ -506,7 +491,7 @@ PODVector<unsigned char> LuaScriptInstance::GetScriptDataAttr() const
     LuaFunction* function = scriptObjectMethods_[LSOM_SAVE];
     if (function && function->BeginCall(this))
     {
-        function->PushUserType((Serializer&)buf, "Serializer");
+        function->PushUserType(buf, "Serializer");
         function->EndCall();
     }
 
@@ -523,7 +508,7 @@ PODVector<unsigned char> LuaScriptInstance::GetScriptNetworkDataAttr() const
     LuaFunction* function = scriptObjectMethods_[LSOM_WRITENETWORKUPDATE];
     if (function && function->BeginCall(this))
     {
-        function->PushUserType((Serializer&)buf, "Serializer");
+        function->PushUserType(buf, "Serializer");
         function->EndCall();
     }
 
@@ -772,8 +757,11 @@ void LuaScriptInstance::ReleaseObject()
     LuaFunction* function = luaScript_->GetFunction("DestroyScriptObjectInstance");
     if (function && function->BeginCall())
     {
-        function->PushUserType((void*)this, "LuaScriptInstance");
+        function->PushUserType(this, "LuaScriptInstance");
+        lua_rawgeti(luaState_, LUA_REGISTRYINDEX, scriptObjectRef_);
+
         function->EndCall();
+        scriptObjectRef_ = LUA_REFNIL;
     }
 
     for (int i = 0; i < MAX_LUA_SCRIPT_OBJECT_METHODS; ++i)

@@ -146,7 +146,6 @@ static void RegisterLuaScriptInstance(kaguya::State &lua)
         "    local o = {}                                                    \n"
         "    setmetatable(o, object)                                         \n"
         "    object.__index = object                                         \n"
-        "    instance.object = o                                             \n"
         "    o.instance = instance                                           \n"
         "    o.node = instance:GetNode()                                     \n"
         "    local keys = {}                                                 \n"
@@ -163,16 +162,11 @@ static void RegisterLuaScriptInstance(kaguya::State &lua)
         "    end                                                             \n"
         "    return o, attrNames                                             \n"
         "end                                                                 \n"
-        "function DestroyScriptObjectInstance(instance)                      \n"
-        "    local object = instance.object                                  \n"
-        "    if object == nil then                                           \n"
-        "        return                                                      \n"
-        "    end                                                             \n"
+        "function DestroyScriptObjectInstance(instance, object)              \n"
         "    -- Call stop function                                           \n"
         "    object:Stop()                                                   \n"
         "    object.node = nil                                               \n"
         "    object.instance = nil                                           \n"
-        "    instance.object = nil                                           \n"
         "end                                                                 \n"
     );
 
@@ -203,8 +197,6 @@ static void RegisterLuaScriptInstance(kaguya::State &lua)
 
         .addFunction("GetScriptFile", &LuaScriptInstance::GetScriptObjectType)
         .addFunction("GetScriptObjectType", &LuaScriptInstance::GetScriptObjectType)
-
-        .addProperty("object", &LuaScriptInstance::GetLuaTableObject, &LuaScriptInstance::SetLuaTableObject)
         );
 }
 
