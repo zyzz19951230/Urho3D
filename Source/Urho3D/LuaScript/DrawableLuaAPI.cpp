@@ -326,41 +326,41 @@ static void RegisterLight(kaguya::State& lua)
     lua["MAX_LIGHT_SPLITS"] = MAX_LIGHT_SPLITS;
     lua["MAX_CASCADE_SPLITS"] = MAX_CASCADE_SPLITS;
 
-    /* lua["BiasParameters"].setClass(UserdataMetatable<BiasParameters>()
-            .setConstructors<BiasParameters(),
-            BiasParameters(float, float, float)>()
+    lua["BiasParameters"].setClass(UserdataMetatable<BiasParameters>()
+        .setConstructors<BiasParameters(),
+        BiasParameters(float, float, float)>()
 
-            .addFunction("Validate", &BiasParameters::Validate)
+        .addFunction("Validate", &BiasParameters::Validate)
 
-            .addProperty("constantBias", &BiasParameters::constantBias_)
-            .addProperty("slopeScaledBias", &BiasParameters::slopeScaledBias_)
-            .addProperty("normalOffset", &BiasParameters::normalOffset_)
+        .addProperty("constantBias", &BiasParameters::constantBias_)
+        .addProperty("slopeScaledBias", &BiasParameters::slopeScaledBias_)
+        .addProperty("normalOffset", &BiasParameters::normalOffset_)
         );
 
-        lua["CascadeParameters"].setClass(UserdataMetatable<CascadeParameters>()
-            .setConstructors<CascadeParameters(),
-            CascadeParameters(float, float, float, float, float, float)>()
+    lua["CascadeParameters"].setClass(UserdataMetatable<CascadeParameters>()
+        .setConstructors<CascadeParameters(),
+        CascadeParameters(float, float, float, float, float, float)>()
 
-            .addFunction("Validate", &CascadeParameters::Validate)
-            .addFunction("GetShadowRange", &CascadeParameters::GetShadowRange)
+        .addFunction("Validate", &CascadeParameters::Validate)
+        .addFunction("GetShadowRange", &CascadeParameters::GetShadowRange)
 
-            .addProperty("shadowRange", &CascadeParameters::GetShadowRange)
-            .addProperty("fadeStart", &CascadeParameters::fadeStart_)
-            .addProperty("biasAutoAdjust", &CascadeParameters::biasAutoAdjust_)
+        .addProperty("shadowRange", &CascadeParameters::GetShadowRange)
+        .addProperty("fadeStart", &CascadeParameters::fadeStart_)
+        .addProperty("biasAutoAdjust", &CascadeParameters::biasAutoAdjust_)
         );
 
-        lua["FocusParameters"].setClass(UserdataMetatable<FocusParameters>()
-            .setConstructors<FocusParameters(),
-            FocusParameters(bool, bool, bool, float, float)>()
+    lua["FocusParameters"].setClass(UserdataMetatable<FocusParameters>()
+        .setConstructors<FocusParameters(),
+        FocusParameters(bool, bool, bool, float, float)>()
 
-            .addFunction("Validate", &FocusParameters::Validate)
+        .addFunction("Validate", &FocusParameters::Validate)
 
-            .addProperty("focus", &FocusParameters::focus_)
-            .addProperty("nonUniform", &FocusParameters::nonUniform_)
-            .addProperty("autoSize", &FocusParameters::autoSize_)
-            .addProperty("quantize", &FocusParameters::quantize_)
-            .addProperty("minView", &FocusParameters::minView_)
-        );*/
+        .addProperty("focus", &FocusParameters::focus_)
+        .addProperty("nonUniform", &FocusParameters::nonUniform_)
+        .addProperty("autoSize", &FocusParameters::autoSize_)
+        .addProperty("quantize", &FocusParameters::quantize_)
+        .addProperty("minView", &FocusParameters::minView_)
+        );
 
     lua["Light"].setClass(UserdataMetatable<Light, Drawable>()
         .addStaticFunction("new", &KCreateObject<Light>)
@@ -375,9 +375,9 @@ static void RegisterLight(kaguya::State& lua)
         .addFunction("SetAspectRatio", &Light::SetAspectRatio)
         .addFunction("SetFadeDistance", &Light::SetFadeDistance)
         .addFunction("SetShadowFadeDistance", &Light::SetShadowFadeDistance)
-        // .addFunction("SetShadowBias", &Light::SetShadowBias)
-        // .addFunction("SetShadowCascade", &Light::SetShadowCascade)
-        // .addFunction("SetShadowFocus", &Light::SetShadowFocus)
+        .addFunction("SetShadowBias", &Light::SetShadowBias)
+        .addFunction("SetShadowCascade", &Light::SetShadowCascade)
+        .addFunction("SetShadowFocus", &Light::SetShadowFocus)
         .addFunction("SetShadowIntensity", &Light::SetShadowIntensity)
         .addFunction("SetShadowResolution", &Light::SetShadowResolution)
         .addFunction("SetShadowNearFarRatio", &Light::SetShadowNearFarRatio)
@@ -396,9 +396,9 @@ static void RegisterLight(kaguya::State& lua)
         .addFunction("GetAspectRatio", &Light::GetAspectRatio)
         .addFunction("GetFadeDistance", &Light::GetFadeDistance)
         .addFunction("GetShadowFadeDistance", &Light::GetShadowFadeDistance)
-        // .addFunction("GetShadowBias", &Light::GetShadowBias)
-        // .addFunction("GetShadowCascade", &Light::GetShadowCascade)
-        // .addFunction("GetShadowFocus", &Light::GetShadowFocus)
+        .addFunction("GetShadowBias", &Light::GetShadowBias)
+        .addFunction("GetShadowCascade", &Light::GetShadowCascade)
+        .addFunction("GetShadowFocus", &Light::GetShadowFocus)
         .addFunction("GetShadowIntensity", &Light::GetShadowIntensity)
         .addFunction("GetShadowResolution", &Light::GetShadowResolution)
         .addFunction("GetShadowNearFarRatio", &Light::GetShadowNearFarRatio)
@@ -421,9 +421,9 @@ static void RegisterLight(kaguya::State& lua)
         .addProperty("aspectRatio", &Light::GetAspectRatio, &Light::SetAspectRatio)
         .addProperty("fadeDistance", &Light::GetFadeDistance, &Light::SetFadeDistance)
         .addProperty("shadowFadeDistance", &Light::GetShadowFadeDistance, &Light::SetShadowFadeDistance)
-        // .addProperty("shadowBias", &Light::GetShadowBias, &Light::SetShadowBias)
-        // .addProperty("shadowCascade", &Light::GetShadowCascade, &Light::SetShadowCascade)
-        // .addProperty("shadowFocus", &Light::GetShadowFocus, &Light::SetShadowFocus)
+        .addProperty("shadowBias", &Light::GetShadowBias, &Light::SetShadowBias)
+        .addProperty("shadowCascade", &Light::GetShadowCascade, &Light::SetShadowCascade)
+        .addProperty("shadowFocus", &Light::GetShadowFocus, &Light::SetShadowFocus)
         .addProperty("shadowIntensity", &Light::GetShadowIntensity, &Light::SetShadowIntensity)
         .addProperty("shadowResolution", &Light::GetShadowResolution, &Light::SetShadowResolution)
         .addProperty("shadowNearFarRatio", &Light::GetShadowNearFarRatio, &Light::SetShadowNearFarRatio)

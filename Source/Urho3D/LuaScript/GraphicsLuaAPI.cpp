@@ -515,6 +515,17 @@ static void RegisterSkeleton(kaguya::State& lua)
         .addProperty("rootBoneIndex", &Skeleton::SetRootBoneIndex)
         );
 }
+
+static Image* TerrainGetHeightMap(const Terrain* terrain)
+{
+    return terrain->GetHeightMap();
+}
+
+static void TerrainSetHeightMap(Terrain* terrain, Image* heightMap)
+{
+    terrain->SetHeightMap(heightMap);
+}
+
 static void RegisterTerrain(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -567,6 +578,7 @@ static void RegisterTerrain(kaguya::State& lua)
         .addProperty("maxLodLevels", &Terrain::GetMaxLodLevels, &Terrain::SetMaxLodLevels)
         .addProperty("occlusionLodLevel", &Terrain::GetOcclusionLodLevel, &Terrain::SetOcclusionLodLevel)
         .addProperty("smoothing", &Terrain::GetSmoothing, &Terrain::SetSmoothing)
+        .addProperty("heightMap", &TerrainGetHeightMap, &TerrainSetHeightMap)
         .addProperty("material", &Terrain::GetMaterial, &Terrain::SetMaterial)
         .addProperty("drawDistance", &Terrain::SetDrawDistance)
         .addProperty("shadowDistance", &Terrain::SetShadowDistance)

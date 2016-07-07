@@ -1292,6 +1292,9 @@ static void RegisterTexture2D(kaguya::State& lua)
         
         .addFunction("SetSize", &Texture2D::SetSize)
         .addFunction("SetData", static_cast<bool(Texture2D::*)(Image*, bool)>(&Texture2D::SetData))
+
+        .addFunction("GetRenderSurface", &Texture2D::GetRenderSurface)
+        .addProperty("renderSurface", &Texture2D::GetRenderSurface)
     );
 }
 
