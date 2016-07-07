@@ -39,9 +39,6 @@
 #include "../Scene/Scene.h"
 #include "../Scene/SceneEvents.h"
 
-#include <toluapp/tolua++.h>
-#include "../LuaScript/ToluaUtils.h"
-
 #include <kaguya.hpp>
 
 #include "../DebugNew.h"
@@ -122,7 +119,7 @@ void LuaScriptInstance::OnSetAttribute(const AttributeInfo& attr, const Variant&
     if (function)
     {
         if (function->BeginCall(this))
-        {   
+        {
             function->PushUserType(src);
             function->EndCall();
         }
@@ -141,77 +138,28 @@ void LuaScriptInstance::OnSetAttribute(const AttributeInfo& attr, const Variant&
             lua_pushnumber(luaState_, src.GetDouble());
             break;
         case VAR_STRING:
-            tolua_pushurho3dstring(luaState_, src.GetString());
+            kaguya::util::push_args(luaState_, src.GetString());
             break;
         case VAR_VECTOR2:
-            {
-                /*
-                Vector2* value = new Vector2(src.GetVector2());
-                tolua_pushusertype(luaState_, value, "Vector2");
-                tolua_register_gc(luaState_, lua_gettop(luaState_));
-                */
-                kaguya::util::push_args(luaState_, src.GetVector2());
-            }
+            kaguya::util::push_args(luaState_, src.GetVector2());
             break;
         case VAR_VECTOR3:
-            {
-                /*
-                Vector3* value = new Vector3(src.GetVector3());
-                tolua_pushusertype(luaState_, value, "Vector3");
-                tolua_register_gc(luaState_, lua_gettop(luaState_));
-                */
-                kaguya::util::push_args(luaState_, src.GetVector3());
-            }
+            kaguya::util::push_args(luaState_, src.GetVector3());
             break;
         case VAR_VECTOR4:
-            {
-                /*
-                Vector4* value = new Vector4(src.GetVector4());
-                tolua_pushusertype(luaState_, value, "Vector4");
-                tolua_register_gc(luaState_, lua_gettop(luaState_));
-                */
-                kaguya::util::push_args(luaState_, src.GetVector4());
-            }
+            kaguya::util::push_args(luaState_, src.GetVector4());
             break;
         case VAR_QUATERNION:
-            {
-                /*
-                Quaternion* value = new Quaternion(src.GetQuaternion());
-                tolua_pushusertype(luaState_, value, "Quaternion");
-                tolua_register_gc(luaState_, lua_gettop(luaState_));
-                */
-                kaguya::util::push_args(luaState_, src.GetQuaternion());
-            }
+            kaguya::util::push_args(luaState_, src.GetQuaternion());
             break;
         case VAR_COLOR:
-            {
-                /*
-                Color* value = new Color(src.GetColor());
-                tolua_pushusertype(luaState_, value, "Color");
-                tolua_register_gc(luaState_, lua_gettop(luaState_));
-                */
-                kaguya::util::push_args(luaState_, src.GetColor());
-            }
+            kaguya::util::push_args(luaState_, src.GetColor());
             break;
         case VAR_INTRECT:
-            {
-                /*
-                IntRect* value = new IntRect(src.GetIntRect());
-                tolua_pushusertype(luaState_, value, "IntRect");
-                tolua_register_gc(luaState_, lua_gettop(luaState_));
-                */
-                kaguya::util::push_args(luaState_, src.GetIntRect());
-            }
+            kaguya::util::push_args(luaState_, src.GetIntRect());
             break;
         case VAR_INTVECTOR2:
-            {
-                /*
-                IntVector2* value = new IntVector2(src.GetIntVector2());
-                tolua_pushusertype(luaState_, value, "IntVector2");
-                tolua_register_gc(luaState_, lua_gettop(luaState_));
-                */
-                kaguya::util::push_args(luaState_, src.GetIntVector2());
-            }
+            kaguya::util::push_args(luaState_, src.GetIntVector2());
             break;
         default:
             URHO3D_LOGERROR("Unsupported data type");
@@ -267,28 +215,28 @@ void LuaScriptInstance::OnGetAttribute(const AttributeInfo& attr, Variant& dest)
         dest = lua_tonumber(luaState_, -1);
         break;
     case VAR_STRING:
-        dest = tolua_tourho3dstring(luaState_, -1, "");
+        dest = kaguya::lua_type_traits<String>::get(luaState_, -1);
         break;
     case VAR_VECTOR2:
-        dest = *((Vector2*)tolua_tousertype(luaState_, -1, 0));
+        dest = kaguya::lua_type_traits<Vector2>::get(luaState_, -1);
         break;
     case VAR_VECTOR3:
-        dest = *((Vector3*)tolua_tousertype(luaState_, -1, 0));
+        dest = kaguya::lua_type_traits<Vector3>::get(luaState_, -1);
         break;
     case VAR_VECTOR4:
-        dest = *((Vector4*)tolua_tousertype(luaState_, -1, 0));
+        dest = kaguya::lua_type_traits<Vector4>::get(luaState_, -1);
         break;
     case VAR_QUATERNION:
-        dest = *((Quaternion*)tolua_tousertype(luaState_, -1, 0));
+        dest = kaguya::lua_type_traits<Quaternion>::get(luaState_, -1);
         break;
     case VAR_COLOR:
-        dest = *((Color*)tolua_tousertype(luaState_, -1, 0));
+        dest = kaguya::lua_type_traits<Color>::get(luaState_, -1);
         break;
     case VAR_INTRECT:
-        dest = *((IntRect*)tolua_tousertype(luaState_, -1, 0));
+        dest = kaguya::lua_type_traits<IntRect>::get(luaState_, -1);
         break;
     case VAR_INTVECTOR2:
-        dest = *((IntVector2*)tolua_tousertype(luaState_, -1, 0));
+        dest = kaguya::lua_type_traits<IntVector2>::get(luaState_, -1);
         break;
     default:
         URHO3D_LOGERROR("Unsupported data type");
@@ -584,32 +532,31 @@ void LuaScriptInstance::GetScriptAttributes()
         case LUA_TBOOLEAN:
             info.type_ = VAR_BOOL;
             break;
+
         case LUA_TNUMBER:
             info.type_ = VAR_DOUBLE;
             break;
+
         case LUA_TSTRING:
             info.type_ = VAR_STRING;
             break;
-        case LUA_TUSERDATA:
-            {
-                String typeName = tolua_typename(luaState_, -1);
-                lua_pop(luaState_, 1);
 
-                if (typeName == "Vector2")
-                    info.type_ = VAR_VECTOR2;
-                else if (typeName == "Vector3")
-                    info.type_ = VAR_VECTOR3;
-                else if (typeName == "Vector4")
-                    info.type_ = VAR_VECTOR4;
-                else if (typeName == "Quaternion")
-                    info.type_ = VAR_QUATERNION;
-                else if (typeName == "Color")
-                    info.type_ = VAR_COLOR;
-                else if (typeName == "Intrect")
-                    info.type_ = VAR_INTRECT;
-                else if (typeName == "Intvector2")
-                    info.type_ = VAR_INTVECTOR2;
-            }
+        case LUA_TUSERDATA:
+            if (kaguya::lua_type_traits<Vector2>::strictCheckType(luaState_, -1))
+                info.type_ = VAR_VECTOR2;
+            else if (kaguya::lua_type_traits<Vector3>::strictCheckType(luaState_, -1))
+                info.type_ = VAR_VECTOR3;
+            else if (kaguya::lua_type_traits<Vector4>::strictCheckType(luaState_, -1))
+                info.type_ = VAR_VECTOR4;
+            else if (kaguya::lua_type_traits<Quaternion>::strictCheckType(luaState_, -1))
+                info.type_ = VAR_QUATERNION;
+            else if (kaguya::lua_type_traits<Color>::strictCheckType(luaState_, -1))
+                info.type_ = VAR_COLOR;
+            else if (kaguya::lua_type_traits<IntRect>::strictCheckType(luaState_, -1))
+                info.type_ = VAR_INTRECT;
+            else if (kaguya::lua_type_traits<IntVector2>::strictCheckType(luaState_, -1))
+                info.type_ = VAR_INTVECTOR2;
+            
             break;
         default:
             break;

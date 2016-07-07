@@ -67,7 +67,6 @@ endif ()
 if (URHO3D_LUA)
     add_subdirectory (ThirdParty/Lua${JIT})
     add_subdirectory (ThirdParty/kaguya)
-    add_subdirectory (ThirdParty/toluapp/src/lib)
 endif ()
 
 if (URHO3D_NETWORK)

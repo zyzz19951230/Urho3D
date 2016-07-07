@@ -155,7 +155,10 @@ static void RegisterInput(kaguya::State& lua)
         .addProperty("screenKeyboardSupport", &Input::GetScreenKeyboardSupport)
         .addProperty("screenKeyboardVisible", &Input::IsScreenKeyboardVisible, &Input::SetScreenKeyboardVisible)
         .addProperty("touchEmulation", &Input::GetTouchEmulation, &Input::SetTouchEmulation)
+        
+        // .addProperty("mouseVisible", &Input::IsMouseVisible, (void(Input::*)(bool))(&Input::SetMouseVisible))
         .addProperty("mouseVisible", &Input::IsMouseVisible)
+
         .addProperty("mouseGrabbed", &Input::IsMouseGrabbed)
         .addProperty("mouseLocked", &Input::IsMouseLocked)
         .addProperty("mouseMode", &Input::GetMouseMode)

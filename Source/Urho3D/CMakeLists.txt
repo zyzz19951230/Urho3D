@@ -164,43 +164,44 @@ if (URHO3D_BINDINGS)
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMENT "Generating source files for binding script subsystems")
 endif ()
-if (URHO3D_LUA)
-    # The host tool must be built natively
-    if (CMAKE_CROSSCOMPILING OR URHO3D_LUAJIT)
-        # When cross-compiling or using LuaJIT, build the tolua++ host tool as external project using normal Lua (there is not much point using LuaJIT for the tool building even when technically it can)
-        include (ExternalProject)
-        if (IOS)
-            set (IOS_FIX CMAKE_COMMAND /usr/bin/env -i PATH=$ENV{PATH} ${CMAKE_COMMAND} BUILD_COMMAND bash -c "sed -i '' 's/EFFECTIVE_PLATFORM_NAME//g' CMakeScripts/install_postBuildPhase.make*")
-        endif ()
-        ExternalProject_Add (tolua++
-            SOURCE_DIR ${CMAKE_SOURCE_DIR}/Source/ThirdParty/toluapp/src/bin
-            CMAKE_ARGS -DDEST_RUNTIME_DIR=${CMAKE_BINARY_DIR}/bin/tool -DBAKED_CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR} -DURHO3D_UPDATE_SOURCE_TREE=${URHO3D_UPDATE_SOURCE_TREE} ${IOS_FIX})
-    else ()
-        # Otherwise, build it internally as per normal
-        add_subdirectory (../ThirdParty/toluapp/src/bin ../ThirdParty/toluapp/src/bin)
-    endif ()
-    # Use the host tool to generate source files for tolua++ API binding
-    file (MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/LuaScript/generated)
-    file (GLOB API_PKG_FILES LuaScript/pkgs/*.pkg)
-    foreach (DIR Navigation Network Database Physics Urho2D)
-        string (TOUPPER URHO3D_${DIR} OPT)
-        if (NOT ${OPT})
-            list (REMOVE_ITEM API_PKG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/LuaScript/pkgs/${DIR}LuaAPI.pkg)
-        endif ()
-    endforeach ()
-    foreach (API_PKG_FILE ${API_PKG_FILES})
-        get_filename_component (NAME ${API_PKG_FILE} NAME)
-        string (REGEX REPLACE LuaAPI\\.pkg$ "" DIR ${NAME})
-        set (GEN_CPP_FILE LuaScript/generated/${DIR}LuaAPI.cpp)
-        list (APPEND GEN_CPP_FILES ${GEN_CPP_FILE})
-        file (GLOB PKG_FILES LuaScript/pkgs/${DIR}/*.pkg)
-        add_custom_command (OUTPUT ${GEN_CPP_FILE}
-            COMMAND ${CMAKE_BINARY_DIR}/bin/tool/tolua++ -E ${CMAKE_PROJECT_NAME} -L ToCppHook.lua -o ${CMAKE_CURRENT_BINARY_DIR}/${GEN_CPP_FILE} ${NAME}
-            DEPENDS tolua++ ${API_PKG_FILE} ${PKG_FILES} LuaScript/pkgs/ToCppHook.lua
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/LuaScript/pkgs
-            COMMENT "Generating tolua++ API binding on the fly for ${DIR}")
-    endforeach ()
-endif ()
+
+# if (URHO3D_LUA)
+#     # The host tool must be built natively
+#     if (CMAKE_CROSSCOMPILING OR URHO3D_LUAJIT)
+#         # When cross-compiling or using LuaJIT, build the tolua++ host tool as external project using normal Lua (there is not much point using LuaJIT for the tool building even when technically it can)
+#         include (ExternalProject)
+#         if (IOS)
+#             set (IOS_FIX CMAKE_COMMAND /usr/bin/env -i PATH=$ENV{PATH} ${CMAKE_COMMAND} BUILD_COMMAND bash -c "sed -i '' 's/EFFECTIVE_PLATFORM_NAME//g' CMakeScripts/install_postBuildPhase.make*")
+#         endif ()
+#         ExternalProject_Add (tolua++
+#             SOURCE_DIR ${CMAKE_SOURCE_DIR}/Source/ThirdParty/toluapp/src/bin
+#             CMAKE_ARGS -DDEST_RUNTIME_DIR=${CMAKE_BINARY_DIR}/bin/tool -DBAKED_CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR} -DURHO3D_UPDATE_SOURCE_TREE=${URHO3D_UPDATE_SOURCE_TREE} ${IOS_FIX})
+#     else ()
+#         # Otherwise, build it internally as per normal
+#         add_subdirectory (../ThirdParty/toluapp/src/bin ../ThirdParty/toluapp/src/bin)
+#     endif ()
+#     # Use the host tool to generate source files for tolua++ API binding
+#     file (MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/LuaScript/generated)
+#     file (GLOB API_PKG_FILES LuaScript/pkgs/*.pkg)
+#     foreach (DIR Navigation Network Database Physics Urho2D)
+#         string (TOUPPER URHO3D_${DIR} OPT)
+#         if (NOT ${OPT})
+#             list (REMOVE_ITEM API_PKG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/LuaScript/pkgs/${DIR}LuaAPI.pkg)
+#         endif ()
+#     endforeach ()
+#     foreach (API_PKG_FILE ${API_PKG_FILES})
+#         get_filename_component (NAME ${API_PKG_FILE} NAME)
+#         string (REGEX REPLACE LuaAPI\\.pkg$ "" DIR ${NAME})
+#         set (GEN_CPP_FILE LuaScript/generated/${DIR}LuaAPI.cpp)
+#         list (APPEND GEN_CPP_FILES ${GEN_CPP_FILE})
+#         file (GLOB PKG_FILES LuaScript/pkgs/${DIR}/*.pkg)
+#         add_custom_command (OUTPUT ${GEN_CPP_FILE}
+#             COMMAND ${CMAKE_BINARY_DIR}/bin/tool/tolua++ -E ${CMAKE_PROJECT_NAME} -L ToCppHook.lua -o ${CMAKE_CURRENT_BINARY_DIR}/${GEN_CPP_FILE} ${NAME}
+#             DEPENDS tolua++ ${API_PKG_FILE} ${PKG_FILES} LuaScript/pkgs/ToCppHook.lua
+#             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/LuaScript/pkgs
+#             COMMENT "Generating tolua++ API binding on the fly for ${DIR}")
+#     endforeach ()
+# endif ()
 
 # Generate platform specific export header file
 if (MSVC)

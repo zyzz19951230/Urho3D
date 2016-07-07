@@ -37,44 +37,9 @@
 #include "../Resource/ResourceCache.h"
 #include "../Scene/Scene.h"
 
-extern "C"
-{
-#include <lualib.h>
-}
-
 #include <kaguya.hpp>
 
-#include <toluapp/tolua++.h>
-#include "../LuaScript/ToluaUtils.h"
-
 #include "../DebugNew.h"
-
-extern int tolua_AudioLuaAPI_open(lua_State*);
-extern int tolua_CoreLuaAPI_open(lua_State*);
-extern int tolua_EngineLuaAPI_open(lua_State*);
-extern int tolua_GraphicsLuaAPI_open(lua_State*);
-extern int tolua_InputLuaAPI_open(lua_State*);
-extern int tolua_IOLuaAPI_open(lua_State*);
-extern int tolua_MathLuaAPI_open(lua_State*);
-#ifdef URHO3D_NAVIGATION
-extern int tolua_NavigationLuaAPI_open(lua_State*);
-#endif
-#ifdef URHO3D_NETWORK
-extern int tolua_NetworkLuaAPI_open(lua_State*);
-#endif
-#ifdef URHO3D_DATABASE
-extern int tolua_DatabaseLuaAPI_open(lua_State*);
-#endif
-#ifdef URHO3D_PHYSICS
-extern int tolua_PhysicsLuaAPI_open(lua_State*);
-#endif
-extern int tolua_ResourceLuaAPI_open(lua_State*);
-extern int tolua_SceneLuaAPI_open(lua_State*);
-extern int tolua_UILuaAPI_open(lua_State*);
-#ifdef URHO3D_URHO2D
-extern int tolua_Urho2DLuaAPI_open(lua_State*);
-#endif
-extern int tolua_LuaScriptLuaAPI_open(lua_State*);
 
 namespace Urho3D
 {
@@ -129,75 +94,38 @@ LuaScript::LuaScript(Context* context) :
     RegisterLoader();
     ReplacePrint();
 
-    // Using kaguya or not
-    usingKaguya_ = true;
-    
-    if (usingKaguya_)
-    {
-        globalContext = context_;
-        kaguya::State lua(luaState_);
+    globalContext = context_;
+    kaguya::State lua(luaState_);
 
-        // lua.setErrorHandler(KaguyaErrorHandler);
+    // lua.setErrorHandler(KaguyaErrorHandler);
 
-        RegisterMathLuaAPI(lua);
-        RegisterCoreLuaAPI(lua);
-        RegisterIOLuaAPI(lua);
-        RegisterResourceLuaAPI(lua);
-        RegisterSceneLuaAPI(lua);
-        RegisterAudioLuaAPI(lua);
-        RegisterEngineLuaAPI(lua);
-        RegisterRendererLuaAPI(lua);
-        RegisterGraphicsLuaAPI(lua);
-        RegisterInputLuaAPI(lua);
-    #ifdef URHO3D_NAVIGATION
-        RegisterNavigationLuaAPI(lua);
-    #endif
-    #ifdef URHO3D_NETWORK
-        RegisterNetworkLuaAPI(lua);
-    #endif
-    #ifdef URHO3D_DATABASE
-        RegisterDatabaseLuaAPI(lua);
-    #endif
-    #ifdef URHO3D_PHYSICS
-        RegisterPhysicsLuaAPI(lua);
-    #endif
-        RegisterUILuaAPI(lua);
-    #ifdef URHO3D_URHO2D
-        RegisterUrho2DLuaAPI(lua);
-    #endif
-        RegisterLuaScriptLuaAPI(lua);
-    }
-    else
-    {
-        tolua_MathLuaAPI_open(luaState_);
-        tolua_CoreLuaAPI_open(luaState_);
-        tolua_IOLuaAPI_open(luaState_);
-        tolua_ResourceLuaAPI_open(luaState_);
-        tolua_SceneLuaAPI_open(luaState_);
-        tolua_AudioLuaAPI_open(luaState_);
-        tolua_EngineLuaAPI_open(luaState_);
-        tolua_GraphicsLuaAPI_open(luaState_);
-        tolua_InputLuaAPI_open(luaState_);
-    #ifdef URHO3D_NAVIGATION
-        tolua_NavigationLuaAPI_open(luaState_);
-    #endif
-    #ifdef URHO3D_NETWORK
-        tolua_NetworkLuaAPI_open(luaState_);
-    #endif
-    #ifdef URHO3D_DATABASE
-        tolua_DatabaseLuaAPI_open(luaState_);
-    #endif
-    #ifdef URHO3D_PHYSICS
-        tolua_PhysicsLuaAPI_open(luaState_);
-    #endif
-        tolua_UILuaAPI_open(luaState_);
-    #ifdef URHO3D_URHO2D
-        tolua_Urho2DLuaAPI_open(luaState_);
-    #endif
-        tolua_LuaScriptLuaAPI_open(luaState_);
-
-        SetContext(luaState_, context_);
-    }
+    RegisterMathLuaAPI(lua);
+    RegisterCoreLuaAPI(lua);
+    RegisterIOLuaAPI(lua);
+    RegisterResourceLuaAPI(lua);
+    RegisterSceneLuaAPI(lua);
+    RegisterAudioLuaAPI(lua);
+    RegisterEngineLuaAPI(lua);
+    RegisterRendererLuaAPI(lua);
+    RegisterGraphicsLuaAPI(lua);
+    RegisterInputLuaAPI(lua);
+#ifdef URHO3D_NAVIGATION
+    RegisterNavigationLuaAPI(lua);
+#endif
+#ifdef URHO3D_NETWORK
+    RegisterNetworkLuaAPI(lua);
+#endif
+#ifdef URHO3D_DATABASE
+    RegisterDatabaseLuaAPI(lua);
+#endif
+#ifdef URHO3D_PHYSICS
+    RegisterPhysicsLuaAPI(lua);
+#endif
+    RegisterUILuaAPI(lua);
+#ifdef URHO3D_URHO2D
+    RegisterUrho2DLuaAPI(lua);
+#endif
+    RegisterLuaScriptLuaAPI(lua);
 
     eventInvoker_ = new LuaScriptEventInvoker(context_);
     coroutineUpdate_ = GetFunction("coroutine.update");

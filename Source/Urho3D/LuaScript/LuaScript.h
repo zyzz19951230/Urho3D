@@ -86,9 +86,6 @@ public:
 
     /// Return Lua state.
     lua_State* GetState() const { return luaState_; }
-    /// Return Using kaguya.
-    bool IsUsingKaguya() const { return usingKaguya_; }
-
     /// Return Lua function at the given stack index.
     LuaFunction* GetFunction(int index);
     /// Return Lua function by function name.
@@ -121,8 +118,6 @@ private:
 
     /// Lua state.
     lua_State* luaState_;
-    /// Using kaguya.
-    bool usingKaguya_;
     /// Procedural event invoker.
     SharedPtr<LuaScriptEventInvoker> eventInvoker_;
     /// Coroutine update function.
