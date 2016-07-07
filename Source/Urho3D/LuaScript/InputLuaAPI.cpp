@@ -24,7 +24,18 @@ static void RegisterControls(kaguya::State& lua)
         .addProperty("yaw", &Controls::yaw_)
         .addProperty("pitch", &Controls::pitch_)
         .addProperty("extraData", &Controls::extraData_)
-    );
+        );
+}
+
+
+static bool InputIsMouseVisible(const Input* input)
+{
+    return input->IsMouseVisible();
+}
+
+static void InputSetMouseVisibile(Input* input, bool enable)
+{
+    input->SetMouseVisible(enable);
 }
 
 static void RegisterInput(kaguya::State& lua)
@@ -51,7 +62,7 @@ static void RegisterInput(kaguya::State& lua)
         .addProperty("delta", &TouchState::delta_)
         .addProperty("pressure", &TouchState::pressure_)
         */
-    );
+        );
 
     lua["KJoystickState"].setClass(UserdataMetatable<JoystickState>()
         .setConstructors<JoystickState()>()
@@ -83,7 +94,7 @@ static void RegisterInput(kaguya::State& lua)
         .addProperty("axes", &JoystickState::axes_)
         .addProperty("hats", &JoystickState::hats_)
         */
-    );
+        );
 
     lua["KInput"].setClass(UserdataMetatable<Input, Object>()
 
@@ -155,15 +166,14 @@ static void RegisterInput(kaguya::State& lua)
         .addProperty("screenKeyboardSupport", &Input::GetScreenKeyboardSupport)
         .addProperty("screenKeyboardVisible", &Input::IsScreenKeyboardVisible, &Input::SetScreenKeyboardVisible)
         .addProperty("touchEmulation", &Input::GetTouchEmulation, &Input::SetTouchEmulation)
-        
-        // .addProperty("mouseVisible", &Input::IsMouseVisible, (void(Input::*)(bool))(&Input::SetMouseVisible))
-        .addProperty("mouseVisible", &Input::IsMouseVisible)
+
+        .addProperty("mouseVisible", &InputIsMouseVisible, &InputSetMouseVisibile)
 
         .addProperty("mouseGrabbed", &Input::IsMouseGrabbed)
         .addProperty("mouseLocked", &Input::IsMouseLocked)
         .addProperty("mouseMode", &Input::GetMouseMode)
         .addProperty("minimized", &Input::IsMinimized)
-    );
+        );
 }
 
 static void RegisterInputEvents(kaguya::State& lua)

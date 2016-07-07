@@ -1048,6 +1048,16 @@ static void RegisterSkybox(kaguya::State& lua)
         );
 }
 
+static Material* StaticModelGetMaterial(const StaticModel* staticModle)
+{
+    return staticModle->GetMaterial();
+}
+
+static void StaticModelSetMaterial(StaticModel* staticModel, Material* material)
+{
+    staticModel->SetMaterial(material);
+}
+
 static void RegisterStaticModel(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -1074,7 +1084,7 @@ static void RegisterStaticModel(kaguya::State& lua)
 
         .addProperty("model", &StaticModel::GetModel, &StaticModel::SetModel)
         
-        .addProperty("material", (Material*(StaticModel::*)() const)(&StaticModel::GetMaterial), static_cast<void(StaticModel::*)(Material*)>(&StaticModel::SetMaterial))
+        .addProperty("material", &StaticModelGetMaterial, &StaticModelSetMaterial)
 
         .addProperty("numGeometries", &StaticModel::GetNumGeometries)
         .addProperty("occlusionLodLevel", &StaticModel::GetOcclusionLodLevel, &StaticModel::SetOcclusionLodLevel)
