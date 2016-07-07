@@ -31,17 +31,17 @@ static void RegisterCamera(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KDEFAULT_NEARCLIP"] = DEFAULT_NEARCLIP;
-    lua["KDEFAULT_FARCLIP"] = DEFAULT_FARCLIP;
-    lua["KDEFAULT_CAMERA_FOV"] = DEFAULT_CAMERA_FOV;
-    lua["KDEFAULT_ORTHOSIZE"] = DEFAULT_ORTHOSIZE;
+    lua["DEFAULT_NEARCLIP"] = DEFAULT_NEARCLIP;
+    lua["DEFAULT_FARCLIP"] = DEFAULT_FARCLIP;
+    lua["DEFAULT_CAMERA_FOV"] = DEFAULT_CAMERA_FOV;
+    lua["DEFAULT_ORTHOSIZE"] = DEFAULT_ORTHOSIZE;
 
-    lua["KVO_NONE"] = VO_NONE;
-    lua["KVO_LOW_MATERIAL_QUALITY"] = VO_LOW_MATERIAL_QUALITY;
-    lua["KVO_DISABLE_SHADOWS"] = VO_DISABLE_SHADOWS;
-    lua["KVO_DISABLE_OCCLUSION"] = VO_DISABLE_OCCLUSION;
+    lua["VO_NONE"] = VO_NONE;
+    lua["VO_LOW_MATERIAL_QUALITY"] = VO_LOW_MATERIAL_QUALITY;
+    lua["VO_DISABLE_SHADOWS"] = VO_DISABLE_SHADOWS;
+    lua["VO_DISABLE_OCCLUSION"] = VO_DISABLE_OCCLUSION;
 
-    lua["KCamera"].setClass(UserdataMetatable<Camera, Component>()
+    lua["Camera"].setClass(UserdataMetatable<Camera, Component>()
         .addStaticFunction("new", &KCreateObject<Camera>)
         
         .addFunction("SetNearClip", &Camera::SetNearClip)
@@ -139,7 +139,7 @@ static void RegisterDebugRenderer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KDebugRenderer"].setClass(UserdataMetatable<DebugRenderer, Component>()
+    lua["DebugRenderer"].setClass(UserdataMetatable<DebugRenderer, Component>()
         .addStaticFunction("new", &KCreateObject<DebugRenderer>)
         
         .addFunction("SetView", &DebugRenderer::SetView)
@@ -182,7 +182,7 @@ static void RegisterGeometry(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KGeometry"].setClass(UserdataMetatable<Geometry, Object>()
+    lua["Geometry"].setClass(UserdataMetatable<Geometry, Object>()
         .addStaticFunction("new", &KCreateObject<Geometry>)
         
         .addFunction("SetNumVertexBuffers", &Geometry::SetNumVertexBuffers)
@@ -217,7 +217,7 @@ static void RegisterGraphics(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KGraphics"].setClass(UserdataMetatable<Graphics, Object>()
+    lua["Graphics"].setClass(UserdataMetatable<Graphics, Object>()
 
         .addFunction("SetExternalWindow", &Graphics::SetExternalWindow)
         .addFunction("SetWindowIcon", &Graphics::SetWindowIcon)
@@ -343,110 +343,110 @@ static void RegisterGraphicsDefs(kaguya::State& lua)
     using namespace kaguya;
 
     // enum PrimitiveType;
-    lua["KTRIANGLE_LIST"] = TRIANGLE_LIST;
-    lua["KLINE_LIST"] = LINE_LIST;
-    lua["KPOINT_LIST"] = POINT_LIST;
-    lua["KTRIANGLE_STRIP"] = TRIANGLE_STRIP;
-    lua["KLINE_STRIP"] = LINE_STRIP;
-    lua["KTRIANGLE_FAN"] = TRIANGLE_FAN;
+    lua["TRIANGLE_LIST"] = TRIANGLE_LIST;
+    lua["LINE_LIST"] = LINE_LIST;
+    lua["POINT_LIST"] = POINT_LIST;
+    lua["TRIANGLE_STRIP"] = TRIANGLE_STRIP;
+    lua["LINE_STRIP"] = LINE_STRIP;
+    lua["TRIANGLE_FAN"] = TRIANGLE_FAN;
 
     // enum GeometryType;
-    lua["KGEOM_STATIC"] = GEOM_STATIC;
-    lua["KGEOM_SKINNED"] = GEOM_SKINNED;
-    lua["KGEOM_INSTANCED"] = GEOM_INSTANCED;
-    lua["KGEOM_BILLBOARD"] = GEOM_BILLBOARD;
-    lua["KGEOM_DIRBILLBOARD"] = GEOM_DIRBILLBOARD;
-    lua["KGEOM_TRAIL_FACE_CAMERA"] = GEOM_TRAIL_FACE_CAMERA;
-    lua["KGEOM_TRAIL_BONE"] = GEOM_TRAIL_BONE;
-    lua["KGEOM_STATIC_NOINSTANCING"] = GEOM_STATIC_NOINSTANCING;
-    lua["KMAX_GEOMETRYTYPES"] = MAX_GEOMETRYTYPES;
+    lua["GEOM_STATIC"] = GEOM_STATIC;
+    lua["GEOM_SKINNED"] = GEOM_SKINNED;
+    lua["GEOM_INSTANCED"] = GEOM_INSTANCED;
+    lua["GEOM_BILLBOARD"] = GEOM_BILLBOARD;
+    lua["GEOM_DIRBILLBOARD"] = GEOM_DIRBILLBOARD;
+    lua["GEOM_TRAIL_FACE_CAMERA"] = GEOM_TRAIL_FACE_CAMERA;
+    lua["GEOM_TRAIL_BONE"] = GEOM_TRAIL_BONE;
+    lua["GEOM_STATIC_NOINSTANCING"] = GEOM_STATIC_NOINSTANCING;
+    lua["MAX_GEOMETRYTYPES"] = MAX_GEOMETRYTYPES;
 
     // enum BlendMode;
-    lua["KBLEND_REPLACE"] = BLEND_REPLACE;
-    lua["KBLEND_ADD"] = BLEND_ADD;
-    lua["KBLEND_MULTIPLY"] = BLEND_MULTIPLY;
-    lua["KBLEND_ALPHA"] = BLEND_ALPHA;
-    lua["KBLEND_ADDALPHA"] = BLEND_ADDALPHA;
-    lua["KBLEND_PREMULALPHA"] = BLEND_PREMULALPHA;
-    lua["KBLEND_INVDESTALPHA"] = BLEND_INVDESTALPHA;
-    lua["KBLEND_SUBTRACT"] = BLEND_SUBTRACT;
-    lua["KBLEND_SUBTRACTALPHA"] = BLEND_SUBTRACTALPHA;
-    lua["KMAX_BLENDMODES"] = MAX_BLENDMODES;
+    lua["BLEND_REPLACE"] = BLEND_REPLACE;
+    lua["BLEND_ADD"] = BLEND_ADD;
+    lua["BLEND_MULTIPLY"] = BLEND_MULTIPLY;
+    lua["BLEND_ALPHA"] = BLEND_ALPHA;
+    lua["BLEND_ADDALPHA"] = BLEND_ADDALPHA;
+    lua["BLEND_PREMULALPHA"] = BLEND_PREMULALPHA;
+    lua["BLEND_INVDESTALPHA"] = BLEND_INVDESTALPHA;
+    lua["BLEND_SUBTRACT"] = BLEND_SUBTRACT;
+    lua["BLEND_SUBTRACTALPHA"] = BLEND_SUBTRACTALPHA;
+    lua["MAX_BLENDMODES"] = MAX_BLENDMODES;
 
     // enum CompareMode;
-    lua["KCMP_ALWAYS"] = CMP_ALWAYS;
-    lua["KCMP_EQUAL"] = CMP_EQUAL;
-    lua["KCMP_NOTEQUAL"] = CMP_NOTEQUAL;
-    lua["KCMP_LESS"] = CMP_LESS;
-    lua["KCMP_LESSEQUAL"] = CMP_LESSEQUAL;
-    lua["KCMP_GREATER"] = CMP_GREATER;
-    lua["KCMP_GREATEREQUAL"] = CMP_GREATEREQUAL;
-    lua["KMAX_COMPAREMODES"] = MAX_COMPAREMODES;
+    lua["CMP_ALWAYS"] = CMP_ALWAYS;
+    lua["CMP_EQUAL"] = CMP_EQUAL;
+    lua["CMP_NOTEQUAL"] = CMP_NOTEQUAL;
+    lua["CMP_LESS"] = CMP_LESS;
+    lua["CMP_LESSEQUAL"] = CMP_LESSEQUAL;
+    lua["CMP_GREATER"] = CMP_GREATER;
+    lua["CMP_GREATEREQUAL"] = CMP_GREATEREQUAL;
+    lua["MAX_COMPAREMODES"] = MAX_COMPAREMODES;
 
     // enum CullMode;
-    lua["KCULL_NONE"] = CULL_NONE;
-    lua["KCULL_CCW"] = CULL_CCW;
-    lua["KCULL_CW"] = CULL_CW;
-    lua["KMAX_CULLMODES"] = MAX_CULLMODES;
+    lua["CULL_NONE"] = CULL_NONE;
+    lua["CULL_CCW"] = CULL_CCW;
+    lua["CULL_CW"] = CULL_CW;
+    lua["MAX_CULLMODES"] = MAX_CULLMODES;
 
     // enum FillMode;
-    lua["KFILL_SOLID"] = FILL_SOLID;
-    lua["KFILL_WIREFRAME"] = FILL_WIREFRAME;
-    lua["KFILL_POINT"] = FILL_POINT;
+    lua["FILL_SOLID"] = FILL_SOLID;
+    lua["FILL_WIREFRAME"] = FILL_WIREFRAME;
+    lua["FILL_POINT"] = FILL_POINT;
 
     // enum StencilOp;
-    lua["KOP_KEEP"] = OP_KEEP;
-    lua["KOP_ZERO"] = OP_ZERO;
-    lua["KOP_REF"] = OP_REF;
-    lua["KOP_INCR"] = OP_INCR;
-    lua["KOP_DECR"] = OP_DECR;
+    lua["OP_KEEP"] = OP_KEEP;
+    lua["OP_ZERO"] = OP_ZERO;
+    lua["OP_REF"] = OP_REF;
+    lua["OP_INCR"] = OP_INCR;
+    lua["OP_DECR"] = OP_DECR;
 
     // enum LockState;
-    lua["KLOCK_NONE"] = LOCK_NONE;
-    lua["KLOCK_HARDWARE"] = LOCK_HARDWARE;
-    lua["KLOCK_SHADOW"] = LOCK_SHADOW;
-    lua["KLOCK_SCRATCH"] = LOCK_SCRATCH;
+    lua["LOCK_NONE"] = LOCK_NONE;
+    lua["LOCK_HARDWARE"] = LOCK_HARDWARE;
+    lua["LOCK_SHADOW"] = LOCK_SHADOW;
+    lua["LOCK_SCRATCH"] = LOCK_SCRATCH;
 
     // enum LegacyVertexElement;
-    lua["KELEMENT_POSITION"] = ELEMENT_POSITION;
-    lua["KELEMENT_NORMAL"] = ELEMENT_NORMAL;
-    lua["KELEMENT_COLOR"] = ELEMENT_COLOR;
-    lua["KELEMENT_TEXCOORD1"] = ELEMENT_TEXCOORD1;
-    lua["KELEMENT_TEXCOORD2"] = ELEMENT_TEXCOORD2;
-    lua["KELEMENT_CUBETEXCOORD1"] = ELEMENT_CUBETEXCOORD1;
-    lua["KELEMENT_CUBETEXCOORD2"] = ELEMENT_CUBETEXCOORD2;
-    lua["KELEMENT_TANGENT"] = ELEMENT_TANGENT;
-    lua["KELEMENT_BLENDWEIGHTS"] = ELEMENT_BLENDWEIGHTS;
-    lua["KELEMENT_BLENDINDICES"] = ELEMENT_BLENDINDICES;
-    lua["KELEMENT_INSTANCEMATRIX1"] = ELEMENT_INSTANCEMATRIX1;
-    lua["KELEMENT_INSTANCEMATRIX2"] = ELEMENT_INSTANCEMATRIX2;
-    lua["KELEMENT_INSTANCEMATRIX3"] = ELEMENT_INSTANCEMATRIX3;
-    lua["KELEMENT_OBJECTINDEX"] = ELEMENT_OBJECTINDEX;
-    lua["KMAX_LEGACY_VERTEX_ELEMENTS"] = MAX_LEGACY_VERTEX_ELEMENTS;
+    lua["ELEMENT_POSITION"] = ELEMENT_POSITION;
+    lua["ELEMENT_NORMAL"] = ELEMENT_NORMAL;
+    lua["ELEMENT_COLOR"] = ELEMENT_COLOR;
+    lua["ELEMENT_TEXCOORD1"] = ELEMENT_TEXCOORD1;
+    lua["ELEMENT_TEXCOORD2"] = ELEMENT_TEXCOORD2;
+    lua["ELEMENT_CUBETEXCOORD1"] = ELEMENT_CUBETEXCOORD1;
+    lua["ELEMENT_CUBETEXCOORD2"] = ELEMENT_CUBETEXCOORD2;
+    lua["ELEMENT_TANGENT"] = ELEMENT_TANGENT;
+    lua["ELEMENT_BLENDWEIGHTS"] = ELEMENT_BLENDWEIGHTS;
+    lua["ELEMENT_BLENDINDICES"] = ELEMENT_BLENDINDICES;
+    lua["ELEMENT_INSTANCEMATRIX1"] = ELEMENT_INSTANCEMATRIX1;
+    lua["ELEMENT_INSTANCEMATRIX2"] = ELEMENT_INSTANCEMATRIX2;
+    lua["ELEMENT_INSTANCEMATRIX3"] = ELEMENT_INSTANCEMATRIX3;
+    lua["ELEMENT_OBJECTINDEX"] = ELEMENT_OBJECTINDEX;
+    lua["MAX_LEGACY_VERTEX_ELEMENTS"] = MAX_LEGACY_VERTEX_ELEMENTS;
 
     // enum VertexElementType;
-    lua["KTYPE_INT"] = TYPE_INT;
-    lua["KTYPE_FLOAT"] = TYPE_FLOAT;
-    lua["KTYPE_VECTOR2"] = TYPE_VECTOR2;
-    lua["KTYPE_VECTOR3"] = TYPE_VECTOR3;
-    lua["KTYPE_VECTOR4"] = TYPE_VECTOR4;
-    lua["KTYPE_UBYTE4"] = TYPE_UBYTE4;
-    lua["KTYPE_UBYTE4_NORM"] = TYPE_UBYTE4_NORM;
-    lua["KMAX_VERTEX_ELEMENT_TYPES"] = MAX_VERTEX_ELEMENT_TYPES;
+    lua["TYPE_INT"] = TYPE_INT;
+    lua["TYPE_FLOAT"] = TYPE_FLOAT;
+    lua["TYPE_VECTOR2"] = TYPE_VECTOR2;
+    lua["TYPE_VECTOR3"] = TYPE_VECTOR3;
+    lua["TYPE_VECTOR4"] = TYPE_VECTOR4;
+    lua["TYPE_UBYTE4"] = TYPE_UBYTE4;
+    lua["TYPE_UBYTE4_NORM"] = TYPE_UBYTE4_NORM;
+    lua["MAX_VERTEX_ELEMENT_TYPES"] = MAX_VERTEX_ELEMENT_TYPES;
 
     // enum VertexElementSemantic;
-    lua["KSEM_POSITION"] = SEM_POSITION;
-    lua["KSEM_NORMAL"] = SEM_NORMAL;
-    lua["KSEM_BINORMAL"] = SEM_BINORMAL;
-    lua["KSEM_TANGENT"] = SEM_TANGENT;
-    lua["KSEM_TEXCOORD"] = SEM_TEXCOORD;
-    lua["KSEM_COLOR"] = SEM_COLOR;
-    lua["KSEM_BLENDWEIGHTS"] = SEM_BLENDWEIGHTS;
-    lua["KSEM_BLENDINDICES"] = SEM_BLENDINDICES;
-    lua["KSEM_OBJECTINDEX"] = SEM_OBJECTINDEX;
-    lua["KMAX_VERTEX_ELEMENT_SEMANTICS"] = MAX_VERTEX_ELEMENT_SEMANTICS;
+    lua["SEM_POSITION"] = SEM_POSITION;
+    lua["SEM_NORMAL"] = SEM_NORMAL;
+    lua["SEM_BINORMAL"] = SEM_BINORMAL;
+    lua["SEM_TANGENT"] = SEM_TANGENT;
+    lua["SEM_TEXCOORD"] = SEM_TEXCOORD;
+    lua["SEM_COLOR"] = SEM_COLOR;
+    lua["SEM_BLENDWEIGHTS"] = SEM_BLENDWEIGHTS;
+    lua["SEM_BLENDINDICES"] = SEM_BLENDINDICES;
+    lua["SEM_OBJECTINDEX"] = SEM_OBJECTINDEX;
+    lua["MAX_VERTEX_ELEMENT_SEMANTICS"] = MAX_VERTEX_ELEMENT_SEMANTICS;
 
-    lua["KVertexElement"].setClass(UserdataMetatable<VertexElement>()
+    lua["VertexElement"].setClass(UserdataMetatable<VertexElement>()
         .setConstructors<VertexElement(),
         VertexElement(VertexElementType, VertexElementSemantic, unsigned char, bool)>()
 
@@ -460,212 +460,212 @@ static void RegisterGraphicsDefs(kaguya::State& lua)
     );
 
     // enum TextureFilterMode;
-    lua["KFILTER_NEAREST"] = FILTER_NEAREST;
-    lua["KFILTER_BILINEAR"] = FILTER_BILINEAR;
-    lua["KFILTER_TRILINEAR"] = FILTER_TRILINEAR;
-    lua["KFILTER_ANISOTROPIC"] = FILTER_ANISOTROPIC;
-    lua["KFILTER_DEFAULT"] = FILTER_DEFAULT;
-    lua["KMAX_FILTERMODES"] = MAX_FILTERMODES;
+    lua["FILTER_NEAREST"] = FILTER_NEAREST;
+    lua["FILTER_BILINEAR"] = FILTER_BILINEAR;
+    lua["FILTER_TRILINEAR"] = FILTER_TRILINEAR;
+    lua["FILTER_ANISOTROPIC"] = FILTER_ANISOTROPIC;
+    lua["FILTER_DEFAULT"] = FILTER_DEFAULT;
+    lua["MAX_FILTERMODES"] = MAX_FILTERMODES;
 
     // enum TextureAddressMode;
-    lua["KADDRESS_WRAP"] = ADDRESS_WRAP;
-    lua["KADDRESS_MIRROR"] = ADDRESS_MIRROR;
-    lua["KADDRESS_CLAMP"] = ADDRESS_CLAMP;
-    lua["KADDRESS_BORDER"] = ADDRESS_BORDER;
-    lua["KMAX_ADDRESSMODES"] = MAX_ADDRESSMODES;
+    lua["ADDRESS_WRAP"] = ADDRESS_WRAP;
+    lua["ADDRESS_MIRROR"] = ADDRESS_MIRROR;
+    lua["ADDRESS_CLAMP"] = ADDRESS_CLAMP;
+    lua["ADDRESS_BORDER"] = ADDRESS_BORDER;
+    lua["MAX_ADDRESSMODES"] = MAX_ADDRESSMODES;
 
     // enum TextureCoordinate;
-    lua["KCOORD_U"] = COORD_U;
-    lua["KCOORD_V"] = COORD_V;
-    lua["KCOORD_W"] = COORD_W;
-    lua["KMAX_COORDS"] = MAX_COORDS;
+    lua["COORD_U"] = COORD_U;
+    lua["COORD_V"] = COORD_V;
+    lua["COORD_W"] = COORD_W;
+    lua["MAX_COORDS"] = MAX_COORDS;
 
     // enum TextureUsage;
-    lua["KTEXTURE_STATIC"] = TEXTURE_STATIC;
-    lua["KTEXTURE_DYNAMIC"] = TEXTURE_DYNAMIC;
-    lua["KTEXTURE_RENDERTARGET"] = TEXTURE_RENDERTARGET;
-    lua["KTEXTURE_DEPTHSTENCIL"] = TEXTURE_DEPTHSTENCIL;
+    lua["TEXTURE_STATIC"] = TEXTURE_STATIC;
+    lua["TEXTURE_DYNAMIC"] = TEXTURE_DYNAMIC;
+    lua["TEXTURE_RENDERTARGET"] = TEXTURE_RENDERTARGET;
+    lua["TEXTURE_DEPTHSTENCIL"] = TEXTURE_DEPTHSTENCIL;
 
     // enum CubeMapFace;
-    lua["KFACE_POSITIVE_X"] = FACE_POSITIVE_X;
-    lua["KFACE_NEGATIVE_X"] = FACE_NEGATIVE_X;
-    lua["KFACE_POSITIVE_Y"] = FACE_POSITIVE_Y;
-    lua["KFACE_NEGATIVE_Y"] = FACE_NEGATIVE_Y;
-    lua["KFACE_POSITIVE_Z"] = FACE_POSITIVE_Z;
-    lua["KFACE_NEGATIVE_Z"] = FACE_NEGATIVE_Z;
-    lua["KMAX_CUBEMAP_FACES"] = MAX_CUBEMAP_FACES;
+    lua["FACE_POSITIVE_X"] = FACE_POSITIVE_X;
+    lua["FACE_NEGATIVE_X"] = FACE_NEGATIVE_X;
+    lua["FACE_POSITIVE_Y"] = FACE_POSITIVE_Y;
+    lua["FACE_NEGATIVE_Y"] = FACE_NEGATIVE_Y;
+    lua["FACE_POSITIVE_Z"] = FACE_POSITIVE_Z;
+    lua["FACE_NEGATIVE_Z"] = FACE_NEGATIVE_Z;
+    lua["MAX_CUBEMAP_FACES"] = MAX_CUBEMAP_FACES;
 
     // enum CubeMapLayout;
-    lua["KCML_HORIZONTAL"] = CML_HORIZONTAL;
-    lua["KCML_HORIZONTALNVIDIA"] = CML_HORIZONTALNVIDIA;
-    lua["KCML_HORIZONTALCROSS"] = CML_HORIZONTALCROSS;
-    lua["KCML_VERTICALCROSS"] = CML_VERTICALCROSS;
-    lua["KCML_BLENDER"] = CML_BLENDER;
+    lua["CML_HORIZONTAL"] = CML_HORIZONTAL;
+    lua["CML_HORIZONTALNVIDIA"] = CML_HORIZONTALNVIDIA;
+    lua["CML_HORIZONTALCROSS"] = CML_HORIZONTALCROSS;
+    lua["CML_VERTICALCROSS"] = CML_VERTICALCROSS;
+    lua["CML_BLENDER"] = CML_BLENDER;
 
     // enum RenderSurfaceUpdateMode;
-    lua["KSURFACE_MANUALUPDATE"] = SURFACE_MANUALUPDATE;
-    lua["KSURFACE_UPDATEVISIBLE"] = SURFACE_UPDATEVISIBLE;
-    lua["KSURFACE_UPDATEALWAYS"] = SURFACE_UPDATEALWAYS;
+    lua["SURFACE_MANUALUPDATE"] = SURFACE_MANUALUPDATE;
+    lua["SURFACE_UPDATEVISIBLE"] = SURFACE_UPDATEVISIBLE;
+    lua["SURFACE_UPDATEALWAYS"] = SURFACE_UPDATEALWAYS;
 
     // enum ShaderType;
-    lua["KVS"] = VS;
-    lua["KPS"] = PS;
+    lua["VS"] = VS;
+    lua["PS"] = PS;
 
     // enum ShaderParameterGroup;
-    lua["KSP_FRAME"] = SP_FRAME;
-    lua["KSP_CAMERA"] = SP_CAMERA;
-    lua["KSP_ZONE"] = SP_ZONE;
-    lua["KSP_LIGHT"] = SP_LIGHT;
-    lua["KSP_MATERIAL"] = SP_MATERIAL;
-    lua["KSP_OBJECT"] = SP_OBJECT;
-    lua["KSP_CUSTOM"] = SP_CUSTOM;
-    lua["KMAX_SHADER_PARAMETER_GROUPS"] = MAX_SHADER_PARAMETER_GROUPS;
+    lua["SP_FRAME"] = SP_FRAME;
+    lua["SP_CAMERA"] = SP_CAMERA;
+    lua["SP_ZONE"] = SP_ZONE;
+    lua["SP_LIGHT"] = SP_LIGHT;
+    lua["SP_MATERIAL"] = SP_MATERIAL;
+    lua["SP_OBJECT"] = SP_OBJECT;
+    lua["SP_CUSTOM"] = SP_CUSTOM;
+    lua["MAX_SHADER_PARAMETER_GROUPS"] = MAX_SHADER_PARAMETER_GROUPS;
 
     // enum TextureUnit;
-    lua["KTU_DIFFUSE"] = TU_DIFFUSE;
-    lua["KTU_ALBEDOBUFFER"] = TU_ALBEDOBUFFER;
-    lua["KTU_NORMAL"] = TU_NORMAL;
-    lua["KTU_NORMALBUFFER"] = TU_NORMALBUFFER;
-    lua["KTU_SPECULAR"] = TU_SPECULAR;
-    lua["KTU_EMISSIVE"] = TU_EMISSIVE;
-    lua["KTU_ENVIRONMENT"] = TU_ENVIRONMENT;
-    lua["KTU_VOLUMEMAP"] = TU_VOLUMEMAP;
-    lua["KTU_CUSTOM1"] = TU_CUSTOM1;
-    lua["KTU_CUSTOM2"] = TU_CUSTOM2;
-    lua["KTU_LIGHTRAMP"] = TU_LIGHTRAMP;
-    lua["KTU_LIGHTSHAPE"] = TU_LIGHTSHAPE;
-    lua["KTU_SHADOWMAP"] = TU_SHADOWMAP;
-    lua["KTU_FACESELECT"] = TU_FACESELECT;
-    lua["KTU_INDIRECTION"] = TU_INDIRECTION;
-    lua["KTU_DEPTHBUFFER"] = TU_DEPTHBUFFER;
-    lua["KTU_LIGHTBUFFER"] = TU_LIGHTBUFFER;
-    lua["KTU_ZONE"] = TU_ZONE;
-    lua["KMAX_MATERIAL_TEXTURE_UNITS"] = MAX_MATERIAL_TEXTURE_UNITS;
-    lua["KMAX_TEXTURE_UNITS"] = MAX_TEXTURE_UNITS;
+    lua["TU_DIFFUSE"] = TU_DIFFUSE;
+    lua["TU_ALBEDOBUFFER"] = TU_ALBEDOBUFFER;
+    lua["TU_NORMAL"] = TU_NORMAL;
+    lua["TU_NORMALBUFFER"] = TU_NORMALBUFFER;
+    lua["TU_SPECULAR"] = TU_SPECULAR;
+    lua["TU_EMISSIVE"] = TU_EMISSIVE;
+    lua["TU_ENVIRONMENT"] = TU_ENVIRONMENT;
+    lua["TU_VOLUMEMAP"] = TU_VOLUMEMAP;
+    lua["TU_CUSTOM1"] = TU_CUSTOM1;
+    lua["TU_CUSTOM2"] = TU_CUSTOM2;
+    lua["TU_LIGHTRAMP"] = TU_LIGHTRAMP;
+    lua["TU_LIGHTSHAPE"] = TU_LIGHTSHAPE;
+    lua["TU_SHADOWMAP"] = TU_SHADOWMAP;
+    lua["TU_FACESELECT"] = TU_FACESELECT;
+    lua["TU_INDIRECTION"] = TU_INDIRECTION;
+    lua["TU_DEPTHBUFFER"] = TU_DEPTHBUFFER;
+    lua["TU_LIGHTBUFFER"] = TU_LIGHTBUFFER;
+    lua["TU_ZONE"] = TU_ZONE;
+    lua["MAX_MATERIAL_TEXTURE_UNITS"] = MAX_MATERIAL_TEXTURE_UNITS;
+    lua["MAX_TEXTURE_UNITS"] = MAX_TEXTURE_UNITS;
 
     // enum FaceCameraMode;
-    lua["KFC_NONE"] = FC_NONE;
-    lua["KFC_ROTATE_XYZ"] = FC_ROTATE_XYZ;
-    lua["KFC_ROTATE_Y"] = FC_ROTATE_Y;
-    lua["KFC_LOOKAT_XYZ"] = FC_LOOKAT_XYZ;
-    lua["KFC_LOOKAT_Y"] = FC_LOOKAT_Y;
-    lua["KFC_DIRECTION"] = FC_DIRECTION;
+    lua["FC_NONE"] = FC_NONE;
+    lua["FC_ROTATE_XYZ"] = FC_ROTATE_XYZ;
+    lua["FC_ROTATE_Y"] = FC_ROTATE_Y;
+    lua["FC_LOOKAT_XYZ"] = FC_LOOKAT_XYZ;
+    lua["FC_LOOKAT_Y"] = FC_LOOKAT_Y;
+    lua["FC_DIRECTION"] = FC_DIRECTION;
 
     // enum ShadowQuality;
-    lua["KSHADOWQUALITY_SIMPLE_16BIT"] = SHADOWQUALITY_SIMPLE_16BIT;
-    lua["KSHADOWQUALITY_SIMPLE_24BIT"] = SHADOWQUALITY_SIMPLE_24BIT;
-    lua["KSHADOWQUALITY_PCF_16BIT"] = SHADOWQUALITY_PCF_16BIT;
-    lua["KSHADOWQUALITY_PCF_24BIT"] = SHADOWQUALITY_PCF_24BIT;
-    lua["KSHADOWQUALITY_VSM"] = SHADOWQUALITY_VSM;
-    lua["KSHADOWQUALITY_BLUR_VSM"] = SHADOWQUALITY_BLUR_VSM;
+    lua["SHADOWQUALITY_SIMPLE_16BIT"] = SHADOWQUALITY_SIMPLE_16BIT;
+    lua["SHADOWQUALITY_SIMPLE_24BIT"] = SHADOWQUALITY_SIMPLE_24BIT;
+    lua["SHADOWQUALITY_PCF_16BIT"] = SHADOWQUALITY_PCF_16BIT;
+    lua["SHADOWQUALITY_PCF_24BIT"] = SHADOWQUALITY_PCF_24BIT;
+    lua["SHADOWQUALITY_VSM"] = SHADOWQUALITY_VSM;
+    lua["SHADOWQUALITY_BLUR_VSM"] = SHADOWQUALITY_BLUR_VSM;
 
     /*
-    lua["KVSP_AMBIENTSTARTCOLOR"] = VSP_AMBIENTSTARTCOLOR;
-    lua["KVSP_AMBIENTENDCOLOR"] = VSP_AMBIENTENDCOLOR;
-    lua["KVSP_BILLBOARDROT"] = VSP_BILLBOARDROT;
-    lua["KVSP_CAMERAPOS"] = VSP_CAMERAPOS;
-    lua["KVSP_CLIPPLANE"] = VSP_CLIPPLANE;
-    lua["KVSP_NEARCLIP"] = VSP_NEARCLIP;
-    lua["KVSP_FARCLIP"] = VSP_FARCLIP;
-    lua["KVSP_DEPTHMODE"] = VSP_DEPTHMODE;
-    lua["KVSP_DELTATIME"] = VSP_DELTATIME;
-    lua["KVSP_ELAPSEDTIME"] = VSP_ELAPSEDTIME;
-    lua["KVSP_FRUSTUMSIZE"] = VSP_FRUSTUMSIZE;
-    lua["KVSP_GBUFFEROFFSETS"] = VSP_GBUFFEROFFSETS;
-    lua["KVSP_LIGHTDIR"] = VSP_LIGHTDIR;
-    lua["KVSP_LIGHTPOS"] = VSP_LIGHTPOS;
-    lua["KVSP_NORMALOFFSETSCALE"] = VSP_NORMALOFFSETSCALE;
-    lua["KVSP_MODEL"] = VSP_MODEL;
-    lua["KVSP_VIEW"] = VSP_VIEW;
-    lua["KVSP_VIEWINV"] = VSP_VIEWINV;
-    lua["KVSP_VIEWPROJ"] = VSP_VIEWPROJ;
-    lua["KVSP_UOFFSET"] = VSP_UOFFSET;
-    lua["KVSP_VOFFSET"] = VSP_VOFFSET;
-    lua["KVSP_ZONE"] = VSP_ZONE;
-    lua["KVSP_LIGHTMATRICES"] = VSP_LIGHTMATRICES;
-    lua["KVSP_SKINMATRICES"] = VSP_SKINMATRICES;
-    lua["KVSP_VERTEXLIGHTS"] = VSP_VERTEXLIGHTS;
-    lua["KPSP_AMBIENTCOLOR"] = PSP_AMBIENTCOLOR;
-    lua["KPSP_CAMERAPOS"] = PSP_CAMERAPOS;
-    lua["KPSP_DELTATIME"] = PSP_DELTATIME;
-    lua["KPSP_DEPTHRECONSTRUCT"] = PSP_DEPTHRECONSTRUCT;
-    lua["KPSP_ELAPSEDTIME"] = PSP_ELAPSEDTIME;
-    lua["KPSP_FOGCOLOR"] = PSP_FOGCOLOR;
-    lua["KPSP_FOGPARAMS"] = PSP_FOGPARAMS;
-    lua["KPSP_GBUFFERINVSIZE"] = PSP_GBUFFERINVSIZE;
-    lua["KPSP_LIGHTCOLOR"] = PSP_LIGHTCOLOR;
-    lua["KPSP_LIGHTDIR"] = PSP_LIGHTDIR;
-    lua["KPSP_LIGHTPOS"] = PSP_LIGHTPOS;
-    lua["KPSP_NORMALOFFSETSCALE"] = PSP_NORMALOFFSETSCALE;
-    lua["KPSP_MATDIFFCOLOR"] = PSP_MATDIFFCOLOR;
-    lua["KPSP_MATEMISSIVECOLOR"] = PSP_MATEMISSIVECOLOR;
-    lua["KPSP_MATENVMAPCOLOR"] = PSP_MATENVMAPCOLOR;
-    lua["KPSP_MATSPECCOLOR"] = PSP_MATSPECCOLOR;
-    lua["KPSP_NEARCLIP"] = PSP_NEARCLIP;
-    lua["KPSP_FARCLIP"] = PSP_FARCLIP;
-    lua["KPSP_SHADOWCUBEADJUST"] = PSP_SHADOWCUBEADJUST;
-    lua["KPSP_SHADOWDEPTHFADE"] = PSP_SHADOWDEPTHFADE;
-    lua["KPSP_SHADOWINTENSITY"] = PSP_SHADOWINTENSITY;
-    lua["KPSP_SHADOWMAPINVSIZE"] = PSP_SHADOWMAPINVSIZE;
-    lua["KPSP_SHADOWSPLITS"] = PSP_SHADOWSPLITS;
-    lua["KPSP_LIGHTMATRICES"] = PSP_LIGHTMATRICES;
-    lua["KPSP_VSMSHADOWPARAMS"] = PSP_VSMSHADOWPARAMS;
-    lua["KPSP_ROUGHNESS"] = PSP_ROUGHNESS;
-    lua["KPSP_METALLIC"] = PSP_METALLIC;
+    lua["VSP_AMBIENTSTARTCOLOR"] = VSP_AMBIENTSTARTCOLOR;
+    lua["VSP_AMBIENTENDCOLOR"] = VSP_AMBIENTENDCOLOR;
+    lua["VSP_BILLBOARDROT"] = VSP_BILLBOARDROT;
+    lua["VSP_CAMERAPOS"] = VSP_CAMERAPOS;
+    lua["VSP_CLIPPLANE"] = VSP_CLIPPLANE;
+    lua["VSP_NEARCLIP"] = VSP_NEARCLIP;
+    lua["VSP_FARCLIP"] = VSP_FARCLIP;
+    lua["VSP_DEPTHMODE"] = VSP_DEPTHMODE;
+    lua["VSP_DELTATIME"] = VSP_DELTATIME;
+    lua["VSP_ELAPSEDTIME"] = VSP_ELAPSEDTIME;
+    lua["VSP_FRUSTUMSIZE"] = VSP_FRUSTUMSIZE;
+    lua["VSP_GBUFFEROFFSETS"] = VSP_GBUFFEROFFSETS;
+    lua["VSP_LIGHTDIR"] = VSP_LIGHTDIR;
+    lua["VSP_LIGHTPOS"] = VSP_LIGHTPOS;
+    lua["VSP_NORMALOFFSETSCALE"] = VSP_NORMALOFFSETSCALE;
+    lua["VSP_MODEL"] = VSP_MODEL;
+    lua["VSP_VIEW"] = VSP_VIEW;
+    lua["VSP_VIEWINV"] = VSP_VIEWINV;
+    lua["VSP_VIEWPROJ"] = VSP_VIEWPROJ;
+    lua["VSP_UOFFSET"] = VSP_UOFFSET;
+    lua["VSP_VOFFSET"] = VSP_VOFFSET;
+    lua["VSP_ZONE"] = VSP_ZONE;
+    lua["VSP_LIGHTMATRICES"] = VSP_LIGHTMATRICES;
+    lua["VSP_SKINMATRICES"] = VSP_SKINMATRICES;
+    lua["VSP_VERTEXLIGHTS"] = VSP_VERTEXLIGHTS;
+    lua["PSP_AMBIENTCOLOR"] = PSP_AMBIENTCOLOR;
+    lua["PSP_CAMERAPOS"] = PSP_CAMERAPOS;
+    lua["PSP_DELTATIME"] = PSP_DELTATIME;
+    lua["PSP_DEPTHRECONSTRUCT"] = PSP_DEPTHRECONSTRUCT;
+    lua["PSP_ELAPSEDTIME"] = PSP_ELAPSEDTIME;
+    lua["PSP_FOGCOLOR"] = PSP_FOGCOLOR;
+    lua["PSP_FOGPARAMS"] = PSP_FOGPARAMS;
+    lua["PSP_GBUFFERINVSIZE"] = PSP_GBUFFERINVSIZE;
+    lua["PSP_LIGHTCOLOR"] = PSP_LIGHTCOLOR;
+    lua["PSP_LIGHTDIR"] = PSP_LIGHTDIR;
+    lua["PSP_LIGHTPOS"] = PSP_LIGHTPOS;
+    lua["PSP_NORMALOFFSETSCALE"] = PSP_NORMALOFFSETSCALE;
+    lua["PSP_MATDIFFCOLOR"] = PSP_MATDIFFCOLOR;
+    lua["PSP_MATEMISSIVECOLOR"] = PSP_MATEMISSIVECOLOR;
+    lua["PSP_MATENVMAPCOLOR"] = PSP_MATENVMAPCOLOR;
+    lua["PSP_MATSPECCOLOR"] = PSP_MATSPECCOLOR;
+    lua["PSP_NEARCLIP"] = PSP_NEARCLIP;
+    lua["PSP_FARCLIP"] = PSP_FARCLIP;
+    lua["PSP_SHADOWCUBEADJUST"] = PSP_SHADOWCUBEADJUST;
+    lua["PSP_SHADOWDEPTHFADE"] = PSP_SHADOWDEPTHFADE;
+    lua["PSP_SHADOWINTENSITY"] = PSP_SHADOWINTENSITY;
+    lua["PSP_SHADOWMAPINVSIZE"] = PSP_SHADOWMAPINVSIZE;
+    lua["PSP_SHADOWSPLITS"] = PSP_SHADOWSPLITS;
+    lua["PSP_LIGHTMATRICES"] = PSP_LIGHTMATRICES;
+    lua["PSP_VSMSHADOWPARAMS"] = PSP_VSMSHADOWPARAMS;
+    lua["PSP_ROUGHNESS"] = PSP_ROUGHNESS;
+    lua["PSP_METALLIC"] = PSP_METALLIC;
     */
 
-    lua["KDOT_SCALE"] = DOT_SCALE;
-    lua["KQUALITY_LOW"] = QUALITY_LOW;
-    lua["KQUALITY_MEDIUM"] = QUALITY_MEDIUM;
-    lua["KQUALITY_HIGH"] = QUALITY_HIGH;
-    lua["KQUALITY_MAX"] = QUALITY_MAX;
-    lua["KCLEAR_COLOR"] = CLEAR_COLOR;
-    lua["KCLEAR_DEPTH"] = CLEAR_DEPTH;
-    lua["KCLEAR_STENCIL"] = CLEAR_STENCIL;
-    lua["KMASK_NONE"] = MASK_NONE;
-    lua["KMASK_POSITION"] = MASK_POSITION;
-    lua["KMASK_NORMAL"] = MASK_NORMAL;
-    lua["KMASK_COLOR"] = MASK_COLOR;
-    lua["KMASK_TEXCOORD1"] = MASK_TEXCOORD1;
-    lua["KMASK_TEXCOORD2"] = MASK_TEXCOORD2;
-    lua["KMASK_CUBETEXCOORD1"] = MASK_CUBETEXCOORD1;
-    lua["KMASK_CUBETEXCOORD2"] = MASK_CUBETEXCOORD2;
-    lua["KMASK_TANGENT"] = MASK_TANGENT;
-    lua["KMASK_BLENDWEIGHTS"] = MASK_BLENDWEIGHTS;
-    lua["KMASK_BLENDINDICES"] = MASK_BLENDINDICES;
-    lua["KMASK_INSTANCEMATRIX1"] = MASK_INSTANCEMATRIX1;
-    lua["KMASK_INSTANCEMATRIX2"] = MASK_INSTANCEMATRIX2;
-    lua["KMASK_INSTANCEMATRIX3"] = MASK_INSTANCEMATRIX3;
-    lua["KMASK_OBJECTINDEX"] = MASK_OBJECTINDEX;
-    lua["KMAX_RENDERTARGETS"] = MAX_RENDERTARGETS;
-    lua["KMAX_VERTEX_STREAMS"] = MAX_VERTEX_STREAMS;
-    lua["KMAX_CONSTANT_REGISTERS"] = MAX_CONSTANT_REGISTERS;
-    lua["KBITS_PER_COMPONENT"] = BITS_PER_COMPONENT;
+    lua["DOT_SCALE"] = DOT_SCALE;
+    lua["QUALITY_LOW"] = QUALITY_LOW;
+    lua["QUALITY_MEDIUM"] = QUALITY_MEDIUM;
+    lua["QUALITY_HIGH"] = QUALITY_HIGH;
+    lua["QUALITY_MAX"] = QUALITY_MAX;
+    lua["CLEAR_COLOR"] = CLEAR_COLOR;
+    lua["CLEAR_DEPTH"] = CLEAR_DEPTH;
+    lua["CLEAR_STENCIL"] = CLEAR_STENCIL;
+    lua["MASK_NONE"] = MASK_NONE;
+    lua["MASK_POSITION"] = MASK_POSITION;
+    lua["MASK_NORMAL"] = MASK_NORMAL;
+    lua["MASK_COLOR"] = MASK_COLOR;
+    lua["MASK_TEXCOORD1"] = MASK_TEXCOORD1;
+    lua["MASK_TEXCOORD2"] = MASK_TEXCOORD2;
+    lua["MASK_CUBETEXCOORD1"] = MASK_CUBETEXCOORD1;
+    lua["MASK_CUBETEXCOORD2"] = MASK_CUBETEXCOORD2;
+    lua["MASK_TANGENT"] = MASK_TANGENT;
+    lua["MASK_BLENDWEIGHTS"] = MASK_BLENDWEIGHTS;
+    lua["MASK_BLENDINDICES"] = MASK_BLENDINDICES;
+    lua["MASK_INSTANCEMATRIX1"] = MASK_INSTANCEMATRIX1;
+    lua["MASK_INSTANCEMATRIX2"] = MASK_INSTANCEMATRIX2;
+    lua["MASK_INSTANCEMATRIX3"] = MASK_INSTANCEMATRIX3;
+    lua["MASK_OBJECTINDEX"] = MASK_OBJECTINDEX;
+    lua["MAX_RENDERTARGETS"] = MAX_RENDERTARGETS;
+    lua["MAX_VERTEX_STREAMS"] = MAX_VERTEX_STREAMS;
+    lua["MAX_CONSTANT_REGISTERS"] = MAX_CONSTANT_REGISTERS;
+    lua["BITS_PER_COMPONENT"] = BITS_PER_COMPONENT;
 }
 
 static void RegisterGraphicsEvents(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KE_SCREENMODE"] = E_SCREENMODE;
-    lua["KE_WINDOWPOS"] = E_WINDOWPOS;
-    lua["KE_RENDERSURFACEUPDATE"] = E_RENDERSURFACEUPDATE;
-    lua["KE_BEGINRENDERING"] = E_BEGINRENDERING;
-    lua["KE_ENDRENDERING"] = E_ENDRENDERING;
-    lua["KE_BEGINVIEWUPDATE"] = E_BEGINVIEWUPDATE;
-    lua["KE_ENDVIEWUPDATE"] = E_ENDVIEWUPDATE;
-    lua["KE_BEGINVIEWRENDER"] = E_BEGINVIEWRENDER;
-    lua["KE_ENDVIEWRENDER"] = E_ENDVIEWRENDER;
-    lua["KE_RENDERPATHEVENT"] = E_RENDERPATHEVENT;
-    lua["KE_DEVICELOST"] = E_DEVICELOST;
-    lua["KE_DEVICERESET"] = E_DEVICERESET;
+    lua["E_SCREENMODE"] = E_SCREENMODE;
+    lua["E_WINDOWPOS"] = E_WINDOWPOS;
+    lua["E_RENDERSURFACEUPDATE"] = E_RENDERSURFACEUPDATE;
+    lua["E_BEGINRENDERING"] = E_BEGINRENDERING;
+    lua["E_ENDRENDERING"] = E_ENDRENDERING;
+    lua["E_BEGINVIEWUPDATE"] = E_BEGINVIEWUPDATE;
+    lua["E_ENDVIEWUPDATE"] = E_ENDVIEWUPDATE;
+    lua["E_BEGINVIEWRENDER"] = E_BEGINVIEWRENDER;
+    lua["E_ENDVIEWRENDER"] = E_ENDVIEWRENDER;
+    lua["E_RENDERPATHEVENT"] = E_RENDERPATHEVENT;
+    lua["E_DEVICELOST"] = E_DEVICELOST;
+    lua["E_DEVICERESET"] = E_DEVICERESET;
 }
 
 static void RegisterIndexBuffer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KIndexBuffer"].setClass(UserdataMetatable<IndexBuffer, Object>()
+    lua["IndexBuffer"].setClass(UserdataMetatable<IndexBuffer, Object>()
         .addStaticFunction("new", &KCreateObject<IndexBuffer>)
         
         .addFunction("SetShadowed", &IndexBuffer::SetShadowed)
@@ -689,9 +689,9 @@ static void RegisterMaterial(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KDEFAULT_RENDER_ORDER"] = DEFAULT_RENDER_ORDER;
+    lua["DEFAULT_RENDER_ORDER"] = DEFAULT_RENDER_ORDER;
 
-    lua["KMaterial"].setClass(UserdataMetatable<Material, Resource>()
+    lua["Material"].setClass(UserdataMetatable<Material, Resource>()
         .addStaticFunction("new", &KCreateObject<Material>)
         
         .addFunction("SetNumTechniques", &Material::SetNumTechniques)
@@ -763,7 +763,7 @@ static void RegisterRenderer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KRenderer"].setClass(UserdataMetatable<Renderer, Object>()
+    lua["Renderer"].setClass(UserdataMetatable<Renderer, Object>()
 
         .addFunction("SetNumViewports", &Renderer::SetNumViewports)
         .addFunction("SetViewport", &Renderer::SetViewport)
@@ -917,25 +917,25 @@ static void RegisterRenderPath(kaguya::State& lua)
     using namespace kaguya;
 
     // enum RenderCommandType;
-    lua["KCMD_NONE"] = CMD_NONE;
-    lua["KCMD_CLEAR"] = CMD_CLEAR;
-    lua["KCMD_SCENEPASS"] = CMD_SCENEPASS;
-    lua["KCMD_QUAD"] = CMD_QUAD;
-    lua["KCMD_FORWARDLIGHTS"] = CMD_FORWARDLIGHTS;
-    lua["KCMD_LIGHTVOLUMES"] = CMD_LIGHTVOLUMES;
-    lua["KCMD_RENDERUI"] = CMD_RENDERUI;
-    lua["KCMD_SENDEVENT"] = CMD_SENDEVENT;
+    lua["CMD_NONE"] = CMD_NONE;
+    lua["CMD_CLEAR"] = CMD_CLEAR;
+    lua["CMD_SCENEPASS"] = CMD_SCENEPASS;
+    lua["CMD_QUAD"] = CMD_QUAD;
+    lua["CMD_FORWARDLIGHTS"] = CMD_FORWARDLIGHTS;
+    lua["CMD_LIGHTVOLUMES"] = CMD_LIGHTVOLUMES;
+    lua["CMD_RENDERUI"] = CMD_RENDERUI;
+    lua["CMD_SENDEVENT"] = CMD_SENDEVENT;
 
     // enum RenderCommandSortMode;
-    lua["KSORT_FRONTTOBACK"] = SORT_FRONTTOBACK;
-    lua["KSORT_BACKTOFRONT"] = SORT_BACKTOFRONT;
+    lua["SORT_FRONTTOBACK"] = SORT_FRONTTOBACK;
+    lua["SORT_BACKTOFRONT"] = SORT_BACKTOFRONT;
 
     // enum RenderTargetSizeMode;
-    lua["KSIZE_ABSOLUTE"] = SIZE_ABSOLUTE;
-    lua["KSIZE_VIEWPORTDIVISOR"] = SIZE_VIEWPORTDIVISOR;
-    lua["KSIZE_VIEWPORTMULTIPLIER"] = SIZE_VIEWPORTMULTIPLIER;
+    lua["SIZE_ABSOLUTE"] = SIZE_ABSOLUTE;
+    lua["SIZE_VIEWPORTDIVISOR"] = SIZE_VIEWPORTDIVISOR;
+    lua["SIZE_VIEWPORTMULTIPLIER"] = SIZE_VIEWPORTMULTIPLIER;
 
-    lua["KRenderTargetInfo"].setClass(UserdataMetatable<RenderTargetInfo>()
+    lua["RenderTargetInfo"].setClass(UserdataMetatable<RenderTargetInfo>()
         .setConstructors<RenderTargetInfo()>()
 
         .addFunction("Load", &RenderTargetInfo::Load)
@@ -951,7 +951,7 @@ static void RegisterRenderPath(kaguya::State& lua)
         .addProperty("persistent", &RenderTargetInfo::persistent_)
     );
 
-    lua["KRenderPathCommand"].setClass(UserdataMetatable<RenderPathCommand>()
+    lua["RenderPathCommand"].setClass(UserdataMetatable<RenderPathCommand>()
         .setConstructors<RenderPathCommand()>()
 
         .addFunction("Load", &RenderPathCommand::Load)
@@ -996,7 +996,7 @@ static void RegisterRenderPath(kaguya::State& lua)
         .addProperty("eventName", &RenderPathCommand::eventName_)
     );
 
-    lua["KRenderPath"].setClass(UserdataMetatable<RenderPath, RefCounted>()
+    lua["RenderPath"].setClass(UserdataMetatable<RenderPath, RefCounted>()
         .setConstructors<RenderPath()>()
 
         .addFunction("Clone", &RenderPath::Clone)
@@ -1034,7 +1034,7 @@ static void RegisterRenderSurface(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KRenderSurface"].setClass(UserdataMetatable<RenderSurface, RefCounted>()
+    lua["RenderSurface"].setClass(UserdataMetatable<RenderSurface, RefCounted>()
         .setConstructors<RenderSurface(Texture*)>()
         
         .addFunction("SetNumViewports", &RenderSurface::SetNumViewports)
@@ -1072,7 +1072,7 @@ static void RegisterShader(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KShader"].setClass(UserdataMetatable<Shader, Resource>()
+    lua["Shader"].setClass(UserdataMetatable<Shader, Resource>()
         .addStaticFunction("new", &KCreateObject<Shader>)
         
         // .addFunction("GetVariation", &Shader::GetVariation)
@@ -1087,7 +1087,7 @@ static void RegisterShaderVariation(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KShaderVariation"].setClass(UserdataMetatable<ShaderVariation, RefCounted>()
+    lua["ShaderVariation"].setClass(UserdataMetatable<ShaderVariation, RefCounted>()
         .setConstructors<ShaderVariation(Shader*, ShaderType)>()
 
         .addFunction("Create", &ShaderVariation::Create)
@@ -1114,11 +1114,11 @@ static void RegisterTechnique(kaguya::State& lua)
     using namespace kaguya;
 
     // enum PassLightingMode;
-    lua["KLIGHTING_UNLIT"] = LIGHTING_UNLIT;
-    lua["KLIGHTING_PERVERTEX"] = LIGHTING_PERVERTEX;
-    lua["KLIGHTING_PERPIXEL"] = LIGHTING_PERPIXEL;
+    lua["LIGHTING_UNLIT"] = LIGHTING_UNLIT;
+    lua["LIGHTING_PERVERTEX"] = LIGHTING_PERVERTEX;
+    lua["LIGHTING_PERPIXEL"] = LIGHTING_PERPIXEL;
 
-    lua["KPass"].setClass(UserdataMetatable<Pass, RefCounted>()
+    lua["Pass"].setClass(UserdataMetatable<Pass, RefCounted>()
         .setConstructors<Pass(const String&)>()
         
         .addFunction("SetBlendMode", &Pass::SetBlendMode)
@@ -1170,7 +1170,7 @@ static void RegisterTechnique(kaguya::State& lua)
         .addProperty("isDesktop", &Pass::SetIsDesktop)
     );
 
-    lua["KTechnique"].setClass(UserdataMetatable<Technique, Resource>()
+    lua["Technique"].setClass(UserdataMetatable<Technique, Resource>()
         .addStaticFunction("new", &KCreateObject<Technique>)
         
         .addFunction("BeginLoad", &Technique::BeginLoad)
@@ -1223,9 +1223,9 @@ static void RegisterTexture(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KMAX_TEXTURE_QUALITY_LEVELS"] = MAX_TEXTURE_QUALITY_LEVELS;
+    lua["MAX_TEXTURE_QUALITY_LEVELS"] = MAX_TEXTURE_QUALITY_LEVELS;
 
-    lua["KTexture"].setClass(UserdataMetatable<Texture, Resource>()
+    lua["Texture"].setClass(UserdataMetatable<Texture, Resource>()
         .addStaticFunction("new", &KCreateObject<Texture>)
         
         .addFunction("SetNumLevels", &Texture::SetNumLevels)
@@ -1287,7 +1287,7 @@ static void RegisterTexture2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KTexture2D"].setClass(UserdataMetatable<Texture2D, Texture>()
+    lua["Texture2D"].setClass(UserdataMetatable<Texture2D, Texture>()
         .addStaticFunction("new", &KCreateObject<Texture2D>)
         
         .addFunction("SetSize", &Texture2D::SetSize)
@@ -1299,7 +1299,7 @@ static void RegisterTexture2DArray(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KTexture2DArray"].setClass(UserdataMetatable<Texture2DArray, Texture>()
+    lua["Texture2DArray"].setClass(UserdataMetatable<Texture2DArray, Texture>()
         .addStaticFunction("new", &KCreateObject<Texture2DArray>)
         
         .addFunction("SetLayers", &Texture2DArray::SetLayers)
@@ -1316,7 +1316,7 @@ static void RegisterTexture3D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KTexture3D"].setClass(UserdataMetatable<Texture3D, Texture>()
+    lua["Texture3D"].setClass(UserdataMetatable<Texture3D, Texture>()
         .addStaticFunction("new", &KCreateObject<Texture3D>)
         
         .addFunction("SetSize", &Texture3D::SetSize)
@@ -1328,7 +1328,7 @@ static void RegisterTextureCube(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KTextureCube"].setClass(UserdataMetatable<TextureCube, Texture>()
+    lua["TextureCube"].setClass(UserdataMetatable<TextureCube, Texture>()
         .addStaticFunction("new", &KCreateObject<TextureCube>)
         
         .addFunction("SetSize", &TextureCube::SetSize)
@@ -1341,7 +1341,7 @@ static void RegisterVertexBuffer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KVertexBuffer"].setClass(UserdataMetatable<VertexBuffer, GPUObject>()
+    lua["VertexBuffer"].setClass(UserdataMetatable<VertexBuffer, GPUObject>()
         .setConstructors<VertexBuffer(Context*, bool)>()
 
         .addFunction("SetShadowed", &VertexBuffer::SetShadowed)
@@ -1385,7 +1385,7 @@ static void RegisterViewport(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KViewport"].setClass(UserdataMetatable<Viewport, Object>()
+    lua["Viewport"].setClass(UserdataMetatable<Viewport, Object>()
         // .addStaticFunction("new", overload(&KCreateViewport1, &KCreateViewport2, &KCreateViewport3))
         .addStaticFunction("new", &KCreateViewport2)
 
@@ -1445,10 +1445,10 @@ void RegisterRendererLuaAPI(kaguya::State& lua)
     RegisterVertexBuffer(lua);
     RegisterViewport(lua);
 
-    lua["kgraphics"] = KGetSubsystem<Graphics>();
-    lua["KGetGraphics"] = KGetSubsystem<Graphics>();
+    lua["graphics"] = KGetSubsystem<Graphics>();
+    lua["GetGraphics"] = KGetSubsystem<Graphics>();
 
-    lua["krenderer"] = KGetSubsystem<Renderer>();
-    lua["KGetRenderer"] = KGetSubsystem<Renderer>;
+    lua["renderer"] = KGetSubsystem<Renderer>();
+    lua["GetRenderer"] = KGetSubsystem<Renderer>;
 }
 }

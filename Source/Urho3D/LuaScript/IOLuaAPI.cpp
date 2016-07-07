@@ -24,7 +24,7 @@ static void RegisterDeserializer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KDeserializer"].setClass(UserdataMetatable<Deserializer>()
+    lua["Deserializer"].setClass(UserdataMetatable<Deserializer>()
         .addFunction("Seek", &Deserializer::Seek)
         .addFunction("GetName", &Deserializer::GetName)
         .addFunction("GetChecksum", &Deserializer::GetChecksum)
@@ -84,7 +84,7 @@ static void RegisterSerializer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSerializer"].setClass(UserdataMetatable<Serializer>()
+    lua["Serializer"].setClass(UserdataMetatable<Serializer>()
         .addFunction("WriteInt", &Serializer::WriteInt)
         .addFunction("WriteShort", &Serializer::WriteShort)
         .addFunction("WriteByte", &Serializer::WriteByte)
@@ -130,11 +130,11 @@ static void RegisterFile(kaguya::State& lua)
     using namespace kaguya;
 
     // enum FileMode;
-    lua["KFILE_READ"] = FILE_READ;
-    lua["KFILE_WRITE"] = FILE_WRITE;
-    lua["KFILE_READWRITE"] = FILE_READWRITE;
+    lua["FILE_READ"] = FILE_READ;
+    lua["FILE_WRITE"] = FILE_WRITE;
+    lua["FILE_READWRITE"] = FILE_READWRITE;
 
-    lua["KFile"].setClass(UserdataMetatable<File, MultipleBase<Object, Deserializer, Serializer>>()
+    lua["File"].setClass(UserdataMetatable<File, MultipleBase<Object, Deserializer, Serializer>>()
         .addStaticFunction("new", &KCreateObject<File>)
 
         .addOverloadedFunctions("Open",
@@ -160,11 +160,11 @@ static void RegisterFileSystem(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSCAN_FILES"] = SCAN_FILES;
-    lua["KSCAN_DIRS"] = SCAN_DIRS;
-    lua["KSCAN_HIDDEN"] = SCAN_HIDDEN;
+    lua["SCAN_FILES"] = SCAN_FILES;
+    lua["SCAN_DIRS"] = SCAN_DIRS;
+    lua["SCAN_HIDDEN"] = SCAN_HIDDEN;
 
-    lua["KFileSystem"].setClass(UserdataMetatable<FileSystem, Object>()
+    lua["FileSystem"].setClass(UserdataMetatable<FileSystem, Object>()
 
         .addFunction("SetCurrentDir", &FileSystem::SetCurrentDir)
         .addFunction("CreateDir", &FileSystem::CreateDir)
@@ -196,41 +196,41 @@ static void RegisterFileSystem(kaguya::State& lua)
         .addProperty("userDocumentsDir", &FileSystem::GetUserDocumentsDir)
     );
 
-    lua["KSplitPath"] = function(&SplitPath);
-    lua["KGetPath"] = function(&GetPath);
-    lua["KGetFileName"] = function(&GetFileName);
-    lua["KGetExtension"] = function(&GetExtension);
-    lua["KGetFileNameAndExtension"] = function(&GetFileNameAndExtension);
-    lua["KReplaceExtension"] = function(&ReplaceExtension);
-    lua["KAddTrailingSlash"] = function(&AddTrailingSlash);
-    lua["KRemoveTrailingSlash"] = function(&RemoveTrailingSlash);
-    lua["KGetParentPath"] = function(&GetParentPath);
-    lua["KGetInternalPath"] = function(&GetInternalPath);
-    lua["KGetNativePath"] = function(&GetNativePath);
-    lua["KGetWideNativePath"] = function(&GetWideNativePath);
-    lua["KIsAbsolutePath"] = function(&IsAbsolutePath);
+    lua["SplitPath"] = function(&SplitPath);
+    lua["GetPath"] = function(&GetPath);
+    lua["GetFileName"] = function(&GetFileName);
+    lua["GetExtension"] = function(&GetExtension);
+    lua["GetFileNameAndExtension"] = function(&GetFileNameAndExtension);
+    lua["ReplaceExtension"] = function(&ReplaceExtension);
+    lua["AddTrailingSlash"] = function(&AddTrailingSlash);
+    lua["RemoveTrailingSlash"] = function(&RemoveTrailingSlash);
+    lua["GetParentPath"] = function(&GetParentPath);
+    lua["GetInternalPath"] = function(&GetInternalPath);
+    lua["GetNativePath"] = function(&GetNativePath);
+    lua["GetWideNativePath"] = function(&GetWideNativePath);
+    lua["IsAbsolutePath"] = function(&IsAbsolutePath);
 }
 
 static void RegisterIOEvents(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KE_LOGMESSAGE"] = E_LOGMESSAGE;
-    lua["KE_ASYNCEXECFINISHED"] = E_ASYNCEXECFINISHED;
+    lua["E_LOGMESSAGE"] = E_LOGMESSAGE;
+    lua["E_ASYNCEXECFINISHED"] = E_ASYNCEXECFINISHED;
 }
 
 static void RegisterLog(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KLOG_RAW"] = LOG_RAW;
-    lua["KLOG_DEBUG"] = LOG_DEBUG;
-    lua["KLOG_INFO"] = LOG_INFO;
-    lua["KLOG_WARNING"] = LOG_WARNING;
-    lua["KLOG_ERROR"] = LOG_ERROR;
-    lua["KLOG_NONE"] = LOG_NONE;
+    lua["LOG_RAW"] = LOG_RAW;
+    lua["LOG_DEBUG"] = LOG_DEBUG;
+    lua["LOG_INFO"] = LOG_INFO;
+    lua["LOG_WARNING"] = LOG_WARNING;
+    lua["LOG_ERROR"] = LOG_ERROR;
+    lua["LOG_NONE"] = LOG_NONE;
 
-    lua["KLog"].setClass(UserdataMetatable<Log, Object>()
+    lua["Log"].setClass(UserdataMetatable<Log, Object>()
 
         .addFunction("Open", &Log::Open)
         .addFunction("Close", &Log::Close)
@@ -255,7 +255,7 @@ static void RegisterPackageFile(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KPackageFile"].setClass(UserdataMetatable<PackageFile, Object>()
+    lua["PackageFile"].setClass(UserdataMetatable<PackageFile, Object>()
         .addStaticFunction("new", &KCreateObject<PackageFile>)
         
         .addFunction("Open", &PackageFile::Open)
@@ -287,7 +287,7 @@ static void RegisterVectorBuffer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KVectorBuffer"].setClass(UserdataMetatable<VectorBuffer, MultipleBase<Deserializer, Serializer>>()
+    lua["VectorBuffer"].setClass(UserdataMetatable<VectorBuffer, MultipleBase<Deserializer, Serializer>>()
         .setConstructors<VectorBuffer(),
             VectorBuffer(const PODVector<unsigned char>&),
             VectorBuffer(const void*, unsigned),
@@ -321,11 +321,11 @@ void RegisterIOLuaAPI(kaguya::State& lua)
     RegisterPackageFile(lua);
     RegisterVectorBuffer(lua);
 
-    lua["kfileSystem"] = KGetSubsystem<FileSystem>();
-    lua["KGetFileSystem"] = KGetSubsystem<FileSystem>;
+    lua["fileSystem"] = KGetSubsystem<FileSystem>();
+    lua["GetFileSystem"] = KGetSubsystem<FileSystem>;
 
-    lua["klog"] = KGetSubsystem<Log>();
-    lua["KGetLog"] = KGetSubsystem<Log>;
+    lua["log"] = KGetSubsystem<Log>();
+    lua["GetLog"] = KGetSubsystem<Log>;
 }
 
 }

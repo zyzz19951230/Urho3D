@@ -24,21 +24,21 @@ static void RegisterImage(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KCOLOR_LUT_SIZE"] = COLOR_LUT_SIZE;
+    lua["COLOR_LUT_SIZE"] = COLOR_LUT_SIZE;
 
     // enum CompressedFormat;
-    lua["KCF_NONE"] = CF_NONE;
-    lua["KCF_RGBA"] = CF_RGBA;
-    lua["KCF_DXT1"] = CF_DXT1;
-    lua["KCF_DXT3"] = CF_DXT3;
-    lua["KCF_DXT5"] = CF_DXT5;
-    lua["KCF_ETC1"] = CF_ETC1;
-    lua["KCF_PVRTC_RGB_2BPP"] = CF_PVRTC_RGB_2BPP;
-    lua["KCF_PVRTC_RGBA_2BPP"] = CF_PVRTC_RGBA_2BPP;
-    lua["KCF_PVRTC_RGB_4BPP"] = CF_PVRTC_RGB_4BPP;
-    lua["KCF_PVRTC_RGBA_4BPP"] = CF_PVRTC_RGBA_4BPP;
+    lua["CF_NONE"] = CF_NONE;
+    lua["CF_RGBA"] = CF_RGBA;
+    lua["CF_DXT1"] = CF_DXT1;
+    lua["CF_DXT3"] = CF_DXT3;
+    lua["CF_DXT5"] = CF_DXT5;
+    lua["CF_ETC1"] = CF_ETC1;
+    lua["CF_PVRTC_RGB_2BPP"] = CF_PVRTC_RGB_2BPP;
+    lua["CF_PVRTC_RGBA_2BPP"] = CF_PVRTC_RGBA_2BPP;
+    lua["CF_PVRTC_RGB_4BPP"] = CF_PVRTC_RGB_4BPP;
+    lua["CF_PVRTC_RGBA_4BPP"] = CF_PVRTC_RGBA_4BPP;
 
-    lua["KImage"].setClass(UserdataMetatable<Image, Resource>()
+    lua["Image"].setClass(UserdataMetatable<Image, Resource>()
         .addStaticFunction("new", &KCreateObject<Image>)
         
         .addFunction("BeginLoad", &Image::BeginLoad)
@@ -116,7 +116,7 @@ static void RegisterJSONFile(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KJSONFile"].setClass(UserdataMetatable<JSONFile, Resource>()
+    lua["JSONFile"].setClass(UserdataMetatable<JSONFile, Resource>()
         .addStaticFunction("new", &KCreateObject<JSONFile>)
         
 
@@ -136,20 +136,20 @@ static void RegisterJSONValue(kaguya::State& lua)
     using namespace kaguya;
 
     // enum JSONValueType;
-    lua["KJSON_NULL"] = JSON_NULL;
-    lua["KJSON_BOOL"] = JSON_BOOL;
-    lua["KJSON_NUMBER"] = JSON_NUMBER;
-    lua["KJSON_STRING"] = JSON_STRING;
-    lua["KJSON_ARRAY"] = JSON_ARRAY;
-    lua["KJSON_OBJECT"] = JSON_OBJECT;
+    lua["JSON_NULL"] = JSON_NULL;
+    lua["JSON_BOOL"] = JSON_BOOL;
+    lua["JSON_NUMBER"] = JSON_NUMBER;
+    lua["JSON_STRING"] = JSON_STRING;
+    lua["JSON_ARRAY"] = JSON_ARRAY;
+    lua["JSON_OBJECT"] = JSON_OBJECT;
 
     // enum JSONNumberType;
-    lua["KJSONNT_NAN"] = JSONNT_NAN;
-    lua["KJSONNT_INT"] = JSONNT_INT;
-    lua["KJSONNT_UINT"] = JSONNT_UINT;
-    lua["KJSONNT_FLOAT_DOUBLE"] = JSONNT_FLOAT_DOUBLE;
+    lua["JSONNT_NAN"] = JSONNT_NAN;
+    lua["JSONNT_INT"] = JSONNT_INT;
+    lua["JSONNT_UINT"] = JSONNT_UINT;
+    lua["JSONNT_FLOAT_DOUBLE"] = JSONNT_FLOAT_DOUBLE;
 
-    lua["KJSONValue"].setClass(UserdataMetatable<JSONValue>()
+    lua["JSONValue"].setClass(UserdataMetatable<JSONValue>()
         .setConstructors<JSONValue(),
         JSONValue(bool),
         JSONValue(int),
@@ -234,7 +234,7 @@ static void RegisterLocalization(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KLocalization"].setClass(UserdataMetatable<Localization, Object>()
+    lua["Localization"].setClass(UserdataMetatable<Localization, Object>()
 
 
         .addFunction("GetNumLanguages", &Localization::GetNumLanguages)
@@ -265,15 +265,15 @@ static void RegisterPListFile(kaguya::State& lua)
     using namespace kaguya;
 
     // enum PListValueType;
-    lua["KPLVT_NONE"] = PLVT_NONE;
-    lua["KPLVT_INT"] = PLVT_INT;
-    lua["KPLVT_BOOL"] = PLVT_BOOL;
-    lua["KPLVT_FLOAT"] = PLVT_FLOAT;
-    lua["KPLVT_STRING"] = PLVT_STRING;
-    lua["KPLVT_VALUEMAP"] = PLVT_VALUEMAP;
-    lua["KPLVT_VALUEVECTOR"] = PLVT_VALUEVECTOR;
+    lua["PLVT_NONE"] = PLVT_NONE;
+    lua["PLVT_INT"] = PLVT_INT;
+    lua["PLVT_BOOL"] = PLVT_BOOL;
+    lua["PLVT_FLOAT"] = PLVT_FLOAT;
+    lua["PLVT_STRING"] = PLVT_STRING;
+    lua["PLVT_VALUEMAP"] = PLVT_VALUEMAP;
+    lua["PLVT_VALUEVECTOR"] = PLVT_VALUEVECTOR;
 
-    lua["KPListValue"].setClass(UserdataMetatable<PListValue>()
+    lua["PListValue"].setClass(UserdataMetatable<PListValue>()
         .setConstructors<PListValue(),
         PListValue(int),
         PListValue(bool),
@@ -305,7 +305,7 @@ static void RegisterPListFile(kaguya::State& lua)
         .addProperty("type", &PListValue::GetType)
     );
 
-    lua["KPListFile"].setClass(UserdataMetatable<PListFile, Resource>()
+    lua["PListFile"].setClass(UserdataMetatable<PListFile, Resource>()
         .addStaticFunction("new", &KCreateObject<PListFile>)
         
 
@@ -321,13 +321,13 @@ static void RegisterResource(kaguya::State& lua)
     using namespace kaguya;
 
     // enum AsyncLoadState;
-    lua["KASYNC_DONE"] = ASYNC_DONE;
-    lua["KASYNC_QUEUED"] = ASYNC_QUEUED;
-    lua["KASYNC_LOADING"] = ASYNC_LOADING;
-    lua["KASYNC_SUCCESS"] = ASYNC_SUCCESS;
-    lua["KASYNC_FAIL"] = ASYNC_FAIL;
+    lua["ASYNC_DONE"] = ASYNC_DONE;
+    lua["ASYNC_QUEUED"] = ASYNC_QUEUED;
+    lua["ASYNC_LOADING"] = ASYNC_LOADING;
+    lua["ASYNC_SUCCESS"] = ASYNC_SUCCESS;
+    lua["ASYNC_FAIL"] = ASYNC_FAIL;
 
-    lua["KResource"].setClass(UserdataMetatable<Resource, Object>()
+    lua["Resource"].setClass(UserdataMetatable<Resource, Object>()
         .addStaticFunction("new", &KCreateObject<Resource>)
         
 
@@ -377,13 +377,13 @@ static void RegisterResourceCache(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KPRIORITY_LAST"] = PRIORITY_LAST;
+    lua["PRIORITY_LAST"] = PRIORITY_LAST;
 
     // enum ResourceRequest;
-    lua["KRESOURCE_CHECKEXISTS"] = RESOURCE_CHECKEXISTS;
-    lua["KRESOURCE_GETFILE"] = RESOURCE_GETFILE;
+    lua["RESOURCE_CHECKEXISTS"] = RESOURCE_CHECKEXISTS;
+    lua["RESOURCE_GETFILE"] = RESOURCE_GETFILE;
 
-    lua["KResourceCache"].setClass(UserdataMetatable<ResourceCache, Object>()
+    lua["ResourceCache"].setClass(UserdataMetatable<ResourceCache, Object>()
 
         .addFunction("AddResourceDir", &ResourceCache::AddResourceDir)
 
@@ -452,22 +452,22 @@ static void RegisterResourceEvents(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KE_RELOADSTARTED"] = E_RELOADSTARTED;
-    lua["KE_RELOADFINISHED"] = E_RELOADFINISHED;
-    lua["KE_RELOADFAILED"] = E_RELOADFAILED;
-    lua["KE_FILECHANGED"] = E_FILECHANGED;
-    lua["KE_LOADFAILED"] = E_LOADFAILED;
-    lua["KE_RESOURCENOTFOUND"] = E_RESOURCENOTFOUND;
-    lua["KE_UNKNOWNRESOURCETYPE"] = E_UNKNOWNRESOURCETYPE;
-    lua["KE_RESOURCEBACKGROUNDLOADED"] = E_RESOURCEBACKGROUNDLOADED;
-    lua["KE_CHANGELANGUAGE"] = E_CHANGELANGUAGE;
+    lua["E_RELOADSTARTED"] = E_RELOADSTARTED;
+    lua["E_RELOADFINISHED"] = E_RELOADFINISHED;
+    lua["E_RELOADFAILED"] = E_RELOADFAILED;
+    lua["E_FILECHANGED"] = E_FILECHANGED;
+    lua["E_LOADFAILED"] = E_LOADFAILED;
+    lua["E_RESOURCENOTFOUND"] = E_RESOURCENOTFOUND;
+    lua["E_UNKNOWNRESOURCETYPE"] = E_UNKNOWNRESOURCETYPE;
+    lua["E_RESOURCEBACKGROUNDLOADED"] = E_RESOURCEBACKGROUNDLOADED;
+    lua["E_CHANGELANGUAGE"] = E_CHANGELANGUAGE;
 }
 
 static void RegisterXMLElement(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KXMLElement"].setClass(UserdataMetatable<XMLElement>()
+    lua["XMLElement"].setClass(UserdataMetatable<XMLElement>()
         .setConstructors<XMLElement(),
         XMLElement(const XMLElement&)>()
 
@@ -606,7 +606,7 @@ static void RegisterXMLElement(kaguya::State& lua)
         .addStaticField("EMPTY", &XMLElement::EMPTY)
     );
 
-    lua["KXPathResultSet"].setClass(UserdataMetatable<XPathResultSet>()
+    lua["XPathResultSet"].setClass(UserdataMetatable<XPathResultSet>()
         .setConstructors<XPathResultSet(),
         XPathResultSet(const XPathResultSet&)>()
 
@@ -617,7 +617,7 @@ static void RegisterXMLElement(kaguya::State& lua)
         .addFunction("Empty", &XPathResultSet::Empty)
     );
 
-    lua["KXPathQuery"].setClass(UserdataMetatable<XPathQuery>()
+    lua["XPathQuery"].setClass(UserdataMetatable<XPathQuery>()
         .setConstructors<XPathQuery(),
         XPathQuery(const String&, const String&)>()
 
@@ -648,7 +648,7 @@ static void RegisterXMLFile(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KXMLFile"].setClass(UserdataMetatable<XMLFile, Resource>()
+    lua["XMLFile"].setClass(UserdataMetatable<XMLFile, Resource>()
         .addStaticFunction("new", &KCreateObject<XMLFile>)
         
 
@@ -685,10 +685,10 @@ void RegisterResourceLuaAPI(kaguya::State& lua)
     RegisterXMLElement(lua);
     RegisterXMLFile(lua);
 
-    lua["kcache"] = KGetSubsystem<ResourceCache>();
-    lua["KGetCache"] = KGetSubsystem<ResourceCache>;
+    lua["cache"] = KGetSubsystem<ResourceCache>();
+    lua["GetCache"] = KGetSubsystem<ResourceCache>;
 
-    lua["klocalization"] = KGetSubsystem<Localization>();
-    lua["KGetLocalization"] = KGetSubsystem<Localization>;
+    lua["localization"] = KGetSubsystem<Localization>();
+    lua["GetLocalization"] = KGetSubsystem<Localization>;
 }
 }

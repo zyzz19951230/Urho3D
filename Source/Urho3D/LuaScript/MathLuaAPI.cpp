@@ -29,7 +29,7 @@ static void RegisterAreaAllocator(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KAreaAllocator"].setClass(UserdataMetatable<AreaAllocator>()
+    lua["AreaAllocator"].setClass(UserdataMetatable<AreaAllocator>()
         .setConstructors<AreaAllocator(),
             AreaAllocator(int, int, bool),
             AreaAllocator(int, int, int, int, bool)>()
@@ -50,7 +50,7 @@ static void RegisterBoundingBox(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KBoundingBox"].setClass(UserdataMetatable<BoundingBox>()
+    lua["BoundingBox"].setClass(UserdataMetatable<BoundingBox>()
         .setConstructors<BoundingBox(),
             BoundingBox(const BoundingBox&),
             BoundingBox(const Rect&),
@@ -121,7 +121,7 @@ static void RegisterColor(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KColor"].setClass(UserdataMetatable<Color>()
+    lua["Color"].setClass(UserdataMetatable<Color>()
         .setConstructors<Color(),
             Color(const Color&),
             Color(const Color&, float),
@@ -190,16 +190,16 @@ static void RegisterFrustum(kaguya::State& lua)
     using namespace kaguya;
 
     // enum FrustumPlane;
-    lua["KPLANE_NEAR"] = PLANE_NEAR;
-    lua["KPLANE_LEFT"] = PLANE_LEFT;
-    lua["KPLANE_RIGHT"] = PLANE_RIGHT;
-    lua["KPLANE_UP"] = PLANE_UP;
-    lua["KPLANE_DOWN"] = PLANE_DOWN;
-    lua["KPLANE_FAR"] = PLANE_FAR;
+    lua["PLANE_NEAR"] = PLANE_NEAR;
+    lua["PLANE_LEFT"] = PLANE_LEFT;
+    lua["PLANE_RIGHT"] = PLANE_RIGHT;
+    lua["PLANE_UP"] = PLANE_UP;
+    lua["PLANE_DOWN"] = PLANE_DOWN;
+    lua["PLANE_FAR"] = PLANE_FAR;
 
-    lua["KNUM_FRUSTUM_PLANES"] = NUM_FRUSTUM_PLANES;
-    lua["KNUM_FRUSTUM_VERTICES"] = NUM_FRUSTUM_VERTICES;
-    lua["KFrustum"].setClass(UserdataMetatable<Frustum>()
+    lua["NUM_FRUSTUM_PLANES"] = NUM_FRUSTUM_PLANES;
+    lua["NUM_FRUSTUM_VERTICES"] = NUM_FRUSTUM_VERTICES;
+    lua["Frustum"].setClass(UserdataMetatable<Frustum>()
         .setConstructors<Frustum(), Frustum(const Frustum&)>()
 
         .addOverloadedFunctions("Define",
@@ -239,82 +239,82 @@ static void RegisterMathDefs(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KM_PI"] = M_PI;
-    lua["KM_HALF_PI"] = M_HALF_PI;
-    lua["KM_MIN_INT"] = M_MIN_INT;
-    lua["KM_MAX_INT"] = M_MAX_INT;
-    lua["KM_MIN_UNSIGNED"] = M_MIN_UNSIGNED;
-    lua["KM_MAX_UNSIGNED"] = M_MAX_UNSIGNED;
-    lua["KM_EPSILON"] = M_EPSILON;
-    lua["KM_LARGE_EPSILON"] = M_LARGE_EPSILON;
-    lua["KM_MIN_NEARCLIP"] = M_MIN_NEARCLIP;
-    lua["KM_MAX_FOV"] = M_MAX_FOV;
-    lua["KM_LARGE_VALUE"] = M_LARGE_VALUE;
-    lua["KM_INFINITY"] = M_INFINITY;
-    lua["KM_DEGTORAD"] = M_DEGTORAD;
-    lua["KM_DEGTORAD_2"] = M_DEGTORAD_2;
-    lua["KM_RADTODEG"] = M_RADTODEG;
+    lua["M_PI"] = M_PI;
+    lua["M_HALF_PI"] = M_HALF_PI;
+    lua["M_MIN_INT"] = M_MIN_INT;
+    lua["M_MAX_INT"] = M_MAX_INT;
+    lua["M_MIN_UNSIGNED"] = M_MIN_UNSIGNED;
+    lua["M_MAX_UNSIGNED"] = M_MAX_UNSIGNED;
+    lua["M_EPSILON"] = M_EPSILON;
+    lua["M_LARGE_EPSILON"] = M_LARGE_EPSILON;
+    lua["M_MIN_NEARCLIP"] = M_MIN_NEARCLIP;
+    lua["M_MAX_FOV"] = M_MAX_FOV;
+    lua["M_LARGE_VALUE"] = M_LARGE_VALUE;
+    lua["M_INFINITY"] = M_INFINITY;
+    lua["M_DEGTORAD"] = M_DEGTORAD;
+    lua["M_DEGTORAD_2"] = M_DEGTORAD_2;
+    lua["M_RADTODEG"] = M_RADTODEG;
     // enum Intersection;
-    lua["KOUTSIDE"] = OUTSIDE;
-    lua["KINTERSECTS"] = INTERSECTS;
-    lua["KINSIDE"] = INSIDE;
+    lua["OUTSIDE"] = OUTSIDE;
+    lua["INTERSECTS"] = INTERSECTS;
+    lua["INSIDE"] = INSIDE;
 
     // bool Equals(T lhs, T rhs);
-    lua["KEquals"] = static_cast<bool(*)(float, float)>(&Equals);
+    lua["Equals"] = static_cast<bool(*)(float, float)>(&Equals);
     // T Lerp(T lhs, T rhs, U t);
-    lua["KLerp"] = static_cast<float(*)(float, float, float)>(&Lerp);
+    lua["Lerp"] = static_cast<float(*)(float, float, float)>(&Lerp);
     // T Min(T lhs, U rhs);
-    lua["KMin"] = static_cast<float(*)(float, float)>(&Min);
+    lua["Min"] = static_cast<float(*)(float, float)>(&Min);
     // T Max(T lhs, U rhs);
-    lua["KMax"] = static_cast<float(*)(float, float)>(&Max);
+    lua["Max"] = static_cast<float(*)(float, float)>(&Max);
     // T Abs(T value);
-    lua["KAbs"] = static_cast<float(*)(float)>(&Abs);
+    lua["Abs"] = static_cast<float(*)(float)>(&Abs);
     // T Sign(T value);
-    lua["KSign"] = static_cast<float(*)(float)>(&Sign);
+    lua["Sign"] = static_cast<float(*)(float)>(&Sign);
     
-    lua["KIsNaN"] = function(&IsNaN);
+    lua["IsNaN"] = function(&IsNaN);
     
     // T Clamp(T value, T min, T max);
-    lua["KClamp"] = static_cast<float(*)(float, float, float)>(&Clamp);
+    lua["Clamp"] = static_cast<float(*)(float, float, float)>(&Clamp);
     // T SmoothStep(T lhs, T rhs, T t);
-    lua["KSmoothStep"] = static_cast<float(*)(float, float, float)>(&SmoothStep);
+    lua["SmoothStep"] = static_cast<float(*)(float, float, float)>(&SmoothStep);
     // T Sin(T angle);
-    lua["KSin"] = static_cast<float(*)(float)>(&Sin);
+    lua["Sin"] = static_cast<float(*)(float)>(&Sin);
     // T Cos(T angle);
-    lua["KCos"] = static_cast<float(*)(float)>(&Cos);
+    lua["Cos"] = static_cast<float(*)(float)>(&Cos);
     // T Tan(T angle);
-    lua["KTan"] = static_cast<float(*)(float)>(&Tan);
+    lua["Tan"] = static_cast<float(*)(float)>(&Tan);
     // T Asin(T x);
-    lua["KAsin"] = static_cast<float(*)(float)>(&Asin);
+    lua["Asin"] = static_cast<float(*)(float)>(&Asin);
     // T Acos(T x);
-    lua["KAcos"] = static_cast<float(*)(float)>(&Acos);
+    lua["Acos"] = static_cast<float(*)(float)>(&Acos);
     // T Atan(T x);
-    lua["KAtan"] = static_cast<float(*)(float)>(&Atan);
+    lua["Atan"] = static_cast<float(*)(float)>(&Atan);
     // T Atan2(T y, T x);
-    lua["KAtan2"] = static_cast<float(*)(float, float)>(&Atan2);
+    lua["Atan2"] = static_cast<float(*)(float, float)>(&Atan2);
 
-    lua["KIsPowerOfTwo"] = function(&IsPowerOfTwo);
-    lua["KNextPowerOfTwo"] = function(&NextPowerOfTwo);
-    lua["KCountSetBits"] = function(&CountSetBits);
-    lua["KSDBMHash"] = function(&SDBMHash);
+    lua["IsPowerOfTwo"] = function(&IsPowerOfTwo);
+    lua["NextPowerOfTwo"] = function(&NextPowerOfTwo);
+    lua["CountSetBits"] = function(&CountSetBits);
+    lua["SDBMHash"] = function(&SDBMHash);
 
-    lua["KRandom"] = overload(static_cast<float(*)()>(&Random),
+    lua["Random"] = overload(static_cast<float(*)()>(&Random),
         static_cast<float(*)(float)>(&Random),
         static_cast<float(*)(float, float)>(&Random),
         static_cast<int(*)(int)>(&Random),
         static_cast<int(*)(int, int)>(&Random));
 
-    lua["KRandomNormal"] = function(&RandomNormal);
-    lua["KFloatToHalf"] = function(&FloatToHalf);
-    lua["KHalfToFloat"] = function(&HalfToFloat);
-    lua["KSinCos"] = function(&SinCos);
+    lua["RandomNormal"] = function(&RandomNormal);
+    lua["FloatToHalf"] = function(&FloatToHalf);
+    lua["HalfToFloat"] = function(&HalfToFloat);
+    lua["SinCos"] = function(&SinCos);
 }
 
 static void RegisterMatrix2(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KMatrix2"].setClass(UserdataMetatable<Matrix2>()
+    lua["Matrix2"].setClass(UserdataMetatable<Matrix2>()
         .setConstructors<Matrix2(),
             Matrix2(const Matrix2&),
             Matrix2(float, float, float, float)>()
@@ -353,7 +353,7 @@ static void RegisterMatrix3(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KMatrix3"].setClass(UserdataMetatable<Matrix3>()
+    lua["Matrix3"].setClass(UserdataMetatable<Matrix3>()
         .setConstructors<Matrix3(),
             Matrix3(const Matrix3&),
             Matrix3(float, float, float, float, float, float, float, float, float)>()
@@ -396,7 +396,7 @@ static void RegisterMatrix3x4(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KMatrix3x4"].setClass(UserdataMetatable<Matrix3x4>()
+    lua["Matrix3x4"].setClass(UserdataMetatable<Matrix3x4>()
         .setConstructors<Matrix3x4(),
             Matrix3x4(const Matrix3x4&),
             Matrix3x4(const Matrix3&),
@@ -466,7 +466,7 @@ static void RegisterMatrix4(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KMatrix4"].setClass(UserdataMetatable<Matrix4>()
+    lua["Matrix4"].setClass(UserdataMetatable<Matrix4>()
         .setConstructors<Matrix4(),
             Matrix4(const Matrix4&),
             Matrix4(const Matrix3&),
@@ -537,7 +537,7 @@ static void RegisterPlane(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KPlane"].setClass(UserdataMetatable<Plane>()
+    lua["Plane"].setClass(UserdataMetatable<Plane>()
         .setConstructors<Plane(),
             Plane(const Plane&),
             Plane(const Vector3&, const Vector3&, const Vector3&),
@@ -578,7 +578,7 @@ static void RegisterPolyhedron(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KPolyhedron"].setClass(UserdataMetatable<Polyhedron>()
+    lua["Polyhedron"].setClass(UserdataMetatable<Polyhedron>()
         .setConstructors<Polyhedron(),
             Polyhedron(const Polyhedron&),
             Polyhedron(const Vector<PODVector<Vector3> >&),
@@ -622,7 +622,7 @@ static void RegisterQuaternion(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KQuaternion"].setClass(UserdataMetatable<Quaternion>()
+    lua["Quaternion"].setClass(UserdataMetatable<Quaternion>()
         .setConstructors<Quaternion(),
             Quaternion(const Quaternion&),
             Quaternion(float, float, float, float),
@@ -688,7 +688,7 @@ static void RegisterRay(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KRay"].setClass(UserdataMetatable<Ray>()
+    lua["Ray"].setClass(UserdataMetatable<Ray>()
         .setConstructors<Ray(),
             Ray(const Vector3&, const Vector3&),
             Ray(const Ray&)>()
@@ -723,7 +723,7 @@ static void RegisterRect(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KRect"].setClass(UserdataMetatable<Rect>()
+    lua["Rect"].setClass(UserdataMetatable<Rect>()
         .setConstructors<Rect(),
             Rect(const Vector2&, const Vector2&),
             Rect(float, float, float, float),
@@ -758,7 +758,7 @@ static void RegisterRect(kaguya::State& lua)
         .addStaticField("POSITIVE", &Rect::POSITIVE)
         .addStaticField("ZERO", &Rect::ZERO)
     );
-    lua["KIntRect"].setClass(UserdataMetatable<IntRect>()
+    lua["IntRect"].setClass(UserdataMetatable<IntRect>()
         .setConstructors<IntRect(),
             IntRect(int, int, int, int),
             IntRect(const int*)>()
@@ -781,7 +781,7 @@ static void RegisterSphere(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSphere"].setClass(UserdataMetatable<Sphere>()
+    lua["Sphere"].setClass(UserdataMetatable<Sphere>()
         .setConstructors<Sphere(),
             Sphere(const Sphere&),
             Sphere(const Vector3&, float),
@@ -832,7 +832,7 @@ static void RegisterStringHash(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KStringHash"].setClass(UserdataMetatable<StringHash>()
+    lua["StringHash"].setClass(UserdataMetatable<StringHash>()
         .setConstructors<StringHash(),
             StringHash(const StringHash&),
             StringHash(unsigned),
@@ -855,7 +855,7 @@ static void RegisterVector2(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KVector2"].setClass(UserdataMetatable<Vector2>()
+    lua["Vector2"].setClass(UserdataMetatable<Vector2>()
         .setConstructors<Vector2(),
             Vector2(const Vector2&),
             Vector2(float, float)>()
@@ -900,7 +900,7 @@ static void RegisterVector2(kaguya::State& lua)
         .addStaticField("DOWN", &Vector2::DOWN)
         .addStaticField("ONE", &Vector2::ONE)
     );
-    lua["KIntVector2"].setClass(UserdataMetatable<IntVector2>()
+    lua["IntVector2"].setClass(UserdataMetatable<IntVector2>()
         .setConstructors<IntVector2(),
             IntVector2(int, int),
             IntVector2(const int*),
@@ -926,7 +926,7 @@ static void RegisterVector3(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KVector3"].setClass(UserdataMetatable<Vector3>()
+    lua["Vector3"].setClass(UserdataMetatable<Vector3>()
         .setConstructors<Vector3(),
             Vector3(const Vector3&),
             Vector3(const Vector2&, float),
@@ -984,7 +984,7 @@ static void RegisterVector4(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KVector4"].setClass(UserdataMetatable<Vector4>()
+    lua["Vector4"].setClass(UserdataMetatable<Vector4>()
         .setConstructors<Vector4(),
             Vector4(const Vector4&),
             Vector4(const Vector3&, float),

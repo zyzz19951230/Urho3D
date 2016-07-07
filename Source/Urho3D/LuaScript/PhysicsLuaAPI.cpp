@@ -18,17 +18,17 @@ static void RegisterCollisionShape(kaguya::State& lua)
     using namespace kaguya;
 
     // enum ShapeType;
-    lua["KSHAPE_BOX"] = SHAPE_BOX;
-    lua["KSHAPE_SPHERE"] = SHAPE_SPHERE;
-    lua["KSHAPE_STATICPLANE"] = SHAPE_STATICPLANE;
-    lua["KSHAPE_CYLINDER"] = SHAPE_CYLINDER;
-    lua["KSHAPE_CAPSULE"] = SHAPE_CAPSULE;
-    lua["KSHAPE_CONE"] = SHAPE_CONE;
-    lua["KSHAPE_TRIANGLEMESH"] = SHAPE_TRIANGLEMESH;
-    lua["KSHAPE_CONVEXHULL"] = SHAPE_CONVEXHULL;
-    lua["KSHAPE_TERRAIN"] = SHAPE_TERRAIN;
+    lua["SHAPE_BOX"] = SHAPE_BOX;
+    lua["SHAPE_SPHERE"] = SHAPE_SPHERE;
+    lua["SHAPE_STATICPLANE"] = SHAPE_STATICPLANE;
+    lua["SHAPE_CYLINDER"] = SHAPE_CYLINDER;
+    lua["SHAPE_CAPSULE"] = SHAPE_CAPSULE;
+    lua["SHAPE_CONE"] = SHAPE_CONE;
+    lua["SHAPE_TRIANGLEMESH"] = SHAPE_TRIANGLEMESH;
+    lua["SHAPE_CONVEXHULL"] = SHAPE_CONVEXHULL;
+    lua["SHAPE_TERRAIN"] = SHAPE_TERRAIN;
 
-    lua["KCollisionShape"].setClass(UserdataMetatable<CollisionShape, Component>()
+    lua["CollisionShape"].setClass(UserdataMetatable<CollisionShape, Component>()
         .addStaticFunction("new", &KCreateObject<CollisionShape>)
         
         .addFunction("SetBox", &CollisionShape::SetBox)
@@ -84,12 +84,12 @@ static void RegisterConstraint(kaguya::State& lua)
     using namespace kaguya;
 
     // enum ConstraintType;
-    lua["KCONSTRAINT_POINT"] = CONSTRAINT_POINT;
-    lua["KCONSTRAINT_HINGE"] = CONSTRAINT_HINGE;
-    lua["KCONSTRAINT_SLIDER"] = CONSTRAINT_SLIDER;
-    lua["KCONSTRAINT_CONETWIST"] = CONSTRAINT_CONETWIST;
+    lua["CONSTRAINT_POINT"] = CONSTRAINT_POINT;
+    lua["CONSTRAINT_HINGE"] = CONSTRAINT_HINGE;
+    lua["CONSTRAINT_SLIDER"] = CONSTRAINT_SLIDER;
+    lua["CONSTRAINT_CONETWIST"] = CONSTRAINT_CONETWIST;
 
-    lua["KConstraint"].setClass(UserdataMetatable<Constraint, Component>()
+    lua["Constraint"].setClass(UserdataMetatable<Constraint, Component>()
         .addStaticFunction("new", &KCreateObject<Constraint>)
         
         .addFunction("SetConstraintType", &Constraint::SetConstraintType)
@@ -148,21 +148,21 @@ static void RegisterPhysicsEvents(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KE_PHYSICSPRESTEP"] = E_PHYSICSPRESTEP;
-    lua["KE_PHYSICSPOSTSTEP"] = E_PHYSICSPOSTSTEP;
-    lua["KE_PHYSICSCOLLISIONSTART"] = E_PHYSICSCOLLISIONSTART;
-    lua["KE_PHYSICSCOLLISION"] = E_PHYSICSCOLLISION;
-    lua["KE_PHYSICSCOLLISIONEND"] = E_PHYSICSCOLLISIONEND;
-    lua["KE_NODECOLLISIONSTART"] = E_NODECOLLISIONSTART;
-    lua["KE_NODECOLLISION"] = E_NODECOLLISION;
-    lua["KE_NODECOLLISIONEND"] = E_NODECOLLISIONEND;
+    lua["E_PHYSICSPRESTEP"] = E_PHYSICSPRESTEP;
+    lua["E_PHYSICSPOSTSTEP"] = E_PHYSICSPOSTSTEP;
+    lua["E_PHYSICSCOLLISIONSTART"] = E_PHYSICSCOLLISIONSTART;
+    lua["E_PHYSICSCOLLISION"] = E_PHYSICSCOLLISION;
+    lua["E_PHYSICSCOLLISIONEND"] = E_PHYSICSCOLLISIONEND;
+    lua["E_NODECOLLISIONSTART"] = E_NODECOLLISIONSTART;
+    lua["E_NODECOLLISION"] = E_NODECOLLISION;
+    lua["E_NODECOLLISIONEND"] = E_NODECOLLISIONEND;
 }
 
 static void RegisterPhysicsWorld(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KPhysicsRaycastResult"].setClass(UserdataMetatable<PhysicsRaycastResult>()
+    lua["PhysicsRaycastResult"].setClass(UserdataMetatable<PhysicsRaycastResult>()
         .setConstructors<PhysicsRaycastResult()>()
 
         .addProperty("position", &PhysicsRaycastResult::position_)
@@ -172,9 +172,9 @@ static void RegisterPhysicsWorld(kaguya::State& lua)
         .addProperty("body", &PhysicsRaycastResult::body_)
     );
 
-    lua["KDEFAULT_MAX_NETWORK_ANGULAR_VELOCITY"] = DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY;
+    lua["DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY"] = DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY;
 
-    lua["KPhysicsWorld"].setClass(UserdataMetatable<PhysicsWorld, Component>()
+    lua["PhysicsWorld"].setClass(UserdataMetatable<PhysicsWorld, Component>()
         .addStaticFunction("new", &KCreateObject<PhysicsWorld>)
         
         .addFunction("DrawDebugGeometry", static_cast<void(PhysicsWorld::*)(bool)>(&PhysicsWorld::DrawDebugGeometry))
@@ -249,7 +249,7 @@ static void RegisterPhysicsWorld(kaguya::State& lua)
         .addProperty("debugRenderer", &PhysicsWorld::SetDebugRenderer)
         .addProperty("debugDepthTest", &PhysicsWorld::SetDebugDepthTest)
     );
-    lua["KRegisterPhysicsLibrary"] = function(&RegisterPhysicsLibrary);
+    lua["RegisterPhysicsLibrary"] = function(&RegisterPhysicsLibrary);
 }
 
 static void RegisterRigidBody(kaguya::State& lua)
@@ -257,11 +257,11 @@ static void RegisterRigidBody(kaguya::State& lua)
     using namespace kaguya;
 
     // enum CollisionEventMode;
-    lua["KCOLLISION_NEVER"] = COLLISION_NEVER;
-    lua["KCOLLISION_ACTIVE"] = COLLISION_ACTIVE;
-    lua["KCOLLISION_ALWAYS"] = COLLISION_ALWAYS;
+    lua["COLLISION_NEVER"] = COLLISION_NEVER;
+    lua["COLLISION_ACTIVE"] = COLLISION_ACTIVE;
+    lua["COLLISION_ALWAYS"] = COLLISION_ALWAYS;
 
-    lua["KRigidBody"].setClass(UserdataMetatable<RigidBody, Component>()
+    lua["RigidBody"].setClass(UserdataMetatable<RigidBody, Component>()
         .addStaticFunction("new", &KCreateObject<RigidBody>)
         
         .addFunction("SetMass", &RigidBody::SetMass)

@@ -20,35 +20,35 @@ static void RegisterCrowdAgent(kaguya::State& lua)
     using namespace kaguya;
 
     // enum CrowdAgentRequestedTarget;
-    lua["KCA_REQUESTEDTARGET_NONE"] = CA_REQUESTEDTARGET_NONE;
-    lua["KCA_REQUESTEDTARGET_POSITION"] = CA_REQUESTEDTARGET_POSITION;
-    lua["KCA_REQUESTEDTARGET_VELOCITY"] = CA_REQUESTEDTARGET_VELOCITY;
+    lua["CA_REQUESTEDTARGET_NONE"] = CA_REQUESTEDTARGET_NONE;
+    lua["CA_REQUESTEDTARGET_POSITION"] = CA_REQUESTEDTARGET_POSITION;
+    lua["CA_REQUESTEDTARGET_VELOCITY"] = CA_REQUESTEDTARGET_VELOCITY;
 
     // enum CrowdAgentTargetState;
-    lua["KCA_TARGET_NONE"] = CA_TARGET_NONE;
-    lua["KCA_TARGET_FAILED"] = CA_TARGET_FAILED;
-    lua["KCA_TARGET_VALID"] = CA_TARGET_VALID;
-    lua["KCA_TARGET_REQUESTING"] = CA_TARGET_REQUESTING;
-    lua["KCA_TARGET_WAITINGFORQUEUE"] = CA_TARGET_WAITINGFORQUEUE;
-    lua["KCA_TARGET_WAITINGFORPATH"] = CA_TARGET_WAITINGFORPATH;
-    lua["KCA_TARGET_VELOCITY"] = CA_TARGET_VELOCITY;
+    lua["CA_TARGET_NONE"] = CA_TARGET_NONE;
+    lua["CA_TARGET_FAILED"] = CA_TARGET_FAILED;
+    lua["CA_TARGET_VALID"] = CA_TARGET_VALID;
+    lua["CA_TARGET_REQUESTING"] = CA_TARGET_REQUESTING;
+    lua["CA_TARGET_WAITINGFORQUEUE"] = CA_TARGET_WAITINGFORQUEUE;
+    lua["CA_TARGET_WAITINGFORPATH"] = CA_TARGET_WAITINGFORPATH;
+    lua["CA_TARGET_VELOCITY"] = CA_TARGET_VELOCITY;
 
     // enum CrowdAgentState;
-    lua["KCA_STATE_INVALID"] = CA_STATE_INVALID;
-    lua["KCA_STATE_WALKING"] = CA_STATE_WALKING;
-    lua["KCA_STATE_OFFMESH"] = CA_STATE_OFFMESH;
+    lua["CA_STATE_INVALID"] = CA_STATE_INVALID;
+    lua["CA_STATE_WALKING"] = CA_STATE_WALKING;
+    lua["CA_STATE_OFFMESH"] = CA_STATE_OFFMESH;
 
     // enum NavigationQuality;
-    lua["KNAVIGATIONQUALITY_LOW"] = NAVIGATIONQUALITY_LOW;
-    lua["KNAVIGATIONQUALITY_MEDIUM"] = NAVIGATIONQUALITY_MEDIUM;
-    lua["KNAVIGATIONQUALITY_HIGH"] = NAVIGATIONQUALITY_HIGH;
+    lua["NAVIGATIONQUALITY_LOW"] = NAVIGATIONQUALITY_LOW;
+    lua["NAVIGATIONQUALITY_MEDIUM"] = NAVIGATIONQUALITY_MEDIUM;
+    lua["NAVIGATIONQUALITY_HIGH"] = NAVIGATIONQUALITY_HIGH;
 
     // enum NavigationPushiness;
-    lua["KNAVIGATIONPUSHINESS_LOW"] = NAVIGATIONPUSHINESS_LOW;
-    lua["KNAVIGATIONPUSHINESS_MEDIUM"] = NAVIGATIONPUSHINESS_MEDIUM;
-    lua["KNAVIGATIONPUSHINESS_HIGH"] = NAVIGATIONPUSHINESS_HIGH;
+    lua["NAVIGATIONPUSHINESS_LOW"] = NAVIGATIONPUSHINESS_LOW;
+    lua["NAVIGATIONPUSHINESS_MEDIUM"] = NAVIGATIONPUSHINESS_MEDIUM;
+    lua["NAVIGATIONPUSHINESS_HIGH"] = NAVIGATIONPUSHINESS_HIGH;
 
-    lua["KCrowdAgent"].setClass(UserdataMetatable<CrowdAgent, Component>()
+    lua["CrowdAgent"].setClass(UserdataMetatable<CrowdAgent, Component>()
         .addStaticFunction("new", &KCreateObject<CrowdAgent>)
         
         .addFunction("DrawDebugGeometry", static_cast<void(CrowdAgent::*)(bool)>(&CrowdAgent::DrawDebugGeometry))
@@ -113,7 +113,7 @@ static void RegisterCrowdManager(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KCrowdObstacleAvoidanceParams"].setClass(UserdataMetatable<CrowdObstacleAvoidanceParams>()
+    lua["CrowdObstacleAvoidanceParams"].setClass(UserdataMetatable<CrowdObstacleAvoidanceParams>()
 
         .addProperty("velBias", &CrowdObstacleAvoidanceParams::velBias)
         .addProperty("weightDesVel", &CrowdObstacleAvoidanceParams::weightDesVel)
@@ -126,7 +126,7 @@ static void RegisterCrowdManager(kaguya::State& lua)
         .addProperty("adaptiveRings", &CrowdObstacleAvoidanceParams::adaptiveRings)
         .addProperty("adaptiveDepth", &CrowdObstacleAvoidanceParams::adaptiveDepth)
     );
-    lua["KCrowdManager"].setClass(UserdataMetatable<CrowdManager, Component>()
+    lua["CrowdManager"].setClass(UserdataMetatable<CrowdManager, Component>()
         .addStaticFunction("new", &KCreateObject<CrowdManager>)
         
         .addFunction("DrawDebugGeometry", static_cast<void(CrowdManager::*)(bool)>(&CrowdManager::DrawDebugGeometry))
@@ -172,7 +172,7 @@ static void RegisterDynamicNavigationMesh(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KDynamicNavigationMesh"].setClass(UserdataMetatable<DynamicNavigationMesh, NavigationMesh>()
+    lua["DynamicNavigationMesh"].setClass(UserdataMetatable<DynamicNavigationMesh, NavigationMesh>()
         .addStaticFunction("new", &KCreateObject<DynamicNavigationMesh>)
         
         .addOverloadedFunctions("Build",
@@ -198,7 +198,7 @@ static void RegisterNavArea(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KNavArea"].setClass(UserdataMetatable<NavArea, Component>()
+    lua["NavArea"].setClass(UserdataMetatable<NavArea, Component>()
         .addStaticFunction("new", &KCreateObject<NavArea>)
         
         .addFunction("GetAreaID", &NavArea::GetAreaID)
@@ -217,7 +217,7 @@ static void RegisterNavigable(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KNavigable"].setClass(UserdataMetatable<Navigable, Component>()
+    lua["Navigable"].setClass(UserdataMetatable<Navigable, Component>()
         .addStaticFunction("new", &KCreateObject<Navigable>)
         
         .addFunction("SetRecursive", &Navigable::SetRecursive)
@@ -231,18 +231,18 @@ static void RegisterNavigationEvents(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KE_NAVIGATION_MESH_REBUILT"] = E_NAVIGATION_MESH_REBUILT;
-    lua["KE_NAVIGATION_AREA_REBUILT"] = E_NAVIGATION_AREA_REBUILT;
-    lua["KE_CROWD_AGENT_FORMATION"] = E_CROWD_AGENT_FORMATION;
-    lua["KE_CROWD_AGENT_NODE_FORMATION"] = E_CROWD_AGENT_NODE_FORMATION;
-    lua["KE_CROWD_AGENT_REPOSITION"] = E_CROWD_AGENT_REPOSITION;
-    lua["KE_CROWD_AGENT_NODE_REPOSITION"] = E_CROWD_AGENT_NODE_REPOSITION;
-    lua["KE_CROWD_AGENT_FAILURE"] = E_CROWD_AGENT_FAILURE;
-    lua["KE_CROWD_AGENT_NODE_FAILURE"] = E_CROWD_AGENT_NODE_FAILURE;
-    lua["KE_CROWD_AGENT_STATE_CHANGED"] = E_CROWD_AGENT_STATE_CHANGED;
-    lua["KE_CROWD_AGENT_NODE_STATE_CHANGED"] = E_CROWD_AGENT_NODE_STATE_CHANGED;
-    lua["KE_NAVIGATION_OBSTACLE_ADDED"] = E_NAVIGATION_OBSTACLE_ADDED;
-    lua["KE_NAVIGATION_OBSTACLE_REMOVED"] = E_NAVIGATION_OBSTACLE_REMOVED;
+    lua["E_NAVIGATION_MESH_REBUILT"] = E_NAVIGATION_MESH_REBUILT;
+    lua["E_NAVIGATION_AREA_REBUILT"] = E_NAVIGATION_AREA_REBUILT;
+    lua["E_CROWD_AGENT_FORMATION"] = E_CROWD_AGENT_FORMATION;
+    lua["E_CROWD_AGENT_NODE_FORMATION"] = E_CROWD_AGENT_NODE_FORMATION;
+    lua["E_CROWD_AGENT_REPOSITION"] = E_CROWD_AGENT_REPOSITION;
+    lua["E_CROWD_AGENT_NODE_REPOSITION"] = E_CROWD_AGENT_NODE_REPOSITION;
+    lua["E_CROWD_AGENT_FAILURE"] = E_CROWD_AGENT_FAILURE;
+    lua["E_CROWD_AGENT_NODE_FAILURE"] = E_CROWD_AGENT_NODE_FAILURE;
+    lua["E_CROWD_AGENT_STATE_CHANGED"] = E_CROWD_AGENT_STATE_CHANGED;
+    lua["E_CROWD_AGENT_NODE_STATE_CHANGED"] = E_CROWD_AGENT_NODE_STATE_CHANGED;
+    lua["E_NAVIGATION_OBSTACLE_ADDED"] = E_NAVIGATION_OBSTACLE_ADDED;
+    lua["E_NAVIGATION_OBSTACLE_REMOVED"] = E_NAVIGATION_OBSTACLE_REMOVED;
 }
 
 static void RegisterNavigationMesh(kaguya::State& lua)
@@ -250,23 +250,23 @@ static void RegisterNavigationMesh(kaguya::State& lua)
     using namespace kaguya;
 
     // enum NavmeshPartitionType;
-    lua["KNAVMESH_PARTITION_WATERSHED"] = NAVMESH_PARTITION_WATERSHED;
-    lua["KNAVMESH_PARTITION_MONOTONE"] = NAVMESH_PARTITION_MONOTONE;
+    lua["NAVMESH_PARTITION_WATERSHED"] = NAVMESH_PARTITION_WATERSHED;
+    lua["NAVMESH_PARTITION_MONOTONE"] = NAVMESH_PARTITION_MONOTONE;
 
     // enum NavigationPathPointFlag;
-    lua["KNAVPATHFLAG_NONE"] = NAVPATHFLAG_NONE;
-    lua["KNAVPATHFLAG_START"] = NAVPATHFLAG_START;
-    lua["KNAVPATHFLAG_END"] = NAVPATHFLAG_END;
-    lua["KNAVPATHFLAG_OFF_MESH"] = NAVPATHFLAG_OFF_MESH;
+    lua["NAVPATHFLAG_NONE"] = NAVPATHFLAG_NONE;
+    lua["NAVPATHFLAG_START"] = NAVPATHFLAG_START;
+    lua["NAVPATHFLAG_END"] = NAVPATHFLAG_END;
+    lua["NAVPATHFLAG_OFF_MESH"] = NAVPATHFLAG_OFF_MESH;
 
-    lua["KNavigationPathPoint"].setClass(UserdataMetatable<NavigationPathPoint>()
+    lua["NavigationPathPoint"].setClass(UserdataMetatable<NavigationPathPoint>()
 
         .addProperty("position", &NavigationPathPoint::position_)
         .addProperty("flag", &NavigationPathPoint::flag_)
         .addProperty("areaID", &NavigationPathPoint::areaID_)
     );
 
-    lua["KNavigationMesh"].setClass(UserdataMetatable<NavigationMesh, Component>()
+    lua["NavigationMesh"].setClass(UserdataMetatable<NavigationMesh, Component>()
         .addStaticFunction("new", &KCreateObject<NavigationMesh>)
         
         .addFunction("DrawDebugGeometry", static_cast<void(NavigationMesh::*)(bool)>(&NavigationMesh::DrawDebugGeometry))
@@ -358,7 +358,7 @@ static void RegisterObstacle(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KObstacle"].setClass(UserdataMetatable<Obstacle, Component>()
+    lua["Obstacle"].setClass(UserdataMetatable<Obstacle, Component>()
         .addStaticFunction("new", &KCreateObject<Obstacle>)
         
         .addFunction("GetHeight", &Obstacle::GetHeight)
@@ -379,7 +379,7 @@ static void RegisterOffMeshConnection(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KOffMeshConnection"].setClass(UserdataMetatable<OffMeshConnection, Component>()
+    lua["OffMeshConnection"].setClass(UserdataMetatable<OffMeshConnection, Component>()
         .addStaticFunction("new", &KCreateObject<OffMeshConnection>)
         
         .addFunction("SetEndPoint", &OffMeshConnection::SetEndPoint)

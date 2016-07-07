@@ -39,10 +39,10 @@ static void RegisterDatabase(kaguya::State& lua)
     using namespace kaguya;
 
     // enum DBAPI;
-    lua["KDBAPI_SQLITE"] = DBAPI_SQLITE;
-    lua["KDBAPI_ODBC"] = DBAPI_ODBC;
+    lua["DBAPI_SQLITE"] = DBAPI_SQLITE;
+    lua["DBAPI_ODBC"] = DBAPI_ODBC;
 
-    lua["KDatabase"].setClass(UserdataMetatable<Database, Object>()
+    lua["Database"].setClass(UserdataMetatable<Database, Object>()
 
         .addStaticFunction("GetAPI", &Database::GetAPI)
 
@@ -61,14 +61,14 @@ static void RegisterDatabaseEvents(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KE_DBCURSOR"] = E_DBCURSOR;
+    lua["E_DBCURSOR"] = E_DBCURSOR;
 }
 
 static void RegisterDbConnection(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KDbConnection"].setClass(UserdataMetatable<DbConnection, Object>()
+    lua["DbConnection"].setClass(UserdataMetatable<DbConnection, Object>()
         
         .addFunction("Finalize", &DbConnection::Finalize)
         .addFunction("Execute", &DbConnection::Execute)
@@ -84,7 +84,7 @@ static void RegisterDbResult(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KDbResult"].setClass(UserdataMetatable<DbResult>()
+    lua["DbResult"].setClass(UserdataMetatable<DbResult>()
         
         .addFunction("GetNumColumns", &DbResult::GetNumColumns)
         .addFunction("GetNumRows", &DbResult::GetNumRows)
@@ -105,8 +105,8 @@ void RegisterDatabaseLuaAPI(kaguya::State& lua)
     RegisterDbConnection(lua);
     RegisterDatabase(lua);
 
-    lua["kdatabase"] = KGetSubsystem<Database>();
-    lua["KGetDatabase"] = KGetSubsystem<Database>;
+    lua["database"] = KGetSubsystem<Database>();
+    lua["GetDatabase"] = KGetSubsystem<Database>;
 }
 }
 

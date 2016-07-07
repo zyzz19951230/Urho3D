@@ -18,17 +18,17 @@ static void RegisterAttribute(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KAM_EDIT"] = AM_EDIT;
-    lua["KAM_FILE"] = AM_FILE;
-    lua["KAM_NET"] = AM_NET;
-    lua["KAM_DEFAULT"] = AM_DEFAULT;
-    lua["KAM_LATESTDATA"] = AM_LATESTDATA;
-    lua["KAM_NOEDIT"] = AM_NOEDIT;
-    lua["KAM_NODEID"] = AM_NODEID;
-    lua["KAM_COMPONENTID"] = AM_COMPONENTID;
-    lua["KAM_NODEIDVECTOR"] = AM_NODEIDVECTOR;
+    lua["AM_EDIT"] = AM_EDIT;
+    lua["AM_FILE"] = AM_FILE;
+    lua["AM_NET"] = AM_NET;
+    lua["AM_DEFAULT"] = AM_DEFAULT;
+    lua["AM_LATESTDATA"] = AM_LATESTDATA;
+    lua["AM_NOEDIT"] = AM_NOEDIT;
+    lua["AM_NODEID"] = AM_NODEID;
+    lua["AM_COMPONENTID"] = AM_COMPONENTID;
+    lua["AM_NODEIDVECTOR"] = AM_NODEIDVECTOR;
 
-    lua["KAttributeInfo"].setClass(UserdataMetatable<AttributeInfo>()
+    lua["AttributeInfo"].setClass(UserdataMetatable<AttributeInfo>()
         .setConstructors<AttributeInfo(),
         AttributeInfo(VariantType, const char*, AttributeAccessor*, const Variant&, unsigned),
         AttributeInfo(const char*, AttributeAccessor*, const char**, const Variant&, unsigned)>()
@@ -46,7 +46,7 @@ static void RegisterContext(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KContext"].setClass(UserdataMetatable<Context, RefCounted>()
+    lua["Context"].setClass(UserdataMetatable<Context, RefCounted>()
 
         .addFunction("GetEventDataMap", &Context::GetEventDataMap)
         .addFunction("GetGlobalVar", &Context::GetGlobalVar)
@@ -67,19 +67,19 @@ static void RegisterCoreEvents(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KE_BEGINFRAME"] = E_BEGINFRAME;
-    lua["KE_UPDATE"] = E_UPDATE;
-    lua["KE_POSTUPDATE"] = E_POSTUPDATE;
-    lua["KE_RENDERUPDATE"] = E_RENDERUPDATE;
-    lua["KE_POSTRENDERUPDATE"] = E_POSTRENDERUPDATE;
-    lua["KE_ENDFRAME"] = E_ENDFRAME;
+    lua["E_BEGINFRAME"] = E_BEGINFRAME;
+    lua["E_UPDATE"] = E_UPDATE;
+    lua["E_POSTUPDATE"] = E_POSTUPDATE;
+    lua["E_RENDERUPDATE"] = E_RENDERUPDATE;
+    lua["E_POSTRENDERUPDATE"] = E_POSTRENDERUPDATE;
+    lua["E_ENDFRAME"] = E_ENDFRAME;
 }
 
 static void RegisterObject(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KObject"].setClass(UserdataMetatable<Object, RefCounted>()
+    lua["Object"].setClass(UserdataMetatable<Object, RefCounted>()
         .addFunction("GetType", &Object::GetType)
         .addFunction("GetTypeName", &Object::GetTypeName)
         .addFunction("GetTypeInfo", &Object::GetTypeInfo)
@@ -144,19 +144,19 @@ static void RegisterProcessUtils(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KErrorDialog"] = function(&ErrorDialog);
-    lua["KErrorExit"] = function(&ErrorExit);
-    lua["KOpenConsoleWindow"] = function(&OpenConsoleWindow);
+    lua["ErrorDialog"] = function(&ErrorDialog);
+    lua["ErrorExit"] = function(&ErrorExit);
+    lua["OpenConsoleWindow"] = function(&OpenConsoleWindow);
 
-    lua["KPrintLine"] = function(&PrintLine);
+    lua["PrintLine"] = function(&PrintLine);
 
-    lua["KGetArguments"] = function(&GetArguments);
-    lua["KGetConsoleInput"] = function(&GetConsoleInput);
-    lua["KGetPlatform"] = function(&GetPlatform);
+    lua["GetArguments"] = function(&GetArguments);
+    lua["GetConsoleInput"] = function(&GetConsoleInput);
+    lua["GetPlatform"] = function(&GetPlatform);
 
-    lua["KGetNumPhysicalCPUs"] = function(&GetNumPhysicalCPUs);
-    lua["KGetNumLogicalCPUs"] = function(&GetNumLogicalCPUs);
-    lua["KSetMiniDumpDir"] = function(&SetMiniDumpDir);
+    lua["GetNumPhysicalCPUs"] = function(&GetNumPhysicalCPUs);
+    lua["GetNumLogicalCPUs"] = function(&GetNumLogicalCPUs);
+    lua["SetMiniDumpDir"] = function(&SetMiniDumpDir);
 }
 
 static void RegisterSpline(kaguya::State& lua)
@@ -164,12 +164,12 @@ static void RegisterSpline(kaguya::State& lua)
     using namespace kaguya;
 
     // enum InterpolationMode;
-    lua["KBEZIER_CURVE"] = BEZIER_CURVE;
-    lua["KCATMULL_ROM_CURVE"] = CATMULL_ROM_CURVE;
-    lua["KLINEAR_CURVE"] = LINEAR_CURVE;
-    lua["KCATMULL_ROM_FULL_CURVE"] = CATMULL_ROM_FULL_CURVE;
+    lua["BEZIER_CURVE"] = BEZIER_CURVE;
+    lua["CATMULL_ROM_CURVE"] = CATMULL_ROM_CURVE;
+    lua["LINEAR_CURVE"] = LINEAR_CURVE;
+    lua["CATMULL_ROM_FULL_CURVE"] = CATMULL_ROM_FULL_CURVE;
 
-    lua["KSpline"].setClass(UserdataMetatable<Spline>()
+    lua["Spline"].setClass(UserdataMetatable<Spline>()
         .setConstructors<Spline(),
         Spline(InterpolationMode),
         Spline(const Vector<Variant>&, InterpolationMode),
@@ -205,45 +205,45 @@ static void RegisterStringUtils(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KToBool"] = static_cast<bool(*)(const char*)>(&ToBool);
-    lua["KToFloat"] = static_cast<float(*)(const char*)>(&ToFloat);
-    lua["KToDouble"] = static_cast<double(*)(const char*)>(&ToDouble);
-    lua["KToInt"] = static_cast<int(*)(const char*)>(&ToInt);
-    lua["KToUInt"] = static_cast<unsigned(*)(const char*)>(&ToUInt);
-    lua["KToColor"] = static_cast<Color(*)(const char*)>(&ToColor);
-    lua["KToIntRect"] = static_cast<IntRect(*)(const char*)>(&ToIntRect);
-    lua["KToIntVector2"] = static_cast<IntVector2(*)(const char*)>(&ToIntVector2);
-    lua["KToQuaternion"] = static_cast<Quaternion(*)(const char*)>(&ToQuaternion);
-    lua["KToRect"] = static_cast<Rect(*)(const char*)>(&ToRect);
-    lua["KToVector2"] = static_cast<Vector2(*)(const char*)>(&ToVector2);
-    lua["KToVector3"] = static_cast<Vector3(*)(const char*)>(&ToVector3);
-    lua["KToVector4"] = static_cast<Vector4(*)(const char*, bool)>(&ToVector4);
-    lua["KToVectorVariant"] = static_cast<Variant(*)(const char*)>(&ToVectorVariant);
-    lua["KToMatrix3"] = static_cast<Matrix3(*)(const char*)>(&ToMatrix3);
-    lua["KToMatrix3x4"] = static_cast<Matrix3x4(*)(const char*)>(&ToMatrix3x4);
-    lua["KToMatrix4"] = static_cast<Matrix4(*)(const char*)>(&ToMatrix4);
+    lua["ToBool"] = static_cast<bool(*)(const char*)>(&ToBool);
+    lua["ToFloat"] = static_cast<float(*)(const char*)>(&ToFloat);
+    lua["ToDouble"] = static_cast<double(*)(const char*)>(&ToDouble);
+    lua["ToInt"] = static_cast<int(*)(const char*)>(&ToInt);
+    lua["ToUInt"] = static_cast<unsigned(*)(const char*)>(&ToUInt);
+    lua["ToColor"] = static_cast<Color(*)(const char*)>(&ToColor);
+    lua["ToIntRect"] = static_cast<IntRect(*)(const char*)>(&ToIntRect);
+    lua["ToIntVector2"] = static_cast<IntVector2(*)(const char*)>(&ToIntVector2);
+    lua["ToQuaternion"] = static_cast<Quaternion(*)(const char*)>(&ToQuaternion);
+    lua["ToRect"] = static_cast<Rect(*)(const char*)>(&ToRect);
+    lua["ToVector2"] = static_cast<Vector2(*)(const char*)>(&ToVector2);
+    lua["ToVector3"] = static_cast<Vector3(*)(const char*)>(&ToVector3);
+    lua["ToVector4"] = static_cast<Vector4(*)(const char*, bool)>(&ToVector4);
+    lua["ToVectorVariant"] = static_cast<Variant(*)(const char*)>(&ToVectorVariant);
+    lua["ToMatrix3"] = static_cast<Matrix3(*)(const char*)>(&ToMatrix3);
+    lua["ToMatrix3x4"] = static_cast<Matrix3x4(*)(const char*)>(&ToMatrix3x4);
+    lua["ToMatrix4"] = static_cast<Matrix4(*)(const char*)>(&ToMatrix4);
 
-    lua["KToStringHex"] = function(&ToStringHex);
+    lua["ToStringHex"] = function(&ToStringHex);
 
-    lua["KIsAlpha"] = function(&IsAlpha);
-    lua["KIsDigit"] = function(&IsDigit);
-    lua["KToUpper"] = function(&ToUpper);
-    lua["KToLower"] = function(&ToLower);
-    lua["KGetFileSizeString"] = function(&GetFileSizeString);
+    lua["IsAlpha"] = function(&IsAlpha);
+    lua["IsDigit"] = function(&IsDigit);
+    lua["ToUpper"] = function(&ToUpper);
+    lua["ToLower"] = function(&ToLower);
+    lua["GetFileSizeString"] = function(&GetFileSizeString);
 }
 
 static void RegisterTimer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KTimer"].setClass(UserdataMetatable<Timer>()
+    lua["Timer"].setClass(UserdataMetatable<Timer>()
         .setConstructors<Timer()>()
 
         .addFunction("GetMSec", &Timer::GetMSec)
         .addFunction("Reset", &Timer::Reset)
     );
 
-    lua["KTime"].setClass(UserdataMetatable<Time, Object>()
+    lua["Time"].setClass(UserdataMetatable<Time, Object>()
         
         .addFunction("GetFrameNumber", &Time::GetFrameNumber)
         .addFunction("GetTimeStep", &Time::GetTimeStep)
@@ -263,33 +263,33 @@ static void RegisterVariant(kaguya::State& lua)
     using namespace kaguya;
 
     // enum VariantType;
-    lua["KVAR_NONE"] = VAR_NONE;
-    lua["KVAR_INT"] = VAR_INT;
-    lua["KVAR_BOOL"] = VAR_BOOL;
-    lua["KVAR_FLOAT"] = VAR_FLOAT;
-    lua["KVAR_VECTOR2"] = VAR_VECTOR2;
-    lua["KVAR_VECTOR3"] = VAR_VECTOR3;
-    lua["KVAR_VECTOR4"] = VAR_VECTOR4;
-    lua["KVAR_QUATERNION"] = VAR_QUATERNION;
-    lua["KVAR_COLOR"] = VAR_COLOR;
-    lua["KVAR_STRING"] = VAR_STRING;
-    lua["KVAR_BUFFER"] = VAR_BUFFER;
-    lua["KVAR_VOIDPTR"] = VAR_VOIDPTR;
-    lua["KVAR_RESOURCEREF"] = VAR_RESOURCEREF;
-    lua["KVAR_RESOURCEREFLIST"] = VAR_RESOURCEREFLIST;
-    lua["KVAR_VARIANTVECTOR"] = VAR_VARIANTVECTOR;
-    lua["KVAR_VARIANTMAP"] = VAR_VARIANTMAP;
-    lua["KVAR_INTRECT"] = VAR_INTRECT;
-    lua["KVAR_INTVECTOR2"] = VAR_INTVECTOR2;
-    lua["KVAR_PTR"] = VAR_PTR;
-    lua["KVAR_MATRIX3"] = VAR_MATRIX3;
-    lua["KVAR_MATRIX3X4"] = VAR_MATRIX3X4;
-    lua["KVAR_MATRIX4"] = VAR_MATRIX4;
-    lua["KVAR_DOUBLE"] = VAR_DOUBLE;
-    lua["KVAR_STRINGVECTOR"] = VAR_STRINGVECTOR;
-    lua["KMAX_VAR_TYPES"] = MAX_VAR_TYPES;
+    lua["VAR_NONE"] = VAR_NONE;
+    lua["VAR_INT"] = VAR_INT;
+    lua["VAR_BOOL"] = VAR_BOOL;
+    lua["VAR_FLOAT"] = VAR_FLOAT;
+    lua["VAR_VECTOR2"] = VAR_VECTOR2;
+    lua["VAR_VECTOR3"] = VAR_VECTOR3;
+    lua["VAR_VECTOR4"] = VAR_VECTOR4;
+    lua["VAR_QUATERNION"] = VAR_QUATERNION;
+    lua["VAR_COLOR"] = VAR_COLOR;
+    lua["VAR_STRING"] = VAR_STRING;
+    lua["VAR_BUFFER"] = VAR_BUFFER;
+    lua["VAR_VOIDPTR"] = VAR_VOIDPTR;
+    lua["VAR_RESOURCEREF"] = VAR_RESOURCEREF;
+    lua["VAR_RESOURCEREFLIST"] = VAR_RESOURCEREFLIST;
+    lua["VAR_VARIANTVECTOR"] = VAR_VARIANTVECTOR;
+    lua["VAR_VARIANTMAP"] = VAR_VARIANTMAP;
+    lua["VAR_INTRECT"] = VAR_INTRECT;
+    lua["VAR_INTVECTOR2"] = VAR_INTVECTOR2;
+    lua["VAR_PTR"] = VAR_PTR;
+    lua["VAR_MATRIX3"] = VAR_MATRIX3;
+    lua["VAR_MATRIX3X4"] = VAR_MATRIX3X4;
+    lua["VAR_MATRIX4"] = VAR_MATRIX4;
+    lua["VAR_DOUBLE"] = VAR_DOUBLE;
+    lua["VAR_STRINGVECTOR"] = VAR_STRINGVECTOR;
+    lua["MAX_VAR_TYPES"] = MAX_VAR_TYPES;
 
-    lua["KResourceRef"].setClass(UserdataMetatable<ResourceRef>()
+    lua["ResourceRef"].setClass(UserdataMetatable<ResourceRef>()
         .setConstructors<ResourceRef(),
         ResourceRef(StringHash),
         ResourceRef(StringHash, const String&),
@@ -302,7 +302,7 @@ static void RegisterVariant(kaguya::State& lua)
         .addProperty("name", &ResourceRef::name_)
     );
 
-    lua["KResourceRefList"].setClass(UserdataMetatable<ResourceRefList>()
+    lua["ResourceRefList"].setClass(UserdataMetatable<ResourceRefList>()
         .setConstructors<ResourceRefList(),
         ResourceRefList(StringHash),
         ResourceRefList(StringHash, const StringVector&)>()
@@ -313,7 +313,7 @@ static void RegisterVariant(kaguya::State& lua)
         .addProperty("names", &ResourceRefList::names_)
     );
 
-    lua["KVariant"].setClass(UserdataMetatable<Variant>()
+    lua["Variant"].setClass(UserdataMetatable<Variant>()
         .setConstructors < Variant(),
         Variant(int),
         Variant(unsigned),
@@ -466,7 +466,7 @@ static void RegisterVariantMap(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KVariantMap"].setClass(UserdataMetatable<VariantMap>()
+    lua["VariantMap"].setClass(UserdataMetatable<VariantMap>()
         .setConstructors<VariantMap()>()
 
         // Can not work in kaguya
@@ -491,7 +491,7 @@ void RegisterCoreLuaAPI(kaguya::State& lua)
     RegisterVariant(lua);
     RegisterVariantMap(lua);
 
-    lua["ktime"] = KGetSubsystem<Time>();
-    lua["KGetTime"] = KGetSubsystem<Time>;
+    lua["time"] = KGetSubsystem<Time>();
+    lua["GetTime"] = KGetSubsystem<Time>;
 }
 }

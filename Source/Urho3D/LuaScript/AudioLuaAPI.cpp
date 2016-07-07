@@ -19,7 +19,7 @@ static void RegisterAudio(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KAudio"].setClass(UserdataMetatable<Audio, Object>()
+    lua["Audio"].setClass(UserdataMetatable<Audio, Object>()
 
         .addFunction("SetMode", &Audio::SetMode)
         .addFunction("Update", &Audio::Update)
@@ -63,23 +63,23 @@ static void RegisterAudio(kaguya::State& lua)
 
 static void RegisterAudioDefs(kaguya::State& lua)
 {
-    lua["KSOUND_MASTER"] = SOUND_MASTER;
-    lua["KSOUND_EFFECT"] = SOUND_EFFECT;
-    lua["KSOUND_AMBIENT"] = SOUND_AMBIENT;
-    lua["KSOUND_VOICE"] = SOUND_VOICE;
-    lua["KSOUND_MUSIC"] = SOUND_MUSIC;
+    lua["SOUND_MASTER"] = SOUND_MASTER;
+    lua["SOUND_EFFECT"] = SOUND_EFFECT;
+    lua["SOUND_AMBIENT"] = SOUND_AMBIENT;
+    lua["SOUND_VOICE"] = SOUND_VOICE;
+    lua["SOUND_MUSIC"] = SOUND_MUSIC;
 }
 
 static void RegisterAudioEvents(kaguya::State& lua)
 {
-    lua["KE_SOUNDFINISHED"] = E_SOUNDFINISHED;
+    lua["E_SOUNDFINISHED"] = E_SOUNDFINISHED;
 }
 
 static void RegisterBufferedSoundStream(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KBufferedSoundStream"].setClass(UserdataMetatable<BufferedSoundStream, SoundStream>()
+    lua["BufferedSoundStream"].setClass(UserdataMetatable<BufferedSoundStream, SoundStream>()
         .setConstructors<BufferedSoundStream()>()
         
         .addFunction("Clear", &BufferedSoundStream::Clear)
@@ -95,7 +95,7 @@ static void RegisterOggVorbisSoundStream(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KOggVorbisSoundStream"].setClass(UserdataMetatable<OggVorbisSoundStream, SoundStream>()
+    lua["OggVorbisSoundStream"].setClass(UserdataMetatable<OggVorbisSoundStream, SoundStream>()
         .setConstructors<OggVorbisSoundStream(const Sound*)>()
         );        
 }
@@ -104,7 +104,7 @@ static void RegisterSound(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSound"].setClass(UserdataMetatable<Sound, Resource>()
+    lua["Sound"].setClass(UserdataMetatable<Sound, Resource>()
         .addStaticFunction("new", &KCreateObject<Sound>)
         
         .addFunction("SetSize", &Sound::SetSize)
@@ -148,7 +148,7 @@ static void RegisterSoundListener(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSoundListener"].setClass(UserdataMetatable<SoundListener, Component>()
+    lua["SoundListener"].setClass(UserdataMetatable<SoundListener, Component>()
         .addStaticFunction("new", &KCreateObject<SoundListener>)
         );
 }
@@ -157,8 +157,8 @@ static void RegisterSoundSource(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSTREAM_BUFFER_LENGTH"] = STREAM_BUFFER_LENGTH;
-    lua["KSoundSource"].setClass(UserdataMetatable<SoundSource, Component>()
+    lua["STREAM_BUFFER_LENGTH"] = STREAM_BUFFER_LENGTH;
+    lua["SoundSource"].setClass(UserdataMetatable<SoundSource, Component>()
         .addStaticFunction("new", &KCreateObject<SoundSource>)
         
         .addOverloadedFunctions("Play",
@@ -202,7 +202,7 @@ static void RegisterSoundSource3D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSoundSource3D"].setClass(UserdataMetatable<SoundSource3D, SoundSource>()
+    lua["SoundSource3D"].setClass(UserdataMetatable<SoundSource3D, SoundSource>()
         .addStaticFunction("new", &KCreateObject<SoundSource3D>)
         
         .addFunction("SetDistanceAttenuation", &SoundSource3D::SetDistanceAttenuation)
@@ -233,7 +233,7 @@ static void RegisterSoundStream(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSoundStream"].setClass(UserdataMetatable<SoundStream, RefCounted>()
+    lua["SoundStream"].setClass(UserdataMetatable<SoundStream, RefCounted>()
 
         .addFunction("GetData", &SoundStream::GetData)
         .addFunction("SetFormat", &SoundStream::SetFormat)
@@ -268,7 +268,7 @@ void RegisterAudioLuaAPI(kaguya::State& lua)
     RegisterSoundSource(lua);
     RegisterSoundSource3D(lua);
 
-    lua["kaudio"] = KGetSubsystem<Audio>();
-    lua["KGetAudio"] = KGetSubsystem<Audio>;
+    lua["audio"] = KGetSubsystem<Audio>();
+    lua["GetAudio"] = KGetSubsystem<Audio>;
 }
 }

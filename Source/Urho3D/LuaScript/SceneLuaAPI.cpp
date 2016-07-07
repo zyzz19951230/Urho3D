@@ -29,7 +29,7 @@ static void RegisterAnimatable(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KAnimatable"].setClass(UserdataMetatable<Animatable, Serializable>()
+    lua["Animatable"].setClass(UserdataMetatable<Animatable, Serializable>()
 
         .addFunction("LoadXML", &Animatable::LoadXML)
         .addFunction("SaveXML", &Animatable::SaveXML)
@@ -63,9 +63,9 @@ static void RegisterAnimationDefs(kaguya::State& lua)
     using namespace kaguya;
 
     // enum WrapMode;
-    lua["KWM_LOOP"] = WM_LOOP;
-    lua["KWM_ONCE"] = WM_ONCE;
-    lua["KWM_CLAMP"] = WM_CLAMP;
+    lua["WM_LOOP"] = WM_LOOP;
+    lua["WM_ONCE"] = WM_ONCE;
+    lua["WM_CLAMP"] = WM_CLAMP;
 
 }
 
@@ -73,7 +73,7 @@ static void RegisterComponent(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KComponent"].setClass(UserdataMetatable<Component, Animatable>()
+    lua["Component"].setClass(UserdataMetatable<Component, Animatable>()
         .addStaticFunction("new", &KCreateObject<Component>)
 
         .addFunction("DrawDebugGeometry", &Component::DrawDebugGeometry)
@@ -106,12 +106,12 @@ static void RegisterLogicComponent(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KUSE_UPDATE"] = USE_UPDATE;
-    lua["KUSE_POSTUPDATE"] = USE_POSTUPDATE;
-    lua["KUSE_FIXEDUPDATE"] = USE_FIXEDUPDATE;
-    lua["KUSE_FIXEDPOSTUPDATE"] = USE_FIXEDPOSTUPDATE;
+    lua["USE_UPDATE"] = USE_UPDATE;
+    lua["USE_POSTUPDATE"] = USE_POSTUPDATE;
+    lua["USE_FIXEDUPDATE"] = USE_FIXEDUPDATE;
+    lua["USE_FIXEDPOSTUPDATE"] = USE_FIXEDPOSTUPDATE;
 
-    lua["KLogicComponent"].setClass(UserdataMetatable<LogicComponent, Component>()
+    lua["LogicComponent"].setClass(UserdataMetatable<LogicComponent, Component>()
         .addStaticFunction("new", &KCreateObject<LogicComponent>)
 
         .addFunction("SetUpdateEventMask", &LogicComponent::SetUpdateEventMask)
@@ -171,15 +171,15 @@ static void RegisterNode(kaguya::State& lua)
     using namespace kaguya;
 
     // enum CreateMode;
-    lua["KREPLICATED"] = REPLICATED;
-    lua["KLOCAL"] = LOCAL;
+    lua["REPLICATED"] = REPLICATED;
+    lua["LOCAL"] = LOCAL;
 
     // enum TransformSpace;
-    lua["KTS_LOCAL"] = TS_LOCAL;
-    lua["KTS_PARENT"] = TS_PARENT;
-    lua["KTS_WORLD"] = TS_WORLD;
+    lua["TS_LOCAL"] = TS_LOCAL;
+    lua["TS_PARENT"] = TS_PARENT;
+    lua["TS_WORLD"] = TS_WORLD;
 
-    lua["KNode"].setClass(UserdataMetatable<Node, Animatable>()
+    lua["Node"].setClass(UserdataMetatable<Node, Animatable>()
         .addStaticFunction("new", &KCreateObject<Node>)
 
         .addFunction("SetName", &Node::SetName)
@@ -443,7 +443,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KObjectAnimation"].setClass(UserdataMetatable<ObjectAnimation, Resource>()
+    lua["ObjectAnimation"].setClass(UserdataMetatable<ObjectAnimation, Resource>()
         .addStaticFunction("new", &KCreateObject<ObjectAnimation>)
 
         .addFunction("AddAttributeAnimation", &ObjectAnimation::AddAttributeAnimation)
@@ -464,8 +464,8 @@ static void RegisterObjectAnimation(kaguya::State& lua)
 //{
 //    using namespace kaguya;
 //
-//    lua["KMAX_NETWORK_ATTRIBUTES"] = MAX_NETWORK_ATTRIBUTES;
-//    lua["KDirtyBits"].setClass(UserdataMetatable<DirtyBits>()
+//    lua["MAX_NETWORK_ATTRIBUTES"] = MAX_NETWORK_ATTRIBUTES;
+//    lua["DirtyBits"].setClass(UserdataMetatable<DirtyBits>()
 //        .setConstructors<DirtyBits(),
 //        DirtyBits(const DirtyBits&)()
 //
@@ -479,7 +479,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
 //        .addProperty("data", &DirtyBits::data_)
 //        .addProperty("count", &DirtyBits::count_)
 //        );
-//    lua["KNetworkState"].setClass(UserdataMetatable<NetworkState>()
+//    lua["NetworkState"].setClass(UserdataMetatable<NetworkState>()
 //        .setConstructors<NetworkState()()
 //
 //        .addProperty("attributes", &NetworkState::attributes_)
@@ -489,17 +489,17 @@ static void RegisterObjectAnimation(kaguya::State& lua)
 //        .addProperty("previousVars", &NetworkState::previousVars_)
 //        .addProperty("interceptMask", &NetworkState::interceptMask_)
 //        );
-//    lua["KReplicationState"].setClass(UserdataMetatable<ReplicationState>()
+//    lua["ReplicationState"].setClass(UserdataMetatable<ReplicationState>()
 //
 //        .addProperty("connection", &ReplicationState::connection_)
 //        );
-//    lua["KComponentReplicationState"].setClass(UserdataMetatable<ComponentReplicationState, ReplicationState>()
+//    lua["ComponentReplicationState"].setClass(UserdataMetatable<ComponentReplicationState, ReplicationState>()
 //
 //        .addProperty("nodeState", &ComponentReplicationState::nodeState_)
 //        .addProperty("component", &ComponentReplicationState::component_)
 //        .addProperty("dirtyAttributes", &ComponentReplicationState::dirtyAttributes_)
 //        );
-//    lua["KNodeReplicationState"].setClass(UserdataMetatable<NodeReplicationState, ReplicationState>()
+//    lua["NodeReplicationState"].setClass(UserdataMetatable<NodeReplicationState, ReplicationState>()
 //        .setConstructors<NodeReplicationState()()
 //
 //        .addProperty("sceneState", &NodeReplicationState::sceneState_)
@@ -510,7 +510,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
 //        .addProperty("priorityAcc", &NodeReplicationState::priorityAcc_)
 //        .addProperty("markedDirty", &NodeReplicationState::markedDirty_)
 //        );
-//    lua["KSceneReplicationState"].setClass(UserdataMetatable<SceneReplicationState, ReplicationState>()
+//    lua["SceneReplicationState"].setClass(UserdataMetatable<SceneReplicationState, ReplicationState>()
 //
 //        .addFunction("Clear", &SceneReplicationState::Clear)
 //        .addProperty("nodeStates", &SceneReplicationState::nodeStates_)
@@ -554,17 +554,17 @@ static void RegisterScene(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KFIRST_REPLICATED_ID"] = FIRST_REPLICATED_ID;
-    lua["KLAST_REPLICATED_ID"] = LAST_REPLICATED_ID;
-    lua["KFIRST_LOCAL_ID"] = FIRST_LOCAL_ID;
-    lua["KLAST_LOCAL_ID"] = LAST_LOCAL_ID;
+    lua["FIRST_REPLICATED_ID"] = FIRST_REPLICATED_ID;
+    lua["LAST_REPLICATED_ID"] = LAST_REPLICATED_ID;
+    lua["FIRST_LOCAL_ID"] = FIRST_LOCAL_ID;
+    lua["LAST_LOCAL_ID"] = LAST_LOCAL_ID;
 
     // enum LoadMode;
-    lua["KLOAD_RESOURCES_ONLY"] = LOAD_RESOURCES_ONLY;
-    lua["KLOAD_SCENE"] = LOAD_SCENE;
-    lua["KLOAD_SCENE_AND_RESOURCES"] = LOAD_SCENE_AND_RESOURCES;
+    lua["LOAD_RESOURCES_ONLY"] = LOAD_RESOURCES_ONLY;
+    lua["LOAD_SCENE"] = LOAD_SCENE;
+    lua["LOAD_SCENE_AND_RESOURCES"] = LOAD_SCENE_AND_RESOURCES;
 
-    lua["KScene"].setClass(UserdataMetatable<Scene, Node>()
+    lua["Scene"].setClass(UserdataMetatable<Scene, Node>()
         .addStaticFunction("new", &KCreateObject<Scene>)
 
         .addStaticFunction("LoadXML", &SceneLoadXML)
@@ -638,38 +638,38 @@ static void RegisterSceneEvents(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KE_SCENEUPDATE"] = E_SCENEUPDATE;
-    lua["KE_SCENESUBSYSTEMUPDATE"] = E_SCENESUBSYSTEMUPDATE;
-    lua["KE_UPDATESMOOTHING"] = E_UPDATESMOOTHING;
-    lua["KE_SCENEDRAWABLEUPDATEFINISHED"] = E_SCENEDRAWABLEUPDATEFINISHED;
-    lua["KE_TARGETPOSITION"] = E_TARGETPOSITION;
-    lua["KE_TARGETROTATION"] = E_TARGETROTATION;
-    lua["KE_ATTRIBUTEANIMATIONUPDATE"] = E_ATTRIBUTEANIMATIONUPDATE;
-    lua["KE_ATTRIBUTEANIMATIONADDED"] = E_ATTRIBUTEANIMATIONADDED;
-    lua["KE_ATTRIBUTEANIMATIONREMOVED"] = E_ATTRIBUTEANIMATIONREMOVED;
-    lua["KE_SCENEPOSTUPDATE"] = E_SCENEPOSTUPDATE;
-    lua["KE_ASYNCLOADPROGRESS"] = E_ASYNCLOADPROGRESS;
-    lua["KE_ASYNCLOADFINISHED"] = E_ASYNCLOADFINISHED;
-    lua["KE_NODEADDED"] = E_NODEADDED;
-    lua["KE_NODEREMOVED"] = E_NODEREMOVED;
-    lua["KE_COMPONENTADDED"] = E_COMPONENTADDED;
-    lua["KE_COMPONENTREMOVED"] = E_COMPONENTREMOVED;
-    lua["KE_NODENAMECHANGED"] = E_NODENAMECHANGED;
-    lua["KE_NODEENABLEDCHANGED"] = E_NODEENABLEDCHANGED;
-    lua["KE_NODETAGADDED"] = E_NODETAGADDED;
-    lua["KE_NODETAGREMOVED"] = E_NODETAGREMOVED;
-    lua["KE_COMPONENTENABLEDCHANGED"] = E_COMPONENTENABLEDCHANGED;
-    lua["KE_TEMPORARYCHANGED"] = E_TEMPORARYCHANGED;
-    lua["KE_NODECLONED"] = E_NODECLONED;
-    lua["KE_COMPONENTCLONED"] = E_COMPONENTCLONED;
-    lua["KE_INTERCEPTNETWORKUPDATE"] = E_INTERCEPTNETWORKUPDATE;
+    lua["E_SCENEUPDATE"] = E_SCENEUPDATE;
+    lua["E_SCENESUBSYSTEMUPDATE"] = E_SCENESUBSYSTEMUPDATE;
+    lua["E_UPDATESMOOTHING"] = E_UPDATESMOOTHING;
+    lua["E_SCENEDRAWABLEUPDATEFINISHED"] = E_SCENEDRAWABLEUPDATEFINISHED;
+    lua["E_TARGETPOSITION"] = E_TARGETPOSITION;
+    lua["E_TARGETROTATION"] = E_TARGETROTATION;
+    lua["E_ATTRIBUTEANIMATIONUPDATE"] = E_ATTRIBUTEANIMATIONUPDATE;
+    lua["E_ATTRIBUTEANIMATIONADDED"] = E_ATTRIBUTEANIMATIONADDED;
+    lua["E_ATTRIBUTEANIMATIONREMOVED"] = E_ATTRIBUTEANIMATIONREMOVED;
+    lua["E_SCENEPOSTUPDATE"] = E_SCENEPOSTUPDATE;
+    lua["E_ASYNCLOADPROGRESS"] = E_ASYNCLOADPROGRESS;
+    lua["E_ASYNCLOADFINISHED"] = E_ASYNCLOADFINISHED;
+    lua["E_NODEADDED"] = E_NODEADDED;
+    lua["E_NODEREMOVED"] = E_NODEREMOVED;
+    lua["E_COMPONENTADDED"] = E_COMPONENTADDED;
+    lua["E_COMPONENTREMOVED"] = E_COMPONENTREMOVED;
+    lua["E_NODENAMECHANGED"] = E_NODENAMECHANGED;
+    lua["E_NODEENABLEDCHANGED"] = E_NODEENABLEDCHANGED;
+    lua["E_NODETAGADDED"] = E_NODETAGADDED;
+    lua["E_NODETAGREMOVED"] = E_NODETAGREMOVED;
+    lua["E_COMPONENTENABLEDCHANGED"] = E_COMPONENTENABLEDCHANGED;
+    lua["E_TEMPORARYCHANGED"] = E_TEMPORARYCHANGED;
+    lua["E_NODECLONED"] = E_NODECLONED;
+    lua["E_COMPONENTCLONED"] = E_COMPONENTCLONED;
+    lua["E_INTERCEPTNETWORKUPDATE"] = E_INTERCEPTNETWORKUPDATE;
 }
 
 static void RegisterSerializable(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSerializable"].setClass(UserdataMetatable<Serializable, Object>()
+    lua["Serializable"].setClass(UserdataMetatable<Serializable, Object>()
 
         /*
         .addFunction("Load", &Serializable::Load)
@@ -716,11 +716,11 @@ static void RegisterSmoothedTransform(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSMOOTH_NONE"] = SMOOTH_NONE;
-    lua["KSMOOTH_POSITION"] = SMOOTH_POSITION;
-    lua["KSMOOTH_ROTATION"] = SMOOTH_ROTATION;
+    lua["SMOOTH_NONE"] = SMOOTH_NONE;
+    lua["SMOOTH_POSITION"] = SMOOTH_POSITION;
+    lua["SMOOTH_ROTATION"] = SMOOTH_ROTATION;
 
-    lua["KSmoothedTransform"].setClass(UserdataMetatable<SmoothedTransform, Component>()
+    lua["SmoothedTransform"].setClass(UserdataMetatable<SmoothedTransform, Component>()
         .addStaticFunction("new", &KCreateObject<SmoothedTransform>)
 
         .addFunction("SetTargetPosition", &SmoothedTransform::SetTargetPosition)
@@ -745,7 +745,7 @@ static void RegisterSplinePath(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSplinePath"].setClass(UserdataMetatable<SplinePath, Component>()
+    lua["SplinePath"].setClass(UserdataMetatable<SplinePath, Component>()
         .addStaticFunction("new", &KCreateObject<SplinePath>)
 
         .addFunction("AddControlPoint", &SplinePath::AddControlPoint)
@@ -778,7 +778,7 @@ static void RegisterUnknownComponent(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KUnknownComponent"].setClass(UserdataMetatable<UnknownComponent, Component>()
+    lua["UnknownComponent"].setClass(UserdataMetatable<UnknownComponent, Component>()
         .addStaticFunction("new", &KCreateObject<UnknownComponent>)
 
         .addFunction("GetType", &UnknownComponent::GetType)
@@ -796,11 +796,11 @@ static void RegisterValueAnimation(kaguya::State& lua)
     using namespace kaguya;
 
     // enum InterpMethod;
-    lua["KIM_NONE"] = IM_NONE;
-    lua["KIM_LINEAR"] = IM_LINEAR;
-    lua["KIM_SPLINE"] = IM_SPLINE;
+    lua["IM_NONE"] = IM_NONE;
+    lua["IM_LINEAR"] = IM_LINEAR;
+    lua["IM_SPLINE"] = IM_SPLINE;
 
-    lua["KValueAnimation"].setClass(UserdataMetatable<ValueAnimation, Resource>()
+    lua["ValueAnimation"].setClass(UserdataMetatable<ValueAnimation, Resource>()
         .addStaticFunction("new", &KCreateObject<ValueAnimation>)
 
         .addFunction("SetInterpolationMethod", &ValueAnimation::SetInterpolationMethod)

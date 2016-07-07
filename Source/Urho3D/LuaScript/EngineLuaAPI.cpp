@@ -15,7 +15,7 @@ static void RegisterConsole(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KConsole"].setClass(UserdataMetatable<Console, Object>()
+    lua["Console"].setClass(UserdataMetatable<Console, Object>()
 
         .addFunction("SetDefaultStyle", &Console::SetDefaultStyle)
         .addFunction("SetVisible", &Console::SetVisible)
@@ -64,16 +64,16 @@ static void RegisterDebugHud(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KDEBUGHUD_SHOW_NONE"] = DEBUGHUD_SHOW_NONE;
-    lua["KDEBUGHUD_SHOW_STATS"] = DEBUGHUD_SHOW_STATS;
-    lua["KDEBUGHUD_SHOW_MODE"] = DEBUGHUD_SHOW_MODE;
-    lua["KDEBUGHUD_SHOW_PROFILER"] = DEBUGHUD_SHOW_PROFILER;
-    lua["KDEBUGHUD_SHOW_MEMORY"] = DEBUGHUD_SHOW_MEMORY;
-    lua["KDEBUGHUD_SHOW_ALL"] = DEBUGHUD_SHOW_ALL;
-    lua["KDEBUGHUD_SHOW_ALL_MEMORY"] = DEBUGHUD_SHOW_ALL_MEMORY;
-    lua["KDEBUGHUD_SHOW_EVENTPROFILER"] = DEBUGHUD_SHOW_EVENTPROFILER;
+    lua["DEBUGHUD_SHOW_NONE"] = DEBUGHUD_SHOW_NONE;
+    lua["DEBUGHUD_SHOW_STATS"] = DEBUGHUD_SHOW_STATS;
+    lua["DEBUGHUD_SHOW_MODE"] = DEBUGHUD_SHOW_MODE;
+    lua["DEBUGHUD_SHOW_PROFILER"] = DEBUGHUD_SHOW_PROFILER;
+    lua["DEBUGHUD_SHOW_MEMORY"] = DEBUGHUD_SHOW_MEMORY;
+    lua["DEBUGHUD_SHOW_ALL"] = DEBUGHUD_SHOW_ALL;
+    lua["DEBUGHUD_SHOW_ALL_MEMORY"] = DEBUGHUD_SHOW_ALL_MEMORY;
+    lua["DEBUGHUD_SHOW_EVENTPROFILER"] = DEBUGHUD_SHOW_EVENTPROFILER;
 
-    lua["KDebugHud"].setClass(UserdataMetatable<DebugHud, Object>()
+    lua["DebugHud"].setClass(UserdataMetatable<DebugHud, Object>()
 
         .addFunction("SetDefaultStyle", &DebugHud::SetDefaultStyle)
         .addFunction("SetMode", &DebugHud::SetMode)
@@ -116,7 +116,7 @@ static void RegisterEngine(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KEngine"].setClass(UserdataMetatable<Engine, Object>()
+    lua["Engine"].setClass(UserdataMetatable<Engine, Object>()
 
         .addFunction("RunFrame", &Engine::RunFrame)
         .addFunction("CreateConsole", &Engine::CreateConsole)
@@ -166,7 +166,7 @@ static void RegisterEngineEvents(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KE_CONSOLECOMMAND"] = E_CONSOLECOMMAND;
+    lua["E_CONSOLECOMMAND"] = E_CONSOLECOMMAND;
 }
 
 void RegisterEngineLuaAPI(kaguya::State& lua)
@@ -176,10 +176,10 @@ void RegisterEngineLuaAPI(kaguya::State& lua)
     RegisterEngine(lua);
     RegisterEngineEvents(lua);
 
-    lua["kengine"] = KGetSubsystem<Engine>();
-    lua["KGetEngine"] = KGetSubsystem<Engine>;
+    lua["engine"] = KGetSubsystem<Engine>();
+    lua["GetEngine"] = KGetSubsystem<Engine>;
 
-    lua["KGetConsole"] = KGetSubsystem<Console>;
+    lua["GetConsole"] = KGetSubsystem<Console>;
     lua["GetDebugHud"] = KGetSubsystem<DebugHud>;
 }
 }

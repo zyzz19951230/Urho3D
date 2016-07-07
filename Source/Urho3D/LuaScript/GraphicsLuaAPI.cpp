@@ -21,7 +21,7 @@ static void RegisterAnimation(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KAnimationTrack"].setClass(UserdataMetatable<AnimationTrack>()
+    lua["AnimationTrack"].setClass(UserdataMetatable<AnimationTrack>()
         .setConstructors<AnimationTrack()>()
 
         .addFunction("SetKeyFrame", &AnimationTrack::SetKeyFrame)
@@ -40,11 +40,11 @@ static void RegisterAnimation(kaguya::State& lua)
         .addProperty("keyFrames", &AnimationTrack::keyFrames_)
         );
 
-    lua["KCHANNEL_POSITION"] = CHANNEL_POSITION;
-    lua["KCHANNEL_ROTATION"] = CHANNEL_ROTATION;
-    lua["KCHANNEL_SCALE"] = CHANNEL_SCALE;
+    lua["CHANNEL_POSITION"] = CHANNEL_POSITION;
+    lua["CHANNEL_ROTATION"] = CHANNEL_ROTATION;
+    lua["CHANNEL_SCALE"] = CHANNEL_SCALE;
 
-    lua["KAnimation"].setClass(UserdataMetatable<Animation, Resource>()
+    lua["Animation"].setClass(UserdataMetatable<Animation, Resource>()
         .addStaticFunction("new", &KCreateObject<Animation>)
 
         .addFunction("SetAnimationName", &Animation::SetAnimationName)
@@ -90,7 +90,7 @@ static void RegisterAnimationController(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KAnimationController"].setClass(UserdataMetatable<AnimationController, Component>()
+    lua["AnimationController"].setClass(UserdataMetatable<AnimationController, Component>()
         .addStaticFunction("new", &KCreateObject<AnimationController>)
 
         .addFunction("Play", &AnimationController::Play)
@@ -140,10 +140,10 @@ static void RegisterAnimationState(kaguya::State& lua)
     using namespace kaguya;
 
     // enum AnimationBlendMode;
-    lua["KABM_LERP"] = ABM_LERP;
-    lua["KABM_ADDITIVE"] = ABM_ADDITIVE;
+    lua["ABM_LERP"] = ABM_LERP;
+    lua["ABM_ADDITIVE"] = ABM_ADDITIVE;
 
-    lua["KAnimationState"].setClass(UserdataMetatable<AnimationState, RefCounted>()
+    lua["AnimationState"].setClass(UserdataMetatable<AnimationState, RefCounted>()
         .setConstructors<AnimationState(AnimatedModel*, Animation*)>()
 
         .addFunction("SetStartBone", &AnimationState::SetStartBone)
@@ -202,7 +202,7 @@ static void RegisterModel(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KModel"].setClass(UserdataMetatable<Model, Resource>()
+    lua["Model"].setClass(UserdataMetatable<Model, Resource>()
         .addStaticFunction("new", &KCreateObject<Model>)
 
         .addFunction("SetBoundingBox", &Model::SetBoundingBox)
@@ -250,10 +250,10 @@ static void RegisterOctree(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // lua["KNUM_OCTANTS"] = NUM_OCTANTS;
-    // lua["KROOT_INDEX"] = ROOT_INDEX;
+    // lua["NUM_OCTANTS"] = NUM_OCTANTS;
+    // lua["ROOT_INDEX"] = ROOT_INDEX;
 
-    lua["KOctant"].setClass(UserdataMetatable<Octant>()
+    lua["Octant"].setClass(UserdataMetatable<Octant>()
         .setConstructors<Octant(const BoundingBox&, unsigned, Octant*, Octree*, unsigned)>()
 
         .addFunction("GetOrCreateChild", &Octant::GetOrCreateChild)
@@ -281,7 +281,7 @@ static void RegisterOctree(kaguya::State& lua)
         .addProperty("empty", &Octant::IsEmpty)
         );
 
-    lua["KOctree"].setClass(UserdataMetatable<Octree, Component>()
+    lua["Octree"].setClass(UserdataMetatable<Octree, Component>()
         .addStaticFunction("new", &KCreateObject<Octree>)
 
         .addOverloadedFunctions("DrawDebugGeometry",
@@ -307,7 +307,7 @@ static void RegisterOctreeQuery(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KOctreeQueryResult"].setClass(UserdataMetatable<OctreeQueryResult>()
+    lua["OctreeQueryResult"].setClass(UserdataMetatable<OctreeQueryResult>()
         .setConstructors<OctreeQueryResult()>()
 
         .addProperty("drawable", &OctreeQueryResult::drawable_)
@@ -315,12 +315,12 @@ static void RegisterOctreeQuery(kaguya::State& lua)
         );
 
     // enum RayQueryLevel;
-    lua["KRAY_AABB"] = RAY_AABB;
-    lua["KRAY_OBB"] = RAY_OBB;
-    lua["KRAY_TRIANGLE"] = RAY_TRIANGLE;
-    lua["KRAY_TRIANGLE_UV"] = RAY_TRIANGLE_UV;
+    lua["RAY_AABB"] = RAY_AABB;
+    lua["RAY_OBB"] = RAY_OBB;
+    lua["RAY_TRIANGLE"] = RAY_TRIANGLE;
+    lua["RAY_TRIANGLE_UV"] = RAY_TRIANGLE_UV;
 
-    lua["KRayQueryResult"].setClass(UserdataMetatable<RayQueryResult>()
+    lua["RayQueryResult"].setClass(UserdataMetatable<RayQueryResult>()
         .setConstructors<RayQueryResult()>()
 
         .addProperty("position", &RayQueryResult::position_)
@@ -338,12 +338,12 @@ static void RegisterParticleEffect(kaguya::State& lua)
     using namespace kaguya;
 
     // enum EmitterType;
-    lua["KEMITTER_SPHERE"] = EMITTER_SPHERE;
-    lua["KEMITTER_BOX"] = EMITTER_BOX;
+    lua["EMITTER_SPHERE"] = EMITTER_SPHERE;
+    lua["EMITTER_BOX"] = EMITTER_BOX;
 
-    lua["KDEFAULT_NUM_PARTICLES"] = DEFAULT_NUM_PARTICLES;
+    lua["DEFAULT_NUM_PARTICLES"] = DEFAULT_NUM_PARTICLES;
 
-    lua["KParticleEffect"].setClass(UserdataMetatable<ParticleEffect, Resource>()
+    lua["ParticleEffect"].setClass(UserdataMetatable<ParticleEffect, Resource>()
         .addStaticFunction("new", &KCreateObject<ParticleEffect>)
 
         .addFunction("SetMaterial", &ParticleEffect::SetMaterial)
@@ -483,11 +483,11 @@ static void RegisterSkeleton(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KBONECOLLISION_NONE"] = BONECOLLISION_NONE;
-    lua["KBONECOLLISION_SPHERE"] = BONECOLLISION_SPHERE;
-    lua["KBONECOLLISION_BOX"] = BONECOLLISION_BOX;
+    lua["BONECOLLISION_NONE"] = BONECOLLISION_NONE;
+    lua["BONECOLLISION_SPHERE"] = BONECOLLISION_SPHERE;
+    lua["BONECOLLISION_BOX"] = BONECOLLISION_BOX;
 
-    lua["KSkeleton"].setClass(UserdataMetatable<Skeleton>()
+    lua["Skeleton"].setClass(UserdataMetatable<Skeleton>()
         .setConstructors<Skeleton()>()
 
         .addFunction("Load", &Skeleton::Load)
@@ -519,7 +519,7 @@ static void RegisterTerrain(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KTerrain"].setClass(UserdataMetatable<Terrain, Component>()
+    lua["Terrain"].setClass(UserdataMetatable<Terrain, Component>()
         .addStaticFunction("new", &KCreateObject<Terrain>)
 
         .addFunction("SetPatchSize", &Terrain::SetPatchSize)

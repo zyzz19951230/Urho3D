@@ -35,7 +35,7 @@ static void RegisterBorderImage(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KBorderImage"].setClass(UserdataMetatable<BorderImage, UIElement>()
+    lua["BorderImage"].setClass(UserdataMetatable<BorderImage, UIElement>()
         .addStaticFunction("new", &KCreateObject<BorderImage>)
         
         .addFunction("SetTexture", &BorderImage::SetTexture)
@@ -72,7 +72,7 @@ static void RegisterButton(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KButton"].setClass(UserdataMetatable<Button, BorderImage>()
+    lua["Button"].setClass(UserdataMetatable<Button, BorderImage>()
         .addStaticFunction("new", &KCreateObject<Button>)
         
         .addOverloadedFunctions("SetPressedOffset",
@@ -106,7 +106,7 @@ static void RegisterCheckBox(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KCheckBox"].setClass(UserdataMetatable<CheckBox, BorderImage>()
+    lua["CheckBox"].setClass(UserdataMetatable<CheckBox, BorderImage>()
         .addStaticFunction("new", &KCreateObject<CheckBox>)
         
         .addFunction("SetChecked", &CheckBox::SetChecked)
@@ -128,21 +128,21 @@ static void RegisterCursor(kaguya::State& lua)
     using namespace kaguya;
 
     // enum CursorShape;
-    lua["KCS_NORMAL"] = CS_NORMAL;
-    lua["KCS_IBEAM"] = CS_IBEAM;
-    lua["KCS_CROSS"] = CS_CROSS;
-    lua["KCS_RESIZEVERTICAL"] = CS_RESIZEVERTICAL;
-    lua["KCS_RESIZEDIAGONAL_TOPRIGHT"] = CS_RESIZEDIAGONAL_TOPRIGHT;
-    lua["KCS_RESIZEHORIZONTAL"] = CS_RESIZEHORIZONTAL;
-    lua["KCS_RESIZEDIAGONAL_TOPLEFT"] = CS_RESIZEDIAGONAL_TOPLEFT;
-    lua["KCS_RESIZE_ALL"] = CS_RESIZE_ALL;
-    lua["KCS_ACCEPTDROP"] = CS_ACCEPTDROP;
-    lua["KCS_REJECTDROP"] = CS_REJECTDROP;
-    lua["KCS_BUSY"] = CS_BUSY;
-    lua["KCS_BUSY_ARROW"] = CS_BUSY_ARROW;
-    lua["KCS_MAX_SHAPES"] = CS_MAX_SHAPES;
+    lua["CS_NORMAL"] = CS_NORMAL;
+    lua["CS_IBEAM"] = CS_IBEAM;
+    lua["CS_CROSS"] = CS_CROSS;
+    lua["CS_RESIZEVERTICAL"] = CS_RESIZEVERTICAL;
+    lua["CS_RESIZEDIAGONAL_TOPRIGHT"] = CS_RESIZEDIAGONAL_TOPRIGHT;
+    lua["CS_RESIZEHORIZONTAL"] = CS_RESIZEHORIZONTAL;
+    lua["CS_RESIZEDIAGONAL_TOPLEFT"] = CS_RESIZEDIAGONAL_TOPLEFT;
+    lua["CS_RESIZE_ALL"] = CS_RESIZE_ALL;
+    lua["CS_ACCEPTDROP"] = CS_ACCEPTDROP;
+    lua["CS_REJECTDROP"] = CS_REJECTDROP;
+    lua["CS_BUSY"] = CS_BUSY;
+    lua["CS_BUSY_ARROW"] = CS_BUSY_ARROW;
+    lua["CS_MAX_SHAPES"] = CS_MAX_SHAPES;
 
-    lua["KCursor"].setClass(UserdataMetatable<Cursor, BorderImage>()
+    lua["Cursor"].setClass(UserdataMetatable<Cursor, BorderImage>()
         .addStaticFunction("new", &KCreateObject<Cursor>)
         
         .addOverloadedFunctions("DefineShape",
@@ -174,7 +174,7 @@ static void RegisterDropDownList(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KDropDownList"].setClass(UserdataMetatable<DropDownList, Menu>()
+    lua["DropDownList"].setClass(UserdataMetatable<DropDownList, Menu>()
         .addStaticFunction("new", &KCreateObject<DropDownList>)
         
         .addFunction("AddItem", &DropDownList::AddItem)
@@ -215,7 +215,7 @@ static void RegisterFileSelector(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KFileSelector"].setClass(UserdataMetatable<FileSelector, Object>()
+    lua["FileSelector"].setClass(UserdataMetatable<FileSelector, Object>()
         .addStaticFunction("new", &KCreateObject<FileSelector>)
         
         .addFunction("SetDefaultStyle", &FileSelector::SetDefaultStyle)
@@ -268,16 +268,16 @@ static void RegisterFont(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // lua["KFONT_TEXTURE_MIN_SIZE"] = FONT_TEXTURE_MIN_SIZE;
-    // lua["KFONT_DPI"] = FONT_DPI;
+    // lua["FONT_TEXTURE_MIN_SIZE"] = FONT_TEXTURE_MIN_SIZE;
+    // lua["FONT_DPI"] = FONT_DPI;
 
     // enum FONT_TYPE;
-    lua["KFONT_NONE"] = FONT_NONE;
-    lua["KFONT_FREETYPE"] = FONT_FREETYPE;
-    lua["KFONT_BITMAP"] = FONT_BITMAP;
-    lua["KMAX_FONT_TYPES"] = MAX_FONT_TYPES;
+    lua["FONT_NONE"] = FONT_NONE;
+    lua["FONT_FREETYPE"] = FONT_FREETYPE;
+    lua["FONT_BITMAP"] = FONT_BITMAP;
+    lua["MAX_FONT_TYPES"] = MAX_FONT_TYPES;
 
-    lua["KFont"].setClass(UserdataMetatable<Font, Resource>()
+    lua["Font"].setClass(UserdataMetatable<Font, Resource>()
         .addStaticFunction("new", &KCreateObject<Font>)
 
         .addFunction("GetFace", &Font::GetFace)
@@ -291,7 +291,7 @@ static void RegisterLineEdit(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KLineEdit"].setClass(UserdataMetatable<LineEdit, BorderImage>()
+    lua["LineEdit"].setClass(UserdataMetatable<LineEdit, BorderImage>()
         .addStaticFunction("new", &KCreateObject<LineEdit>)
         
         .addFunction("SetText", &LineEdit::SetText)
@@ -346,11 +346,11 @@ static void RegisterListView(kaguya::State& lua)
     using namespace kaguya;
 
     // enum HighlightMode;
-    lua["KHM_NEVER"] = HM_NEVER;
-    lua["KHM_FOCUS"] = HM_FOCUS;
-    lua["KHM_ALWAYS"] = HM_ALWAYS;
+    lua["HM_NEVER"] = HM_NEVER;
+    lua["HM_FOCUS"] = HM_FOCUS;
+    lua["HM_ALWAYS"] = HM_ALWAYS;
 
-    lua["KListView"].setClass(UserdataMetatable<ListView, ScrollView>()
+    lua["ListView"].setClass(UserdataMetatable<ListView, ScrollView>()
         .addStaticFunction("new", &KCreateObject<ListView>)
         
         .addFunction("AddItem", &ListView::AddItem)
@@ -419,7 +419,7 @@ static void RegisterMenu(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KMenu"].setClass(UserdataMetatable<Menu, Button>()
+    lua["Menu"].setClass(UserdataMetatable<Menu, Button>()
         .addStaticFunction("new", &KCreateObject<Menu>)
         
         .addFunction("SetPopup", &Menu::SetPopup)
@@ -449,7 +449,7 @@ static void RegisterMessageBox(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KMessageBox"].setClass(UserdataMetatable<MessageBox, Object>()
+    lua["MessageBox"].setClass(UserdataMetatable<MessageBox, Object>()
         .addStaticFunction("new", &KCreateObject<MessageBox>)
         
         .addFunction("SetTitle", &MessageBox::SetTitle)
@@ -470,7 +470,7 @@ static void RegisterScrollBar(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KScrollBar"].setClass(UserdataMetatable<ScrollBar, BorderImage>()
+    lua["ScrollBar"].setClass(UserdataMetatable<ScrollBar, BorderImage>()
         .addStaticFunction("new", &KCreateObject<FileSelector>)
         
         .addFunction("SetOrientation", &ScrollBar::SetOrientation)
@@ -508,7 +508,7 @@ static void RegisterScrollView(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KScrollView"].setClass(UserdataMetatable<ScrollView, UIElement>()
+    lua["ScrollView"].setClass(UserdataMetatable<ScrollView, UIElement>()
         .addStaticFunction("new", &KCreateObject<ScrollView>)
         
         .addFunction("SetContentElement", &ScrollView::SetContentElement)
@@ -558,7 +558,7 @@ static void RegisterSlider(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSlider"].setClass(UserdataMetatable<Slider, BorderImage>()
+    lua["Slider"].setClass(UserdataMetatable<Slider, BorderImage>()
         .addStaticFunction("new", &KCreateObject<Slider>)
         
         .addFunction("SetOrientation", &Slider::SetOrientation)
@@ -585,7 +585,7 @@ static void RegisterSprite(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KSprite"].setClass(UserdataMetatable<Sprite, UIElement>()
+    lua["Sprite"].setClass(UserdataMetatable<Sprite, UIElement>()
         .addStaticFunction("new", &KCreateObject<Sprite>)
         
          .addOverloadedFunctions("SetPosition",
@@ -632,14 +632,14 @@ static void RegisterText(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KDEFAULT_FONT_SIZE"] = DEFAULT_FONT_SIZE;
+    lua["DEFAULT_FONT_SIZE"] = DEFAULT_FONT_SIZE;
 
     // enum TextEffect;
-    lua["KTE_NONE"] = TE_NONE;
-    lua["KTE_SHADOW"] = TE_SHADOW;
-    lua["KTE_STROKE"] = TE_STROKE;
+    lua["TE_NONE"] = TE_NONE;
+    lua["TE_SHADOW"] = TE_SHADOW;
+    lua["TE_STROKE"] = TE_STROKE;
 
-    lua["KText"].setClass(UserdataMetatable<Text, UIElement>()
+    lua["Text"].setClass(UserdataMetatable<Text, UIElement>()
         .addStaticFunction("new", &KCreateObject<Text>)
         
         .addOverloadedFunctions("SetFont",
@@ -713,7 +713,7 @@ static void RegisterText3D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KText3D"].setClass(UserdataMetatable<Text3D, Drawable>()
+    lua["Text3D"].setClass(UserdataMetatable<Text3D, Drawable>()
         .addStaticFunction("new", &KCreateObject<Text3D>)
         
         .addOverloadedFunctions("SetFont",
@@ -800,7 +800,7 @@ static void RegisterToolTip(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KToolTip"].setClass(UserdataMetatable<ToolTip, UIElement>()
+    lua["ToolTip"].setClass(UserdataMetatable<ToolTip, UIElement>()
         .addStaticFunction("new", &KCreateObject<ToolTip>)
         
         .addFunction("SetDelay", &ToolTip::SetDelay)
@@ -832,7 +832,7 @@ static void RegisterUI(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KUI"].setClass(UserdataMetatable<UI, Object>()
+    lua["UI"].setClass(UserdataMetatable<UI, Object>()
 
         .addFunction("SetCursor", &UI::SetCursor)
         .addFunction("SetFocusElement", &UI::SetFocusElement)
@@ -952,47 +952,47 @@ static void RegisterUIElement(kaguya::State& lua)
     using namespace kaguya;
 
     // enum HorizontalAlignment;
-    lua["KHA_LEFT"] = HA_LEFT;
-    lua["KHA_CENTER"] = HA_CENTER;
-    lua["KHA_RIGHT"] = HA_RIGHT;
+    lua["HA_LEFT"] = HA_LEFT;
+    lua["HA_CENTER"] = HA_CENTER;
+    lua["HA_RIGHT"] = HA_RIGHT;
 
     // enum VerticalAlignment;
-    lua["KVA_TOP"] = VA_TOP;
-    lua["KVA_CENTER"] = VA_CENTER;
-    lua["KVA_BOTTOM"] = VA_BOTTOM;
+    lua["VA_TOP"] = VA_TOP;
+    lua["VA_CENTER"] = VA_CENTER;
+    lua["VA_BOTTOM"] = VA_BOTTOM;
 
     // enum Corner;
-    lua["KC_TOPLEFT"] = C_TOPLEFT;
-    lua["KC_TOPRIGHT"] = C_TOPRIGHT;
-    lua["KC_BOTTOMLEFT"] = C_BOTTOMLEFT;
-    lua["KC_BOTTOMRIGHT"] = C_BOTTOMRIGHT;
-    lua["KMAX_UIELEMENT_CORNERS"] = MAX_UIELEMENT_CORNERS;
+    lua["C_TOPLEFT"] = C_TOPLEFT;
+    lua["C_TOPRIGHT"] = C_TOPRIGHT;
+    lua["C_BOTTOMLEFT"] = C_BOTTOMLEFT;
+    lua["C_BOTTOMRIGHT"] = C_BOTTOMRIGHT;
+    lua["MAX_UIELEMENT_CORNERS"] = MAX_UIELEMENT_CORNERS;
 
     // enum Orientation;
-    lua["KO_HORIZONTAL"] = O_HORIZONTAL;
-    lua["KO_VERTICAL"] = O_VERTICAL;
+    lua["O_HORIZONTAL"] = O_HORIZONTAL;
+    lua["O_VERTICAL"] = O_VERTICAL;
 
     // enum FocusMode;
-    lua["KFM_NOTFOCUSABLE"] = FM_NOTFOCUSABLE;
-    lua["KFM_RESETFOCUS"] = FM_RESETFOCUS;
-    lua["KFM_FOCUSABLE"] = FM_FOCUSABLE;
-    lua["KFM_FOCUSABLE_DEFOCUSABLE"] = FM_FOCUSABLE_DEFOCUSABLE;
+    lua["FM_NOTFOCUSABLE"] = FM_NOTFOCUSABLE;
+    lua["FM_RESETFOCUS"] = FM_RESETFOCUS;
+    lua["FM_FOCUSABLE"] = FM_FOCUSABLE;
+    lua["FM_FOCUSABLE_DEFOCUSABLE"] = FM_FOCUSABLE_DEFOCUSABLE;
 
     // enum LayoutMode;
-    lua["KLM_FREE"] = LM_FREE;
-    lua["KLM_HORIZONTAL"] = LM_HORIZONTAL;
-    lua["KLM_VERTICAL"] = LM_VERTICAL;
+    lua["LM_FREE"] = LM_FREE;
+    lua["LM_HORIZONTAL"] = LM_HORIZONTAL;
+    lua["LM_VERTICAL"] = LM_VERTICAL;
 
     // enum TraversalMode;
-    lua["KTM_BREADTH_FIRST"] = TM_BREADTH_FIRST;
-    lua["KTM_DEPTH_FIRST"] = TM_DEPTH_FIRST;
+    lua["TM_BREADTH_FIRST"] = TM_BREADTH_FIRST;
+    lua["TM_DEPTH_FIRST"] = TM_DEPTH_FIRST;
 
-    lua["KDD_DISABLED"] = DD_DISABLED;
-    lua["KDD_SOURCE"] = DD_SOURCE;
-    lua["KDD_TARGET"] = DD_TARGET;
-    lua["KDD_SOURCE_AND_TARGET"] = DD_SOURCE_AND_TARGET;
+    lua["DD_DISABLED"] = DD_DISABLED;
+    lua["DD_SOURCE"] = DD_SOURCE;
+    lua["DD_TARGET"] = DD_TARGET;
+    lua["DD_SOURCE_AND_TARGET"] = DD_SOURCE_AND_TARGET;
 
-    lua["KUIElement"].setClass(UserdataMetatable<UIElement, Animatable>()
+    lua["UIElement"].setClass(UserdataMetatable<UIElement, Animatable>()
         .addStaticFunction("new", &KCreateObject<UIElement>)
 
         .addStaticFunction("LoadXML", UIElementLoadXML)
@@ -1259,58 +1259,58 @@ static void RegisterUIEvents(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KE_UIMOUSECLICK"] = E_UIMOUSECLICK;
-    lua["KE_UIMOUSECLICKEND"] = E_UIMOUSECLICKEND;
-    lua["KE_UIMOUSEDOUBLECLICK"] = E_UIMOUSEDOUBLECLICK;
-    lua["KE_CLICK"] = E_CLICK;
-    lua["KE_CLICKEND"] = E_CLICKEND;
-    lua["KE_DOUBLECLICK"] = E_DOUBLECLICK;
-    lua["KE_DRAGDROPTEST"] = E_DRAGDROPTEST;
-    lua["KE_DRAGDROPFINISH"] = E_DRAGDROPFINISH;
-    lua["KE_FOCUSCHANGED"] = E_FOCUSCHANGED;
-    lua["KE_NAMECHANGED"] = E_NAMECHANGED;
-    lua["KE_RESIZED"] = E_RESIZED;
-    lua["KE_POSITIONED"] = E_POSITIONED;
-    lua["KE_VISIBLECHANGED"] = E_VISIBLECHANGED;
-    lua["KE_FOCUSED"] = E_FOCUSED;
-    lua["KE_DEFOCUSED"] = E_DEFOCUSED;
-    lua["KE_LAYOUTUPDATED"] = E_LAYOUTUPDATED;
-    lua["KE_PRESSED"] = E_PRESSED;
-    lua["KE_RELEASED"] = E_RELEASED;
-    lua["KE_TOGGLED"] = E_TOGGLED;
-    lua["KE_SLIDERCHANGED"] = E_SLIDERCHANGED;
-    lua["KE_SLIDERPAGED"] = E_SLIDERPAGED;
-    lua["KE_SCROLLBARCHANGED"] = E_SCROLLBARCHANGED;
-    lua["KE_VIEWCHANGED"] = E_VIEWCHANGED;
-    lua["KE_MODALCHANGED"] = E_MODALCHANGED;
-    lua["KE_TEXTENTRY"] = E_TEXTENTRY;
-    lua["KE_TEXTCHANGED"] = E_TEXTCHANGED;
-    lua["KE_TEXTFINISHED"] = E_TEXTFINISHED;
-    lua["KE_MENUSELECTED"] = E_MENUSELECTED;
-    lua["KE_ITEMSELECTED"] = E_ITEMSELECTED;
-    lua["KE_ITEMDESELECTED"] = E_ITEMDESELECTED;
-    lua["KE_SELECTIONCHANGED"] = E_SELECTIONCHANGED;
-    lua["KE_ITEMCLICKED"] = E_ITEMCLICKED;
-    lua["KE_ITEMDOUBLECLICKED"] = E_ITEMDOUBLECLICKED;
-    lua["KE_UNHANDLEDKEY"] = E_UNHANDLEDKEY;
-    lua["KE_FILESELECTED"] = E_FILESELECTED;
-    lua["KE_MESSAGEACK"] = E_MESSAGEACK;
-    lua["KE_ELEMENTADDED"] = E_ELEMENTADDED;
-    lua["KE_ELEMENTREMOVED"] = E_ELEMENTREMOVED;
-    lua["KE_HOVERBEGIN"] = E_HOVERBEGIN;
-    lua["KE_HOVEREND"] = E_HOVEREND;
-    lua["KE_DRAGBEGIN"] = E_DRAGBEGIN;
-    lua["KE_DRAGMOVE"] = E_DRAGMOVE;
-    lua["KE_DRAGEND"] = E_DRAGEND;
-    lua["KE_DRAGCANCEL"] = E_DRAGCANCEL;
-    lua["KE_UIDROPFILE"] = E_UIDROPFILE;
+    lua["E_UIMOUSECLICK"] = E_UIMOUSECLICK;
+    lua["E_UIMOUSECLICKEND"] = E_UIMOUSECLICKEND;
+    lua["E_UIMOUSEDOUBLECLICK"] = E_UIMOUSEDOUBLECLICK;
+    lua["E_CLICK"] = E_CLICK;
+    lua["E_CLICKEND"] = E_CLICKEND;
+    lua["E_DOUBLECLICK"] = E_DOUBLECLICK;
+    lua["E_DRAGDROPTEST"] = E_DRAGDROPTEST;
+    lua["E_DRAGDROPFINISH"] = E_DRAGDROPFINISH;
+    lua["E_FOCUSCHANGED"] = E_FOCUSCHANGED;
+    lua["E_NAMECHANGED"] = E_NAMECHANGED;
+    lua["E_RESIZED"] = E_RESIZED;
+    lua["E_POSITIONED"] = E_POSITIONED;
+    lua["E_VISIBLECHANGED"] = E_VISIBLECHANGED;
+    lua["E_FOCUSED"] = E_FOCUSED;
+    lua["E_DEFOCUSED"] = E_DEFOCUSED;
+    lua["E_LAYOUTUPDATED"] = E_LAYOUTUPDATED;
+    lua["E_PRESSED"] = E_PRESSED;
+    lua["E_RELEASED"] = E_RELEASED;
+    lua["E_TOGGLED"] = E_TOGGLED;
+    lua["E_SLIDERCHANGED"] = E_SLIDERCHANGED;
+    lua["E_SLIDERPAGED"] = E_SLIDERPAGED;
+    lua["E_SCROLLBARCHANGED"] = E_SCROLLBARCHANGED;
+    lua["E_VIEWCHANGED"] = E_VIEWCHANGED;
+    lua["E_MODALCHANGED"] = E_MODALCHANGED;
+    lua["E_TEXTENTRY"] = E_TEXTENTRY;
+    lua["E_TEXTCHANGED"] = E_TEXTCHANGED;
+    lua["E_TEXTFINISHED"] = E_TEXTFINISHED;
+    lua["E_MENUSELECTED"] = E_MENUSELECTED;
+    lua["E_ITEMSELECTED"] = E_ITEMSELECTED;
+    lua["E_ITEMDESELECTED"] = E_ITEMDESELECTED;
+    lua["E_SELECTIONCHANGED"] = E_SELECTIONCHANGED;
+    lua["E_ITEMCLICKED"] = E_ITEMCLICKED;
+    lua["E_ITEMDOUBLECLICKED"] = E_ITEMDOUBLECLICKED;
+    lua["E_UNHANDLEDKEY"] = E_UNHANDLEDKEY;
+    lua["E_FILESELECTED"] = E_FILESELECTED;
+    lua["E_MESSAGEACK"] = E_MESSAGEACK;
+    lua["E_ELEMENTADDED"] = E_ELEMENTADDED;
+    lua["E_ELEMENTREMOVED"] = E_ELEMENTREMOVED;
+    lua["E_HOVERBEGIN"] = E_HOVERBEGIN;
+    lua["E_HOVEREND"] = E_HOVEREND;
+    lua["E_DRAGBEGIN"] = E_DRAGBEGIN;
+    lua["E_DRAGMOVE"] = E_DRAGMOVE;
+    lua["E_DRAGEND"] = E_DRAGEND;
+    lua["E_DRAGCANCEL"] = E_DRAGCANCEL;
+    lua["E_UIDROPFILE"] = E_UIDROPFILE;
 }
 
 static void RegisterView3D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["KView3D"].setClass(UserdataMetatable<View3D, Window>()
+    lua["View3D"].setClass(UserdataMetatable<View3D, Window>()
         .addStaticFunction("new", &KCreateObject<View3D>)
         
         .addFunction("SetView", &View3D::SetView)
@@ -1340,18 +1340,18 @@ static void RegisterWindow(kaguya::State& lua)
     using namespace kaguya;
 
     // enum WindowDragMode;
-    lua["KDRAG_NONE"] = DRAG_NONE;
-    lua["KDRAG_MOVE"] = DRAG_MOVE;
-    lua["KDRAG_RESIZE_TOPLEFT"] = DRAG_RESIZE_TOPLEFT;
-    lua["KDRAG_RESIZE_TOP"] = DRAG_RESIZE_TOP;
-    lua["KDRAG_RESIZE_TOPRIGHT"] = DRAG_RESIZE_TOPRIGHT;
-    lua["KDRAG_RESIZE_RIGHT"] = DRAG_RESIZE_RIGHT;
-    lua["KDRAG_RESIZE_BOTTOMRIGHT"] = DRAG_RESIZE_BOTTOMRIGHT;
-    lua["KDRAG_RESIZE_BOTTOM"] = DRAG_RESIZE_BOTTOM;
-    lua["KDRAG_RESIZE_BOTTOMLEFT"] = DRAG_RESIZE_BOTTOMLEFT;
-    lua["KDRAG_RESIZE_LEFT"] = DRAG_RESIZE_LEFT;
+    lua["DRAG_NONE"] = DRAG_NONE;
+    lua["DRAG_MOVE"] = DRAG_MOVE;
+    lua["DRAG_RESIZE_TOPLEFT"] = DRAG_RESIZE_TOPLEFT;
+    lua["DRAG_RESIZE_TOP"] = DRAG_RESIZE_TOP;
+    lua["DRAG_RESIZE_TOPRIGHT"] = DRAG_RESIZE_TOPRIGHT;
+    lua["DRAG_RESIZE_RIGHT"] = DRAG_RESIZE_RIGHT;
+    lua["DRAG_RESIZE_BOTTOMRIGHT"] = DRAG_RESIZE_BOTTOMRIGHT;
+    lua["DRAG_RESIZE_BOTTOM"] = DRAG_RESIZE_BOTTOM;
+    lua["DRAG_RESIZE_BOTTOMLEFT"] = DRAG_RESIZE_BOTTOMLEFT;
+    lua["DRAG_RESIZE_LEFT"] = DRAG_RESIZE_LEFT;
 
-    lua["KWindow"].setClass(UserdataMetatable<Window, BorderImage>()
+    lua["Window"].setClass(UserdataMetatable<Window, BorderImage>()
         .addStaticFunction("new", &KCreateObject<Window>)
         
         .addFunction("SetMovable", &Window::SetMovable)
@@ -1423,7 +1423,7 @@ void RegisterUILuaAPI(kaguya::State& lua)
     RegisterWindow(lua);
     RegisterView3D(lua);
 
-    lua["kui"] = KGetSubsystem<UI>();
-    lua["KGetUI"] = KGetSubsystem<UI>;
+    lua["ui"] = KGetSubsystem<UI>();
+    lua["GetUI"] = KGetSubsystem<UI>;
 }
 }

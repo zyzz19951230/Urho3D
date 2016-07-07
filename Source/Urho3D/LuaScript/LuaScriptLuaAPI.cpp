@@ -170,7 +170,7 @@ static void RegisterLuaScriptInstance(kaguya::State &lua)
         "end                                                                 \n"
     );
 
-    lua["KLuaScriptInstance"].setClass(UserdataMetatable<LuaScriptInstance, Component>()
+    lua["LuaScriptInstance"].setClass(UserdataMetatable<LuaScriptInstance, Component>()
 
         .addOverloadedFunctions("CreateObject", 
             static_cast<bool (LuaScriptInstance::*)(const String&)>(&LuaScriptInstance::CreateObject),
@@ -226,8 +226,8 @@ void RegisterLuaScript(kaguya::State &lua)
 {
     using namespace kaguya;
 
-    lua["KSubscribeToEvent"] = &LuaScriptSubscribeToEvent1;
-    lua["KUnsubscribeFromEvent"] = &LuaScriptUnsubscribeFromEvent1;
+    lua["SubscribeToEvent"] = &LuaScriptSubscribeToEvent1;
+    lua["UnsubscribeFromEvent"] = &LuaScriptUnsubscribeFromEvent1;
 }
 
 void RegisterLuaScriptLuaAPI(kaguya::State& lua)

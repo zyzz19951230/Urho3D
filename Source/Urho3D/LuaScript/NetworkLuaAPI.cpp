@@ -18,11 +18,11 @@ static void RegisterConnection(kaguya::State& lua)
 	using namespace kaguya;
 
 	// enum ObserverPositionSendMode;
-	lua["KOPSM_NONE"] = OPSM_NONE;
-	lua["KOPSM_POSITION"] = OPSM_POSITION;
-	lua["KOPSM_POSITION_ROTATION"] = OPSM_POSITION_ROTATION;
+	lua["OPSM_NONE"] = OPSM_NONE;
+	lua["OPSM_POSITION"] = OPSM_POSITION;
+	lua["OPSM_POSITION_ROTATION"] = OPSM_POSITION_ROTATION;
 
-	lua["KConnection"].setClass(UserdataMetatable<Connection, Object>()
+	lua["Connection"].setClass(UserdataMetatable<Connection, Object>()
 
 		.addOverloadedFunctions("SendMessage",
 			static_cast<void(Connection::*)(int, bool, bool, const VectorBuffer&, unsigned)>(&Connection::SendMessage),
@@ -107,13 +107,13 @@ static void RegisterHttpRequest(kaguya::State& lua)
 	using namespace kaguya;
 
 	// enum HttpRequestState;
-	lua["KHTTP_INITIALIZING"] = HTTP_INITIALIZING;
-	lua["KHTTP_ERROR"] = HTTP_ERROR;
-	lua["KHTTP_OPEN"] = HTTP_OPEN;
-	lua["KHTTP_CLOSED"] = HTTP_CLOSED;
+	lua["HTTP_INITIALIZING"] = HTTP_INITIALIZING;
+	lua["HTTP_ERROR"] = HTTP_ERROR;
+	lua["HTTP_OPEN"] = HTTP_OPEN;
+	lua["HTTP_CLOSED"] = HTTP_CLOSED;
 
 	// Deserializer
-	lua["KHttpRequest"].setClass(UserdataMetatable<HttpRequest, RefCounted>()
+	lua["HttpRequest"].setClass(UserdataMetatable<HttpRequest, RefCounted>()
 		.setConstructors<HttpRequest(const String&, const String&, const Vector<String>&, const String&)>()
 
 		.addFunction("GetURL", &HttpRequest::GetURL)
@@ -136,7 +136,7 @@ static void RegisterNetwork(kaguya::State& lua)
 {
 	using namespace kaguya;
 
-    lua["KNetwork"].setClass(UserdataMetatable<Network, Object>()
+    lua["Network"].setClass(UserdataMetatable<Network, Object>()
 
 		.addFunction("Connect", &Network::Connect)
 		.addFunction("Disconnect", &Network::Disconnect)
@@ -188,25 +188,25 @@ static void RegisterNetworkEvents(kaguya::State& lua)
 {
 	using namespace kaguya;
 
-	lua["KE_SERVERCONNECTED"] = E_SERVERCONNECTED;
-	lua["KE_SERVERDISCONNECTED"] = E_SERVERDISCONNECTED;
-	lua["KE_CONNECTFAILED"] = E_CONNECTFAILED;
-	lua["KE_CLIENTCONNECTED"] = E_CLIENTCONNECTED;
-	lua["KE_CLIENTDISCONNECTED"] = E_CLIENTDISCONNECTED;
-	lua["KE_CLIENTIDENTITY"] = E_CLIENTIDENTITY;
-	lua["KE_CLIENTSCENELOADED"] = E_CLIENTSCENELOADED;
-	lua["KE_NETWORKMESSAGE"] = E_NETWORKMESSAGE;
-	lua["KE_NETWORKUPDATE"] = E_NETWORKUPDATE;
-	lua["KE_NETWORKUPDATESENT"] = E_NETWORKUPDATESENT;
-	lua["KE_NETWORKSCENELOADFAILED"] = E_NETWORKSCENELOADFAILED;
-	lua["KE_REMOTEEVENTDATA"] = E_REMOTEEVENTDATA;
+	lua["E_SERVERCONNECTED"] = E_SERVERCONNECTED;
+	lua["E_SERVERDISCONNECTED"] = E_SERVERDISCONNECTED;
+	lua["E_CONNECTFAILED"] = E_CONNECTFAILED;
+	lua["E_CLIENTCONNECTED"] = E_CLIENTCONNECTED;
+	lua["E_CLIENTDISCONNECTED"] = E_CLIENTDISCONNECTED;
+	lua["E_CLIENTIDENTITY"] = E_CLIENTIDENTITY;
+	lua["E_CLIENTSCENELOADED"] = E_CLIENTSCENELOADED;
+	lua["E_NETWORKMESSAGE"] = E_NETWORKMESSAGE;
+	lua["E_NETWORKUPDATE"] = E_NETWORKUPDATE;
+	lua["E_NETWORKUPDATESENT"] = E_NETWORKUPDATESENT;
+	lua["E_NETWORKSCENELOADFAILED"] = E_NETWORKSCENELOADFAILED;
+	lua["E_REMOTEEVENTDATA"] = E_REMOTEEVENTDATA;
 }
 
 static void RegisterNetworkPriority(kaguya::State& lua)
 {
 	using namespace kaguya;
 
-	lua["KNetworkPriority"].setClass(UserdataMetatable<NetworkPriority, Component>()
+	lua["NetworkPriority"].setClass(UserdataMetatable<NetworkPriority, Component>()
 		.addStaticFunction("new", &KCreateObject<NetworkPriority>)
 		
 		.addFunction("SetBasePriority", &NetworkPriority::SetBasePriority)
@@ -230,26 +230,26 @@ static void RegisterProtocol(kaguya::State& lua)
 {
 	using namespace kaguya;
 
-	lua["KMSG_IDENTITY"] = MSG_IDENTITY;
-	lua["KMSG_CONTROLS"] = MSG_CONTROLS;
-	lua["KMSG_SCENELOADED"] = MSG_SCENELOADED;
-	lua["KMSG_REQUESTPACKAGE"] = MSG_REQUESTPACKAGE;
-	lua["KMSG_PACKAGEDATA"] = MSG_PACKAGEDATA;
-	lua["KMSG_LOADSCENE"] = MSG_LOADSCENE;
-	lua["KMSG_SCENECHECKSUMERROR"] = MSG_SCENECHECKSUMERROR;
-	lua["KMSG_CREATENODE"] = MSG_CREATENODE;
-	lua["KMSG_NODEDELTAUPDATE"] = MSG_NODEDELTAUPDATE;
-	lua["KMSG_NODELATESTDATA"] = MSG_NODELATESTDATA;
-	lua["KMSG_REMOVENODE"] = MSG_REMOVENODE;
-	lua["KMSG_CREATECOMPONENT"] = MSG_CREATECOMPONENT;
-	lua["KMSG_COMPONENTDELTAUPDATE"] = MSG_COMPONENTDELTAUPDATE;
-	lua["KMSG_COMPONENTLATESTDATA"] = MSG_COMPONENTLATESTDATA;
-	lua["KMSG_REMOVECOMPONENT"] = MSG_REMOVECOMPONENT;
-	lua["KMSG_REMOTEEVENT"] = MSG_REMOTEEVENT;
-	lua["KMSG_REMOTENODEEVENT"] = MSG_REMOTENODEEVENT;
-	lua["KMSG_PACKAGEINFO"] = MSG_PACKAGEINFO;
-	lua["KCONTROLS_CONTENT_ID"] = CONTROLS_CONTENT_ID;
-	lua["KPACKAGE_FRAGMENT_SIZE"] = PACKAGE_FRAGMENT_SIZE;
+	lua["MSG_IDENTITY"] = MSG_IDENTITY;
+	lua["MSG_CONTROLS"] = MSG_CONTROLS;
+	lua["MSG_SCENELOADED"] = MSG_SCENELOADED;
+	lua["MSG_REQUESTPACKAGE"] = MSG_REQUESTPACKAGE;
+	lua["MSG_PACKAGEDATA"] = MSG_PACKAGEDATA;
+	lua["MSG_LOADSCENE"] = MSG_LOADSCENE;
+	lua["MSG_SCENECHECKSUMERROR"] = MSG_SCENECHECKSUMERROR;
+	lua["MSG_CREATENODE"] = MSG_CREATENODE;
+	lua["MSG_NODEDELTAUPDATE"] = MSG_NODEDELTAUPDATE;
+	lua["MSG_NODELATESTDATA"] = MSG_NODELATESTDATA;
+	lua["MSG_REMOVENODE"] = MSG_REMOVENODE;
+	lua["MSG_CREATECOMPONENT"] = MSG_CREATECOMPONENT;
+	lua["MSG_COMPONENTDELTAUPDATE"] = MSG_COMPONENTDELTAUPDATE;
+	lua["MSG_COMPONENTLATESTDATA"] = MSG_COMPONENTLATESTDATA;
+	lua["MSG_REMOVECOMPONENT"] = MSG_REMOVECOMPONENT;
+	lua["MSG_REMOTEEVENT"] = MSG_REMOTEEVENT;
+	lua["MSG_REMOTENODEEVENT"] = MSG_REMOTENODEEVENT;
+	lua["MSG_PACKAGEINFO"] = MSG_PACKAGEINFO;
+	lua["CONTROLS_CONTENT_ID"] = CONTROLS_CONTENT_ID;
+	lua["PACKAGE_FRAGMENT_SIZE"] = PACKAGE_FRAGMENT_SIZE;
 }
 
 void RegisterNetworkLuaAPI(kaguya::State& lua)
@@ -261,7 +261,7 @@ void RegisterNetworkLuaAPI(kaguya::State& lua)
 	RegisterNetworkPriority(lua);
 	RegisterProtocol(lua);
 
-    lua["knetwork"] = KGetSubsystem<Network>();
-    lua["KGetNetwork"] = KGetSubsystem<Network>;
+    lua["network"] = KGetSubsystem<Network>();
+    lua["GetNetwork"] = KGetSubsystem<Network>;
 }
 }
