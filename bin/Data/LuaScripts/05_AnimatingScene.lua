@@ -59,6 +59,7 @@ function CreateScene()
         -- Add the Rotator script object which will rotate the scene node each frame, when the scene sends its update event.
         -- This requires the C++ component LuaScriptInstance in the scene node, which acts as a container. We need to tell the
         -- class name to instantiate the object
+
         local object = boxNode:CreateScriptObject("Rotator")
         object.rotationSpeed = {10.0, 20.0, 30.0}
     end
