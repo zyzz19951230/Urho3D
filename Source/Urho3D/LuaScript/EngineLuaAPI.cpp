@@ -57,7 +57,7 @@ static void RegisterConsole(kaguya::State& lua)
         .addProperty("numHistoryRows", &Console::GetNumHistoryRows, &Console::SetNumHistoryRows)
         .addProperty("historyPosition", &Console::GetHistoryPosition)
         .addProperty("focusOnShow", &Console::GetFocusOnShow, &Console::SetFocusOnShow)
-    );
+        );
 }
 
 static void RegisterDebugHud(kaguya::State& lua)
@@ -109,7 +109,17 @@ static void RegisterDebugHud(kaguya::State& lua)
         .addProperty("profilerMaxDepth", &DebugHud::GetProfilerMaxDepth, &DebugHud::SetProfilerMaxDepth)
         .addProperty("profilerInterval", &DebugHud::GetProfilerInterval, &DebugHud::SetProfilerInterval)
         .addProperty("useRendererStats", &DebugHud::GetUseRendererStats, &DebugHud::SetUseRendererStats)
-    );
+        );
+}
+
+static void EngineDumpResources0(Engine* self)
+{
+    self->DumpResources();
+}
+
+static void EngineDumpResources1(Engine* self, bool dumpFileName)
+{
+    self->DumpResources(dumpFileName);
 }
 
 static void RegisterEngine(kaguya::State& lua)
@@ -133,7 +143,9 @@ static void RegisterEngine(kaguya::State& lua)
         .addFunction("Exit", &Engine::Exit)
 
         .addFunction("DumpProfiler", &Engine::DumpProfiler)
-        .addFunction("DumpResources", &Engine::DumpResources)
+
+        ADD_OVERLOADED_FUNCTIONS_2(Engine, DumpResources)
+
         .addFunction("DumpMemory", &Engine::DumpMemory)
 
         .addFunction("GetNextTimeStep", &Engine::GetNextTimeStep)
@@ -159,7 +171,7 @@ static void RegisterEngine(kaguya::State& lua)
         .addProperty("initialized", &Engine::IsInitialized)
         .addProperty("exiting", &Engine::IsExiting)
         .addProperty("headless", &Engine::IsHeadless)
-    );
+        );
 }
 
 static void RegisterEngineEvents(kaguya::State& lua)

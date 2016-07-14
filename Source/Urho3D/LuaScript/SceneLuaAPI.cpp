@@ -25,21 +25,57 @@
 namespace Urho3D
 {
 
+static bool AnimatableLoadXML0(Animatable* self, const XMLElement& source)
+{
+    return self->LoadXML(source);
+}
+
+static bool AnimatableLoadXML1(Animatable* self, const XMLElement& source, bool setInstanceDefault)
+{
+    return self->LoadXML(source, setInstanceDefault);
+}
+
+
+static bool AnimatableLoadJSON0(Animatable* self, const JSONValue& source)
+{
+    return self->LoadJSON(source);
+}
+
+static bool AnimatableLoadJSON1(Animatable* self, const JSONValue& source, bool setInstanceDefault)
+{
+    return self->LoadJSON(source, setInstanceDefault);
+}
+
+static void AnimatableSetAttributeAnimation0(Animatable* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode)
+{
+    self->SetAttributeAnimation(name, attributeAnimation, wrapMode);
+}
+
+static void AnimatableSetAttributeAnimation1(Animatable* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode, float speed)
+{
+    self->SetAttributeAnimation(name, attributeAnimation, wrapMode, speed);
+}
+
 static void RegisterAnimatable(kaguya::State& lua)
 {
     using namespace kaguya;
 
     lua["Animatable"].setClass(UserdataMetatable<Animatable, Serializable>()
 
-        .addFunction("LoadXML", &Animatable::LoadXML)
+        ADD_OVERLOADED_FUNCTIONS_2(Animatable, LoadXML)
+
         .addFunction("SaveXML", &Animatable::SaveXML)
-        .addFunction("LoadJSON", &Animatable::LoadJSON)
+
+        ADD_OVERLOADED_FUNCTIONS_2(Animatable, LoadJSON)
+
         .addFunction("SaveJSON", &Animatable::SaveJSON)
 
         .addFunction("SetAnimationEnabled", &Animatable::SetAnimationEnabled)
         .addFunction("SetAnimationTime", &Animatable::SetAnimationTime)
         .addFunction("SetObjectAnimation", &Animatable::SetObjectAnimation)
-        .addFunction("SetAttributeAnimation", &Animatable::SetAttributeAnimation)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(Animatable, SetAttributeAnimation)
+
         .addFunction("SetAttributeAnimationWrapMode", &Animatable::SetAttributeAnimationWrapMode)
         .addFunction("SetAttributeAnimationSpeed", &Animatable::SetAttributeAnimationSpeed)
         .addFunction("SetAttributeAnimationTime", &Animatable::SetAttributeAnimationTime)
@@ -55,7 +91,7 @@ static void RegisterAnimatable(kaguya::State& lua)
         .addProperty("animationEnabled", &Animatable::GetAnimationEnabled, &Animatable::SetAnimationEnabled)
         .addProperty("objectAnimation", &Animatable::GetObjectAnimation, &Animatable::SetObjectAnimation)
         .addProperty("animationTime", &Animatable::SetAnimationTime)
-    );
+        );
 }
 
 static void RegisterAnimationDefs(kaguya::State& lua)
@@ -99,7 +135,7 @@ static void RegisterComponent(kaguya::State& lua)
         .addProperty("scene", &Component::GetScene)
         .addProperty("enabled", &Component::IsEnabled, &Component::SetEnabled)
         .addProperty("enabledEffective", &Component::IsEnabledEffective)
-    );
+        );
 }
 
 static void RegisterLogicComponent(kaguya::State& lua)
@@ -120,7 +156,7 @@ static void RegisterLogicComponent(kaguya::State& lua)
 
         .addProperty("updateEventMask", &LogicComponent::GetUpdateEventMask, &LogicComponent::SetUpdateEventMask)
         .addProperty("delayedStartCalled", &LogicComponent::IsDelayedStartCalled)
-    );
+        );
 }
 
 static Node* NodeCreateChild0(Node* node)
@@ -185,12 +221,12 @@ static SharedPtr<Component> NodeGetComponent1(const Node* node, const char* type
 
 static kaguya::LuaTable NodeCreateScriptObject0(Node* node, const char* scriptObjectType)
 {
-    LuaScriptInstance* instance = node->CreateComponent<LuaScriptInstance>();    
+    LuaScriptInstance* instance = node->CreateComponent<LuaScriptInstance>();
     instance->CreateObject(scriptObjectType);
 
     // Push Script object to stack
     lua_rawgeti(instance->GetLuaState(), LUA_REGISTRYINDEX, instance->GetScriptObjectRef());
-    
+
     // return Lua table Object.
     return kaguya::LuaTable(instance->GetLuaState(), kaguya::StackTop());
 }
@@ -305,7 +341,7 @@ static void RegisterNode(kaguya::State& lua)
 
         .addFunction("Translate", &Node::Translate)
         .addFunction("Translate2D", &Node::Translate2D)
-        
+
         .addOverloadedFunctions("Rotate", &NodeRotate0, &NodeRotate1)
 
         .addFunction("Rotate2D", &Node::Rotate2D)
@@ -336,7 +372,7 @@ static void RegisterNode(kaguya::State& lua)
         .addFunction("RemoveChild", static_cast<void(Node::*)(Node*)>(&Node::RemoveChild))
         .addFunction("RemoveAllChildren", &Node::RemoveAllChildren)
         .addFunction("RemoveChildren", &Node::RemoveChildren)
-        
+
         .addOverloadedFunctions("CreateComponent", &NodeCreateComponent0, &NodeCreateComponent1, &NodeCreateComponent2)
         .addOverloadedFunctions("GetOrCreateComponent", &NodeGetOrCreateComponent0, &NodeGetOrCreateComponent1, &NodeGetOrCreateComponent2)
 
@@ -492,7 +528,17 @@ static void RegisterNode(kaguya::State& lua)
         .addProperty("positionSilent", &Node::SetPositionSilent)
         .addProperty("rotationSilent", &Node::SetRotationSilent)
         .addProperty("scaleSilent", &Node::SetScaleSilent)
-    );
+        );
+}
+
+static void ObjectAnimationAddAttributeAnimation0(ObjectAnimation* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode)
+{
+    self->AddAttributeAnimation(name, attributeAnimation, wrapMode);
+}
+
+static void ObjectAnimationAddAttributeAnimation1(ObjectAnimation* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode, float speed)
+{
+    self->AddAttributeAnimation(name, attributeAnimation, wrapMode, speed);
 }
 
 static void RegisterObjectAnimation(kaguya::State& lua)
@@ -502,7 +548,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
     lua["ObjectAnimation"].setClass(UserdataMetatable<ObjectAnimation, Resource>()
         .addStaticFunction("new", &KCreateObject<ObjectAnimation>)
 
-        .addFunction("AddAttributeAnimation", &ObjectAnimation::AddAttributeAnimation)
+        ADD_OVERLOADED_FUNCTIONS_2(ObjectAnimation, AddAttributeAnimation)
 
         .addOverloadedFunctions("RemoveAttributeAnimation",
             static_cast<void(ObjectAnimation::*)(const String&)>(&ObjectAnimation::RemoveAttributeAnimation),
@@ -513,7 +559,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
         .addFunction("GetAttributeAnimationSpeed", &ObjectAnimation::GetAttributeAnimationSpeed)
         // .addFunction("GetAttributeAnimationInfos", &ObjectAnimation::GetAttributeAnimationInfos)
         .addFunction("GetAttributeAnimationInfo", &ObjectAnimation::GetAttributeAnimationInfo)
-    );
+        );
 }
 
 //static void RegisterReplicationState(kaguya::State& lua)
@@ -606,6 +652,21 @@ static bool SceneSaveJSON(const Scene* scene, const char* filepath, const String
     return scene->SaveJSON(*file, indentation);
 }
 
+static void SceneClear0(Scene* self)
+{
+    self->Clear();
+}
+
+static void SceneClear1(Scene* self, bool clearReplicated)
+{
+    self->Clear(clearReplicated);
+}
+
+static void SceneClear2(Scene* self, bool clearReplicated, bool clearLocal)
+{
+    self->Clear(clearReplicated, clearLocal);
+}
+
 static void RegisterScene(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -627,10 +688,10 @@ static void RegisterScene(kaguya::State& lua)
         .addStaticFunction("LoadJSON", &SceneLoadJSON)
         .addStaticFunction("SaveXML", &SceneSaveXML)
         .addStaticFunction("SaveJSON", &SceneSaveJSON)
-        
+
         // .addFunction("Instantiate", &Scene::Instantiate)
 
-        .addFunction("Clear", &Scene::Clear)
+        ADD_OVERLOADED_FUNCTIONS_3(Scene, Clear)
 
         .addFunction("SetUpdateEnabled", &Scene::SetUpdateEnabled)
         .addFunction("SetTimeScale", &Scene::SetTimeScale)
@@ -765,7 +826,7 @@ static void RegisterSerializable(kaguya::State& lua)
         .addFunction("IsTemporary", &Serializable::IsTemporary)
         .addFunction("GetInterceptNetworkUpdate", &Serializable::GetInterceptNetworkUpdate)
         .addFunction("GetNetworkState", &Serializable::GetNetworkState)
-    );
+        );
 }
 
 static void RegisterSmoothedTransform(kaguya::State& lua)
@@ -794,7 +855,7 @@ static void RegisterSmoothedTransform(kaguya::State& lua)
         .addProperty("targetWorldPosition", &SmoothedTransform::GetTargetWorldPosition, &SmoothedTransform::SetTargetWorldPosition)
         .addProperty("targetWorldRotation", &SmoothedTransform::GetTargetWorldRotation, &SmoothedTransform::SetTargetWorldRotation)
         .addProperty("inProgress", &SmoothedTransform::IsInProgress)
-    );
+        );
 }
 
 static void RegisterSplinePath(kaguya::State& lua)
@@ -827,7 +888,7 @@ static void RegisterSplinePath(kaguya::State& lua)
         .addProperty("position", &SplinePath::GetPosition, &SplinePath::SetPosition)
         .addProperty("controlledNode", &SplinePath::GetControlledNode, &SplinePath::SetControlledNode)
         .addProperty("finished", &SplinePath::IsFinished)
-    );
+        );
 }
 
 static void RegisterUnknownComponent(kaguya::State& lua)
@@ -844,7 +905,7 @@ static void RegisterUnknownComponent(kaguya::State& lua)
         .addProperty("type", &UnknownComponent::GetType, &UnknownComponent::SetType)
         .addProperty("typeName", &UnknownComponent::GetTypeName, &UnknownComponent::SetTypeName)
         .addProperty("attributes", &UnknownComponent::GetAttributes)
-    );
+        );
 }
 
 static void RegisterValueAnimation(kaguya::State& lua)
@@ -880,7 +941,7 @@ static void RegisterValueAnimation(kaguya::State& lua)
         .addProperty("interpolationMethod", &ValueAnimation::GetInterpolationMethod, &ValueAnimation::SetInterpolationMethod)
         .addProperty("splineTension", &ValueAnimation::GetSplineTension, &ValueAnimation::SetSplineTension)
         .addProperty("valueType", &ValueAnimation::GetValueType, &ValueAnimation::SetValueType)
-    );
+        );
 }
 
 void RegisterSceneLuaAPI(kaguya::State& lua)
