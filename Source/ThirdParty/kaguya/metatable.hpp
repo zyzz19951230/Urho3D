@@ -17,6 +17,8 @@
 
 #include "kaguya/lua_ref_function.hpp"
 
+#define KAGUYA_PROPERTY_PREFIX "_prop_"
+
 namespace kaguya
 {
 	template<class A1, class A2 = void
@@ -60,6 +62,116 @@ namespace kaguya
 		}
 	};
 
+	namespace detail
+	{
+		inline bool is_property_key(const char* keyname)
+		{
+			return keyname && strncmp(keyname, KAGUYA_PROPERTY_PREFIX, sizeof(KAGUYA_PROPERTY_PREFIX) - 1) != 0;
+		}
+		inline int property_index_function(lua_State* L)
+		{
+			//Lua
+			//local arg = {...};local metatable = arg[1];
+			//return function(table, index)
+			//if string.find(index,KAGUYA_PROPERTY_PREFIX)~=0 then 
+			//local propfun = metatable[KAGUYA_PROPERTY_PREFIX ..index];
+			//if propfun then return propfun(table) end 
+			//end 
+			//return metatable[index]
+			//end
+			static const int table = 1;
+			static const int key = 2;
+			static const int metatable = lua_upvalueindex(1);
+			const char* strkey = lua_tostring(L, key);
+
+			if (lua_type(L, 1) == LUA_TUSERDATA && is_property_key(strkey))
+			{
+				int type = lua_getfield_rtype(L, metatable, (KAGUYA_PROPERTY_PREFIX + std::string(strkey)).c_str());
+				if (type == LUA_TFUNCTION)
+				{
+					lua_pushvalue(L, table);
+					lua_call(L, 1, 1);
+					return 1;
+				}
+			}
+			lua_pushvalue(L, key);
+			lua_gettable(L, metatable);
+			return 1;
+		}
+		inline int property_newindex_function(lua_State* L)
+		{
+			//Lua
+			//local arg = {...};local metatable = arg[1];
+			// return function(table, index, value) 
+			// if type(table) == 'userdata' then 
+			// if string.find(index,KAGUYA_PROPERTY_PREFIX)~=0 then 
+			// local propfun = metatable[KAGUYA_PROPERTY_PREFIX..index];
+			// if propfun then return propfun(table,value) end 
+			// end 
+			// end 
+			// rawset(table,index,value) 
+			// end
+			static const int table = 1;
+			static const int key = 2;
+			static const int value = 3;
+			static const int metatable = lua_upvalueindex(1);
+			const char* strkey = lua_tostring(L, 2);
+
+			if (lua_type(L, 1) == LUA_TUSERDATA && is_property_key(strkey))
+			{
+				int type = lua_getfield_rtype(L, metatable, (KAGUYA_PROPERTY_PREFIX + std::string(strkey)).c_str());
+				if (type == LUA_TFUNCTION)
+				{
+					lua_pushvalue(L, table);
+					lua_pushvalue(L, value);
+					lua_call(L, 2, 0);
+					return 0;
+				}
+			}
+			lua_pushvalue(L, key);
+			lua_pushvalue(L, value);
+			lua_rawset(L, table);
+			return 0;
+		}
+
+
+		inline int multiple_base_index_function(lua_State* L)
+		{
+			//Lua
+			//local arg = {...};local metabases = arg[1];
+			//return function(t, k)
+			// for i = 1,#metabases do 
+			// local v = metabases[i][k] 
+			// if v then 
+			// t[k] = v 
+			// return v end 
+			// end
+			//end
+			static const int table = 1;
+			static const int key = 2;
+			static const int metabases = lua_upvalueindex(1);
+
+			lua_pushnil(L);
+			while (lua_next(L, metabases) != 0)
+			{
+				if (lua_type(L, -1) == LUA_TTABLE)
+				{
+					lua_pushvalue(L, key);
+					int type = lua_gettable_rtype(L, -2);
+					if (type != LUA_TNIL)
+					{
+						lua_pushvalue(L, key);
+						lua_pushvalue(L, -2);
+						lua_settable(L, table);
+						return 1;
+					}
+				}
+				lua_settop(L, 3);//pop value
+			}
+			return 0;
+		}
+	}
+
 	template<typename class_type, typename base_class_type = void>
 	class UserdataMetatable
 	{
@@ -92,30 +204,31 @@ namespace kaguya
 
 				if (!traits::is_same<base_class_type, void>::value || !property_map_.empty())//if base class has property and derived class hasnt property. need property access metamethod
 				{
-					LuaFunction indexfun = kaguya::LuaFunction::loadstring(state, "local arg = {...};local metatable = arg[1];"
-						"return function(table, index)"
-						//						" if type(table) == 'userdata' then "
-						" local propfun = metatable['_prop_'..index];"
-						" if propfun then return propfun(table) end "
-						//						" end "
-						" return metatable[index]"
-						" end")(metatable);
 
-					metatable.setField("__index", indexfun);
+					if (member_map_.count("__index") == 0)
+					{
+						metatable.push(state);
+						lua_pushcclosure(state, &detail::property_index_function, 1);
+						LuaStackRef indexfun(state, -1);
+						metatable.setRawField("__index", indexfun);
+					}
 
-					LuaFunction newindexfn = LuaFunction::loadstring(state, "local arg = {...};local metatable = arg[1];"
-						" return function(table, index, value) "
-						" if type(table) == 'userdata' then "
-						" local propfun = metatable['_prop_'..index];"
-						" if propfun then return propfun(table,value) end "
-						" end "
-						" rawset(table,index,value) "
-						" end")(metatable);
-					metatable.setField("__newindex", newindexfn);
+
+
+					if (member_map_.count("__newindex") == 0)
+					{
+						metatable.push(state);
+						lua_pushcclosure(state, &detail::property_newindex_function, 1);
+						LuaStackRef newindexfun(state, -1);
+						metatable.setRawField("__newindex", newindexfun);
+					}
 				}
 				else
 				{
-					metatable.setField("__index", metatable);
+					if (member_map_.count("__index") == 0)
+					{
+						metatable.setRawField("__index", metatable);
+					}
 				}
 
 				set_base_metatable(state, metatable, types::typetag<base_class_type>());
@@ -385,7 +498,7 @@ namespace kaguya
 		KAGUYA_DEPRECATED_FEATURE("add is deprecated. use addFunction instead.")
 		UserdataMetatable& add(const char* name, Ret class_type::* f)
 		{
-			return addFunction(name,f);
+			return addFunction(name, f);
 		}
 #endif
 
@@ -408,16 +521,9 @@ namespace kaguya
 		{
 			LuaTable newmeta(state, NewTable());
 
-			LuaFunction indexfun = kaguya::LuaFunction::loadstring(state, "local arg = {...};local metabases = arg[1];"
-				"return function(t, k)"
-				" for i = 1,#metabases do "
-				" local v = metabases[i][k] "
-				" if v then "
-				" t[k] = v "
-				" return v end "
-				" end"
-				" end")(metabases);
-
+			metabases.push(state);
+			lua_pushcclosure(state, &detail::multiple_base_index_function, 1);
+			LuaStackRef indexfun(state, -1);
 			newmeta.setField("__index", indexfun);
 
 			metatable.setMetatable(newmeta);
@@ -429,14 +535,14 @@ namespace kaguya
 		void metatables(lua_State* state, LuaStackRef& metabases, PointerConverter& pvtreg, types::typetag<MultipleBase<Base> >)const
 		{
 			class_userdata::get_metatable<Base>(state);
-			metabases.setField(metabases.size() + 1, LuaTable(state, StackTop()));
+			metabases.setRawField(metabases.size() + 1, LuaTable(state, StackTop()));
 			pvtreg.add_type_conversion<Base, class_type>();
 		}
 		template<typename Base, typename... Remain>
 		void metatables(lua_State* state, LuaStackRef& metabases, PointerConverter& pvtreg, types::typetag<MultipleBase<Base, Remain...> >)const
 		{
 			class_userdata::get_metatable<Base>(state);
-			metabases.setField(metabases.size() + 1, LuaTable(state, StackTop()));
+			metabases.setRawField(metabases.size() + 1, LuaTable(state, StackTop()));
 			pvtreg.add_type_conversion<Base, class_type>();
 			metatables(state, metabases, pvtreg, types::typetag<MultipleBase<Remain...> >());
 		}
@@ -446,8 +552,8 @@ namespace kaguya
 		{
 			PointerConverter& pconverter = PointerConverter::get(state);
 
-			util::one_push(state, NewTable(sizeof...(Bases),0));
-			LuaStackRef metabases(state,-1, true);
+			util::one_push(state, NewTable(sizeof...(Bases), 0));
+			LuaStackRef metabases(state, -1, true);
 			metatables(state, metabases, pconverter, metatypes);
 			set_multiple_base(state, metatable, metabases);
 		}
@@ -455,7 +561,7 @@ namespace kaguya
 #else
 #define KAGUYA_TEMPLATE_PARAMETER(N) template<KAGUYA_PP_TEMPLATE_DEF_REPEAT(N)>
 #define KAGUYA_GET_BASE_METATABLE(N) class_userdata::get_metatable<KAGUYA_PP_CAT(A,N)>(state);\
-		metabases.setField(metabases.size() + 1, LuaTable(state, StackTop())); \
+		metabases.setRawField(metabases.size() + 1, LuaTable(state, StackTop())); \
 		pconverter.add_type_conversion<KAGUYA_PP_CAT(A,N),class_type>();
 #define KAGUYA_MULTIPLE_INHERITANCE_SETBASE_DEF(N) \
 	KAGUYA_TEMPLATE_PARAMETER(N)\
@@ -477,11 +583,16 @@ namespace kaguya
 
 		bool has_key(const std::string& key)
 		{
-			if (member_map_.count(key) > 0 )
+			if (member_map_.count(key) > 0)
 			{
 				return true;
 			}
-			if (property_map_.count(key) > 0 )
+			if (property_map_.count(key) > 0)
+			{
+				return true;
+			}
+			std::string propkey = KAGUYA_PROPERTY_PREFIX + key;
+			if (member_map_.count(propkey) > 0)//_prop_keyname is reserved for property
 			{
 				return true;
 			}
@@ -508,7 +619,7 @@ namespace kaguya
 			}
 			for (typename PropMapType::const_iterator it = property_map_.begin(); it != property_map_.end(); ++it)
 			{
-				registerField(state, ("_prop_" + it->first).c_str(), it->second);
+				registerField(state, (KAGUYA_PROPERTY_PREFIX + it->first).c_str(), it->second);
 			}
 		}
 
