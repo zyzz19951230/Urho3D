@@ -27,6 +27,8 @@
 namespace Urho3D
 {
 
+extern Context* globalContext;
+
 static void RegisterCamera(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -685,6 +687,21 @@ static void RegisterIndexBuffer(kaguya::State& lua)
     );
 }
 
+static void MaterialSetTechnique0(Material* material, unsigned index, Technique* tech)
+{
+    material->SetTechnique(index, tech);
+}
+
+static void MaterialSetTechnique1(Material* material, unsigned index, Technique* tech, unsigned qualityLevel)
+{
+    material->SetTechnique(index, tech, qualityLevel);
+}
+
+static void MaterialSetTechnique2(Material* material, unsigned index, Technique* tech, unsigned qualityLevel, float lodDistance)
+{
+    material->SetTechnique(index, tech, qualityLevel, lodDistance);
+}
+
 static void RegisterMaterial(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -695,7 +712,9 @@ static void RegisterMaterial(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<Material>)
         
         .addFunction("SetNumTechniques", &Material::SetNumTechniques)
-        .addFunction("SetTechnique", &Material::SetTechnique)
+        
+        ADD_OVERLOADED_FUNCTIONS_3(Material, SetTechnique)
+
         .addFunction("SetShaderParameter", &Material::SetShaderParameter)
         .addFunction("SetShaderParameterAnimation", &Material::SetShaderParameterAnimation)
         .addFunction("SetShaderParameterAnimationWrapMode", &Material::SetShaderParameterAnimationWrapMode)
@@ -1367,19 +1386,27 @@ static void RegisterVertexBuffer(kaguya::State& lua)
     );
 }
 
-extern Context* globalContext;
-
-SharedPtr<Viewport> KCreateViewport1()
+static SharedPtr<Viewport> CreateViewport0()
 {
     return SharedPtr<Viewport>(new Viewport(globalContext));
 }
 
-SharedPtr<Viewport> KCreateViewport2(Scene* scene, Camera* camera, RenderPath* renderPath = 0)
+static SharedPtr<Viewport> CreateViewport1(Scene* scene, Camera* camera)
+{
+    return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera));
+}
+
+static SharedPtr<Viewport> CreateViewport2(Scene* scene, Camera* camera, RenderPath* renderPath)
 {
     return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera, renderPath));
 }
 
-SharedPtr<Viewport> KCreateViewport3(Scene* scene, Camera* camera, const IntRect& rect, RenderPath* renderPath = 0)
+static SharedPtr<Viewport> CreateViewport3(Scene* scene, Camera* camera, const IntRect& rect)
+{
+    return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera, rect));
+}
+
+static SharedPtr<Viewport> CreateViewport4(Scene* scene, Camera* camera, const IntRect& rect, RenderPath* renderPath)
 {
     return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera, rect, renderPath));
 }
@@ -1389,8 +1416,7 @@ static void RegisterViewport(kaguya::State& lua)
     using namespace kaguya;
 
     lua["Viewport"].setClass(UserdataMetatable<Viewport, Object>()
-        // .addStaticFunction("new", overload(&KCreateViewport1, &KCreateViewport2, &KCreateViewport3))
-        .addStaticFunction("new", &KCreateViewport2)
+        .addOverloadedFunctions("new", &CreateViewport0, &CreateViewport1, &CreateViewport2, &CreateViewport3, &CreateViewport4)
 
         .addFunction("SetScene", &Viewport::SetScene)
         .addFunction("SetCamera", &Viewport::SetCamera)

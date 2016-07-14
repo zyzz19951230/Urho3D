@@ -140,6 +140,17 @@ static void RegisterObject(kaguya::State& lua)
     );
 }
 
+static void PrintLine0(const String& str)
+{
+    return PrintLine(str);
+}
+
+static void PrintLine1(const String& str, bool error)
+{
+    return PrintLine(str, error);
+}
+
+
 static void RegisterProcessUtils(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -148,7 +159,7 @@ static void RegisterProcessUtils(kaguya::State& lua)
     lua["ErrorExit"] = function(&ErrorExit);
     lua["OpenConsoleWindow"] = function(&OpenConsoleWindow);
 
-    lua["PrintLine"] = function(&PrintLine);
+    lua["PrintLine"] = overload(&PrintLine0, &PrintLine1);
 
     lua["GetArguments"] = function(&GetArguments);
     lua["GetConsoleInput"] = function(&GetConsoleInput);
@@ -201,6 +212,16 @@ static void RegisterSpline(kaguya::State& lua)
     );
 }
 
+static Vector4 ToVector40(const char* source)
+{
+    return ToVector4(source);
+}
+
+static Vector4 ToVector41(const char* source, bool allowMissingCoords)
+{
+    return ToVector4(source, allowMissingCoords);
+}
+
 static void RegisterStringUtils(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -217,7 +238,9 @@ static void RegisterStringUtils(kaguya::State& lua)
     lua["ToRect"] = static_cast<Rect(*)(const char*)>(&ToRect);
     lua["ToVector2"] = static_cast<Vector2(*)(const char*)>(&ToVector2);
     lua["ToVector3"] = static_cast<Vector3(*)(const char*)>(&ToVector3);
-    lua["ToVector4"] = static_cast<Vector4(*)(const char*, bool)>(&ToVector4);
+    
+    lua["ToVector4"] = overload(&ToVector40, &ToVector41);
+
     lua["ToVectorVariant"] = static_cast<Variant(*)(const char*)>(&ToVectorVariant);
     lua["ToMatrix3"] = static_cast<Matrix3(*)(const char*)>(&ToMatrix3);
     lua["ToMatrix3x4"] = static_cast<Matrix3x4(*)(const char*)>(&ToMatrix3x4);
@@ -256,6 +279,11 @@ static void RegisterTimer(kaguya::State& lua)
         .addProperty("timeStep", &Time::GetTimeStep)
         .addProperty("elapsedTime", &Time::GetElapsedTime)
     );
+}
+
+static SharedPtr<RefCounted> VariantGetPtr(const Variant* self)
+{
+    return SharedPtr<RefCounted>(self->GetPtr());
 }
 
 static void RegisterVariant(kaguya::State& lua)
@@ -420,7 +448,9 @@ static void RegisterVariant(kaguya::State& lua)
         .addFunction("GetVariantMap", &Variant::GetVariantMap)
         .addFunction("GetIntRect", &Variant::GetIntRect)
         .addFunction("GetIntVector2", &Variant::GetIntVector2)
-        .addFunction("GetPtr", &Variant::GetPtr)
+        
+        .addStaticFunction("GetPtr", &VariantGetPtr)
+
         .addFunction("GetMatrix3", &Variant::GetMatrix3)
         .addFunction("GetMatrix3x4", &Variant::GetMatrix3x4)
         .addFunction("GetMatrix4", &Variant::GetMatrix4)

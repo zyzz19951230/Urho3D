@@ -404,7 +404,7 @@ static void RegisterVectorBuffer(kaguya::State& lua)
 void RegisterIOLuaAPI(kaguya::State& lua)
 {
     RegisterDeserializer(lua);
-    RegisterDeserializer(lua);
+    RegisterSerializer(lua);
     RegisterFile(lua);
     RegisterFileSystem(lua);
     RegisterIOEvents(lua);

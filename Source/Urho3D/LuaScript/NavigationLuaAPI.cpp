@@ -109,6 +109,16 @@ static void RegisterCrowdAgent(kaguya::State& lua)
     );
 }
 
+static PODVector<CrowdAgent*> CrowdManagerGetAgents0(const CrowdManager* self, Node* node)
+{
+    return self->GetAgents(node);
+}
+
+static PODVector<CrowdAgent*> CrowdManagerGetAgents1(const CrowdManager* self, Node* node, bool inCrowdFilter)
+{
+    return self->GetAgents(node, inCrowdFilter);
+}
+
 static void RegisterCrowdManager(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -141,7 +151,9 @@ static void RegisterCrowdManager(kaguya::State& lua)
         .addFunction("SetExcludeFlags", &CrowdManager::SetExcludeFlags)
         .addFunction("SetAreaCost", &CrowdManager::SetAreaCost)
         .addFunction("SetObstacleAvoidanceParams", &CrowdManager::SetObstacleAvoidanceParams)
-        .addFunction("GetAgents", &CrowdManager::GetAgents)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, GetAgents)
+
         .addFunction("FindNearestPoint", &CrowdManager::FindNearestPoint)
         .addFunction("MoveAlongSurface", &CrowdManager::MoveAlongSurface)
         .addFunction("FindPath", &CrowdManager::FindPath)

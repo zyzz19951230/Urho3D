@@ -78,7 +78,8 @@ LuaScriptInstance::LuaScriptInstance(Context* context) :
 
 LuaScriptInstance::~LuaScriptInstance()
 {
-    ReleaseObject();
+    if (luaScript_->GetState())
+        ReleaseObject();
 }
 
 void LuaScriptInstance::RegisterObject(Context* context)
@@ -697,10 +698,17 @@ void LuaScriptInstance::ReleaseObject()
     if (IsEnabledEffective())
         UnsubscribeFromScriptMethodEvents();
 
-    // Unref script object
+    // Call stop function
+    LuaFunction* function = scriptObjectMethods_[LSOM_STOP];
+    if (function && function->BeginCall(this))
+    {
+        function->EndCall();
+    }
+    
     luaL_unref(luaState_, LUA_REGISTRYINDEX, scriptObjectRef_);
     scriptObjectRef_ = LUA_REFNIL;
 
+    /*
     LuaFunction* function = luaScript_->GetFunction("DestroyScriptObjectInstance");
     if (function && function->BeginCall())
     {
@@ -710,6 +718,7 @@ void LuaScriptInstance::ReleaseObject()
         function->EndCall();
         scriptObjectRef_ = LUA_REFNIL;
     }
+    */
 
     for (int i = 0; i < MAX_LUA_SCRIPT_OBJECT_METHODS; ++i)
         scriptObjectMethods_[i] = 0;

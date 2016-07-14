@@ -355,6 +355,10 @@ static kaguya::LuaTable NodeCreateScriptObject1(Node* node, const char* fileName
     return kaguya::LuaTable(instance->GetLuaState(), kaguya::StackTop());
 }
 
+static void NodeRemoveComponent(Node* self, const char* type)
+{
+    self->RemoveComponent(StringHash(type));
+}
 
 static void RegisterNode(kaguya::State& lua)
 {
@@ -482,8 +486,8 @@ static void RegisterNode(kaguya::State& lua)
             static_cast<Component*(Node::*)(Component*, CreateMode, unsigned)>(&Node::CloneComponent))
 
         .addOverloadedFunctions("RemoveComponent",
-            static_cast<void(Node::*)(Component*)>(&Node::RemoveComponent),
-            static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponent))
+            static_cast<void(Node::*)(Component*)>(&Node::RemoveComponent), 
+            &NodeRemoveComponent)
 
 
         .addOverloadedFunctions("RemoveComponents",

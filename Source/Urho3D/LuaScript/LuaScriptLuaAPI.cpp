@@ -162,12 +162,6 @@ static void RegisterLuaScriptInstance(kaguya::State &lua)
         "    end                                                             \n"
         "    return o, attrNames                                             \n"
         "end                                                                 \n"
-        "function DestroyScriptObjectInstance(instance, object)              \n"
-        "    -- Call stop function                                           \n"
-        "    object:Stop()                                                   \n"
-        "    object.node = nil                                               \n"
-        "    object.instance = nil                                           \n"
-        "end                                                                 \n"
     );
 
     lua["LuaScriptInstance"].setClass(UserdataMetatable<LuaScriptInstance, Component>()

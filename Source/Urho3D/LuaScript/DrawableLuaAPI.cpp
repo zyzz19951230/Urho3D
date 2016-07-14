@@ -22,6 +22,21 @@
 namespace Urho3D
 {
 
+static void AnimatedModelSetModel0(AnimatedModel* self, Model* model)
+{
+    self->SetModel(model);
+}
+
+static void AnimatedModelSetModel1(AnimatedModel* self, Model* model, bool createBones)
+{
+    self->SetModel(model, createBones);
+}
+
+static Model* AnimatedModelGetModel(const AnimatedModel* self)
+{
+    return self->GetModel();
+}
+
 static void RegisterAnimatedModel(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -29,7 +44,8 @@ static void RegisterAnimatedModel(kaguya::State& lua)
     lua["AnimatedModel"].setClass(UserdataMetatable<AnimatedModel, StaticModel>()
         .addStaticFunction("new", &KCreateObject<AnimatedModel>)
 
-        .addFunction("SetModel", &AnimatedModel::SetModel)
+        ADD_OVERLOADED_FUNCTIONS_2(AnimatedModel, SetModel)
+
         .addFunction("AddAnimationState", &AnimatedModel::AddAnimationState)
 
         .addOverloadedFunctions("RemoveAnimationState",
@@ -74,6 +90,8 @@ static void RegisterAnimatedModel(kaguya::State& lua)
         .addFunction("GetGeometryBoneMappings", &AnimatedModel::GetGeometryBoneMappings)
         .addFunction("GetGeometrySkinMatrices", &AnimatedModel::GetGeometrySkinMatrices)
         .addFunction("UpdateBoneBoundingBox", &AnimatedModel::UpdateBoneBoundingBox)
+
+        .addProperty("model", &AnimatedModelGetModel, &AnimatedModelSetModel0)
 
         .addProperty("updateGeometryType", &AnimatedModel::GetUpdateGeometryType)
         .addProperty("skeleton", &AnimatedModel::GetSkeleton)
@@ -531,6 +549,62 @@ static void RegisterRibbonTrail(kaguya::State& lua)
         );
 }
 
+static void RegisterSkeleton(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["BONECOLLISION_NONE"] = BONECOLLISION_NONE;
+    lua["BONECOLLISION_SPHERE"] = BONECOLLISION_SPHERE;
+    lua["BONECOLLISION_BOX"] = BONECOLLISION_BOX;
+
+    lua["Bone"].setClass(UserdataMetatable<Bone>()
+        .setConstructors<Bone()>()
+
+        .addProperty("name", &Bone::name_)
+        .addProperty("nameHash", &Bone::nameHash_)
+        .addProperty("parentIndex", &Bone::parentIndex_)
+        .addProperty("initialPosition", &Bone::initialPosition_)
+        .addProperty("initialRotation", &Bone::initialRotation_)
+        .addProperty("initialScale", &Bone::initialScale_)
+        .addProperty("offsetMatrix", &Bone::offsetMatrix_)
+        .addProperty("animated", &Bone::animated_)
+        .addProperty("collisionMask", &Bone::collisionMask_)
+        .addProperty("radius", &Bone::radius_)
+        .addProperty("boundingBox", &Bone::boundingBox_)
+        // .addProperty("node", &Bone::node_)
+    );
+
+    lua["Skeleton"].setClass(UserdataMetatable<Skeleton>()
+        .setConstructors<Skeleton()>()
+
+        // .addFunction("Load", &Skeleton::Load)
+        // .addFunction("Save", &Skeleton::Save)
+        // .addFunction("Define", &Skeleton::Define)
+
+        .addFunction("SetRootBoneIndex", &Skeleton::SetRootBoneIndex)
+        .addFunction("ClearBones", &Skeleton::ClearBones)
+        .addFunction("Reset", &Skeleton::Reset)
+        
+        .addFunction("GetBones", &Skeleton::GetBones)
+        .addFunction("GetModifiableBones", &Skeleton::GetModifiableBones)
+
+        .addFunction("GetNumBones", &Skeleton::GetNumBones)
+        .addFunction("GetRootBone", &Skeleton::GetRootBone)
+
+        .addOverloadedFunctions("GetBone",
+            static_cast<Bone*(Skeleton::*)(unsigned int)>(&Skeleton::GetBone),
+            static_cast<Bone*(Skeleton::*)(const char*)>(&Skeleton::GetBone),
+            static_cast<Bone*(Skeleton::*)(StringHash)>(&Skeleton::GetBone))
+
+        .addProperty("bones", &Skeleton::GetBones)
+        .addProperty("modifiableBones", &Skeleton::GetModifiableBones)
+        .addProperty("numBones", &Skeleton::GetNumBones)
+        .addProperty("rootBone", &Skeleton::GetRootBone)
+        .addProperty("rootBoneIndex", &Skeleton::SetRootBoneIndex)
+    );
+}
+
+
 static void RegisterSkybox(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -712,6 +786,7 @@ void RegisterDrawableLuaAPI(kaguya::State& lua)
     RegisterLight(lua);
     RegisterParticleEmitter(lua);
     RegisterRibbonTrail(lua);
+    RegisterSkeleton(lua);
     RegisterSkybox(lua);
     RegisterStaticModelGroup(lua);
     RegisterTerrainPatch(lua);
