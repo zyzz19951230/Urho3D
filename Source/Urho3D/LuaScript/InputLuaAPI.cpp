@@ -9,15 +9,15 @@
 namespace Urho3D
 {
 
-    static void ControlsSet0(Controls* self, unsigned int buttons)
-    {
-        self->Set(buttons);
-    }
+static void ControlsSet0(Controls* self, unsigned int buttons)
+{
+    self->Set(buttons);
+}
 
-    static void ControlsSet1(Controls* self, unsigned int buttons, bool down)
-    {
-        self->Set(buttons, down);
-    }
+static void ControlsSet1(Controls* self, unsigned int buttons, bool down)
+{
+    self->Set(buttons, down);
+}
 
 static void RegisterControls(kaguya::State& lua)
 {
@@ -27,7 +27,7 @@ static void RegisterControls(kaguya::State& lua)
         .setConstructors<Controls()>()
 
         .addFunction("Reset", &Controls::Reset)
-        
+
         ADD_OVERLOADED_FUNCTIONS_2(Controls, Set)
 
         .addFunction("IsDown", &Controls::IsDown)
@@ -72,6 +72,21 @@ static void InputSetMouseMode1(Input* self, MouseMode mode, bool suppressEvent)
 static bool InputIsMouseVisible(const Input* input)
 {
     return input->IsMouseVisible();
+}
+
+static int InputAddScreenJoystick0(Input* self)
+{
+    return self->AddScreenJoystick();
+}
+
+static int InputAddScreenJoystick1(Input* self, XMLFile* layoutFile)
+{
+    return self->AddScreenJoystick(layoutFile);
+}
+
+static int InputAddScreenJoystick2(Input* self, XMLFile* layoutFile, XMLFile* styleFile)
+{
+    return self->AddScreenJoystick(layoutFile, styleFile);
 }
 
 static void RegisterInput(kaguya::State& lua)
@@ -135,19 +150,21 @@ static void RegisterInput(kaguya::State& lua)
     lua["Input"].setClass(UserdataMetatable<Input, Object>()
 
         .addFunction("SetToggleFullscreen", &Input::SetToggleFullscreen)
-        
+
         ADD_OVERLOADED_FUNCTIONS_2(Input, SetMouseVisible)
 
         .addFunction("ResetMouseVisible", &Input::ResetMouseVisible)
-        
+
         ADD_OVERLOADED_FUNCTIONS_2(Input, SetMouseGrabbed)
 
         .addFunction("ResetMouseGrabbed", &Input::ResetMouseGrabbed)
-        
+
         ADD_OVERLOADED_FUNCTIONS_2(Input, SetMouseMode)
 
         .addFunction("ResetMouseMode", &Input::ResetMouseMode)
-        .addFunction("AddScreenJoystick", &Input::AddScreenJoystick)
+        
+        ADD_OVERLOADED_FUNCTIONS_3(Input, AddScreenJoystick)
+
         .addFunction("RemoveScreenJoystick", &Input::RemoveScreenJoystick)
         .addFunction("SetScreenJoystickVisible", &Input::SetScreenJoystickVisible)
         .addFunction("SetScreenKeyboardVisible", &Input::SetScreenKeyboardVisible)
@@ -195,8 +212,6 @@ static void RegisterInput(kaguya::State& lua)
         .addFunction("GetMouseMode", &Input::GetMouseMode)
         .addFunction("HasFocus", &Input::HasFocus)
         .addFunction("IsMinimized", &Input::IsMinimized)
-        
-
 
         .addProperty("qualifiers", &Input::GetQualifiers)
         .addProperty("mousePosition", &Input::GetMousePosition)

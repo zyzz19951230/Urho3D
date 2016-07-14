@@ -40,6 +40,15 @@
 
 namespace Urho3D
 {
+    static void AnimatedSprite2DSetAnimation0(AnimatedSprite2D* self, const String& name)
+    {
+        self->SetAnimation(name);
+    }
+
+    static void AnimatedSprite2DSetAnimation1(AnimatedSprite2D* self, const String& name, LoopMode2D loopMode)
+    {
+        self->SetAnimation(name, loopMode);
+    }
 
 static void RegisterAnimatedSprite2D(kaguya::State& lua)
 {
@@ -50,7 +59,9 @@ static void RegisterAnimatedSprite2D(kaguya::State& lua)
         
         .addFunction("SetAnimationSet", &AnimatedSprite2D::SetAnimationSet)
         .addFunction("SetEntity", &AnimatedSprite2D::SetEntity)
-        .addFunction("SetAnimation", &AnimatedSprite2D::SetAnimation)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(AnimatedSprite2D, SetAnimation)
+
         .addFunction("SetLoopMode", &AnimatedSprite2D::SetLoopMode)
         .addFunction("SetSpeed", &AnimatedSprite2D::SetSpeed)
         
@@ -712,10 +723,65 @@ static void RegisterPhysicsEvents2D(kaguya::State& lua)
     lua["E_PHYSICSENDCONTACT2D"] = E_PHYSICSENDCONTACT2D;
 }
 
-PhysicsRaycastResult2D PhysicsWorld2DRaycastSingle(PhysicsWorld2D* physicsWorld2D, const Vector2& startPoint, const Vector2& endPoint, unsigned collisionMask = M_MAX_UNSIGNED)
+static PODVector<PhysicsRaycastResult2D> PhysicsWorld2DRaycast0(PhysicsWorld2D* self, const Vector2& startPoint, const Vector2& endPoint)
+{
+    PODVector<PhysicsRaycastResult2D> results; 
+    self->Raycast(results, startPoint, endPoint);
+    return results;
+}
+
+static PODVector<PhysicsRaycastResult2D> PhysicsWorld2DRaycast1(PhysicsWorld2D* self, const Vector2& startPoint, const Vector2& endPoint, unsigned int collisionMask)
+{
+    PODVector<PhysicsRaycastResult2D> results;
+    self->Raycast(results, startPoint, endPoint, collisionMask);
+    return results;
+}
+
+static PhysicsRaycastResult2D PhysicsWorld2DRaycastSingle0(PhysicsWorld2D* self, const Vector2& startPoint, const Vector2& endPoint)
+{
+    PhysicsRaycastResult2D result; 
+    self->RaycastSingle(result, startPoint, endPoint);
+    return result;
+}
+
+static PhysicsRaycastResult2D PhysicsWorld2DRaycastSingle1(PhysicsWorld2D* self, const Vector2& startPoint, const Vector2& endPoint, unsigned int collisionMask)
 {
     PhysicsRaycastResult2D result;
-    physicsWorld2D->RaycastSingle(result, startPoint, endPoint, collisionMask);
+    self->RaycastSingle(result, startPoint, endPoint, collisionMask);
+    return result;
+}
+
+static RigidBody2D* PhysicsWorld2DGetRigidBody0(PhysicsWorld2D* self, const Vector2& point)
+{
+    return self->GetRigidBody(point);
+}
+
+static RigidBody2D* PhysicsWorld2DGetRigidBody1(PhysicsWorld2D* self, const Vector2& point, unsigned int collisionMask)
+{
+    return self->GetRigidBody(point, collisionMask);
+}
+
+static RigidBody2D* PhysicsWorld2DGetRigidBody2(PhysicsWorld2D* self, int screenX, int screenY)
+{
+    return self->GetRigidBody(screenX, screenY);
+}
+
+static RigidBody2D* PhysicsWorld2DGetRigidBody3(PhysicsWorld2D* self, int screenX, int screenY, unsigned int collisionMask)
+{
+    return self->GetRigidBody(screenX, screenY, collisionMask);
+}
+
+static PODVector<RigidBody2D*> PhysicsWorld2DGetRigidBodies0(PhysicsWorld2D* self, const Rect& aabb)
+{
+    PODVector<RigidBody2D*> result; 
+    self->GetRigidBodies(result, aabb);
+    return result;
+}
+
+static PODVector<RigidBody2D*> PhysicsWorld2DGetRigidBodies1(PhysicsWorld2D* self, const Rect& aabb, unsigned int collisionMask)
+{
+    PODVector<RigidBody2D*> result;
+    self->GetRigidBodies(result, aabb, collisionMask);
     return result;
 }
 
@@ -756,15 +822,11 @@ static void RegisterPhysicsWorld2D(kaguya::State& lua)
         .addFunction("AddRigidBody", &PhysicsWorld2D::AddRigidBody)
         .addFunction("RemoveRigidBody", &PhysicsWorld2D::RemoveRigidBody)
         
-        // TODO:
-        // .addFunction("Raycast", &PhysicsWorld2D::Raycast)
-        .addStaticFunction("RaycastSingle", &PhysicsWorld2DRaycastSingle)
+        ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld2D, Raycast)
+        ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld2D, RaycastSingle)
 
-        .addOverloadedFunctions("GetRigidBody",
-            static_cast<RigidBody2D*(PhysicsWorld2D::*)(const Vector2&, unsigned)>(&PhysicsWorld2D::GetRigidBody),
-            static_cast<RigidBody2D*(PhysicsWorld2D::*)(int, int, unsigned)>(&PhysicsWorld2D::GetRigidBody))
-
-        // .addFunction("GetRigidBodies", &PhysicsWorld2D::GetRigidBodies)
+        ADD_OVERLOADED_FUNCTIONS_4(PhysicsWorld2D, GetRigidBody)        
+        ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld2D, GetRigidBodies)
 
         .addFunction("IsUpdateEnabled", &PhysicsWorld2D::IsUpdateEnabled)
         .addFunction("GetDrawShape", &PhysicsWorld2D::GetDrawShape)
@@ -903,6 +965,21 @@ static void RegisterSprite2D(kaguya::State& lua)
     );
 }
 
+static void SpriteSheet2DDefineSprite0(SpriteSheet2D* self, const String& name, const IntRect& rectangle)
+{
+    self->DefineSprite(name, rectangle);
+}
+
+static void SpriteSheet2DDefineSprite1(SpriteSheet2D* self, const String& name, const IntRect& rectangle, const Vector2& hotSpot)
+{
+    self->DefineSprite(name, rectangle, hotSpot);
+}
+
+static void SpriteSheet2DDefineSprite2(SpriteSheet2D* self, const String& name, const IntRect& rectangle, const Vector2& hotSpot, const IntVector2& offset)
+{
+    self->DefineSprite(name, rectangle, hotSpot, offset);
+}
+
 static void RegisterSpriteSheet2D(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -911,7 +988,8 @@ static void RegisterSpriteSheet2D(kaguya::State& lua)
         .addStaticFunction("new", &KCreateObject<SpriteSheet2D>)
         
         .addFunction("SetTexture", &SpriteSheet2D::SetTexture)
-        .addFunction("DefineSprite", &SpriteSheet2D::DefineSprite)
+
+        ADD_OVERLOADED_FUNCTIONS_3(SpriteSheet2D, DefineSprite)
         
         .addFunction("GetTexture", &SpriteSheet2D::GetTexture)
         .addFunction("GetSprite", &SpriteSheet2D::GetSprite)
