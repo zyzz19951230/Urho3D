@@ -27,7 +27,7 @@ function Start()
 end
 
 function CreateScene()
-    scene_ = Scene()
+    scene_ = Scene.new()
 
     -- Create the Octree component to the scene so that drawable objects can be rendered. Use default volume
     -- (-1000, -1000, -1000) to (1000, 1000, 1000)
@@ -39,9 +39,9 @@ function CreateScene()
     local zoneNode = scene_:CreateChild("Zone")
     local zone = zoneNode:CreateComponent("Zone")
     -- Set same volume as the Octree, set a close bluish fog and some ambient light
-    zone.boundingBox = BoundingBox(-1000.0, 1000.0)
-    zone.ambientColor = Color(0.05, 0.1, 0.15)
-    zone.fogColor = Color(0.1, 0.2, 0.3)
+    zone.boundingBox = BoundingBox.new(-1000.0, 1000.0)
+    zone.ambientColor = Color.new(0.05, 0.1, 0.15)
+    zone.fogColor = Color.new(0.1, 0.2, 0.3)
     zone.fogStart = 10.0
     zone.fogEnd = 100.0
 
@@ -49,9 +49,9 @@ function CreateScene()
     local NUM_OBJECTS = 2000
     for i = 1, NUM_OBJECTS do
         local boxNode = scene_:CreateChild("Box")
-        boxNode.position = Vector3(Random(200.0) - 100.0, Random(200.0) - 100.0, Random(200.0) - 100.0)
+        boxNode.position = Vector3.new(Random(200.0) - 100.0, Random(200.0) - 100.0, Random(200.0) - 100.0)
         -- Orient using random pitch, yaw and roll Euler angles
-        boxNode.rotation = Quaternion(Random(360.0), Random(360.0), Random(360.0))
+        boxNode.rotation = Quaternion.new(Random(360.0), Random(360.0), Random(360.0))
         local boxObject = boxNode:CreateComponent("StaticModel")
         boxObject.model = cache:GetResource("Model", "Models/Box.mdl")
         boxObject.material = cache:GetResource("Material", "Materials/Stone.xml")
@@ -59,8 +59,6 @@ function CreateScene()
         -- Add the Rotator script object which will rotate the scene node each frame, when the scene sends its update event.
         -- This requires the C++ component LuaScriptInstance in the scene node, which acts as a container. We need to tell the
         -- class name to instantiate the object
-
-
         local object = boxNode:CreateScriptObject("Rotator")
         object.rotationSpeed = {10.0, 20.0, 30.0}
     end
@@ -93,7 +91,7 @@ function SetupViewport()
     -- Set up a viewport to the Renderer subsystem so that the 3D scene can be seen. We need to define the scene and the camera
     -- at minimum. Additionally we could configure the viewport screen size and the rendering path (eg. forward / deferred) to
     -- use, but now we just use full screen and default render path configured in the engine command line options
-    local viewport = Viewport:new(scene_, cameraNode:GetComponent("Camera"))
+    local viewport = Viewport.new(scene_, cameraNode:GetComponent("Camera"))
     renderer:SetViewport(0, viewport)
 end
 
@@ -115,20 +113,20 @@ function MoveCamera(timeStep)
     pitch = Clamp(pitch, -90.0, 90.0)
 
     -- Construct new orientation for the camera scene node from yaw and pitch. Roll is fixed to zero
-    cameraNode.rotation = Quaternion(pitch, yaw, 0.0)
+    cameraNode.rotation = Quaternion.new(pitch, yaw, 0.0)
 
     -- Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
     if input:GetKeyDown(KEY_W) then
-        cameraNode:Translate(Vector3(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3.new(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_S) then
-        cameraNode:Translate(Vector3(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3.new(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_A) then
-        cameraNode:Translate(Vector3(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3.new(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_D) then
-        cameraNode:Translate(Vector3(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3.new(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
 end
 
@@ -140,7 +138,7 @@ end
 function HandleUpdate(eventType, eventData)
     -- Take the frame time step, which is stored as a float
     local timeStep = eventData["TimeStep"]:GetFloat()
-
+    
     -- Move the camera, scale movement with time step
     MoveCamera(timeStep)
 end
@@ -156,5 +154,5 @@ function Rotator:Update(timeStep)
     local x = self.rotationSpeed[1] * timeStep
     local y = self.rotationSpeed[2] * timeStep
     local z = self.rotationSpeed[3] * timeStep
-    self.node:Rotate(Quaternion(x, y, z))
+    self.node:Rotate(Quaternion.new(x, y, z))
 end

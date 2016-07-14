@@ -111,7 +111,7 @@ function CreateLogo()
     logoSprite:SetSize(textureWidth, textureHeight)
 
     -- Set logo sprite hot spot
-    logoSprite.hotSpot = IntVector2(0, textureHeight)
+    logoSprite.hotSpot = IntVector2.new(0, textureHeight)
 
     -- Set logo sprite alignment
     logoSprite:SetAlignment(HA_LEFT, VA_BOTTOM);
@@ -137,17 +137,18 @@ function CreateConsoleAndDebugHud()
     end
 
     -- Create console
-    engine:CreateConsole()
+    console = engine:CreateConsole()
     console.defaultStyle = uiStyle
     console.background.opacity = 0.8
 
     -- Create debug HUD
-    engine:CreateDebugHud()
+    debugHud = engine:CreateDebugHud()
     debugHud.defaultStyle = uiStyle
 end
 
 function HandleKeyUp(eventType, eventData)
     local key = eventData["Key"]:GetInt()
+
     -- Close console (if open) or exit when ESC is pressed
     if key == KEY_ESCAPE then
         if console:IsVisible() then

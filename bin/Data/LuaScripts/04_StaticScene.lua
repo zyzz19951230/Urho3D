@@ -27,7 +27,7 @@ function Start()
 end
 
 function CreateScene()
-    scene_ = Scene()
+    scene_ = Scene.new()
 
     -- Create the Octree component to the scene. This is required before adding any drawable components, or else nothing will
     -- show up. The default octree volume will be from (-1000, -1000, -1000) to (1000, 1000, 1000) in world coordinates it
@@ -39,7 +39,7 @@ function CreateScene()
     -- plane mesh with a "stone" material. Note that naming the scene nodes is optional. Scale the scene node larger
     -- (100 x 100 world units)
     local planeNode = scene_:CreateChild("Plane")
-    planeNode.scale = Vector3(100.0, 1.0, 100.0)
+    planeNode.scale = Vector3.new(100.0, 1.0, 100.0)
     local planeObject = planeNode:CreateComponent("StaticModel")
     planeObject.model = cache:GetResource("Model", "Models/Plane.mdl")
     planeObject.material = cache:GetResource("Material", "Materials/StoneTiled.xml")
@@ -48,7 +48,7 @@ function CreateScene()
     -- light direction we will use the SetDirection() function which calculates the orientation from a forward direction vector.
     -- The light will use default settings (white light, no shadows)
     local lightNode = scene_:CreateChild("DirectionalLight")
-    lightNode.direction = Vector3(0.6, -1.0, 0.8) -- The direction vector does not need to be normalized
+    lightNode.direction = Vector3.new(0.6, -1.0, 0.8) -- The direction vector does not need to be normalized
     local light = lightNode:CreateComponent("Light")
     light.lightType = LIGHT_DIRECTIONAL
 
@@ -61,8 +61,8 @@ function CreateScene()
     local NUM_OBJECTS = 200
     for i = 1, NUM_OBJECTS do
         local mushroomNode = scene_:CreateChild("Mushroom")
-        mushroomNode.position = Vector3(Random(90.0) - 45.0, 0.0, Random(90.0) - 45.0)
-        mushroomNode.rotation = Quaternion(0.0, Random(360.0), 0.0)
+        mushroomNode.position = Vector3.new(Random(90.0) - 45.0, 0.0, Random(90.0) - 45.0)
+        mushroomNode.rotation = Quaternion.new(0.0, Random(360.0), 0.0)
         mushroomNode:SetScale(0.5 + Random(2.0))
         local mushroomObject = mushroomNode:CreateComponent("StaticModel")
         mushroomObject.model = cache:GetResource("Model", "Models/Mushroom.mdl")
@@ -75,7 +75,7 @@ function CreateScene()
     cameraNode:CreateComponent("Camera")
 
     -- Set an initial position for the camera scene node above the plane
-    cameraNode.position = Vector3(0.0, 5.0, 0.0)
+    cameraNode.position = Vector3.new(0.0, 5.0, 0.0)
 end
 
 function CreateInstructions()
@@ -94,7 +94,7 @@ function SetupViewport()
     -- Set up a viewport to the Renderer subsystem so that the 3D scene can be seen. We need to define the scene and the camera
     -- at minimum. Additionally we could configure the viewport screen size and the rendering path (eg. forward / deferred) to
     -- use, but now we just use full screen and default render path configured in the engine command line options
-    local viewport = Viewport:new(scene_, cameraNode:GetComponent("Camera"))
+    local viewport = Viewport.new(scene_, cameraNode:GetComponent("Camera"))
     renderer:SetViewport(0, viewport)
 end
 
@@ -116,21 +116,21 @@ function MoveCamera(timeStep)
     pitch = Clamp(pitch, -90.0, 90.0)
 
     -- Construct new orientation for the camera scene node from yaw and pitch. Roll is fixed to zero
-    cameraNode.rotation = Quaternion(pitch, yaw, 0.0)
+    cameraNode.rotation = Quaternion.new(pitch, yaw, 0.0)
 
     -- Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
     -- Use the Translate() function (default local space) to move relative to the node's orientation.
     if input:GetKeyDown(KEY_W) then
-        cameraNode:Translate(Vector3(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3.new(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_S) then
-        cameraNode:Translate(Vector3(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3.new(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_A) then
-        cameraNode:Translate(Vector3(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3.new(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_D) then
-        cameraNode:Translate(Vector3(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3.new(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
 end
 
@@ -140,8 +140,8 @@ function SubscribeToEvents()
 end
 
 function HandleUpdate(eventType, eventData)
-    -- Take the frame time step, which is stored as a float
-    local timeStep = eventData["TimeStep"]:GetFloat()
+    -- Take the frame time step, which is stored as a float    
+    local timeStep = eventData:Get("TimeStep"):GetFloat()
 
     -- Move the camera, scale movement with time step
     MoveCamera(timeStep)
