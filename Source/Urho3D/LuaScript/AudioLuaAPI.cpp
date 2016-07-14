@@ -15,13 +15,25 @@
 
 namespace Urho3D
 {
+
+static bool AudioSetMode0(Audio* self, int bufferLengthMSec, int mixRate, bool stereo)
+{
+    return self->SetMode(bufferLengthMSec, mixRate, stereo);
+}
+
+static bool AudioSetMode1(Audio* self, int bufferLengthMSec, int mixRate, bool stereo, bool interpolation)
+{
+    return self->SetMode(bufferLengthMSec, mixRate, stereo, interpolation);
+}
+
 static void RegisterAudio(kaguya::State& lua)
 {
     using namespace kaguya;
 
     lua["Audio"].setClass(UserdataMetatable<Audio, Object>()
 
-        .addFunction("SetMode", &Audio::SetMode)
+        ADD_OVERLOADED_FUNCTIONS_2(Audio, SetMode)
+
         .addFunction("Update", &Audio::Update)
         .addFunction("Play", &Audio::Play)
         .addFunction("Stop", &Audio::Stop)
@@ -58,7 +70,7 @@ static void RegisterAudio(kaguya::State& lua)
         .addProperty("soundSources", &Audio::GetSoundSources)
         .addProperty("mutex", &Audio::GetMutex)
         .addStaticField("SAMPLESIZEMUL", &Audio::SAMPLE_SIZE_MUL)
-    );
+        );
 }
 
 static void RegisterAudioDefs(kaguya::State& lua)
@@ -81,14 +93,14 @@ static void RegisterBufferedSoundStream(kaguya::State& lua)
 
     lua["BufferedSoundStream"].setClass(UserdataMetatable<BufferedSoundStream, SoundStream>()
         .setConstructors<BufferedSoundStream()>()
-        
+
         .addFunction("Clear", &BufferedSoundStream::Clear)
         .addFunction("GetBufferNumBytes", &BufferedSoundStream::GetBufferNumBytes)
         .addFunction("GetBufferLength", &BufferedSoundStream::GetBufferLength)
 
         .addProperty("bufferNumBytes", &BufferedSoundStream::GetBufferNumBytes)
         .addProperty("bufferLength", &BufferedSoundStream::GetBufferLength)
-    );
+        );
 }
 
 static void RegisterOggVorbisSoundStream(kaguya::State& lua)
@@ -97,7 +109,7 @@ static void RegisterOggVorbisSoundStream(kaguya::State& lua)
 
     lua["OggVorbisSoundStream"].setClass(UserdataMetatable<OggVorbisSoundStream, SoundStream>()
         .setConstructors<OggVorbisSoundStream(const Sound*)>()
-        );        
+        );
 }
 
 static void RegisterSound(kaguya::State& lua)
@@ -106,7 +118,7 @@ static void RegisterSound(kaguya::State& lua)
 
     lua["Sound"].setClass(UserdataMetatable<Sound, Resource>()
         .addStaticFunction("new", &KCreateObject<Sound>)
-        
+
         .addFunction("SetSize", &Sound::SetSize)
 
         .addFunction("SetFormat", &Sound::SetFormat)
@@ -141,7 +153,7 @@ static void RegisterSound(kaguya::State& lua)
         .addProperty("stereo", &Sound::IsStereo)
         .addProperty("compressed", &Sound::IsCompressed)
         .addProperty("size", &Sound::SetSize)
-    );
+        );
 }
 
 static void RegisterSoundListener(kaguya::State& lua)
@@ -160,7 +172,7 @@ static void RegisterSoundSource(kaguya::State& lua)
     lua["STREAM_BUFFER_LENGTH"] = STREAM_BUFFER_LENGTH;
     lua["SoundSource"].setClass(UserdataMetatable<SoundSource, Component>()
         .addStaticFunction("new", &KCreateObject<SoundSource>)
-        
+
         .addOverloadedFunctions("Play",
             static_cast<void(SoundSource::*)(Sound*)>(&SoundSource::Play),
             static_cast<void(SoundSource::*)(Sound*, float)>(&SoundSource::Play),
@@ -195,7 +207,7 @@ static void RegisterSoundSource(kaguya::State& lua)
         .addProperty("attenuation", &SoundSource::GetAttenuation, &SoundSource::SetAttenuation)
         .addProperty("panning", &SoundSource::GetPanning, &SoundSource::SetPanning)
         .addProperty("playing", &SoundSource::IsPlaying)
-    );
+        );
 }
 
 static void RegisterSoundSource3D(kaguya::State& lua)
@@ -204,7 +216,7 @@ static void RegisterSoundSource3D(kaguya::State& lua)
 
     lua["SoundSource3D"].setClass(UserdataMetatable<SoundSource3D, SoundSource>()
         .addStaticFunction("new", &KCreateObject<SoundSource3D>)
-        
+
         .addFunction("SetDistanceAttenuation", &SoundSource3D::SetDistanceAttenuation)
         .addFunction("SetAngleAttenuation", &SoundSource3D::SetAngleAttenuation)
         .addFunction("SetNearDistance", &SoundSource3D::SetNearDistance)
@@ -226,7 +238,7 @@ static void RegisterSoundSource3D(kaguya::State& lua)
         .addProperty("innerAngle", &SoundSource3D::GetInnerAngle, &SoundSource3D::SetInnerAngle)
         .addProperty("outerAngle", &SoundSource3D::GetOuterAngle, &SoundSource3D::SetOuterAngle)
         .addProperty("rolloffFactor", &SoundSource3D::SetRolloffFactor)
-    );
+        );
 }
 
 static void RegisterSoundStream(kaguya::State& lua)
@@ -251,7 +263,7 @@ static void RegisterSoundStream(kaguya::State& lua)
         .addProperty("stopAtEnd", &SoundStream::GetStopAtEnd, &SoundStream::SetStopAtEnd)
         .addProperty("sixteenBit", &SoundStream::IsSixteenBit)
         .addProperty("stereo", &SoundStream::IsStereo)
-    );
+        );
 }
 
 void RegisterAudioLuaAPI(kaguya::State& lua)

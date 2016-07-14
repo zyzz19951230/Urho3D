@@ -147,7 +147,7 @@ function CreateConsoleAndDebugHud()
 end
 
 function HandleKeyUp(eventType, eventData)
-    local key = eventData:Get("Key"):GetInt()
+    local key = eventData["Key"]:GetInt()
 
     -- Close console (if open) or exit when ESC is pressed
     if key == KEY_ESCAPE then
@@ -167,7 +167,7 @@ function HandleKeyUp(eventType, eventData)
 end
 
 function HandleKeyDown(eventType, eventData)
-    local key = eventData:Get("Key"):GetInt()
+    local key = eventData["Key"]:GetInt()
 
     if key == KEY_F1 then
         console:Toggle()
@@ -314,7 +314,7 @@ end
 
 -- If the user clicks the canvas, attempt to switch to relative mouse mode on web platform
 function HandleMouseModeChange(eventType, eventData)
-    mouseLocked = eventData:Get("MouseLocked"):GetBool()
+    mouseLocked = eventData["MouseLocked"]:GetBool()
     input.mouseVisible = not mouseLocked;
 end
 

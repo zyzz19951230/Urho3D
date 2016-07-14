@@ -137,8 +137,8 @@ end
 
 function HandleUpdate(eventType, eventData)
     -- Take the frame time step, which is stored as a float
-    local timeStep = eventData:Get("TimeStep"):GetFloat()
-
+    local timeStep = eventData["TimeStep"]:GetFloat()
+    
     -- Move the camera, scale movement with time step
     MoveCamera(timeStep)
 end
@@ -151,7 +151,7 @@ function Rotator:Start()
 end
 
 function Rotator:Update(timeStep)
-	local x = self.rotationSpeed[1] * timeStep
+    local x = self.rotationSpeed[1] * timeStep
     local y = self.rotationSpeed[2] * timeStep
     local z = self.rotationSpeed[3] * timeStep
     self.node:Rotate(Quaternion.new(x, y, z))
