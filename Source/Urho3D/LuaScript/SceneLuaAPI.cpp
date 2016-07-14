@@ -73,7 +73,7 @@ static void RegisterAnimatable(kaguya::State& lua)
         .addFunction("SetAnimationEnabled", &Animatable::SetAnimationEnabled)
         .addFunction("SetAnimationTime", &Animatable::SetAnimationTime)
         .addFunction("SetObjectAnimation", &Animatable::SetObjectAnimation)
-        
+
         ADD_OVERLOADED_FUNCTIONS_2(Animatable, SetAttributeAnimation)
 
         .addFunction("SetAttributeAnimationWrapMode", &Animatable::SetAttributeAnimationWrapMode)
@@ -159,6 +159,113 @@ static void RegisterLogicComponent(kaguya::State& lua)
         );
 }
 
+static void NodeTranslate0(Node* self, const Vector3& delta)
+{
+    self->Translate(delta);
+}
+
+static void NodeTranslate1(Node* self, const Vector3& delta, TransformSpace space)
+{
+    self->Translate(delta, space);
+}
+
+static void NodeTranslate2D0(Node* self, const Vector2& delta)
+{
+    self->Translate2D(delta);
+}
+
+static void NodeTranslate2D1(Node* self, const Vector2& delta, TransformSpace space)
+{
+    self->Translate2D(delta, space);
+}
+
+static void NodeRotate0(Node* node, const Quaternion& delta)
+{
+    node->Rotate(delta);
+}
+
+static void NodeRotate1(Node* node, const Quaternion& delta, TransformSpace space)
+{
+    node->Rotate(delta, space);
+}
+
+static void NodeRotate2D0(Node* self, float delta)
+{
+    self->Rotate2D(delta);
+}
+
+static void NodeRotate2D1(Node* self, float delta, TransformSpace space)
+{
+    self->Rotate2D(delta, space);
+}
+
+static void NodeRotateAround0(Node* self, const Vector3& point, const Quaternion& delta)
+{
+    self->RotateAround(point, delta);
+}
+
+static void NodeRotateAround1(Node* self, const Vector3& point, const Quaternion& delta, TransformSpace space)
+{
+    self->RotateAround(point, delta, space);
+}
+
+static void NodeRotateAround2D0(Node* self, const Vector2& point, float delta)
+{
+    self->RotateAround2D(point, delta);
+}
+
+static void NodeRotateAround2D1(Node* self, const Vector2& point, float delta, TransformSpace space)
+{
+    self->RotateAround2D(point, delta, space);
+}
+
+
+static void NodePitch0(Node* self, float angle)
+{
+    self->Pitch(angle);
+}
+
+static void NodePitch1(Node* self, float angle, TransformSpace space)
+{
+    self->Pitch(angle, space);
+}
+
+static void NodeYaw0(Node* self, float angle)
+{
+    self->Yaw(angle);
+}
+
+static void NodeYaw1(Node* self, float angle, TransformSpace space)
+{
+    self->Yaw(angle, space);
+}
+
+static void NodeRoll0(Node* self, float angle)
+{
+    self->Roll(angle);
+}
+
+static void NodeRoll1(Node* self, float angle, TransformSpace space)
+{
+    self->Roll(angle, space);
+}
+
+
+static bool NodeLookAt0(Node* self, const Vector3& target)
+{
+    return self->LookAt(target);
+}
+
+static bool NodeLookAt1(Node* self, const Vector3& target, const Vector3& up)
+{
+    return self->LookAt(target, up);
+}
+
+static bool NodeLookAt2(Node* self, const Vector3& target, const Vector3& up, TransformSpace space)
+{
+    return self->LookAt(target, up, space);
+}
+
 static Node* NodeCreateChild0(Node* node)
 {
     return node->CreateChild();
@@ -178,6 +285,7 @@ static Node* NodeCreateChild3(Node* node, const String& name, CreateMode mode, u
 {
     return node->CreateChild(name, mode, id);
 }
+
 
 static SharedPtr<Component> NodeCreateComponent0(Node* node, const char* type)
 {
@@ -247,15 +355,6 @@ static kaguya::LuaTable NodeCreateScriptObject1(Node* node, const char* fileName
     return kaguya::LuaTable(instance->GetLuaState(), kaguya::StackTop());
 }
 
-static void NodeRotate0(Node* node, const Quaternion& delta)
-{
-    node->Rotate(delta);
-}
-
-static void NodeRotate1(Node* node, const Quaternion& delta, TransformSpace space)
-{
-    node->Rotate(delta, space);
-}
 
 static void RegisterNode(kaguya::State& lua)
 {
@@ -339,18 +438,19 @@ static void RegisterNode(kaguya::State& lua)
             static_cast<void(Node::*)(const Vector2&, float, float)>(&Node::SetWorldTransform2D),
             static_cast<void(Node::*)(const Vector2&, float, const Vector2&)>(&Node::SetWorldTransform2D))
 
-        .addFunction("Translate", &Node::Translate)
-        .addFunction("Translate2D", &Node::Translate2D)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Translate)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Translate2D)
 
-        .addOverloadedFunctions("Rotate", &NodeRotate0, &NodeRotate1)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Rotate)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Rotate2D)
 
-        .addFunction("Rotate2D", &Node::Rotate2D)
-        .addFunction("RotateAround", &Node::RotateAround)
-        .addFunction("RotateAround2D", &Node::RotateAround2D)
-        .addFunction("Pitch", &Node::Pitch)
-        .addFunction("Yaw", &Node::Yaw)
-        .addFunction("Roll", &Node::Roll)
-        .addFunction("LookAt", &Node::LookAt)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, RotateAround)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, RotateAround2D)
+
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Pitch)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Yaw)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Roll)
+        ADD_OVERLOADED_FUNCTIONS_3(Node, LookAt)
 
         .addOverloadedFunctions("Scale",
             static_cast<void(Node::*)(float)>(&Node::Scale),
@@ -366,17 +466,16 @@ static void RegisterNode(kaguya::State& lua)
         .addFunction("SetOwner", &Node::SetOwner)
         .addFunction("MarkDirty", &Node::MarkDirty)
 
-        .addOverloadedFunctions("CreateChild", &NodeCreateChild0, &NodeCreateChild1, &NodeCreateChild2, &NodeCreateChild3)
+        ADD_OVERLOADED_FUNCTIONS_4(Node, CreateChild)
 
         .addFunction("AddChild", &Node::AddChild)
         .addFunction("RemoveChild", static_cast<void(Node::*)(Node*)>(&Node::RemoveChild))
         .addFunction("RemoveAllChildren", &Node::RemoveAllChildren)
         .addFunction("RemoveChildren", &Node::RemoveChildren)
 
-        .addOverloadedFunctions("CreateComponent", &NodeCreateComponent0, &NodeCreateComponent1, &NodeCreateComponent2)
-        .addOverloadedFunctions("GetOrCreateComponent", &NodeGetOrCreateComponent0, &NodeGetOrCreateComponent1, &NodeGetOrCreateComponent2)
-
-        .addOverloadedFunctions("CreateScriptObject", &NodeCreateScriptObject0, &NodeCreateScriptObject1)
+        ADD_OVERLOADED_FUNCTIONS_3(Node, CreateComponent)
+        ADD_OVERLOADED_FUNCTIONS_3(Node, GetOrCreateComponent)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, CreateScriptObject)
 
         .addOverloadedFunctions("CloneComponent",
             static_cast<Component*(Node::*)(Component*, unsigned)>(&Node::CloneComponent),
