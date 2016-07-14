@@ -123,22 +123,67 @@ static void RegisterLogicComponent(kaguya::State& lua)
     );
 }
 
-static SharedPtr<Component> NodeCreateComponent(Node* node, const char* type, CreateMode mode = REPLICATED, unsigned id = 0)
+static Node* NodeCreateChild0(Node* node)
+{
+    return node->CreateChild();
+}
+
+static Node* NodeCreateChild1(Node* node, const String& name)
+{
+    return node->CreateChild(name);
+}
+
+static Node* NodeCreateChild2(Node* node, const String& name, CreateMode mode)
+{
+    return node->CreateChild(name, mode);
+}
+
+static Node* NodeCreateChild3(Node* node, const String& name, CreateMode mode, unsigned id)
+{
+    return node->CreateChild(name, mode, id);
+}
+
+static SharedPtr<Component> NodeCreateComponent0(Node* node, const char* type)
+{
+    return SharedPtr<Component>(node->CreateComponent(StringHash(type)));
+}
+
+static SharedPtr<Component> NodeCreateComponent1(Node* node, const char* type, CreateMode mode)
+{
+    return SharedPtr<Component>(node->CreateComponent(StringHash(type), mode));
+}
+
+static SharedPtr<Component> NodeCreateComponent2(Node* node, const char* type, CreateMode mode, unsigned id)
 {
     return SharedPtr<Component>(node->CreateComponent(StringHash(type), mode, id));
 }
 
-static SharedPtr<Component> NodeGetOrCreateComponent(Node* node, const char* type, CreateMode mode = REPLICATED, unsigned id = 0)
+static SharedPtr<Component> NodeGetOrCreateComponent0(Node* node, const char* type)
+{
+    return SharedPtr<Component>(node->GetOrCreateComponent(StringHash(type)));
+}
+
+static SharedPtr<Component> NodeGetOrCreateComponent1(Node* node, const char* type, CreateMode mode)
+{
+    return SharedPtr<Component>(node->GetOrCreateComponent(StringHash(type), mode));
+}
+
+static SharedPtr<Component> NodeGetOrCreateComponent2(Node* node, const char* type, CreateMode mode, unsigned id)
 {
     return SharedPtr<Component>(node->GetOrCreateComponent(StringHash(type), mode, id));
 }
 
-static SharedPtr<Component> NodeGetComponent(const Node* node, const char* type, bool recursive = false)
+static SharedPtr<Component> NodeGetComponent0(const Node* node, const char* type)
+{
+    return SharedPtr<Component>(node->GetComponent(StringHash(type)));
+}
+
+static SharedPtr<Component> NodeGetComponent1(const Node* node, const char* type, bool recursive)
 {
     return SharedPtr<Component>(node->GetComponent(StringHash(type), recursive));
 }
 
-static kaguya::LuaTable NodeCreateScriptObject1(Node* node, const char* scriptObjectType)
+static kaguya::LuaTable NodeCreateScriptObject0(Node* node, const char* scriptObjectType)
 {
     LuaScriptInstance* instance = node->CreateComponent<LuaScriptInstance>();    
     instance->CreateObject(scriptObjectType);
@@ -150,7 +195,7 @@ static kaguya::LuaTable NodeCreateScriptObject1(Node* node, const char* scriptOb
     return kaguya::LuaTable(instance->GetLuaState(), kaguya::StackTop());
 }
 
-static kaguya::LuaTable NodeCreateScriptObject2(Node* node, const char* fileName, const char* scriptObjectType)
+static kaguya::LuaTable NodeCreateScriptObject1(Node* node, const char* fileName, const char* scriptObjectType)
 {
     ResourceCache* cache = node->GetSubsystem<ResourceCache>();
     LuaFile* scriptFile = cache->GetResource<LuaFile>(fileName);
@@ -273,18 +318,17 @@ static void RegisterNode(kaguya::State& lua)
         .addFunction("SetOwner", &Node::SetOwner)
         .addFunction("MarkDirty", &Node::MarkDirty)
 
-        .addFunction("CreateChild", static_cast<Node*(Node::*)(const String&, CreateMode, unsigned)>(&Node::CreateChild))
+        .addOverloadedFunctions("CreateChild", &NodeCreateChild0, &NodeCreateChild1, &NodeCreateChild2, &NodeCreateChild3)
 
         .addFunction("AddChild", &Node::AddChild)
         .addFunction("RemoveChild", static_cast<void(Node::*)(Node*)>(&Node::RemoveChild))
         .addFunction("RemoveAllChildren", &Node::RemoveAllChildren)
         .addFunction("RemoveChildren", &Node::RemoveChildren)
         
-        .addStaticFunction("CreateComponent", &NodeCreateComponent)
-        .addStaticFunction("GetOrCreateComponent", &NodeGetOrCreateComponent)
+        .addOverloadedFunctions("CreateComponent", &NodeCreateComponent0, &NodeCreateComponent1, &NodeCreateComponent2)
+        .addOverloadedFunctions("GetOrCreateComponent", &NodeGetOrCreateComponent0, &NodeGetOrCreateComponent1, &NodeGetOrCreateComponent2)
 
-        .addStaticFunction("CreateScriptObject", &NodeCreateScriptObject1)
-        .addStaticFunction("CreateScriptObject2", &NodeCreateScriptObject2)
+        .addOverloadedFunctions("CreateScriptObject", &NodeCreateScriptObject0, &NodeCreateScriptObject1)
 
         .addOverloadedFunctions("CloneComponent",
             static_cast<Component*(Node::*)(Component*, unsigned)>(&Node::CloneComponent),
@@ -373,7 +417,7 @@ static void RegisterNode(kaguya::State& lua)
             static_cast<const Vector<SharedPtr<Component> >&(Node::*)() const>(&Node::GetComponents),
             static_cast<void(Node::*)(PODVector<Component*>&, StringHash, bool) const>(&Node::GetComponents))
 
-        .addStaticFunction("GetComponent", &NodeGetComponent)
+        .addOverloadedFunctions("GetComponent", &NodeGetComponent0, &NodeGetComponent1)
         // .addFunction("GetParentComponent", &Node::GetParentComponent)
         // .addFunction("HasComponent", &Node::HasComponent)
 

@@ -924,13 +924,25 @@ static bool UIElementLoadXML(UIElement* uiElement, const char* filepath)
     return uiElement->LoadXML(*file);
 }
 
-static bool UIElementSaveXML(const UIElement* uiElement, const char* filepath, const String& indentation = "\t")
+static bool UIElementSaveXML(const UIElement* uiElement, const char* filepath)
 {
     SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
-    return uiElement->SaveXML(*file, indentation);
+    return uiElement->SaveXML(*file);
 }
 
-static SharedPtr<UIElement> UIElementCreateChild(UIElement* uiElement, const char* type, const String& name = String::EMPTY, unsigned index = M_MAX_UNSIGNED)
+
+static SharedPtr<UIElement> UIElementCreateChild0(UIElement* uiElement, const char* type)
+{
+    return SharedPtr<UIElement>(uiElement->CreateChild(StringHash(type)));
+}
+
+
+static SharedPtr<UIElement> UIElementCreateChild1(UIElement* uiElement, const char* type, const String& name)
+{
+    return SharedPtr<UIElement>(uiElement->CreateChild(StringHash(type), name));
+}
+
+static SharedPtr<UIElement> UIElementCreateChild2(UIElement* uiElement, const char* type, const String& name, unsigned index)
 {
     return SharedPtr<UIElement>(uiElement->CreateChild(StringHash(type), name, index));
 }
@@ -1072,14 +1084,14 @@ static void RegisterUIElement(kaguya::State& lua)
         .addFunction("SetLayoutFlexScale", &UIElement::SetLayoutFlexScale)
         .addFunction("SetIndent", &UIElement::SetIndent)
         .addFunction("SetIndentSpacing", &UIElement::SetIndentSpacing)
-        
+
         // .addFunction("UpdateLayout", &UIElement::UpdateLayout)
 
         .addFunction("DisableLayoutUpdate", &UIElement::DisableLayoutUpdate)
         .addFunction("EnableLayoutUpdate", &UIElement::EnableLayoutUpdate)
         .addFunction("BringToFront", &UIElement::BringToFront)
-        
-        .addStaticFunction("CreateChild", &UIElementCreateChild)
+
+        .addOverloadedFunctions("CreateChild", &UIElementCreateChild0, &UIElementCreateChild1, &UIElementCreateChild2)
 
         .addFunction("AddChild", &UIElement::AddChild)
         .addFunction("InsertChild", &UIElement::InsertChild)

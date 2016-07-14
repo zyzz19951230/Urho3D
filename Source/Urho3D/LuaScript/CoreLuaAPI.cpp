@@ -469,12 +469,8 @@ static void RegisterVariantMap(kaguya::State& lua)
     lua["VariantMap"].setClass(UserdataMetatable<VariantMap>()
         .setConstructors<VariantMap()>()
 
-        // Can not work in kaguya
-        // .addStaticFunction("__index", &VariantMapGetVariant)
-        // .addStaticFunction("__newindex", &VariantMapSetVariant)
-
-        .addStaticFunction("Get", &VariantMapGetVariant)
-        .addStaticFunction("Set", &VariantMapSetVariant)
+        .addStaticFunction("__index", &VariantMapGetVariant)
+        .addStaticFunction("__newindex", &VariantMapSetVariant)
         );
 }
 
