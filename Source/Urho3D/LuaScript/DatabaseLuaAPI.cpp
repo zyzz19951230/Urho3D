@@ -64,6 +64,16 @@ static void RegisterDatabaseEvents(kaguya::State& lua)
     lua["E_DBCURSOR"] = E_DBCURSOR;
 }
 
+static DbResult DbConnectionExecute0(DbConnection* self, const String& sql)
+{
+    return self->Execute(sql);
+}
+
+static DbResult DbConnectionExecute1(DbConnection* self, const String& sql, bool useCursorEvent)
+{
+    return self->Execute(sql, useCursorEvent);
+}
+
 static void RegisterDbConnection(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -71,7 +81,9 @@ static void RegisterDbConnection(kaguya::State& lua)
     lua["DbConnection"].setClass(UserdataMetatable<DbConnection, Object>()
         
         .addFunction("Finalize", &DbConnection::Finalize)
-        .addFunction("Execute", &DbConnection::Execute)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(DbConnection, Execute)
+
         .addFunction("GetConnectionString", &DbConnection::GetConnectionString)
         .addFunction("IsConnected", &DbConnection::IsConnected)
 

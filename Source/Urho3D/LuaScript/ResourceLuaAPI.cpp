@@ -187,9 +187,11 @@ static void RegisterJSONValue(kaguya::State& lua)
         .addFunction("GetArray", &JSONValue::GetArray)
         .addFunction("GetObject", &JSONValue::GetObject)
 
+        /*
         .addOverloadedFunctions("__index",
             static_cast<JSONValue&(JSONValue::*)(unsigned)>(&JSONValue::operator[]),
             static_cast<const JSONValue&(JSONValue::*)(unsigned) const>(&JSONValue::operator[]))
+            */
 
         .addFunction("Push", &JSONValue::Push)
         .addFunction("Pop", &JSONValue::Pop)
@@ -610,7 +612,7 @@ static void RegisterXMLElement(kaguya::State& lua)
         .setConstructors<XPathResultSet(),
         XPathResultSet(const XPathResultSet&)>()
 
-        .addFunction("__index", &XPathResultSet::operator[])
+        // .addFunction("__index", &XPathResultSet::operator[])
 
         .addFunction("FirstResult", &XPathResultSet::FirstResult)
         .addFunction("Size", &XPathResultSet::Size)

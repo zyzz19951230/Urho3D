@@ -404,6 +404,21 @@ namespace kaguya
 			lua_remove(state, -2);//remove table
 			return LuaStackRef(state, -1, true);
 		}
+		template<typename T> template <typename KEY>
+		LuaStackRef LuaTableOrUserDataImpl<T>::getRawField(const KEY& key)const
+		{
+			lua_State* state = state_();
+			if (!state)
+			{
+				except::typeMismatchError(state, "is nil");
+				return LuaStackRef();
+			}
+			push_(state);
+			util::one_push(state, key);//push key
+			lua_rawget(state, -2);//get table[key]
+			lua_remove(state, -2);//remove table
+			return LuaStackRef(state, -1, true);
+		}
 
 		template<typename T> template<typename KEY>
 		LuaStackRef LuaTableOrUserDataImpl<T>::operator[](KEY key)const
@@ -504,12 +519,11 @@ namespace kaguya
 		static int push(lua_State* l, push_type v)
 		{
 			lua_createtable(l, int(v.size()), 0);
-			LuaStackRef table(l, -1);
-
 			int count = 1;//array is 1 origin in Lua
 			for (typename std::vector<T, A>::const_iterator it = v.begin(); it != v.end(); ++it)
 			{
-				table.setField(count++, *it);
+				util::one_push(l, *it);
+				lua_rawseti(l, -2, count++);
 			}
 			return 1;
 		}
@@ -574,10 +588,11 @@ namespace kaguya
 		static int push(lua_State* l, push_type v)
 		{
 			lua_createtable(l, 0, int(v.size()));
-			LuaStackRef table(l, -1);
 			for (typename std::map<K, V, C, A>::const_iterator it = v.begin(); it != v.end(); ++it)
 			{
-				table.setField(it->first, it->second);
+				util::one_push(l, it->first);
+				util::one_push(l, it->second);
+				lua_rawset(l, -3);
 			}
 			return 1;
 		}
@@ -604,20 +619,22 @@ namespace kaguya
 	};
 	template<>
 	struct lua_type_traits<TableData> {
-		static int push(lua_State* l,const TableData& list)
+		static int push(lua_State* l, const TableData& list)
 		{
-			lua_createtable(l, int(list.elements.size()), 0);
-			LuaStackRef table(l, -1);
+			lua_createtable(l, int(list.elements.size()), int(list.elements.size()));
 			int count = 1;//array is 1 origin in Lua
 			for (auto&& v : list.elements)
 			{
 				if (v.keyvalue.first.empty())
 				{
-					table.setField(count++, v.keyvalue.second);
+					util::one_push(l, v.keyvalue.second);
+					lua_rawseti(l, -2, count++);
 				}
 				else
 				{
-					table.setField(v.keyvalue.first, v.keyvalue.second);
+					util::one_push(l, v.keyvalue.first);
+					util::one_push(l, v.keyvalue.second);
+					lua_rawset(l, -3);
 				}
 			}
 			return 1;

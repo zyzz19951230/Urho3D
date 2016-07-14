@@ -5,6 +5,18 @@
 
 #include <kaguya.hpp>
 
+#define ADD_OVERLOADED_FUNCTIONS_2(Class, Name) \
+.addOverloadedFunctions(#Name, &Class##Name##0, &Class##Name##1)
+
+#define ADD_OVERLOADED_FUNCTIONS_3(Class, Name) \
+.addOverloadedFunctions(#Name, &Class##Name##0, &Class##Name##1, &Class##Name##2)
+
+#define ADD_OVERLOADED_FUNCTIONS_4(Class, Name) \
+.addOverloadedFunctions(#Name, &Class##Name##0, &Class##Name##1, &Class##Name##2, &Class##Name##3)
+
+#define ADD_OVERLOADED_FUNCTIONS_5(Class, Name) \
+.addOverloadedFunctions(#Name, &Class##Name##0, &Class##Name##1, &Class##Name##2, &Class##Name##3, &Class##Name##4)
+
 namespace Urho3D
 {
     class Context;
@@ -130,6 +142,84 @@ namespace kaguya
         {
             lua_pushlstring(l, s.CString(), s.Length());
             return 1;
+        }
+    };
+
+    // PODVector<T> type traits.
+    template<typename T>
+    struct lua_type_traits<Urho3D::PODVector<T>>
+    {
+        typedef Urho3D::PODVector<T> get_type;
+        typedef const Urho3D::PODVector<T>& push_type;
+
+        static bool checkType(lua_State* l, int index)
+        {
+            return lua_type_traits<std::vector<T>>::checkType(l, index);
+        }
+        static bool strictCheckType(lua_State* l, int index)
+        {
+            return lua_type_traits<std::vector<T>>::strictCheckType(l, index);
+        }
+        static get_type get(lua_State* l, int index)
+        {
+            std::vector<T> std_res = lua_type_traits<std::vector<T>>::get(l, index);
+
+            get_type res;
+            res.Reserve(std_res.size());
+
+            for (size_t i = 0; i < std_res.size(); ++i)
+                res[i] = std_res[i];
+
+            return res;
+        }
+        static int push(lua_State* l, push_type p)
+        {
+            std::vector<T> std_p;
+            std_p.reserve(p.Size());
+
+            for (unsigned i = 0; i < p.Size(); ++i)
+                std_p[i] = p[i];
+
+            return lua_type_traits<std::vector<T>>::push(l, std_p);
+        }
+    };
+
+    // Vector<T> type traits.
+    template<typename T>
+    struct lua_type_traits<Urho3D::Vector<T>>
+    {
+        typedef Urho3D::Vector<T> get_type;
+        typedef const Urho3D::Vector<T>& push_type;
+
+        static bool checkType(lua_State* l, int index)
+        {
+            return lua_type_traits<std::vector<T>>::checkType(l, index);
+        }
+        static bool strictCheckType(lua_State* l, int index)
+        {
+            return lua_type_traits<std::vector<T>>::strictCheckType(l, index);
+        }
+        static get_type get(lua_State* l, int index)
+        {
+            std::vector<T> std_res = lua_type_traits<std::vector<T>>::get(l, index);
+            
+            get_type res;
+            res.Reserve(std_res.size());
+
+            for (size_t i = 0; i < std_res.size(); ++i)
+                res[i] = std_res[i];
+
+            return res;
+        }
+        static int push(lua_State* l, push_type p)
+        {
+            std::vector<T> std_p;
+            std_p.reserve(p.Size());
+
+            for (unsigned i = 0; i < p.Size(); ++i)
+                std_p[i] = p[i];
+
+            return lua_type_traits<std::vector<T>>::push(l, std_p);
         }
     };
 }

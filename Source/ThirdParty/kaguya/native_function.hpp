@@ -268,11 +268,11 @@ namespace kaguya
 			}
 			return best_score_index;
 		}
-		template<typename Fn> int invoke_index(lua_State* state, int index, int current_index, const Fn& fn)
+		template<typename Fn> int invoke_index(lua_State* state, int index, int current_index, Fn&& fn)
 		{
 			return nativefunction::call(state, fn);
 		}
-		template<typename Fn, typename... Functions> int invoke_index(lua_State* state, int index, int current_index, const Fn& fn, const Functions&... fns)
+		template<typename Fn, typename... Functions> int invoke_index(lua_State* state, int index, int current_index, Fn&& fn, Functions&&... fns)
 		{
 			if (index == current_index)
 			{
@@ -284,12 +284,12 @@ namespace kaguya
 			}
 		}
 
-		template<typename Fun> int best_match_invoke(lua_State* state, const Fun& fn)
+		template<typename Fun> int best_match_invoke(lua_State* state, Fun&& fn)
 		{
 			return nativefunction::call(state, fn);
 		}
 
-		template<typename Fun, typename... Functions> int best_match_invoke(lua_State* state, const Fun& fn, const Functions&... fns)
+		template<typename Fun, typename... Functions> int best_match_invoke(lua_State* state, Fun&& fn, Functions&&... fns)
 		{
 			int index = best_function_index(state, fn, fns...);
 			if (index >= 0)
@@ -408,6 +408,11 @@ namespace kaguya
 		KAGUYA_STATIC_ASSERT(nativefunction::is_callable<typename traits::decay<T>::type>::value, "argument need callable");
 		return FunctionInvokerType<standard::tuple<T> >(standard::tuple<T>(f));
 	}
+	//specialize for lua_CFunction
+	inline lua_CFunction function(lua_CFunction f)
+	{
+		return f;
+	}
 
 	template<typename FTYPE, typename T>
 	inline FunctionInvokerType<standard::tuple<standard::function<FTYPE> > > function(T f)
@@ -442,7 +447,7 @@ namespace kaguya
 #endif
 
 
-		template<typename FunctionTuple> struct lua_type_traits<FunctionInvokerType<FunctionTuple> >
+	template<typename FunctionTuple> struct lua_type_traits<FunctionInvokerType<FunctionTuple> >
 	{
 		typedef FunctionInvokerType<FunctionTuple> userdatatype;
 		typedef const FunctionInvokerType<FunctionTuple>& push_type;
@@ -517,6 +522,29 @@ namespace kaguya
 		static int push(lua_State* l, T f)
 		{
 			return util::one_push(l, function(f));
+		}
+	};
+	//specialize for lua_CFunction
+	template<> struct lua_type_traits < lua_CFunction >
+	{
+		typedef lua_CFunction push_type;
+		typedef lua_CFunction get_type;
+		static bool strictCheckType(lua_State* l, int index)
+		{
+			return lua_iscfunction(l, index) != 0;
+		}
+		static bool checkType(lua_State* l, int index)
+		{
+			return lua_iscfunction(l, index) != 0;
+		}
+		static get_type get(lua_State* l, int index)
+		{
+			return lua_tocfunction(l,index);
+		}
+		static int push(lua_State* l, lua_CFunction f)
+		{
+			lua_pushcfunction(l, f);
+			return 1;
 		}
 	};
 

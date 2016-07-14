@@ -25,21 +25,57 @@
 namespace Urho3D
 {
 
+static bool AnimatableLoadXML0(Animatable* self, const XMLElement& source)
+{
+    return self->LoadXML(source);
+}
+
+static bool AnimatableLoadXML1(Animatable* self, const XMLElement& source, bool setInstanceDefault)
+{
+    return self->LoadXML(source, setInstanceDefault);
+}
+
+
+static bool AnimatableLoadJSON0(Animatable* self, const JSONValue& source)
+{
+    return self->LoadJSON(source);
+}
+
+static bool AnimatableLoadJSON1(Animatable* self, const JSONValue& source, bool setInstanceDefault)
+{
+    return self->LoadJSON(source, setInstanceDefault);
+}
+
+static void AnimatableSetAttributeAnimation0(Animatable* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode)
+{
+    self->SetAttributeAnimation(name, attributeAnimation, wrapMode);
+}
+
+static void AnimatableSetAttributeAnimation1(Animatable* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode, float speed)
+{
+    self->SetAttributeAnimation(name, attributeAnimation, wrapMode, speed);
+}
+
 static void RegisterAnimatable(kaguya::State& lua)
 {
     using namespace kaguya;
 
     lua["Animatable"].setClass(UserdataMetatable<Animatable, Serializable>()
 
-        .addFunction("LoadXML", &Animatable::LoadXML)
+        ADD_OVERLOADED_FUNCTIONS_2(Animatable, LoadXML)
+
         .addFunction("SaveXML", &Animatable::SaveXML)
-        .addFunction("LoadJSON", &Animatable::LoadJSON)
+
+        ADD_OVERLOADED_FUNCTIONS_2(Animatable, LoadJSON)
+
         .addFunction("SaveJSON", &Animatable::SaveJSON)
 
         .addFunction("SetAnimationEnabled", &Animatable::SetAnimationEnabled)
         .addFunction("SetAnimationTime", &Animatable::SetAnimationTime)
         .addFunction("SetObjectAnimation", &Animatable::SetObjectAnimation)
-        .addFunction("SetAttributeAnimation", &Animatable::SetAttributeAnimation)
+
+        ADD_OVERLOADED_FUNCTIONS_2(Animatable, SetAttributeAnimation)
+
         .addFunction("SetAttributeAnimationWrapMode", &Animatable::SetAttributeAnimationWrapMode)
         .addFunction("SetAttributeAnimationSpeed", &Animatable::SetAttributeAnimationSpeed)
         .addFunction("SetAttributeAnimationTime", &Animatable::SetAttributeAnimationTime)
@@ -55,7 +91,7 @@ static void RegisterAnimatable(kaguya::State& lua)
         .addProperty("animationEnabled", &Animatable::GetAnimationEnabled, &Animatable::SetAnimationEnabled)
         .addProperty("objectAnimation", &Animatable::GetObjectAnimation, &Animatable::SetObjectAnimation)
         .addProperty("animationTime", &Animatable::SetAnimationTime)
-    );
+        );
 }
 
 static void RegisterAnimationDefs(kaguya::State& lua)
@@ -99,7 +135,7 @@ static void RegisterComponent(kaguya::State& lua)
         .addProperty("scene", &Component::GetScene)
         .addProperty("enabled", &Component::IsEnabled, &Component::SetEnabled)
         .addProperty("enabledEffective", &Component::IsEnabledEffective)
-    );
+        );
 }
 
 static void RegisterLogicComponent(kaguya::State& lua)
@@ -120,37 +156,190 @@ static void RegisterLogicComponent(kaguya::State& lua)
 
         .addProperty("updateEventMask", &LogicComponent::GetUpdateEventMask, &LogicComponent::SetUpdateEventMask)
         .addProperty("delayedStartCalled", &LogicComponent::IsDelayedStartCalled)
-    );
+        );
 }
 
-static SharedPtr<Component> NodeCreateComponent(Node* node, const char* type, CreateMode mode = REPLICATED, unsigned id = 0)
+static void NodeTranslate0(Node* self, const Vector3& delta)
+{
+    self->Translate(delta);
+}
+
+static void NodeTranslate1(Node* self, const Vector3& delta, TransformSpace space)
+{
+    self->Translate(delta, space);
+}
+
+static void NodeTranslate2D0(Node* self, const Vector2& delta)
+{
+    self->Translate2D(delta);
+}
+
+static void NodeTranslate2D1(Node* self, const Vector2& delta, TransformSpace space)
+{
+    self->Translate2D(delta, space);
+}
+
+static void NodeRotate0(Node* node, const Quaternion& delta)
+{
+    node->Rotate(delta);
+}
+
+static void NodeRotate1(Node* node, const Quaternion& delta, TransformSpace space)
+{
+    node->Rotate(delta, space);
+}
+
+static void NodeRotate2D0(Node* self, float delta)
+{
+    self->Rotate2D(delta);
+}
+
+static void NodeRotate2D1(Node* self, float delta, TransformSpace space)
+{
+    self->Rotate2D(delta, space);
+}
+
+static void NodeRotateAround0(Node* self, const Vector3& point, const Quaternion& delta)
+{
+    self->RotateAround(point, delta);
+}
+
+static void NodeRotateAround1(Node* self, const Vector3& point, const Quaternion& delta, TransformSpace space)
+{
+    self->RotateAround(point, delta, space);
+}
+
+static void NodeRotateAround2D0(Node* self, const Vector2& point, float delta)
+{
+    self->RotateAround2D(point, delta);
+}
+
+static void NodeRotateAround2D1(Node* self, const Vector2& point, float delta, TransformSpace space)
+{
+    self->RotateAround2D(point, delta, space);
+}
+
+
+static void NodePitch0(Node* self, float angle)
+{
+    self->Pitch(angle);
+}
+
+static void NodePitch1(Node* self, float angle, TransformSpace space)
+{
+    self->Pitch(angle, space);
+}
+
+static void NodeYaw0(Node* self, float angle)
+{
+    self->Yaw(angle);
+}
+
+static void NodeYaw1(Node* self, float angle, TransformSpace space)
+{
+    self->Yaw(angle, space);
+}
+
+static void NodeRoll0(Node* self, float angle)
+{
+    self->Roll(angle);
+}
+
+static void NodeRoll1(Node* self, float angle, TransformSpace space)
+{
+    self->Roll(angle, space);
+}
+
+
+static bool NodeLookAt0(Node* self, const Vector3& target)
+{
+    return self->LookAt(target);
+}
+
+static bool NodeLookAt1(Node* self, const Vector3& target, const Vector3& up)
+{
+    return self->LookAt(target, up);
+}
+
+static bool NodeLookAt2(Node* self, const Vector3& target, const Vector3& up, TransformSpace space)
+{
+    return self->LookAt(target, up, space);
+}
+
+static Node* NodeCreateChild0(Node* node)
+{
+    return node->CreateChild();
+}
+
+static Node* NodeCreateChild1(Node* node, const String& name)
+{
+    return node->CreateChild(name);
+}
+
+static Node* NodeCreateChild2(Node* node, const String& name, CreateMode mode)
+{
+    return node->CreateChild(name, mode);
+}
+
+static Node* NodeCreateChild3(Node* node, const String& name, CreateMode mode, unsigned id)
+{
+    return node->CreateChild(name, mode, id);
+}
+
+
+static SharedPtr<Component> NodeCreateComponent0(Node* node, const char* type)
+{
+    return SharedPtr<Component>(node->CreateComponent(StringHash(type)));
+}
+
+static SharedPtr<Component> NodeCreateComponent1(Node* node, const char* type, CreateMode mode)
+{
+    return SharedPtr<Component>(node->CreateComponent(StringHash(type), mode));
+}
+
+static SharedPtr<Component> NodeCreateComponent2(Node* node, const char* type, CreateMode mode, unsigned id)
 {
     return SharedPtr<Component>(node->CreateComponent(StringHash(type), mode, id));
 }
 
-static SharedPtr<Component> NodeGetOrCreateComponent(Node* node, const char* type, CreateMode mode = REPLICATED, unsigned id = 0)
+static SharedPtr<Component> NodeGetOrCreateComponent0(Node* node, const char* type)
+{
+    return SharedPtr<Component>(node->GetOrCreateComponent(StringHash(type)));
+}
+
+static SharedPtr<Component> NodeGetOrCreateComponent1(Node* node, const char* type, CreateMode mode)
+{
+    return SharedPtr<Component>(node->GetOrCreateComponent(StringHash(type), mode));
+}
+
+static SharedPtr<Component> NodeGetOrCreateComponent2(Node* node, const char* type, CreateMode mode, unsigned id)
 {
     return SharedPtr<Component>(node->GetOrCreateComponent(StringHash(type), mode, id));
 }
 
-static SharedPtr<Component> NodeGetComponent(const Node* node, const char* type, bool recursive = false)
+static SharedPtr<Component> NodeGetComponent0(const Node* node, const char* type)
+{
+    return SharedPtr<Component>(node->GetComponent(StringHash(type)));
+}
+
+static SharedPtr<Component> NodeGetComponent1(const Node* node, const char* type, bool recursive)
 {
     return SharedPtr<Component>(node->GetComponent(StringHash(type), recursive));
 }
 
-static kaguya::LuaTable NodeCreateScriptObject1(Node* node, const char* scriptObjectType)
+static kaguya::LuaTable NodeCreateScriptObject0(Node* node, const char* scriptObjectType)
 {
-    LuaScriptInstance* instance = node->CreateComponent<LuaScriptInstance>();    
+    LuaScriptInstance* instance = node->CreateComponent<LuaScriptInstance>();
     instance->CreateObject(scriptObjectType);
 
     // Push Script object to stack
     lua_rawgeti(instance->GetLuaState(), LUA_REGISTRYINDEX, instance->GetScriptObjectRef());
-    
+
     // return Lua table Object.
     return kaguya::LuaTable(instance->GetLuaState(), kaguya::StackTop());
 }
 
-static kaguya::LuaTable NodeCreateScriptObject2(Node* node, const char* fileName, const char* scriptObjectType)
+static kaguya::LuaTable NodeCreateScriptObject1(Node* node, const char* fileName, const char* scriptObjectType)
 {
     ResourceCache* cache = node->GetSubsystem<ResourceCache>();
     LuaFile* scriptFile = cache->GetResource<LuaFile>(fileName);
@@ -165,6 +354,7 @@ static kaguya::LuaTable NodeCreateScriptObject2(Node* node, const char* fileName
     lua_rawgeti(instance->GetLuaState(), LUA_REGISTRYINDEX, instance->GetScriptObjectRef());
     return kaguya::LuaTable(instance->GetLuaState(), kaguya::StackTop());
 }
+
 
 static void RegisterNode(kaguya::State& lua)
 {
@@ -248,16 +438,19 @@ static void RegisterNode(kaguya::State& lua)
             static_cast<void(Node::*)(const Vector2&, float, float)>(&Node::SetWorldTransform2D),
             static_cast<void(Node::*)(const Vector2&, float, const Vector2&)>(&Node::SetWorldTransform2D))
 
-        .addFunction("Translate", &Node::Translate)
-        .addFunction("Translate2D", &Node::Translate2D)
-        .addFunction("Rotate", &Node::Rotate)
-        .addFunction("Rotate2D", &Node::Rotate2D)
-        .addFunction("RotateAround", &Node::RotateAround)
-        .addFunction("RotateAround2D", &Node::RotateAround2D)
-        .addFunction("Pitch", &Node::Pitch)
-        .addFunction("Yaw", &Node::Yaw)
-        .addFunction("Roll", &Node::Roll)
-        .addFunction("LookAt", &Node::LookAt)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Translate)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Translate2D)
+
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Rotate)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Rotate2D)
+
+        ADD_OVERLOADED_FUNCTIONS_2(Node, RotateAround)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, RotateAround2D)
+
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Pitch)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Yaw)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, Roll)
+        ADD_OVERLOADED_FUNCTIONS_3(Node, LookAt)
 
         .addOverloadedFunctions("Scale",
             static_cast<void(Node::*)(float)>(&Node::Scale),
@@ -273,18 +466,16 @@ static void RegisterNode(kaguya::State& lua)
         .addFunction("SetOwner", &Node::SetOwner)
         .addFunction("MarkDirty", &Node::MarkDirty)
 
-        .addFunction("CreateChild", static_cast<Node*(Node::*)(const String&, CreateMode, unsigned)>(&Node::CreateChild))
+        ADD_OVERLOADED_FUNCTIONS_4(Node, CreateChild)
 
         .addFunction("AddChild", &Node::AddChild)
         .addFunction("RemoveChild", static_cast<void(Node::*)(Node*)>(&Node::RemoveChild))
         .addFunction("RemoveAllChildren", &Node::RemoveAllChildren)
         .addFunction("RemoveChildren", &Node::RemoveChildren)
-        
-        .addStaticFunction("CreateComponent", &NodeCreateComponent)
-        .addStaticFunction("GetOrCreateComponent", &NodeGetOrCreateComponent)
 
-        .addStaticFunction("CreateScriptObject", &NodeCreateScriptObject1)
-        .addStaticFunction("CreateScriptObject2", &NodeCreateScriptObject2)
+        ADD_OVERLOADED_FUNCTIONS_3(Node, CreateComponent)
+        ADD_OVERLOADED_FUNCTIONS_3(Node, GetOrCreateComponent)
+        ADD_OVERLOADED_FUNCTIONS_2(Node, CreateScriptObject)
 
         .addOverloadedFunctions("CloneComponent",
             static_cast<Component*(Node::*)(Component*, unsigned)>(&Node::CloneComponent),
@@ -373,7 +564,7 @@ static void RegisterNode(kaguya::State& lua)
             static_cast<const Vector<SharedPtr<Component> >&(Node::*)() const>(&Node::GetComponents),
             static_cast<void(Node::*)(PODVector<Component*>&, StringHash, bool) const>(&Node::GetComponents))
 
-        .addStaticFunction("GetComponent", &NodeGetComponent)
+        .addOverloadedFunctions("GetComponent", &NodeGetComponent0, &NodeGetComponent1)
         // .addFunction("GetParentComponent", &Node::GetParentComponent)
         // .addFunction("HasComponent", &Node::HasComponent)
 
@@ -436,7 +627,17 @@ static void RegisterNode(kaguya::State& lua)
         .addProperty("positionSilent", &Node::SetPositionSilent)
         .addProperty("rotationSilent", &Node::SetRotationSilent)
         .addProperty("scaleSilent", &Node::SetScaleSilent)
-    );
+        );
+}
+
+static void ObjectAnimationAddAttributeAnimation0(ObjectAnimation* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode)
+{
+    self->AddAttributeAnimation(name, attributeAnimation, wrapMode);
+}
+
+static void ObjectAnimationAddAttributeAnimation1(ObjectAnimation* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode, float speed)
+{
+    self->AddAttributeAnimation(name, attributeAnimation, wrapMode, speed);
 }
 
 static void RegisterObjectAnimation(kaguya::State& lua)
@@ -446,7 +647,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
     lua["ObjectAnimation"].setClass(UserdataMetatable<ObjectAnimation, Resource>()
         .addStaticFunction("new", &KCreateObject<ObjectAnimation>)
 
-        .addFunction("AddAttributeAnimation", &ObjectAnimation::AddAttributeAnimation)
+        ADD_OVERLOADED_FUNCTIONS_2(ObjectAnimation, AddAttributeAnimation)
 
         .addOverloadedFunctions("RemoveAttributeAnimation",
             static_cast<void(ObjectAnimation::*)(const String&)>(&ObjectAnimation::RemoveAttributeAnimation),
@@ -457,7 +658,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
         .addFunction("GetAttributeAnimationSpeed", &ObjectAnimation::GetAttributeAnimationSpeed)
         // .addFunction("GetAttributeAnimationInfos", &ObjectAnimation::GetAttributeAnimationInfos)
         .addFunction("GetAttributeAnimationInfo", &ObjectAnimation::GetAttributeAnimationInfo)
-    );
+        );
 }
 
 //static void RegisterReplicationState(kaguya::State& lua)
@@ -550,6 +751,21 @@ static bool SceneSaveJSON(const Scene* scene, const char* filepath, const String
     return scene->SaveJSON(*file, indentation);
 }
 
+static void SceneClear0(Scene* self)
+{
+    self->Clear();
+}
+
+static void SceneClear1(Scene* self, bool clearReplicated)
+{
+    self->Clear(clearReplicated);
+}
+
+static void SceneClear2(Scene* self, bool clearReplicated, bool clearLocal)
+{
+    self->Clear(clearReplicated, clearLocal);
+}
+
 static void RegisterScene(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -571,10 +787,10 @@ static void RegisterScene(kaguya::State& lua)
         .addStaticFunction("LoadJSON", &SceneLoadJSON)
         .addStaticFunction("SaveXML", &SceneSaveXML)
         .addStaticFunction("SaveJSON", &SceneSaveJSON)
-        
+
         // .addFunction("Instantiate", &Scene::Instantiate)
 
-        .addFunction("Clear", &Scene::Clear)
+        ADD_OVERLOADED_FUNCTIONS_3(Scene, Clear)
 
         .addFunction("SetUpdateEnabled", &Scene::SetUpdateEnabled)
         .addFunction("SetTimeScale", &Scene::SetTimeScale)
@@ -709,7 +925,7 @@ static void RegisterSerializable(kaguya::State& lua)
         .addFunction("IsTemporary", &Serializable::IsTemporary)
         .addFunction("GetInterceptNetworkUpdate", &Serializable::GetInterceptNetworkUpdate)
         .addFunction("GetNetworkState", &Serializable::GetNetworkState)
-    );
+        );
 }
 
 static void RegisterSmoothedTransform(kaguya::State& lua)
@@ -738,7 +954,7 @@ static void RegisterSmoothedTransform(kaguya::State& lua)
         .addProperty("targetWorldPosition", &SmoothedTransform::GetTargetWorldPosition, &SmoothedTransform::SetTargetWorldPosition)
         .addProperty("targetWorldRotation", &SmoothedTransform::GetTargetWorldRotation, &SmoothedTransform::SetTargetWorldRotation)
         .addProperty("inProgress", &SmoothedTransform::IsInProgress)
-    );
+        );
 }
 
 static void RegisterSplinePath(kaguya::State& lua)
@@ -771,7 +987,7 @@ static void RegisterSplinePath(kaguya::State& lua)
         .addProperty("position", &SplinePath::GetPosition, &SplinePath::SetPosition)
         .addProperty("controlledNode", &SplinePath::GetControlledNode, &SplinePath::SetControlledNode)
         .addProperty("finished", &SplinePath::IsFinished)
-    );
+        );
 }
 
 static void RegisterUnknownComponent(kaguya::State& lua)
@@ -788,7 +1004,7 @@ static void RegisterUnknownComponent(kaguya::State& lua)
         .addProperty("type", &UnknownComponent::GetType, &UnknownComponent::SetType)
         .addProperty("typeName", &UnknownComponent::GetTypeName, &UnknownComponent::SetTypeName)
         .addProperty("attributes", &UnknownComponent::GetAttributes)
-    );
+        );
 }
 
 static void RegisterValueAnimation(kaguya::State& lua)
@@ -824,7 +1040,7 @@ static void RegisterValueAnimation(kaguya::State& lua)
         .addProperty("interpolationMethod", &ValueAnimation::GetInterpolationMethod, &ValueAnimation::SetInterpolationMethod)
         .addProperty("splineTension", &ValueAnimation::GetSplineTension, &ValueAnimation::SetSplineTension)
         .addProperty("valueType", &ValueAnimation::GetValueType, &ValueAnimation::SetValueType)
-    );
+        );
 }
 
 void RegisterSceneLuaAPI(kaguya::State& lua)
