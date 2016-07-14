@@ -211,6 +211,16 @@ static kaguya::LuaTable NodeCreateScriptObject1(Node* node, const char* fileName
     return kaguya::LuaTable(instance->GetLuaState(), kaguya::StackTop());
 }
 
+static void NodeRotate0(Node* node, const Quaternion& delta)
+{
+    node->Rotate(delta);
+}
+
+static void NodeRotate1(Node* node, const Quaternion& delta, TransformSpace space)
+{
+    node->Rotate(delta, space);
+}
+
 static void RegisterNode(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -295,7 +305,9 @@ static void RegisterNode(kaguya::State& lua)
 
         .addFunction("Translate", &Node::Translate)
         .addFunction("Translate2D", &Node::Translate2D)
-        .addFunction("Rotate", &Node::Rotate)
+        
+        .addOverloadedFunctions("Rotate", &NodeRotate0, &NodeRotate1)
+
         .addFunction("Rotate2D", &Node::Rotate2D)
         .addFunction("RotateAround", &Node::RotateAround)
         .addFunction("RotateAround2D", &Node::RotateAround2D)

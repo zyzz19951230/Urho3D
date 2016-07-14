@@ -25,16 +25,34 @@
 namespace Urho3D
 {
 
+static void AreaAllocatorReset0(AreaAllocator* self, int width, int height)
+{
+    self->Reset(width, height);
+}
+
+static void AreaAllocatorReset1(AreaAllocator* self, int width, int height, int maxWidth, int maxHeight)
+{
+    self->Reset(width, height, maxWidth, maxHeight);
+}
+    
+static void AreaAllocatorReset2(AreaAllocator* self, int width, int height, int maxWidth, int maxHeight, bool fastMode)
+{
+    self->Reset(width, height, maxWidth, maxHeight, fastMode);
+}   
+
 static void RegisterAreaAllocator(kaguya::State& lua)
 {
     using namespace kaguya;
 
     lua["AreaAllocator"].setClass(UserdataMetatable<AreaAllocator>()
         .setConstructors<AreaAllocator(),
+            AreaAllocator(int, int),
             AreaAllocator(int, int, bool),
+            AreaAllocator(int, int, int, int),
             AreaAllocator(int, int, int, int, bool)>()
 
-        .addFunction("Reset", &AreaAllocator::Reset)
+        ADD_OVERLOADED_FUNCTIONS_3(AreaAllocator, Reset)
+
         .addFunction("Allocate", &AreaAllocator::Allocate)
         .addFunction("GetWidth", &AreaAllocator::GetWidth)
         .addFunction("GetHeight", &AreaAllocator::GetHeight)
@@ -117,6 +135,56 @@ static void RegisterBoundingBox(kaguya::State& lua)
     );
 }
 
+static void ColorFromHSL0(Color* self, float h, float s, float l)
+{
+    self->FromHSL(h, s, l);
+}
+
+static void ColorFromHSL1(Color* self, float h, float s, float l, float a)
+{
+    self->FromHSL(h, s, l, a);
+}
+
+static std::tuple<float, float> ColorBounds0(const Color* self)
+{
+    float boundMin;
+    float boundMax;
+
+    self->Bounds(&boundMin, &boundMax);
+
+    return std::make_tuple(boundMin, boundMax);
+}
+
+static std::tuple<float, float> ColorBounds1(const Color* self, bool clipped)
+{
+    float boundMin;
+    float boundMax;
+    
+    self->Bounds(&boundMin, &boundMax, clipped);
+
+    return std::make_tuple(boundMin, boundMax);
+}
+
+static void ColorClip0(Color* color)
+{
+    color->Clip();
+}
+
+static void ColorClip1(Color* color, bool clipAlpha)
+{
+    color->Clip(clipAlpha);
+}
+
+static void ColorInvert0(Color* color)
+{
+    color->Invert();
+}
+
+static void ColorInvert1(Color* color, bool invertAlpha)
+{
+    color->Invert(invertAlpha);
+}
+
 static void RegisterColor(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -139,7 +207,9 @@ static void RegisterColor(kaguya::State& lua)
         .addFunction("ToUInt", &Color::ToUInt)
         .addFunction("ToHSL", &Color::ToHSL)
         .addFunction("ToHSV", &Color::ToHSV)
-        .addFunction("FromHSL", &Color::FromHSL)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(Color, FromHSL)
+        
         .addFunction("FromHSV", &Color::FromHSV)
         .addFunction("ToVector3", &Color::ToVector3)
         .addFunction("ToVector4", &Color::ToVector4)
@@ -155,13 +225,16 @@ static void RegisterColor(kaguya::State& lua)
         .addFunction("Value", &Color::Value)
         .addFunction("Lightness", &Color::Lightness)
         
-        // .addFunction("Bounds", &Color::Bounds)
+        ADD_OVERLOADED_FUNCTIONS_2(Color, Bounds)
 
         .addFunction("MaxRGB", &Color::MaxRGB)
         .addFunction("MinRGB", &Color::MinRGB)
         .addFunction("Range", &Color::Range)
-        .addFunction("Clip", &Color::Clip)
-        .addFunction("Invert", &Color::Invert)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(Color, Clip)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(Color, Invert)
+        
         .addFunction("Lerp", &Color::Lerp)
         .addFunction("Abs", &Color::Abs)
         .addFunction("Equals", &Color::Equals)
@@ -618,6 +691,26 @@ static void RegisterPolyhedron(kaguya::State& lua)
     );
 }
 
+static bool QuaternionFromLookRotation0(Quaternion* self, const Vector3& direction)
+{
+    return self->FromLookRotation(direction);
+}
+
+static bool QuaternionFromLookRotation1(Quaternion* self, const Vector3& direction, const Vector3& up)
+{
+    return self->FromLookRotation(direction, up);
+}
+
+static Quaternion QuaternionNlerp0(const Quaternion* self, Quaternion rhs, float t)
+{
+    return self->Nlerp(rhs, t);
+}
+
+static Quaternion QuaternionNlerp1(const Quaternion* self, Quaternion rhs, float t, bool shortestPath)
+{
+    return self->Nlerp(rhs, t, shortestPath);
+}
+
 static void RegisterQuaternion(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -651,7 +744,9 @@ static void RegisterQuaternion(kaguya::State& lua)
         .addFunction("FromRotationTo", &Quaternion::FromRotationTo)
         .addFunction("FromAxes", &Quaternion::FromAxes)
         .addFunction("FromRotationMatrix", &Quaternion::FromRotationMatrix)
-        .addFunction("FromLookRotation", &Quaternion::FromLookRotation)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(Quaternion, FromLookRotation)
+
         .addFunction("Normalize", &Quaternion::Normalize)
         .addFunction("Normalized", &Quaternion::Normalized)
         .addFunction("Inverse", &Quaternion::Inverse)
@@ -666,7 +761,9 @@ static void RegisterQuaternion(kaguya::State& lua)
         .addFunction("RollAngle", &Quaternion::RollAngle)
         .addFunction("RotationMatrix", &Quaternion::RotationMatrix)
         .addFunction("Slerp", &Quaternion::Slerp)
-        .addFunction("Nlerp", &Quaternion::Nlerp)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(Quaternion, Nlerp)
+
         .addFunction("ToString", &Quaternion::ToString)
 
         .addProperty("naN", &Quaternion::IsNaN)
@@ -681,7 +778,24 @@ static void RegisterQuaternion(kaguya::State& lua)
 static void RegisterRandom(kaguya::State& lua)
 {
     using namespace kaguya;
+}
 
+static float RayHitDistance0(const Ray* self, const Frustum& frustum)
+{
+    return self->HitDistance(frustum);
+}
+
+static float RayHitDistance1(const Ray* self, const Frustum& frustum, bool solidInside)
+{
+    return self->HitDistance(frustum, solidInside);
+}
+
+static std::tuple<float, Vector3, Vector3> RayHitDistance2(const Ray* self, const Vector3& v0, const Vector3& v1, const Vector3& v2)
+{
+    Vector3 outNormal;
+    Vector3 outBary;
+    float distance = self->HitDistance(v0, v1, v2, &outNormal, &outBary);
+    return std::make_tuple(distance, outNormal, outBary);
 }
 
 static void RegisterRay(kaguya::State& lua)
@@ -702,11 +816,10 @@ static void RegisterRay(kaguya::State& lua)
         .addOverloadedFunctions("HitDistance",
             static_cast<float(Ray::*)(const Plane&) const>(&Ray::HitDistance),
             static_cast<float(Ray::*)(const BoundingBox&) const>(&Ray::HitDistance),
-            static_cast<float(Ray::*)(const Frustum&, bool) const>(&Ray::HitDistance),
+            &RayHitDistance0,
+            &RayHitDistance1,
             static_cast<float(Ray::*)(const Sphere&) const>(&Ray::HitDistance),
-            static_cast<float(Ray::*)(const Vector3&, const Vector3&, const Vector3&, Vector3*, Vector3*) const>(&Ray::HitDistance),
-            static_cast<float(Ray::*)(const void*, unsigned, unsigned, unsigned, Vector3*, Vector2*, unsigned) const>(&Ray::HitDistance),
-            static_cast<float(Ray::*)(const void*, unsigned, const void*, unsigned, unsigned, unsigned, Vector3*, Vector2*, unsigned) const>(&Ray::HitDistance))
+            &RayHitDistance2)
 
 
         .addOverloadedFunctions("InsideGeometry",

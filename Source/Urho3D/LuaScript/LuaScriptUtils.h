@@ -5,6 +5,18 @@
 
 #include <kaguya.hpp>
 
+#define ADD_OVERLOADED_FUNCTIONS_2(Class, Name) \
+.addOverloadedFunctions(#Name, &Class##Name##0, &Class##Name##1)
+
+#define ADD_OVERLOADED_FUNCTIONS_3(Class, Name) \
+.addOverloadedFunctions(#Name, &Class##Name##0, &Class##Name##1, &Class##Name##2)
+
+#define ADD_OVERLOADED_FUNCTIONS_4(Class, Name) \
+.addOverloadedFunctions(#Name, &Class##Name##0, &Class##Name##1, &Class##Name##2, &Class##Name##3)
+
+#define ADD_OVERLOADED_FUNCTIONS_5(Class, Name) \
+.addOverloadedFunctions(#Name, &Class##Name##0, &Class##Name##1, &Class##Name##2, &Class##Name##3, &Class##Name##4)
+
 namespace Urho3D
 {
     class Context;
