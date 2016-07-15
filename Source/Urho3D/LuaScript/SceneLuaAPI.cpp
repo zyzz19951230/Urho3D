@@ -72,7 +72,6 @@ static void RegisterAnimationDefs(kaguya::State& lua)
     lua["WM_LOOP"] = WM_LOOP;
     lua["WM_ONCE"] = WM_ONCE;
     lua["WM_CLAMP"] = WM_CLAMP;
-
 }
 
 static SharedPtr<Component> ComponentGetComponent(const Component* self, const char* type)
@@ -141,24 +140,32 @@ static void RegisterLogicComponent(kaguya::State& lua)
 static bool NodeSaveXML0(const Node* self, const char* filepath)
 {
     SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    if (!file->IsOpen())
+        return false;
     return self->SaveXML(*file);
 }
 
 static bool NodeSaveXML1(const Node* self, const char* filepath, const String& indentation)
 {
     SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    if (!file->IsOpen())
+        return false;
     return self->SaveXML(*file, indentation);
 }
 
 static bool NodeSaveJSON0(const Node* self, const char* filepath)
 {
     SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    if (!file->IsOpen())
+        return false;
     return self->SaveJSON(*file);
 }
 
 static bool NodeSaveJSON1(const Node* self, const char* filepath, const String& indentation)
 {
     SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    if (!file->IsOpen())
+        return false;
     return self->SaveJSON(*file, indentation);
 }
 
@@ -763,9 +770,7 @@ static void RegisterNode(kaguya::State& lua)
         .addProperty("dirty", &Node::IsDirty)
         .addProperty("numComponents", &Node::GetNumComponents)
         .addProperty("numNetworkComponents", &Node::GetNumNetworkComponents)
-
         // .addProperty("listeners", &Node::GetListeners)
-
         .addProperty("vars", &Node::GetVars)
         );
 }
@@ -807,96 +812,128 @@ static void RegisterObjectAnimation(kaguya::State& lua)
 static bool SceneLoadXML(Scene* scene, const char* filepath)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
     return scene->LoadXML(*file);
 }
 
 static bool SceneLoadJSON(Scene* scene, const char* filepath)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
     return scene->LoadJSON(*file);
 }
 
 static bool SceneSaveXML(const Scene* scene, const char* filepath, const String& indentation = "\t")
 {
     SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    if (!file->IsOpen())
+        return false;
     return scene->SaveXML(*file, indentation);
 }
 
 static bool SceneSaveJSON(const Scene* scene, const char* filepath, const String& indentation = "\t")
 {
     SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    if (!file->IsOpen())
+        return false;
     return scene->SaveJSON(*file, indentation);
 }
 
 static bool SceneLoadAsync0(Scene* self, const char* filepath)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
     return self->LoadAsync(file);
 }
 
 static bool SceneLoadAsync1(Scene* self, const char* filepath, LoadMode mode)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
     return self->LoadAsync(file, mode);
 }
 
 static bool SceneLoadAsyncXML0(Scene* self, const char* filepath)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
     return self->LoadAsyncXML(file);
 }
 
 static bool SceneLoadAsyncXML1(Scene* self, const char* filepath, LoadMode mode)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
     return self->LoadAsyncXML(file, mode);
 }
 
 static bool SceneLoadAsyncJSON0(Scene* self, const char* filepath)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
     return self->LoadAsyncJSON(file);
 }
 
 static bool SceneLoadAsyncJSON1(Scene* self, const char* filepath, LoadMode mode)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
     return self->LoadAsyncJSON(file, mode);
 }
 
 static SharedPtr<Node> SceneInstantiate0(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return SharedPtr<Node>();
     return SharedPtr<Node>(self->Instantiate(*file, position, rotation));
 }
 
 static SharedPtr<Node> SceneInstantiate1(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation, CreateMode mode)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return SharedPtr<Node>();
     return SharedPtr<Node>(self->Instantiate(*file, position, rotation, mode));
 }
 
 static SharedPtr<Node> SceneInstantiateXML0(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return SharedPtr<Node>();
     return SharedPtr<Node>(self->InstantiateXML(*file, position, rotation));
 }
 
 static SharedPtr<Node> SceneInstantiateXML1(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation, CreateMode mode)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return SharedPtr<Node>();
     return SharedPtr<Node>(self->InstantiateXML(*file, position, rotation, mode));
 }
 
 static SharedPtr<Node> SceneInstantiateJSON0(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return SharedPtr<Node>();
     return SharedPtr<Node>(self->InstantiateJSON(*file, position, rotation));
 }
 
 static SharedPtr<Node> SceneInstantiateJSON1(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation, CreateMode mode)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return SharedPtr<Node>();
     return SharedPtr<Node>(self->InstantiateJSON(*file, position, rotation, mode));
 }
 
@@ -914,8 +951,6 @@ static void SceneClear2(Scene* self, bool clearReplicated, bool clearLocal)
 {
     self->Clear(clearReplicated, clearLocal);
 }
-//////////////////////////////////////////////////////////////////////////
-
 
 static void RegisterScene(kaguya::State& lua)
 {
@@ -1030,6 +1065,8 @@ static void RegisterSceneEvents(kaguya::State& lua)
 static bool SerializableLoad0(Serializable* self, const char* filepath)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
     return self->Load(*file);
 }
 
