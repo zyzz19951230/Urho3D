@@ -50,7 +50,7 @@ static void RegisterCrowdAgent(kaguya::State& lua)
 
     lua["CrowdAgent"].setClass(UserdataMetatable<CrowdAgent, Component>()
         .addStaticFunction("new", &CreateObject<CrowdAgent>)
-        
+
         .addFunction("DrawDebugGeometry", static_cast<void(CrowdAgent::*)(bool)>(&CrowdAgent::DrawDebugGeometry))
 
         .addFunction("SetTargetPosition", &CrowdAgent::SetTargetPosition)
@@ -86,7 +86,7 @@ static void RegisterCrowdAgent(kaguya::State& lua)
         .addFunction("HasRequestedTarget", &CrowdAgent::HasRequestedTarget)
         .addFunction("HasArrived", &CrowdAgent::HasArrived)
         .addFunction("IsInCrowd", &CrowdAgent::IsInCrowd)
-        
+
         .addProperty("position", &CrowdAgent::GetPosition)
         .addProperty("desiredVelocity", &CrowdAgent::GetDesiredVelocity)
         .addProperty("actualVelocity", &CrowdAgent::GetActualVelocity)
@@ -106,17 +106,92 @@ static void RegisterCrowdAgent(kaguya::State& lua)
         .addProperty("navigationQuality", &CrowdAgent::GetNavigationQuality, &CrowdAgent::SetNavigationQuality)
         .addProperty("navigationPushiness", &CrowdAgent::GetNavigationPushiness, &CrowdAgent::SetNavigationPushiness)
         .addProperty("inCrowd", &CrowdAgent::IsInCrowd)
-    );
+        );
 }
 
-static PODVector<CrowdAgent*> CrowdManagerGetAgents0(const CrowdManager* self, Node* node)
+static void CrowdManagerSetCrowdTarget0(CrowdManager* self, const Vector3& position)
+{
+    self->SetCrowdTarget(position);
+}
+
+static void CrowdManagerSetCrowdTarget1(CrowdManager* self, const Vector3& position, Node* node)
+{
+    self->SetCrowdTarget(position, node);
+}
+
+static void CrowdManagerSetCrowdVelocity0(CrowdManager* self, const Vector3& velocity)
+{
+    self->SetCrowdVelocity(velocity);
+}
+
+static void CrowdManagerSetCrowdVelocity1(CrowdManager* self, const Vector3& velocity, Node* node)
+{
+    self->SetCrowdVelocity(velocity, node);
+}
+
+static void CrowdManagerResetCrowdTarget0(CrowdManager* self)
+{
+    self->ResetCrowdTarget();
+}
+
+static void CrowdManagerResetCrowdTarget1(CrowdManager* self, Node* node)
+{
+    self->ResetCrowdTarget(node);
+}
+
+static PODVector<CrowdAgent*> CrowdManagerGetAgents0(const CrowdManager* self)
+{
+    return self->GetAgents();
+}
+
+static PODVector<CrowdAgent*> CrowdManagerGetAgents1(const CrowdManager* self, Node* node)
 {
     return self->GetAgents(node);
 }
 
-static PODVector<CrowdAgent*> CrowdManagerGetAgents1(const CrowdManager* self, Node* node, bool inCrowdFilter)
+static PODVector<CrowdAgent*> CrowdManagerGetAgents2(const CrowdManager* self, Node* node, bool inCrowdFilter)
 {
     return self->GetAgents(node, inCrowdFilter);
+}
+
+static Vector3 CrowdManagerFindNearestPoint(CrowdManager* self, const Vector3& point, int queryFilterType)
+{
+    return self->FindNearestPoint(point, queryFilterType);
+}
+
+static Vector3 CrowdManagerMoveAlongSurface0(CrowdManager* self, const Vector3& start, const Vector3& end, int queryFilterType)
+{
+    return self->MoveAlongSurface(start, end, queryFilterType);
+}
+
+static Vector3 CrowdManagerMoveAlongSurface1(CrowdManager* self, const Vector3& start, const Vector3& end, int queryFilterType, int maxVisited)
+{
+    return self->MoveAlongSurface(start, end, queryFilterType, maxVisited);
+}
+
+static Vector3 CrowdManagerGetRandomPoint(CrowdManager* self, int queryFilterType)
+{
+    return self->GetRandomPoint(queryFilterType);
+}
+
+static Vector3 CrowdManagerGetRandomPointInCircle(CrowdManager* self, const Vector3& center, float radius, int queryFilterType)
+{
+    return self->GetRandomPointInCircle(center, radius, queryFilterType);
+}
+
+static std::tuple<float, Vector3, Vector3> CrowdManagerGetDistanceToWall(CrowdManager* self, const Vector3& point, float radius, int queryFilterType)
+{
+    Vector3 hitPos;
+    Vector3 hitNormal;
+    float distance = self->GetDistanceToWall(point, radius, queryFilterType, &hitPos, &hitNormal);
+    return std::make_tuple(distance, hitPos, hitNormal);
+}
+
+static std::tuple<Vector3, Vector3> CrowdManagerRaycast(CrowdManager* self, const Vector3& start, const Vector3& end, int queryFilterType)
+{
+    Vector3 hitNormal;
+    Vector3 result = self->Raycast(start, end, queryFilterType, &hitNormal);
+    return std::make_tuple(result, hitNormal);
 }
 
 static void RegisterCrowdManager(kaguya::State& lua)
@@ -135,15 +210,17 @@ static void RegisterCrowdManager(kaguya::State& lua)
         .addProperty("adaptiveDivs", &CrowdObstacleAvoidanceParams::adaptiveDivs)
         .addProperty("adaptiveRings", &CrowdObstacleAvoidanceParams::adaptiveRings)
         .addProperty("adaptiveDepth", &CrowdObstacleAvoidanceParams::adaptiveDepth)
-    );
+        );
+
     lua["CrowdManager"].setClass(UserdataMetatable<CrowdManager, Component>()
         .addStaticFunction("new", &CreateObject<CrowdManager>)
-        
+
         .addFunction("DrawDebugGeometry", static_cast<void(CrowdManager::*)(bool)>(&CrowdManager::DrawDebugGeometry))
 
-        .addFunction("SetCrowdTarget", &CrowdManager::SetCrowdTarget)
-        .addFunction("SetCrowdVelocity", &CrowdManager::SetCrowdVelocity)
-        .addFunction("ResetCrowdTarget", &CrowdManager::ResetCrowdTarget)
+        ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, SetCrowdTarget)
+        ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, SetCrowdVelocity)
+        ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, ResetCrowdTarget)
+
         .addFunction("SetMaxAgents", &CrowdManager::SetMaxAgents)
         .addFunction("SetMaxAgentRadius", &CrowdManager::SetMaxAgentRadius)
         .addFunction("SetNavigationMesh", &CrowdManager::SetNavigationMesh)
@@ -151,16 +228,21 @@ static void RegisterCrowdManager(kaguya::State& lua)
         .addFunction("SetExcludeFlags", &CrowdManager::SetExcludeFlags)
         .addFunction("SetAreaCost", &CrowdManager::SetAreaCost)
         .addFunction("SetObstacleAvoidanceParams", &CrowdManager::SetObstacleAvoidanceParams)
-        
+
         ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, GetAgents)
 
-        .addFunction("FindNearestPoint", &CrowdManager::FindNearestPoint)
-        .addFunction("MoveAlongSurface", &CrowdManager::MoveAlongSurface)
+        .addStaticFunction("FindNearestPoint", &CrowdManagerFindNearestPoint)
+
+        ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, MoveAlongSurface)
+
         .addFunction("FindPath", &CrowdManager::FindPath)
-        .addFunction("GetRandomPoint", &CrowdManager::GetRandomPoint)
-        .addFunction("GetRandomPointInCircle", &CrowdManager::GetRandomPointInCircle)
-        .addFunction("GetDistanceToWall", &CrowdManager::GetDistanceToWall)
-        .addFunction("Raycast", &CrowdManager::Raycast)
+
+        .addStaticFunction("GetRandomPoint", &CrowdManagerGetRandomPoint)
+        .addStaticFunction("GetRandomPointInCircle", &CrowdManagerGetRandomPointInCircle)
+
+        .addStaticFunction("GetDistanceToWall", &CrowdManagerGetDistanceToWall)
+        .addStaticFunction("Raycast", &CrowdManagerRaycast)
+
         .addFunction("GetMaxAgents", &CrowdManager::GetMaxAgents)
         .addFunction("GetMaxAgentRadius", &CrowdManager::GetMaxAgentRadius)
         .addFunction("GetNavigationMesh", &CrowdManager::GetNavigationMesh)
@@ -177,7 +259,7 @@ static void RegisterCrowdManager(kaguya::State& lua)
         .addProperty("navigationMesh", &CrowdManager::GetNavigationMesh, &CrowdManager::SetNavigationMesh)
         .addProperty("numQueryFilterTypes", &CrowdManager::GetNumQueryFilterTypes)
         .addProperty("numObstacleAvoidanceTypes", &CrowdManager::GetNumObstacleAvoidanceTypes)
-    );
+        );
 }
 
 static void RegisterDynamicNavigationMesh(kaguya::State& lua)
@@ -186,7 +268,7 @@ static void RegisterDynamicNavigationMesh(kaguya::State& lua)
 
     lua["DynamicNavigationMesh"].setClass(UserdataMetatable<DynamicNavigationMesh, NavigationMesh>()
         .addStaticFunction("new", &CreateObject<DynamicNavigationMesh>)
-        
+
         .addOverloadedFunctions("Build",
             static_cast<bool(DynamicNavigationMesh::*)()>(&DynamicNavigationMesh::Build),
             static_cast<bool(DynamicNavigationMesh::*)(const BoundingBox&)>(&DynamicNavigationMesh::Build))
@@ -203,7 +285,7 @@ static void RegisterDynamicNavigationMesh(kaguya::State& lua)
         .addProperty("maxObstacles", &DynamicNavigationMesh::GetMaxObstacles, &DynamicNavigationMesh::SetMaxObstacles)
         .addProperty("maxLayers", &DynamicNavigationMesh::GetMaxLayers, &DynamicNavigationMesh::SetMaxLayers)
         .addProperty("drawObstacles", &DynamicNavigationMesh::GetDrawObstacles, &DynamicNavigationMesh::SetDrawObstacles)
-    );
+        );
 }
 
 static void RegisterNavArea(kaguya::State& lua)
@@ -212,7 +294,7 @@ static void RegisterNavArea(kaguya::State& lua)
 
     lua["NavArea"].setClass(UserdataMetatable<NavArea, Component>()
         .addStaticFunction("new", &CreateObject<NavArea>)
-        
+
         .addFunction("GetAreaID", &NavArea::GetAreaID)
         .addFunction("SetAreaID", &NavArea::SetAreaID)
         .addFunction("GetBoundingBox", &NavArea::GetBoundingBox)
@@ -222,7 +304,7 @@ static void RegisterNavArea(kaguya::State& lua)
         .addProperty("areaID", &NavArea::GetAreaID, &NavArea::SetAreaID)
         .addProperty("boundingBox", &NavArea::GetBoundingBox, &NavArea::SetBoundingBox)
         .addProperty("worldBoundingBox", &NavArea::GetWorldBoundingBox)
-    );
+        );
 }
 
 static void RegisterNavigable(kaguya::State& lua)
@@ -231,12 +313,12 @@ static void RegisterNavigable(kaguya::State& lua)
 
     lua["Navigable"].setClass(UserdataMetatable<Navigable, Component>()
         .addStaticFunction("new", &CreateObject<Navigable>)
-        
+
         .addFunction("SetRecursive", &Navigable::SetRecursive)
         .addFunction("IsRecursive", &Navigable::IsRecursive)
 
         .addProperty("recursive", &Navigable::IsRecursive, &Navigable::SetRecursive)
-    );
+        );
 }
 
 static void RegisterNavigationEvents(kaguya::State& lua)
@@ -255,6 +337,80 @@ static void RegisterNavigationEvents(kaguya::State& lua)
     lua["E_CROWD_AGENT_NODE_STATE_CHANGED"] = E_CROWD_AGENT_NODE_STATE_CHANGED;
     lua["E_NAVIGATION_OBSTACLE_ADDED"] = E_NAVIGATION_OBSTACLE_ADDED;
     lua["E_NAVIGATION_OBSTACLE_REMOVED"] = E_NAVIGATION_OBSTACLE_REMOVED;
+}
+
+static Vector3 NavigationMeshFindNearestPoint0(NavigationMesh* self, const Vector3& point)
+{
+    return self->FindNearestPoint(point);
+}
+
+static Vector3 NavigationMeshFindNearestPoint1(NavigationMesh* self, const Vector3& point, const Vector3& extents)
+{
+    return self->FindNearestPoint(point, extents);
+}
+
+static Vector3 NavigationMeshMoveAlongSurface0(NavigationMesh* self, const Vector3& start, const Vector3& end)
+{
+    return self->MoveAlongSurface(start, end);
+}
+
+static Vector3 NavigationMeshMoveAlongSurface1(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents)
+{
+    return self->MoveAlongSurface(start, end, extents);
+}
+
+static Vector3 NavigationMeshMoveAlongSurface2(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents, int maxVisited)
+{
+    return self->MoveAlongSurface(start, end, extents, maxVisited);
+}
+
+static PODVector<Vector3> NavigationMeshFindPath0(NavigationMesh* self, const Vector3& start, const Vector3& end)
+{
+    PODVector<Vector3> dest;
+    self->FindPath(dest, start, end);
+    return dest;
+}
+
+static PODVector<Vector3> NavigationMeshFindPath1(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents)
+{
+    PODVector<Vector3> dest;
+    self->FindPath(dest, start, end, extents);
+    return dest;
+}
+
+static Vector3 NavigationMeshGetRandomPoint(NavigationMesh* self)
+{
+    return self->GetRandomPoint();
+}
+
+static Vector3 NavigationMeshGetRandomPointInCircle0(NavigationMesh* self, const Vector3& center, float radius)
+{
+    return self->GetRandomPointInCircle(center, radius);
+}
+
+static Vector3 NavigationMeshGetRandomPointInCircle1(NavigationMesh* self, const Vector3& center, float radius, const Vector3& extents)
+{
+    return self->GetRandomPointInCircle(center, radius, extents);
+}
+
+static float NavigationMeshGetDistanceToWall0(NavigationMesh* self, const Vector3& point, float radius)
+{
+    return self->GetDistanceToWall(point, radius);
+}
+
+static float NavigationMeshGetDistanceToWall1(NavigationMesh* self, const Vector3& point, float radius, const Vector3& extents)
+{
+    return self->GetDistanceToWall(point, radius, extents);
+}
+
+static Vector3 NavigationMeshRaycast0(NavigationMesh* self, const Vector3& start, const Vector3& end)
+{
+    return self->Raycast(start, end);
+}
+
+static Vector3 NavigationMeshRaycast1(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents)
+{
+    return self->Raycast(start, end, extents);
 }
 
 static void RegisterNavigationMesh(kaguya::State& lua)
@@ -276,11 +432,11 @@ static void RegisterNavigationMesh(kaguya::State& lua)
         .addProperty("position", &NavigationPathPoint::position_)
         .addProperty("flag", &NavigationPathPoint::flag_)
         .addProperty("areaID", &NavigationPathPoint::areaID_)
-    );
+        );
 
     lua["NavigationMesh"].setClass(UserdataMetatable<NavigationMesh, Component>()
         .addStaticFunction("new", &CreateObject<NavigationMesh>)
-        
+
         .addFunction("DrawDebugGeometry", static_cast<void(NavigationMesh::*)(bool)>(&NavigationMesh::DrawDebugGeometry))
 
         .addFunction("SetTileSize", &NavigationMesh::SetTileSize)
@@ -299,20 +455,17 @@ static void RegisterNavigationMesh(kaguya::State& lua)
         .addFunction("SetPadding", &NavigationMesh::SetPadding)
         .addFunction("SetAreaCost", &NavigationMesh::SetAreaCost)
 
-        .addFunction("FindNearestPoint", &NavigationMesh::FindNearestPoint)
-        .addFunction("MoveAlongSurface", &NavigationMesh::MoveAlongSurface)
+        ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, FindNearestPoint)
+        ADD_OVERLOADED_FUNCTIONS_3(NavigationMesh, MoveAlongSurface)
 
-        /*
-        // TODO:
-        .addOverloadedFunctions("FindPath",
-            static_cast<void(NavigationMesh::*)(PODVector<Vector3>&, const Vector3&, const Vector3&, const Vector3&, const dtQueryFilter*)>(&NavigationMesh::FindPath),
-            static_cast<void(NavigationMesh::*)(PODVector<NavigationPathPoint>&, const Vector3&, const Vector3&, const Vector3&, const dtQueryFilter*)>(&NavigationMesh::FindPath))
-            */
+        ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, FindPath)
 
-        .addFunction("GetRandomPoint", &NavigationMesh::GetRandomPoint)
-        .addFunction("GetRandomPointInCircle", &NavigationMesh::GetRandomPointInCircle)
-        .addFunction("GetDistanceToWall", &NavigationMesh::GetDistanceToWall)
-        .addFunction("Raycast", &NavigationMesh::Raycast)
+        .addStaticFunction("GetRandomPoint", &NavigationMeshGetRandomPoint)
+
+        ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, GetRandomPointInCircle)
+        ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, GetDistanceToWall)
+        ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, Raycast)
+
         .addFunction("GetMeshName", &NavigationMesh::GetMeshName)
         .addFunction("SetMeshName", &NavigationMesh::SetMeshName)
         .addFunction("GetTileSize", &NavigationMesh::GetTileSize)
@@ -363,7 +516,7 @@ static void RegisterNavigationMesh(kaguya::State& lua)
         .addProperty("partitionType", &NavigationMesh::GetPartitionType, &NavigationMesh::SetPartitionType)
         .addProperty("drawOffMeshConnections", &NavigationMesh::GetDrawOffMeshConnections, &NavigationMesh::SetDrawOffMeshConnections)
         .addProperty("drawNavAreas", &NavigationMesh::GetDrawNavAreas, &NavigationMesh::SetDrawNavAreas)
-    );
+        );
 }
 
 static void RegisterObstacle(kaguya::State& lua)
@@ -372,7 +525,7 @@ static void RegisterObstacle(kaguya::State& lua)
 
     lua["Obstacle"].setClass(UserdataMetatable<Obstacle, Component>()
         .addStaticFunction("new", &CreateObject<Obstacle>)
-        
+
         .addFunction("GetHeight", &Obstacle::GetHeight)
         .addFunction("SetHeight", &Obstacle::SetHeight)
         .addFunction("GetRadius", &Obstacle::GetRadius)
@@ -384,7 +537,7 @@ static void RegisterObstacle(kaguya::State& lua)
         .addProperty("height", &Obstacle::GetHeight, &Obstacle::SetHeight)
         .addProperty("radius", &Obstacle::GetRadius, &Obstacle::SetRadius)
         .addProperty("obstacleID", &Obstacle::GetObstacleID)
-    );
+        );
 }
 
 static void RegisterOffMeshConnection(kaguya::State& lua)
@@ -393,7 +546,7 @@ static void RegisterOffMeshConnection(kaguya::State& lua)
 
     lua["OffMeshConnection"].setClass(UserdataMetatable<OffMeshConnection, Component>()
         .addStaticFunction("new", &CreateObject<OffMeshConnection>)
-        
+
         .addFunction("SetEndPoint", &OffMeshConnection::SetEndPoint)
         .addFunction("SetRadius", &OffMeshConnection::SetRadius)
         .addFunction("SetBidirectional", &OffMeshConnection::SetBidirectional)
@@ -410,7 +563,7 @@ static void RegisterOffMeshConnection(kaguya::State& lua)
         .addProperty("bidirectional", &OffMeshConnection::IsBidirectional, &OffMeshConnection::SetBidirectional)
         .addProperty("mask", &OffMeshConnection::GetMask, &OffMeshConnection::SetMask)
         .addProperty("areaID", &OffMeshConnection::GetAreaID, &OffMeshConnection::SetAreaID)
-    );
+        );
 }
 
 void RegisterNavigationLuaAPI(kaguya::State& lua)

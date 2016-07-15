@@ -228,7 +228,6 @@ static void RegisterCollisionShape(kaguya::State& lua)
     lua["SHAPE_TRIANGLEMESH"] = SHAPE_TRIANGLEMESH;
     lua["SHAPE_CONVEXHULL"] = SHAPE_CONVEXHULL;
     lua["SHAPE_TERRAIN"] = SHAPE_TERRAIN;
-
     lua["CollisionShape"].setClass(UserdataMetatable<CollisionShape, Component>()
         .addStaticFunction("new", &CreateObject<CollisionShape>)
         
@@ -492,24 +491,13 @@ static void RegisterPhysicsWorld(kaguya::State& lua)
         .addFunction("SetMaxNetworkAngularVelocity", &PhysicsWorld::SetMaxNetworkAngularVelocity)
         
         ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld, Raycast)
-
         ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld, RaycastSingle)
         ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld, RaycastSingleSegmented)
         ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld, SphereCast)
-
-        // .addFunction("ConvexCast", static_cast<void(PhysicsWorld::*)(PhysicsRaycastResult&, CollisionShape*, const Vector3&, const Quaternion&, const Vector3&, const Quaternion&, unsigned)>(&PhysicsWorld::ConvexCast))
         ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld, ConvexCast)
 
         .addFunction("RemoveCachedGeometry", &PhysicsWorld::RemoveCachedGeometry)
 
-        /*
-        .addOverloadedFunctions("GetRigidBodies",
-            static_cast<void(PhysicsWorld::*)(PODVector<RigidBody*>&, const Sphere&, unsigned)>(&PhysicsWorld::GetRigidBodies),
-            static_cast<void(PhysicsWorld::*)(PODVector<RigidBody*>&, const BoundingBox&, unsigned)>(&PhysicsWorld::GetRigidBodies),
-            static_cast<void(PhysicsWorld::*)(PODVector<RigidBody*>&, const RigidBody*)>(&PhysicsWorld::GetRigidBodies))
-            */
-
-            // .addFunction("GetCollidingBodies", &PhysicsWorld::GetCollidingBodies)
         ADD_OVERLOADED_FUNCTIONS_4(PhysicsWorld, GetRigidBodies)
 
         .addFunction("GetGravity", &PhysicsWorld::GetGravity)

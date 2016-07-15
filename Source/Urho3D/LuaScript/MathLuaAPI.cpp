@@ -275,6 +275,46 @@ static void RegisterColor(kaguya::State& lua)
         );
 }
 
+static void FrustumDefine0(Frustum* self, float fov, float aspectRatio, float zoom, float nearZ, float farZ)
+{
+    self->Define(fov, aspectRatio, zoom, nearZ, farZ);
+}
+
+static void FrustumDefine1(Frustum* self, float fov, float aspectRatio, float zoom, float nearZ, float farZ, const Matrix3x4& transform)
+{
+    self->Define(fov, aspectRatio, zoom, nearZ, farZ, transform);
+}
+
+static void FrustumDefine2(Frustum* self, const Vector3& near, const Vector3& far)
+{
+    self->Define(near, far);
+}
+
+static void FrustumDefine3(Frustum* self, const Vector3& near, const Vector3& far, const Matrix3x4& transform)
+{
+    self->Define(near, far, transform);
+}
+
+static void FrustumDefine4(Frustum* self, const BoundingBox& box)
+{
+    self->Define(box);
+}
+
+static void FrustumDefine5(Frustum* self, const BoundingBox& box, const Matrix3x4& transform)
+{
+    self->Define(box, transform);
+}
+
+static void FrustumDefineOrtho0(Frustum* self, float orthoSize, float aspectRatio, float zoom, float nearZ, float farZ)
+{
+    self->DefineOrtho(orthoSize, aspectRatio, zoom, nearZ, farZ);
+}
+
+static void FrustumDefineOrtho1(Frustum* self, float orthoSize, float aspectRatio, float zoom, float nearZ, float farZ, const Matrix3x4& transform)
+{
+    self->DefineOrtho(orthoSize, aspectRatio, zoom, nearZ, farZ, transform);
+}
+
 static void RegisterFrustum(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -292,12 +332,8 @@ static void RegisterFrustum(kaguya::State& lua)
     lua["Frustum"].setClass(UserdataMetatable<Frustum>()
         .setConstructors<Frustum(), Frustum(const Frustum&)>()
 
-        .addOverloadedFunctions("Define",
-            static_cast<void(Frustum::*)(float, float, float, float, float, const Matrix3x4&)>(&Frustum::Define),
-            static_cast<void(Frustum::*)(const Vector3&, const Vector3&, const Matrix3x4&)>(&Frustum::Define),
-            static_cast<void(Frustum::*)(const BoundingBox&, const Matrix3x4&)>(&Frustum::Define))
-
-        .addFunction("DefineOrtho", &Frustum::DefineOrtho)
+        ADD_OVERLOADED_FUNCTIONS_2(Frustum, Define)
+        ADD_OVERLOADED_FUNCTIONS_2(Frustum, DefineOrtho)
 
         .addOverloadedFunctions("Transform",
             static_cast<void(Frustum::*)(const Matrix3&)>(&Frustum::Transform),
