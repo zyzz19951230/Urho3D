@@ -9,7 +9,6 @@
 #include "../Graphics/ParticleEffect.h"
 #include "../Graphics/ParticleEmitter.h"
 #include "../Graphics/RibbonTrail.h"
-#include "../Graphics/Skeleton.h"
 #include "../Graphics/Skybox.h"
 #include "../Graphics/StaticModel.h"
 #include "../Graphics/StaticModelGroup.h"
@@ -580,62 +579,6 @@ static void RegisterRibbonTrail(kaguya::State& lua)
         );
 }
 
-static void RegisterSkeleton(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["BONECOLLISION_NONE"] = BONECOLLISION_NONE;
-    lua["BONECOLLISION_SPHERE"] = BONECOLLISION_SPHERE;
-    lua["BONECOLLISION_BOX"] = BONECOLLISION_BOX;
-
-    lua["Bone"].setClass(UserdataMetatable<Bone>()
-        .setConstructors<Bone()>()
-
-        .addProperty("name", &Bone::name_)
-        .addProperty("nameHash", &Bone::nameHash_)
-        .addProperty("parentIndex", &Bone::parentIndex_)
-        .addProperty("initialPosition", &Bone::initialPosition_)
-        .addProperty("initialRotation", &Bone::initialRotation_)
-        .addProperty("initialScale", &Bone::initialScale_)
-        .addProperty("offsetMatrix", &Bone::offsetMatrix_)
-        .addProperty("animated", &Bone::animated_)
-        .addProperty("collisionMask", &Bone::collisionMask_)
-        .addProperty("radius", &Bone::radius_)
-        .addProperty("boundingBox", &Bone::boundingBox_)
-        // .addProperty("node", &Bone::node_)
-    );
-
-    lua["Skeleton"].setClass(UserdataMetatable<Skeleton>()
-        .setConstructors<Skeleton()>()
-
-        // .addFunction("Load", &Skeleton::Load)
-        // .addFunction("Save", &Skeleton::Save)
-        // .addFunction("Define", &Skeleton::Define)
-
-        .addFunction("SetRootBoneIndex", &Skeleton::SetRootBoneIndex)
-        .addFunction("ClearBones", &Skeleton::ClearBones)
-        .addFunction("Reset", &Skeleton::Reset)
-        
-        .addFunction("GetBones", &Skeleton::GetBones)
-        .addFunction("GetModifiableBones", &Skeleton::GetModifiableBones)
-
-        .addFunction("GetNumBones", &Skeleton::GetNumBones)
-        .addFunction("GetRootBone", &Skeleton::GetRootBone)
-
-        .addOverloadedFunctions("GetBone",
-            static_cast<Bone*(Skeleton::*)(unsigned int)>(&Skeleton::GetBone),
-            static_cast<Bone*(Skeleton::*)(const char*)>(&Skeleton::GetBone),
-            static_cast<Bone*(Skeleton::*)(StringHash)>(&Skeleton::GetBone))
-
-        .addProperty("bones", &Skeleton::GetBones)
-        .addProperty("modifiableBones", &Skeleton::GetModifiableBones)
-        .addProperty("numBones", &Skeleton::GetNumBones)
-        .addProperty("rootBone", &Skeleton::GetRootBone)
-        .addProperty("rootBoneIndex", &Skeleton::SetRootBoneIndex)
-    );
-}
-
-
 static void RegisterSkybox(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -829,7 +772,6 @@ void RegisterDrawableLuaAPI(kaguya::State& lua)
     RegisterLight(lua);
     RegisterParticleEmitter(lua);
     RegisterRibbonTrail(lua);
-    RegisterSkeleton(lua);
     RegisterSkybox(lua);
     RegisterStaticModelGroup(lua);
     RegisterTerrainPatch(lua);
@@ -843,7 +785,5 @@ void RegisterDrawableLuaAPI(kaguya::State& lua)
     lua["CascadeParameters"].setMetatable(metatable);
     lua["FocusParameters"].setMetatable(metatable);
     lua["TrailPoint"].setMetatable(metatable);
-    lua["Bone"].setMetatable(metatable);
-    lua["Skeleton"].setMetatable(metatable);
 }
 }
