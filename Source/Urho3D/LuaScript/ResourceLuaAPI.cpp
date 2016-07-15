@@ -40,7 +40,7 @@ static void RegisterImage(kaguya::State& lua)
 
     lua["Image"].setClass(UserdataMetatable<Image, Resource>()
         .addStaticFunction("new", &CreateObject<Image>)
-        
+
         .addFunction("BeginLoad", &Image::BeginLoad)
         .addFunction("Save", &Image::Save)
 
@@ -109,7 +109,7 @@ static void RegisterImage(kaguya::State& lua)
         .addProperty("numCompressedLevels", &Image::GetNumCompressedLevels)
         .addProperty("nextLevel", &Image::GetNextLevel)
         .addProperty("nextSibling", &Image::GetNextSibling)
-    );
+        );
 }
 
 static void RegisterJSONFile(kaguya::State& lua)
@@ -118,7 +118,7 @@ static void RegisterJSONFile(kaguya::State& lua)
 
     lua["JSONFile"].setClass(UserdataMetatable<JSONFile, Resource>()
         .addStaticFunction("new", &CreateObject<JSONFile>)
-        
+
 
         // .addFunction("Save", static_cast<bool(JSONFile::*)(Serializer&, const String&) const>(&JSONFile::Save))
         .addFunction("FromString", &JSONFile::FromString)
@@ -128,7 +128,7 @@ static void RegisterJSONFile(kaguya::State& lua)
 
         .addFunction("GetRoot", static_cast<const JSONValue&(JSONFile::*)() const>(&JSONFile::GetRoot))
 
-    );
+        );
 }
 
 static void RegisterJSONValue(kaguya::State& lua)
@@ -229,7 +229,7 @@ static void RegisterJSONValue(kaguya::State& lua)
         .addProperty("isObject", &JSONValue::IsObject)
 
         .addStaticField("EMPTY", &JSONValue::EMPTY)
-    );
+        );
 }
 
 static void RegisterLocalization(kaguya::State& lua)
@@ -259,7 +259,7 @@ static void RegisterLocalization(kaguya::State& lua)
         .addFunction("LoadJSONFile", &Localization::LoadJSONFile)
 
         .addProperty("numLanguages", &Localization::GetNumLanguages)
-    );
+        );
 }
 
 static void RegisterPListFile(kaguya::State& lua)
@@ -305,17 +305,17 @@ static void RegisterPListFile(kaguya::State& lua)
 
 
         .addProperty("type", &PListValue::GetType)
-    );
+        );
 
     lua["PListFile"].setClass(UserdataMetatable<PListFile, Resource>()
         .addStaticFunction("new", &CreateObject<PListFile>)
-        
+
 
 
         .addFunction("GetRoot", &PListFile::GetRoot)
 
         .addProperty("root", &PListFile::GetRoot)
-    );
+        );
 }
 
 static void RegisterResource(kaguya::State& lua)
@@ -331,7 +331,7 @@ static void RegisterResource(kaguya::State& lua)
 
     lua["Resource"].setClass(UserdataMetatable<Resource, Object>()
         .addStaticFunction("new", &CreateObject<Resource>)
-        
+
 
 
         .addStaticFunction("LoadFromFile", [](Resource& resouce, const char* filepath)
@@ -365,12 +365,153 @@ static void RegisterResource(kaguya::State& lua)
         );
 }
 
-static SharedPtr<Resource> ResourceCacheGetResource(ResourceCache* cache, const char* type, const char* name, bool sendEventOnFailure = true)
+static bool ResourceCacheAddResourceDir0(ResourceCache* self, const String& pathName)
+{
+    return self->AddResourceDir(pathName);
+}
+
+static bool ResourceCacheAddResourceDir1(ResourceCache* self, const String& pathName, unsigned int priority)
+{
+    return self->AddResourceDir(pathName, priority);
+}
+
+static bool ResourceCacheAddPackageFile0(ResourceCache* self, PackageFile* package)
+{
+    return self->AddPackageFile(package);
+}
+
+static bool ResourceCacheAddPackageFile1(ResourceCache* self, PackageFile* package, unsigned int priority)
+{
+    return self->AddPackageFile(package, priority);
+}
+
+static bool ResourceCacheAddPackageFile2(ResourceCache* self, const String& fileName)
+{
+    return self->AddPackageFile(fileName);
+}
+
+static bool ResourceCacheAddPackageFile3(ResourceCache* self, const String& fileName, unsigned int priority)
+{
+    return self->AddPackageFile(fileName, priority);
+}
+
+static void ResourceCacheRemovePackageFile0(ResourceCache* self, PackageFile* package)
+{
+    self->RemovePackageFile(package);
+}
+
+static void ResourceCacheRemovePackageFile1(ResourceCache* self, PackageFile* package, bool releaseResources)
+{
+    self->RemovePackageFile(package, releaseResources);
+}
+
+static void ResourceCacheRemovePackageFile2(ResourceCache* self, PackageFile* package, bool releaseResources, bool forceRelease)
+{
+    self->RemovePackageFile(package, releaseResources, forceRelease);
+}
+
+static void ResourceCacheRemovePackageFile3(ResourceCache* self, const String& fileName)
+{
+    self->RemovePackageFile(fileName);
+}
+
+static void ResourceCacheRemovePackageFile4(ResourceCache* self, const String& fileName, bool releaseResources)
+{
+    self->RemovePackageFile(fileName, releaseResources);
+}
+
+static void ResourceCacheRemovePackageFile5(ResourceCache* self, const String& fileName, bool releaseResources, bool forceRelease)
+{
+    self->RemovePackageFile(fileName, releaseResources, forceRelease);
+}
+
+static void ResourceCacheReleaseResource0(ResourceCache* self, StringHash type, const String& name)
+{
+    self->ReleaseResource(type, name);
+}
+
+static void ResourceCacheReleaseResource1(ResourceCache* self, StringHash type, const String& name, bool force)
+{
+    self->ReleaseResource(type, name, force);
+}
+
+static void ResourceCacheReleaseResources0(ResourceCache* self, StringHash type)
+{
+    self->ReleaseResources(type);
+}
+
+static void ResourceCacheReleaseResources1(ResourceCache* self, StringHash type, bool force)
+{
+    self->ReleaseResources(type, force);
+}
+
+static void ResourceCacheReleaseResources2(ResourceCache* self, StringHash type, const String& partialName)
+{
+    self->ReleaseResources(type, partialName);
+}
+
+static void ResourceCacheReleaseResources3(ResourceCache* self, StringHash type, const String& partialName, bool force)
+{
+    self->ReleaseResources(type, partialName, force);
+}
+
+
+static void ResourceCacheReleaseResources4(ResourceCache* self, const String& partialName)
+{
+    self->ReleaseResources(partialName);
+}
+
+static void ResourceCacheReleaseResources5(ResourceCache* self, const String& partialName, bool force)
+{
+    self->ReleaseResources(partialName, force);
+}
+
+static void ResourceCacheReleaseAllResources0(ResourceCache* self)
+{
+    self->ReleaseAllResources();
+}
+
+static void ResourceCacheReleaseAllResources1(ResourceCache* self, bool force)
+{
+    self->ReleaseAllResources(force);
+}
+
+static void ResourceCacheAddResourceRouter0(ResourceCache* self, ResourceRouter* router)
+{
+    self->AddResourceRouter(router);
+}
+
+static void ResourceCacheAddResourceRouter1(ResourceCache* self, ResourceRouter* router, bool addAsFirst)
+{
+    self->AddResourceRouter(router, addAsFirst);
+}
+
+static SharedPtr<File> ResourceCacheGetFile0(ResourceCache* self, const String& name)
+{
+    return self->GetFile(name);
+}
+
+static SharedPtr<File> ResourceCacheGetFile1(ResourceCache* self, const String& name, bool sendEventOnFailure)
+{
+    return self->GetFile(name, sendEventOnFailure);
+}
+
+static SharedPtr<Resource> ResourceCacheGetResource0(ResourceCache* cache, const char* type, const char* name)
+{
+    return SharedPtr<Resource>(cache->GetResource(StringHash(type), String(name)));
+}
+
+static SharedPtr<Resource> ResourceCacheGetResource1(ResourceCache* cache, const char* type, const char* name, bool sendEventOnFailure)
 {
     return SharedPtr<Resource>(cache->GetResource(StringHash(type), String(name), sendEventOnFailure));
 }
 
-static SharedPtr<Resource> ResourceCacheGetTempResource(ResourceCache* cache, const char* type, const char* name, bool sendEventOnFailure = true)
+static SharedPtr<Resource> ResourceCacheGetTempResource0(ResourceCache* cache, const char* type, const char* name)
+{
+    return SharedPtr<Resource>(cache->GetTempResource(StringHash(type), String(name)));
+}
+
+static SharedPtr<Resource> ResourceCacheGetTempResource1(ResourceCache* cache, const char* type, const char* name, bool sendEventOnFailure)
 {
     return SharedPtr<Resource>(cache->GetTempResource(StringHash(type), String(name), sendEventOnFailure));
 }
@@ -387,27 +528,18 @@ static void RegisterResourceCache(kaguya::State& lua)
 
     lua["ResourceCache"].setClass(UserdataMetatable<ResourceCache, Object>()
 
-        .addFunction("AddResourceDir", &ResourceCache::AddResourceDir)
-
-        .addOverloadedFunctions("AddPackageFile",
-            static_cast<bool(ResourceCache::*)(PackageFile*, unsigned)>(&ResourceCache::AddPackageFile),
-            static_cast<bool(ResourceCache::*)(const String&, unsigned)>(&ResourceCache::AddPackageFile))
+        ADD_OVERLOADED_FUNCTIONS_2(ResourceCache, AddResourceDir)
+        ADD_OVERLOADED_FUNCTIONS_4(ResourceCache, AddPackageFile)
 
         .addFunction("AddManualResource", &ResourceCache::AddManualResource)
         .addFunction("RemoveResourceDir", &ResourceCache::RemoveResourceDir)
 
-        .addOverloadedFunctions("RemovePackageFile",
-            static_cast<void(ResourceCache::*)(PackageFile*, bool, bool)>(&ResourceCache::RemovePackageFile),
-            static_cast<void(ResourceCache::*)(const String&, bool, bool)>(&ResourceCache::RemovePackageFile))
+        ADD_OVERLOADED_FUNCTIONS_6(ResourceCache, RemovePackageFile)
+        ADD_OVERLOADED_FUNCTIONS_2(ResourceCache, ReleaseResource)
+        ADD_OVERLOADED_FUNCTIONS_6(ResourceCache, ReleaseResources)
 
-        .addFunction("ReleaseResource", static_cast<void(ResourceCache::*)(StringHash, const String&, bool)>(&ResourceCache::ReleaseResource))
+        ADD_OVERLOADED_FUNCTIONS_2(ResourceCache, ReleaseAllResources)
 
-        .addOverloadedFunctions("ReleaseResources",
-            static_cast<void(ResourceCache::*)(StringHash, bool)>(&ResourceCache::ReleaseResources),
-            static_cast<void(ResourceCache::*)(StringHash, const String&, bool)>(&ResourceCache::ReleaseResources),
-            static_cast<void(ResourceCache::*)(const String&, bool)>(&ResourceCache::ReleaseResources))
-
-        .addFunction("ReleaseAllResources", &ResourceCache::ReleaseAllResources)
         .addFunction("ReloadResource", &ResourceCache::ReloadResource)
         .addFunction("ReloadResourceWithDependencies", &ResourceCache::ReloadResourceWithDependencies)
         .addFunction("SetMemoryBudget", &ResourceCache::SetMemoryBudget)
@@ -415,12 +547,14 @@ static void RegisterResourceCache(kaguya::State& lua)
         .addFunction("SetReturnFailedResources", &ResourceCache::SetReturnFailedResources)
         .addFunction("SetSearchPackagesFirst", &ResourceCache::SetSearchPackagesFirst)
         .addFunction("SetFinishBackgroundResourcesMs", &ResourceCache::SetFinishBackgroundResourcesMs)
-        .addFunction("AddResourceRouter", &ResourceCache::AddResourceRouter)
-        .addFunction("RemoveResourceRouter", &ResourceCache::RemoveResourceRouter)
-        .addFunction("GetFile", &ResourceCache::GetFile)
 
-        .addStaticFunction("GetResource", &ResourceCacheGetResource)
-        .addStaticFunction("GetTempResource", &ResourceCacheGetTempResource)
+        ADD_OVERLOADED_FUNCTIONS_2(ResourceCache, AddResourceRouter)
+
+        .addFunction("RemoveResourceRouter", &ResourceCache::RemoveResourceRouter)
+
+        ADD_OVERLOADED_FUNCTIONS_2(ResourceCache, GetFile)
+        ADD_OVERLOADED_FUNCTIONS_2(ResourceCache, GetResource)
+        ADD_OVERLOADED_FUNCTIONS_2(ResourceCache, GetTempResource)
 
         //.addFunction("BackgroundLoadResource", &ResourceCache::BackgroundLoadResource)
         .addFunction("GetNumBackgroundLoadResources", &ResourceCache::GetNumBackgroundLoadResources)
@@ -445,7 +579,7 @@ static void RegisterResourceCache(kaguya::State& lua)
         .addFunction("StoreResourceDependency", &ResourceCache::StoreResourceDependency)
         .addFunction("ResetDependencies", &ResourceCache::ResetDependencies)
         .addFunction("PrintMemoryUsage", &ResourceCache::PrintMemoryUsage)
-    );
+        );
 
 
 }
@@ -465,6 +599,72 @@ static void RegisterResourceEvents(kaguya::State& lua)
     lua["E_CHANGELANGUAGE"] = E_CHANGELANGUAGE;
 }
 
+static bool XMLElementRemoveChildren0(XMLElement* self)
+{
+    return self->RemoveChildren();
+}
+
+static bool XMLElementRemoveChildren1(XMLElement* self, const String& name)
+{
+    return self->RemoveChildren(name);
+}
+
+
+static bool XMLElementRemoveAttribute0(XMLElement* self)
+{
+    return self->RemoveAttribute();
+}
+
+static bool XMLElementRemoveAttribute1(XMLElement* self, const String& name)
+{
+    return self->RemoveAttribute(name);
+}
+
+static XMLElement XMLElementGetChild0(const XMLElement* self)
+{
+    return self->GetChild();
+}
+
+static XMLElement XMLElementGetChild1(const XMLElement* self, const String& name)
+{
+    return self->GetChild(name);
+}
+
+static XMLElement XMLElementGetNext0(const XMLElement* self)
+{
+    return self->GetNext();
+}
+
+static XMLElement XMLElementGetNext1(const XMLElement* self, const String& name)
+{
+    return self->GetNext(name);
+}
+
+static String XMLElementGetAttribute0(const XMLElement* self)
+{
+    return self->GetAttribute();
+}
+
+static String XMLElementGetAttribute1(const XMLElement* self, const String& name)
+{
+    return self->GetAttribute(name);
+}
+
+static bool XPathQuerySetQuery0(XPathQuery* self, const String& queryString)
+{
+    return self->SetQuery(queryString);
+}
+
+static bool XPathQuerySetQuery1(XPathQuery* self, const String& queryString, const String& variableString)
+{
+    return self->SetQuery(queryString, variableString);
+}
+
+static bool XPathQuerySetQuery2(XPathQuery* self, const String& queryString, const String& variableString, bool bind)
+{
+    return self->SetQuery(queryString, variableString, bind);
+}
+
 static void RegisterXMLElement(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -473,16 +673,14 @@ static void RegisterXMLElement(kaguya::State& lua)
         .setConstructors<XMLElement(),
         XMLElement(const XMLElement&)>()
 
-        .addOverloadedFunctions("CreateChild",
-            static_cast<XMLElement(XMLElement::*)(const String&)>(&XMLElement::CreateChild),
-            static_cast<XMLElement(XMLElement::*)(const char*)>(&XMLElement::CreateChild))
+        .addFunction("CreateChild", static_cast<XMLElement(XMLElement::*)(const String&)>(&XMLElement::CreateChild))
 
         .addOverloadedFunctions("RemoveChild",
             static_cast<bool(XMLElement::*)(const XMLElement&)>(&XMLElement::RemoveChild),
-            static_cast<bool(XMLElement::*)(const char*)>(&XMLElement::RemoveChild))
+            static_cast<bool(XMLElement::*)(const String&)>(&XMLElement::RemoveChild))
 
-        .addFunction("RemoveChildren", static_cast<bool(XMLElement::*)(const char*)>(&XMLElement::RemoveChildren))
-        .addFunction("RemoveAttribute", static_cast<bool(XMLElement::*)(const char*)>(&XMLElement::RemoveAttribute))
+        ADD_OVERLOADED_FUNCTIONS_2(XMLElement, RemoveChildren)
+        ADD_OVERLOADED_FUNCTIONS_2(XMLElement, RemoveAttribute)
 
         .addFunction("SelectSingle", &XMLElement::SelectSingle)
         .addFunction("SelectSinglePrepared", &XMLElement::SelectSinglePrepared)
@@ -497,7 +695,6 @@ static void RegisterXMLElement(kaguya::State& lua)
 
         .addFunction("SetBool", &XMLElement::SetBool)
         .addFunction("SetBoundingBox", &XMLElement::SetBoundingBox)
-
         .addFunction("SetColor", &XMLElement::SetColor)
         .addFunction("SetFloat", &XMLElement::SetFloat)
         .addFunction("SetDouble", &XMLElement::SetDouble)
@@ -526,43 +723,22 @@ static void RegisterXMLElement(kaguya::State& lua)
         .addFunction("NotNull", &XMLElement::NotNull)
         .addFunction("GetName", &XMLElement::GetName)
 
-        .addOverloadedFunctions("HasChild",
-            static_cast<bool(XMLElement::*)(const String&) const>(&XMLElement::HasChild),
-            static_cast<bool(XMLElement::*)(const char*) const>(&XMLElement::HasChild))
+        .addFunction("HasChild", static_cast<bool(XMLElement::*)(const String&) const>(&XMLElement::HasChild))
 
-
-        .addOverloadedFunctions("GetChild",
-            static_cast<XMLElement(XMLElement::*)(const String&) const>(&XMLElement::GetChild),
-            static_cast<XMLElement(XMLElement::*)(const char*) const>(&XMLElement::GetChild))
-
-
-        .addOverloadedFunctions("GetNext",
-            static_cast<XMLElement(XMLElement::*)(const String&) const>(&XMLElement::GetNext),
-            static_cast<XMLElement(XMLElement::*)(const char*) const>(&XMLElement::GetNext))
+        ADD_OVERLOADED_FUNCTIONS_2(XMLElement, GetChild)
+        ADD_OVERLOADED_FUNCTIONS_2(XMLElement, GetNext)
 
         .addFunction("GetParent", &XMLElement::GetParent)
         .addFunction("GetNumAttributes", &XMLElement::GetNumAttributes)
-
-        .addOverloadedFunctions("HasAttribute",
-            static_cast<bool(XMLElement::*)(const String&) const>(&XMLElement::HasAttribute),
-            static_cast<bool(XMLElement::*)(const char*) const>(&XMLElement::HasAttribute))
+        .addFunction("HasAttribute", static_cast<bool(XMLElement::*)(const String&) const>(&XMLElement::HasAttribute))
 
         .addFunction("GetValue", &XMLElement::GetValue)
 
-        .addOverloadedFunctions("GetAttribute",
-            static_cast<String(XMLElement::*)(const String&) const>(&XMLElement::GetAttribute),
-            static_cast<String(XMLElement::*)(const char*) const>(&XMLElement::GetAttribute))
+        ADD_OVERLOADED_FUNCTIONS_2(XMLElement, GetAttribute)
 
         .addFunction("GetAttributeCString", &XMLElement::GetAttributeCString)
-
-        .addOverloadedFunctions("GetAttributeLower",
-            static_cast<String(XMLElement::*)(const String&) const>(&XMLElement::GetAttributeLower),
-            static_cast<String(XMLElement::*)(const char*) const>(&XMLElement::GetAttributeLower))
-
-
-        .addOverloadedFunctions("GetAttributeUpper",
-            static_cast<String(XMLElement::*)(const String&) const>(&XMLElement::GetAttributeUpper),
-            static_cast<String(XMLElement::*)(const char*) const>(&XMLElement::GetAttributeUpper))
+        .addFunction("GetAttributeLower", static_cast<String(XMLElement::*)(const String&) const>(&XMLElement::GetAttributeLower))
+        .addFunction("GetAttributeUpper", static_cast<String(XMLElement::*)(const String&) const>(&XMLElement::GetAttributeUpper))
 
         .addFunction("GetAttributeNames", &XMLElement::GetAttributeNames)
         .addFunction("GetBool", &XMLElement::GetBool)
@@ -606,7 +782,7 @@ static void RegisterXMLElement(kaguya::State& lua)
         .addProperty("value", &XMLElement::GetValue)
 
         .addStaticField("EMPTY", &XMLElement::EMPTY)
-    );
+        );
 
     lua["XPathResultSet"].setClass(UserdataMetatable<XPathResultSet>()
         .setConstructors<XPathResultSet(),
@@ -617,7 +793,7 @@ static void RegisterXMLElement(kaguya::State& lua)
         .addFunction("FirstResult", &XPathResultSet::FirstResult)
         .addFunction("Size", &XPathResultSet::Size)
         .addFunction("Empty", &XPathResultSet::Empty)
-    );
+        );
 
     lua["XPathQuery"].setClass(UserdataMetatable<XPathQuery>()
         .setConstructors<XPathQuery(),
@@ -631,7 +807,7 @@ static void RegisterXMLElement(kaguya::State& lua)
             static_cast<bool(XPathQuery::*)(const char*, const char*)>(&XPathQuery::SetVariable),
             static_cast<bool(XPathQuery::*)(const String&, const XPathResultSet&)>(&XPathQuery::SetVariable))
 
-        .addFunction("SetQuery", &XPathQuery::SetQuery)
+        ADD_OVERLOADED_FUNCTIONS_3(XPathQuery, SetQuery)
 
         .addFunction("Clear", &XPathQuery::Clear)
         .addFunction("EvaluateToBool", &XPathQuery::EvaluateToBool)
@@ -643,7 +819,27 @@ static void RegisterXMLElement(kaguya::State& lua)
         .addFunction("GetXPathVariableSet", &XPathQuery::GetXPathVariableSet)
 
         .addProperty("query", &XPathQuery::GetQuery)
-    );
+        );
+}
+
+static XMLElement XMLFileGetRoot0(XMLFile* self)
+{
+    return self->GetRoot();
+}
+
+static XMLElement XMLFileGetRoot1(XMLFile* self, const String& name)
+{
+    return self->GetRoot(name);
+}
+
+static String XMLFileToString0(const XMLFile* self)
+{
+    return self->ToString();
+}
+
+static String XMLFileToString1(const XMLFile* self, const String& indentation)
+{
+    return self->ToString(indentation);
 }
 
 static void RegisterXMLFile(kaguya::State& lua)
@@ -652,7 +848,7 @@ static void RegisterXMLFile(kaguya::State& lua)
 
     lua["XMLFile"].setClass(UserdataMetatable<XMLFile, Resource>()
         .addStaticFunction("new", &CreateObject<XMLFile>)
-        
+
 
         .addFunction("BeginLoad", &XMLFile::BeginLoad)
 
@@ -661,16 +857,18 @@ static void RegisterXMLFile(kaguya::State& lua)
         .addFunction("FromString", &XMLFile::FromString)
 
         .addFunction("CreateRoot", &XMLFile::CreateRoot)
-        .addFunction("GetRoot", &XMLFile::GetRoot)
+
+        ADD_OVERLOADED_FUNCTIONS_2(XMLFile, GetRoot)
+
         .addFunction("GetDocument", &XMLFile::GetDocument)
 
-        .addFunction("ToString", &XMLFile::ToString)
+        ADD_OVERLOADED_FUNCTIONS_2(XMLFile, ToString)
 
         .addOverloadedFunctions("Patch",
             static_cast<void(XMLFile::*)(XMLFile*)>(&XMLFile::Patch),
             static_cast<void(XMLFile::*)(XMLElement)>(&XMLFile::Patch))
 
-    );
+        );
 }
 
 void RegisterResourceLuaAPI(kaguya::State& lua)
