@@ -37,7 +37,7 @@ static void RegisterBorderImage(kaguya::State& lua)
 
     lua["BorderImage"].setClass(UserdataMetatable<BorderImage, UIElement>()
         .addStaticFunction("new", &CreateObject<BorderImage>)
-        
+
         .addFunction("SetTexture", &BorderImage::SetTexture)
         .addFunction("SetImageRect", &BorderImage::SetImageRect)
         .addFunction("SetFullImageRect", &BorderImage::SetFullImageRect)
@@ -65,7 +65,7 @@ static void RegisterBorderImage(kaguya::State& lua)
         .addProperty("hoverOffset", &BorderImage::GetHoverOffset)
         .addProperty("blendMode", &BorderImage::GetBlendMode, &BorderImage::SetBlendMode)
         .addProperty("tiled", &BorderImage::IsTiled, &BorderImage::SetTiled)
-    );
+        );
 }
 
 static void RegisterButton(kaguya::State& lua)
@@ -74,7 +74,7 @@ static void RegisterButton(kaguya::State& lua)
 
     lua["Button"].setClass(UserdataMetatable<Button, BorderImage>()
         .addStaticFunction("new", &CreateObject<Button>)
-        
+
         .addOverloadedFunctions("SetPressedOffset",
             static_cast<void(Button::*)(const IntVector2&)>(&Button::SetPressedOffset),
             static_cast<void(Button::*)(int, int)>(&Button::SetPressedOffset))
@@ -99,7 +99,7 @@ static void RegisterButton(kaguya::State& lua)
         .addProperty("repeatDelay", &Button::GetRepeatDelay, &Button::SetRepeatDelay)
         .addProperty("repeatRate", &Button::GetRepeatRate, &Button::SetRepeatRate)
         .addProperty("pressed", &Button::IsPressed)
-    );
+        );
 }
 
 static void RegisterCheckBox(kaguya::State& lua)
@@ -108,7 +108,7 @@ static void RegisterCheckBox(kaguya::State& lua)
 
     lua["CheckBox"].setClass(UserdataMetatable<CheckBox, BorderImage>()
         .addStaticFunction("new", &CreateObject<CheckBox>)
-        
+
         .addFunction("SetChecked", &CheckBox::SetChecked)
 
         .addOverloadedFunctions("SetCheckedOffset",
@@ -120,7 +120,7 @@ static void RegisterCheckBox(kaguya::State& lua)
 
         .addProperty("checked", &CheckBox::IsChecked, &CheckBox::SetChecked)
         .addProperty("checkedOffset", &CheckBox::GetCheckedOffset)
-    );
+        );
 }
 
 static void RegisterCursor(kaguya::State& lua)
@@ -144,7 +144,7 @@ static void RegisterCursor(kaguya::State& lua)
 
     lua["Cursor"].setClass(UserdataMetatable<Cursor, BorderImage>()
         .addStaticFunction("new", &CreateObject<Cursor>)
-        
+
         .addOverloadedFunctions("DefineShape",
             static_cast<void(Cursor::*)(const String&, Image*, const IntRect&, const IntVector2&)>(&Cursor::DefineShape),
             static_cast<void(Cursor::*)(CursorShape, Image*, const IntRect&, const IntVector2&)>(&Cursor::DefineShape))
@@ -154,13 +154,13 @@ static void RegisterCursor(kaguya::State& lua)
             static_cast<void(Cursor::*)(CursorShape)>(&Cursor::SetShape))
 
         .addFunction("SetUseSystemShapes", &Cursor::SetUseSystemShapes)
-        
+
         .addFunction("GetShape", &Cursor::GetShape)
         .addFunction("GetUseSystemShapes", &Cursor::GetUseSystemShapes)
-        
+
         .addProperty("shape", &Cursor::GetShape)
         .addProperty("useSystemShapes", &Cursor::GetUseSystemShapes, &Cursor::SetUseSystemShapes)
-    );
+        );
 }
 
 static const PODVector<UIElement*>& DropDownListGetItems(const DropDownList* list)
@@ -176,7 +176,7 @@ static void RegisterDropDownList(kaguya::State& lua)
 
     lua["DropDownList"].setClass(UserdataMetatable<DropDownList, Menu>()
         .addStaticFunction("new", &CreateObject<DropDownList>)
-        
+
         .addFunction("AddItem", &DropDownList::AddItem)
         .addFunction("InsertItem", &DropDownList::InsertItem)
 
@@ -188,10 +188,10 @@ static void RegisterDropDownList(kaguya::State& lua)
         .addFunction("SetSelection", &DropDownList::SetSelection)
         .addFunction("SetPlaceholderText", &DropDownList::SetPlaceholderText)
         .addFunction("SetResizePopup", &DropDownList::SetResizePopup)
-        
+
         .addFunction("GetNumItems", &DropDownList::GetNumItems)
         .addFunction("GetItem", &DropDownList::GetItem)
-        
+
         .addStaticFunction("GetItems", &DropDownListGetItems)
 
         .addFunction("GetSelection", &DropDownList::GetSelection)
@@ -208,7 +208,7 @@ static void RegisterDropDownList(kaguya::State& lua)
         .addProperty("placeholder", &DropDownList::GetPlaceholder)
         .addProperty("placeholderText", &DropDownList::GetPlaceholderText, &DropDownList::SetPlaceholderText)
         .addProperty("resizePopup", &DropDownList::GetResizePopup, &DropDownList::SetResizePopup)
-    );
+        );
 }
 
 static void RegisterFileSelector(kaguya::State& lua)
@@ -217,7 +217,7 @@ static void RegisterFileSelector(kaguya::State& lua)
 
     lua["FileSelector"].setClass(UserdataMetatable<FileSelector, Object>()
         .addStaticFunction("new", &CreateObject<FileSelector>)
-        
+
         .addFunction("SetDefaultStyle", &FileSelector::SetDefaultStyle)
         .addFunction("SetTitle", &FileSelector::SetTitle)
         .addFunction("SetButtonTexts", &FileSelector::SetButtonTexts)
@@ -225,7 +225,7 @@ static void RegisterFileSelector(kaguya::State& lua)
         .addFunction("SetFileName", &FileSelector::SetFileName)
         .addFunction("SetFilters", &FileSelector::SetFilters)
         .addFunction("SetDirectoryMode", &FileSelector::SetDirectoryMode)
-        
+
         // .addFunction("UpdateElements", &FileSelector::UpdateElements)
 
         .addFunction("GetDefaultStyle", &FileSelector::GetDefaultStyle)
@@ -261,7 +261,7 @@ static void RegisterFileSelector(kaguya::State& lua)
         .addProperty("filter", &FileSelector::GetFilter)
         .addProperty("filterIndex", &FileSelector::GetFilterIndex)
         .addProperty("directoryMode", &FileSelector::GetDirectoryMode, &FileSelector::SetDirectoryMode)
-    );
+        );
 }
 
 static void RegisterFont(kaguya::State& lua)
@@ -284,7 +284,7 @@ static void RegisterFont(kaguya::State& lua)
         .addFunction("IsSDFFont", &Font::IsSDFFont)
 
         .addProperty("sdfFont", &Font::IsSDFFont)
-    );
+        );
 }
 
 static void RegisterLineEdit(kaguya::State& lua)
@@ -293,7 +293,7 @@ static void RegisterLineEdit(kaguya::State& lua)
 
     lua["LineEdit"].setClass(UserdataMetatable<LineEdit, BorderImage>()
         .addStaticFunction("new", &CreateObject<LineEdit>)
-        
+
         .addFunction("SetText", &LineEdit::SetText)
         .addFunction("SetCursorPosition", &LineEdit::SetCursorPosition)
         .addFunction("SetCursorBlinkRate", &LineEdit::SetCursorBlinkRate)
@@ -302,7 +302,7 @@ static void RegisterLineEdit(kaguya::State& lua)
         .addFunction("SetCursorMovable", &LineEdit::SetCursorMovable)
         .addFunction("SetTextSelectable", &LineEdit::SetTextSelectable)
         .addFunction("SetTextCopyable", &LineEdit::SetTextCopyable)
-        
+
         .addFunction("GetText", &LineEdit::GetText)
         .addFunction("GetCursorPosition", &LineEdit::GetCursorPosition)
         .addFunction("GetCursorBlinkRate", &LineEdit::GetCursorBlinkRate)
@@ -324,7 +324,59 @@ static void RegisterLineEdit(kaguya::State& lua)
         .addProperty("textCopyable", &LineEdit::IsTextCopyable, &LineEdit::SetTextCopyable)
         .addProperty("textElement", &LineEdit::GetTextElement)
         .addProperty("cursor", &LineEdit::GetCursor)
-    );
+        );
+}
+
+static void ListViewInsertItem0(ListView* self, unsigned int index, UIElement* item)
+{
+    self->InsertItem(index, item);
+}
+
+static void ListViewInsertItem1(ListView* self, unsigned int index, UIElement* item, UIElement* parentItem)
+{
+    self->InsertItem(index, item, parentItem);
+}
+
+static void ListViewRemoveItem0(ListView* self, UIElement* item)
+{
+    self->RemoveItem(item);
+}
+
+static void ListViewRemoveItem1(ListView* self, UIElement* item, unsigned int index)
+{
+    self->RemoveItem(item, index);
+}
+
+static void ListViewChangeSelection0(ListView* self, int delta)
+{
+    self->ChangeSelection(delta);
+}
+
+static void ListViewChangeSelection1(ListView* self, int delta, bool additive)
+{
+    self->ChangeSelection(delta, additive);
+}
+
+
+
+static void ListViewExpand0(ListView* self, unsigned int index, bool enable)
+{
+    self->Expand(index, enable);
+}
+
+static void ListViewExpand1(ListView* self, unsigned int index, bool enable, bool recursive)
+{
+    self->Expand(index, enable, recursive);
+}
+
+static void ListViewToggleExpand0(ListView* self, unsigned int index)
+{
+    self->ToggleExpand(index);
+}
+
+static void ListViewToggleExpand1(ListView* self, unsigned int index, bool recursive)
+{
+    self->ToggleExpand(index, recursive);
 }
 
 static const PODVector<UIElement*>& ListViewGetItems(const ListView* listView)
@@ -352,13 +404,11 @@ static void RegisterListView(kaguya::State& lua)
 
     lua["ListView"].setClass(UserdataMetatable<ListView, ScrollView>()
         .addStaticFunction("new", &CreateObject<ListView>)
-        
-        .addFunction("AddItem", &ListView::AddItem)
-        .addFunction("InsertItem", &ListView::InsertItem)
 
-        .addOverloadedFunctions("RemoveItem",
-            static_cast<void(ListView::*)(UIElement*, unsigned)>(&ListView::RemoveItem),
-            static_cast<void(ListView::*)(unsigned)>(&ListView::RemoveItem))
+        .addFunction("AddItem", &ListView::AddItem)
+
+        ADD_OVERLOADED_FUNCTIONS_2(ListView, InsertItem)
+        ADD_OVERLOADED_FUNCTIONS_2(ListView, RemoveItem)
 
         .addFunction("RemoveAllItems", &ListView::RemoveAllItems)
         .addFunction("SetSelection", &ListView::SetSelection)
@@ -366,7 +416,9 @@ static void RegisterListView(kaguya::State& lua)
         .addFunction("AddSelection", &ListView::AddSelection)
         .addFunction("RemoveSelection", &ListView::RemoveSelection)
         .addFunction("ToggleSelection", &ListView::ToggleSelection)
-        .addFunction("ChangeSelection", &ListView::ChangeSelection)
+
+        ADD_OVERLOADED_FUNCTIONS_2(ListView, ChangeSelection)
+
         .addFunction("ClearSelection", &ListView::ClearSelection)
         .addFunction("SetHighlightMode", &ListView::SetHighlightMode)
         .addFunction("SetMultiselect", &ListView::SetMultiselect)
@@ -374,17 +426,19 @@ static void RegisterListView(kaguya::State& lua)
         .addFunction("SetBaseIndent", &ListView::SetBaseIndent)
         .addFunction("SetClearSelectionOnDefocus", &ListView::SetClearSelectionOnDefocus)
         .addFunction("SetSelectOnClickEnd", &ListView::SetSelectOnClickEnd)
-        .addFunction("Expand", &ListView::Expand)
-        .addFunction("ToggleExpand", &ListView::ToggleExpand)
+
+        ADD_OVERLOADED_FUNCTIONS_2(ListView, Expand)
+
+        ADD_OVERLOADED_FUNCTIONS_2(ListView, ToggleExpand)
 
         .addFunction("GetNumItems", &ListView::GetNumItems)
         .addFunction("GetItem", &ListView::GetItem)
-        
+
         .addStaticFunction("GetItems", &ListViewGetItems)
 
         .addFunction("FindItem", &ListView::FindItem)
         .addFunction("GetSelection", &ListView::GetSelection)
-        
+
         .addStaticFunction("GetSelections", &ListViewGetSelectedItems)
 
         .addFunction("CopySelectedItemsToClipboard", &ListView::CopySelectedItemsToClipboard)
@@ -412,7 +466,7 @@ static void RegisterListView(kaguya::State& lua)
         .addProperty("selectOnClickEnd", &ListView::GetSelectOnClickEnd, &ListView::SetSelectOnClickEnd)
         .addProperty("hierarchyMode", &ListView::GetHierarchyMode, &ListView::SetHierarchyMode)
         .addProperty("baseIndent", &ListView::GetBaseIndent, &ListView::SetBaseIndent)
-    );
+        );
 }
 
 static void RegisterMenu(kaguya::State& lua)
@@ -421,7 +475,7 @@ static void RegisterMenu(kaguya::State& lua)
 
     lua["Menu"].setClass(UserdataMetatable<Menu, Button>()
         .addStaticFunction("new", &CreateObject<Menu>)
-        
+
         .addFunction("SetPopup", &Menu::SetPopup)
 
         .addOverloadedFunctions("SetPopupOffset",
@@ -442,7 +496,7 @@ static void RegisterMenu(kaguya::State& lua)
         .addProperty("showPopup", &Menu::GetShowPopup)
         .addProperty("acceleratorKey", &Menu::GetAcceleratorKey)
         .addProperty("acceleratorQualifiers", &Menu::GetAcceleratorQualifiers)
-    );
+        );
 }
 
 static void RegisterMessageBox(kaguya::State& lua)
@@ -451,19 +505,19 @@ static void RegisterMessageBox(kaguya::State& lua)
 
     lua["MessageBox"].setClass(UserdataMetatable<MessageBox, Object>()
         .addStaticFunction("new", &CreateObject<MessageBox>)
-        
+
         .addFunction("SetTitle", &MessageBox::SetTitle)
         .addFunction("SetMessage", &MessageBox::SetMessage)
-        
+
         .addFunction("GetTitle", &MessageBox::GetTitle)
         .addFunction("GetMessage", &MessageBox::GetMessage)
-        
+
         .addFunction("GetWindow", &MessageBox::GetWindow)
 
         .addProperty("title", &MessageBox::GetTitle, &MessageBox::SetTitle)
         .addProperty("message", &MessageBox::GetMessage, &MessageBox::SetMessage)
         .addProperty("window", &MessageBox::GetWindow)
-    );
+        );
 }
 
 static void RegisterScrollBar(kaguya::State& lua)
@@ -472,7 +526,7 @@ static void RegisterScrollBar(kaguya::State& lua)
 
     lua["ScrollBar"].setClass(UserdataMetatable<ScrollBar, BorderImage>()
         .addStaticFunction("new", &CreateObject<FileSelector>)
-        
+
         .addFunction("SetOrientation", &ScrollBar::SetOrientation)
         .addFunction("SetRange", &ScrollBar::SetRange)
         .addFunction("SetValue", &ScrollBar::SetValue)
@@ -501,7 +555,7 @@ static void RegisterScrollBar(kaguya::State& lua)
         .addProperty("backButton", &ScrollBar::GetBackButton)
         .addProperty("forwardButton", &ScrollBar::GetForwardButton)
         .addProperty("slider", &ScrollBar::GetSlider)
-    );
+        );
 }
 
 static void RegisterScrollView(kaguya::State& lua)
@@ -510,7 +564,7 @@ static void RegisterScrollView(kaguya::State& lua)
 
     lua["ScrollView"].setClass(UserdataMetatable<ScrollView, UIElement>()
         .addStaticFunction("new", &CreateObject<ScrollView>)
-        
+
         .addFunction("SetContentElement", &ScrollView::SetContentElement)
 
         .addOverloadedFunctions("SetViewPosition",
@@ -520,12 +574,12 @@ static void RegisterScrollView(kaguya::State& lua)
         .addFunction("SetScrollBarsVisible", &ScrollView::SetScrollBarsVisible)
         .addFunction("SetScrollBarsAutoVisible", &ScrollView::SetScrollBarsAutoVisible)
         .addFunction("SetScrollStep", &ScrollView::SetScrollStep)
-        .addFunction("SetPageStep", &ScrollView::SetPageStep)        
+        .addFunction("SetPageStep", &ScrollView::SetPageStep)
         .addFunction("SetScrollDeceleration", &ScrollView::SetScrollDeceleration)
         .addFunction("SetScrollSnapEpsilon", &ScrollView::SetScrollSnapEpsilon)
         .addFunction("SetAutoDisableChildren", &ScrollView::SetAutoDisableChildren)
         .addFunction("SetAutoDisableThreshold", &ScrollView::SetAutoDisableThreshold)
-        
+
         .addFunction("GetViewPosition", &ScrollView::GetViewPosition)
         .addFunction("GetContentElement", &ScrollView::GetContentElement)
         .addFunction("GetHorizontalScrollBar", &ScrollView::GetHorizontalScrollBar)
@@ -551,7 +605,7 @@ static void RegisterScrollView(kaguya::State& lua)
         .addProperty("scrollSnapEpsilon", &ScrollView::GetScrollSnapEpsilon, &ScrollView::SetScrollSnapEpsilon)
         .addProperty("autoDisableChildren", &ScrollView::GetAutoDisableChildren, &ScrollView::SetAutoDisableChildren)
         .addProperty("autoDisableThreshold", &ScrollView::GetAutoDisableThreshold, &ScrollView::SetAutoDisableThreshold)
-    );
+        );
 }
 
 static void RegisterSlider(kaguya::State& lua)
@@ -560,13 +614,13 @@ static void RegisterSlider(kaguya::State& lua)
 
     lua["Slider"].setClass(UserdataMetatable<Slider, BorderImage>()
         .addStaticFunction("new", &CreateObject<Slider>)
-        
+
         .addFunction("SetOrientation", &Slider::SetOrientation)
         .addFunction("SetRange", &Slider::SetRange)
         .addFunction("SetValue", &Slider::SetValue)
         .addFunction("ChangeValue", &Slider::ChangeValue)
         .addFunction("SetRepeatRate", &Slider::SetRepeatRate)
-        
+
         .addFunction("GetOrientation", &Slider::GetOrientation)
         .addFunction("GetRange", &Slider::GetRange)
         .addFunction("GetValue", &Slider::GetValue)
@@ -578,7 +632,7 @@ static void RegisterSlider(kaguya::State& lua)
         .addProperty("value", &Slider::GetValue, &Slider::SetValue)
         .addProperty("knob", &Slider::GetKnob)
         .addProperty("repeatRate", &Slider::GetRepeatRate, &Slider::SetRepeatRate)
-    );
+        );
 }
 
 static void RegisterSprite(kaguya::State& lua)
@@ -587,19 +641,19 @@ static void RegisterSprite(kaguya::State& lua)
 
     lua["Sprite"].setClass(UserdataMetatable<Sprite, UIElement>()
         .addStaticFunction("new", &CreateObject<Sprite>)
-        
-         .addOverloadedFunctions("SetPosition",
-             static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetPosition),
-             static_cast<void(Sprite::*)(float, float)>(&Sprite::SetPosition))
-        
-        .addOverloadedFunctions("SetHotSpot",
-             static_cast<void(Sprite::*)(const IntVector2&)>(&Sprite::SetHotSpot),
-             static_cast<void(Sprite::*)(int, int)>(&Sprite::SetHotSpot))
 
-         .addOverloadedFunctions("SetScale",
-             static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetScale),
-             static_cast<void(Sprite::*)(float, float)>(&Sprite::SetScale),
-             static_cast<void(Sprite::*)(float)>(&Sprite::SetScale))
+        .addOverloadedFunctions("SetPosition",
+            static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetPosition),
+            static_cast<void(Sprite::*)(float, float)>(&Sprite::SetPosition))
+
+        .addOverloadedFunctions("SetHotSpot",
+            static_cast<void(Sprite::*)(const IntVector2&)>(&Sprite::SetHotSpot),
+            static_cast<void(Sprite::*)(int, int)>(&Sprite::SetHotSpot))
+
+        .addOverloadedFunctions("SetScale",
+            static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetScale),
+            static_cast<void(Sprite::*)(float, float)>(&Sprite::SetScale),
+            static_cast<void(Sprite::*)(float)>(&Sprite::SetScale))
 
         .addFunction("SetRotation", &Sprite::SetRotation)
         .addFunction("SetTexture", &Sprite::SetTexture)
@@ -625,7 +679,37 @@ static void RegisterSprite(kaguya::State& lua)
         .addProperty("imageRect", &Sprite::GetImageRect, &Sprite::SetImageRect)
         .addProperty("blendMode", &Sprite::GetBlendMode, &Sprite::SetBlendMode)
         .addProperty("transform", &Sprite::GetTransform)
-    );
+        );
+}
+
+static bool TextSetFont0(Text* self, const String& fontName)
+{
+    return self->SetFont(fontName);
+}
+
+static bool TextSetFont1(Text* self, const String& fontName, int size)
+{
+    return self->SetFont(fontName, size);
+}
+
+static bool TextSetFont2(Text* self, Font* font)
+{
+    return self->SetFont(font);
+}
+
+static bool TextSetFont3(Text* self, Font* font, int size)
+{
+    return self->SetFont(font, size);
+}
+
+static void TextSetSelection0(Text* self, unsigned int start)
+{
+    self->SetSelection(start);
+}
+
+static void TextSetSelection1(Text* self, unsigned int start, unsigned int length)
+{
+    self->SetSelection(start, length);
 }
 
 static void RegisterText(kaguya::State& lua)
@@ -641,17 +725,17 @@ static void RegisterText(kaguya::State& lua)
 
     lua["Text"].setClass(UserdataMetatable<Text, UIElement>()
         .addStaticFunction("new", &CreateObject<Text>)
-        
-        .addOverloadedFunctions("SetFont",
-            static_cast<bool(Text::*)(const String&, int)>(&Text::SetFont),
-            static_cast<bool(Text::*)(Font*, int)>(&Text::SetFont))
+
+        ADD_OVERLOADED_FUNCTIONS_4(Text, SetFont)
 
         .addFunction("SetText", &Text::SetText)
         .addFunction("SetTextAlignment", &Text::SetTextAlignment)
         .addFunction("SetRowSpacing", &Text::SetRowSpacing)
         .addFunction("SetWordwrap", &Text::SetWordwrap)
         .addFunction("SetAutoLocalizable", &Text::SetAutoLocalizable)
-        .addFunction("SetSelection", &Text::SetSelection)
+
+        ADD_OVERLOADED_FUNCTIONS_2(Text, SetSelection)
+
         .addFunction("ClearSelection", &Text::ClearSelection)
         .addFunction("SetSelectionColor", &Text::SetSelectionColor)
         .addFunction("SetHoverColor", &Text::SetHoverColor)
@@ -706,7 +790,27 @@ static void RegisterText(kaguya::State& lua)
         .addProperty("numRows", &Text::GetNumRows)
         .addProperty("numChars", &Text::GetNumChars)
         .addProperty("effectDepthBias", &Text::GetEffectDepthBias, &Text::SetEffectDepthBias)
-    );
+        );
+}
+
+static bool Text3DSetFont0(Text3D* self, const String& fontName)
+{
+    return self->SetFont(fontName);
+}
+
+static bool Text3DSetFont1(Text3D* self, const String& fontName, int size)
+{
+    return self->SetFont(fontName, size);
+}
+
+static bool Text3DSetFont2(Text3D* self, Font* font)
+{
+    return self->SetFont(font);
+}
+
+static bool Text3DSetFont3(Text3D* self, Font* font, int size)
+{
+    return self->SetFont(font, size);
 }
 
 static void RegisterText3D(kaguya::State& lua)
@@ -715,10 +819,8 @@ static void RegisterText3D(kaguya::State& lua)
 
     lua["Text3D"].setClass(UserdataMetatable<Text3D, Drawable>()
         .addStaticFunction("new", &CreateObject<Text3D>)
-        
-        .addOverloadedFunctions("SetFont",
-            static_cast<bool(Text3D::*)(const String&, int)>(&Text3D::SetFont),
-            static_cast<bool(Text3D::*)(Font*, int)>(&Text3D::SetFont))
+
+        ADD_OVERLOADED_FUNCTIONS_4(Text3D, SetFont)
 
         .addFunction("SetMaterial", &Text3D::SetMaterial)
         .addFunction("SetText", &Text3D::SetText)
@@ -793,7 +895,7 @@ static void RegisterText3D(kaguya::State& lua)
         .addProperty("opacity", &Text3D::GetOpacity, &Text3D::SetOpacity)
         .addProperty("fixedScreenSize", &Text3D::IsFixedScreenSize, &Text3D::SetFixedScreenSize)
         .addProperty("faceCameraMode", &Text3D::GetFaceCameraMode, &Text3D::SetFaceCameraMode)
-    );
+        );
 }
 
 static void RegisterToolTip(kaguya::State& lua)
@@ -802,30 +904,70 @@ static void RegisterToolTip(kaguya::State& lua)
 
     lua["ToolTip"].setClass(UserdataMetatable<ToolTip, UIElement>()
         .addStaticFunction("new", &CreateObject<ToolTip>)
-        
+
         .addFunction("SetDelay", &ToolTip::SetDelay)
         .addFunction("GetDelay", &ToolTip::GetDelay)
 
         .addProperty("delay", &ToolTip::GetDelay, &ToolTip::SetDelay)
-    );
+        );
 }
 
-static SharedPtr<UIElement> UILoadLayout(UI* ui, const char* filepath, XMLFile* styleFile = 0)
+
+static void UISetFocusElement0(UI* self, UIElement* element)
+{
+    self->SetFocusElement(element);
+}
+
+static void UISetFocusElement1(UI* self, UIElement* element, bool byKey)
+{
+    self->SetFocusElement(element, byKey);
+}
+
+static SharedPtr<UIElement> UILoadLayout0(UI* self, const char* filepath)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
     if (!file->IsOpen())
         return SharedPtr<UIElement>();
 
-    return ui->LoadLayout(*file, styleFile);
+    return self->LoadLayout(*file);
 }
 
-static bool UISaveLayout(UI* ui, const char* filepath, UIElement* element)
+static SharedPtr<UIElement> UILoadLayout1(UI* self, const char* filepath, XMLFile* styleFile)
+{
+    SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return SharedPtr<UIElement>();
+
+    return self->LoadLayout(*file, styleFile);
+}
+
+static bool UISaveLayout(UI* self, const char* filepath, UIElement* element)
 {
     if (!element)
         return false;
 
     SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
-    return ui->SaveLayout(*file, element);
+    return self->SaveLayout(*file, element);
+}
+
+static UIElement* UIGetElementAt0(UI* self, const IntVector2& position)
+{
+    return self->GetElementAt(position);
+}
+
+static UIElement* UIGetElementAt1(UI* self, const IntVector2& position, bool enabledOnly)
+{
+    return self->GetElementAt(position, enabledOnly);
+}
+
+static UIElement* UIGetElementAt2(UI* self, int x, int y)
+{
+    return self->GetElementAt(x, y);
+}
+
+static UIElement* UIGetElementAt3(UI* self, int x, int y, bool enabledOnly)
+{
+    return self->GetElementAt(x, y, enabledOnly);
 }
 
 static void RegisterUI(kaguya::State& lua)
@@ -835,11 +977,14 @@ static void RegisterUI(kaguya::State& lua)
     lua["UI"].setClass(UserdataMetatable<UI, Object>()
 
         .addFunction("SetCursor", &UI::SetCursor)
-        .addFunction("SetFocusElement", &UI::SetFocusElement)
+
+        ADD_OVERLOADED_FUNCTIONS_2(UI, SetFocusElement)
+
         .addFunction("SetModalElement", &UI::SetModalElement)
         .addFunction("Clear", &UI::Clear)
 
-        .addStaticFunction("LoadLayout", &UILoadLayout)
+        ADD_OVERLOADED_FUNCTIONS_2(UI, LoadLayout)
+
         .addStaticFunction("SaveLayout", &UISaveLayout)
 
         .addFunction("SetClipboardText", &UI::SetClipboardText)
@@ -862,13 +1007,11 @@ static void RegisterUI(kaguya::State& lua)
         .addFunction("GetCursor", &UI::GetCursor)
         .addFunction("GetCursorPosition", &UI::GetCursorPosition)
 
-        .addOverloadedFunctions("GetElementAt",
-            static_cast<UIElement*(UI::*)(const IntVector2&, bool)>(&UI::GetElementAt),
-            static_cast<UIElement*(UI::*)(int, int, bool)>(&UI::GetElementAt))
+        ADD_OVERLOADED_FUNCTIONS_4(UI, GetElementAt)
 
         .addFunction("GetFocusElement", &UI::GetFocusElement)
         .addFunction("GetFrontElement", &UI::GetFrontElement)
-        
+
         // .addFunction("GetDragElements", &UI::GetDragElements)
 
         .addFunction("GetNumDragElements", &UI::GetNumDragElements)
@@ -894,7 +1037,7 @@ static void RegisterUI(kaguya::State& lua)
         .addProperty("cursorPosition", &UI::GetCursorPosition)
         .addProperty("focusElement", &UI::GetFocusElement)
         .addProperty("frontElement", &UI::GetFrontElement)
-        
+
         // .addProperty("dragElements", &UI::GetDragElements)
 
         .addProperty("numDragElements", &UI::GetNumDragElements)
@@ -913,7 +1056,7 @@ static void RegisterUI(kaguya::State& lua)
         .addProperty("scale", &UI::GetScale, &UI::SetScale)
         .addProperty("width", &UI::SetWidth)
         .addProperty("height", &UI::SetHeight)
-    );
+        );
 }
 
 static bool UIElementLoadXML(UIElement* uiElement, const char* filepath)
@@ -930,6 +1073,40 @@ static bool UIElementSaveXML(const UIElement* uiElement, const char* filepath)
     return uiElement->SaveXML(*file);
 }
 
+static bool UIElementSetStyle0(UIElement* self, const String& styleName)
+{
+    return self->SetStyle(styleName);
+}
+
+static bool UIElementSetStyle1(UIElement* self, const String& styleName, XMLFile* file)
+{
+    return self->SetStyle(styleName, file);
+}
+
+static bool UIElementSetStyleAuto0(UIElement* self)
+{
+    return self->SetStyleAuto();
+}
+
+static bool UIElementSetStyleAuto1(UIElement* self, XMLFile* file)
+{
+    return self->SetStyleAuto(file);
+}
+
+static void UIElementSetLayout0(UIElement* self, LayoutMode mode)
+{
+    self->SetLayout(mode);
+}
+
+static void UIElementSetLayout1(UIElement* self, LayoutMode mode, int spacing)
+{
+    self->SetLayout(mode, spacing);
+}
+
+static void UIElementSetLayout2(UIElement* self, LayoutMode mode, int spacing, const IntRect& border)
+{
+    self->SetLayout(mode, spacing, border);
+}
 
 static SharedPtr<UIElement> UIElementCreateChild0(UIElement* uiElement, const char* type)
 {
@@ -947,12 +1124,99 @@ static SharedPtr<UIElement> UIElementCreateChild2(UIElement* uiElement, const ch
     return SharedPtr<UIElement>(uiElement->CreateChild(StringHash(type), name, index));
 }
 
-static const Color& UIElementGetColor(const UIElement* uiElement)
+static void UIElementRemoveChild0(UIElement* self, UIElement* element)
 {
-    return uiElement->GetColor(C_TOPLEFT);
+    self->RemoveChild(element);
 }
 
-static const PODVector<UIElement*>& UIElementGetChildrenWithTag(const UIElement* element, const char* tag, bool recursive = false)
+static void UIElementRemoveChild1(UIElement* self, UIElement* element, unsigned int index)
+{
+    self->RemoveChild(element, index);
+}
+
+static void UIElementSetParent0(UIElement* self, UIElement* parent)
+{
+    self->SetParent(parent);
+}
+
+static void UIElementSetParent1(UIElement* self, UIElement* parent, unsigned int index)
+{
+    self->SetParent(parent, index);
+}
+
+static void UIElementAddTags0(UIElement* self, const String& tags)
+{
+    self->AddTags(tags);
+}
+
+static void UIElementAddTags1(UIElement* self, const String& tags, char separator)
+{
+    self->AddTags(tags, separator);
+}
+
+static XMLFile* UIElementGetDefaultStyle0(const UIElement* self)
+{
+    return self->GetDefaultStyle();
+}
+
+static XMLFile* UIElementGetDefaultStyle1(const UIElement* self, bool recursiveUp)
+{
+    return self->GetDefaultStyle(recursiveUp);
+}
+
+static unsigned int UIElementGetNumChildren0(const UIElement* self)
+{
+    return self->GetNumChildren();
+}
+
+static unsigned int UIElementGetNumChildren1(const UIElement* self, bool recursive)
+{
+    return self->GetNumChildren(recursive);
+}
+
+static UIElement* UIElementGetChild0(const UIElement* self, const String& name)
+{
+    return self->GetChild(name);
+}
+
+static UIElement* UIElementGetChild1(const UIElement* self, const String& name, bool recursive)
+{
+    return self->GetChild(name, recursive);
+}
+
+static UIElement* UIElementGetChild2(const UIElement* self, const StringHash& key)
+{
+    return self->GetChild(key);
+}
+
+static UIElement* UIElementGetChild3(const UIElement* self, const StringHash& key, const Variant& value)
+{
+    return self->GetChild(key, value);
+}
+
+static UIElement* UIElementGetChild4(const UIElement* self, const StringHash& key, const Variant& value, bool recursive)
+{
+    return self->GetChild(key, value, recursive);
+}
+
+static void UIElementGetChildren0(const UIElement* self, PODVector<UIElement*>& dest)
+{
+    self->GetChildren(dest);
+}
+
+static void UIElementGetChildren1(const UIElement* self, PODVector<UIElement*>& dest, bool recursive)
+{
+    self->GetChildren(dest, recursive);
+}
+
+static const PODVector<UIElement*>& UIElementGetChildrenWithTag0(const UIElement* element, const char* tag)
+{
+    static PODVector<UIElement*> children;
+    element->GetChildrenWithTag(children, tag);
+    return children;
+}
+
+static const PODVector<UIElement*>& UIElementGetChildrenWithTag1(const UIElement* element, const char* tag, bool recursive)
 {
     static PODVector<UIElement*> children;
     element->GetChildrenWithTag(children, tag, recursive);
@@ -1071,13 +1335,12 @@ static void RegisterUIElement(kaguya::State& lua)
         .addFunction("SetFocusMode", &UIElement::SetFocusMode)
         .addFunction("SetDragDropMode", &UIElement::SetDragDropMode)
 
-        .addOverloadedFunctions("SetStyle",
-            static_cast<bool(UIElement::*)(const String&, XMLFile*)>(&UIElement::SetStyle),
-            static_cast<bool(UIElement::*)(const XMLElement&)>(&UIElement::SetStyle))
-
-        .addFunction("SetStyleAuto", &UIElement::SetStyleAuto)
+        ADD_OVERLOADED_FUNCTIONS_2(UIElement, SetStyle)
+        ADD_OVERLOADED_FUNCTIONS_2(UIElement, SetStyleAuto)
         .addFunction("SetDefaultStyle", &UIElement::SetDefaultStyle)
-        .addFunction("SetLayout", &UIElement::SetLayout)
+
+        ADD_OVERLOADED_FUNCTIONS_3(UIElement, SetLayout)
+
         .addFunction("SetLayoutMode", &UIElement::SetLayoutMode)
         .addFunction("SetLayoutSpacing", &UIElement::SetLayoutSpacing)
         .addFunction("SetLayoutBorder", &UIElement::SetLayoutBorder)
@@ -1085,36 +1348,34 @@ static void RegisterUIElement(kaguya::State& lua)
         .addFunction("SetIndent", &UIElement::SetIndent)
         .addFunction("SetIndentSpacing", &UIElement::SetIndentSpacing)
 
-        // .addFunction("UpdateLayout", &UIElement::UpdateLayout)
-
         .addFunction("DisableLayoutUpdate", &UIElement::DisableLayoutUpdate)
         .addFunction("EnableLayoutUpdate", &UIElement::EnableLayoutUpdate)
         .addFunction("BringToFront", &UIElement::BringToFront)
 
-        .addOverloadedFunctions("CreateChild", &UIElementCreateChild0, &UIElementCreateChild1, &UIElementCreateChild2)
+        ADD_OVERLOADED_FUNCTIONS_3(UIElement, CreateChild)
 
         .addFunction("AddChild", &UIElement::AddChild)
         .addFunction("InsertChild", &UIElement::InsertChild)
-        .addFunction("RemoveChild", &UIElement::RemoveChild)
+
+        ADD_OVERLOADED_FUNCTIONS_2(UIElement, RemoveChild)
+
         .addFunction("RemoveChildAtIndex", &UIElement::RemoveChildAtIndex)
         .addFunction("RemoveAllChildren", &UIElement::RemoveAllChildren)
         .addFunction("Remove", &UIElement::Remove)
         .addFunction("FindChild", &UIElement::FindChild)
-        .addFunction("SetParent", &UIElement::SetParent)
+
+        ADD_OVERLOADED_FUNCTIONS_2(UIElement, SetParent)
+
         .addFunction("SetVar", &UIElement::SetVar)
         .addFunction("SetInternal", &UIElement::SetInternal)
         .addFunction("SetTraversalMode", &UIElement::SetTraversalMode)
         .addFunction("SetElementEventSender", &UIElement::SetElementEventSender)
         .addFunction("SetTags", &UIElement::SetTags)
-        .addFunction("AddTag", &UIElement::AddTag)
 
-        .addOverloadedFunctions("AddTags",
-            static_cast<void(UIElement::*)(const String&, char)>(&UIElement::AddTags),
-            static_cast<void(UIElement::*)(const StringVector&)>(&UIElement::AddTags))
+        ADD_OVERLOADED_FUNCTIONS_2(UIElement, AddTags)
 
         .addFunction("RemoveTag", &UIElement::RemoveTag)
         .addFunction("RemoveAllTags", &UIElement::RemoveAllTags)
-
         .addFunction("GetName", &UIElement::GetName)
         .addFunction("GetPosition", &UIElement::GetPosition)
         .addFunction("GetSize", &UIElement::GetSize)
@@ -1155,23 +1416,18 @@ static void RegisterUIElement(kaguya::State& lua)
         .addFunction("GetFocusMode", &UIElement::GetFocusMode)
         .addFunction("GetDragDropMode", &UIElement::GetDragDropMode)
         .addFunction("GetAppliedStyle", &UIElement::GetAppliedStyle)
-        .addFunction("GetDefaultStyle", &UIElement::GetDefaultStyle)
+
+        ADD_OVERLOADED_FUNCTIONS_2(UIElement, GetDefaultStyle)
+
         .addFunction("GetLayoutMode", &UIElement::GetLayoutMode)
         .addFunction("GetLayoutSpacing", &UIElement::GetLayoutSpacing)
         .addFunction("GetLayoutBorder", &UIElement::GetLayoutBorder)
         .addFunction("GetLayoutFlexScale", &UIElement::GetLayoutFlexScale)
-        .addFunction("GetNumChildren", &UIElement::GetNumChildren)
 
-        .addOverloadedFunctions("GetChild",
-            static_cast<UIElement*(UIElement::*)(unsigned) const>(&UIElement::GetChild),
-            static_cast<UIElement*(UIElement::*)(const String&, bool) const>(&UIElement::GetChild),
-            static_cast<UIElement*(UIElement::*)(const StringHash&, const Variant&, bool) const>(&UIElement::GetChild))
+        ADD_OVERLOADED_FUNCTIONS_2(UIElement, GetNumChildren)
 
-        /*
-        .addOverloadedFunctions("GetChildren",
-            static_cast<const Vector<SharedPtr<UIElement> >&(UIElement::*)() const>(&UIElement::GetChildren),
-            static_cast<void(UIElement::*)(PODVector<UIElement*>&, bool) const>(&UIElement::GetChildren))
-            */
+        ADD_OVERLOADED_FUNCTIONS_5(UIElement, GetChild)
+        ADD_OVERLOADED_FUNCTIONS_2(UIElement, GetChildren)
 
         .addFunction("GetParent", &UIElement::GetParent)
         .addFunction("GetRoot", &UIElement::GetRoot)
@@ -1180,9 +1436,9 @@ static void RegisterUIElement(kaguya::State& lua)
         .addFunction("GetVars", &UIElement::GetVars)
         .addFunction("HasTag", &UIElement::HasTag)
         .addFunction("GetTags", &UIElement::GetTags)
-        
-        .addStaticFunction("GetChildrenWithTag", &UIElementGetChildrenWithTag)
-        
+
+        ADD_OVERLOADED_FUNCTIONS_2(UIElement, GetChildrenWithTag)
+
         .addFunction("GetDragButtonCombo", &UIElement::GetDragButtonCombo)
         .addFunction("GetDragButtonCount", &UIElement::GetDragButtonCount)
         .addFunction("IsInside", &UIElement::IsInside)
@@ -1220,7 +1476,7 @@ static void RegisterUIElement(kaguya::State& lua)
         .addProperty("childOffset", &UIElement::GetChildOffset, &UIElement::SetChildOffset)
         .addProperty("horizontalAlignment", &UIElement::GetHorizontalAlignment, &UIElement::SetHorizontalAlignment)
         .addProperty("verticalAlignment", &UIElement::GetVerticalAlignment, &UIElement::SetVerticalAlignment)
-        .addProperty("clipBorder", &UIElement::GetClipBorder, &UIElement::SetClipBorder)        
+        .addProperty("clipBorder", &UIElement::GetClipBorder, &UIElement::SetClipBorder)
         .addProperty("priority", &UIElement::GetPriority, &UIElement::SetPriority)
         .addProperty("opacity", &UIElement::GetOpacity, &UIElement::SetOpacity)
         .addProperty("derivedOpacity", &UIElement::GetDerivedOpacity)
@@ -1264,7 +1520,7 @@ static void RegisterUIElement(kaguya::State& lua)
         .addProperty("focus", &UIElement::SetFocus)
         .addProperty("styleAuto", &UIElement::SetStyleAuto)
         .addProperty("defaultStyle", &UIElement::SetDefaultStyle)
-    );
+        );
 }
 
 static void RegisterUIEvents(kaguya::State& lua)
@@ -1318,17 +1574,29 @@ static void RegisterUIEvents(kaguya::State& lua)
     lua["E_UIDROPFILE"] = E_UIDROPFILE;
 }
 
+static void View3DSetView0(View3D* self, Scene* scene, Camera* camera)
+{
+    self->SetView(scene, camera);
+}
+
+static void View3DSetView1(View3D* self, Scene* scene, Camera* camera, bool ownScene)
+{
+    self->SetView(scene, camera, ownScene);
+}
+
+
 static void RegisterView3D(kaguya::State& lua)
 {
     using namespace kaguya;
 
     lua["View3D"].setClass(UserdataMetatable<View3D, Window>()
         .addStaticFunction("new", &CreateObject<View3D>)
-        
-        .addFunction("SetView", &View3D::SetView)
+
+        ADD_OVERLOADED_FUNCTIONS_2(View3D, SetView)
+
         .addFunction("SetFormat", &View3D::SetFormat)
         .addFunction("SetAutoUpdate", &View3D::SetAutoUpdate)
-        
+
         .addFunction("GetFormat", &View3D::GetFormat)
         .addFunction("GetAutoUpdate", &View3D::GetAutoUpdate)
         .addFunction("GetScene", &View3D::GetScene)
@@ -1344,7 +1612,7 @@ static void RegisterView3D(kaguya::State& lua)
         .addProperty("renderTexture", &View3D::GetRenderTexture)
         .addProperty("depthTexture", &View3D::GetDepthTexture)
         .addProperty("viewport", &View3D::GetViewport)
-    );
+        );
 }
 
 static void RegisterWindow(kaguya::State& lua)
@@ -1365,7 +1633,7 @@ static void RegisterWindow(kaguya::State& lua)
 
     lua["Window"].setClass(UserdataMetatable<Window, BorderImage>()
         .addStaticFunction("new", &CreateObject<Window>)
-        
+
         .addFunction("SetMovable", &Window::SetMovable)
         .addFunction("SetResizable", &Window::SetResizable)
         .addFunction("SetFixedWidthResizing", &Window::SetFixedWidthResizing)
@@ -1376,7 +1644,7 @@ static void RegisterWindow(kaguya::State& lua)
         .addFunction("SetModalFrameColor", &Window::SetModalFrameColor)
         .addFunction("SetModalFrameSize", &Window::SetModalFrameSize)
         .addFunction("SetModalAutoDismiss", &Window::SetModalAutoDismiss)
-        
+
         .addFunction("IsMovable", &Window::IsMovable)
         .addFunction("IsResizable", &Window::IsResizable)
         .addFunction("GetFixedWidthResizing", &Window::GetFixedWidthResizing)
@@ -1398,7 +1666,7 @@ static void RegisterWindow(kaguya::State& lua)
         .addProperty("modalFrameColor", &Window::GetModalFrameColor, &Window::SetModalFrameColor)
         .addProperty("modalFrameSize", &Window::GetModalFrameSize, &Window::SetModalFrameSize)
         .addProperty("modalAutoDismiss", &Window::GetModalAutoDismiss, &Window::SetModalAutoDismiss)
-    );
+        );
 }
 
 void RegisterUILuaAPI(kaguya::State& lua)

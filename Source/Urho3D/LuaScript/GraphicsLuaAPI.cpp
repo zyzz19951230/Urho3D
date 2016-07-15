@@ -86,6 +86,56 @@ static void RegisterAnimation(kaguya::State& lua)
         );
 }
 
+static bool AnimationControllerPlay0(AnimationController* self, const String& name, unsigned char layer, bool looped)
+{
+    return self->Play(name, layer, looped);
+}
+
+static bool AnimationControllerPlay1(AnimationController* self, const String& name, unsigned char layer, bool looped, float fadeInTime)
+{
+    return self->Play(name, layer, looped, fadeInTime);
+}
+
+static bool AnimationControllerPlayExclusive0(AnimationController* self, const String& name, unsigned char layer, bool looped)
+{
+    return self->PlayExclusive(name, layer, looped);
+}
+
+static bool AnimationControllerPlayExclusive1(AnimationController* self, const String& name, unsigned char layer, bool looped, float fadeTime)
+{
+    return self->PlayExclusive(name, layer, looped, fadeTime);
+}
+
+static bool AnimationControllerStop0(AnimationController* self, const String& name)
+{
+    return self->Stop(name);
+}
+
+static bool AnimationControllerStop1(AnimationController* self, const String& name, float fadeOutTime)
+{
+    return self->Stop(name, fadeOutTime);
+}
+
+static void AnimationControllerStopLayer0(AnimationController* self, unsigned char layer)
+{
+    self->StopLayer(layer);
+}
+
+static void AnimationControllerStopLayer1(AnimationController* self, unsigned char layer, float fadeOutTime)
+{
+    self->StopLayer(layer, fadeOutTime);
+}
+
+static void AnimationControllerStopAll0(AnimationController* self)
+{
+    self->StopAll();
+}
+
+static void AnimationControllerStopAll1(AnimationController* self, float fadeTime)
+{
+    self->StopAll(fadeTime);
+}
+
 static void RegisterAnimationController(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -93,11 +143,12 @@ static void RegisterAnimationController(kaguya::State& lua)
     lua["AnimationController"].setClass(UserdataMetatable<AnimationController, Component>()
         .addStaticFunction("new", &CreateObject<AnimationController>)
 
-        .addFunction("Play", &AnimationController::Play)
-        .addFunction("PlayExclusive", &AnimationController::PlayExclusive)
-        .addFunction("Stop", &AnimationController::Stop)
-        .addFunction("StopLayer", &AnimationController::StopLayer)
-        .addFunction("StopAll", &AnimationController::StopAll)
+        ADD_OVERLOADED_FUNCTIONS_2(AnimationController, Play)
+        ADD_OVERLOADED_FUNCTIONS_2(AnimationController, PlayExclusive)
+        ADD_OVERLOADED_FUNCTIONS_2(AnimationController, Stop)
+        ADD_OVERLOADED_FUNCTIONS_2(AnimationController, StopLayer)
+        ADD_OVERLOADED_FUNCTIONS_2(AnimationController, StopAll)
+
         .addFunction("Fade", &AnimationController::Fade)
         .addFunction("FadeOthers", &AnimationController::FadeOthers)
         .addFunction("SetLayer", &AnimationController::SetLayer)
@@ -130,9 +181,28 @@ static void RegisterAnimationController(kaguya::State& lua)
         .addOverloadedFunctions("GetAnimationState",
             static_cast<AnimationState*(AnimationController::*)(const String&) const>(&AnimationController::GetAnimationState),
             static_cast<AnimationState*(AnimationController::*)(StringHash) const>(&AnimationController::GetAnimationState))
-
-
         );
+}
+
+static void AnimationStateSetBoneWeight0(AnimationState* self, unsigned int index, float weight)
+{
+    self->SetBoneWeight(index, weight);
+}
+
+static void AnimationStateSetBoneWeight1(AnimationState* self, unsigned int index, float weight, bool recursive)
+{
+    self->SetBoneWeight(index, weight, recursive);
+}
+
+
+static void AnimationStateSetBoneWeight2(AnimationState* self, const String& name, float weight)
+{
+    self->SetBoneWeight(name, weight);
+}
+
+static void AnimationStateSetBoneWeight3(AnimationState* self, const String& name, float weight, bool recursive)
+{
+    self->SetBoneWeight(name, weight, recursive);
 }
 
 static void RegisterAnimationState(kaguya::State& lua)
@@ -152,9 +222,7 @@ static void RegisterAnimationState(kaguya::State& lua)
         .addFunction("SetBlendMode", &AnimationState::SetBlendMode)
         .addFunction("SetTime", &AnimationState::SetTime)
 
-        .addOverloadedFunctions("SetBoneWeight",
-            static_cast<void(AnimationState::*)(unsigned, float, bool)>(&AnimationState::SetBoneWeight),
-            static_cast<void(AnimationState::*)(const String&, float, bool)>(&AnimationState::SetBoneWeight))
+        ADD_OVERLOADED_FUNCTIONS_4(AnimationState, SetBoneWeight)
 
         .addFunction("AddWeight", &AnimationState::AddWeight)
         .addFunction("AddTime", &AnimationState::AddTime)

@@ -162,7 +162,15 @@ static void RegisterBillboardSet(kaguya::State& lua)
         );
 }
 
+static Material* CustomGeometryGetMaterial0(const CustomGeometry* self)
+{
+    return self->GetMaterial();
+}
 
+static Material* CustomGeometryGetMaterial1(const CustomGeometry* self, unsigned int index)
+{
+    return self->GetMaterial(index);
+}
 
 static void RegisterCustomGeometry(kaguya::State& lua)
 {
@@ -193,7 +201,9 @@ static void RegisterCustomGeometry(kaguya::State& lua)
         .addFunction("GetNumGeometries", &CustomGeometry::GetNumGeometries)
         .addFunction("GetNumVertices", &CustomGeometry::GetNumVertices)
         .addFunction("IsDynamic", &CustomGeometry::IsDynamic)
-        .addFunction("GetMaterial", &CustomGeometry::GetMaterial)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(CustomGeometry, GetMaterial)
+
         .addFunction("GetVertices", &CustomGeometry::GetVertices)
         .addFunction("GetVertex", &CustomGeometry::GetVertex)
 
@@ -204,6 +214,25 @@ static void RegisterCustomGeometry(kaguya::State& lua)
         );
 }
 
+static bool DecalSetAddDecal0(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV)
+{
+    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV);
+}
+
+static bool DecalSetAddDecal1(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive)
+{
+    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive);
+}
+
+static bool DecalSetAddDecal2(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive, float normalCutoff)
+{
+    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive, normalCutoff);
+}
+
+static bool DecalSetAddDecal3(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive, float normalCutoff, unsigned int subGeometry)
+{
+    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive, normalCutoff, subGeometry);
+}
 
 static void RegisterDecalSet(kaguya::State& lua)
 {
@@ -215,7 +244,9 @@ static void RegisterDecalSet(kaguya::State& lua)
         .addFunction("SetMaterial", &DecalSet::SetMaterial)
         .addFunction("SetMaxVertices", &DecalSet::SetMaxVertices)
         .addFunction("SetMaxIndices", &DecalSet::SetMaxIndices)
-        .addFunction("AddDecal", &DecalSet::AddDecal)
+        
+        ADD_OVERLOADED_FUNCTIONS_4(DecalSet, AddDecal)
+
         .addFunction("RemoveDecals", &DecalSet::RemoveDecals)
         .addFunction("RemoveAllDecals", &DecalSet::RemoveAllDecals)
         .addFunction("GetMaterial", &DecalSet::GetMaterial)
@@ -614,6 +645,16 @@ static void RegisterSkybox(kaguya::State& lua)
         );
 }
 
+static void StaticModelApplyMaterialList0(StaticModel* self)
+{
+    self->ApplyMaterialList();
+}
+
+static void StaticModelApplyMaterialList1(StaticModel* self, const String& fileName)
+{
+    self->ApplyMaterialList(fileName);
+}
+
 static Material* StaticModelGetMaterial(const StaticModel* staticModle)
 {
     return staticModle->GetMaterial();
@@ -638,7 +679,9 @@ static void RegisterStaticModel(kaguya::State& lua)
             static_cast<bool(StaticModel::*)(unsigned, Material*)>(&StaticModel::SetMaterial))
 
         .addFunction("SetOcclusionLodLevel", &StaticModel::SetOcclusionLodLevel)
-        .addFunction("ApplyMaterialList", &StaticModel::ApplyMaterialList)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(StaticModel, ApplyMaterialList)
+
         .addFunction("GetModel", &StaticModel::GetModel)
         .addFunction("GetNumGeometries", &StaticModel::GetNumGeometries)
 
