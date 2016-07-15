@@ -1301,5 +1301,10 @@ void RegisterUrho2DLuaAPI(kaguya::State& lua)
     RegisterTileMapDefs2D(lua);
     RegisterTileMapLayer2D(lua);
     RegisterTmxFile2D(lua);
+
+    kaguya::LuaTable metatable = lua["__CALLABLE__"];
+
+    lua["PhysicsRaycastResult2D"].setMetatable(metatable);
+    lua["TileMapInfo2D"].setMetatable(metatable);
 }
 }

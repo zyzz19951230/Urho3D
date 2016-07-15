@@ -577,5 +577,9 @@ void RegisterNavigationLuaAPI(kaguya::State& lua)
     RegisterNavigationMesh(lua);
     RegisterObstacle(lua);
     RegisterOffMeshConnection(lua);
+
+    kaguya::LuaTable metatable = lua["__CALLABLE__"];
+
+    lua["CrowdObstacleAvoidanceParams"].setMetatable(metatable);
 }
 }

@@ -1479,5 +1479,11 @@ void RegisterRendererLuaAPI(kaguya::State& lua)
 
     lua["renderer"] = GetSubsystem<Renderer>();
     lua["GetRenderer"] = GetSubsystem<Renderer>;
+
+    kaguya::LuaTable metatable = lua["__CALLABLE__"];
+
+    lua["VertexElement"].setMetatable(metatable);
+    lua["RenderTargetInfo"].setMetatable(metatable);
+    lua["RenderPathCommand"].setMetatable(metatable);
 }
 }

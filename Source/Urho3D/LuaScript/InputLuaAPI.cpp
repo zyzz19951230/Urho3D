@@ -664,5 +664,11 @@ void RegisterInputLuaAPI(kaguya::State& lua)
 
     lua["input"] = GetSubsystem<Input>();
     lua["GetInput"] = GetSubsystem<Input>;
+
+    kaguya::LuaTable metatable = lua["__CALLABLE__"];
+
+    lua["Controls"].setMetatable(metatable);
+    lua["TouchState"].setMetatable(metatable);
+    lua["JoystickState"].setMetatable(metatable);
 }
 }

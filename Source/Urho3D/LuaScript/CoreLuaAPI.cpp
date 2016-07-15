@@ -537,5 +537,15 @@ void RegisterCoreLuaAPI(kaguya::State& lua)
 
     lua["time"] = GetSubsystem<Time>();
     lua["GetTime"] = GetSubsystem<Time>;
+
+    kaguya::LuaTable metatable = lua["__CALLABLE__"];
+    
+    lua["AttributeInfo"].setMetatable(metatable);
+    lua["Spline"].setMetatable(metatable);
+    lua["Timer"].setMetatable(metatable);
+    lua["ResourceRef"].setMetatable(metatable);
+    lua["ResourceRefList"].setMetatable(metatable);
+    lua["Variant"].setMetatable(metatable);
+    lua["VariantMap"].setMetatable(metatable);
 }
 }
