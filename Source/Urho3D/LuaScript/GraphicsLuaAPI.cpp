@@ -676,6 +676,7 @@ void RegisterGraphicsLuaAPI(kaguya::State& lua)
 
     kaguya::LuaTable metatable = lua["__CALLABLE__"];
 
+    lua["AnimationState"].setMetatable(metatable);
     lua["AnimationTrack"].setMetatable(metatable);
     lua["Octant"].setMetatable(metatable);
     lua["OctreeQueryResult"].setMetatable(metatable);

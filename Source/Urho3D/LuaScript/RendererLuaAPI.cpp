@@ -1482,8 +1482,12 @@ void RegisterRendererLuaAPI(kaguya::State& lua)
 
     kaguya::LuaTable metatable = lua["__CALLABLE__"];
 
-    lua["VertexElement"].setMetatable(metatable);
-    lua["RenderTargetInfo"].setMetatable(metatable);
+    lua["Pass"].setMetatable(metatable);
+    lua["RenderPath"].setMetatable(metatable);
     lua["RenderPathCommand"].setMetatable(metatable);
+    lua["RenderSurface"].setMetatable(metatable);
+    lua["RenderTargetInfo"].setMetatable(metatable);
+    lua["ShaderVariation"].setMetatable(metatable);
+    lua["VertexElement"].setMetatable(metatable);
 }
 }
