@@ -111,7 +111,7 @@ function CreateLogo()
     logoSprite:SetSize(textureWidth, textureHeight)
 
     -- Set logo sprite hot spot
-    logoSprite.hotSpot = IntVector2.new(0, textureHeight)
+    logoSprite.hotSpot = IntVector2(0, textureHeight)
 
     -- Set logo sprite alignment
     logoSprite:SetAlignment(HA_LEFT, VA_BOTTOM);

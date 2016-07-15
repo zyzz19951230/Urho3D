@@ -39,9 +39,9 @@ function CreateScene()
     local zoneNode = rttScene_:CreateChild("Zone")
     local zone = zoneNode:CreateComponent("Zone")
     -- Set same volume as the Octree, set a close bluish fog and some ambient light
-    zone.boundingBox = BoundingBox.new(-1000.0, 1000.0)
-    zone.ambientColor = Color.new(0.05, 0.1, 0.15)
-    zone.fogColor = Color.new(0.1, 0.2, 0.3)
+    zone.boundingBox = BoundingBox(-1000.0, 1000.0)
+    zone.ambientColor = Color(0.05, 0.1, 0.15)
+    zone.fogColor = Color(0.1, 0.2, 0.3)
     zone.fogStart = 10.0
     zone.fogEnd = 100.0
 
@@ -49,9 +49,9 @@ function CreateScene()
     local NUM_OBJECTS = 2000
     for i = 1, NUM_OBJECTS do
         local boxNode = rttScene_:CreateChild("Box")
-        boxNode.position = Vector3.new(Random(200.0) - 100.0, Random(200.0) - 100.0, Random(200.0) - 100.0)
+        boxNode.position = Vector3(Random(200.0) - 100.0, Random(200.0) - 100.0, Random(200.0) - 100.0)
         -- Orient using random pitch, yaw and roll Euler angles
-        boxNode.rotation = Quaternion.new(Random(360.0), Random(360.0), Random(360.0))
+        boxNode.rotation = Quaternion(Random(360.0), Random(360.0), Random(360.0))
         local boxObject = boxNode:CreateComponent("StaticModel")
         boxObject.model = cache:GetResource("Model", "Models/Box.mdl")
         boxObject.material = cache:GetResource("Material", "Materials/Stone.xml")
@@ -81,25 +81,25 @@ function CreateScene()
     -- Create a Zone component for ambient lighting & fog control
     local zoneNode = scene_:CreateChild("Zone")
     local zone = zoneNode:CreateComponent("Zone")
-    zone.boundingBox = BoundingBox.new(-1000.0, 1000.0)
-    zone.ambientColor = Color.new(0.1, 0.1, 0.1)
+    zone.boundingBox = BoundingBox(-1000.0, 1000.0)
+    zone.ambientColor = Color(0.1, 0.1, 0.1)
     zone.fogStart = 100.0
     zone.fogEnd = 300.0
 
     -- Create a directional light without shadows
     local lightNode = scene_:CreateChild("DirectionalLight")
-    lightNode.direction = Vector3.new(0.5, -1.0, 0.5)
+    lightNode.direction = Vector3(0.5, -1.0, 0.5)
     local light = lightNode:CreateComponent("Light")
     light.lightType = LIGHT_DIRECTIONAL
-    light.color = Color.new(0.2, 0.2, 0.2)
+    light.color = Color(0.2, 0.2, 0.2)
     light.specularIntensity = 1.0
 
     -- Create a "floor" consisting of several tiles
     for y = -5, 5 do
         for x = -5, 5 do
             local floorNode = scene_:CreateChild("FloorTile")
-            floorNode.position = Vector3.new(x * 20.5, -0.5, y * 20.5)
-            floorNode.scale = Vector3.new(20.0, 1.0, 20.)
+            floorNode.position = Vector3(x * 20.5, -0.5, y * 20.5)
+            floorNode.scale = Vector3(20.0, 1.0, 20.)
             local floorObject = floorNode:CreateComponent("StaticModel")
             floorObject.model = cache:GetResource("Model", "Models/Box.mdl")
             floorObject.material = cache:GetResource("Material", "Materials/Stone.xml")
@@ -109,16 +109,16 @@ function CreateScene()
     -- Create a "screen" like object for viewing the second scene. Construct it from two StaticModels, a box for the frame
     -- and a plane for the actual view
     local boxNode = scene_:CreateChild("ScreenBox")
-    boxNode.position = Vector3.new(0.0, 10.0, 0.0)
-    boxNode.scale = Vector3.new(21.0, 16.0, 0.5)
+    boxNode.position = Vector3(0.0, 10.0, 0.0)
+    boxNode.scale = Vector3(21.0, 16.0, 0.5)
     local boxObject = boxNode:CreateComponent("StaticModel")
     boxObject.model = cache:GetResource("Model", "Models/Box.mdl")
     boxObject.material = cache:GetResource("Material", "Materials/Stone.xml")
 
     local screenNode = scene_:CreateChild("Screen")
-    screenNode.position = Vector3.new(0.0, 10.0, -0.27)
-    screenNode.rotation = Quaternion.new(-90.0, 0.0, 0.0)
-    screenNode.scale = Vector3.new(20.0, 0.0, 15.0)
+    screenNode.position = Vector3(0.0, 10.0, -0.27)
+    screenNode.rotation = Quaternion(-90.0, 0.0, 0.0)
+    screenNode.scale = Vector3(20.0, 0.0, 15.0)
     local screenObject = screenNode:CreateComponent("StaticModel")
     screenObject.model = cache:GetResource("Model", "Models/Plane.mdl")
 
@@ -148,7 +148,7 @@ function CreateScene()
     camera.farClip = 300.0
 
     -- Set an initial position for the camera scene node above the plane
-    cameraNode.position = Vector3.new(0.0, 7.0, -30.0)
+    cameraNode.position = Vector3(0.0, 7.0, -30.0)
 end
 
 function CreateInstructions()
@@ -187,20 +187,20 @@ function MoveCamera(timeStep)
     pitch = Clamp(pitch, -90.0, 90.0)
 
     -- Construct new orientation for the camera scene node from yaw and pitch. Roll is fixed to zero
-    cameraNode.rotation = Quaternion.new(pitch, yaw, 0.0)
+    cameraNode.rotation = Quaternion(pitch, yaw, 0.0)
     -- Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
     local delta = MOVE_SPEED * timeStep
     if input:GetKeyDown(KEY_W) then
-        cameraNode:Translate(Vector3.new(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_S) then
-        cameraNode:Translate(Vector3.new(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_A) then
-        cameraNode:Translate(Vector3.new(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_D) then
-        cameraNode:Translate(Vector3.new(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
 end
 
@@ -229,5 +229,5 @@ function Rotator:Update(timeStep)
     local x = self.rotationSpeed[1] * timeStep
     local y = self.rotationSpeed[2] * timeStep
     local z = self.rotationSpeed[3] * timeStep
-    self.node:Rotate(Quaternion.new(x, y, z))
+    self.node:Rotate(Quaternion(x, y, z))
 end

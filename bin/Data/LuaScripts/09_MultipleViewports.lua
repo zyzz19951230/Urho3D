@@ -37,7 +37,7 @@ function CreateScene()
 
     -- Create scene node & StaticModel component for showing a static plane
     local planeNode = scene_:CreateChild("Plane")
-    planeNode.scale = Vector3.new(100.0, 1.0, 100.0)
+    planeNode.scale = Vector3(100.0, 1.0, 100.0)
     local planeObject = planeNode:CreateComponent("StaticModel")
     planeObject.model = cache:GetResource("Model", "Models/Plane.mdl")
     planeObject.material = cache:GetResource("Material", "Materials/StoneTiled.xml")
@@ -45,28 +45,28 @@ function CreateScene()
     -- Create a Zone component for ambient lighting & fog control
     local zoneNode = scene_:CreateChild("Zone")
     local zone = zoneNode:CreateComponent("Zone")
-    zone.boundingBox = BoundingBox.new(-1000.0, 1000.0)
-    zone.ambientColor = Color.new(0.15, 0.15, 0.15)
-    zone.fogColor = Color.new(0.5, 0.5, 0.7)
+    zone.boundingBox = BoundingBox(-1000.0, 1000.0)
+    zone.ambientColor = Color(0.15, 0.15, 0.15)
+    zone.fogColor = Color(0.5, 0.5, 0.7)
     zone.fogStart = 100.0
     zone.fogEnd = 300.0
 
     -- Create a directional light to the world. Enable cascaded shadows on it
     local lightNode = scene_:CreateChild("DirectionalLight")
-    lightNode.direction = Vector3.new(0.6, -1.0, 0.8)
+    lightNode.direction = Vector3(0.6, -1.0, 0.8)
     local light = lightNode:CreateComponent("Light")
     light.lightType = LIGHT_DIRECTIONAL
     light.castShadows = true
-    light.shadowBias = BiasParameters.new(0.00025, 0.5)
+    light.shadowBias = BiasParameters(0.00025, 0.5)
     -- Set cascade splits at 10, 50 and 200 world units, fade shadows out at 80% of maximum shadow distance
-    light.shadowCascade = CascadeParameters.new(10.0, 50.0, 200.0, 0.0, 0.8)
+    light.shadowCascade = CascadeParameters(10.0, 50.0, 200.0, 0.0, 0.8)
 
     -- Create some mushrooms
     local NUM_MUSHROOMS = 240
     for i = 1, NUM_MUSHROOMS do
         local mushroomNode = scene_:CreateChild("Mushroom")
-        mushroomNode.position = Vector3.new(Random(90.0) - 45.0, 0.0, Random(90.0) - 45.0)
-        mushroomNode.rotation = Quaternion.new(0.0, Random(360.0), 0.0)
+        mushroomNode.position = Vector3(Random(90.0) - 45.0, 0.0, Random(90.0) - 45.0)
+        mushroomNode.rotation = Quaternion(0.0, Random(360.0), 0.0)
         mushroomNode:SetScale(0.5 + Random(2.0))
         local mushroomObject = mushroomNode:CreateComponent("StaticModel")
         mushroomObject.model = cache:GetResource("Model", "Models/Mushroom.mdl")
@@ -80,7 +80,7 @@ function CreateScene()
     for i = 1, NUM_BOXES do
         local boxNode = scene_:CreateChild("Box")
         local size = 1.0 + Random(10.0)
-        boxNode.position = Vector3.new(Random(80.0) - 40.0, size * 0.5, Random(80.0) - 40.0)
+        boxNode.position = Vector3(Random(80.0) - 40.0, size * 0.5, Random(80.0) - 40.0)
         boxNode:SetScale(size)
         local boxObject = boxNode:CreateComponent("StaticModel")
         boxObject.model = cache:GetResource("Model", "Models/Box.mdl")
@@ -99,7 +99,7 @@ function CreateScene()
     -- Parent the rear camera node to the front camera node and turn it 180 degrees to face backward
     -- Here, we use the angle-axis constructor for Quaternion instead of the usual Euler angles
     rearCameraNode = cameraNode:CreateChild("RearCamera")
-    rearCameraNode:Rotate(Quaternion.new(180.0, Vector3.new(0.0, 1.0, 0.0)))
+    rearCameraNode:Rotate(Quaternion(180.0, Vector3(0.0, 1.0, 0.0)))
     local rearCamera = rearCameraNode:CreateComponent("Camera")
     rearCamera.farClip = 300.0
     -- Because the rear viewport is rather small, disable occlusion culling from it. Use the camera's
@@ -108,7 +108,7 @@ function CreateScene()
     rearCamera.viewOverrideFlags = VO_DISABLE_OCCLUSION
 
     -- Set an initial position for the front camera scene node above the plane
-    cameraNode.position = Vector3.new(0.0, 5.0, 0.0)
+    cameraNode.position = Vector3(0.0, 5.0, 0.0)
 end
 
 function CreateInstructions()
@@ -143,7 +143,7 @@ function SetupViewports()
     effectRenderPath:Append(cache:GetResource("XMLFile", "PostProcess/Bloom.xml"))
     effectRenderPath:Append(cache:GetResource("XMLFile", "PostProcess/FXAA2.xml"))
     -- Make the bloom mixing parameter more pronounced
-    effectRenderPath:SetShaderParameter("BloomMix", Variant.new(Vector2.new(0.9, 0.6)))
+    effectRenderPath:SetShaderParameter("BloomMix", Variant(Vector2(0.9, 0.6)))
     effectRenderPath:SetEnabled("Bloom", false)
     effectRenderPath:SetEnabled("FXAA2", false)
     viewport:SetRenderPath(effectRenderPath)
@@ -151,7 +151,7 @@ function SetupViewports()
     -- Set up the rear camera viewport on top of the front view ("rear view mirror")
     -- The viewport index must be greater in that case, otherwise the view would be left behind
     local rearViewport = Viewport.new(scene_, rearCameraNode:GetComponent("Camera"),
-        IntRect.new(graphics.width * 2 / 3, 32, graphics.width - 32, graphics.height / 3))
+        IntRect(graphics.width * 2 / 3, 32, graphics.width - 32, graphics.height / 3))
     renderer:SetViewport(1, rearViewport)
 end
 
@@ -182,20 +182,20 @@ function MoveCamera(timeStep)
     pitch = Clamp(pitch, -90.0, 90.0)
 
     -- Construct new orientation for the camera scene node from yaw and pitch. Roll is fixed to zero
-    cameraNode.rotation = Quaternion.new(pitch, yaw, 0.0)
+    cameraNode.rotation = Quaternion(pitch, yaw, 0.0)
 
     -- Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
     if input:GetKeyDown(KEY_W) then
-        cameraNode:Translate(Vector3.new(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_S) then
-        cameraNode:Translate(Vector3.new(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_A) then
-        cameraNode:Translate(Vector3.new(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_D) then
-        cameraNode:Translate(Vector3.new(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
 
     -- Toggle post processing effects on the front viewport. Note that the rear viewport is unaffected

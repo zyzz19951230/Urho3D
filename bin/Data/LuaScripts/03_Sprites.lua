@@ -10,7 +10,7 @@ local numSprites = 100
 local sprites = {}
 
 -- Custom variable identifier for storing sprite velocity within the UI element
-local VAR_VELOCITY = StringHash.new("Velocity")
+local VAR_VELOCITY = StringHash("Velocity")
 
 function Start()
     -- Execute the common startup for samples
@@ -39,25 +39,25 @@ function CreateSprites()
         sprite:SetFullImageRect()
 
         -- The UI root element is as big as the rendering window, set random position within it
-        sprite.position = Vector2.new(Random(width), Random(height))
+        sprite.position = Vector2(Random(width), Random(height))
 
         -- Set sprite size & hotspot in its center
         sprite:SetSize(128, 128)
-        sprite.hotSpot = IntVector2.new(64, 64)
+        sprite.hotSpot = IntVector2(64, 64)
 
         -- Set random rotation in degrees and random scale
         sprite.rotation = Random(360.0)
-        sprite.scale = Vector2.new(1.0, 1.0) * (Random(1.0) + 0.5)
+        sprite.scale = Vector2(1.0, 1.0) * (Random(1.0) + 0.5)
 
         -- Set random color and additive blending mode
-        sprite:SetColor(Color.new(Random(0.5) + 0.5, Random(0.5) + 0.5, Random(0.5) + 0.5, 1.0))
+        sprite:SetColor(Color(Random(0.5) + 0.5, Random(0.5) + 0.5, Random(0.5) + 0.5, 1.0))
         sprite.blendMode = BLEND_ADD
 
         -- Add as a child of the root UI element
         ui.root:AddChild(sprite)
 
         -- Store sprite's velocity as a custom variable
-        sprite:SetVar(VAR_VELOCITY, Variant.new(Vector2.new(Random(200.0) - 100.0, Random(200.0) - 100.0)))
+        sprite:SetVar(VAR_VELOCITY, Variant(Vector2(Random(200.0) - 100.0, Random(200.0) - 100.0)))
 
         table.insert(sprites, sprite)
     end

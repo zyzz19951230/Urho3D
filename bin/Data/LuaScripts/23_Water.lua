@@ -7,8 +7,8 @@ require "LuaScripts/Utilities/Sample"
 
 local reflectionCameraNode = nil
 local waterNode = nil
-local waterPlane = Plane.new()
-local waterClipPlane = Plane.new()
+local waterPlane = Plane()
+local waterClipPlane = Plane()
 
 function Start()
     -- Execute the common startup for samples
@@ -39,23 +39,23 @@ function CreateScene()
     -- Create a Zone component for ambient lighting & fog control
     local zoneNode = scene_:CreateChild("Zone")
     local zone = zoneNode:CreateComponent("Zone")
-    zone.boundingBox = BoundingBox.new(-1000.0, 1000.0)
-    zone.ambientColor = Color.new(0.15, 0.15, 0.15)
-    zone.fogColor = Color.new(1.0, 1.0, 1.0)
+    zone.boundingBox = BoundingBox(-1000.0, 1000.0)
+    zone.ambientColor = Color(0.15, 0.15, 0.15)
+    zone.fogColor = Color(1.0, 1.0, 1.0)
     zone.fogStart = 500.0
     zone.fogEnd = 750.0
 
     -- Create a directional light to the world. Enable cascaded shadows on it
     local lightNode = scene_:CreateChild("DirectionalLight")
-    lightNode.direction = Vector3.new(0.6, -1.0, 0.8)
+    lightNode.direction = Vector3(0.6, -1.0, 0.8)
     local light = lightNode:CreateComponent("Light")
     light.lightType = LIGHT_DIRECTIONAL
     light.castShadows = true
-    light.shadowBias = BiasParameters.new(0.00025, 0.5)
-    light.shadowCascade = CascadeParameters.new(10.0, 50.0, 200.0, 0.0, 0.8)
+    light.shadowBias = BiasParameters(0.00025, 0.5)
+    light.shadowCascade = CascadeParameters(10.0, 50.0, 200.0, 0.0, 0.8)
     light.specularIntensity = 0.5;
     -- Apply slightly overbright lighting to match the skybox
-    light.color = Color.new(1.2, 1.2, 1.2);
+    light.color = Color(1.2, 1.2, 1.2);
 
     -- Create skybox. The Skybox component is used like StaticModel, but it will be always located at the camera, giving the
     -- illusion of the box planes being far away. Use just the ordinary Box model and a suitable material, whose shader will
@@ -68,10 +68,10 @@ function CreateScene()
 
     -- Create heightmap terrain
     local terrainNode = scene_:CreateChild("Terrain")
-    terrainNode.position = Vector3.new(0.0, 0.0, 0.0)
+    terrainNode.position = Vector3(0.0, 0.0, 0.0)
     local terrain = terrainNode:CreateComponent("Terrain")
     terrain.patchSize = 64
-    terrain.spacing = Vector3.new(2.0, 0.5, 2.0) -- Spacing between vertices and vertical resolution of the height map
+    terrain.spacing = Vector3(2.0, 0.5, 2.0) -- Spacing between vertices and vertical resolution of the height map
     terrain.smoothing = true
     terrain.heightMap = cache:GetResource("Image", "Textures/HeightMap.png")
     terrain.material = cache:GetResource("Material", "Materials/Terrain.xml")
@@ -83,11 +83,11 @@ function CreateScene()
     local NUM_OBJECTS = 1000
     for i = 1, NUM_OBJECTS do
         local objectNode = scene_:CreateChild("Box")
-        local position = Vector3.new(Random(2000.0) - 1000.0, 0.0, Random(2000.0) - 1000.0)
+        local position = Vector3(Random(2000.0) - 1000.0, 0.0, Random(2000.0) - 1000.0)
         position.y = terrain:GetHeight(position) + 2.25
         objectNode.position = position
         -- Create a rotation quaternion from up vector to terrain normal
-        objectNode.rotation = Quaternion.new(Vector3.new(0.0, 1.0, 0.0), terrain:GetNormal(position))
+        objectNode.rotation = Quaternion(Vector3(0.0, 1.0, 0.0), terrain:GetNormal(position))
         objectNode:SetScale(5.0)
         local object = objectNode:CreateComponent("StaticModel")
         object.model = cache:GetResource("Model", "Models/Box.mdl")
@@ -97,8 +97,8 @@ function CreateScene()
 
     -- Create a water plane object that is as large as the terrain
     waterNode = scene_:CreateChild("Water")
-    waterNode.scale = Vector3.new(2048.0, 1.0, 2048.0)
-    waterNode.position = Vector3.new(0.0, 5.0, 0.0)
+    waterNode.scale = Vector3(2048.0, 1.0, 2048.0)
+    waterNode.position = Vector3(0.0, 5.0, 0.0)
     local water = waterNode:CreateComponent("StaticModel")
     water.model = cache:GetResource("Model", "Models/Plane.mdl")
     water.material = cache:GetResource("Material", "Materials/Water.xml")
@@ -112,7 +112,7 @@ function CreateScene()
     camera.farClip = 750.0
 
     -- Set an initial position for the camera scene node above the floor
-    cameraNode.position = Vector3.new(0.0, 7.0, -20.0)
+    cameraNode.position = Vector3(0.0, 7.0, -20.0)
 end
 
 function CreateInstructions()
@@ -134,10 +134,10 @@ function SetupViewport()
     renderer:SetViewport(0, viewport)
 
     -- Create a mathematical plane to represent the water in calculations
-    waterPlane = Plane.new(waterNode.worldRotation * Vector3.new(0.0, 1.0, 0.0), waterNode.worldPosition)
+    waterPlane = Plane(waterNode.worldRotation * Vector3(0.0, 1.0, 0.0), waterNode.worldPosition)
     -- Create a downward biased plane for reflection view clipping. Biasing is necessary to avoid too aggressive clipping
-    waterClipPlane = Plane.new(waterNode.worldRotation * Vector3.new(0.0, 1.0, 0.0), waterNode.worldPosition -
-        Vector3.new(0.0, 0.1, 0.0))
+    waterClipPlane = Plane(waterNode.worldRotation * Vector3(0.0, 1.0, 0.0), waterNode.worldPosition -
+        Vector3(0.0, 0.1, 0.0))
 
     -- Create camera for water reflection
     -- It will have the same farclip and position as the main viewport camera, but uses a reflection plane to modify
@@ -192,20 +192,20 @@ function MoveCamera(timeStep)
     pitch = Clamp(pitch, -90.0, 90.0)
 
     -- Construct new orientation for the camera scene node from yaw and pitch. Roll is fixed to zero
-    cameraNode.rotation = Quaternion.new(pitch, yaw, 0.0)
+    cameraNode.rotation = Quaternion(pitch, yaw, 0.0)
 
     -- Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
     if input:GetKeyDown(KEY_W) then
-        cameraNode:Translate(Vector3.new(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_S) then
-        cameraNode:Translate(Vector3.new(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_A) then
-        cameraNode:Translate(Vector3.new(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_D) then
-        cameraNode:Translate(Vector3.new(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
 
     -- In case resolution has changed, adjust the reflection camera aspect ratio

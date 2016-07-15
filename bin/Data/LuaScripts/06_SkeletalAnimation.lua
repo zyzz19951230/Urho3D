@@ -38,7 +38,7 @@ function CreateScene()
 
     -- Create scene node & StaticModel component for showing a static plane
     local planeNode = scene_:CreateChild("Plane")
-    planeNode.scale = Vector3.new(100.0, 1.0, 100.0)
+    planeNode.scale = Vector3(100.0, 1.0, 100.0)
     local planeObject = planeNode:CreateComponent("StaticModel")
     planeObject.model = cache:GetResource("Model", "Models/Plane.mdl")
     planeObject.material = cache:GetResource("Material", "Materials/StoneTiled.xml")
@@ -46,32 +46,32 @@ function CreateScene()
     -- Create a Zone component for ambient lighting & fog control
     local zoneNode = scene_:CreateChild("Zone")
     local zone = zoneNode:CreateComponent("Zone")
-    zone.boundingBox = BoundingBox.new(-1000.0, 1000.0)
-    zone.ambientColor = Color.new(0.15, 0.15, 0.15)
-    zone.fogColor = Color.new(0.5, 0.5, 0.7)
+    zone.boundingBox = BoundingBox(-1000.0, 1000.0)
+    zone.ambientColor = Color(0.15, 0.15, 0.15)
+    zone.fogColor = Color(0.5, 0.5, 0.7)
     zone.fogStart = 100.0
     zone.fogEnd = 300.0
 
     -- Create a directional light to the world. Enable cascaded shadows on it
     local lightNode = scene_:CreateChild("DirectionalLight")
-    lightNode.direction = Vector3.new(0.6, -1.0, 0.8)
+    lightNode.direction = Vector3(0.6, -1.0, 0.8)
     local light = lightNode:CreateComponent("Light")
     light.lightType = LIGHT_DIRECTIONAL
     light.castShadows = true
-    light.shadowBias = BiasParameters.new(0.00025, 0.5)
+    light.shadowBias = BiasParameters(0.00025, 0.5)
     -- Set cascade splits at 10, 50 and 200 world units, fade shadows out at 80% of maximum shadow distance
-    light.shadowCascade = CascadeParameters.new(10.0, 50.0, 200.0, 0.0, 0.8)
+    light.shadowCascade = CascadeParameters(10.0, 50.0, 200.0, 0.0, 0.8)
 
     -- Create animated models
     local uint NUM_MODELS = 100
     local MODEL_MOVE_SPEED = 2.0
     local MODEL_ROTATE_SPEED = 100.0
-    local bounds = BoundingBox.new(Vector3.new(-47.0, 0.0, -47.0), Vector3.new(47.0, 0.0, 47.0))
+    local bounds = BoundingBox(Vector3(-47.0, 0.0, -47.0), Vector3(47.0, 0.0, 47.0))
 
     for i = 1, NUM_MODELS do
         local modelNode = scene_:CreateChild("Jack")
-        modelNode.position = Vector3.new(Random(90.0) - 45.0, 0.0, Random(90.0) - 45.0)
-        modelNode.rotation = Quaternion.new(0.0, Random(360.0), 0.0)
+        modelNode.position = Vector3(Random(90.0) - 45.0, 0.0, Random(90.0) - 45.0)
+        modelNode.rotation = Quaternion(0.0, Random(360.0), 0.0)
         local modelObject = modelNode:CreateComponent("AnimatedModel")
         modelObject.model = cache:GetResource("Model", "Models/Jack.mdl")
         modelObject.material = cache:GetResource("Material", "Materials/Jack.xml")
@@ -99,7 +99,7 @@ function CreateScene()
     camera.farClip = 300.0
 
     -- Set an initial position for the camera scene node above the plane
-    cameraNode.position = Vector3.new(0.0, 5.0, 0.0)
+    cameraNode.position = Vector3(0.0, 5.0, 0.0)
 end
 
 function CreateInstructions()
@@ -151,20 +151,20 @@ function MoveCamera(timeStep)
     pitch = Clamp(pitch, -90.0, 90.0)
 
     -- Construct new orientation for the camera scene node from yaw and pitch. Roll is fixed to zero
-    cameraNode.rotation = Quaternion.new(pitch, yaw, 0.0)
+    cameraNode.rotation = Quaternion(pitch, yaw, 0.0)
 
     -- Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
     if input:GetKeyDown(KEY_W) then
-        cameraNode:Translate(Vector3.new(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_S) then
-        cameraNode:Translate(Vector3.new(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_A) then
-        cameraNode:Translate(Vector3.new(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_D) then
-        cameraNode:Translate(Vector3.new(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
     -- Toggle debug geometry with space
     if input:GetKeyPress(KEY_SPACE) then
@@ -195,7 +195,7 @@ Mover = ScriptObject()
 function Mover:Start()
     self.moveSpeed = 0.0
     self.rotationSpeed = 0.0
-    self.bounds = BoundingBox.new()
+    self.bounds = BoundingBox()
 end
 
 function Mover:SetParameters(moveSpeed, rotationSpeed, bounds)
@@ -206,7 +206,7 @@ end
 
 function Mover:Update(timeStep)
     local node = self.node
-    node:Translate(Vector3.new(0.0, 0.0, 1.0) * self.moveSpeed * timeStep)
+    node:Translate(Vector3(0.0, 0.0, 1.0) * self.moveSpeed * timeStep)
 
     -- If in risk of going outside the plane, rotate the model right
     local pos = node.position

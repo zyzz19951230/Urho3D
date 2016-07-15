@@ -40,26 +40,26 @@ function CreateScene()
     -- Create a Zone component for ambient lighting & fog control
     local zoneNode = scene_:CreateChild("Zone")
     local zone = zoneNode:CreateComponent("Zone")
-    zone.boundingBox = BoundingBox.new(-1000.0, 1000.0)
-    zone.ambientColor = Color.new(0.15, 0.15, 0.15)
-    zone.fogColor = Color.new(0.5, 0.5, 0.7)
+    zone.boundingBox = BoundingBox(-1000.0, 1000.0)
+    zone.ambientColor = Color(0.15, 0.15, 0.15)
+    zone.fogColor = Color(0.5, 0.5, 0.7)
     zone.fogStart = 100.0
     zone.fogEnd = 300.0
 
     -- Create a directional light to the world. Enable cascaded shadows on it
     local lightNode = scene_:CreateChild("DirectionalLight")
-    lightNode.direction = Vector3.new(0.6, -1.0, 0.8)
+    lightNode.direction = Vector3(0.6, -1.0, 0.8)
     local light = lightNode:CreateComponent("Light")
     light.lightType = LIGHT_DIRECTIONAL
     light.castShadows = true
-    light.shadowBias = BiasParameters.new(0.00025, 0.5)
+    light.shadowBias = BiasParameters(0.00025, 0.5)
     -- Set cascade splits at 10, 50 and 200 world units, fade shadows out at 80% of maximum shadow distance
-    light.shadowCascade = CascadeParameters.new(10.0, 50.0, 200.0, 0.0, 0.8)
+    light.shadowCascade = CascadeParameters(10.0, 50.0, 200.0, 0.0, 0.8)
 
     -- Create a floor object, 500 x 500 world units. Adjust position so that the ground is at zero Y
     local floorNode = scene_:CreateChild("Floor")
-    floorNode.position = Vector3.new(0.0, -0.5, 0.0)
-    floorNode.scale = Vector3.new(500.0, 1.0, 500.0)
+    floorNode.position = Vector3(0.0, -0.5, 0.0)
+    floorNode.scale = Vector3(500.0, 1.0, 500.0)
     local floorObject = floorNode:CreateComponent("StaticModel")
     floorObject.model = cache:GetResource("Model", "Models/Box.mdl")
     floorObject.material = cache:GetResource("Material", "Materials/StoneTiled.xml")
@@ -72,14 +72,14 @@ function CreateScene()
     local shape = floorNode:CreateComponent("CollisionShape")
     -- Set a box shape of size 1 x 1 x 1 for collision. The shape will be scaled with the scene node scale, so the
     -- rendering and physics representation sizes should match (the box model is also 1 x 1 x 1.)
-    shape:SetBox(Vector3.new(1.0, 1.0, 1.0))
+    shape:SetBox(Vector3(1.0, 1.0, 1.0))
 
     -- Create animated models
     for z = -1, 1 do
         for x = -4, 4 do
             local modelNode = scene_:CreateChild("Jack")
-            modelNode.position = Vector3.new(x * 5.0, 0.0, z * 5.0)
-            modelNode.rotation = Quaternion.new(0.0, 180.0, 0.0)
+            modelNode.position = Vector3(x * 5.0, 0.0, z * 5.0)
+            modelNode.rotation = Quaternion(0.0, 180.0, 0.0)
             local modelObject = modelNode:CreateComponent("AnimatedModel")
             modelObject.model = cache:GetResource("Model", "Models/Jack.mdl")
             modelObject.material = cache:GetResource("Material", "Materials/Jack.xml")
@@ -97,7 +97,7 @@ function CreateScene()
             local shape = modelNode:CreateComponent("CollisionShape")
             -- Create the capsule shape with an offset so that it is correctly aligned with the model, which
             -- has its origin at the feet
-            shape:SetCapsule(0.7, 2.0, Vector3.new(0.0, 1.0, 0.0))
+            shape:SetCapsule(0.7, 2.0, Vector3(0.0, 1.0, 0.0))
 
             -- Create a custom script object that reacts to collisions and creates the ragdoll
             modelNode:CreateScriptObject("CreateRagdoll")
@@ -111,7 +111,7 @@ function CreateScene()
     camera.farClip = 300.0
 
     -- Set an initial position for the camera scene node above the floor
-    cameraNode.position = Vector3.new(0.0, 5.0, -20.0)
+    cameraNode.position = Vector3(0.0, 5.0, -20.0)
 end
 
 function CreateInstructions()
@@ -165,20 +165,20 @@ function MoveCamera(timeStep)
     pitch = Clamp(pitch, -90.0, 90.0)
 
     -- Construct new orientation for the camera scene node from yaw and pitch. Roll is fixed to zero
-    cameraNode.rotation = Quaternion.new(pitch, yaw, 0.0)
+    cameraNode.rotation = Quaternion(pitch, yaw, 0.0)
 
     -- Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
     if input:GetKeyDown(KEY_W) then
-        cameraNode:Translate(Vector3.new(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(0.0, 0.0, 1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_S) then
-        cameraNode:Translate(Vector3.new(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(0.0, 0.0, -1.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_A) then
-        cameraNode:Translate(Vector3.new(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(-1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
     if input:GetKeyDown(KEY_D) then
-        cameraNode:Translate(Vector3.new(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
+        cameraNode:Translate(Vector3(1.0, 0.0, 0.0) * MOVE_SPEED * timeStep)
     end
 
     -- "Shoot" a physics object with left mousebutton
@@ -221,7 +221,7 @@ function SpawnObject()
 
     -- Set initial velocity for the RigidBody based on camera forward vector. Add also a slight up component
     -- to overcome gravity better
-    body.linearVelocity = cameraNode.rotation * Vector3.new(0.0, 0.25, 1.0) * OBJECT_VELOCITY
+    body.linearVelocity = cameraNode.rotation * Vector3(0.0, 0.25, 1.0) * OBJECT_VELOCITY
 end
 
 function HandleUpdate(eventType, eventData)
@@ -257,50 +257,50 @@ function CreateRagdoll:HandleNodeCollision(eventType, eventData)
         self.node:RemoveComponent("CollisionShape")
 
         -- Create RigidBody & CollisionShape components to bones
-        self:CreateRagdollBone("Bip01_Pelvis", SHAPE_BOX, Vector3.new(0.3, 0.2, 0.25), Vector3.new(0.0, 0.0, 0.0),
-            Quaternion.new(0.0, 0.0, 0.0))
-        self:CreateRagdollBone("Bip01_Spine1", SHAPE_BOX, Vector3.new(0.35, 0.2, 0.3), Vector3.new(0.15, 0.0, 0.0),
-            Quaternion.new(0.0, 0.0, 0.0))
-        self:CreateRagdollBone("Bip01_L_Thigh", SHAPE_CAPSULE, Vector3.new(0.175, 0.45, 0.175), Vector3.new(0.25, 0.0, 0.0),
-            Quaternion.new(0.0, 0.0, 90.0))
-        self:CreateRagdollBone("Bip01_R_Thigh", SHAPE_CAPSULE, Vector3.new(0.175, 0.45, 0.175), Vector3.new(0.25, 0.0, 0.0),
-            Quaternion.new(0.0, 0.0, 90.0))
-        self:CreateRagdollBone("Bip01_L_Calf", SHAPE_CAPSULE, Vector3.new(0.15, 0.55, 0.15), Vector3.new(0.25, 0.0, 0.0),
-            Quaternion.new(0.0, 0.0, 90.0))
-        self:CreateRagdollBone("Bip01_R_Calf", SHAPE_CAPSULE, Vector3.new(0.15, 0.55, 0.15), Vector3.new(0.25, 0.0, 0.0),
-            Quaternion.new(0.0, 0.0, 90.0))
-        self:CreateRagdollBone("Bip01_Head", SHAPE_BOX, Vector3.new(0.2, 0.2, 0.2), Vector3.new(0.1, 0.0, 0.0),
-            Quaternion.new(0.0, 0.0, 0.0))
-        self:CreateRagdollBone("Bip01_L_UpperArm", SHAPE_CAPSULE, Vector3.new(0.15, 0.35, 0.15), Vector3.new(0.1, 0.0, 0.0),
-            Quaternion.new(0.0, 0.0, 90.0))
-        self:CreateRagdollBone("Bip01_R_UpperArm", SHAPE_CAPSULE, Vector3.new(0.15, 0.35, 0.15), Vector3.new(0.1, 0.0, 0.0),
-            Quaternion.new(0.0, 0.0, 90.0))
-        self:CreateRagdollBone("Bip01_L_Forearm", SHAPE_CAPSULE, Vector3.new(0.125, 0.4, 0.125), Vector3.new(0.2, 0.0, 0.0),
-            Quaternion.new(0.0, 0.0, 90.0))
-        self:CreateRagdollBone("Bip01_R_Forearm", SHAPE_CAPSULE, Vector3.new(0.125, 0.4, 0.125), Vector3.new(0.2, 0.0, 0.0),
-            Quaternion.new(0.0, 0.0, 90.0))
+        self:CreateRagdollBone("Bip01_Pelvis", SHAPE_BOX, Vector3(0.3, 0.2, 0.25), Vector3(0.0, 0.0, 0.0),
+            Quaternion(0.0, 0.0, 0.0))
+        self:CreateRagdollBone("Bip01_Spine1", SHAPE_BOX, Vector3(0.35, 0.2, 0.3), Vector3(0.15, 0.0, 0.0),
+            Quaternion(0.0, 0.0, 0.0))
+        self:CreateRagdollBone("Bip01_L_Thigh", SHAPE_CAPSULE, Vector3(0.175, 0.45, 0.175), Vector3(0.25, 0.0, 0.0),
+            Quaternion(0.0, 0.0, 90.0))
+        self:CreateRagdollBone("Bip01_R_Thigh", SHAPE_CAPSULE, Vector3(0.175, 0.45, 0.175), Vector3(0.25, 0.0, 0.0),
+            Quaternion(0.0, 0.0, 90.0))
+        self:CreateRagdollBone("Bip01_L_Calf", SHAPE_CAPSULE, Vector3(0.15, 0.55, 0.15), Vector3(0.25, 0.0, 0.0),
+            Quaternion(0.0, 0.0, 90.0))
+        self:CreateRagdollBone("Bip01_R_Calf", SHAPE_CAPSULE, Vector3(0.15, 0.55, 0.15), Vector3(0.25, 0.0, 0.0),
+            Quaternion(0.0, 0.0, 90.0))
+        self:CreateRagdollBone("Bip01_Head", SHAPE_BOX, Vector3(0.2, 0.2, 0.2), Vector3(0.1, 0.0, 0.0),
+            Quaternion(0.0, 0.0, 0.0))
+        self:CreateRagdollBone("Bip01_L_UpperArm", SHAPE_CAPSULE, Vector3(0.15, 0.35, 0.15), Vector3(0.1, 0.0, 0.0),
+            Quaternion(0.0, 0.0, 90.0))
+        self:CreateRagdollBone("Bip01_R_UpperArm", SHAPE_CAPSULE, Vector3(0.15, 0.35, 0.15), Vector3(0.1, 0.0, 0.0),
+            Quaternion(0.0, 0.0, 90.0))
+        self:CreateRagdollBone("Bip01_L_Forearm", SHAPE_CAPSULE, Vector3(0.125, 0.4, 0.125), Vector3(0.2, 0.0, 0.0),
+            Quaternion(0.0, 0.0, 90.0))
+        self:CreateRagdollBone("Bip01_R_Forearm", SHAPE_CAPSULE, Vector3(0.125, 0.4, 0.125), Vector3(0.2, 0.0, 0.0),
+            Quaternion(0.0, 0.0, 90.0))
 
         -- Create Constraints between bones
-        self:CreateRagdollConstraint("Bip01_L_Thigh", "Bip01_Pelvis", CONSTRAINT_CONETWIST, Vector3.new(0.0, 0.0, -1.0),
-            Vector3.new(0.0, 0.0, 1.0), Vector2.new(45.0, 45.0), Vector2.new(0.0, 0.0), true)
-        self:CreateRagdollConstraint("Bip01_R_Thigh", "Bip01_Pelvis", CONSTRAINT_CONETWIST, Vector3.new(0.0, 0.0, -1.0),
-            Vector3.new(0.0, 0.0, 1.0), Vector2.new(45.0, 45.0), Vector2.new(0.0, 0.0), true)
-        self:CreateRagdollConstraint("Bip01_L_Calf", "Bip01_L_Thigh", CONSTRAINT_HINGE, Vector3.new(0.0, 0.0, -1.0),
-            Vector3.new(0.0, 0.0, -1.0), Vector2.new(90.0, 0.0), Vector2.new(0.0, 0.0), true)
-        self:CreateRagdollConstraint("Bip01_R_Calf", "Bip01_R_Thigh", CONSTRAINT_HINGE, Vector3.new(0.0, 0.0, -1.0),
-            Vector3.new(0.0, 0.0, -1.0), Vector2.new(90.0, 0.0), Vector2.new(0.0, 0.0), true)
-        self:CreateRagdollConstraint("Bip01_Spine1", "Bip01_Pelvis", CONSTRAINT_HINGE, Vector3.new(0.0, 0.0, 1.0),
-            Vector3.new(0.0, 0.0, 1.0), Vector2.new(45.0, 0.0), Vector2.new(-10.0, 0.0), true)
-        self:CreateRagdollConstraint("Bip01_Head", "Bip01_Spine1", CONSTRAINT_CONETWIST, Vector3.new(-1.0, 0.0, 0.0),
-            Vector3.new(-1.0, 0.0, 0.0), Vector2.new(0.0, 30.0), Vector2.new(0.0, 0.0), true)
-        self:CreateRagdollConstraint("Bip01_L_UpperArm", "Bip01_Spine1", CONSTRAINT_CONETWIST, Vector3.new(0.0, -1.0, 0.0),
-            Vector3.new(0.0, 1.0, 0.0), Vector2.new(45.0, 45.0), Vector2.new(0.0, 0.0), false)
-        self:CreateRagdollConstraint("Bip01_R_UpperArm", "Bip01_Spine1", CONSTRAINT_CONETWIST, Vector3.new(0.0, -1.0, 0.0),
-            Vector3.new(0.0, 1.0, 0.0), Vector2.new(45.0, 45.0), Vector2.new(0.0, 0.0), false)
-        self:CreateRagdollConstraint("Bip01_L_Forearm", "Bip01_L_UpperArm", CONSTRAINT_HINGE, Vector3.new(0.0, 0.0, -1.0),
-            Vector3.new(0.0, 0.0, -1.0), Vector2.new(90.0, 0.0), Vector2.new(0.0, 0.0), true)
-        self:CreateRagdollConstraint("Bip01_R_Forearm", "Bip01_R_UpperArm", CONSTRAINT_HINGE, Vector3.new(0.0, 0.0, -1.0),
-            Vector3.new(0.0, 0.0, -1.0), Vector2.new(90.0, 0.0), Vector2.new(0.0, 0.0), true)
+        self:CreateRagdollConstraint("Bip01_L_Thigh", "Bip01_Pelvis", CONSTRAINT_CONETWIST, Vector3(0.0, 0.0, -1.0),
+            Vector3(0.0, 0.0, 1.0), Vector2(45.0, 45.0), Vector2(0.0, 0.0), true)
+        self:CreateRagdollConstraint("Bip01_R_Thigh", "Bip01_Pelvis", CONSTRAINT_CONETWIST, Vector3(0.0, 0.0, -1.0),
+            Vector3(0.0, 0.0, 1.0), Vector2(45.0, 45.0), Vector2(0.0, 0.0), true)
+        self:CreateRagdollConstraint("Bip01_L_Calf", "Bip01_L_Thigh", CONSTRAINT_HINGE, Vector3(0.0, 0.0, -1.0),
+            Vector3(0.0, 0.0, -1.0), Vector2(90.0, 0.0), Vector2(0.0, 0.0), true)
+        self:CreateRagdollConstraint("Bip01_R_Calf", "Bip01_R_Thigh", CONSTRAINT_HINGE, Vector3(0.0, 0.0, -1.0),
+            Vector3(0.0, 0.0, -1.0), Vector2(90.0, 0.0), Vector2(0.0, 0.0), true)
+        self:CreateRagdollConstraint("Bip01_Spine1", "Bip01_Pelvis", CONSTRAINT_HINGE, Vector3(0.0, 0.0, 1.0),
+            Vector3(0.0, 0.0, 1.0), Vector2(45.0, 0.0), Vector2(-10.0, 0.0), true)
+        self:CreateRagdollConstraint("Bip01_Head", "Bip01_Spine1", CONSTRAINT_CONETWIST, Vector3(-1.0, 0.0, 0.0),
+            Vector3(-1.0, 0.0, 0.0), Vector2(0.0, 30.0), Vector2(0.0, 0.0), true)
+        self:CreateRagdollConstraint("Bip01_L_UpperArm", "Bip01_Spine1", CONSTRAINT_CONETWIST, Vector3(0.0, -1.0, 0.0),
+            Vector3(0.0, 1.0, 0.0), Vector2(45.0, 45.0), Vector2(0.0, 0.0), false)
+        self:CreateRagdollConstraint("Bip01_R_UpperArm", "Bip01_Spine1", CONSTRAINT_CONETWIST, Vector3(0.0, -1.0, 0.0),
+            Vector3(0.0, 1.0, 0.0), Vector2(45.0, 45.0), Vector2(0.0, 0.0), false)
+        self:CreateRagdollConstraint("Bip01_L_Forearm", "Bip01_L_UpperArm", CONSTRAINT_HINGE, Vector3(0.0, 0.0, -1.0),
+            Vector3(0.0, 0.0, -1.0), Vector2(90.0, 0.0), Vector2(0.0, 0.0), true)
+        self:CreateRagdollConstraint("Bip01_R_Forearm", "Bip01_R_UpperArm", CONSTRAINT_HINGE, Vector3(0.0, 0.0, -1.0),
+            Vector3(0.0, 0.0, -1.0), Vector2(90.0, 0.0), Vector2(0.0, 0.0), true)
 
         -- Disable keyframe animation from all bones so that they will not interfere with the ragdoll
         local model = self.node:GetComponent("AnimatedModel")
