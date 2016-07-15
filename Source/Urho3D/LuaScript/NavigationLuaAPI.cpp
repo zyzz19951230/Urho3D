@@ -49,7 +49,7 @@ static void RegisterCrowdAgent(kaguya::State& lua)
     lua["NAVIGATIONPUSHINESS_HIGH"] = NAVIGATIONPUSHINESS_HIGH;
 
     lua["CrowdAgent"].setClass(UserdataMetatable<CrowdAgent, Component>()
-        .addStaticFunction("new", &KCreateObject<CrowdAgent>)
+        .addStaticFunction("new", &CreateObject<CrowdAgent>)
         
         .addFunction("DrawDebugGeometry", static_cast<void(CrowdAgent::*)(bool)>(&CrowdAgent::DrawDebugGeometry))
 
@@ -137,7 +137,7 @@ static void RegisterCrowdManager(kaguya::State& lua)
         .addProperty("adaptiveDepth", &CrowdObstacleAvoidanceParams::adaptiveDepth)
     );
     lua["CrowdManager"].setClass(UserdataMetatable<CrowdManager, Component>()
-        .addStaticFunction("new", &KCreateObject<CrowdManager>)
+        .addStaticFunction("new", &CreateObject<CrowdManager>)
         
         .addFunction("DrawDebugGeometry", static_cast<void(CrowdManager::*)(bool)>(&CrowdManager::DrawDebugGeometry))
 
@@ -185,7 +185,7 @@ static void RegisterDynamicNavigationMesh(kaguya::State& lua)
     using namespace kaguya;
 
     lua["DynamicNavigationMesh"].setClass(UserdataMetatable<DynamicNavigationMesh, NavigationMesh>()
-        .addStaticFunction("new", &KCreateObject<DynamicNavigationMesh>)
+        .addStaticFunction("new", &CreateObject<DynamicNavigationMesh>)
         
         .addOverloadedFunctions("Build",
             static_cast<bool(DynamicNavigationMesh::*)()>(&DynamicNavigationMesh::Build),
@@ -211,7 +211,7 @@ static void RegisterNavArea(kaguya::State& lua)
     using namespace kaguya;
 
     lua["NavArea"].setClass(UserdataMetatable<NavArea, Component>()
-        .addStaticFunction("new", &KCreateObject<NavArea>)
+        .addStaticFunction("new", &CreateObject<NavArea>)
         
         .addFunction("GetAreaID", &NavArea::GetAreaID)
         .addFunction("SetAreaID", &NavArea::SetAreaID)
@@ -230,7 +230,7 @@ static void RegisterNavigable(kaguya::State& lua)
     using namespace kaguya;
 
     lua["Navigable"].setClass(UserdataMetatable<Navigable, Component>()
-        .addStaticFunction("new", &KCreateObject<Navigable>)
+        .addStaticFunction("new", &CreateObject<Navigable>)
         
         .addFunction("SetRecursive", &Navigable::SetRecursive)
         .addFunction("IsRecursive", &Navigable::IsRecursive)
@@ -279,7 +279,7 @@ static void RegisterNavigationMesh(kaguya::State& lua)
     );
 
     lua["NavigationMesh"].setClass(UserdataMetatable<NavigationMesh, Component>()
-        .addStaticFunction("new", &KCreateObject<NavigationMesh>)
+        .addStaticFunction("new", &CreateObject<NavigationMesh>)
         
         .addFunction("DrawDebugGeometry", static_cast<void(NavigationMesh::*)(bool)>(&NavigationMesh::DrawDebugGeometry))
 
@@ -371,7 +371,7 @@ static void RegisterObstacle(kaguya::State& lua)
     using namespace kaguya;
 
     lua["Obstacle"].setClass(UserdataMetatable<Obstacle, Component>()
-        .addStaticFunction("new", &KCreateObject<Obstacle>)
+        .addStaticFunction("new", &CreateObject<Obstacle>)
         
         .addFunction("GetHeight", &Obstacle::GetHeight)
         .addFunction("SetHeight", &Obstacle::SetHeight)
@@ -392,7 +392,7 @@ static void RegisterOffMeshConnection(kaguya::State& lua)
     using namespace kaguya;
 
     lua["OffMeshConnection"].setClass(UserdataMetatable<OffMeshConnection, Component>()
-        .addStaticFunction("new", &KCreateObject<OffMeshConnection>)
+        .addStaticFunction("new", &CreateObject<OffMeshConnection>)
         
         .addFunction("SetEndPoint", &OffMeshConnection::SetEndPoint)
         .addFunction("SetRadius", &OffMeshConnection::SetRadius)

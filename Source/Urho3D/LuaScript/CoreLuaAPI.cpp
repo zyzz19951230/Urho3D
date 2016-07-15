@@ -140,6 +140,22 @@ static void RegisterObject(kaguya::State& lua)
     );
 }
 
+static void ErrorExit0()
+{
+    return ErrorExit();
+}
+
+static void ErrorExit1(const String& message)
+{
+    return ErrorExit(message);
+}
+
+static void ErrorExit2(const String& message, int exitCode)
+{
+    return ErrorExit(message, exitCode);
+}
+
+
 static void PrintLine0(const String& str)
 {
     return PrintLine(str);
@@ -156,7 +172,9 @@ static void RegisterProcessUtils(kaguya::State& lua)
     using namespace kaguya;
 
     lua["ErrorDialog"] = function(&ErrorDialog);
-    lua["ErrorExit"] = function(&ErrorExit);
+    
+    lua["ErrorExit"] = overload(&ErrorExit0, &ErrorExit1, &ErrorExit2);
+
     lua["OpenConsoleWindow"] = function(&OpenConsoleWindow);
 
     lua["PrintLine"] = overload(&PrintLine0, &PrintLine1);
@@ -517,7 +535,7 @@ void RegisterCoreLuaAPI(kaguya::State& lua)
     RegisterVariant(lua);
     RegisterVariantMap(lua);
 
-    lua["time"] = KGetSubsystem<Time>();
-    lua["GetTime"] = KGetSubsystem<Time>;
+    lua["time"] = GetSubsystem<Time>();
+    lua["GetTime"] = GetSubsystem<Time>;
 }
 }

@@ -137,12 +137,12 @@ function CreateConsoleAndDebugHud()
     end
 
     -- Create console
-    console = engine:CreateConsole()
+    engine:CreateConsole()
     console.defaultStyle = uiStyle
     console.background.opacity = 0.8
 
     -- Create debug HUD
-    debugHud = engine:CreateDebugHud()
+    engine:CreateDebugHud()
     debugHud.defaultStyle = uiStyle
 end
 

@@ -231,7 +231,7 @@ static void RegisterNetworkPriority(kaguya::State& lua)
     using namespace kaguya;
 
     lua["NetworkPriority"].setClass(UserdataMetatable<NetworkPriority, Component>()
-        .addStaticFunction("new", &KCreateObject<NetworkPriority>)
+        .addStaticFunction("new", &CreateObject<NetworkPriority>)
 
         .addFunction("SetBasePriority", &NetworkPriority::SetBasePriority)
         .addFunction("SetDistanceFactor", &NetworkPriority::SetDistanceFactor)
@@ -285,7 +285,7 @@ void RegisterNetworkLuaAPI(kaguya::State& lua)
     RegisterNetworkPriority(lua);
     RegisterProtocol(lua);
 
-    lua["network"] = KGetSubsystem<Network>();
-    lua["GetNetwork"] = KGetSubsystem<Network>;
+    lua["network"] = GetSubsystem<Network>();
+    lua["GetNetwork"] = GetSubsystem<Network>;
 }
 }

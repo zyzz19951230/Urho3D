@@ -39,7 +39,7 @@ static void RegisterImage(kaguya::State& lua)
     lua["CF_PVRTC_RGBA_4BPP"] = CF_PVRTC_RGBA_4BPP;
 
     lua["Image"].setClass(UserdataMetatable<Image, Resource>()
-        .addStaticFunction("new", &KCreateObject<Image>)
+        .addStaticFunction("new", &CreateObject<Image>)
         
         .addFunction("BeginLoad", &Image::BeginLoad)
         .addFunction("Save", &Image::Save)
@@ -117,7 +117,7 @@ static void RegisterJSONFile(kaguya::State& lua)
     using namespace kaguya;
 
     lua["JSONFile"].setClass(UserdataMetatable<JSONFile, Resource>()
-        .addStaticFunction("new", &KCreateObject<JSONFile>)
+        .addStaticFunction("new", &CreateObject<JSONFile>)
         
 
         // .addFunction("Save", static_cast<bool(JSONFile::*)(Serializer&, const String&) const>(&JSONFile::Save))
@@ -308,7 +308,7 @@ static void RegisterPListFile(kaguya::State& lua)
     );
 
     lua["PListFile"].setClass(UserdataMetatable<PListFile, Resource>()
-        .addStaticFunction("new", &KCreateObject<PListFile>)
+        .addStaticFunction("new", &CreateObject<PListFile>)
         
 
 
@@ -330,7 +330,7 @@ static void RegisterResource(kaguya::State& lua)
     lua["ASYNC_FAIL"] = ASYNC_FAIL;
 
     lua["Resource"].setClass(UserdataMetatable<Resource, Object>()
-        .addStaticFunction("new", &KCreateObject<Resource>)
+        .addStaticFunction("new", &CreateObject<Resource>)
         
 
 
@@ -651,7 +651,7 @@ static void RegisterXMLFile(kaguya::State& lua)
     using namespace kaguya;
 
     lua["XMLFile"].setClass(UserdataMetatable<XMLFile, Resource>()
-        .addStaticFunction("new", &KCreateObject<XMLFile>)
+        .addStaticFunction("new", &CreateObject<XMLFile>)
         
 
         .addFunction("BeginLoad", &XMLFile::BeginLoad)
@@ -687,10 +687,10 @@ void RegisterResourceLuaAPI(kaguya::State& lua)
     RegisterXMLElement(lua);
     RegisterXMLFile(lua);
 
-    lua["cache"] = KGetSubsystem<ResourceCache>();
-    lua["GetCache"] = KGetSubsystem<ResourceCache>;
+    lua["cache"] = GetSubsystem<ResourceCache>();
+    lua["GetCache"] = GetSubsystem<ResourceCache>;
 
-    lua["localization"] = KGetSubsystem<Localization>();
-    lua["GetLocalization"] = KGetSubsystem<Localization>;
+    lua["localization"] = GetSubsystem<Localization>();
+    lua["GetLocalization"] = GetSubsystem<Localization>;
 }
 }

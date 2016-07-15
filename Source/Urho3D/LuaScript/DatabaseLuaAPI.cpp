@@ -117,8 +117,8 @@ void RegisterDatabaseLuaAPI(kaguya::State& lua)
     RegisterDbConnection(lua);
     RegisterDatabase(lua);
 
-    lua["database"] = KGetSubsystem<Database>();
-    lua["GetDatabase"] = KGetSubsystem<Database>;
+    lua["database"] = GetSubsystem<Database>();
+    lua["GetDatabase"] = GetSubsystem<Database>;
 }
 }
 

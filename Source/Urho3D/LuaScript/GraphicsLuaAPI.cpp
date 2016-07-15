@@ -45,7 +45,7 @@ static void RegisterAnimation(kaguya::State& lua)
     lua["CHANNEL_SCALE"] = CHANNEL_SCALE;
 
     lua["Animation"].setClass(UserdataMetatable<Animation, Resource>()
-        .addStaticFunction("new", &KCreateObject<Animation>)
+        .addStaticFunction("new", &CreateObject<Animation>)
 
         .addFunction("SetAnimationName", &Animation::SetAnimationName)
         .addFunction("SetLength", &Animation::SetLength)
@@ -91,7 +91,7 @@ static void RegisterAnimationController(kaguya::State& lua)
     using namespace kaguya;
 
     lua["AnimationController"].setClass(UserdataMetatable<AnimationController, Component>()
-        .addStaticFunction("new", &KCreateObject<AnimationController>)
+        .addStaticFunction("new", &CreateObject<AnimationController>)
 
         .addFunction("Play", &AnimationController::Play)
         .addFunction("PlayExclusive", &AnimationController::PlayExclusive)
@@ -203,7 +203,7 @@ static void RegisterModel(kaguya::State& lua)
     using namespace kaguya;
 
     lua["Model"].setClass(UserdataMetatable<Model, Resource>()
-        .addStaticFunction("new", &KCreateObject<Model>)
+        .addStaticFunction("new", &CreateObject<Model>)
 
         .addFunction("SetBoundingBox", &Model::SetBoundingBox)
         // .addFunction("SetVertexBuffers", &Model::SetVertexBuffers)
@@ -282,7 +282,7 @@ static void RegisterOctree(kaguya::State& lua)
         );
 
     lua["Octree"].setClass(UserdataMetatable<Octree, Component>()
-        .addStaticFunction("new", &KCreateObject<Octree>)
+        .addStaticFunction("new", &CreateObject<Octree>)
 
         .addOverloadedFunctions("DrawDebugGeometry",
             static_cast<void(Octree::*)(DebugRenderer*, bool)>(&Octree::DrawDebugGeometry),
@@ -344,7 +344,7 @@ static void RegisterParticleEffect(kaguya::State& lua)
     lua["DEFAULT_NUM_PARTICLES"] = DEFAULT_NUM_PARTICLES;
 
     lua["ParticleEffect"].setClass(UserdataMetatable<ParticleEffect, Resource>()
-        .addStaticFunction("new", &KCreateObject<ParticleEffect>)
+        .addStaticFunction("new", &CreateObject<ParticleEffect>)
 
         .addFunction("SetMaterial", &ParticleEffect::SetMaterial)
         .addFunction("SetNumParticles", &ParticleEffect::SetNumParticles)
@@ -531,7 +531,7 @@ static void RegisterTerrain(kaguya::State& lua)
     using namespace kaguya;
 
     lua["Terrain"].setClass(UserdataMetatable<Terrain, Component>()
-        .addStaticFunction("new", &KCreateObject<Terrain>)
+        .addStaticFunction("new", &CreateObject<Terrain>)
 
         .addFunction("SetPatchSize", &Terrain::SetPatchSize)
         .addFunction("SetSpacing", &Terrain::SetSpacing)

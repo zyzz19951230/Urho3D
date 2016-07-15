@@ -230,7 +230,7 @@ static void RegisterCollisionShape(kaguya::State& lua)
     lua["SHAPE_TERRAIN"] = SHAPE_TERRAIN;
 
     lua["CollisionShape"].setClass(UserdataMetatable<CollisionShape, Component>()
-        .addStaticFunction("new", &KCreateObject<CollisionShape>)
+        .addStaticFunction("new", &CreateObject<CollisionShape>)
         
         ADD_OVERLOADED_FUNCTIONS_3(CollisionShape, SetBox)        
         ADD_OVERLOADED_FUNCTIONS_3(CollisionShape, SetSphere)
@@ -294,7 +294,7 @@ static void RegisterConstraint(kaguya::State& lua)
     lua["CONSTRAINT_CONETWIST"] = CONSTRAINT_CONETWIST;
 
     lua["Constraint"].setClass(UserdataMetatable<Constraint, Component>()
-        .addStaticFunction("new", &KCreateObject<Constraint>)
+        .addStaticFunction("new", &CreateObject<Constraint>)
         
         .addFunction("SetConstraintType", &Constraint::SetConstraintType)
         .addFunction("SetOtherBody", &Constraint::SetOtherBody)
@@ -477,7 +477,7 @@ static void RegisterPhysicsWorld(kaguya::State& lua)
     lua["DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY"] = DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY;
 
     lua["PhysicsWorld"].setClass(UserdataMetatable<PhysicsWorld, Component>()
-        .addStaticFunction("new", &KCreateObject<PhysicsWorld>)
+        .addStaticFunction("new", &CreateObject<PhysicsWorld>)
         
         .addFunction("DrawDebugGeometry", static_cast<void(PhysicsWorld::*)(bool)>(&PhysicsWorld::DrawDebugGeometry))
 
@@ -568,7 +568,7 @@ static void RegisterRigidBody(kaguya::State& lua)
     lua["COLLISION_ALWAYS"] = COLLISION_ALWAYS;
 
     lua["RigidBody"].setClass(UserdataMetatable<RigidBody, Component>()
-        .addStaticFunction("new", &KCreateObject<RigidBody>)
+        .addStaticFunction("new", &CreateObject<RigidBody>)
         
         .addFunction("SetMass", &RigidBody::SetMass)
         .addFunction("SetPosition", &RigidBody::SetPosition)

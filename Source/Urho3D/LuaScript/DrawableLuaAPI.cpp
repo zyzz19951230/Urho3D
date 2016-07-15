@@ -42,7 +42,7 @@ static void RegisterAnimatedModel(kaguya::State& lua)
     using namespace kaguya;
 
     lua["AnimatedModel"].setClass(UserdataMetatable<AnimatedModel, StaticModel>()
-        .addStaticFunction("new", &KCreateObject<AnimatedModel>)
+        .addStaticFunction("new", &CreateObject<AnimatedModel>)
 
         ADD_OVERLOADED_FUNCTIONS_2(AnimatedModel, SetModel)
 
@@ -128,7 +128,7 @@ static void RegisterBillboardSet(kaguya::State& lua)
     lua["MAX_BILLBOARDS"] = MAX_BILLBOARDS;
 
     lua["BillboardSet"].setClass(UserdataMetatable<BillboardSet, Drawable>()
-        .addStaticFunction("new", &KCreateObject<BillboardSet>)
+        .addStaticFunction("new", &CreateObject<BillboardSet>)
 
         .addFunction("SetMaterial", &BillboardSet::SetMaterial)
         .addFunction("SetNumBillboards", &BillboardSet::SetNumBillboards)
@@ -169,7 +169,7 @@ static void RegisterCustomGeometry(kaguya::State& lua)
     using namespace kaguya;
 
     lua["CustomGeometry"].setClass(UserdataMetatable<CustomGeometry, Drawable>()
-        .addStaticFunction("new", &KCreateObject<CustomGeometry>)
+        .addStaticFunction("new", &CreateObject<CustomGeometry>)
 
         .addFunction("GetLodGeometry", &CustomGeometry::GetLodGeometry)
         .addFunction("GetNumOccluderTriangles", &CustomGeometry::GetNumOccluderTriangles)
@@ -210,7 +210,7 @@ static void RegisterDecalSet(kaguya::State& lua)
     using namespace kaguya;
 
     lua["DecalSet"].setClass(UserdataMetatable<DecalSet, Drawable>()
-        .addStaticFunction("new", &KCreateObject<DecalSet>)
+        .addStaticFunction("new", &CreateObject<DecalSet>)
 
         .addFunction("SetMaterial", &DecalSet::SetMaterial)
         .addFunction("SetMaxVertices", &DecalSet::SetMaxVertices)
@@ -381,7 +381,7 @@ static void RegisterLight(kaguya::State& lua)
         );
 
     lua["Light"].setClass(UserdataMetatable<Light, Drawable>()
-        .addStaticFunction("new", &KCreateObject<Light>)
+        .addStaticFunction("new", &CreateObject<Light>)
 
         .addFunction("SetLightType", &Light::SetLightType)
         .addFunction("SetPerVertex", &Light::SetPerVertex)
@@ -458,7 +458,7 @@ static void RegisterParticleEmitter(kaguya::State& lua)
     using namespace kaguya;
 
     lua["ParticleEmitter"].setClass(UserdataMetatable<ParticleEmitter, BillboardSet>()
-        .addStaticFunction("new", &KCreateObject<ParticleEmitter>)
+        .addStaticFunction("new", &CreateObject<ParticleEmitter>)
 
         .addFunction("SetEffect", &ParticleEmitter::SetEffect)
         .addFunction("SetNumParticles", &ParticleEmitter::SetNumParticles)
@@ -500,7 +500,7 @@ static void RegisterRibbonTrail(kaguya::State& lua)
         );
 
     lua["RibbonTrail"].setClass(UserdataMetatable<RibbonTrail, Drawable>()
-        .addStaticFunction("new", &KCreateObject<RibbonTrail>)
+        .addStaticFunction("new", &CreateObject<RibbonTrail>)
 
         .addFunction("SetMaterial", &RibbonTrail::SetMaterial)
         .addFunction("SetVertexDistance", &RibbonTrail::SetVertexDistance)
@@ -610,7 +610,7 @@ static void RegisterSkybox(kaguya::State& lua)
     using namespace kaguya;
 
     lua["Skybox"].setClass(UserdataMetatable<Skybox, StaticModel>()
-        .addStaticFunction("new", &KCreateObject<Skybox>)
+        .addStaticFunction("new", &CreateObject<Skybox>)
         );
 }
 
@@ -629,7 +629,7 @@ static void RegisterStaticModel(kaguya::State& lua)
     using namespace kaguya;
 
     lua["StaticModel"].setClass(UserdataMetatable<StaticModel, Drawable>()
-        .addStaticFunction("new", &KCreateObject<StaticModel>)
+        .addStaticFunction("new", &CreateObject<StaticModel>)
 
         .addFunction("SetModel", &StaticModel::SetModel)
 
@@ -662,7 +662,7 @@ static void RegisterStaticModelGroup(kaguya::State& lua)
     using namespace kaguya;
 
     lua["StaticModelGroup"].setClass(UserdataMetatable<StaticModelGroup, StaticModel>()
-        .addStaticFunction("new", &KCreateObject<StaticModelGroup>)
+        .addStaticFunction("new", &CreateObject<StaticModelGroup>)
 
         .addFunction("AddInstanceNode", &StaticModelGroup::AddInstanceNode)
         .addFunction("RemoveInstanceNode", &StaticModelGroup::RemoveInstanceNode)
@@ -680,7 +680,7 @@ static void RegisterTerrainPatch(kaguya::State& lua)
     using namespace kaguya;
 
     lua["TerrainPatch"].setClass(UserdataMetatable<TerrainPatch, Drawable>()
-        .addStaticFunction("new", &KCreateObject<TerrainPatch>)
+        .addStaticFunction("new", &CreateObject<TerrainPatch>)
 
         .addFunction("SetOwner", &TerrainPatch::SetOwner)
         .addFunction("SetNeighbors", &TerrainPatch::SetNeighbors)
@@ -725,7 +725,7 @@ static void RegisterZone(kaguya::State& lua)
     using namespace kaguya;
 
     lua["Zone"].setClass(UserdataMetatable<Zone, Drawable>()
-        .addStaticFunction("new", &KCreateObject<Zone>)
+        .addStaticFunction("new", &CreateObject<Zone>)
 
         .addFunction("SetBoundingBox", &Zone::SetBoundingBox)
         .addFunction("SetAmbientColor", &Zone::SetAmbientColor)

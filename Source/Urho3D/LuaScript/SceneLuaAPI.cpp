@@ -110,7 +110,7 @@ static void RegisterComponent(kaguya::State& lua)
     using namespace kaguya;
 
     lua["Component"].setClass(UserdataMetatable<Component, Animatable>()
-        .addStaticFunction("new", &KCreateObject<Component>)
+        .addStaticFunction("new", &CreateObject<Component>)
 
         .addFunction("DrawDebugGeometry", &Component::DrawDebugGeometry)
 
@@ -148,7 +148,7 @@ static void RegisterLogicComponent(kaguya::State& lua)
     lua["USE_FIXEDPOSTUPDATE"] = USE_FIXEDPOSTUPDATE;
 
     lua["LogicComponent"].setClass(UserdataMetatable<LogicComponent, Component>()
-        .addStaticFunction("new", &KCreateObject<LogicComponent>)
+        .addStaticFunction("new", &CreateObject<LogicComponent>)
 
         .addFunction("SetUpdateEventMask", &LogicComponent::SetUpdateEventMask)
         .addFunction("GetUpdateEventMask", &LogicComponent::GetUpdateEventMask)
@@ -374,7 +374,7 @@ static void RegisterNode(kaguya::State& lua)
     lua["TS_WORLD"] = TS_WORLD;
 
     lua["Node"].setClass(UserdataMetatable<Node, Animatable>()
-        .addStaticFunction("new", &KCreateObject<Node>)
+        .addStaticFunction("new", &CreateObject<Node>)
 
         .addFunction("SetName", &Node::SetName)
         .addFunction("SetTags", &Node::SetTags)
@@ -649,7 +649,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
     using namespace kaguya;
 
     lua["ObjectAnimation"].setClass(UserdataMetatable<ObjectAnimation, Resource>()
-        .addStaticFunction("new", &KCreateObject<ObjectAnimation>)
+        .addStaticFunction("new", &CreateObject<ObjectAnimation>)
 
         ADD_OVERLOADED_FUNCTIONS_2(ObjectAnimation, AddAttributeAnimation)
 
@@ -785,7 +785,7 @@ static void RegisterScene(kaguya::State& lua)
     lua["LOAD_SCENE_AND_RESOURCES"] = LOAD_SCENE_AND_RESOURCES;
 
     lua["Scene"].setClass(UserdataMetatable<Scene, Node>()
-        .addStaticFunction("new", &KCreateObject<Scene>)
+        .addStaticFunction("new", &CreateObject<Scene>)
 
         .addStaticFunction("LoadXML", &SceneLoadXML)
         .addStaticFunction("LoadJSON", &SceneLoadJSON)
@@ -941,7 +941,7 @@ static void RegisterSmoothedTransform(kaguya::State& lua)
     lua["SMOOTH_ROTATION"] = SMOOTH_ROTATION;
 
     lua["SmoothedTransform"].setClass(UserdataMetatable<SmoothedTransform, Component>()
-        .addStaticFunction("new", &KCreateObject<SmoothedTransform>)
+        .addStaticFunction("new", &CreateObject<SmoothedTransform>)
 
         .addFunction("SetTargetPosition", &SmoothedTransform::SetTargetPosition)
         .addFunction("SetTargetRotation", &SmoothedTransform::SetTargetRotation)
@@ -966,7 +966,7 @@ static void RegisterSplinePath(kaguya::State& lua)
     using namespace kaguya;
 
     lua["SplinePath"].setClass(UserdataMetatable<SplinePath, Component>()
-        .addStaticFunction("new", &KCreateObject<SplinePath>)
+        .addStaticFunction("new", &CreateObject<SplinePath>)
 
         .addFunction("AddControlPoint", &SplinePath::AddControlPoint)
         .addFunction("RemoveControlPoint", &SplinePath::RemoveControlPoint)
@@ -999,7 +999,7 @@ static void RegisterUnknownComponent(kaguya::State& lua)
     using namespace kaguya;
 
     lua["UnknownComponent"].setClass(UserdataMetatable<UnknownComponent, Component>()
-        .addStaticFunction("new", &KCreateObject<UnknownComponent>)
+        .addStaticFunction("new", &CreateObject<UnknownComponent>)
 
         .addFunction("GetType", &UnknownComponent::GetType)
         .addFunction("GetTypeName", &UnknownComponent::GetTypeName)
@@ -1021,7 +1021,7 @@ static void RegisterValueAnimation(kaguya::State& lua)
     lua["IM_SPLINE"] = IM_SPLINE;
 
     lua["ValueAnimation"].setClass(UserdataMetatable<ValueAnimation, Resource>()
-        .addStaticFunction("new", &KCreateObject<ValueAnimation>)
+        .addStaticFunction("new", &CreateObject<ValueAnimation>)
 
         .addFunction("SetInterpolationMethod", &ValueAnimation::SetInterpolationMethod)
         .addFunction("SetSplineTension", &ValueAnimation::SetSplineTension)

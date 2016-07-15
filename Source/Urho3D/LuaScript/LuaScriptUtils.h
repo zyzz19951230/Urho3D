@@ -24,7 +24,7 @@ namespace Urho3D
 
     /// Create object.
     template<typename T>
-    SharedPtr<T> KCreateObject()
+    SharedPtr<T> CreateObject()
     {
         SharedPtr<T> tPtr(new T(globalContext));
         return tPtr;
@@ -32,7 +32,7 @@ namespace Urho3D
 
     /// Get subsystem.
     template<typename T>
-    T* KGetSubsystem()
+    T* GetSubsystem()
     {
         return globalContext->GetSubsystem<T>();
     }

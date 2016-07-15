@@ -145,7 +145,7 @@ static void RegisterFile(kaguya::State& lua)
     lua["FILE_READWRITE"] = FILE_READWRITE;
 
     lua["File"].setClass(UserdataMetatable<File, MultipleBase<Object, Deserializer, Serializer>>()
-        .addStaticFunction("new", &KCreateObject<File>)
+        .addStaticFunction("new", &CreateObject<File>)
 
         .addOverloadedFunctions("Open",
             FileOpen0,
@@ -346,7 +346,7 @@ static void RegisterPackageFile(kaguya::State& lua)
     using namespace kaguya;
 
     lua["PackageFile"].setClass(UserdataMetatable<PackageFile, Object>()
-        .addStaticFunction("new", &KCreateObject<PackageFile>)
+        .addStaticFunction("new", &CreateObject<PackageFile>)
 
         ADD_OVERLOADED_FUNCTIONS_2(PackageFile, Open)
 
@@ -412,11 +412,11 @@ void RegisterIOLuaAPI(kaguya::State& lua)
     RegisterPackageFile(lua);
     RegisterVectorBuffer(lua);
 
-    lua["fileSystem"] = KGetSubsystem<FileSystem>();
-    lua["GetFileSystem"] = KGetSubsystem<FileSystem>;
+    lua["fileSystem"] = GetSubsystem<FileSystem>();
+    lua["GetFileSystem"] = GetSubsystem<FileSystem>;
 
-    lua["log"] = KGetSubsystem<Log>();
-    lua["GetLog"] = KGetSubsystem<Log>;
+    lua["log"] = GetSubsystem<Log>();
+    lua["GetLog"] = GetSubsystem<Log>;
 }
 
 }

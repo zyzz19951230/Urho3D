@@ -3,7 +3,7 @@
 #include "../Engine/DebugHud.h"
 #include "../Engine/Engine.h"
 #include "../Engine/EngineEvents.h"
-
+#include "../LuaScript/LuaScript.h"
 #include "../LuaScript/LuaScriptUtils.h"
 
 #include <kaguya.hpp>
@@ -112,6 +112,28 @@ static void RegisterDebugHud(kaguya::State& lua)
         );
 }
 
+static Console* EngineCreateConsole(Engine* self)
+{
+    Console* console = self->CreateConsole();
+
+    LuaScript* luaScript = GetSubsystem<LuaScript>();
+    kaguya::State lua(luaScript->GetState());
+    lua["console"] = console;
+
+    return console;
+}
+
+static DebugHud* EngineCreateDebugHud(Engine* self)
+{
+    DebugHud* debugHud = self->CreateDebugHud();
+
+    LuaScript* luaScript = GetSubsystem<LuaScript>();
+    kaguya::State lua(luaScript->GetState());
+    lua["debugHud"] = debugHud;
+
+    return debugHud;
+}
+
 static void EngineDumpResources0(Engine* self)
 {
     self->DumpResources();
@@ -129,8 +151,8 @@ static void RegisterEngine(kaguya::State& lua)
     lua["Engine"].setClass(UserdataMetatable<Engine, Object>()
 
         .addFunction("RunFrame", &Engine::RunFrame)
-        .addFunction("CreateConsole", &Engine::CreateConsole)
-        .addFunction("CreateDebugHud", &Engine::CreateDebugHud)
+        .addStaticFunction("CreateConsole", &EngineCreateConsole)
+        .addStaticFunction("CreateDebugHud", &EngineCreateDebugHud)
 
         .addFunction("SetMinFps", &Engine::SetMinFps)
         .addFunction("SetMaxFps", &Engine::SetMaxFps)
@@ -188,10 +210,19 @@ void RegisterEngineLuaAPI(kaguya::State& lua)
     RegisterEngine(lua);
     RegisterEngineEvents(lua);
 
-    lua["engine"] = KGetSubsystem<Engine>();
-    lua["GetEngine"] = KGetSubsystem<Engine>;
+    lua["engine"] = GetSubsystem<Engine>();
+    lua["GetEngine"] = GetSubsystem<Engine>;
 
-    lua["GetConsole"] = KGetSubsystem<Console>;
-    lua["GetDebugHud"] = KGetSubsystem<DebugHud>;
+    Console* console = GetSubsystem<Console>();
+    if (console)
+        lua["console"] = console;
+    
+    lua["GetConsole"] = GetSubsystem<Console>;
+
+    DebugHud* debugHud = GetSubsystem<DebugHud>();
+    if (debugHud)
+        lua["debugHud"] = debugHud;
+
+    lua["GetDebugHud"] = GetSubsystem<DebugHud>;
 }
 }

@@ -662,7 +662,7 @@ void RegisterInputLuaAPI(kaguya::State& lua)
     RegisterInput(lua);
     RegisterInputEvents(lua);
 
-    lua["input"] = KGetSubsystem<Input>();
-    lua["GetInput"] = KGetSubsystem<Input>;
+    lua["input"] = GetSubsystem<Input>();
+    lua["GetInput"] = GetSubsystem<Input>;
 }
 }

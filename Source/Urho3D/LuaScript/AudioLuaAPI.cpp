@@ -117,7 +117,7 @@ static void RegisterSound(kaguya::State& lua)
     using namespace kaguya;
 
     lua["Sound"].setClass(UserdataMetatable<Sound, Resource>()
-        .addStaticFunction("new", &KCreateObject<Sound>)
+        .addStaticFunction("new", &CreateObject<Sound>)
 
         .addFunction("SetSize", &Sound::SetSize)
 
@@ -161,7 +161,7 @@ static void RegisterSoundListener(kaguya::State& lua)
     using namespace kaguya;
 
     lua["SoundListener"].setClass(UserdataMetatable<SoundListener, Component>()
-        .addStaticFunction("new", &KCreateObject<SoundListener>)
+        .addStaticFunction("new", &CreateObject<SoundListener>)
         );
 }
 
@@ -171,7 +171,7 @@ static void RegisterSoundSource(kaguya::State& lua)
 
     lua["STREAM_BUFFER_LENGTH"] = STREAM_BUFFER_LENGTH;
     lua["SoundSource"].setClass(UserdataMetatable<SoundSource, Component>()
-        .addStaticFunction("new", &KCreateObject<SoundSource>)
+        .addStaticFunction("new", &CreateObject<SoundSource>)
 
         .addOverloadedFunctions("Play",
             static_cast<void(SoundSource::*)(Sound*)>(&SoundSource::Play),
@@ -215,7 +215,7 @@ static void RegisterSoundSource3D(kaguya::State& lua)
     using namespace kaguya;
 
     lua["SoundSource3D"].setClass(UserdataMetatable<SoundSource3D, SoundSource>()
-        .addStaticFunction("new", &KCreateObject<SoundSource3D>)
+        .addStaticFunction("new", &CreateObject<SoundSource3D>)
 
         .addFunction("SetDistanceAttenuation", &SoundSource3D::SetDistanceAttenuation)
         .addFunction("SetAngleAttenuation", &SoundSource3D::SetAngleAttenuation)
@@ -280,7 +280,7 @@ void RegisterAudioLuaAPI(kaguya::State& lua)
     RegisterSoundSource(lua);
     RegisterSoundSource3D(lua);
 
-    lua["audio"] = KGetSubsystem<Audio>();
-    lua["GetAudio"] = KGetSubsystem<Audio>;
+    lua["audio"] = GetSubsystem<Audio>();
+    lua["GetAudio"] = GetSubsystem<Audio>;
 }
 }
