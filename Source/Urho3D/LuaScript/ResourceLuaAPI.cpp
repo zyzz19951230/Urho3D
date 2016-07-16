@@ -564,9 +564,6 @@ static void RegisterResourceCache(kaguya::State& lua)
         ADD_OVERLOADED_FUNCTIONS_2(ResourceCache, GetResource)
         ADD_OVERLOADED_FUNCTIONS_2(ResourceCache, GetTempResource)
 
-        // .addFunction("BackgroundLoadResource", &ResourceCache::BackgroundLoadResource)
-        .addFunction("GetNumBackgroundLoadResources", &ResourceCache::GetNumBackgroundLoadResources)
-
         .addStaticFunction("GetResources", &ResourceCacheGetResources)
         .addStaticFunction("GetExistingResource", &ResourceCacheGetExistingResource)
 
@@ -578,24 +575,22 @@ static void RegisterResourceCache(kaguya::State& lua)
         .addFunction("GetMemoryUse", &ResourceCache::GetMemoryUse)
         .addFunction("GetTotalMemoryUse", &ResourceCache::GetTotalMemoryUse)
         .addFunction("GetResourceFileName", &ResourceCache::GetResourceFileName)
+
         .addFunction("GetAutoReloadResources", &ResourceCache::GetAutoReloadResources)
         .addFunction("GetReturnFailedResources", &ResourceCache::GetReturnFailedResources)
         .addFunction("GetSearchPackagesFirst", &ResourceCache::GetSearchPackagesFirst)
-        .addFunction("GetFinishBackgroundResourcesMs", &ResourceCache::GetFinishBackgroundResourcesMs)
         .addFunction("GetPreferredResourceDir", &ResourceCache::GetPreferredResourceDir)
         .addFunction("SanitateResourceName", &ResourceCache::SanitateResourceName)
+
         .addFunction("SanitateResourceDirName", &ResourceCache::SanitateResourceDirName)
         .addFunction("StoreResourceDependency", &ResourceCache::StoreResourceDependency)
         .addFunction("ResetDependencies", &ResourceCache::ResetDependencies)
         .addFunction("PrintMemoryUsage", &ResourceCache::PrintMemoryUsage)
 
-        /*
         .addProperty("totalMemoryUse", &ResourceCache::GetTotalMemoryUse)
-        .addProperty("autoReloadResources", &ResourceCache::GetAutoReloadResources)
-        .addProperty("returnFailedResources", &ResourceCache::GetReturnFailedResources)
-        .addProperty("searchPackagesFirst", &ResourceCache::GetSearchPackagesFirst)
-        .addProperty("finishBackgroundResourcesMs", &ResourceCache::GetFinishBackgroundResourcesMs)
-        */
+        .addProperty("autoReloadResources", &ResourceCache::GetAutoReloadResources, &ResourceCache::SetAutoReloadResources)
+        .addProperty("returnFailedResources", &ResourceCache::GetReturnFailedResources, &ResourceCache::SetReturnFailedResources)
+        .addProperty("searchPackagesFirst", &ResourceCache::GetSearchPackagesFirst, &ResourceCache::SetSearchPackagesFirst)
     );
 }
 
