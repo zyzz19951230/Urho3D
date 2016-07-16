@@ -42,6 +42,11 @@ static void RegisterAttribute(kaguya::State& lua)
     );
 }
 
+static SharedPtr<Object> GlobalGetEventSender()
+{
+    return SharedPtr<Object>(globalContext->GetEventSender());
+}
+
 static void RegisterContext(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -61,6 +66,8 @@ static void RegisterContext(kaguya::State& lua)
         .addProperty("eventSender", &Context::GetEventSender)
         .addProperty("eventHandler", &Context::GetEventHandler)
     );
+
+    lua["GetEventSender"] = function(GlobalGetEventSender);
 }
 
 static void RegisterCoreEvents(kaguya::State& lua)
