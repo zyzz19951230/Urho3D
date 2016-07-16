@@ -314,6 +314,60 @@ static void RegisterModel(kaguya::State& lua)
         );
 }
 
+static RayQueryResult OctreeRaycastSingle0(const Octree* self, const Ray& ray)
+{
+    PODVector<RayQueryResult> result;
+    RayOctreeQuery query(result, ray);
+    self->RaycastSingle(query);
+    if (result.Size() == 0)
+        return RayQueryResult();
+
+    return result[0];
+}
+
+static RayQueryResult OctreeRaycastSingle1(const Octree* self, const Ray& ray, RayQueryLevel level)
+{
+    PODVector<RayQueryResult> result;
+    RayOctreeQuery query(result, ray, level);
+    self->RaycastSingle(query);
+    if (result.Size() == 0)
+        return RayQueryResult();
+
+    return result[0];
+}
+
+static RayQueryResult OctreeRaycastSingle2(const Octree* self, const Ray& ray, RayQueryLevel level, float maxDistance)
+{
+    PODVector<RayQueryResult> result;
+    RayOctreeQuery query(result, ray, level, maxDistance);
+    self->RaycastSingle(query);
+    if (result.Size() == 0)
+        return RayQueryResult();
+
+    return result[0];
+}
+
+static RayQueryResult OctreeRaycastSingle3(const Octree* self, const Ray& ray, RayQueryLevel level, float maxDistance, unsigned char drawableFlags)
+{
+    PODVector<RayQueryResult> result;
+    RayOctreeQuery query(result, ray, level, maxDistance, drawableFlags);
+    self->RaycastSingle(query);
+    if (result.Size() == 0)
+        return RayQueryResult();
+    return result[0];
+}
+
+static RayQueryResult OctreeRaycastSingle4(const Octree* self, const Ray& ray, RayQueryLevel level, float maxDistance, unsigned char drawableFlags, unsigned viewMask)
+{
+    PODVector<RayQueryResult> result;
+    RayOctreeQuery query(result, ray, level, maxDistance, drawableFlags, viewMask);
+    self->RaycastSingle(query);
+    if (result.Size() == 0)
+        return RayQueryResult();
+
+    return result[0];
+}
+
 static void RegisterOctree(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -362,7 +416,9 @@ static void RegisterOctree(kaguya::State& lua)
         .addFunction("RemoveManualDrawable", &Octree::RemoveManualDrawable)
         .addFunction("GetDrawables", &Octree::GetDrawables)
         .addFunction("Raycast", &Octree::Raycast)
-        .addFunction("RaycastSingle", &Octree::RaycastSingle)
+        
+        ADD_OVERLOADED_FUNCTIONS_5(Octree, RaycastSingle)
+
         .addFunction("GetNumLevels", &Octree::GetNumLevels)
         .addFunction("QueueUpdate", &Octree::QueueUpdate)
         .addFunction("CancelUpdate", &Octree::CancelUpdate)
