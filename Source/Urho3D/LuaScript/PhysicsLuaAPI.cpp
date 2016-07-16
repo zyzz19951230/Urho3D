@@ -681,9 +681,5 @@ void RegisterPhysicsLuaAPI(kaguya::State& lua)
     RegisterPhysicsEvents(lua);
     RegisterPhysicsWorld(lua);
     RegisterRigidBody(lua);
-
-    kaguya::LuaTable metatable = lua["__CALLABLE__"];
-
-    lua["PhysicsRaycastResult"].setMetatable(metatable);
 }
 }

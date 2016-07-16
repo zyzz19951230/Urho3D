@@ -29,7 +29,7 @@ function Start()
 end
 
 function CreateScene()
-    scene_ = Scene.new()
+    scene_ = Scene()
 
     -- Create octree, use default volume (-1000, -1000, -1000) to (1000, 1000, 1000)
     -- Also create a DebugRenderer component so that we can draw debug geometry
@@ -119,7 +119,7 @@ end
 
 function SetupViewport()
     -- Set up a viewport to the Renderer subsystem so that the 3D scene can be seen
-    local viewport = Viewport.new(scene_, cameraNode:GetComponent("Camera"))
+    local viewport = Viewport(scene_, cameraNode:GetComponent("Camera"))
     renderer:SetViewport(0, viewport)
 end
 

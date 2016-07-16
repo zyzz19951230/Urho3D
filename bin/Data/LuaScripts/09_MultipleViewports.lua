@@ -28,7 +28,7 @@ function Start()
 end
 
 function CreateScene()
-    scene_ = Scene.new()
+    scene_ = Scene()
 
     -- Create octree, use default volume (-1000, -1000, -1000) to (1000, 1000, 1000)
     -- Also create a DebugRenderer component so that we can draw debug geometry
@@ -132,7 +132,7 @@ function SetupViewports()
     renderer.numViewports = 2
 
     -- Set up the front camera viewport
-    local viewport = Viewport.new(scene_, cameraNode:GetComponent("Camera"))
+    local viewport = Viewport(scene_, cameraNode:GetComponent("Camera"))
     renderer:SetViewport(0, viewport)
 
     -- Clone the default render path so that we do not interfere with the other viewport, then add
@@ -150,7 +150,7 @@ function SetupViewports()
 
     -- Set up the rear camera viewport on top of the front view ("rear view mirror")
     -- The viewport index must be greater in that case, otherwise the view would be left behind
-    local rearViewport = Viewport.new(scene_, rearCameraNode:GetComponent("Camera"),
+    local rearViewport = Viewport(scene_, rearCameraNode:GetComponent("Camera"),
         IntRect(graphics.width * 2 / 3, 32, graphics.width - 32, graphics.height / 3))
     renderer:SetViewport(1, rearViewport)
 end

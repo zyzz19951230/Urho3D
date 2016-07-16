@@ -98,12 +98,8 @@ LuaScript::LuaScript(Context* context) :
     globalContext = context_;
     kaguya::State lua(luaState_);
 
-    // Create a callable metatable
-    lua["__CALLABLE__"] = lua.newTable();
-    lua["__CALLABLE__"]["__call"] = kaguya::LuaCodeChunkResult("return function(T, ...) return T.new(...) end");
-
     // lua.setErrorHandler(KaguyaErrorHandler);
-
+    
     RegisterMathLuaAPI(lua);
     RegisterCoreLuaAPI(lua);
     RegisterIOLuaAPI(lua);

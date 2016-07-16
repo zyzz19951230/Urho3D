@@ -31,7 +31,7 @@ function Start()
 end
 
 function CreateScene()
-    scene_ = Scene.new()
+    scene_ = Scene()
 
     -- Create octree, use default volume (-1000, -1000, -1000) to (1000, 1000, 1000)
     scene_:CreateComponent("Octree")
@@ -107,7 +107,7 @@ function CreateScene()
 
     -- Create the camera. Set far clip to match the fog. Note: now we actually create the camera node outside
     -- the scene, because we want it to be unaffected by scene load / save
-    cameraNode = Node.new()
+    cameraNode = Node()
     local camera = cameraNode:CreateComponent("Camera")
     camera.farClip = 750.0
 
@@ -130,7 +130,7 @@ end
 
 function SetupViewport()
     -- Set up a viewport to the Renderer subsystem so that the 3D scene can be seen
-    local viewport = Viewport.new(scene_, cameraNode:GetComponent("Camera"))
+    local viewport = Viewport(scene_, cameraNode:GetComponent("Camera"))
     renderer:SetViewport(0, viewport)
 
     -- Create a mathematical plane to represent the water in calculations
@@ -159,11 +159,11 @@ function SetupViewport()
     -- Create a texture and setup viewport for water reflection. Assign the reflection texture to the diffuse
     -- texture unit of the water material
     local texSize = 1024
-    local renderTexture = Texture2D.new()
+    local renderTexture = Texture2D()
     renderTexture:SetSize(texSize, texSize, Graphics:GetRGBFormat(), TEXTURE_RENDERTARGET)
     renderTexture.filterMode = FILTER_BILINEAR
     local surface = renderTexture.renderSurface
-    local rttViewport = Viewport.new(scene_, reflectionCamera)
+    local rttViewport = Viewport(scene_, reflectionCamera)
     surface:SetViewport(0, rttViewport)
     local waterMat = cache:GetResource("Material", "Materials/Water.xml")
     waterMat:SetTexture(TU_DIFFUSE, renderTexture)

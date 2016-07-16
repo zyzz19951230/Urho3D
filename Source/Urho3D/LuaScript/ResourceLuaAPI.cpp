@@ -880,13 +880,5 @@ void RegisterResourceLuaAPI(kaguya::State& lua)
 
     lua["localization"] = GetSubsystem<Localization>();
     lua["GetLocalization"] = GetSubsystem<Localization>;
-
-    kaguya::LuaTable metatable = lua["__CALLABLE__"];
-
-    lua["JSONValue"].setMetatable(metatable);
-    lua["PListValue"].setMetatable(metatable);
-    lua["XMLElement"].setMetatable(metatable);
-    lua["XPathResultSet"].setMetatable(metatable);
-    lua["XPathQuery"].setMetatable(metatable);
 }
 }

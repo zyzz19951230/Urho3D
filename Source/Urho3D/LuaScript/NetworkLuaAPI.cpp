@@ -397,9 +397,5 @@ void RegisterNetworkLuaAPI(kaguya::State& lua)
 
     lua["network"] = GetSubsystem<Network>();
     lua["GetNetwork"] = GetSubsystem<Network>;
-
-    kaguya::LuaTable metatable = lua["__CALLABLE__"];
-    
-    lua["HttpRequest"].setMetatable(metatable);
 }
 }

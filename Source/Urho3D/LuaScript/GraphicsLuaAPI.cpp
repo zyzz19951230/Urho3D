@@ -673,14 +673,5 @@ void RegisterGraphicsLuaAPI(kaguya::State& lua)
     RegisterParticleEffect(lua);
     RegisterSkeleton(lua);
     RegisterTerrain(lua);
-
-    kaguya::LuaTable metatable = lua["__CALLABLE__"];
-
-    lua["AnimationState"].setMetatable(metatable);
-    lua["AnimationTrack"].setMetatable(metatable);
-    lua["Octant"].setMetatable(metatable);
-    lua["OctreeQueryResult"].setMetatable(metatable);
-    lua["RayQueryResult"].setMetatable(metatable);
-    lua["Skeleton"].setMetatable(metatable);
 }
 }

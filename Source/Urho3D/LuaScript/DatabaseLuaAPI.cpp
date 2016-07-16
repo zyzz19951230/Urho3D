@@ -119,10 +119,6 @@ void RegisterDatabaseLuaAPI(kaguya::State& lua)
 
     lua["database"] = GetSubsystem<Database>();
     lua["GetDatabase"] = GetSubsystem<Database>;
-
-    kaguya::LuaTable metatable = lua["__CALLABLE__"];
-    
-    lua["DbResult"].setMetatable(metatable);
 }
 }
 

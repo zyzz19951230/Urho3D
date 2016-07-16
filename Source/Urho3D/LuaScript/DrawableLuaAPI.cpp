@@ -776,14 +776,5 @@ void RegisterDrawableLuaAPI(kaguya::State& lua)
     RegisterStaticModelGroup(lua);
     RegisterTerrainPatch(lua);
     RegisterZone(lua);
-
-    kaguya::LuaTable metatable = lua["__CALLABLE__"];
-
-    lua["Billboard"].setMetatable(metatable);
-    lua["SourceBatch"].setMetatable(metatable);
-    lua["BiasParameters"].setMetatable(metatable);
-    lua["CascadeParameters"].setMetatable(metatable);
-    lua["FocusParameters"].setMetatable(metatable);
-    lua["TrailPoint"].setMetatable(metatable);
 }
 }

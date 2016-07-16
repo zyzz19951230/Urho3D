@@ -22,7 +22,7 @@ end
 
 function CreateText()
     -- Construct new Text object
-    local helloText = Text.new()
+    local helloText = Text()
 
     -- Set String to display
     helloText.text = "Hello World from Urho3D!"

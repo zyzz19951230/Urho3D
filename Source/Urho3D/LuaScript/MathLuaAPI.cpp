@@ -1213,28 +1213,5 @@ void RegisterMathLuaAPI(kaguya::State& lua)
     RegisterVector2(lua);
     RegisterVector3(lua);
     RegisterVector4(lua);
-
-    kaguya::LuaTable metatable = lua["__CALLABLE__"];
-
-    lua["AreaAllocator"].setMetatable(metatable);
-    lua["BoundingBox"].setMetatable(metatable);
-    lua["Color"].setMetatable(metatable);
-    lua["Frustum"].setMetatable(metatable);
-    lua["Matrix2"].setMetatable(metatable);
-    lua["Matrix3"].setMetatable(metatable);
-    lua["Matrix3x4"].setMetatable(metatable);
-    lua["Matrix4"].setMetatable(metatable);
-    lua["Plane"].setMetatable(metatable);
-    lua["Polyhedron"].setMetatable(metatable);
-    lua["Quaternion"].setMetatable(metatable);
-    lua["Ray"].setMetatable(metatable);
-    lua["Rect"].setMetatable(metatable);
-    lua["IntRect"].setMetatable(metatable);
-    lua["Sphere"].setMetatable(metatable);
-    lua["StringHash"].setMetatable(metatable);
-    lua["Vector2"].setMetatable(metatable);
-    lua["IntVector2"].setMetatable(metatable);
-    lua["Vector3"].setMetatable(metatable);
-    lua["Vector4"].setMetatable(metatable);
 }
 }

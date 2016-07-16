@@ -34,7 +34,7 @@ function CreateSprites()
 
     for i = 1, numSprites do
         -- Create a new sprite, set it to use the texture
-        local sprite = Sprite.new()
+        local sprite = Sprite()
         sprite.texture = decalTex
         sprite:SetFullImageRect()
 
