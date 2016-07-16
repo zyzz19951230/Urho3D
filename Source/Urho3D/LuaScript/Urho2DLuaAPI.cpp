@@ -1,5 +1,30 @@
+//
+// Copyright (c) 2008-2016 the Urho3D project.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+
+#include "../Precompiled.h"
+
 #include "../Core/Context.h"
 #include "../Graphics/Material.h"
+#include "../LuaScript/LuaScriptUtils.h"
 #include "../Urho2D/AnimatedSprite2D.h"
 #include "../Urho2D/AnimationSet2D.h"
 #include "../Urho2D/CollisionBox2D.h"
@@ -34,7 +59,6 @@
 #include "../Urho2D/TileMapDefs2D.h"
 #include "../Urho2D/TileMapLayer2D.h"
 #include "../Urho2D/TmxFile2D.h"
-#include "../LuaScript/LuaScriptUtils.h"
 
 #include <kaguya.hpp>
 
@@ -53,6 +77,11 @@ static void AnimatedSprite2DSetAnimation1(AnimatedSprite2D* self, const String& 
 static void RegisterAnimatedSprite2D(kaguya::State& lua)
 {
     using namespace kaguya;
+
+    // enum LoopMode2D;
+    lua["LM_DEFAULT"] = LM_DEFAULT;
+    lua["LM_FORCE_LOOPED"] = LM_FORCE_LOOPED;
+    lua["LM_FORCE_CLAMPED"] = LM_FORCE_CLAMPED;
 
     lua["AnimatedSprite2D"].setClass(UserdataMetatable<AnimatedSprite2D, StaticSprite2D>()
         .addStaticFunction("new", &CreateObject<AnimatedSprite2D>)
@@ -76,7 +105,7 @@ static void RegisterAnimatedSprite2D(kaguya::State& lua)
         .addProperty("animation", &AnimatedSprite2D::GetAnimation)
         .addProperty("loopMode", &AnimatedSprite2D::GetLoopMode, &AnimatedSprite2D::SetLoopMode)
         .addProperty("speed", &AnimatedSprite2D::GetSpeed, &AnimatedSprite2D::SetSpeed)
-        );
+    );
 }
 
 static void RegisterAnimationSet2D(kaguya::State& lua)
@@ -93,8 +122,7 @@ static void RegisterAnimationSet2D(kaguya::State& lua)
 
         .addProperty("numAnimations", &AnimationSet2D::GetNumAnimations)
         .addProperty("sprite", &AnimationSet2D::GetSprite)
-        .addProperty("spriterData", &AnimationSet2D::GetSpriterData)
-        );
+    );
 }
 
 static void RegisterCollisionBox2D(kaguya::State& lua)
@@ -121,7 +149,7 @@ static void RegisterCollisionBox2D(kaguya::State& lua)
         .addProperty("size", &CollisionBox2D::GetSize)
         .addProperty("center", &CollisionBox2D::GetCenter)
         .addProperty("angle", &CollisionBox2D::GetAngle, &CollisionBox2D::SetAngle)
-        );
+    );
 }
 
 static void RegisterCollisionChain2D(kaguya::State& lua)
@@ -134,14 +162,16 @@ static void RegisterCollisionChain2D(kaguya::State& lua)
         .addFunction("SetLoop", &CollisionChain2D::SetLoop)
         .addFunction("SetVertexCount", &CollisionChain2D::SetVertexCount)
         .addFunction("SetVertex", &CollisionChain2D::SetVertex)
+        .addFunction("SetVertices", &CollisionChain2D::SetVertices)
 
         .addFunction("GetLoop", &CollisionChain2D::GetLoop)
         .addFunction("GetVertexCount", &CollisionChain2D::GetVertexCount)
         .addFunction("GetVertex", &CollisionChain2D::GetVertex)
+        .addFunction("GetVertices", &CollisionChain2D::GetVertices)
 
         .addProperty("loop", &CollisionChain2D::GetLoop, &CollisionChain2D::SetLoop)
         .addProperty("vertexCount", &CollisionChain2D::GetVertexCount, &CollisionChain2D::SetVertexCount)
-        );
+    );
 }
 
 static void RegisterCollisionCircle2D(kaguya::State& lua)
@@ -162,7 +192,7 @@ static void RegisterCollisionCircle2D(kaguya::State& lua)
 
         .addProperty("radius", &CollisionCircle2D::GetRadius, &CollisionCircle2D::SetRadius)
         .addProperty("center", &CollisionCircle2D::GetCenter)
-        );
+    );
 }
 
 static void RegisterCollisionEdge2D(kaguya::State& lua)
@@ -181,7 +211,7 @@ static void RegisterCollisionEdge2D(kaguya::State& lua)
 
         .addProperty("vertex1", &CollisionEdge2D::GetVertex1, &CollisionEdge2D::SetVertex1)
         .addProperty("vertex2", &CollisionEdge2D::GetVertex2, &CollisionEdge2D::SetVertex2)
-        );
+    );
 }
 
 static void RegisterCollisionPolygon2D(kaguya::State& lua)
@@ -193,13 +223,14 @@ static void RegisterCollisionPolygon2D(kaguya::State& lua)
 
         .addFunction("SetVertexCount", &CollisionPolygon2D::SetVertexCount)
         .addFunction("SetVertex", &CollisionPolygon2D::SetVertex)
+        .addFunction("SetVertices", &CollisionPolygon2D::SetVertices)
 
         .addFunction("GetVertexCount", &CollisionPolygon2D::GetVertexCount)
         .addFunction("GetVertex", &CollisionPolygon2D::GetVertex)
+        .addFunction("GetVertices", &CollisionPolygon2D::GetVertices)
 
         .addProperty("vertexCount", &CollisionPolygon2D::GetVertexCount, &CollisionPolygon2D::SetVertexCount)
-        .addProperty("vertices", &CollisionPolygon2D::GetVertices, &CollisionPolygon2D::SetVertices)
-        );
+    );
 }
 
 static void RegisterCollisionShape2D(kaguya::State& lua)
@@ -237,7 +268,7 @@ static void RegisterCollisionShape2D(kaguya::State& lua)
         .addProperty("mass", &CollisionShape2D::GetMass)
         .addProperty("inertia", &CollisionShape2D::GetInertia)
         .addProperty("massCenter", &CollisionShape2D::GetMassCenter)
-        );
+    );
 }
 
 static void RegisterConstraint2D(kaguya::State& lua)
@@ -260,7 +291,7 @@ static void RegisterConstraint2D(kaguya::State& lua)
         .addProperty("otherBody", &Constraint2D::GetOtherBody, &Constraint2D::SetOtherBody)
         .addProperty("collideConnected", &Constraint2D::GetCollideConnected, &Constraint2D::SetCollideConnected)
         .addProperty("attachedConstraint", &Constraint2D::GetAttachedConstraint, &Constraint2D::SetAttachedConstraint)
-        );
+    );
 }
 
 static void RegisterConstraintDistance2D(kaguya::State& lua)
@@ -284,7 +315,7 @@ static void RegisterConstraintDistance2D(kaguya::State& lua)
         .addProperty("otherBodyAnchor", &ConstraintDistance2D::GetOtherBodyAnchor, &ConstraintDistance2D::SetOtherBodyAnchor)
         .addProperty("frequencyHz", &ConstraintDistance2D::GetFrequencyHz, &ConstraintDistance2D::SetFrequencyHz)
         .addProperty("dampingRatio", &ConstraintDistance2D::GetDampingRatio, &ConstraintDistance2D::SetDampingRatio)
-        );
+    );
 }
 
 static void RegisterConstraintFriction2D(kaguya::State& lua)
@@ -305,7 +336,7 @@ static void RegisterConstraintFriction2D(kaguya::State& lua)
         .addProperty("anchor", &ConstraintFriction2D::GetAnchor, &ConstraintFriction2D::SetAnchor)
         .addProperty("maxForce", &ConstraintFriction2D::GetMaxForce, &ConstraintFriction2D::SetMaxForce)
         .addProperty("maxTorque", &ConstraintFriction2D::GetMaxTorque, &ConstraintFriction2D::SetMaxTorque)
-        );
+    );
 }
 
 static void RegisterConstraintGear2D(kaguya::State& lua)
@@ -326,7 +357,7 @@ static void RegisterConstraintGear2D(kaguya::State& lua)
         .addProperty("ownerConstraint", &ConstraintGear2D::GetOwnerConstraint, &ConstraintGear2D::SetOwnerConstraint)
         .addProperty("otherConstraint", &ConstraintGear2D::GetOtherConstraint, &ConstraintGear2D::SetOtherConstraint)
         .addProperty("ratio", &ConstraintGear2D::GetRatio, &ConstraintGear2D::SetRatio)
-        );
+    );
 }
 
 static void RegisterConstraintMotor2D(kaguya::State& lua)
@@ -353,7 +384,7 @@ static void RegisterConstraintMotor2D(kaguya::State& lua)
         .addProperty("maxForce", &ConstraintMotor2D::GetMaxForce, &ConstraintMotor2D::SetMaxForce)
         .addProperty("maxTorque", &ConstraintMotor2D::GetMaxTorque, &ConstraintMotor2D::SetMaxTorque)
         .addProperty("correctionFactor", &ConstraintMotor2D::GetCorrectionFactor, &ConstraintMotor2D::SetCorrectionFactor)
-        );
+    );
 }
 
 static void RegisterConstraintMouse2D(kaguya::State& lua)
@@ -377,7 +408,7 @@ static void RegisterConstraintMouse2D(kaguya::State& lua)
         .addProperty("maxForce", &ConstraintMouse2D::GetMaxForce, &ConstraintMouse2D::SetMaxForce)
         .addProperty("frequencyHz", &ConstraintMouse2D::GetFrequencyHz, &ConstraintMouse2D::SetFrequencyHz)
         .addProperty("dampingRatio", &ConstraintMouse2D::GetDampingRatio, &ConstraintMouse2D::SetDampingRatio)
-        );
+    );
 }
 
 static void RegisterConstraintPrismatic2D(kaguya::State& lua)
@@ -413,7 +444,7 @@ static void RegisterConstraintPrismatic2D(kaguya::State& lua)
         .addProperty("enableMotor", &ConstraintPrismatic2D::GetEnableMotor, &ConstraintPrismatic2D::SetEnableMotor)
         .addProperty("maxMotorForce", &ConstraintPrismatic2D::GetMaxMotorForce, &ConstraintPrismatic2D::SetMaxMotorForce)
         .addProperty("motorSpeed", &ConstraintPrismatic2D::GetMotorSpeed, &ConstraintPrismatic2D::SetMotorSpeed)
-        );
+    );
 }
 
 static void RegisterConstraintPulley2D(kaguya::State& lua)
@@ -440,7 +471,7 @@ static void RegisterConstraintPulley2D(kaguya::State& lua)
         .addProperty("ownerBodyAnchor", &ConstraintPulley2D::GetOwnerBodyAnchor, &ConstraintPulley2D::SetOwnerBodyAnchor)
         .addProperty("otherBodyAnchor", &ConstraintPulley2D::GetOtherBodyAnchor, &ConstraintPulley2D::SetOtherBodyAnchor)
         .addProperty("ratio", &ConstraintPulley2D::GetRatio, &ConstraintPulley2D::SetRatio)
-        );
+    );
 }
 
 static void RegisterConstraintRevolute2D(kaguya::State& lua)
@@ -473,7 +504,7 @@ static void RegisterConstraintRevolute2D(kaguya::State& lua)
         .addProperty("enableMotor", &ConstraintRevolute2D::GetEnableMotor, &ConstraintRevolute2D::SetEnableMotor)
         .addProperty("motorSpeed", &ConstraintRevolute2D::GetMotorSpeed, &ConstraintRevolute2D::SetMotorSpeed)
         .addProperty("maxMotorTorque", &ConstraintRevolute2D::GetMaxMotorTorque, &ConstraintRevolute2D::SetMaxMotorTorque)
-        );
+    );
 }
 
 static void RegisterConstraintRope2D(kaguya::State& lua)
@@ -494,7 +525,7 @@ static void RegisterConstraintRope2D(kaguya::State& lua)
         .addProperty("ownerBodyAnchor", &ConstraintRope2D::GetOwnerBodyAnchor, &ConstraintRope2D::SetOwnerBodyAnchor)
         .addProperty("otherBodyAnchor", &ConstraintRope2D::GetOtherBodyAnchor, &ConstraintRope2D::SetOtherBodyAnchor)
         .addProperty("maxLength", &ConstraintRope2D::GetMaxLength, &ConstraintRope2D::SetMaxLength)
-        );
+    );
 }
 
 static void RegisterConstraintWeld2D(kaguya::State& lua)
@@ -515,7 +546,7 @@ static void RegisterConstraintWeld2D(kaguya::State& lua)
         .addProperty("anchor", &ConstraintWeld2D::GetAnchor, &ConstraintWeld2D::SetAnchor)
         .addProperty("frequencyHz", &ConstraintWeld2D::GetFrequencyHz, &ConstraintWeld2D::SetFrequencyHz)
         .addProperty("dampingRatio", &ConstraintWeld2D::GetDampingRatio, &ConstraintWeld2D::SetDampingRatio)
-        );
+    );
 }
 
 static void RegisterConstraintWheel2D(kaguya::State& lua)
@@ -548,7 +579,7 @@ static void RegisterConstraintWheel2D(kaguya::State& lua)
         .addProperty("motorSpeed", &ConstraintWheel2D::GetMotorSpeed, &ConstraintWheel2D::SetMotorSpeed)
         .addProperty("frequencyHz", &ConstraintWheel2D::GetFrequencyHz, &ConstraintWheel2D::SetFrequencyHz)
         .addProperty("dampingRatio", &ConstraintWheel2D::GetDampingRatio, &ConstraintWheel2D::SetDampingRatio)
-        );
+    );
 }
 
 static void RegisterDrawable2D(kaguya::State& lua)
@@ -567,7 +598,7 @@ static void RegisterDrawable2D(kaguya::State& lua)
 
         .addProperty("layer", &Drawable2D::GetLayer, &Drawable2D::SetLayer)
         .addProperty("orderInLayer", &Drawable2D::GetOrderInLayer, &Drawable2D::SetOrderInLayer)
-        );
+    );
 }
 
 static void RegisterParticleEffect2D(kaguya::State& lua)
@@ -688,7 +719,7 @@ static void RegisterParticleEffect2D(kaguya::State& lua)
         .addProperty("rotationStartVariance", &ParticleEffect2D::GetRotationStartVariance, &ParticleEffect2D::SetRotationStartVariance)
         .addProperty("rotationEnd", &ParticleEffect2D::GetRotationEnd, &ParticleEffect2D::SetRotationEnd)
         .addProperty("rotationEndVariance", &ParticleEffect2D::GetRotationEndVariance, &ParticleEffect2D::SetRotationEndVariance)
-        );
+    );
 }
 
 static void RegisterParticleEmitter2D(kaguya::State& lua)
@@ -712,7 +743,7 @@ static void RegisterParticleEmitter2D(kaguya::State& lua)
         .addProperty("sprite", &ParticleEmitter2D::GetSprite, &ParticleEmitter2D::SetSprite)
         .addProperty("blendMode", &ParticleEmitter2D::GetBlendMode, &ParticleEmitter2D::SetBlendMode)
         .addProperty("maxParticles", &ParticleEmitter2D::GetMaxParticles, &ParticleEmitter2D::SetMaxParticles)
-        );
+    );
 }
 
 static void RegisterPhysicsEvents2D(kaguya::State& lua)
@@ -796,7 +827,7 @@ static void RegisterPhysicsWorld2D(kaguya::State& lua)
         .addProperty("normal", &PhysicsRaycastResult2D::normal_)
         .addProperty("distance", &PhysicsRaycastResult2D::distance_)
         .addProperty("body", &PhysicsRaycastResult2D::body_)
-        );
+    );
 
     lua["PhysicsWorld2D"].setClass(UserdataMetatable<PhysicsWorld2D, Component>()
         .addStaticFunction("new", &CreateObject<PhysicsWorld2D>)
@@ -804,13 +835,11 @@ static void RegisterPhysicsWorld2D(kaguya::State& lua)
         .addFunction("DrawDebugGeometry", static_cast<void(PhysicsWorld2D::*)()>(&PhysicsWorld2D::DrawDebugGeometry))
 
         .addFunction("SetUpdateEnabled", &PhysicsWorld2D::SetUpdateEnabled)
-
         .addFunction("SetDrawShape", &PhysicsWorld2D::SetDrawShape)
         .addFunction("SetDrawJoint", &PhysicsWorld2D::SetDrawJoint)
         .addFunction("SetDrawAabb", &PhysicsWorld2D::SetDrawAabb)
         .addFunction("SetDrawPair", &PhysicsWorld2D::SetDrawPair)
         .addFunction("SetDrawCenterOfMass", &PhysicsWorld2D::SetDrawCenterOfMass)
-
         .addFunction("SetAllowSleeping", &PhysicsWorld2D::SetAllowSleeping)
         .addFunction("SetWarmStarting", &PhysicsWorld2D::SetWarmStarting)
         .addFunction("SetContinuousPhysics", &PhysicsWorld2D::SetContinuousPhysics)
@@ -819,8 +848,6 @@ static void RegisterPhysicsWorld2D(kaguya::State& lua)
         .addFunction("SetAutoClearForces", &PhysicsWorld2D::SetAutoClearForces)
         .addFunction("SetVelocityIterations", &PhysicsWorld2D::SetVelocityIterations)
         .addFunction("SetPositionIterations", &PhysicsWorld2D::SetPositionIterations)
-        .addFunction("AddRigidBody", &PhysicsWorld2D::AddRigidBody)
-        .addFunction("RemoveRigidBody", &PhysicsWorld2D::RemoveRigidBody)
 
         ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld2D, Raycast)
         ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld2D, RaycastSingle)
@@ -857,7 +884,7 @@ static void RegisterPhysicsWorld2D(kaguya::State& lua)
         .addProperty("gravity", &PhysicsWorld2D::GetGravity, &PhysicsWorld2D::SetGravity)
         .addProperty("velocityIterations", &PhysicsWorld2D::GetVelocityIterations, &PhysicsWorld2D::SetVelocityIterations)
         .addProperty("positionIterations", &PhysicsWorld2D::GetPositionIterations, &PhysicsWorld2D::SetPositionIterations)
-        );
+    );
 }
 
 static void RegisterRenderer2D(kaguya::State& lua)
@@ -866,7 +893,7 @@ static void RegisterRenderer2D(kaguya::State& lua)
 
     lua["Renderer2D"].setClass(UserdataMetatable<Renderer2D, Drawable>()
         .addStaticFunction("new", &CreateObject<Renderer2D>)
-        );
+    );
 }
 
 static void RegisterRigidBody2D(kaguya::State& lua)
@@ -932,7 +959,7 @@ static void RegisterRigidBody2D(kaguya::State& lua)
         .addProperty("awake", &RigidBody2D::IsAwake, &RigidBody2D::SetAwake)
         .addProperty("linearVelocity", &RigidBody2D::GetLinearVelocity, &RigidBody2D::SetLinearVelocity)
         .addProperty("angularVelocity", &RigidBody2D::GetAngularVelocity, &RigidBody2D::SetAngularVelocity)
-        );
+    );
 }
 
 static void RegisterSprite2D(kaguya::State& lua)
@@ -962,7 +989,7 @@ static void RegisterSprite2D(kaguya::State& lua)
         .addProperty("offset", &Sprite2D::GetOffset, &Sprite2D::SetOffset)
         .addProperty("textureEdgeOffset", &Sprite2D::GetTextureEdgeOffset, &Sprite2D::SetTextureEdgeOffset)
         .addProperty("spriteSheet", &Sprite2D::GetSpriteSheet, &Sprite2D::SetSpriteSheet)
-        );
+    );
 }
 
 static void SpriteSheet2DDefineSprite0(SpriteSheet2D* self, const String& name, const IntRect& rectangle)
@@ -994,11 +1021,8 @@ static void RegisterSpriteSheet2D(kaguya::State& lua)
         .addFunction("GetTexture", &SpriteSheet2D::GetTexture)
         .addFunction("GetSprite", &SpriteSheet2D::GetSprite)
 
-        // .addFunction("GetSpriteMapping", &SpriteSheet2D::GetSpriteMapping)
-
         .addProperty("texture", &SpriteSheet2D::GetTexture, &SpriteSheet2D::SetTexture)
-        // .addProperty("spriteMapping", &SpriteSheet2D::GetSpriteMapping)
-        );
+    );
 }
 
 static void RegisterStaticSprite2D(kaguya::State& lua)
@@ -1038,7 +1062,7 @@ static void RegisterStaticSprite2D(kaguya::State& lua)
         .addProperty("useHotSpot", &StaticSprite2D::GetUseHotSpot, &StaticSprite2D::SetUseHotSpot)
         .addProperty("hotSpot", &StaticSprite2D::GetHotSpot, &StaticSprite2D::SetHotSpot)
         .addProperty("customMaterial", &StaticSprite2D::GetCustomMaterial, &StaticSprite2D::SetCustomMaterial)
-        );
+    );
 }
 
 static void RegisterTileMap2D(kaguya::State& lua)
@@ -1048,20 +1072,19 @@ static void RegisterTileMap2D(kaguya::State& lua)
     lua["TileMap2D"].setClass(UserdataMetatable<TileMap2D, Component>()
         .addStaticFunction("new", &CreateObject<TileMap2D>)
 
+        .addFunction("DrawDebugGeometry", static_cast<void(TileMap2D::*)()>(&TileMap2D::DrawDebugGeometry))
         .addFunction("SetTmxFile", &TileMap2D::SetTmxFile)
 
         .addFunction("GetTmxFile", &TileMap2D::GetTmxFile)
         .addFunction("GetInfo", &TileMap2D::GetInfo)
         .addFunction("GetNumLayers", &TileMap2D::GetNumLayers)
         .addFunction("GetLayer", &TileMap2D::GetLayer)
-
         .addFunction("TileIndexToPosition", &TileMap2D::TileIndexToPosition)
         .addFunction("PositionToTileIndex", &TileMap2D::PositionToTileIndex)
-
         .addProperty("tmxFile", &TileMap2D::GetTmxFile, &TileMap2D::SetTmxFile)
         .addProperty("info", &TileMap2D::GetInfo)
         .addProperty("numLayers", &TileMap2D::GetNumLayers)
-        );
+    );
 }
 
 static void RegisterTileMapDefs2D(kaguya::State& lua)
@@ -1090,7 +1113,7 @@ static void RegisterTileMapDefs2D(kaguya::State& lua)
         .addProperty("height", &TileMapInfo2D::height_)
         .addProperty("tileWidth", &TileMapInfo2D::tileWidth_)
         .addProperty("tileHeight", &TileMapInfo2D::tileHeight_)
-        );
+    );
 
     // enum TileMapLayerType2D;
     lua["LT_TILE_LAYER"] = LT_TILE_LAYER;
@@ -1108,11 +1131,9 @@ static void RegisterTileMapDefs2D(kaguya::State& lua)
 
     lua["PropertySet2D"].setClass(UserdataMetatable<PropertySet2D, RefCounted>()
         .setConstructors<PropertySet2D()>()
-
-        .addFunction("Load", &PropertySet2D::Load)
         .addFunction("HasProperty", &PropertySet2D::HasProperty)
         .addFunction("GetProperty", &PropertySet2D::GetProperty)
-        );
+    );
 
     lua["Tile2D"].setClass(UserdataMetatable<Tile2D, RefCounted>()
         .setConstructors<Tile2D()>()
@@ -1124,7 +1145,7 @@ static void RegisterTileMapDefs2D(kaguya::State& lua)
 
         .addProperty("gid", &Tile2D::GetGid)
         .addProperty("sprite", &Tile2D::GetSprite)
-        );
+    );
 
     lua["TileMapObject2D"].setClass(UserdataMetatable<TileMapObject2D, RefCounted>()
         .setConstructors<TileMapObject2D()>()
@@ -1149,7 +1170,7 @@ static void RegisterTileMapDefs2D(kaguya::State& lua)
         .addProperty("numPoints", &TileMapObject2D::GetNumPoints)
         .addProperty("tileGid", &TileMapObject2D::GetTileGid)
         .addProperty("tileSprite", &TileMapObject2D::GetTileSprite)
-        );
+    );
 }
 
 static void RegisterTileMapLayer2D(kaguya::State& lua)
@@ -1185,83 +1206,24 @@ static void RegisterTileMapLayer2D(kaguya::State& lua)
         .addProperty("height", &TileMapLayer2D::GetHeight)
         .addProperty("numObjects", &TileMapLayer2D::GetNumObjects)
         .addProperty("imageNode", &TileMapLayer2D::GetImageNode)
-        );
+    );
 }
 
 static void RegisterTmxFile2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["TmxLayer2D"].setClass(UserdataMetatable<TmxLayer2D, RefCounted>()
-        .setConstructors<TmxLayer2D(TmxFile2D*, TileMapLayerType2D)>()
-
-        .addFunction("GetTmxFile", &TmxLayer2D::GetTmxFile)
-        .addFunction("GetType", &TmxLayer2D::GetType)
-        .addFunction("GetName", &TmxLayer2D::GetName)
-        .addFunction("GetWidth", &TmxLayer2D::GetWidth)
-        .addFunction("GetHeight", &TmxLayer2D::GetHeight)
-        .addFunction("IsVisible", &TmxLayer2D::IsVisible)
-        .addFunction("HasProperty", &TmxLayer2D::HasProperty)
-        .addFunction("GetProperty", &TmxLayer2D::GetProperty)
-
-        .addProperty("tmxFile", &TmxLayer2D::GetTmxFile)
-        .addProperty("type", &TmxLayer2D::GetType)
-        .addProperty("name", &TmxLayer2D::GetName)
-        .addProperty("width", &TmxLayer2D::GetWidth)
-        .addProperty("height", &TmxLayer2D::GetHeight)
-        .addProperty("visible", &TmxLayer2D::IsVisible)
-        );
-
-    lua["TmxTileLayer2D"].setClass(UserdataMetatable<TmxTileLayer2D, TmxLayer2D>()
-        .setConstructors<TmxTileLayer2D(TmxFile2D*)>()
-
-        .addFunction("Load", &TmxTileLayer2D::Load)
-        .addFunction("GetTile", &TmxTileLayer2D::GetTile)
-        );
-
-    lua["TmxObjectGroup2D"].setClass(UserdataMetatable<TmxObjectGroup2D, TmxLayer2D>()
-        .setConstructors<TmxObjectGroup2D(TmxFile2D*)>()
-
-        .addFunction("Load", &TmxObjectGroup2D::Load)
-        .addFunction("GetNumObjects", &TmxObjectGroup2D::GetNumObjects)
-        .addFunction("GetObject", &TmxObjectGroup2D::GetObject)
-
-        .addProperty("numObjects", &TmxObjectGroup2D::GetNumObjects)
-        );
-
-    lua["TmxImageLayer2D"].setClass(UserdataMetatable<TmxImageLayer2D, TmxLayer2D>()
-        .setConstructors<TmxImageLayer2D(TmxFile2D*)>()
-
-        .addFunction("Load", &TmxImageLayer2D::Load)
-        .addFunction("GetPosition", &TmxImageLayer2D::GetPosition)
-        .addFunction("GetSource", &TmxImageLayer2D::GetSource)
-        .addFunction("GetSprite", &TmxImageLayer2D::GetSprite)
-
-        .addProperty("position", &TmxImageLayer2D::GetPosition)
-        .addProperty("source", &TmxImageLayer2D::GetSource)
-        .addProperty("sprite", &TmxImageLayer2D::GetSprite)
-        );
-
     lua["TmxFile2D"].setClass(UserdataMetatable<TmxFile2D, Resource>()
         .addStaticFunction("new", &CreateObject<TmxFile2D>)
-
-        .addFunction("BeginLoad", &TmxFile2D::BeginLoad)
-        .addFunction("EndLoad", &TmxFile2D::EndLoad)
-        .addFunction("SetInfo", &TmxFile2D::SetInfo)
-
-        .addOverloadedFunctions("AddLayer",
-            static_cast<void(TmxFile2D::*)(unsigned, TmxLayer2D*)>(&TmxFile2D::AddLayer),
-            static_cast<void(TmxFile2D::*)(TmxLayer2D*)>(&TmxFile2D::AddLayer))
 
         .addFunction("GetInfo", &TmxFile2D::GetInfo)
         .addFunction("GetTileSprite", &TmxFile2D::GetTileSprite)
         .addFunction("GetTilePropertySet", &TmxFile2D::GetTilePropertySet)
         .addFunction("GetNumLayers", &TmxFile2D::GetNumLayers)
-        .addFunction("GetLayer", &TmxFile2D::GetLayer)
 
         .addProperty("info", &TmxFile2D::GetInfo)
         .addProperty("numLayers", &TmxFile2D::GetNumLayers)
-        );
+    );
 }
 
 void RegisterUrho2DLuaAPI(kaguya::State& lua)
