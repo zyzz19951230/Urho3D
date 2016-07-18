@@ -1,3 +1,27 @@
+//
+// Copyright (c) 2008-2016 the Urho3D project.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+
+#include "../Precompiled.h"
+
 #include "../Audio/Audio.h"
 #include "../Audio/AudioDefs.h"
 #include "../Audio/AudioEvents.h"
@@ -9,12 +33,15 @@
 #include "../Audio/SoundSource3D.h"
 #include "../Audio/SoundStream.h"
 #include "../Core/Context.h"
+#include "../IO/File.h"
 #include "../LuaScript/LuaScriptUtils.h"
 
 #include <kaguya.hpp>
 
 namespace Urho3D
 {
+
+extern Context* globalContext;
 
 static bool AudioSetMode0(Audio* self, int bufferLengthMSec, int mixRate, bool stereo)
 {
@@ -34,7 +61,6 @@ static void RegisterAudio(kaguya::State& lua)
 
         ADD_OVERLOADED_FUNCTIONS_2(Audio, SetMode)
 
-        .addFunction("Update", &Audio::Update)
         .addFunction("Play", &Audio::Play)
         .addFunction("Stop", &Audio::Stop)
         .addFunction("SetMasterGain", &Audio::SetMasterGain)
@@ -43,6 +69,7 @@ static void RegisterAudio(kaguya::State& lua)
         .addFunction("ResumeAll", &Audio::ResumeAll)
         .addFunction("SetListener", &Audio::SetListener)
         .addFunction("StopSound", &Audio::StopSound)
+
         .addFunction("GetSampleSize", &Audio::GetSampleSize)
         .addFunction("GetMixRate", &Audio::GetMixRate)
         .addFunction("GetInterpolation", &Audio::GetInterpolation)
@@ -58,7 +85,6 @@ static void RegisterAudio(kaguya::State& lua)
         .addFunction("RemoveSoundSource", &Audio::RemoveSoundSource)
         .addFunction("GetMutex", &Audio::GetMutex)
         .addFunction("GetSoundSourceMasterGain", &Audio::GetSoundSourceMasterGain)
-        .addFunction("MixOutput", &Audio::MixOutput)
 
         .addProperty("sampleSize", &Audio::GetSampleSize)
         .addProperty("mixRate", &Audio::GetMixRate)
@@ -69,6 +95,7 @@ static void RegisterAudio(kaguya::State& lua)
         .addProperty("listener", &Audio::GetListener, &Audio::SetListener)
         .addProperty("soundSources", &Audio::GetSoundSources)
         .addProperty("mutex", &Audio::GetMutex)
+
         .addStaticField("SAMPLESIZEMUL", &Audio::SAMPLE_SIZE_MUL)
         );
 }
@@ -112,6 +139,30 @@ static void RegisterOggVorbisSoundStream(kaguya::State& lua)
         );
 }
 
+static bool SoundLoadRaw(Sound* sound, const char* filepath)
+{
+    SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
+    return sound->LoadRaw(*file);
+}
+
+static bool SoundLoadWav(Sound* sound, const char* filepath)
+{
+    SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
+    return sound->LoadWav(*file);
+}
+
+static bool SoundLoadOggVorbis(Sound* sound, const char* filepath)
+{
+    SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
+    return sound->LoadOggVorbis(*file);
+}
+
 static void RegisterSound(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -119,15 +170,18 @@ static void RegisterSound(kaguya::State& lua)
     lua["Sound"].setClass(UserdataMetatable<Sound, Resource>()
         .addStaticFunction("new", &CreateObject<Sound>)
 
+        .addStaticFunction("LoadRaw", &SoundLoadRaw)
+        .addStaticFunction("LoadWav", &SoundLoadWav)
+        .addStaticFunction("LoadOggVorbis", &SoundLoadOggVorbis)
+
         .addFunction("SetSize", &Sound::SetSize)
 
         .addFunction("SetFormat", &Sound::SetFormat)
         .addFunction("SetLooped", &Sound::SetLooped)
         .addFunction("SetLoop", &Sound::SetLoop)
+
         .addFunction("GetDecoderStream", &Sound::GetDecoderStream)
-        .addFunction("GetStart", &Sound::GetStart)
-        .addFunction("GetRepeat", &Sound::GetRepeat)
-        .addFunction("GetEnd", &Sound::GetEnd)
+        
         .addFunction("GetLength", &Sound::GetLength)
         .addFunction("GetDataSize", &Sound::GetDataSize)
         .addFunction("GetSampleSize", &Sound::GetSampleSize)
@@ -140,9 +194,6 @@ static void RegisterSound(kaguya::State& lua)
         .addFunction("FixInterpolation", &Sound::FixInterpolation)
 
         .addProperty("decoderStream", &Sound::GetDecoderStream)
-        .addProperty("start", &Sound::GetStart)
-        .addProperty("repeat", &Sound::GetRepeat)
-        .addProperty("end", &Sound::GetEnd)
         .addProperty("length", &Sound::GetLength)
         .addProperty("dataSize", &Sound::GetDataSize)
         .addProperty("sampleSize", &Sound::GetSampleSize)
@@ -170,6 +221,7 @@ static void RegisterSoundSource(kaguya::State& lua)
     using namespace kaguya;
 
     lua["STREAM_BUFFER_LENGTH"] = STREAM_BUFFER_LENGTH;
+
     lua["SoundSource"].setClass(UserdataMetatable<SoundSource, Component>()
         .addStaticFunction("new", &CreateObject<SoundSource>)
 
@@ -186,9 +238,8 @@ static void RegisterSoundSource(kaguya::State& lua)
         .addFunction("SetGain", &SoundSource::SetGain)
         .addFunction("SetAttenuation", &SoundSource::SetAttenuation)
         .addFunction("SetPanning", &SoundSource::SetPanning)
-        .addFunction("SetPlayPosition", &SoundSource::SetPlayPosition)
+        
         .addFunction("GetSound", &SoundSource::GetSound)
-        // .addFunction("GetPlayPosition", &SoundSource::GetPlayPosition)
         .addFunction("GetSoundType", &SoundSource::GetSoundType)
         .addFunction("GetTimePosition", &SoundSource::GetTimePosition)
         .addFunction("GetFrequency", &SoundSource::GetFrequency)
@@ -196,10 +247,8 @@ static void RegisterSoundSource(kaguya::State& lua)
         .addFunction("GetAttenuation", &SoundSource::GetAttenuation)
         .addFunction("GetPanning", &SoundSource::GetPanning)
         .addFunction("IsPlaying", &SoundSource::IsPlaying)
-        .addFunction("UpdateMasterGain", &SoundSource::UpdateMasterGain)
-
+        
         .addProperty("sound", &SoundSource::GetSound)
-        // .addProperty("playPosition", &SoundSource::GetPlayPosition, &SoundSource::SetPlayPosition)
         .addProperty("soundType", &SoundSource::GetSoundType, &SoundSource::SetSoundType)
         .addProperty("timePosition", &SoundSource::GetTimePosition)
         .addProperty("frequency", &SoundSource::GetFrequency, &SoundSource::SetFrequency)
@@ -247,7 +296,6 @@ static void RegisterSoundStream(kaguya::State& lua)
 
     lua["SoundStream"].setClass(UserdataMetatable<SoundStream, RefCounted>()
 
-        .addFunction("GetData", &SoundStream::GetData)
         .addFunction("SetFormat", &SoundStream::SetFormat)
         .addFunction("SetStopAtEnd", &SoundStream::SetStopAtEnd)
         .addFunction("GetSampleSize", &SoundStream::GetSampleSize)

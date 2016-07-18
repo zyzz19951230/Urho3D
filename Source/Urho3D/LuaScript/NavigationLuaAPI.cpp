@@ -1,3 +1,28 @@
+//
+// Copyright (c) 2008-2016 the Urho3D project.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+
+#include "../Precompiled.h"
+
+#include "../LuaScript/LuaScriptUtils.h"
 #include "../Navigation/CrowdAgent.h"
 #include "../Navigation/CrowdManager.h"
 #include "../Navigation/DynamicNavigationMesh.h"
@@ -7,8 +32,6 @@
 #include "../Navigation/NavigationMesh.h"
 #include "../Navigation/Obstacle.h"
 #include "../Navigation/OffMeshConnection.h"
-
-#include "../LuaScript/LuaScriptUtils.h"
 
 #include <kaguya.hpp>
 
@@ -65,6 +88,7 @@ static void RegisterCrowdAgent(kaguya::State& lua)
         .addFunction("SetObstacleAvoidanceType", &CrowdAgent::SetObstacleAvoidanceType)
         .addFunction("SetNavigationQuality", &CrowdAgent::SetNavigationQuality)
         .addFunction("SetNavigationPushiness", &CrowdAgent::SetNavigationPushiness)
+        
         .addFunction("GetPosition", &CrowdAgent::GetPosition)
         .addFunction("GetDesiredVelocity", &CrowdAgent::GetDesiredVelocity)
         .addFunction("GetActualVelocity", &CrowdAgent::GetActualVelocity)
@@ -169,6 +193,13 @@ static Vector3 CrowdManagerMoveAlongSurface1(CrowdManager* self, const Vector3& 
     return self->MoveAlongSurface(start, end, queryFilterType, maxVisited);
 }
 
+static PODVector<Vector3> CrowdManagerFindPath(CrowdManager* self, Vector3& start, const Vector3& end, int queryFilterType)
+{
+    PODVector<Vector3> dest;
+    self->FindPath(dest, start, end, queryFilterType);
+    return dest;
+}
+
 static Vector3 CrowdManagerGetRandomPoint(CrowdManager* self, int queryFilterType)
 {
     return self->GetRandomPoint(queryFilterType);
@@ -198,20 +229,6 @@ static void RegisterCrowdManager(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["CrowdObstacleAvoidanceParams"].setClass(UserdataMetatable<CrowdObstacleAvoidanceParams>()
-
-        .addProperty("velBias", &CrowdObstacleAvoidanceParams::velBias)
-        .addProperty("weightDesVel", &CrowdObstacleAvoidanceParams::weightDesVel)
-        .addProperty("weightCurVel", &CrowdObstacleAvoidanceParams::weightCurVel)
-        .addProperty("weightSide", &CrowdObstacleAvoidanceParams::weightSide)
-        .addProperty("weightToi", &CrowdObstacleAvoidanceParams::weightToi)
-        .addProperty("horizTime", &CrowdObstacleAvoidanceParams::horizTime)
-        .addProperty("gridSize", &CrowdObstacleAvoidanceParams::gridSize)
-        .addProperty("adaptiveDivs", &CrowdObstacleAvoidanceParams::adaptiveDivs)
-        .addProperty("adaptiveRings", &CrowdObstacleAvoidanceParams::adaptiveRings)
-        .addProperty("adaptiveDepth", &CrowdObstacleAvoidanceParams::adaptiveDepth)
-        );
-
     lua["CrowdManager"].setClass(UserdataMetatable<CrowdManager, Component>()
         .addStaticFunction("new", &CreateObject<CrowdManager>)
 
@@ -227,15 +244,14 @@ static void RegisterCrowdManager(kaguya::State& lua)
         .addFunction("SetIncludeFlags", &CrowdManager::SetIncludeFlags)
         .addFunction("SetExcludeFlags", &CrowdManager::SetExcludeFlags)
         .addFunction("SetAreaCost", &CrowdManager::SetAreaCost)
-        .addFunction("SetObstacleAvoidanceParams", &CrowdManager::SetObstacleAvoidanceParams)
-
+        
         ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, GetAgents)
-
+        
         .addStaticFunction("FindNearestPoint", &CrowdManagerFindNearestPoint)
 
         ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, MoveAlongSurface)
 
-        .addFunction("FindPath", &CrowdManager::FindPath)
+        .addStaticFunction("FindPath", &CrowdManagerFindPath)
 
         .addStaticFunction("GetRandomPoint", &CrowdManagerGetRandomPoint)
         .addStaticFunction("GetRandomPointInCircle", &CrowdManagerGetRandomPointInCircle)
@@ -252,8 +268,7 @@ static void RegisterCrowdManager(kaguya::State& lua)
         .addFunction("GetExcludeFlags", &CrowdManager::GetExcludeFlags)
         .addFunction("GetAreaCost", &CrowdManager::GetAreaCost)
         .addFunction("GetNumObstacleAvoidanceTypes", &CrowdManager::GetNumObstacleAvoidanceTypes)
-        .addFunction("GetObstacleAvoidanceParams", &CrowdManager::GetObstacleAvoidanceParams)
-
+        
         .addProperty("maxAgents", &CrowdManager::GetMaxAgents, &CrowdManager::SetMaxAgents)
         .addProperty("maxAgentRadius", &CrowdManager::GetMaxAgentRadius, &CrowdManager::SetMaxAgentRadius)
         .addProperty("navigationMesh", &CrowdManager::GetNavigationMesh, &CrowdManager::SetNavigationMesh)
@@ -269,16 +284,14 @@ static void RegisterDynamicNavigationMesh(kaguya::State& lua)
     lua["DynamicNavigationMesh"].setClass(UserdataMetatable<DynamicNavigationMesh, NavigationMesh>()
         .addStaticFunction("new", &CreateObject<DynamicNavigationMesh>)
 
-        .addOverloadedFunctions("Build",
-            static_cast<bool(DynamicNavigationMesh::*)()>(&DynamicNavigationMesh::Build),
-            static_cast<bool(DynamicNavigationMesh::*)(const BoundingBox&)>(&DynamicNavigationMesh::Build))
-
         .addFunction("DrawDebugGeometry", static_cast<void(DynamicNavigationMesh::*)(bool)>(&DynamicNavigationMesh::DrawDebugGeometry))
 
         .addFunction("SetMaxObstacles", &DynamicNavigationMesh::SetMaxObstacles)
         .addFunction("SetMaxLayers", &DynamicNavigationMesh::SetMaxLayers)
+        
         .addFunction("GetMaxObstacles", &DynamicNavigationMesh::GetMaxObstacles)
         .addFunction("GetMaxLayers", &DynamicNavigationMesh::GetMaxLayers)
+
         .addFunction("SetDrawObstacles", &DynamicNavigationMesh::SetDrawObstacles)
         .addFunction("GetDrawObstacles", &DynamicNavigationMesh::GetDrawObstacles)
 
@@ -297,8 +310,10 @@ static void RegisterNavArea(kaguya::State& lua)
 
         .addFunction("GetAreaID", &NavArea::GetAreaID)
         .addFunction("SetAreaID", &NavArea::SetAreaID)
+
         .addFunction("GetBoundingBox", &NavArea::GetBoundingBox)
         .addFunction("SetBoundingBox", &NavArea::SetBoundingBox)
+
         .addFunction("GetWorldBoundingBox", &NavArea::GetWorldBoundingBox)
 
         .addProperty("areaID", &NavArea::GetAreaID, &NavArea::SetAreaID)
@@ -457,7 +472,6 @@ static void RegisterNavigationMesh(kaguya::State& lua)
 
         ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, FindNearestPoint)
         ADD_OVERLOADED_FUNCTIONS_3(NavigationMesh, MoveAlongSurface)
-
         ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, FindPath)
 
         .addStaticFunction("GetRandomPoint", &NavigationMeshGetRandomPoint)

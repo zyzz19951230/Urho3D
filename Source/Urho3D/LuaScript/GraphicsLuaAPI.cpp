@@ -1,3 +1,27 @@
+//
+// Copyright (c) 2008-2016 the Urho3D project.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+
+#include "../Precompiled.h"
+
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationController.h"
 #include "../Graphics/AnimationState.h"
@@ -17,28 +41,19 @@
 namespace Urho3D
 {
 
+    static SharedPtr<Animation> AnimationClone0(const Animation* self)
+    {
+        return self->Clone();
+    }
+
+    static SharedPtr<Animation> AnimationClone1(const Animation* self, const String& cloneName)
+    {
+        return self->Clone(cloneName);
+    }
+
 static void RegisterAnimation(kaguya::State& lua)
 {
     using namespace kaguya;
-
-    lua["AnimationTrack"].setClass(UserdataMetatable<AnimationTrack>()
-        .setConstructors<AnimationTrack()>()
-
-        .addFunction("SetKeyFrame", &AnimationTrack::SetKeyFrame)
-        .addFunction("AddKeyFrame", &AnimationTrack::AddKeyFrame)
-        .addFunction("InsertKeyFrame", &AnimationTrack::InsertKeyFrame)
-        .addFunction("RemoveKeyFrame", &AnimationTrack::RemoveKeyFrame)
-        .addFunction("RemoveAllKeyFrames", &AnimationTrack::RemoveAllKeyFrames)
-        .addFunction("GetKeyFrame", &AnimationTrack::GetKeyFrame)
-        .addFunction("GetNumKeyFrames", &AnimationTrack::GetNumKeyFrames)
-        .addFunction("GetKeyFrameIndex", &AnimationTrack::GetKeyFrameIndex)
-
-        .addProperty("numKeyFrames", &AnimationTrack::GetNumKeyFrames)
-        .addProperty("name", &AnimationTrack::name_)
-        .addProperty("nameHash", &AnimationTrack::nameHash_)
-        .addProperty("channelMask", &AnimationTrack::channelMask_)
-        .addProperty("keyFrames", &AnimationTrack::keyFrames_)
-        );
 
     lua["CHANNEL_POSITION"] = CHANNEL_POSITION;
     lua["CHANNEL_ROTATION"] = CHANNEL_ROTATION;
@@ -49,39 +64,28 @@ static void RegisterAnimation(kaguya::State& lua)
 
         .addFunction("SetAnimationName", &Animation::SetAnimationName)
         .addFunction("SetLength", &Animation::SetLength)
-        .addFunction("CreateTrack", &Animation::CreateTrack)
         .addFunction("RemoveTrack", &Animation::RemoveTrack)
         .addFunction("RemoveAllTracks", &Animation::RemoveAllTracks)
-        .addFunction("SetTrigger", &Animation::SetTrigger)
 
-        .addOverloadedFunctions("AddTrigger",
-            static_cast<void(Animation::*)(const AnimationTriggerPoint&)>(&Animation::AddTrigger),
-            static_cast<void(Animation::*)(float, bool, const Variant&)>(&Animation::AddTrigger))
-
+        .addFunction("AddTrigger", static_cast<void(Animation::*)(float, bool, const Variant&)>(&Animation::AddTrigger))
+        
         .addFunction("RemoveTrigger", &Animation::RemoveTrigger)
         .addFunction("RemoveAllTriggers", &Animation::RemoveAllTriggers)
         .addFunction("SetNumTriggers", &Animation::SetNumTriggers)
-        .addFunction("Clone", &Animation::Clone)
+
+        ADD_OVERLOADED_FUNCTIONS_2(Animation, Clone)
+
         .addFunction("GetAnimationName", &Animation::GetAnimationName)
         .addFunction("GetAnimationNameHash", &Animation::GetAnimationNameHash)
         .addFunction("GetLength", &Animation::GetLength)
-        .addFunction("GetTracks", &Animation::GetTracks)
         .addFunction("GetNumTracks", &Animation::GetNumTracks)
 
-        .addOverloadedFunctions("GetTrack",
-            static_cast<AnimationTrack*(Animation::*)(const String&)>(&Animation::GetTrack),
-            static_cast<AnimationTrack*(Animation::*)(StringHash)>(&Animation::GetTrack))
-
-        .addFunction("GetTriggers", &Animation::GetTriggers)
         .addFunction("GetNumTriggers", &Animation::GetNumTriggers)
-        .addFunction("GetTrigger", &Animation::GetTrigger)
-
+        
         .addProperty("animationName", &Animation::GetAnimationName, &Animation::SetAnimationName)
         .addProperty("animationNameHash", &Animation::GetAnimationNameHash)
         .addProperty("length", &Animation::GetLength, &Animation::SetLength)
-        // .addProperty("tracks", &Animation::GetTracks)
         .addProperty("numTracks", &Animation::GetNumTracks)
-        // .addProperty("triggers", &Animation::GetTriggers)
         .addProperty("numTriggers", &Animation::GetNumTriggers, &Animation::SetNumTriggers)
         );
 }
@@ -151,6 +155,7 @@ static void RegisterAnimationController(kaguya::State& lua)
 
         .addFunction("Fade", &AnimationController::Fade)
         .addFunction("FadeOthers", &AnimationController::FadeOthers)
+
         .addFunction("SetLayer", &AnimationController::SetLayer)
         .addFunction("SetStartBone", &AnimationController::SetStartBone)
         .addFunction("SetTime", &AnimationController::SetTime)
@@ -160,6 +165,7 @@ static void RegisterAnimationController(kaguya::State& lua)
         .addFunction("SetAutoFade", &AnimationController::SetAutoFade)
         .addFunction("SetRemoveOnCompletion", &AnimationController::SetRemoveOnCompletion)
         .addFunction("SetBlendMode", &AnimationController::SetBlendMode)
+        
         .addFunction("IsPlaying", &AnimationController::IsPlaying)
         .addFunction("IsFadingIn", &AnimationController::IsFadingIn)
         .addFunction("IsFadingOut", &AnimationController::IsFadingOut)
@@ -178,9 +184,7 @@ static void RegisterAnimationController(kaguya::State& lua)
         .addFunction("GetAutoFade", &AnimationController::GetAutoFade)
         .addFunction("GetRemoveOnCompletion", &AnimationController::GetRemoveOnCompletion)
 
-        .addOverloadedFunctions("GetAnimationState",
-            static_cast<AnimationState*(AnimationController::*)(const String&) const>(&AnimationController::GetAnimationState),
-            static_cast<AnimationState*(AnimationController::*)(StringHash) const>(&AnimationController::GetAnimationState))
+        .addFunction("GetAnimationState", static_cast<AnimationState*(AnimationController::*)(const String&) const>(&AnimationController::GetAnimationState))
         );
 }
 
@@ -232,16 +236,15 @@ static void RegisterAnimationState(kaguya::State& lua)
         .addFunction("GetNode", &AnimationState::GetNode)
         .addFunction("GetStartBone", &AnimationState::GetStartBone)
 
+        /*
         .addOverloadedFunctions("GetBoneWeight",
             static_cast<float(AnimationState::*)(unsigned) const>(&AnimationState::GetBoneWeight),
             static_cast<float(AnimationState::*)(const String&) const>(&AnimationState::GetBoneWeight))
-
-
-        /*
+        
         .addOverloadedFunctions("GetTrackIndex",
             static_cast<unsigned(AnimationState::*)(int*) const>(&AnimationState::GetTrackIndex),
             static_cast<unsigned(AnimationState::*)(const String&) const>(&AnimationState::GetTrackIndex))
-            */
+        */
 
         .addFunction("IsEnabled", &AnimationState::IsEnabled)
         .addFunction("IsLooped", &AnimationState::IsLooped)
@@ -266,6 +269,16 @@ static void RegisterAnimationState(kaguya::State& lua)
         );
 }
 
+static SharedPtr<Model> ModelClone0(const Model* self)
+{
+    return self->Clone();
+}
+
+static SharedPtr<Model> ModelClone1(const Model* self, const String& cloneName)
+{
+    return self->Clone(cloneName);
+}
+
 static void RegisterModel(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -274,8 +287,10 @@ static void RegisterModel(kaguya::State& lua)
         .addStaticFunction("new", &CreateObject<Model>)
 
         .addFunction("SetBoundingBox", &Model::SetBoundingBox)
+        
         // .addFunction("SetVertexBuffers", &Model::SetVertexBuffers)
         // .addFunction("SetIndexBuffers", &Model::SetIndexBuffers)
+
         .addFunction("SetNumGeometries", &Model::SetNumGeometries)
         .addFunction("SetNumGeometryLodLevels", &Model::SetNumGeometryLodLevels)
         .addFunction("SetGeometry", &Model::SetGeometry)
@@ -283,7 +298,8 @@ static void RegisterModel(kaguya::State& lua)
         .addFunction("SetSkeleton", &Model::SetSkeleton)
         .addFunction("SetGeometryBoneMappings", &Model::SetGeometryBoneMappings)
         .addFunction("SetMorphs", &Model::SetMorphs)
-        .addFunction("Clone", &Model::Clone)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(Model, Clone)
 
         .addFunction("GetBoundingBox", &Model::GetBoundingBox)
         .addFunction("GetSkeleton", &Model::GetSkeleton)
@@ -368,6 +384,16 @@ static RayQueryResult OctreeRaycastSingle4(const Octree* self, const Ray& ray, R
     return result[0];
 }
 
+static void OctantRemoveDrawable0(Octant* self, Drawable* drawable)
+{
+    self->RemoveDrawable(drawable);
+}
+
+static void OctantRemoveDrawable1(Octant* self, Drawable* drawable, bool resetOctant)
+{
+    self->RemoveDrawable(drawable, resetOctant);
+}
+
 static void RegisterOctree(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -383,7 +409,9 @@ static void RegisterOctree(kaguya::State& lua)
         .addFunction("InsertDrawable", &Octant::InsertDrawable)
         .addFunction("CheckDrawableFit", &Octant::CheckDrawableFit)
         .addFunction("AddDrawable", &Octant::AddDrawable)
-        .addFunction("RemoveDrawable", &Octant::RemoveDrawable)
+        
+        ADD_OVERLOADED_FUNCTIONS_2(Octant, RemoveDrawable)
+
         .addFunction("GetWorldBoundingBox", &Octant::GetWorldBoundingBox)
         .addFunction("GetCullingBox", &Octant::GetCullingBox)
         .addFunction("GetLevel", &Octant::GetLevel)

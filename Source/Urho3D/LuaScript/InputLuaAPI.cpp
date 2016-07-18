@@ -1,13 +1,40 @@
+//
+// Copyright (c) 2008-2016 the Urho3D project.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+
+#include "../Precompiled.h"
+
 #include "../Core/Context.h"
 #include "../Input/Controls.h"
 #include "../Input/Input.h"
 #include "../Input/InputEvents.h"
+#include "../IO/File.h"
 #include "../LuaScript/LuaScriptUtils.h"
 
 #include <kaguya.hpp>
 
 namespace Urho3D
 {
+
+extern Context* globalContext;
 
 static void ControlsSet0(Controls* self, unsigned int buttons)
 {
@@ -32,6 +59,7 @@ static void RegisterControls(kaguya::State& lua)
 
         .addFunction("IsDown", &Controls::IsDown)
         .addFunction("IsPressed", &Controls::IsPressed)
+
         .addProperty("buttons", &Controls::buttons_)
         .addProperty("yaw", &Controls::yaw_)
         .addProperty("pitch", &Controls::pitch_)
@@ -74,19 +102,28 @@ static bool InputIsMouseVisible(const Input* input)
     return input->IsMouseVisible();
 }
 
-static int InputAddScreenJoystick0(Input* self)
+static bool InputSaveGestures(Input* self, const char* filepath)
 {
-    return self->AddScreenJoystick();
+    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    if (!file->IsOpen())
+        return false;
+    return self->SaveGestures(*file);
 }
 
-static int InputAddScreenJoystick1(Input* self, XMLFile* layoutFile)
+static bool InputSaveGesture(Input* self, const char* filepath, unsigned gestureID)
 {
-    return self->AddScreenJoystick(layoutFile);
+    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    if (!file->IsOpen())
+        return false;
+    return self->SaveGesture(*file, gestureID);
 }
 
-static int InputAddScreenJoystick2(Input* self, XMLFile* layoutFile, XMLFile* styleFile)
+static unsigned InputLoadGestures(Input* self, const char* filepath)
 {
-    return self->AddScreenJoystick(layoutFile, styleFile);
+    SharedPtr<File> file(new File(globalContext, filepath));
+    if (!file->IsOpen())
+        return false;
+    return self->LoadGestures(*file);
 }
 
 static void RegisterInput(kaguya::State& lua)
@@ -101,51 +138,6 @@ static void RegisterInput(kaguya::State& lua)
     lua["MM_INVALID"] = MM_INVALID;
 
     lua["MOUSE_POSITION_OFFSCREEN"] = MOUSE_POSITION_OFFSCREEN;
-    lua["TouchState"].setClass(UserdataMetatable<TouchState>()
-
-        .addFunction("GetTouchedElement", &TouchState::GetTouchedElement)
-
-        .addProperty("touchedElement", &TouchState::GetTouchedElement)
-        /*
-        .addProperty("touchID", &TouchState::touchID_)
-        .addProperty("position", &TouchState::position_)
-        .addProperty("lastPosition", &TouchState::lastPosition_)
-        .addProperty("delta", &TouchState::delta_)
-        .addProperty("pressure", &TouchState::pressure_)
-        */
-        );
-
-    lua["JoystickState"].setClass(UserdataMetatable<JoystickState>()
-        .setConstructors<JoystickState()>()
-
-        .addFunction("Initialize", &JoystickState::Initialize)
-        .addFunction("Reset", &JoystickState::Reset)
-        .addFunction("IsController", &JoystickState::IsController)
-        .addFunction("GetNumButtons", &JoystickState::GetNumButtons)
-        .addFunction("GetNumAxes", &JoystickState::GetNumAxes)
-        .addFunction("GetNumHats", &JoystickState::GetNumHats)
-        .addFunction("GetButtonDown", &JoystickState::GetButtonDown)
-        .addFunction("GetButtonPress", &JoystickState::GetButtonPress)
-        .addFunction("GetAxisPosition", &JoystickState::GetAxisPosition)
-        .addFunction("GetHatPosition", &JoystickState::GetHatPosition)
-
-        .addProperty("isController", &JoystickState::IsController)
-        .addProperty("numButtons", &JoystickState::GetNumButtons)
-        .addProperty("numAxes", &JoystickState::GetNumAxes)
-        .addProperty("numHats", &JoystickState::GetNumHats)
-        .addProperty("joystick", &JoystickState::joystick_)
-
-        /*
-        .addProperty("joystickID", &JoystickState::joystickID_)
-        .addProperty("controller", &JoystickState::controller_)
-        .addProperty("screenJoystick", &JoystickState::screenJoystick_)
-        .addProperty("name", &JoystickState::name_)
-        .addProperty("buttons", &JoystickState::buttons_)
-        .addProperty("buttonPress", &JoystickState::buttonPress_)
-        .addProperty("axes", &JoystickState::axes_)
-        .addProperty("hats", &JoystickState::hats_)
-        */
-        );
 
     lua["Input"].setClass(UserdataMetatable<Input, Object>()
 
@@ -162,17 +154,15 @@ static void RegisterInput(kaguya::State& lua)
         ADD_OVERLOADED_FUNCTIONS_2(Input, SetMouseMode)
 
         .addFunction("ResetMouseMode", &Input::ResetMouseMode)
-        
-        ADD_OVERLOADED_FUNCTIONS_3(Input, AddScreenJoystick)
 
-        .addFunction("RemoveScreenJoystick", &Input::RemoveScreenJoystick)
-        .addFunction("SetScreenJoystickVisible", &Input::SetScreenJoystickVisible)
         .addFunction("SetScreenKeyboardVisible", &Input::SetScreenKeyboardVisible)
-        .addFunction("SetTouchEmulation", &Input::SetTouchEmulation)
+        .addFunction("SetTouchEmulation", &Input::SetTouchEmulation)        
         .addFunction("RecordGesture", &Input::RecordGesture)
-        .addFunction("SaveGestures", &Input::SaveGestures)
-        .addFunction("SaveGesture", &Input::SaveGesture)
-        .addFunction("LoadGestures", &Input::LoadGestures)
+
+        .addStaticFunction("SaveGestures", &InputSaveGestures)
+        .addStaticFunction("SaveGesture", &InputSaveGesture)
+        .addStaticFunction("LoadGestures", &InputLoadGestures)
+
         .addFunction("RemoveGesture", &Input::RemoveGesture)
         .addFunction("RemoveAllGestures", &Input::RemoveAllGestures)
         .addFunction("GetKeyFromName", &Input::GetKeyFromName)
@@ -196,11 +186,7 @@ static void RegisterInput(kaguya::State& lua)
         .addFunction("GetMouseMoveY", &Input::GetMouseMoveY)
         .addFunction("GetMouseMoveWheel", &Input::GetMouseMoveWheel)
         .addFunction("GetNumTouches", &Input::GetNumTouches)
-        .addFunction("GetTouch", &Input::GetTouch)
         .addFunction("GetNumJoysticks", &Input::GetNumJoysticks)
-        .addFunction("GetJoystick", &Input::GetJoystick)
-        .addFunction("GetJoystickByIndex", &Input::GetJoystickByIndex)
-        .addFunction("GetJoystickByName", &Input::GetJoystickByName)
         .addFunction("GetToggleFullscreen", &Input::GetToggleFullscreen)
         .addFunction("IsScreenJoystickVisible", &Input::IsScreenJoystickVisible)
         .addFunction("GetScreenKeyboardSupport", &Input::GetScreenKeyboardSupport)
@@ -225,9 +211,7 @@ static void RegisterInput(kaguya::State& lua)
         .addProperty("screenKeyboardSupport", &Input::GetScreenKeyboardSupport)
         .addProperty("screenKeyboardVisible", &Input::IsScreenKeyboardVisible, &Input::SetScreenKeyboardVisible)
         .addProperty("touchEmulation", &Input::GetTouchEmulation, &Input::SetTouchEmulation)
-
         .addProperty("mouseVisible", &InputIsMouseVisible, &InputSetMouseVisible0)
-
         .addProperty("mouseGrabbed", &Input::IsMouseGrabbed)
         .addProperty("mouseLocked", &Input::IsMouseLocked)
         .addProperty("mouseMode", &Input::GetMouseMode)

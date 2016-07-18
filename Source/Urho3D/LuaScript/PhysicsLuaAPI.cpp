@@ -1,5 +1,30 @@
+//
+// Copyright (c) 2008-2016 the Urho3D project.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+
+#include "../Precompiled.h"
+
 #include "../Core/Context.h"
 #include "../Graphics/Model.h"
+#include "../LuaScript/LuaScriptUtils.h"
 #include "../Physics/CollisionShape.h"
 #include "../Physics/Constraint.h"
 #include "../Physics/PhysicsEvents.h"
@@ -7,212 +32,200 @@
 #include "../Physics/PhysicsWorld.h"
 #include "../Physics/RigidBody.h"
 
-#include "../LuaScript/LuaScriptUtils.h"
-
 #include <kaguya.hpp>
 
 namespace Urho3D
 {
 
-    static void CollisionShapeSetBox0(CollisionShape* self, const Vector3& size)
-    {
-        self->SetBox(size);
-    }
+static void CollisionShapeSetBox0(CollisionShape* self, const Vector3& size)
+{
+    self->SetBox(size);
+}
 
-    static void CollisionShapeSetBox1(CollisionShape* self, const Vector3& size, const Vector3& position)
-    {
-        self->SetBox(size, position);
-    }
+static void CollisionShapeSetBox1(CollisionShape* self, const Vector3& size, const Vector3& position)
+{
+    self->SetBox(size, position);
+}
 
-    static void CollisionShapeSetBox2(CollisionShape* self, const Vector3& size, const Vector3& position, const Quaternion& rotation)
-    {
-        self->SetBox(size, position, rotation);
-    }
+static void CollisionShapeSetBox2(CollisionShape* self, const Vector3& size, const Vector3& position, const Quaternion& rotation)
+{
+    self->SetBox(size, position, rotation);
+}
 
-    static void CollisionShapeSetSphere0(CollisionShape* self, float diameter)
-    {
-        self->SetSphere(diameter);
-    }
+static void CollisionShapeSetSphere0(CollisionShape* self, float diameter)
+{
+    self->SetSphere(diameter);
+}
 
-    static void CollisionShapeSetSphere1(CollisionShape* self, float diameter, const Vector3& position)
-    {
-        self->SetSphere(diameter, position);
-    }
+static void CollisionShapeSetSphere1(CollisionShape* self, float diameter, const Vector3& position)
+{
+    self->SetSphere(diameter, position);
+}
 
-    static void CollisionShapeSetSphere2(CollisionShape* self, float diameter, const Vector3& position, const Quaternion& rotation)
-    {
-        self->SetSphere(diameter, position, rotation);
-    }
+static void CollisionShapeSetSphere2(CollisionShape* self, float diameter, const Vector3& position, const Quaternion& rotation)
+{
+    self->SetSphere(diameter, position, rotation);
+}
 
-    static void CollisionShapeSetStaticPlane0(CollisionShape* self)
-    {
-        self->SetStaticPlane();
-    }
+static void CollisionShapeSetStaticPlane0(CollisionShape* self)
+{
+    self->SetStaticPlane();
+}
 
-    static void CollisionShapeSetStaticPlane1(CollisionShape* self, const Vector3& position)
-    {
-        self->SetStaticPlane(position);
-    }
+static void CollisionShapeSetStaticPlane1(CollisionShape* self, const Vector3& position)
+{
+    self->SetStaticPlane(position);
+}
 
-    static void CollisionShapeSetStaticPlane2(CollisionShape* self, const Vector3& position, const Quaternion& rotation)
-    {
-        self->SetStaticPlane(position, rotation);
-    }
+static void CollisionShapeSetStaticPlane2(CollisionShape* self, const Vector3& position, const Quaternion& rotation)
+{
+    self->SetStaticPlane(position, rotation);
+}
 
-    static void CollisionShapeSetCylinder0(CollisionShape* self, float diameter, float height)
-    {
-        self->SetCylinder(diameter, height);
-    }
+static void CollisionShapeSetCylinder0(CollisionShape* self, float diameter, float height)
+{
+    self->SetCylinder(diameter, height);
+}
 
-    static void CollisionShapeSetCylinder1(CollisionShape* self, float diameter, float height, const Vector3& position)
-    {
-        self->SetCylinder(diameter, height, position);
-    }
+static void CollisionShapeSetCylinder1(CollisionShape* self, float diameter, float height, const Vector3& position)
+{
+    self->SetCylinder(diameter, height, position);
+}
 
-    static void CollisionShapeSetCylinder2(CollisionShape* self, float diameter, float height, const Vector3& position, const Quaternion& rotation)
-    {
-        self->SetCylinder(diameter, height, position, rotation);
-    }
+static void CollisionShapeSetCylinder2(CollisionShape* self, float diameter, float height, const Vector3& position, const Quaternion& rotation)
+{
+    self->SetCylinder(diameter, height, position, rotation);
+}
 
-    static void CollisionShapeSetCapsule0(CollisionShape* self, float diameter, float height)
-    {
-        self->SetCapsule(diameter, height);
-    }
+static void CollisionShapeSetCapsule0(CollisionShape* self, float diameter, float height)
+{
+    self->SetCapsule(diameter, height);
+}
 
-    static void CollisionShapeSetCapsule1(CollisionShape* self, float diameter, float height, const Vector3& position)
-    {
-        self->SetCapsule(diameter, height, position);
-    }
+static void CollisionShapeSetCapsule1(CollisionShape* self, float diameter, float height, const Vector3& position)
+{
+    self->SetCapsule(diameter, height, position);
+}
 
-    static void CollisionShapeSetCapsule2(CollisionShape* self, float diameter, float height, const Vector3& position, const Quaternion& rotation)
-    {
-        self->SetCapsule(diameter, height, position, rotation);
-    }
-    
-    static void CollisionShapeSetCone0(CollisionShape* self, float diameter, float height)
-    {
-        self->SetCone(diameter, height);
-    }
+static void CollisionShapeSetCapsule2(CollisionShape* self, float diameter, float height, const Vector3& position, const Quaternion& rotation)
+{
+    self->SetCapsule(diameter, height, position, rotation);
+}
 
-    static void CollisionShapeSetCone1(CollisionShape* self, float diameter, float height, const Vector3& position)
-    {
-        self->SetCone(diameter, height, position);
-    }
+static void CollisionShapeSetCone0(CollisionShape* self, float diameter, float height)
+{
+    self->SetCone(diameter, height);
+}
 
-    static void CollisionShapeSetCone2(CollisionShape* self, float diameter, float height, const Vector3& position, const Quaternion& rotation)
-    {
-        self->SetCone(diameter, height, position, rotation);
-    }
+static void CollisionShapeSetCone1(CollisionShape* self, float diameter, float height, const Vector3& position)
+{
+    self->SetCone(diameter, height, position);
+}
 
-    static void CollisionShapeSetTriangleMesh0(CollisionShape* self, Model* model)
-    {
-        self->SetTriangleMesh(model);
-    }
+static void CollisionShapeSetCone2(CollisionShape* self, float diameter, float height, const Vector3& position, const Quaternion& rotation)
+{
+    self->SetCone(diameter, height, position, rotation);
+}
 
-    static void CollisionShapeSetTriangleMesh1(CollisionShape* self, Model* model, unsigned int lodLevel)
-    {
-        self->SetTriangleMesh(model, lodLevel);
-    }
+static void CollisionShapeSetTriangleMesh0(CollisionShape* self, Model* model)
+{
+    self->SetTriangleMesh(model);
+}
 
-    static void CollisionShapeSetTriangleMesh2(CollisionShape* self, Model* model, unsigned int lodLevel, const Vector3& scale)
-    {
-        self->SetTriangleMesh(model, lodLevel, scale);
-    }
+static void CollisionShapeSetTriangleMesh1(CollisionShape* self, Model* model, unsigned int lodLevel)
+{
+    self->SetTriangleMesh(model, lodLevel);
+}
 
-    static void CollisionShapeSetTriangleMesh3(CollisionShape* self, Model* model, unsigned int lodLevel, const Vector3& scale, const Vector3& position)
-    {
-        self->SetTriangleMesh(model, lodLevel, scale, position);
-    }
+static void CollisionShapeSetTriangleMesh2(CollisionShape* self, Model* model, unsigned int lodLevel, const Vector3& scale)
+{
+    self->SetTriangleMesh(model, lodLevel, scale);
+}
 
-    static void CollisionShapeSetTriangleMesh4(CollisionShape* self, Model* model, unsigned int lodLevel, const Vector3& scale, const Vector3& position, const Quaternion& rotation)
-    {
-        self->SetTriangleMesh(model, lodLevel, scale, position, rotation);
-    }
+static void CollisionShapeSetTriangleMesh3(CollisionShape* self, Model* model, unsigned int lodLevel, const Vector3& scale, const Vector3& position)
+{
+    self->SetTriangleMesh(model, lodLevel, scale, position);
+}
 
-    static void CollisionShapeSetCustomTriangleMesh0(CollisionShape* self, CustomGeometry* custom)
-    {
-        self->SetCustomTriangleMesh(custom);
-    }
+static void CollisionShapeSetTriangleMesh4(CollisionShape* self, Model* model, unsigned int lodLevel, const Vector3& scale, const Vector3& position, const Quaternion& rotation)
+{
+    self->SetTriangleMesh(model, lodLevel, scale, position, rotation);
+}
 
-    static void CollisionShapeSetCustomTriangleMesh1(CollisionShape* self, CustomGeometry* custom, const Vector3& scale)
-    {
-        self->SetCustomTriangleMesh(custom, scale);
-    }
+static void CollisionShapeSetCustomTriangleMesh0(CollisionShape* self, CustomGeometry* custom)
+{
+    self->SetCustomTriangleMesh(custom);
+}
 
-    static void CollisionShapeSetCustomTriangleMesh2(CollisionShape* self, CustomGeometry* custom, const Vector3& scale, const Vector3& position)
-    {
-        self->SetCustomTriangleMesh(custom, scale, position);
-    }
+static void CollisionShapeSetCustomTriangleMesh1(CollisionShape* self, CustomGeometry* custom, const Vector3& scale)
+{
+    self->SetCustomTriangleMesh(custom, scale);
+}
 
-    static void CollisionShapeSetCustomTriangleMesh3(CollisionShape* self, CustomGeometry* custom, const Vector3& scale, const Vector3& position, const Quaternion& rotation)
-    {
-        self->SetCustomTriangleMesh(custom, scale, position, rotation);
-    }
+static void CollisionShapeSetCustomTriangleMesh2(CollisionShape* self, CustomGeometry* custom, const Vector3& scale, const Vector3& position)
+{
+    self->SetCustomTriangleMesh(custom, scale, position);
+}
 
-    static void CollisionShapeSetConvexHull0(CollisionShape* self, Model* model)
-    {
-        self->SetConvexHull(model);
-    }
+static void CollisionShapeSetCustomTriangleMesh3(CollisionShape* self, CustomGeometry* custom, const Vector3& scale, const Vector3& position, const Quaternion& rotation)
+{
+    self->SetCustomTriangleMesh(custom, scale, position, rotation);
+}
 
-    static void CollisionShapeSetConvexHull1(CollisionShape* self, Model* model, unsigned int lodLevel)
-    {
-        self->SetConvexHull(model, lodLevel);
-    }
+static void CollisionShapeSetConvexHull0(CollisionShape* self, Model* model)
+{
+    self->SetConvexHull(model);
+}
 
-    static void CollisionShapeSetConvexHull2(CollisionShape* self, Model* model, unsigned int lodLevel, const Vector3& scale)
-    {
-        self->SetConvexHull(model, lodLevel, scale);
-    }
+static void CollisionShapeSetConvexHull1(CollisionShape* self, Model* model, unsigned int lodLevel)
+{
+    self->SetConvexHull(model, lodLevel);
+}
 
-    static void CollisionShapeSetConvexHull3(CollisionShape* self, Model* model, unsigned int lodLevel, const Vector3& scale, const Vector3& position)
-    {
-        self->SetConvexHull(model, lodLevel, scale, position);
-    }
+static void CollisionShapeSetConvexHull2(CollisionShape* self, Model* model, unsigned int lodLevel, const Vector3& scale)
+{
+    self->SetConvexHull(model, lodLevel, scale);
+}
 
-    static void CollisionShapeSetConvexHull4(CollisionShape* self, Model* model, unsigned int lodLevel, const Vector3& scale, const Vector3& position, const Quaternion& rotation)
-    {
-        self->SetConvexHull(model, lodLevel, scale, position, rotation);
-    }
-    
-    static void CollisionShapeSetCustomConvexHull0(CollisionShape* self, CustomGeometry* custom)
-    {
-        self->SetCustomConvexHull(custom);
-    }
+static void CollisionShapeSetConvexHull3(CollisionShape* self, Model* model, unsigned int lodLevel, const Vector3& scale, const Vector3& position)
+{
+    self->SetConvexHull(model, lodLevel, scale, position);
+}
 
-    static void CollisionShapeSetCustomConvexHull1(CollisionShape* self, CustomGeometry* custom, const Vector3& scale)
-    {
-        self->SetCustomConvexHull(custom, scale);
-    }
+static void CollisionShapeSetConvexHull4(CollisionShape* self, Model* model, unsigned int lodLevel, const Vector3& scale, const Vector3& position, const Quaternion& rotation)
+{
+    self->SetConvexHull(model, lodLevel, scale, position, rotation);
+}
 
-    static void CollisionShapeSetCustomConvexHull2(CollisionShape* self, CustomGeometry* custom, const Vector3& scale, const Vector3& position)
-    {
-        self->SetCustomConvexHull(custom, scale, position);
-    }
+static void CollisionShapeSetCustomConvexHull0(CollisionShape* self, CustomGeometry* custom)
+{
+    self->SetCustomConvexHull(custom);
+}
 
-    static void CollisionShapeSetCustomConvexHull3(CollisionShape* self, CustomGeometry* custom, const Vector3& scale, const Vector3& position, const Quaternion& rotation)
-    {
-        self->SetCustomConvexHull(custom, scale, position, rotation);
-    }
-    
-    static void CollisionShapeSetTerrain0(CollisionShape* self)
-    {
-        self->SetTerrain();
-    }
+static void CollisionShapeSetCustomConvexHull1(CollisionShape* self, CustomGeometry* custom, const Vector3& scale)
+{
+    self->SetCustomConvexHull(custom, scale);
+}
 
-    static void CollisionShapeSetTerrain1(CollisionShape* self, unsigned int lodLevel)
-    {
-        self->SetTerrain(lodLevel);
-    }
-    
-    static void CollisionShapeNotifyRigidBody0(CollisionShape* self)
-    {
-        self->NotifyRigidBody();
-    }
+static void CollisionShapeSetCustomConvexHull2(CollisionShape* self, CustomGeometry* custom, const Vector3& scale, const Vector3& position)
+{
+    self->SetCustomConvexHull(custom, scale, position);
+}
 
-    static void CollisionShapeNotifyRigidBody1(CollisionShape* self, bool updateMass)
-    {
-        self->NotifyRigidBody(updateMass);
-    }
+static void CollisionShapeSetCustomConvexHull3(CollisionShape* self, CustomGeometry* custom, const Vector3& scale, const Vector3& position, const Quaternion& rotation)
+{
+    self->SetCustomConvexHull(custom, scale, position, rotation);
+}
+
+static void CollisionShapeSetTerrain0(CollisionShape* self)
+{
+    self->SetTerrain();
+}
+
+static void CollisionShapeSetTerrain1(CollisionShape* self, unsigned int lodLevel)
+{
+    self->SetTerrain(lodLevel);
+}
 
 static void RegisterCollisionShape(kaguya::State& lua)
 {
@@ -228,10 +241,11 @@ static void RegisterCollisionShape(kaguya::State& lua)
     lua["SHAPE_TRIANGLEMESH"] = SHAPE_TRIANGLEMESH;
     lua["SHAPE_CONVEXHULL"] = SHAPE_CONVEXHULL;
     lua["SHAPE_TERRAIN"] = SHAPE_TERRAIN;
+    
     lua["CollisionShape"].setClass(UserdataMetatable<CollisionShape, Component>()
         .addStaticFunction("new", &CreateObject<CollisionShape>)
-        
-        ADD_OVERLOADED_FUNCTIONS_3(CollisionShape, SetBox)        
+
+        ADD_OVERLOADED_FUNCTIONS_3(CollisionShape, SetBox)
         ADD_OVERLOADED_FUNCTIONS_3(CollisionShape, SetSphere)
         ADD_OVERLOADED_FUNCTIONS_3(CollisionShape, SetStaticPlane)
         ADD_OVERLOADED_FUNCTIONS_3(CollisionShape, SetCylinder)
@@ -242,7 +256,7 @@ static void RegisterCollisionShape(kaguya::State& lua)
         ADD_OVERLOADED_FUNCTIONS_5(CollisionShape, SetConvexHull)
         ADD_OVERLOADED_FUNCTIONS_4(CollisionShape, SetCustomConvexHull)
         ADD_OVERLOADED_FUNCTIONS_2(CollisionShape, SetTerrain)
-        
+
         .addFunction("SetShapeType", &CollisionShape::SetShapeType)
         .addFunction("SetSize", &CollisionShape::SetSize)
         .addFunction("SetPosition", &CollisionShape::SetPosition)
@@ -251,6 +265,7 @@ static void RegisterCollisionShape(kaguya::State& lua)
         .addFunction("SetMargin", &CollisionShape::SetMargin)
         .addFunction("SetModel", &CollisionShape::SetModel)
         .addFunction("SetLodLevel", &CollisionShape::SetLodLevel)
+
         .addFunction("GetCollisionShape", &CollisionShape::GetCollisionShape)
         .addFunction("GetGeometryData", &CollisionShape::GetGeometryData)
         .addFunction("GetPhysicsWorld", &CollisionShape::GetPhysicsWorld)
@@ -262,10 +277,6 @@ static void RegisterCollisionShape(kaguya::State& lua)
         .addFunction("GetModel", &CollisionShape::GetModel)
         .addFunction("GetLodLevel", &CollisionShape::GetLodLevel)
         .addFunction("GetWorldBoundingBox", &CollisionShape::GetWorldBoundingBox)
-        
-        ADD_OVERLOADED_FUNCTIONS_2(CollisionShape, NotifyRigidBody)
-
-        .addFunction("ReleaseShape", &CollisionShape::ReleaseShape)
 
         .addProperty("collisionShape", &CollisionShape::GetCollisionShape)
         .addProperty("geometryData", &CollisionShape::GetGeometryData)
@@ -279,7 +290,7 @@ static void RegisterCollisionShape(kaguya::State& lua)
         .addProperty("lodLevel", &CollisionShape::GetLodLevel, &CollisionShape::SetLodLevel)
         .addProperty("worldBoundingBox", &CollisionShape::GetWorldBoundingBox)
         .addProperty("terrain", &CollisionShape::SetTerrain)
-    );
+        );
 }
 
 static void RegisterConstraint(kaguya::State& lua)
@@ -294,7 +305,7 @@ static void RegisterConstraint(kaguya::State& lua)
 
     lua["Constraint"].setClass(UserdataMetatable<Constraint, Component>()
         .addStaticFunction("new", &CreateObject<Constraint>)
-        
+
         .addFunction("SetConstraintType", &Constraint::SetConstraintType)
         .addFunction("SetOtherBody", &Constraint::SetOtherBody)
         .addFunction("SetPosition", &Constraint::SetPosition)
@@ -324,9 +335,7 @@ static void RegisterConstraint(kaguya::State& lua)
         .addFunction("GetERP", &Constraint::GetERP)
         .addFunction("GetCFM", &Constraint::GetCFM)
         .addFunction("GetDisableCollision", &Constraint::GetDisableCollision)
-        .addFunction("ReleaseConstraint", &Constraint::ReleaseConstraint)
-        .addFunction("ApplyFrames", &Constraint::ApplyFrames)
-
+        
         .addProperty("physicsWorld", &Constraint::GetPhysicsWorld)
         .addProperty("constraint", &Constraint::GetConstraint)
         .addProperty("constraintType", &Constraint::GetConstraintType, &Constraint::SetConstraintType)
@@ -344,7 +353,7 @@ static void RegisterConstraint(kaguya::State& lua)
         .addProperty("disableCollision", &Constraint::GetDisableCollision, &Constraint::SetDisableCollision)
         .addProperty("axis", &Constraint::SetAxis)
         .addProperty("otherAxis", &Constraint::SetOtherAxis)
-    );
+        );
 }
 
 static void RegisterPhysicsEvents(kaguya::State& lua)
@@ -363,7 +372,7 @@ static void RegisterPhysicsEvents(kaguya::State& lua)
 
 static PODVector<PhysicsRaycastResult> PhysicsWorldRaycast0(PhysicsWorld* self, const Ray& ray, float maxDistance)
 {
-    PODVector<PhysicsRaycastResult> result; 
+    PODVector<PhysicsRaycastResult> result;
     self->Raycast(result, ray, maxDistance);
     return result;
 }
@@ -377,28 +386,28 @@ static PODVector<PhysicsRaycastResult> PhysicsWorldRaycast1(PhysicsWorld* self, 
 
 static PhysicsRaycastResult PhysicsWorldRaycastSingle0(PhysicsWorld* self, const Ray& ray, float maxDistance)
 {
-    PhysicsRaycastResult result; 
+    PhysicsRaycastResult result;
     self->RaycastSingle(result, ray, maxDistance);
     return result;
 }
 
 static PhysicsRaycastResult PhysicsWorldRaycastSingle1(PhysicsWorld* self, const Ray& ray, float maxDistance, unsigned int collisionMask)
 {
-    PhysicsRaycastResult result; 
+    PhysicsRaycastResult result;
     self->RaycastSingle(result, ray, maxDistance, collisionMask);
     return result;
 }
 
 static PhysicsRaycastResult PhysicsWorldRaycastSingleSegmented0(PhysicsWorld* self, const Ray& ray, float maxDistance, float segmentDistance)
 {
-    PhysicsRaycastResult result; 
+    PhysicsRaycastResult result;
     self->RaycastSingleSegmented(result, ray, maxDistance, segmentDistance);
     return result;
 }
 
 static PhysicsRaycastResult PhysicsWorldRaycastSingleSegmented1(PhysicsWorld* self, const Ray& ray, float maxDistance, float segmentDistance, unsigned int collisionMask)
 {
-    PhysicsRaycastResult result; 
+    PhysicsRaycastResult result;
     self->RaycastSingleSegmented(result, ray, maxDistance, segmentDistance, collisionMask);
     return result;
 }
@@ -459,6 +468,13 @@ static PODVector<RigidBody*> PhysicsWorldGetRigidBodies3(PhysicsWorld* self, con
     return result;
 }
 
+static PODVector<RigidBody*> PhysicsWorldGetCollidingBodies(PhysicsWorld* self, const RigidBody* body)
+{
+    PODVector<RigidBody*> result;
+    self->GetCollidingBodies(result, body);
+    return result;
+}
+
 static void RegisterPhysicsWorld(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -471,13 +487,13 @@ static void RegisterPhysicsWorld(kaguya::State& lua)
         .addProperty("distance", &PhysicsRaycastResult::distance_)
         .addProperty("hitFraction", &PhysicsRaycastResult::hitFraction_)
         .addProperty("body", &PhysicsRaycastResult::body_)
-    );
+        );
 
     lua["DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY"] = DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY;
 
     lua["PhysicsWorld"].setClass(UserdataMetatable<PhysicsWorld, Component>()
         .addStaticFunction("new", &CreateObject<PhysicsWorld>)
-        
+
         .addFunction("DrawDebugGeometry", static_cast<void(PhysicsWorld::*)(bool)>(&PhysicsWorld::DrawDebugGeometry))
 
         .addFunction("SetFps", &PhysicsWorld::SetFps)
@@ -489,7 +505,7 @@ static void RegisterPhysicsWorld(kaguya::State& lua)
         .addFunction("SetInternalEdge", &PhysicsWorld::SetInternalEdge)
         .addFunction("SetSplitImpulse", &PhysicsWorld::SetSplitImpulse)
         .addFunction("SetMaxNetworkAngularVelocity", &PhysicsWorld::SetMaxNetworkAngularVelocity)
-        
+
         ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld, Raycast)
         ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld, RaycastSingle)
         ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld, RaycastSingleSegmented)
@@ -500,6 +516,8 @@ static void RegisterPhysicsWorld(kaguya::State& lua)
 
         ADD_OVERLOADED_FUNCTIONS_4(PhysicsWorld, GetRigidBodies)
 
+        .addStaticFunction("GetCollidingBodies", &PhysicsWorldGetCollidingBodies)
+
         .addFunction("GetGravity", &PhysicsWorld::GetGravity)
         .addFunction("GetMaxSubSteps", &PhysicsWorld::GetMaxSubSteps)
         .addFunction("GetNumIterations", &PhysicsWorld::GetNumIterations)
@@ -509,23 +527,7 @@ static void RegisterPhysicsWorld(kaguya::State& lua)
         .addFunction("GetSplitImpulse", &PhysicsWorld::GetSplitImpulse)
         .addFunction("GetFps", &PhysicsWorld::GetFps)
         .addFunction("GetMaxNetworkAngularVelocity", &PhysicsWorld::GetMaxNetworkAngularVelocity)
-        .addFunction("AddRigidBody", &PhysicsWorld::AddRigidBody)
-        .addFunction("RemoveRigidBody", &PhysicsWorld::RemoveRigidBody)
-        .addFunction("AddCollisionShape", &PhysicsWorld::AddCollisionShape)
-        .addFunction("RemoveCollisionShape", &PhysicsWorld::RemoveCollisionShape)
-        .addFunction("AddConstraint", &PhysicsWorld::AddConstraint)
-        .addFunction("RemoveConstraint", &PhysicsWorld::RemoveConstraint)
-        .addFunction("AddDelayedWorldTransform", &PhysicsWorld::AddDelayedWorldTransform)
-        .addFunction("SetDebugRenderer", &PhysicsWorld::SetDebugRenderer)
-        .addFunction("SetDebugDepthTest", &PhysicsWorld::SetDebugDepthTest)
-        .addFunction("GetWorld", &PhysicsWorld::GetWorld)
-        .addFunction("CleanupGeometryCache", &PhysicsWorld::CleanupGeometryCache)
-        .addFunction("GetTriMeshCache", &PhysicsWorld::GetTriMeshCache)
-        .addFunction("GetConvexCache", &PhysicsWorld::GetConvexCache)
-        .addFunction("SetApplyingTransforms", &PhysicsWorld::SetApplyingTransforms)
-        .addFunction("IsApplyingTransforms", &PhysicsWorld::IsApplyingTransforms)
-        .addFunction("IsSimulating", &PhysicsWorld::IsSimulating)
-
+        
         .addProperty("gravity", &PhysicsWorld::GetGravity, &PhysicsWorld::SetGravity)
         .addProperty("maxSubSteps", &PhysicsWorld::GetMaxSubSteps, &PhysicsWorld::SetMaxSubSteps)
         .addProperty("numIterations", &PhysicsWorld::GetNumIterations, &PhysicsWorld::SetNumIterations)
@@ -535,15 +537,16 @@ static void RegisterPhysicsWorld(kaguya::State& lua)
         .addProperty("splitImpulse", &PhysicsWorld::GetSplitImpulse, &PhysicsWorld::SetSplitImpulse)
         .addProperty("fps", &PhysicsWorld::GetFps, &PhysicsWorld::SetFps)
         .addProperty("maxNetworkAngularVelocity", &PhysicsWorld::GetMaxNetworkAngularVelocity, &PhysicsWorld::SetMaxNetworkAngularVelocity)
-        .addProperty("world", &PhysicsWorld::GetWorld)
-        .addProperty("triMeshCache", &PhysicsWorld::GetTriMeshCache)
-        .addProperty("convexCache", &PhysicsWorld::GetConvexCache)
-        .addProperty("applyingTransforms", &PhysicsWorld::IsApplyingTransforms, &PhysicsWorld::SetApplyingTransforms)
-        .addProperty("simulating", &PhysicsWorld::IsSimulating)
-        .addProperty("debugRenderer", &PhysicsWorld::SetDebugRenderer)
-        .addProperty("debugDepthTest", &PhysicsWorld::SetDebugDepthTest)
-    );
+        );
+
     lua["RegisterPhysicsLibrary"] = function(&RegisterPhysicsLibrary);
+}
+
+static PODVector<RigidBody*> RigidBodyGetCollidingBodies(RigidBody* self)
+{
+    PODVector<RigidBody*> result;
+    self->GetCollidingBodies(result);
+    return result;
 }
 
 static void RegisterRigidBody(kaguya::State& lua)
@@ -557,7 +560,7 @@ static void RegisterRigidBody(kaguya::State& lua)
 
     lua["RigidBody"].setClass(UserdataMetatable<RigidBody, Component>()
         .addStaticFunction("new", &CreateObject<RigidBody>)
-        
+
         .addFunction("SetMass", &RigidBody::SetMass)
         .addFunction("SetPosition", &RigidBody::SetPosition)
         .addFunction("SetRotation", &RigidBody::SetRotation)
@@ -602,6 +605,7 @@ static void RegisterRigidBody(kaguya::State& lua)
         .addFunction("ReAddBodyToWorld", &RigidBody::ReAddBodyToWorld)
         .addFunction("DisableMassUpdate", &RigidBody::DisableMassUpdate)
         .addFunction("EnableMassUpdate", &RigidBody::EnableMassUpdate)
+        
         .addFunction("GetPhysicsWorld", &RigidBody::GetPhysicsWorld)
         .addFunction("GetBody", &RigidBody::GetBody)
         .addFunction("GetCompoundShape", &RigidBody::GetCompoundShape)
@@ -633,14 +637,9 @@ static void RegisterRigidBody(kaguya::State& lua)
         .addFunction("GetCollisionLayer", &RigidBody::GetCollisionLayer)
         .addFunction("GetCollisionMask", &RigidBody::GetCollisionMask)
         .addFunction("GetCollisionEventMode", &RigidBody::GetCollisionEventMode)
-        .addFunction("GetCollidingBodies", &RigidBody::GetCollidingBodies)
-        .addFunction("ApplyWorldTransform", &RigidBody::ApplyWorldTransform)
-        .addFunction("UpdateMass", &RigidBody::UpdateMass)
-        .addFunction("UpdateGravity", &RigidBody::UpdateGravity)
-        .addFunction("AddConstraint", &RigidBody::AddConstraint)
-        .addFunction("RemoveConstraint", &RigidBody::RemoveConstraint)
-        .addFunction("ReleaseBody", &RigidBody::ReleaseBody)
-
+        
+        .addStaticFunction("GetCollidingBodies", &RigidBodyGetCollidingBodies)
+        
         .addProperty("physicsWorld", &RigidBody::GetPhysicsWorld)
         .addProperty("body", &RigidBody::GetBody)
         .addProperty("compoundShape", &RigidBody::GetCompoundShape)
@@ -671,7 +670,7 @@ static void RegisterRigidBody(kaguya::State& lua)
         .addProperty("collisionLayer", &RigidBody::GetCollisionLayer, &RigidBody::SetCollisionLayer)
         .addProperty("collisionMask", &RigidBody::GetCollisionMask, &RigidBody::SetCollisionMask)
         .addProperty("collisionEventMode", &RigidBody::GetCollisionEventMode, &RigidBody::SetCollisionEventMode)
-    );
+        );
 }
 
 void RegisterPhysicsLuaAPI(kaguya::State& lua)

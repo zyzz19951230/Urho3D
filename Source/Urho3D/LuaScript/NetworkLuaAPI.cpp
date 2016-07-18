@@ -1,4 +1,29 @@
+//
+// Copyright (c) 2008-2016 the Urho3D project.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+
+#include "../Precompiled.h"
+
 #include "../Core/Context.h"
+#include "../LuaScript/LuaScriptUtils.h"
 #include "../Network/Connection.h"
 #include "../Network/HttpRequest.h"
 #include "../Network/Network.h"
@@ -6,52 +31,50 @@
 #include "../Network/NetworkPriority.h"
 #include "../Network/Protocol.h"
 
-#include "../LuaScript/LuaScriptUtils.h"
-
 #include <kaguya.hpp>
 
 namespace Urho3D
 {
 
-    static void ConnectionSendMessage0(Connection* self, int msgID, bool reliable, bool inOrder, const VectorBuffer& msg)
-    {
-        self->SendMessage(msgID, reliable, inOrder, msg);
-    }
+static void ConnectionSendMessage0(Connection* self, int msgID, bool reliable, bool inOrder, const VectorBuffer& msg)
+{
+    self->SendMessage(msgID, reliable, inOrder, msg);
+}
 
-    static void ConnectionSendMessage1(Connection* self, int msgID, bool reliable, bool inOrder, const VectorBuffer& msg, unsigned int contentID)
-    {
-        self->SendMessage(msgID, reliable, inOrder, msg, contentID);
-    }
+static void ConnectionSendMessage1(Connection* self, int msgID, bool reliable, bool inOrder, const VectorBuffer& msg, unsigned int contentID)
+{
+    self->SendMessage(msgID, reliable, inOrder, msg, contentID);
+}
 
-    static void ConnectionSendMessage2(Connection* self, int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned int numBytes)
-    {
-        self->SendMessage(msgID, reliable, inOrder, data, numBytes);
-    }
+static void ConnectionSendMessage2(Connection* self, int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned int numBytes)
+{
+    self->SendMessage(msgID, reliable, inOrder, data, numBytes);
+}
 
-    static void ConnectionSendMessage3(Connection* self, int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned int numBytes, unsigned int contentID)
-    {
-        self->SendMessage(msgID, reliable, inOrder, data, numBytes, contentID);
-    }
+static void ConnectionSendMessage3(Connection* self, int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned int numBytes, unsigned int contentID)
+{
+    self->SendMessage(msgID, reliable, inOrder, data, numBytes, contentID);
+}
 
-    static void ConnectionSendRemoteEvent0(Connection* self, StringHash eventType, bool inOrder)
-    {
-        self->SendRemoteEvent(eventType, inOrder);
-    }
+static void ConnectionSendRemoteEvent0(Connection* self, StringHash eventType, bool inOrder)
+{
+    self->SendRemoteEvent(eventType, inOrder);
+}
 
-    static void ConnectionSendRemoteEvent1(Connection* self, StringHash eventType, bool inOrder, const VariantMap& eventData)
-    {
-        self->SendRemoteEvent(eventType, inOrder, eventData);
-    }
+static void ConnectionSendRemoteEvent1(Connection* self, StringHash eventType, bool inOrder, const VariantMap& eventData)
+{
+    self->SendRemoteEvent(eventType, inOrder, eventData);
+}
 
-    static void ConnectionSendRemoteEvent2(Connection* self, Node* node, StringHash eventType, bool inOrder)
-    {
-        self->SendRemoteEvent(node, eventType, inOrder);
-    }
+static void ConnectionSendRemoteEvent2(Connection* self, Node* node, StringHash eventType, bool inOrder)
+{
+    self->SendRemoteEvent(node, eventType, inOrder);
+}
 
-    static void ConnectionSendRemoteEvent3(Connection* self, Node* node, StringHash eventType, bool inOrder, const VariantMap& eventData)
-    {
-        self->SendRemoteEvent(node, eventType, inOrder, eventData);
-    }
+static void ConnectionSendRemoteEvent3(Connection* self, Node* node, StringHash eventType, bool inOrder, const VariantMap& eventData)
+{
+    self->SendRemoteEvent(node, eventType, inOrder, eventData);
+}
 
 static void ConnectionDisconnect0(Connection* self)
 {
@@ -92,9 +115,8 @@ static void RegisterConnection(kaguya::State& lua)
         .addFunction("SendClientUpdate", &Connection::SendClientUpdate)
         .addFunction("SendRemoteEvents", &Connection::SendRemoteEvents)
         .addFunction("SendPackages", &Connection::SendPackages)
-        .addFunction("ProcessPendingLatestData", &Connection::ProcessPendingLatestData)
-        .addFunction("ProcessMessage", &Connection::ProcessMessage)
 
+        .addFunction("GetIdentity", &Connection::GetIdentity)
         .addFunction("GetScene", &Connection::GetScene)
         .addFunction("GetControls", &Connection::GetControls)
         .addFunction("GetTimeStamp", &Connection::GetTimeStamp)
@@ -120,7 +142,7 @@ static void RegisterConnection(kaguya::State& lua)
         .addFunction("SendPackageToClient", &Connection::SendPackageToClient)
         .addFunction("ConfigureNetworkSimulator", &Connection::ConfigureNetworkSimulator)
 
-        // .addProperty("identity", &Connection::GetIdentity, &Connection::SetIdentity)
+        .addProperty("identity", &Connection::GetIdentity)
         .addProperty("scene", &Connection::GetScene, &Connection::SetScene)
         .addProperty("controls", &Connection::GetControls, &Connection::SetControls)
         .addProperty("timeStamp", &Connection::GetTimeStamp)
@@ -142,11 +164,6 @@ static void RegisterConnection(kaguya::State& lua)
         .addProperty("numDownloads", &Connection::GetNumDownloads)
         .addProperty("downloadName", &Connection::GetDownloadName)
         .addProperty("downloadProgress", &Connection::GetDownloadProgress)
-        /*
-        .addProperty("controls", &Connection::controls_)
-        .addProperty("timeStamp", &Connection::timeStamp_)
-        .addProperty("identity", &Connection::identity_)
-        */
         );
 }
 
@@ -293,7 +310,7 @@ static void RegisterNetwork(kaguya::State& lua)
         .addFunction("UnregisterAllRemoteEvents", &Network::UnregisterAllRemoteEvents)
         .addFunction("SetPackageCacheDir", &Network::SetPackageCacheDir)
         .addFunction("SendPackageToClients", &Network::SendPackageToClients)
-        
+
         ADD_OVERLOADED_FUNCTIONS_4(Network, MakeHttpRequest)
 
         .addFunction("GetUpdateFps", &Network::GetUpdateFps)
