@@ -383,12 +383,20 @@ static kaguya::LuaTable NodeCreateScriptObject1(Node* node, const char* fileName
     ResourceCache* cache = node->GetSubsystem<ResourceCache>();
     LuaFile* scriptFile = cache->GetResource<LuaFile>(fileName);
     if (!scriptFile)
-    {
         return 0;
-    }
 
     LuaScriptInstance* instance = node->CreateComponent<LuaScriptInstance>();
     instance->CreateObject(scriptFile, scriptObjectType);
+
+    lua_rawgeti(instance->GetLuaState(), LUA_REGISTRYINDEX, instance->GetScriptObjectRef());
+    return kaguya::LuaTable(instance->GetLuaState(), kaguya::StackTop());
+}
+
+static kaguya::LuaTable NodeGetScriptObject(Node* self)
+{
+    LuaScriptInstance* instance = self->GetComponent<LuaScriptInstance>();
+    if (!instance)
+        return 0;
 
     lua_rawgeti(instance->GetLuaState(), LUA_REGISTRYINDEX, instance->GetScriptObjectRef());
     return kaguya::LuaTable(instance->GetLuaState(), kaguya::StackTop());
@@ -658,6 +666,9 @@ static void RegisterNode(kaguya::State& lua)
         ADD_OVERLOADED_FUNCTIONS_3(Node, CreateComponent)
         ADD_OVERLOADED_FUNCTIONS_3(Node, GetOrCreateComponent)
         ADD_OVERLOADED_FUNCTIONS_2(Node, CreateScriptObject)
+
+        .addStaticFunction("GetScriptObject", &NodeGetScriptObject)
+
         ADD_OVERLOADED_FUNCTIONS_4(Node, CloneComponent)
 
         .addOverloadedFunctions("RemoveComponent",
