@@ -1,4 +1,3 @@
-#include "../Math/AreaAllocator.h"
 #include "../Math/BoundingBox.h"
 #include "../Math/Color.h"
 #include "../Math/Frustum.h"
@@ -24,51 +23,6 @@
 
 namespace Urho3D
 {
-
-static void AreaAllocatorReset0(AreaAllocator* self, int width, int height)
-{
-    self->Reset(width, height);
-}
-
-static void AreaAllocatorReset1(AreaAllocator* self, int width, int height, int maxWidth)
-{
-    self->Reset(width, height, maxWidth);
-}
-
-static void AreaAllocatorReset2(AreaAllocator* self, int width, int height, int maxWidth, int maxHeight)
-{
-    self->Reset(width, height, maxWidth, maxHeight);
-}
-
-static void AreaAllocatorReset3(AreaAllocator* self, int width, int height, int maxWidth, int maxHeight, bool fastMode)
-{
-    self->Reset(width, height, maxWidth, maxHeight, fastMode);
-}
-
-static void RegisterAreaAllocator(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["AreaAllocator"].setClass(UserdataMetatable<AreaAllocator>()
-        .setConstructors<AreaAllocator(),
-        AreaAllocator(int, int),
-        AreaAllocator(int, int, bool),
-        AreaAllocator(int, int, int, int),
-        AreaAllocator(int, int, int, int, bool)>()
-
-        ADD_OVERLOADED_FUNCTIONS_4(AreaAllocator, Reset)
-
-        .addFunction("Allocate", &AreaAllocator::Allocate)
-        .addFunction("GetWidth", &AreaAllocator::GetWidth)
-        .addFunction("GetHeight", &AreaAllocator::GetHeight)
-        .addFunction("GetFastMode", &AreaAllocator::GetFastMode)
-
-        .addProperty("width", &AreaAllocator::GetWidth)
-        .addProperty("height", &AreaAllocator::GetHeight)
-        .addProperty("fastMode", &AreaAllocator::GetFastMode)
-        );
-}
-
 static void RegisterBoundingBox(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -94,7 +48,6 @@ static void RegisterBoundingBox(kaguya::State& lua)
             static_cast<void(BoundingBox::*)(const Frustum&)>(&BoundingBox::Define),
             static_cast<void(BoundingBox::*)(const Polyhedron&)>(&BoundingBox::Define),
             static_cast<void(BoundingBox::*)(const Sphere&)>(&BoundingBox::Define))
-
 
         .addOverloadedFunctions("Merge",
             static_cast<void(BoundingBox::*)(const Vector3&)>(&BoundingBox::Merge),
@@ -134,9 +87,11 @@ static void RegisterBoundingBox(kaguya::State& lua)
         .addFunction("ToString", &BoundingBox::ToString)
 
         .addProperty("min", &BoundingBox::min_)
-        .addProperty("dummyMin", &BoundingBox::dummyMin_)
         .addProperty("max", &BoundingBox::max_)
-        .addProperty("dummyMax", &BoundingBox::dummyMax_)
+
+        .addProperty("center", &BoundingBox::Center)
+        .addProperty("size", &BoundingBox::Size)
+        .addProperty("halfSize", &BoundingBox::HalfSize)
         );
 }
 
@@ -159,26 +114,6 @@ static void ColorFromHSV0(Color* self, float h, float s, float v)
 static void ColorFromHSV1(Color* self, float h, float s, float v, float a)
 {
     self->FromHSV(h, s, v, a);
-}
-
-static std::tuple<float, float> ColorBounds0(const Color* self)
-{
-    float boundMin;
-    float boundMax;
-
-    self->Bounds(&boundMin, &boundMax);
-
-    return std::make_tuple(boundMin, boundMax);
-}
-
-static std::tuple<float, float> ColorBounds1(const Color* self, bool clipped)
-{
-    float boundMin;
-    float boundMax;
-
-    self->Bounds(&boundMin, &boundMax, clipped);
-
-    return std::make_tuple(boundMin, boundMax);
 }
 
 static void ColorClip0(Color* color)
@@ -216,45 +151,38 @@ static void RegisterColor(kaguya::State& lua)
         .addFunction("__mul", &Color::operator*)
         .addFunction("__add", &Color::operator+)
 
-        .addOverloadedFunctions("__sub",
-            static_cast<Color(Color::*)() const>(&Color::operator-),
-            static_cast<Color(Color::*)(const Color&) const>(&Color::operator-))
-
         .addFunction("ToUInt", &Color::ToUInt)
         .addFunction("ToHSL", &Color::ToHSL)
         .addFunction("ToHSV", &Color::ToHSV)
 
         ADD_OVERLOADED_FUNCTIONS_2(Color, FromHSL)
-
         ADD_OVERLOADED_FUNCTIONS_2(Color, FromHSV)
 
         .addFunction("ToVector3", &Color::ToVector3)
         .addFunction("ToVector4", &Color::ToVector4)
+
         .addFunction("SumRGB", &Color::SumRGB)
         .addFunction("Average", &Color::Average)
+
         .addFunction("Luma", &Color::Luma)
         .addFunction("Chroma", &Color::Chroma)
-
         .addFunction("Hue", static_cast<float(Color::*)() const>(&Color::Hue))
         .addFunction("SaturationHSL", static_cast<float(Color::*)() const>(&Color::SaturationHSL))
         .addFunction("SaturationHSV", static_cast<float(Color::*)() const>(&Color::SaturationHSV))
-
         .addFunction("Value", &Color::Value)
         .addFunction("Lightness", &Color::Lightness)
-
-        ADD_OVERLOADED_FUNCTIONS_2(Color, Bounds)
 
         .addFunction("MaxRGB", &Color::MaxRGB)
         .addFunction("MinRGB", &Color::MinRGB)
         .addFunction("Range", &Color::Range)
 
         ADD_OVERLOADED_FUNCTIONS_2(Color, Clip)
-
         ADD_OVERLOADED_FUNCTIONS_2(Color, Invert)
 
         .addFunction("Lerp", &Color::Lerp)
         .addFunction("Abs", &Color::Abs)
         .addFunction("Equals", &Color::Equals)
+
         .addFunction("ToString", &Color::ToString)
 
         .addProperty("r", &Color::r_)
@@ -329,23 +257,23 @@ static void RegisterFrustum(kaguya::State& lua)
 
     lua["NUM_FRUSTUM_PLANES"] = NUM_FRUSTUM_PLANES;
     lua["NUM_FRUSTUM_VERTICES"] = NUM_FRUSTUM_VERTICES;
-    lua["Frustum"].setClass(UserdataMetatable<Frustum>()
-        .setConstructors<Frustum(), Frustum(const Frustum&)>()
 
-        ADD_OVERLOADED_FUNCTIONS_2(Frustum, Define)
+    lua["Frustum"].setClass(UserdataMetatable<Frustum>()
+        .setConstructors<Frustum(), 
+        Frustum(const Frustum&)>()
+
+        ADD_OVERLOADED_FUNCTIONS_6(Frustum, Define)
         ADD_OVERLOADED_FUNCTIONS_2(Frustum, DefineOrtho)
 
         .addOverloadedFunctions("Transform",
             static_cast<void(Frustum::*)(const Matrix3&)>(&Frustum::Transform),
             static_cast<void(Frustum::*)(const Matrix3x4&)>(&Frustum::Transform))
-
-
+        
         .addOverloadedFunctions("IsInside",
             static_cast<Intersection(Frustum::*)(const Vector3&) const>(&Frustum::IsInside),
             static_cast<Intersection(Frustum::*)(const Sphere&) const>(&Frustum::IsInside),
             static_cast<Intersection(Frustum::*)(const BoundingBox&) const>(&Frustum::IsInside))
-
-
+        
         .addOverloadedFunctions("IsInsideFast",
             static_cast<Intersection(Frustum::*)(const Sphere&) const>(&Frustum::IsInsideFast),
             static_cast<Intersection(Frustum::*)(const BoundingBox&) const>(&Frustum::IsInsideFast))
@@ -371,6 +299,7 @@ static void RegisterMathDefs(kaguya::State& lua)
     lua["M_MAX_INT"] = M_MAX_INT;
     lua["M_MIN_UNSIGNED"] = M_MIN_UNSIGNED;
     lua["M_MAX_UNSIGNED"] = M_MAX_UNSIGNED;
+
     lua["M_EPSILON"] = M_EPSILON;
     lua["M_LARGE_EPSILON"] = M_LARGE_EPSILON;
     lua["M_MIN_NEARCLIP"] = M_MIN_NEARCLIP;
@@ -380,44 +309,35 @@ static void RegisterMathDefs(kaguya::State& lua)
     lua["M_DEGTORAD"] = M_DEGTORAD;
     lua["M_DEGTORAD_2"] = M_DEGTORAD_2;
     lua["M_RADTODEG"] = M_RADTODEG;
+
     // enum Intersection;
     lua["OUTSIDE"] = OUTSIDE;
     lua["INTERSECTS"] = INTERSECTS;
     lua["INSIDE"] = INSIDE;
 
-    // bool Equals(T lhs, T rhs);
     lua["Equals"] = static_cast<bool(*)(float, float)>(&Equals);
-    // T Lerp(T lhs, T rhs, U t);
     lua["Lerp"] = static_cast<float(*)(float, float, float)>(&Lerp);
-    // T Min(T lhs, U rhs);
     lua["Min"] = static_cast<float(*)(float, float)>(&Min);
-    // T Max(T lhs, U rhs);
     lua["Max"] = static_cast<float(*)(float, float)>(&Max);
-    // T Abs(T value);
     lua["Abs"] = static_cast<float(*)(float)>(&Abs);
-    // T Sign(T value);
     lua["Sign"] = static_cast<float(*)(float)>(&Sign);
 
     lua["IsNaN"] = function(&IsNaN);
 
-    // T Clamp(T value, T min, T max);
     lua["Clamp"] = static_cast<float(*)(float, float, float)>(&Clamp);
-    // T SmoothStep(T lhs, T rhs, T t);
     lua["SmoothStep"] = static_cast<float(*)(float, float, float)>(&SmoothStep);
-    // T Sin(T angle);
     lua["Sin"] = static_cast<float(*)(float)>(&Sin);
-    // T Cos(T angle);
     lua["Cos"] = static_cast<float(*)(float)>(&Cos);
-    // T Tan(T angle);
     lua["Tan"] = static_cast<float(*)(float)>(&Tan);
-    // T Asin(T x);
     lua["Asin"] = static_cast<float(*)(float)>(&Asin);
-    // T Acos(T x);
     lua["Acos"] = static_cast<float(*)(float)>(&Acos);
-    // T Atan(T x);
     lua["Atan"] = static_cast<float(*)(float)>(&Atan);
-    // T Atan2(T y, T x);
     lua["Atan2"] = static_cast<float(*)(float, float)>(&Atan2);
+
+    lua["MinInt"] = static_cast<int(*)(int, int)>(&Min);
+    lua["MaxInt"] = static_cast<int(*)(int, int)>(&Max);
+    lua["AbsInt"] = static_cast<int(*)(int)>(&Abs);
+    lua["ClampInt"] = static_cast<int(*)(int, int, int)>(&Clamp);
 
     lua["IsPowerOfTwo"] = function(&IsPowerOfTwo);
     lua["NextPowerOfTwo"] = function(&NextPowerOfTwo);
@@ -426,14 +346,12 @@ static void RegisterMathDefs(kaguya::State& lua)
 
     lua["Random"] = overload(static_cast<float(*)()>(&Random),
         static_cast<float(*)(float)>(&Random),
-        static_cast<float(*)(float, float)>(&Random),
-        static_cast<int(*)(int)>(&Random),
+        static_cast<float(*)(float, float)>(&Random));
+
+    lua["RandomInt"] = overload(static_cast<int(*)(int)>(&Random),
         static_cast<int(*)(int, int)>(&Random));
 
     lua["RandomNormal"] = function(&RandomNormal);
-    lua["FloatToHalf"] = function(&FloatToHalf);
-    lua["HalfToFloat"] = function(&HalfToFloat);
-    lua["SinCos"] = function(&SinCos);
 }
 
 static void RegisterMatrix2(kaguya::State& lua)
@@ -464,12 +382,14 @@ static void RegisterMatrix2(kaguya::State& lua)
         .addFunction("Scaled", &Matrix2::Scaled)
         .addFunction("Equals", &Matrix2::Equals)
         .addFunction("Inverse", &Matrix2::Inverse)
+
         .addFunction("ToString", &Matrix2::ToString)
+
         .addProperty("m00", &Matrix2::m00_)
         .addProperty("m01", &Matrix2::m01_)
-        .addProperty("m02", &Matrix2::m02_)
         .addProperty("m10", &Matrix2::m10_)
         .addProperty("m11", &Matrix2::m11_)
+
         .addStaticField("ZERO", &Matrix2::ZERO)
         .addStaticField("IDENTITY", &Matrix2::IDENTITY)
         );
@@ -503,7 +423,9 @@ static void RegisterMatrix3(kaguya::State& lua)
         .addFunction("Scaled", &Matrix3::Scaled)
         .addFunction("Equals", &Matrix3::Equals)
         .addFunction("Inverse", &Matrix3::Inverse)
+
         .addFunction("ToString", &Matrix3::ToString)
+
         .addProperty("m00", &Matrix3::m00_)
         .addProperty("m01", &Matrix3::m01_)
         .addProperty("m02", &Matrix3::m02_)
@@ -513,9 +435,19 @@ static void RegisterMatrix3(kaguya::State& lua)
         .addProperty("m20", &Matrix3::m20_)
         .addProperty("m21", &Matrix3::m21_)
         .addProperty("m22", &Matrix3::m22_)
+
         .addStaticField("ZERO", &Matrix3::ZERO)
         .addStaticField("IDENTITY", &Matrix3::IDENTITY)
         );
+}
+
+static std::tuple<Vector3, Quaternion, Vector3> Matrix3x4Decompose(const Matrix3x4* self)
+{
+    Vector3 translation;
+    Quaternion rotation;
+    Vector3 scale;
+    self->Decompose(translation, rotation, scale);
+    return std::make_tuple(translation, rotation, scale);
 }
 
 static void RegisterMatrix3x4(kaguya::State& lua)
@@ -542,6 +474,7 @@ static void RegisterMatrix3x4(kaguya::State& lua)
 
         .addFunction("__add", &Matrix3x4::operator+)
         .addFunction("__sub", &Matrix3x4::operator-)
+
         .addFunction("SetTranslation", &Matrix3x4::SetTranslation)
         .addFunction("SetRotation", &Matrix3x4::SetRotation)
 
@@ -557,20 +490,12 @@ static void RegisterMatrix3x4(kaguya::State& lua)
         .addFunction("Scale", &Matrix3x4::Scale)
         .addFunction("Equals", &Matrix3x4::Equals)
 
-        .addStaticFunction("Decompose", [](const Matrix3x4& matrix3x4)
-    {
-        Vector3 translation;
-        Quaternion rotation;
-        Vector3 scale;
-        matrix3x4.Decompose(translation, rotation, scale);
-        return std::make_tuple(translation, rotation, scale);
-    })
+        .addStaticFunction("Decompose", &Matrix3x4Decompose)
 
         .addFunction("Inverse", &Matrix3x4::Inverse)
+
         .addFunction("ToString", &Matrix3x4::ToString)
 
-        .addProperty("translation", &Matrix3x4::SetTranslation)
-        .addProperty("rotation", &Matrix3x4::SetRotation)
         .addProperty("m00", &Matrix3x4::m00_)
         .addProperty("m01", &Matrix3x4::m01_)
         .addProperty("m02", &Matrix3x4::m02_)
@@ -583,9 +508,19 @@ static void RegisterMatrix3x4(kaguya::State& lua)
         .addProperty("m21", &Matrix3x4::m21_)
         .addProperty("m22", &Matrix3x4::m22_)
         .addProperty("m23", &Matrix3x4::m23_)
+
         .addStaticField("ZERO", &Matrix3x4::ZERO)
         .addStaticField("IDENTITY", &Matrix3x4::IDENTITY)
         );
+}
+
+static std::tuple<Vector3, Quaternion, Vector3> Matrix4Decompose(const Matrix4* self)
+{
+    Vector3 translation;
+    Quaternion rotation;
+    Vector3 scale;
+    self->Decompose(translation, rotation, scale);
+    return std::make_tuple(translation, rotation, scale);
 }
 
 static void RegisterMatrix4(kaguya::State& lua)
@@ -609,6 +544,7 @@ static void RegisterMatrix4(kaguya::State& lua)
 
         .addFunction("__add", &Matrix4::operator+)
         .addFunction("__sub", &Matrix4::operator-)
+
         .addFunction("SetTranslation", &Matrix4::SetTranslation)
         .addFunction("SetRotation", &Matrix4::SetRotation)
 
@@ -624,20 +560,12 @@ static void RegisterMatrix4(kaguya::State& lua)
         .addFunction("Transpose", &Matrix4::Transpose)
         .addFunction("Equals", &Matrix4::Equals)
 
-        .addStaticFunction("Decompose", [](const Matrix4& matrix4)
-    {
-        Vector3 translation;
-        Quaternion rotation;
-        Vector3 scale;
-        matrix4.Decompose(translation, rotation, scale);
-        return std::make_tuple(translation, rotation, scale);
-    })
+        .addStaticFunction("Decompose", &Matrix4Decompose)
 
         .addFunction("Inverse", &Matrix4::Inverse)
+
         .addFunction("ToString", &Matrix4::ToString)
 
-        .addProperty("translation", &Matrix4::SetTranslation)
-        .addProperty("rotation", &Matrix4::SetRotation)
         .addProperty("m00", &Matrix4::m00_)
         .addProperty("m01", &Matrix4::m01_)
         .addProperty("m02", &Matrix4::m02_)
@@ -654,6 +582,7 @@ static void RegisterMatrix4(kaguya::State& lua)
         .addProperty("m31", &Matrix4::m31_)
         .addProperty("m32", &Matrix4::m32_)
         .addProperty("m33", &Matrix4::m33_)
+
         .addStaticField("ZERO", &Matrix4::ZERO)
         .addStaticField("IDENTITY", &Matrix4::IDENTITY)
         );
@@ -670,12 +599,10 @@ static void RegisterPlane(kaguya::State& lua)
         Plane(const Vector3&, const Vector3&),
         Plane(const Vector4&)>()
 
-
         .addOverloadedFunctions("Define",
             static_cast<void(Plane::*)(const Vector3&, const Vector3&, const Vector3&)>(&Plane::Define),
             static_cast<void(Plane::*)(const Vector3&, const Vector3&)>(&Plane::Define),
             static_cast<void(Plane::*)(const Vector4&)>(&Plane::Define))
-
 
         .addOverloadedFunctions("Transform",
             static_cast<void(Plane::*)(const Matrix3&)>(&Plane::Transform),
@@ -693,9 +620,11 @@ static void RegisterPlane(kaguya::State& lua)
             static_cast<Plane(Plane::*)(const Matrix4&) const>(&Plane::Transformed))
 
         .addFunction("ToVector4", &Plane::ToVector4)
+
         .addProperty("normal", &Plane::normal_)
         .addProperty("absNormal", &Plane::absNormal_)
         .addProperty("d", &Plane::d_)
+
         .addStaticField("UP", &Plane::UP)
         );
 }
@@ -707,22 +636,17 @@ static void RegisterPolyhedron(kaguya::State& lua)
     lua["Polyhedron"].setClass(UserdataMetatable<Polyhedron>()
         .setConstructors<Polyhedron(),
         Polyhedron(const Polyhedron&),
-        Polyhedron(const Vector<PODVector<Vector3> >&),
         Polyhedron(const BoundingBox&),
         Polyhedron(const Frustum&)>()
-
 
         .addOverloadedFunctions("Define",
             static_cast<void(Polyhedron::*)(const BoundingBox&)>(&Polyhedron::Define),
             static_cast<void(Polyhedron::*)(const Frustum&)>(&Polyhedron::Define))
 
-
         .addOverloadedFunctions("AddFace",
             static_cast<void(Polyhedron::*)(const Vector3&, const Vector3&, const Vector3&)>(&Polyhedron::AddFace),
-            static_cast<void(Polyhedron::*)(const Vector3&, const Vector3&, const Vector3&, const Vector3&)>(&Polyhedron::AddFace),
-            static_cast<void(Polyhedron::*)(const PODVector<Vector3>&)>(&Polyhedron::AddFace))
-
-
+            static_cast<void(Polyhedron::*)(const Vector3&, const Vector3&, const Vector3&, const Vector3&)>(&Polyhedron::AddFace))
+        
         .addOverloadedFunctions("Clip",
             static_cast<void(Polyhedron::*)(const Plane&)>(&Polyhedron::Clip),
             static_cast<void(Polyhedron::*)(const BoundingBox&)>(&Polyhedron::Clip),
@@ -733,14 +657,14 @@ static void RegisterPolyhedron(kaguya::State& lua)
         .addOverloadedFunctions("Transform",
             static_cast<void(Polyhedron::*)(const Matrix3&)>(&Polyhedron::Transform),
             static_cast<void(Polyhedron::*)(const Matrix3x4&)>(&Polyhedron::Transform))
-
-
+        
         .addOverloadedFunctions("Transformed",
             static_cast<Polyhedron(Polyhedron::*)(const Matrix3&) const>(&Polyhedron::Transformed),
             static_cast<Polyhedron(Polyhedron::*)(const Matrix3x4&) const>(&Polyhedron::Transformed))
 
         .addFunction("Empty", &Polyhedron::Empty)
-        .addProperty("faces", &Polyhedron::faces_)
+
+        .addProperty("empty", &Polyhedron::Empty)
         );
 }
 
@@ -786,12 +710,12 @@ static void RegisterQuaternion(kaguya::State& lua)
             static_cast<Quaternion(Quaternion::*)(const Quaternion&) const>(&Quaternion::operator*),
             static_cast<Vector3(Quaternion::*)(const Vector3&) const>(&Quaternion::operator*))
 
-
         .addOverloadedFunctions("__sub",
             static_cast<Quaternion(Quaternion::*)() const>(&Quaternion::operator-),
             static_cast<Quaternion(Quaternion::*)(const Quaternion&) const>(&Quaternion::operator-))
 
         .addFunction("__add", &Quaternion::operator+)
+
         .addFunction("FromAngleAxis", &Quaternion::FromAngleAxis)
         .addFunction("FromEulerAngles", &Quaternion::FromEulerAngles)
         .addFunction("FromRotationTo", &Quaternion::FromRotationTo)
@@ -801,12 +725,14 @@ static void RegisterQuaternion(kaguya::State& lua)
         ADD_OVERLOADED_FUNCTIONS_2(Quaternion, FromLookRotation)
 
         .addFunction("Normalize", &Quaternion::Normalize)
+
         .addFunction("Normalized", &Quaternion::Normalized)
         .addFunction("Inverse", &Quaternion::Inverse)
         .addFunction("LengthSquared", &Quaternion::LengthSquared)
         .addFunction("DotProduct", &Quaternion::DotProduct)
         .addFunction("Equals", &Quaternion::Equals)
         .addFunction("IsNaN", &Quaternion::IsNaN)
+
         .addFunction("Conjugate", &Quaternion::Conjugate)
         .addFunction("EulerAngles", &Quaternion::EulerAngles)
         .addFunction("YawAngle", &Quaternion::YawAngle)
@@ -819,11 +745,11 @@ static void RegisterQuaternion(kaguya::State& lua)
 
         .addFunction("ToString", &Quaternion::ToString)
 
-        .addProperty("naN", &Quaternion::IsNaN)
         .addProperty("w", &Quaternion::w_)
         .addProperty("x", &Quaternion::x_)
         .addProperty("y", &Quaternion::y_)
         .addProperty("z", &Quaternion::z_)
+
         .addStaticField("IDENTITY", &Quaternion::IDENTITY)
         );
 }
@@ -831,6 +757,11 @@ static void RegisterQuaternion(kaguya::State& lua)
 static void RegisterRandom(kaguya::State& lua)
 {
     using namespace kaguya;
+
+    lua["SetRandomSeed"] = function(SetRandomSeed);
+    lua["GetRandomSeed"] = function(GetRandomSeed);
+    lua["Rand"] = function(Rand);
+    lua["RandStandardNormal"] = function(RandStandardNormal);
 }
 
 static float RayHitDistance0(const Ray* self, const Frustum& frustum)
@@ -861,6 +792,7 @@ static void RegisterRay(kaguya::State& lua)
         Ray(const Ray&)>()
 
         .addFunction("__eq", &Ray::operator==)
+
         .addFunction("Define", &Ray::Define)
         .addFunction("Project", &Ray::Project)
         .addFunction("Distance", &Ray::Distance)
@@ -874,12 +806,8 @@ static void RegisterRay(kaguya::State& lua)
             static_cast<float(Ray::*)(const Sphere&) const>(&Ray::HitDistance),
             &RayHitDistance2)
 
-
-        .addOverloadedFunctions("InsideGeometry",
-            static_cast<bool(Ray::*)(const void*, unsigned, unsigned, unsigned) const>(&Ray::InsideGeometry),
-            static_cast<bool(Ray::*)(const void*, unsigned, const void*, unsigned, unsigned, unsigned) const>(&Ray::InsideGeometry))
-
         .addFunction("Transformed", &Ray::Transformed)
+
         .addProperty("origin", &Ray::origin_)
         .addProperty("direction", &Ray::direction_)
         );
@@ -903,13 +831,13 @@ static void RegisterRect(kaguya::State& lua)
             static_cast<void(Rect::*)(const Vector2&, const Vector2&)>(&Rect::Define),
             static_cast<void(Rect::*)(const Vector2&)>(&Rect::Define))
 
-
         .addOverloadedFunctions("Merge",
             static_cast<void(Rect::*)(const Vector2&)>(&Rect::Merge),
             static_cast<void(Rect::*)(const Rect&)>(&Rect::Merge))
 
         .addFunction("Clear", &Rect::Clear)
         .addFunction("Clip", &Rect::Clip)
+
         .addFunction("Defined", &Rect::Defined)
         .addFunction("Center", &Rect::Center)
         .addFunction("Size", &Rect::Size)
@@ -917,28 +845,43 @@ static void RegisterRect(kaguya::State& lua)
         .addFunction("Equals", &Rect::Equals)
         .addFunction("IsInside", &Rect::IsInside)
         .addFunction("ToVector4", &Rect::ToVector4)
+
         .addFunction("ToString", &Rect::ToString)
+
         .addProperty("min", &Rect::min_)
         .addProperty("max", &Rect::max_)
+
+        .addProperty("center", &Rect::Center)
+        .addProperty("size", &Rect::Size)
+        .addProperty("halfSize", &Rect::HalfSize)
+
         .addStaticField("FULL", &Rect::FULL)
         .addStaticField("POSITIVE", &Rect::POSITIVE)
         .addStaticField("ZERO", &Rect::ZERO)
         );
+
     lua["IntRect"].setClass(UserdataMetatable<IntRect>()
         .setConstructors<IntRect(),
-        IntRect(int, int, int, int),
-        IntRect(const int*)>()
+        IntRect(int, int, int, int)>()
 
         .addFunction("__eq", &IntRect::operator==)
+
         .addFunction("Size", &IntRect::Size)
         .addFunction("Width", &IntRect::Width)
         .addFunction("Height", &IntRect::Height)
         .addFunction("IsInside", &IntRect::IsInside)
+
         .addFunction("ToString", &IntRect::ToString)
+
         .addProperty("left", &IntRect::left_)
         .addProperty("top", &IntRect::top_)
         .addProperty("right", &IntRect::right_)
         .addProperty("bottom", &IntRect::bottom_)
+
+        .addProperty("size", &IntRect::Size)
+        .addProperty("width", &IntRect::Width)
+        .addProperty("height", &IntRect::Height)
+
         .addStaticField("ZERO", &IntRect::ZERO)
         );
 }
@@ -966,7 +909,6 @@ static void RegisterSphere(kaguya::State& lua)
             static_cast<void(Sphere::*)(const Frustum&)>(&Sphere::Define),
             static_cast<void(Sphere::*)(const Polyhedron&)>(&Sphere::Define))
 
-
         .addOverloadedFunctions("Merge",
             static_cast<void(Sphere::*)(const Vector3&)>(&Sphere::Merge),
             static_cast<void(Sphere::*)(const Vector3*, unsigned)>(&Sphere::Merge),
@@ -976,6 +918,7 @@ static void RegisterSphere(kaguya::State& lua)
             static_cast<void(Sphere::*)(const Sphere&)>(&Sphere::Merge))
 
         .addFunction("Clear", &Sphere::Clear)
+
         .addFunction("Defined", &Sphere::Defined)
 
         .addOverloadedFunctions("IsInside",
@@ -983,12 +926,10 @@ static void RegisterSphere(kaguya::State& lua)
             static_cast<Intersection(Sphere::*)(const Sphere&) const>(&Sphere::IsInside),
             static_cast<Intersection(Sphere::*)(const BoundingBox&) const>(&Sphere::IsInside))
 
-
         .addOverloadedFunctions("IsInsideFast",
             static_cast<Intersection(Sphere::*)(const Sphere&) const>(&Sphere::IsInsideFast),
             static_cast<Intersection(Sphere::*)(const BoundingBox&) const>(&Sphere::IsInsideFast))
 
-        .addFunction("Distance", &Sphere::Distance)
         .addProperty("center", &Sphere::center_)
         .addProperty("radius", &Sphere::radius_)
         );
@@ -1002,17 +943,22 @@ static void RegisterStringHash(kaguya::State& lua)
         .setConstructors<StringHash(),
         StringHash(const StringHash&),
         StringHash(unsigned),
-        StringHash(const char*),
-        StringHash(const String&)>()
+        StringHash(const char*)>()
 
         .addFunction("__add", &StringHash::operator+)
         .addFunction("__eq", &StringHash::operator==)
-        .addFunction("operator<", &StringHash::operator<)
-        .addFunction("operator>", &StringHash::operator>)
+
+        .addFunction("__less", &StringHash::operator<)
+
         .addFunction("Value", &StringHash::Value)
+
         .addFunction("ToString", &StringHash::ToString)
         .addFunction("ToHash", &StringHash::ToHash)
+
         .addStaticFunction("Calculate", &StringHash::Calculate)
+
+        .addProperty("value", &StringHash::Value)
+
         .addStaticField("ZERO", &StringHash::ZERO)
         );
 }
@@ -1032,13 +978,11 @@ static void RegisterVector2(kaguya::State& lua)
         .addOverloadedFunctions("__sub",
             static_cast<Vector2(Vector2::*)() const>(&Vector2::operator-),
             static_cast<Vector2(Vector2::*)(const Vector2&) const>(&Vector2::operator-))
-
-
+        
         .addOverloadedFunctions("__mul",
             static_cast<Vector2(Vector2::*)(float) const>(&Vector2::operator*),
             static_cast<Vector2(Vector2::*)(const Vector2&) const>(&Vector2::operator*))
-
-
+        
         .addOverloadedFunctions("__div",
             static_cast<Vector2(Vector2::*)(float) const>(&Vector2::operator/),
             static_cast<Vector2(Vector2::*)(const Vector2&) const>(&Vector2::operator/))
@@ -1053,12 +997,13 @@ static void RegisterVector2(kaguya::State& lua)
         .addFunction("Lerp", &Vector2::Lerp)
         .addFunction("Equals", &Vector2::Equals)
         .addFunction("IsNaN", &Vector2::IsNaN)
+        
         .addFunction("Normalized", &Vector2::Normalized)
         .addFunction("ToString", &Vector2::ToString)
 
-        .addProperty("naN", &Vector2::IsNaN)
         .addProperty("x", &Vector2::x_)
         .addProperty("y", &Vector2::y_)
+
         .addStaticField("ZERO", &Vector2::ZERO)
         .addStaticField("LEFT", &Vector2::LEFT)
         .addStaticField("RIGHT", &Vector2::RIGHT)
@@ -1066,10 +1011,10 @@ static void RegisterVector2(kaguya::State& lua)
         .addStaticField("DOWN", &Vector2::DOWN)
         .addStaticField("ONE", &Vector2::ONE)
         );
+
     lua["IntVector2"].setClass(UserdataMetatable<IntVector2>()
         .setConstructors<IntVector2(),
         IntVector2(int, int),
-        IntVector2(const int*),
         IntVector2(const IntVector2&)>()
 
         .addFunction("__eq", &IntVector2::operator==)
@@ -1081,9 +1026,12 @@ static void RegisterVector2(kaguya::State& lua)
 
         .addFunction("__mul", &IntVector2::operator*)
         .addFunction("__div", &IntVector2::operator/)
+
         .addFunction("ToString", &IntVector2::ToString)
+
         .addProperty("x", &IntVector2::x_)
         .addProperty("y", &IntVector2::y_)
+
         .addStaticField("ZERO", &IntVector2::ZERO)
         );
 }
@@ -1107,11 +1055,9 @@ static void RegisterVector3(kaguya::State& lua)
             static_cast<Vector3(Vector3::*)() const>(&Vector3::operator-),
             static_cast<Vector3(Vector3::*)(const Vector3&) const>(&Vector3::operator-))
 
-
         .addOverloadedFunctions("__mul",
             static_cast<Vector3(Vector3::*)(float) const>(&Vector3::operator*),
             static_cast<Vector3(Vector3::*)(const Vector3&) const>(&Vector3::operator*))
-
 
         .addOverloadedFunctions("__div",
             static_cast<Vector3(Vector3::*)(float) const>(&Vector3::operator/),
@@ -1129,12 +1075,13 @@ static void RegisterVector3(kaguya::State& lua)
         .addFunction("Angle", &Vector3::Angle)
         .addFunction("IsNaN", &Vector3::IsNaN)
         .addFunction("Normalized", &Vector3::Normalized)
+
         .addFunction("ToString", &Vector3::ToString)
 
-        .addProperty("naN", &Vector3::IsNaN)
         .addProperty("x", &Vector3::x_)
         .addProperty("y", &Vector3::y_)
         .addProperty("z", &Vector3::z_)
+        
         .addStaticField("ZERO", &Vector3::ZERO)
         .addStaticField("LEFT", &Vector3::LEFT)
         .addStaticField("RIGHT", &Vector3::RIGHT)
@@ -1163,11 +1110,9 @@ static void RegisterVector4(kaguya::State& lua)
             static_cast<Vector4(Vector4::*)() const>(&Vector4::operator-),
             static_cast<Vector4(Vector4::*)(const Vector4&) const>(&Vector4::operator-))
 
-
         .addOverloadedFunctions("__mul",
             static_cast<Vector4(Vector4::*)(float) const>(&Vector4::operator*),
             static_cast<Vector4(Vector4::*)(const Vector4&) const>(&Vector4::operator*))
-
 
         .addOverloadedFunctions("__div",
             static_cast<Vector4(Vector4::*)(float) const>(&Vector4::operator/),
@@ -1179,13 +1124,14 @@ static void RegisterVector4(kaguya::State& lua)
         .addFunction("Lerp", &Vector4::Lerp)
         .addFunction("Equals", &Vector4::Equals)
         .addFunction("IsNaN", &Vector4::IsNaN)
+
         .addFunction("ToString", &Vector4::ToString)
 
-        .addProperty("naN", &Vector4::IsNaN)
         .addProperty("x", &Vector4::x_)
         .addProperty("y", &Vector4::y_)
         .addProperty("z", &Vector4::z_)
         .addProperty("w", &Vector4::w_)
+
         .addStaticField("ZERO", &Vector4::ZERO)
         .addStaticField("ONE", &Vector4::ONE)
         );
@@ -1193,7 +1139,6 @@ static void RegisterVector4(kaguya::State& lua)
 
 void RegisterMathLuaAPI(kaguya::State& lua)
 {
-    RegisterAreaAllocator(lua);
     RegisterBoundingBox(lua);
     RegisterColor(lua);
     RegisterFrustum(lua);

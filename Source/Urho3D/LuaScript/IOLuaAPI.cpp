@@ -23,17 +23,13 @@
 #include "../Precompiled.h"
 
 #include "../Core/Context.h"
+#include "../IO/Compression.h"
 #include "../IO/Deserializer.h"
 #include "../IO/File.h"
 #include "../IO/FileSystem.h"
-#include "../IO/FileWatcher.h"
-#include "../IO/IOEvents.h"
 #include "../IO/Log.h"
-#include "../IO/MacFileWatcher.h"
-#include "../IO/MemoryBuffer.h"
 #include "../IO/NamedPipe.h"
 #include "../IO/PackageFile.h"
-#include "../IO/RWOpsWrapper.h"
 #include "../IO/Serializer.h"
 #include "../IO/VectorBuffer.h"
 #include "../LuaScript/LuaScriptUtils.h"
@@ -43,17 +39,42 @@
 namespace Urho3D
 {
 
+static void RegisterCompression(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["CompressVectorBuffer"] = &CompressVectorBuffer;
+    lua["DecompressVectorBuffer"] = &DecompressVectorBuffer;
+}
+
+static VectorBuffer DeserializerRead(Deserializer* self, unsigned size)
+{
+    unsigned char* data = new unsigned char[size];
+    self->Read(data, size);
+    VectorBuffer buffer(data, size);
+    delete[] data;
+    return buffer;
+}
+
+static VectorBuffer DeserializerReadBuffer(Deserializer* self)
+{
+    return VectorBuffer(self->ReadBuffer());
+}
+
 static void RegisterDeserializer(kaguya::State& lua)
 {
     using namespace kaguya;
 
     lua["Deserializer"].setClass(UserdataMetatable<Deserializer>()
+        .addStaticFunction("Read", &DeserializerRead)
+
         .addFunction("Seek", &Deserializer::Seek)
         .addFunction("GetName", &Deserializer::GetName)
         .addFunction("GetChecksum", &Deserializer::GetChecksum)
         .addFunction("IsEof", &Deserializer::IsEof)
         .addFunction("GetPosition", &Deserializer::GetPosition)
         .addFunction("GetSize", &Deserializer::GetSize)
+
         .addFunction("ReadInt", &Deserializer::ReadInt)
         .addFunction("ReadShort", &Deserializer::ReadShort)
         .addFunction("ReadByte", &Deserializer::ReadByte)
@@ -80,7 +101,9 @@ static void RegisterDeserializer(kaguya::State& lua)
         .addFunction("ReadString", &Deserializer::ReadString)
         .addFunction("ReadFileID", &Deserializer::ReadFileID)
         .addFunction("ReadStringHash", &Deserializer::ReadStringHash)
-        .addFunction("ReadBuffer", &Deserializer::ReadBuffer)
+        
+        .addStaticFunction("ReadBuffer", &DeserializerReadBuffer)
+
         .addFunction("ReadResourceRef", &Deserializer::ReadResourceRef)
         .addFunction("ReadResourceRefList", &Deserializer::ReadResourceRefList)
 
@@ -103,11 +126,23 @@ static void RegisterDeserializer(kaguya::State& lua)
         );
 }
 
+static unsigned SerializerWrite(Serializer* self, const VectorBuffer& buffer)
+{
+    return self->Write(buffer.GetData(), buffer.GetSize());
+}
+
+static bool SerializerWriteBuffer(Serializer* self, const VectorBuffer& buffer)
+{
+    return self->WriteBuffer(buffer.GetBuffer());
+}
+
 static void RegisterSerializer(kaguya::State& lua)
 {
     using namespace kaguya;
 
     lua["Serializer"].setClass(UserdataMetatable<Serializer>()
+        .addStaticFunction("Write", &SerializerWrite)
+
         .addFunction("WriteInt", &Serializer::WriteInt)
         .addFunction("WriteShort", &Serializer::WriteShort)
         .addFunction("WriteByte", &Serializer::WriteByte)
@@ -134,7 +169,9 @@ static void RegisterSerializer(kaguya::State& lua)
         .addFunction("WriteString", &Serializer::WriteString)
         .addFunction("WriteFileID", &Serializer::WriteFileID)
         .addFunction("WriteStringHash", &Serializer::WriteStringHash)
-        .addFunction("WriteBuffer", &Serializer::WriteBuffer)
+        
+        .addStaticFunction("WriteBuffer", &SerializerWriteBuffer)
+
         .addFunction("WriteResourceRef", &Serializer::WriteResourceRef)
         .addFunction("WriteResourceRefList", &Serializer::WriteResourceRefList)
         .addFunction("WriteVariant", &Serializer::WriteVariant)
@@ -146,6 +183,26 @@ static void RegisterSerializer(kaguya::State& lua)
         .addFunction("WriteNetID", &Serializer::WriteNetID)
         .addFunction("WriteLine", &Serializer::WriteLine)
         );
+}
+
+static SharedPtr<File> CreateFile0()
+{
+    return SharedPtr<File>(new File(globalContext));
+}
+
+static SharedPtr<File> CreateFile1(const String& fileName)
+{
+    return SharedPtr<File>(new File(globalContext, fileName));
+}
+
+static SharedPtr<File> CreateFile2(const String& fileName, FileMode mode)
+{
+    return SharedPtr<File>(new File(globalContext, fileName, mode));
+}
+
+static SharedPtr<File> CreateFile3(PackageFile* package, const String& fileName)
+{
+    return SharedPtr<File>(new File(globalContext, package, fileName));
 }
 
 static bool FileOpen0(File* self, const String& fileName)
@@ -168,7 +225,11 @@ static void RegisterFile(kaguya::State& lua)
     lua["FILE_READWRITE"] = FILE_READWRITE;
 
     lua["File"].setClass(UserdataMetatable<File, MultipleBase<Object, Deserializer, Serializer>>()
-        .addStaticFunction("new", &CreateObject<File>)
+        .addOverloadedFunctions("new", 
+            &CreateFile0, 
+            &CreateFile1, 
+            &CreateFile2, 
+            &CreateFile3)
 
         .addOverloadedFunctions("Open",
             FileOpen0,
@@ -178,6 +239,7 @@ static void RegisterFile(kaguya::State& lua)
         .addFunction("Close", &File::Close)
         .addFunction("Flush", &File::Flush)
         .addFunction("SetName", &File::SetName)
+
         .addFunction("GetMode", &File::GetMode)
         .addFunction("IsOpen", &File::IsOpen)
         .addFunction("GetHandle", &File::GetHandle)
@@ -210,14 +272,11 @@ static bool FileSystemSystemOpen1(FileSystem* self, const String& fileName, cons
     return self->SystemOpen(fileName, mode);
 }
 
-static void SplitPath0(const String& fullPath, String& pathName, String& fileName, String& extension)
+static Vector<String> FileSystemScanDir(const FileSystem* self, const String& pathName, const String& filter, unsigned flags, bool recursive)
 {
-    SplitPath(fullPath, pathName, fileName, extension);
-}
-
-static void SplitPath1(const String& fullPath, String& pathName, String& fileName, String& extension, bool lowercaseExtension)
-{
-    SplitPath(fullPath, pathName, fileName, extension, lowercaseExtension);
+    Vector<String> result;
+    self->ScanDir(result, pathName, filter, flags, recursive);
+    return result;
 }
 
 static String GetExtension0(const String& fullPath)
@@ -265,32 +324,27 @@ static void RegisterFileSystem(kaguya::State& lua)
         .addFunction("Copy", &FileSystem::Copy)
         .addFunction("Rename", &FileSystem::Rename)
         .addFunction("Delete", &FileSystem::Delete)
-        .addFunction("RegisterPath", &FileSystem::RegisterPath)
+        
         .addFunction("SetLastModifiedTime", &FileSystem::SetLastModifiedTime)
         .addFunction("GetCurrentDir", &FileSystem::GetCurrentDir)
         .addFunction("GetExecuteConsoleCommands", &FileSystem::GetExecuteConsoleCommands)
         .addFunction("HasRegisteredPaths", &FileSystem::HasRegisteredPaths)
         .addFunction("CheckAccess", &FileSystem::CheckAccess)
         .addFunction("GetLastModifiedTime", &FileSystem::GetLastModifiedTime)
+        
         .addFunction("FileExists", &FileSystem::FileExists)
         .addFunction("DirExists", &FileSystem::DirExists)
-        .addFunction("ScanDir", &FileSystem::ScanDir)
+        
+        .addStaticFunction("ScanDir", &FileSystemScanDir)
+
         .addFunction("GetProgramDir", &FileSystem::GetProgramDir)
         .addFunction("GetUserDocumentsDir", &FileSystem::GetUserDocumentsDir)
         .addFunction("GetAppPreferencesDir", &FileSystem::GetAppPreferencesDir)
-
-        .addProperty("executeConsoleCommands", &FileSystem::GetExecuteConsoleCommands, &FileSystem::SetExecuteConsoleCommands)
-        .addProperty("programDir", &FileSystem::GetProgramDir)
-        .addProperty("userDocumentsDir", &FileSystem::GetUserDocumentsDir)
         );
-
-    lua["SplitPath"] = overload(&SplitPath0, &SplitPath1);
 
     lua["GetPath"] = function(&GetPath);
     lua["GetFileName"] = function(&GetFileName);
-
     lua["GetExtension"] = overload(&GetExtension0, &GetExtension1);
-
     lua["GetFileNameAndExtension"] = overload(&GetFileNameAndExtension0, &GetFileNameAndExtension1);
 
     lua["ReplaceExtension"] = function(&ReplaceExtension);
@@ -299,16 +353,9 @@ static void RegisterFileSystem(kaguya::State& lua)
     lua["GetParentPath"] = function(&GetParentPath);
     lua["GetInternalPath"] = function(&GetInternalPath);
     lua["GetNativePath"] = function(&GetNativePath);
-    lua["GetWideNativePath"] = function(&GetWideNativePath);
+
     lua["IsAbsolutePath"] = function(&IsAbsolutePath);
-}
-
-static void RegisterIOEvents(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["E_LOGMESSAGE"] = E_LOGMESSAGE;
-    lua["E_ASYNCEXECFINISHED"] = E_ASYNCEXECFINISHED;
+    lua["GetFileSizeString"] = function(&GetFileSizeString);
 }
 
 static void LogWriteRaw0(Log* self, const String& message)
@@ -336,22 +383,50 @@ static void RegisterLog(kaguya::State& lua)
 
         .addFunction("Open", &Log::Open)
         .addFunction("Close", &Log::Close)
+
         .addFunction("SetLevel", &Log::SetLevel)
         .addFunction("SetTimeStamp", &Log::SetTimeStamp)
         .addFunction("SetQuiet", &Log::SetQuiet)
+
         .addFunction("GetLevel", &Log::GetLevel)
         .addFunction("GetTimeStamp", &Log::GetTimeStamp)
         .addFunction("GetLastMessage", &Log::GetLastMessage)
         .addFunction("IsQuiet", &Log::IsQuiet)
-        .addStaticFunction("Write", &Log::Write)
 
+        .addStaticFunction("Write", &Log::Write)
         ADD_OVERLOADED_FUNCTIONS_2(Log, WriteRaw)
 
         .addProperty("level", &Log::GetLevel, &Log::SetLevel)
         .addProperty("timeStamp", &Log::GetTimeStamp, &Log::SetTimeStamp)
-        .addProperty("lastMessage", &Log::GetLastMessage)
         .addProperty("quiet", &Log::IsQuiet, &Log::SetQuiet)
         );
+}
+
+static void RegisterNamedPipe(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["NamedPipe"].setClass(UserdataMetatable<NamedPipe, MultipleBase<Object, Deserializer, Serializer>>()
+        
+        .addFunction("Open", &NamedPipe::Open)
+        .addFunction("Close", &NamedPipe::Close)
+        .addFunction("IsOpen", &NamedPipe::IsOpen)
+        );
+}
+
+static SharedPtr<PackageFile> CreatePackageFile0()
+{
+    return SharedPtr<PackageFile>(new PackageFile(globalContext));
+}
+
+static SharedPtr<PackageFile> CreatePackageFile1(const String& fileName)
+{
+    return SharedPtr<PackageFile>(new PackageFile(globalContext, fileName));
+}
+
+static SharedPtr<PackageFile> CreatePackageFile2(const String& fileName, unsigned startOffset)
+{
+    return SharedPtr<PackageFile>(new PackageFile(globalContext, fileName, startOffset));
 }
 
 static bool PackageFileOpen0(PackageFile* self, const String& fileName)
@@ -367,15 +442,24 @@ static bool PackageFileOpen1(PackageFile* self, const String& fileName, unsigned
 static void RegisterPackageFile(kaguya::State& lua)
 {
     using namespace kaguya;
+    lua["PackageEntry"].setClass(UserdataMetatable<PackageEntry>()
+        .addProperty("offset", &PackageEntry::offset_)
+        .addProperty("size", &PackageEntry::size_)
+        .addProperty("checksum", &PackageEntry::checksum_)
+        );
 
     lua["PackageFile"].setClass(UserdataMetatable<PackageFile, Object>()
-        .addStaticFunction("new", &CreateObject<PackageFile>)
+        .addOverloadedFunctions("new",
+            &CreatePackageFile0,
+            &CreatePackageFile1,
+            &CreatePackageFile2)
 
         ADD_OVERLOADED_FUNCTIONS_2(PackageFile, Open)
 
         .addFunction("Exists", &PackageFile::Exists)
         .addFunction("GetEntry", &PackageFile::GetEntry)
         .addFunction("GetEntries", &PackageFile::GetEntries)
+        
         .addFunction("GetName", &PackageFile::GetName)
         .addFunction("GetNameHash", &PackageFile::GetNameHash)
         .addFunction("GetNumFiles", &PackageFile::GetNumFiles)
@@ -383,9 +467,7 @@ static void RegisterPackageFile(kaguya::State& lua)
         .addFunction("GetTotalDataSize", &PackageFile::GetTotalDataSize)
         .addFunction("GetChecksum", &PackageFile::GetChecksum)
         .addFunction("IsCompressed", &PackageFile::IsCompressed)
-        .addFunction("GetEntryNames", &PackageFile::GetEntryNames)
 
-        .addProperty("entries", &PackageFile::GetEntries)
         .addProperty("name", &PackageFile::GetName)
         .addProperty("nameHash", &PackageFile::GetNameHash)
         .addProperty("numFiles", &PackageFile::GetNumFiles)
@@ -393,7 +475,6 @@ static void RegisterPackageFile(kaguya::State& lua)
         .addProperty("totalDataSize", &PackageFile::GetTotalDataSize)
         .addProperty("checksum", &PackageFile::GetChecksum)
         .addProperty("compressed", &PackageFile::IsCompressed)
-        .addProperty("entryNames", &PackageFile::GetEntryNames)
         );
 }
 
@@ -403,35 +484,26 @@ static void RegisterVectorBuffer(kaguya::State& lua)
 
     lua["VectorBuffer"].setClass(UserdataMetatable<VectorBuffer, MultipleBase<Deserializer, Serializer>>()
         .setConstructors<VectorBuffer(),
-        VectorBuffer(const PODVector<unsigned char>&),
-        VectorBuffer(const void*, unsigned),
         VectorBuffer(Deserializer&, unsigned)>()
 
-        .addOverloadedFunctions("SetData",
-            static_cast<void(VectorBuffer::*)(const PODVector<unsigned char>&)>(&VectorBuffer::SetData),
-            static_cast<void(VectorBuffer::*)(const void*, unsigned)>(&VectorBuffer::SetData),
-            static_cast<void(VectorBuffer::*)(Deserializer&, unsigned)>(&VectorBuffer::SetData))
-
+        .addFunction("SetData", static_cast<void(VectorBuffer::*)(Deserializer&, unsigned)>(&VectorBuffer::SetData))
         .addFunction("Clear", &VectorBuffer::Clear)
         .addFunction("Resize", &VectorBuffer::Resize)
+        
         .addFunction("GetData", &VectorBuffer::GetData)
         .addFunction("GetModifiableData", &VectorBuffer::GetModifiableData)
-        .addFunction("GetBuffer", &VectorBuffer::GetBuffer)
-
-        .addProperty("data", &VectorBuffer::GetData)
-        .addProperty("modifiableData", &VectorBuffer::GetModifiableData)
-        .addProperty("buffer", &VectorBuffer::GetBuffer)
         );
 }
 
 void RegisterIOLuaAPI(kaguya::State& lua)
 {
+    RegisterCompression(lua);
     RegisterDeserializer(lua);
     RegisterSerializer(lua);
     RegisterFile(lua);
     RegisterFileSystem(lua);
-    RegisterIOEvents(lua);
     RegisterLog(lua);
+    RegisterNamedPipe(lua);
     RegisterPackageFile(lua);
     RegisterVectorBuffer(lua);
 

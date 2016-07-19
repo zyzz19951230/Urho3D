@@ -102,6 +102,21 @@ static bool InputIsMouseVisible(const Input* input)
     return input->IsMouseVisible();
 }
 
+static int InputAddScreenJoystick0(Input* self)
+{
+    return self->AddScreenJoystick();
+}
+
+static int InputAddScreenJoystick1(Input* self, XMLFile* layoutFile)
+{
+    return self->AddScreenJoystick(layoutFile);
+}
+
+static int InputAddScreenJoystick2(Input* self, XMLFile* layoutFile, XMLFile* styleFile)
+{
+    return self->AddScreenJoystick(layoutFile, styleFile);
+}
+
 static bool InputSaveGestures(Input* self, const char* filepath)
 {
     SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
@@ -137,23 +152,48 @@ static void RegisterInput(kaguya::State& lua)
     lua["MM_FREE"] = MM_FREE;
     lua["MM_INVALID"] = MM_INVALID;
 
-    lua["MOUSE_POSITION_OFFSCREEN"] = MOUSE_POSITION_OFFSCREEN;
+    lua["TouchState"].setClass(UserdataMetatable<TouchState>()
+        .addFunction("GetTouchedElement", &TouchState::GetTouchedElement)
+
+        .addProperty("touchID", &TouchState::touchID_)
+        .addProperty("position", &TouchState::position_)
+        .addProperty("lastPosition", &TouchState::lastPosition_)
+        .addProperty("delta", &TouchState::delta_)
+        .addProperty("pressure", &TouchState::pressure_)
+        .addProperty("touchedElement", &TouchState::GetTouchedElement)
+    );
+
+    lua["JoystickState"].setClass(UserdataMetatable<JoystickState>()
+        .addFunction("IsController", &JoystickState::IsController)
+        .addFunction("GetNumButtons", &JoystickState::GetNumButtons)
+        .addFunction("GetNumAxes", &JoystickState::GetNumAxes)
+        .addFunction("GetNumHats", &JoystickState::GetNumHats)
+        .addFunction("GetButtonDown", &JoystickState::GetButtonDown)
+        .addFunction("GetButtonPress", &JoystickState::GetButtonPress)
+        .addFunction("GetAxisPosition", &JoystickState::GetAxisPosition)
+        .addFunction("GetHatPosition", &JoystickState::GetHatPosition)
+
+        .addProperty("name", &JoystickState::name_)
+        .addProperty("joystickID", &JoystickState::joystickID_)
+        .addProperty("controller", &JoystickState::IsController)
+        .addProperty("numButtons", &JoystickState::GetNumButtons)
+        .addProperty("numAxes", &JoystickState::GetNumAxes)
+        .addProperty("numHats", &JoystickState::GetNumHats)
+        );    
 
     lua["Input"].setClass(UserdataMetatable<Input, Object>()
 
         .addFunction("SetToggleFullscreen", &Input::SetToggleFullscreen)
 
         ADD_OVERLOADED_FUNCTIONS_2(Input, SetMouseVisible)
-
-        .addFunction("ResetMouseVisible", &Input::ResetMouseVisible)
-
         ADD_OVERLOADED_FUNCTIONS_2(Input, SetMouseGrabbed)
-
-        .addFunction("ResetMouseGrabbed", &Input::ResetMouseGrabbed)
-
         ADD_OVERLOADED_FUNCTIONS_2(Input, SetMouseMode)
 
-        .addFunction("ResetMouseMode", &Input::ResetMouseMode)
+        .addFunction("IsMouseLocked", &Input::IsMouseLocked)
+
+        ADD_OVERLOADED_FUNCTIONS_3(Input, AddScreenJoystick)
+        .addFunction("RemoveScreenJoystick", &Input::RemoveScreenJoystick)
+        .addFunction("SetScreenJoystickVisible", &Input::SetScreenJoystickVisible)
 
         .addFunction("SetScreenKeyboardVisible", &Input::SetScreenKeyboardVisible)
         .addFunction("SetTouchEmulation", &Input::SetTouchEmulation)        
@@ -162,9 +202,10 @@ static void RegisterInput(kaguya::State& lua)
         .addStaticFunction("SaveGestures", &InputSaveGestures)
         .addStaticFunction("SaveGesture", &InputSaveGesture)
         .addStaticFunction("LoadGestures", &InputLoadGestures)
-
+        
         .addFunction("RemoveGesture", &Input::RemoveGesture)
         .addFunction("RemoveAllGestures", &Input::RemoveAllGestures)
+
         .addFunction("GetKeyFromName", &Input::GetKeyFromName)
         .addFunction("GetKeyFromScancode", &Input::GetKeyFromScancode)
         .addFunction("GetKeyName", &Input::GetKeyName)
@@ -185,16 +226,22 @@ static void RegisterInput(kaguya::State& lua)
         .addFunction("GetMouseMoveX", &Input::GetMouseMoveX)
         .addFunction("GetMouseMoveY", &Input::GetMouseMoveY)
         .addFunction("GetMouseMoveWheel", &Input::GetMouseMoveWheel)
+        
         .addFunction("GetNumTouches", &Input::GetNumTouches)
+        .addFunction("GetTouch", &Input::GetTouch)
+
         .addFunction("GetNumJoysticks", &Input::GetNumJoysticks)
+        .addFunction("GetJoystick", &Input::GetJoystick)
+        .addFunction("GetJoystickByIndex", &Input::GetJoystickByIndex)
+        .addFunction("GetJoystickByName", &Input::GetJoystickByName)
+
         .addFunction("GetToggleFullscreen", &Input::GetToggleFullscreen)
-        .addFunction("IsScreenJoystickVisible", &Input::IsScreenJoystickVisible)
         .addFunction("GetScreenKeyboardSupport", &Input::GetScreenKeyboardSupport)
+        .addFunction("IsScreenJoystickVisible", &Input::IsScreenJoystickVisible)        
         .addFunction("IsScreenKeyboardVisible", &Input::IsScreenKeyboardVisible)
         .addFunction("GetTouchEmulation", &Input::GetTouchEmulation)
         .addFunction("IsMouseVisible", &Input::IsMouseVisible)
         .addFunction("IsMouseGrabbed", &Input::IsMouseGrabbed)
-        .addFunction("IsMouseLocked", &Input::IsMouseLocked)
         .addFunction("GetMouseMode", &Input::GetMouseMode)
         .addFunction("HasFocus", &Input::HasFocus)
         .addFunction("IsMinimized", &Input::IsMinimized)
@@ -205,6 +252,7 @@ static void RegisterInput(kaguya::State& lua)
         .addProperty("mouseMoveX", &Input::GetMouseMoveX)
         .addProperty("mouseMoveY", &Input::GetMouseMoveY)
         .addProperty("mouseMoveWheel", &Input::GetMouseMoveWheel)
+
         .addProperty("numTouches", &Input::GetNumTouches)
         .addProperty("numJoysticks", &Input::GetNumJoysticks)
         .addProperty("toggleFullscreen", &Input::GetToggleFullscreen, &Input::SetToggleFullscreen)
@@ -215,6 +263,7 @@ static void RegisterInput(kaguya::State& lua)
         .addProperty("mouseGrabbed", &Input::IsMouseGrabbed)
         .addProperty("mouseLocked", &Input::IsMouseLocked)
         .addProperty("mouseMode", &Input::GetMouseMode)
+        .addFunction("focus", &Input::HasFocus)
         .addProperty("minimized", &Input::IsMinimized)
         );
 }
@@ -223,39 +272,17 @@ static void RegisterInputEvents(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["E_MOUSEBUTTONDOWN"] = E_MOUSEBUTTONDOWN;
-    lua["E_MOUSEBUTTONUP"] = E_MOUSEBUTTONUP;
-    lua["E_MOUSEMOVE"] = E_MOUSEMOVE;
-    lua["E_MOUSEWHEEL"] = E_MOUSEWHEEL;
-    lua["E_KEYDOWN"] = E_KEYDOWN;
-    lua["E_KEYUP"] = E_KEYUP;
-    lua["E_TEXTINPUT"] = E_TEXTINPUT;
-    lua["E_JOYSTICKCONNECTED"] = E_JOYSTICKCONNECTED;
-    lua["E_JOYSTICKDISCONNECTED"] = E_JOYSTICKDISCONNECTED;
-    lua["E_JOYSTICKBUTTONDOWN"] = E_JOYSTICKBUTTONDOWN;
-    lua["E_JOYSTICKBUTTONUP"] = E_JOYSTICKBUTTONUP;
-    lua["E_JOYSTICKAXISMOVE"] = E_JOYSTICKAXISMOVE;
-    lua["E_JOYSTICKHATMOVE"] = E_JOYSTICKHATMOVE;
-    lua["E_TOUCHBEGIN"] = E_TOUCHBEGIN;
-    lua["E_TOUCHEND"] = E_TOUCHEND;
-    lua["E_TOUCHMOVE"] = E_TOUCHMOVE;
-    lua["E_GESTURERECORDED"] = E_GESTURERECORDED;
-    lua["E_GESTUREINPUT"] = E_GESTUREINPUT;
-    lua["E_MULTIGESTURE"] = E_MULTIGESTURE;
-    lua["E_DROPFILE"] = E_DROPFILE;
-    lua["E_INPUTFOCUS"] = E_INPUTFOCUS;
-    lua["E_MOUSEVISIBLECHANGED"] = E_MOUSEVISIBLECHANGED;
-    lua["E_MOUSEMODECHANGED"] = E_MOUSEMODECHANGED;
-    lua["E_EXITREQUESTED"] = E_EXITREQUESTED;
     lua["MOUSEB_LEFT"] = MOUSEB_LEFT;
     lua["MOUSEB_MIDDLE"] = MOUSEB_MIDDLE;
     lua["MOUSEB_RIGHT"] = MOUSEB_RIGHT;
     lua["MOUSEB_X1"] = MOUSEB_X1;
     lua["MOUSEB_X2"] = MOUSEB_X2;
+
     lua["QUAL_SHIFT"] = QUAL_SHIFT;
     lua["QUAL_CTRL"] = QUAL_CTRL;
     lua["QUAL_ALT"] = QUAL_ALT;
     lua["QUAL_ANY"] = QUAL_ANY;
+
     lua["KEY_A"] = KEY_A;
     lua["KEY_B"] = KEY_B;
     lua["KEY_C"] = KEY_C;
@@ -367,6 +394,7 @@ static void RegisterInputEvents(kaguya::State& lua)
     lua["KEY_RCTRL"] = KEY_RCTRL;
     lua["KEY_LALT"] = KEY_LALT;
     lua["KEY_RALT"] = KEY_RALT;
+
     lua["SCANCODE_UNKNOWN"] = SCANCODE_UNKNOWN;
     lua["SCANCODE_CTRL"] = SCANCODE_CTRL;
     lua["SCANCODE_SHIFT"] = SCANCODE_SHIFT;
@@ -612,11 +640,13 @@ static void RegisterInputEvents(kaguya::State& lua)
     lua["SCANCODE_SLEEP"] = SCANCODE_SLEEP;
     lua["SCANCODE_APP1"] = SCANCODE_APP1;
     lua["SCANCODE_APP2"] = SCANCODE_APP2;
+
     lua["HAT_CENTER"] = HAT_CENTER;
     lua["HAT_UP"] = HAT_UP;
     lua["HAT_RIGHT"] = HAT_RIGHT;
     lua["HAT_DOWN"] = HAT_DOWN;
     lua["HAT_LEFT"] = HAT_LEFT;
+    
     lua["CONTROLLER_BUTTON_A"] = CONTROLLER_BUTTON_A;
     lua["CONTROLLER_BUTTON_B"] = CONTROLLER_BUTTON_B;
     lua["CONTROLLER_BUTTON_X"] = CONTROLLER_BUTTON_X;
@@ -632,6 +662,7 @@ static void RegisterInputEvents(kaguya::State& lua)
     lua["CONTROLLER_BUTTON_DPAD_DOWN"] = CONTROLLER_BUTTON_DPAD_DOWN;
     lua["CONTROLLER_BUTTON_DPAD_LEFT"] = CONTROLLER_BUTTON_DPAD_LEFT;
     lua["CONTROLLER_BUTTON_DPAD_RIGHT"] = CONTROLLER_BUTTON_DPAD_RIGHT;
+
     lua["CONTROLLER_AXIS_LEFTX"] = CONTROLLER_AXIS_LEFTX;
     lua["CONTROLLER_AXIS_LEFTY"] = CONTROLLER_AXIS_LEFTY;
     lua["CONTROLLER_AXIS_RIGHTX"] = CONTROLLER_AXIS_RIGHTX;

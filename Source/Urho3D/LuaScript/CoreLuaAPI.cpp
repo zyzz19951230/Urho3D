@@ -22,15 +22,14 @@
 
 #include "../Precompiled.h"
 
-#include "../Core/Attribute.h"
 #include "../Core/Context.h"
-#include "../Core/CoreEvents.h"
 #include "../Core/Object.h"
 #include "../Core/ProcessUtils.h"
 #include "../Core/Spline.h"
 #include "../Core/StringUtils.h"
 #include "../Core/Timer.h"
 #include "../Core/Variant.h"
+#include "../IO/VectorBuffer.h"
 #include "../LuaScript/LuaScriptUtils.h"
 
 #include <kaguya.hpp>
@@ -38,32 +37,11 @@
 namespace Urho3D
 {
 
-static void RegisterAttribute(kaguya::State& lua)
+extern Context* globalContext;
+
+static Context* GlobalGetContext()
 {
-    using namespace kaguya;
-
-    lua["AM_EDIT"] = AM_EDIT;
-    lua["AM_FILE"] = AM_FILE;
-    lua["AM_NET"] = AM_NET;
-    lua["AM_DEFAULT"] = AM_DEFAULT;
-    lua["AM_LATESTDATA"] = AM_LATESTDATA;
-    lua["AM_NOEDIT"] = AM_NOEDIT;
-    lua["AM_NODEID"] = AM_NODEID;
-    lua["AM_COMPONENTID"] = AM_COMPONENTID;
-    lua["AM_NODEIDVECTOR"] = AM_NODEIDVECTOR;
-
-    lua["AttributeInfo"].setClass(UserdataMetatable<AttributeInfo>()
-        .setConstructors<AttributeInfo(),
-        AttributeInfo(VariantType, const char*, AttributeAccessor*, const Variant&, unsigned),
-        AttributeInfo(const char*, AttributeAccessor*, const char**, const Variant&, unsigned)>()
-
-        .addProperty("type", &AttributeInfo::type_)
-        .addProperty("name", &AttributeInfo::name_)
-
-        .addProperty("enumNames", &AttributeInfo::enumNames_)
-        .addProperty("defaultValue", &AttributeInfo::defaultValue_)
-        .addProperty("mode", &AttributeInfo::mode_)
-    );
+    return globalContext;
 }
 
 static SharedPtr<Object> GlobalGetEventSender()
@@ -77,33 +55,39 @@ static void RegisterContext(kaguya::State& lua)
 
     lua["Context"].setClass(UserdataMetatable<Context, RefCounted>()
 
-        .addFunction("GetEventDataMap", &Context::GetEventDataMap)
-        .addFunction("GetGlobalVar", &Context::GetGlobalVar)
-        .addFunction("GetGlobalVars", &Context::GetGlobalVars)
-        .addFunction("SetGlobalVar", &Context::SetGlobalVar)
         .addFunction("GetEventSender", &Context::GetEventSender)
         .addFunction("GetEventHandler", &Context::GetEventHandler)
         .addFunction("GetTypeName", &Context::GetTypeName)
 
-        .addProperty("eventDataMap", &Context::GetEventDataMap)
-        .addProperty("globalVars", &Context::GetGlobalVars)
         .addProperty("eventSender", &Context::GetEventSender)
         .addProperty("eventHandler", &Context::GetEventHandler)
     );
 
+    lua["context"] = globalContext;
+    lua["GetContext"] = GlobalGetContext();
+
     lua["GetEventSender"] = function(GlobalGetEventSender);
+    // lua["GetEventHandler"] = function(GlobalGetEventHandler);
 }
 
-static void RegisterCoreEvents(kaguya::State& lua)
+static void ObjectSendEvent0(Object* self, const String& eventName)
 {
-    using namespace kaguya;
+    self->SendEvent(StringHash(eventName));
+}
 
-    lua["E_BEGINFRAME"] = E_BEGINFRAME;
-    lua["E_UPDATE"] = E_UPDATE;
-    lua["E_POSTUPDATE"] = E_POSTUPDATE;
-    lua["E_RENDERUPDATE"] = E_RENDERUPDATE;
-    lua["E_POSTRENDERUPDATE"] = E_POSTRENDERUPDATE;
-    lua["E_ENDFRAME"] = E_ENDFRAME;
+static void ObjectSendEvent1(Object* self, const String& eventName, VariantMap* eventData)
+{
+    self->SendEvent(StringHash(eventName), *eventData);
+}
+
+static bool ObjectHasSubscribedToEvent0(const Object* self, const String& eventName)
+{
+    return self->HasSubscribedToEvent(StringHash(eventName));
+}
+
+static bool ObjectHasSubscribedToEvent1(const Object* self, Object* sender, const String& eventName)
+{
+    return self->HasSubscribedToEvent(sender, StringHash(eventName));
 }
 
 static void RegisterObject(kaguya::State& lua)
@@ -111,62 +95,16 @@ static void RegisterObject(kaguya::State& lua)
     using namespace kaguya;
 
     lua["Object"].setClass(UserdataMetatable<Object, RefCounted>()
+
         .addFunction("GetType", &Object::GetType)
         .addFunction("GetTypeName", &Object::GetTypeName)
-        .addFunction("GetTypeInfo", &Object::GetTypeInfo)
-        
-        /*
-        .addOverloadedFunctions("IsTypeOf",
-            static_cast<bool(Object::*)(StringHash)>(&Object::IsTypeOf),
-            static_cast<bool(Object::*)(const TypeInfo*)>(&Object::IsTypeOf))
-
-        .addOverloadedFunctions("IsInstanceOf",
-            static_cast<bool(Object::*)(StringHash) const>(&Object::IsInstanceOf),
-            static_cast<bool(Object::*)(const TypeInfo*) const>(&Object::IsInstanceOf))
-
-        .addOverloadedFunctions("SubscribeToEvent",
-            static_cast<void(Object::*)(StringHash, EventHandler*)>(&Object::SubscribeToEvent),
-            static_cast<void(Object::*)(Object*, StringHash, EventHandler*)>(&Object::SubscribeToEvent))
-
-        .addOverloadedFunctions("UnsubscribeFromEvent",
-            static_cast<void(Object::*)(StringHash)>(&Object::UnsubscribeFromEvent),
-            static_cast<void(Object::*)(Object*, StringHash)>(&Object::UnsubscribeFromEvent))
-
-        .addFunction("UnsubscribeFromEvents", &Object::UnsubscribeFromEvents)
-        .addFunction("UnsubscribeFromAllEvents", &Object::UnsubscribeFromAllEvents)
-        .addFunction("UnsubscribeFromAllEventsExcept", &Object::UnsubscribeFromAllEventsExcept)
-        */
-
-        .addOverloadedFunctions("SendEvent",
-            static_cast<void(Object::*)(StringHash)>(&Object::SendEvent),
-            static_cast<void(Object::*)(StringHash, VariantMap&)>(&Object::SendEvent))
-
-        .addFunction("GetEventDataMap", &Object::GetEventDataMap)
-
-        .addFunction("GetContext", &Object::GetContext)
-        .addFunction("GetGlobalVar", &Object::GetGlobalVar)
-        .addFunction("GetGlobalVars", &Object::GetGlobalVars)
-        .addFunction("SetGlobalVar", &Object::SetGlobalVar)
-        .addFunction("GetEventSender", &Object::GetEventSender)
-        .addFunction("GetEventHandler", &Object::GetEventHandler)
-
-        /*
-        .addOverloadedFunctions("HasSubscribedToEvent",
-            static_cast<bool(Object::*)(StringHash) const>(&Object::HasSubscribedToEvent),
-            static_cast<bool(Object::*)(Object*, StringHash) const>(&Object::HasSubscribedToEvent))
-            */
-
-        .addFunction("HasEventHandlers", &Object::HasEventHandlers)
         .addFunction("GetCategory", &Object::GetCategory)
+
+        ADD_OVERLOADED_FUNCTIONS_2(Object, SendEvent)
+        ADD_OVERLOADED_FUNCTIONS_2(Object, HasSubscribedToEvent)
 
         .addProperty("type", &Object::GetType)
         .addProperty("typeName", &Object::GetTypeName)
-        .addProperty("typeInfo", &Object::GetTypeInfo)
-        .addProperty("eventDataMap", &Object::GetEventDataMap)
-        .addProperty("context", &Object::GetContext)
-        .addProperty("globalVars", &Object::GetGlobalVars)
-        .addProperty("eventSender", &Object::GetEventSender)
-        .addProperty("eventHandler", &Object::GetEventHandler)
         .addProperty("category", &Object::GetCategory)
     );
 }
@@ -197,13 +135,12 @@ static void PrintLine1(const String& str, bool error)
     return PrintLine(str, error);
 }
 
-
 static void RegisterProcessUtils(kaguya::State& lua)
 {
     using namespace kaguya;
 
     lua["ErrorDialog"] = function(&ErrorDialog);
-    
+
     lua["ErrorExit"] = overload(&ErrorExit0, &ErrorExit1, &ErrorExit2);
 
     lua["OpenConsoleWindow"] = function(&OpenConsoleWindow);
@@ -211,12 +148,15 @@ static void RegisterProcessUtils(kaguya::State& lua)
     lua["PrintLine"] = overload(&PrintLine0, &PrintLine1);
 
     lua["GetArguments"] = function(&GetArguments);
+
     lua["GetConsoleInput"] = function(&GetConsoleInput);
     lua["GetPlatform"] = function(&GetPlatform);
 
     lua["GetNumPhysicalCPUs"] = function(&GetNumPhysicalCPUs);
     lua["GetNumLogicalCPUs"] = function(&GetNumLogicalCPUs);
+
     lua["SetMiniDumpDir"] = function(&SetMiniDumpDir);
+    lua["GetMiniDumpDir"] = function(&GetMiniDumpDir);
 }
 
 static void RegisterSpline(kaguya::State& lua)
@@ -231,33 +171,27 @@ static void RegisterSpline(kaguya::State& lua)
 
     lua["Spline"].setClass(UserdataMetatable<Spline>()
         .setConstructors<Spline(),
-        Spline(InterpolationMode),
-        Spline(const Vector<Variant>&, InterpolationMode),
-        Spline(const Spline&)>()
+        Spline(InterpolationMode)>()
 
         .addFunction("__eq", &Spline::operator==)
 
-        .addFunction("GetInterpolationMode", &Spline::GetInterpolationMode)
-        .addFunction("GetKnots", &Spline::GetKnots)
-        .addFunction("GetKnot", &Spline::GetKnot)
-        .addFunction("GetPoint", &Spline::GetPoint)
         .addFunction("SetInterpolationMode", &Spline::SetInterpolationMode)
-        .addFunction("SetKnots", &Spline::SetKnots)
         .addFunction("SetKnot", &Spline::SetKnot)
-
+        
         .addOverloadedFunctions("AddKnot",
             static_cast<void(Spline::*)(const Variant&)>(&Spline::AddKnot),
             static_cast<void(Spline::*)(const Variant&, unsigned)>(&Spline::AddKnot))
 
-
         .addOverloadedFunctions("RemoveKnot",
             static_cast<void(Spline::*)()>(&Spline::RemoveKnot),
             static_cast<void(Spline::*)(unsigned)>(&Spline::RemoveKnot))
-
         .addFunction("Clear", &Spline::Clear)
 
+        .addFunction("GetInterpolationMode", &Spline::GetInterpolationMode)
+        .addFunction("GetKnot", &Spline::GetKnot)        
+        .addFunction("GetPoint", &Spline::GetPoint)
+
         .addProperty("interpolationMode", &Spline::GetInterpolationMode, &Spline::SetInterpolationMode)
-        .addProperty("knots", &Spline::GetKnots, &Spline::SetKnots)
     );
 }
 
@@ -280,17 +214,15 @@ static void RegisterStringUtils(kaguya::State& lua)
     lua["ToDouble"] = static_cast<double(*)(const char*)>(&ToDouble);
     lua["ToInt"] = static_cast<int(*)(const char*)>(&ToInt);
     lua["ToUInt"] = static_cast<unsigned(*)(const char*)>(&ToUInt);
+    
     lua["ToColor"] = static_cast<Color(*)(const char*)>(&ToColor);
     lua["ToIntRect"] = static_cast<IntRect(*)(const char*)>(&ToIntRect);
     lua["ToIntVector2"] = static_cast<IntVector2(*)(const char*)>(&ToIntVector2);
     lua["ToQuaternion"] = static_cast<Quaternion(*)(const char*)>(&ToQuaternion);
     lua["ToRect"] = static_cast<Rect(*)(const char*)>(&ToRect);
     lua["ToVector2"] = static_cast<Vector2(*)(const char*)>(&ToVector2);
-    lua["ToVector3"] = static_cast<Vector3(*)(const char*)>(&ToVector3);
-    
+    lua["ToVector3"] = static_cast<Vector3(*)(const char*)>(&ToVector3);    
     lua["ToVector4"] = overload(&ToVector40, &ToVector41);
-
-    lua["ToVectorVariant"] = static_cast<Variant(*)(const char*)>(&ToVectorVariant);
     lua["ToMatrix3"] = static_cast<Matrix3(*)(const char*)>(&ToMatrix3);
     lua["ToMatrix3x4"] = static_cast<Matrix3x4(*)(const char*)>(&ToMatrix3x4);
     lua["ToMatrix4"] = static_cast<Matrix4(*)(const char*)>(&ToMatrix4);
@@ -301,31 +233,27 @@ static void RegisterStringUtils(kaguya::State& lua)
     lua["IsDigit"] = function(&IsDigit);
     lua["ToUpper"] = function(&ToUpper);
     lua["ToLower"] = function(&ToLower);
-    lua["GetFileSizeString"] = function(&GetFileSizeString);
 }
 
 static void RegisterTimer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["Timer"].setClass(UserdataMetatable<Timer>()
-        .setConstructors<Timer()>()
-
-        .addFunction("GetMSec", &Timer::GetMSec)
-        .addFunction("Reset", &Timer::Reset)
-    );
-
     lua["Time"].setClass(UserdataMetatable<Time, Object>()
-        
+
         .addFunction("GetFrameNumber", &Time::GetFrameNumber)
         .addFunction("GetTimeStep", &Time::GetTimeStep)
+        .addFunction("GetTimerPeriod", &Time::GetTimerPeriod)
         .addFunction("GetElapsedTime", &Time::GetElapsedTime)
+
         .addStaticFunction("GetSystemTime", &Time::GetSystemTime)
         .addStaticFunction("GetTimeSinceEpoch", &Time::GetTimeSinceEpoch)
         .addStaticFunction("GetTimeStamp", &Time::GetTimeStamp)
+        .addStaticFunction("Sleep", &Time::GetTimeStamp)
 
         .addProperty("frameNumber", &Time::GetFrameNumber)
         .addProperty("timeStep", &Time::GetTimeStep)
+        .addProperty("timerPeriod", &Time::GetTimerPeriod)
         .addProperty("elapsedTime", &Time::GetElapsedTime)
     );
 }
@@ -370,8 +298,7 @@ static void RegisterVariant(kaguya::State& lua)
         .setConstructors<ResourceRef(),
         ResourceRef(StringHash),
         ResourceRef(StringHash, const String&),
-        ResourceRef(const char*, const char*),
-        ResourceRef(const ResourceRef&)>()
+        ResourceRef(const char*, const char*)>()
 
         .addFunction("__eq", &ResourceRef::operator==)
 
@@ -381,15 +308,14 @@ static void RegisterVariant(kaguya::State& lua)
 
     lua["ResourceRefList"].setClass(UserdataMetatable<ResourceRefList>()
         .setConstructors<ResourceRefList(),
-        ResourceRefList(StringHash),
-        ResourceRefList(StringHash, const StringVector&)>()
+        ResourceRefList(StringHash)>()
 
         .addFunction("__eq", &ResourceRefList::operator==)
 
         .addProperty("type", &ResourceRefList::type_)
-        .addProperty("names", &ResourceRefList::names_)
     );
 
+    // todo from here:
     lua["Variant"].setClass(UserdataMetatable<Variant>()
         .setConstructors<Variant(),
         Variant(int),
@@ -418,60 +344,7 @@ static void RegisterVariant(kaguya::State& lua)
 
         .addFunction("Clear", &Variant::Clear)
 
-        .addOverloadedFunctions("__eq",
-            static_cast<bool(Variant::*)(const Variant&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(int) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(unsigned) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(bool) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(float) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(double) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const Vector2&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const Vector3&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const Vector4&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const Quaternion&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const Color&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const String&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const ResourceRef&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const ResourceRefList&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const VariantVector&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const StringVector&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const VariantMap&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const IntRect&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const IntVector2&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const StringHash&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(RefCounted*) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const Matrix3&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const Matrix3x4&) const>(&Variant::operator==),
-            static_cast<bool(Variant::*)(const Matrix4&) const>(&Variant::operator==))
-
-
-        .addOverloadedFunctions("FromString",
-            static_cast<void(Variant::*)(const char*, const char*)>(&Variant::FromString),
-            static_cast<void(Variant::*)(VariantType, const char*)>(&Variant::FromString))
-
-        .addStaticFunction("SetInt", [](Variant& variant, int value) { variant = value; })
-        .addStaticFunction("SetUInt", [](Variant& variant, unsigned value) { variant = value; })
-        .addStaticFunction("SetStringHash", [](Variant& variant, StringHash value) { variant = value; })
-        .addStaticFunction("SetBool", [](Variant& variant, bool value) { variant = value; })
-        .addStaticFunction("SetFloat", [](Variant& variant, float value) { variant = value; })
-        .addStaticFunction("SetDouble", [](Variant& variant, double value) { variant = value; })
-        .addStaticFunction("SetVector2", [](Variant& variant, const Vector2& value) { variant = value; })
-        .addStaticFunction("SetVector3", [](Variant& variant, const Vector3& value) { variant = value; })
-        .addStaticFunction("SetVector4", [](Variant& variant, const Vector4& value) { variant = value; })
-        .addStaticFunction("SetQuaternion", [](Variant& variant, const Quaternion& value) { variant = value; })
-        .addStaticFunction("SetColor", [](Variant& variant, const Color& value) { variant = value; })
-        .addStaticFunction("SetString", [](Variant& variant, const String& value) { variant = value; })
-        .addStaticFunction("SetResourceRef", [](Variant& variant, const ResourceRef& value) { variant = value; })
-        .addStaticFunction("SetResourceRefList", [](Variant& variant, const ResourceRefList& value) { variant = value; })
-        .addStaticFunction("SetVariantVector", [](Variant& variant, const VariantVector& value) { variant = value; })
-        .addStaticFunction("SetStringVector", [](Variant& variant, const StringVector& value) { variant = value; })
-        .addStaticFunction("SetVariantMap", [](Variant& variant, const VariantMap& value) { variant = value; })
-        .addStaticFunction("SetIntRect", [](Variant& variant, const IntRect& value) { variant = value; })
-        .addStaticFunction("SetIntVector2", [](Variant& variant, const IntVector2& value) { variant = value; })
-        .addStaticFunction("SetPtr", [](Variant& variant, RefCounted* value) { variant = value; })
-        .addStaticFunction("SetMatrix3", [](Variant& variant, const Matrix3& value) { variant = value; })
-        .addStaticFunction("SetMatrix3x4", [](Variant& variant, const Matrix3x4& value) { variant = value; })
-        .addStaticFunction("SetMatrix4", [](Variant& variant, const Matrix4& value) { variant = value; })
+        .addFunction("__eq", static_cast<bool(Variant::*)(const Variant&) const>(&Variant::operator==))
 
         .addFunction("GetInt", &Variant::GetInt)
         .addFunction("GetUInt", &Variant::GetUInt)
@@ -479,12 +352,18 @@ static void RegisterVariant(kaguya::State& lua)
         .addFunction("GetBool", &Variant::GetBool)
         .addFunction("GetFloat", &Variant::GetFloat)
         .addFunction("GetDouble", &Variant::GetDouble)
+        
         .addFunction("GetVector2", &Variant::GetVector2)
         .addFunction("GetVector3", &Variant::GetVector3)
         .addFunction("GetVector4", &Variant::GetVector4)
         .addFunction("GetQuaternion", &Variant::GetQuaternion)
         .addFunction("GetColor", &Variant::GetColor)
         .addFunction("GetString", &Variant::GetString)
+
+        .addFunction("GetRawBuffer", &Variant::GetBuffer)
+        .addFunction("GetBuffer", &Variant::GetVectorBuffer)
+        .addFunction("GetVoidPtr", &Variant::GetVoidPtr)
+
         .addFunction("GetResourceRef", &Variant::GetResourceRef)
         .addFunction("GetResourceRefList", &Variant::GetResourceRefList)
         .addFunction("GetVariantVector", &Variant::GetVariantVector)
@@ -502,27 +381,17 @@ static void RegisterVariant(kaguya::State& lua)
         .addFunction("GetType", &Variant::GetType)
         .addFunction("GetTypeName", static_cast<String(Variant::*)() const>(&Variant::GetTypeName))
         .addFunction("ToString", &Variant::ToString)
-
         .addFunction("IsZero", &Variant::IsZero)
         .addFunction("IsEmpty", &Variant::IsEmpty)
 
         .addProperty("type", &Variant::GetType)
         .addProperty("typeName", static_cast<String(Variant::*)() const>(&Variant::GetTypeName))
-
         .addProperty("zero", &Variant::IsZero)
         .addProperty("empty", &Variant::IsEmpty)
-
-        .addStaticField("EMPTY", &Variant::EMPTY)
-        .addStaticField("emptyBuffer", &Variant::emptyBuffer)
-        .addStaticField("emptyResourceRef", &Variant::emptyResourceRef)
-        .addStaticField("emptyResourceRefList", &Variant::emptyResourceRefList)
-        .addStaticField("emptyVariantMap", &Variant::emptyVariantMap)
-        .addStaticField("emptyVariantVector", &Variant::emptyVariantVector)
-        .addStaticField("emptyStringVector", &Variant::emptyStringVector)
     );
 }
 
-static const Variant& VariantMapGetVariant(const VariantMap& variantMap, const String& key)
+static const Variant& VariantMapGetVariant(const VariantMap& variantMap, const char* key)
 {
     VariantMap::ConstIterator i = variantMap.Find(StringHash(key));
     if (i == variantMap.End())
@@ -531,7 +400,7 @@ static const Variant& VariantMapGetVariant(const VariantMap& variantMap, const S
     return i->second_;
 }
 
-static void VariantMapSetVariant(VariantMap& variantMap, const String& key, const Variant& value)
+static void VariantMapSetVariant(VariantMap& variantMap, const char* key, const Variant& value)
 {
     variantMap[StringHash(key)] = value;
 }
@@ -550,9 +419,7 @@ static void RegisterVariantMap(kaguya::State& lua)
 
 void RegisterCoreLuaAPI(kaguya::State& lua)
 {
-    RegisterAttribute(lua);
     RegisterContext(lua);
-    RegisterCoreEvents(lua);
     RegisterObject(lua);
     RegisterProcessUtils(lua);
     RegisterSpline(lua);

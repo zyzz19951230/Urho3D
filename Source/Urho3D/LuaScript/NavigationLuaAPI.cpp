@@ -28,7 +28,6 @@
 #include "../Navigation/DynamicNavigationMesh.h"
 #include "../Navigation/NavArea.h"
 #include "../Navigation/Navigable.h"
-#include "../Navigation/NavigationEvents.h"
 #include "../Navigation/NavigationMesh.h"
 #include "../Navigation/Obstacle.h"
 #include "../Navigation/OffMeshConnection.h"
@@ -97,8 +96,8 @@ static void RegisterCrowdAgent(kaguya::State& lua)
         .addFunction("GetRequestedTargetType", &CrowdAgent::GetRequestedTargetType)
         .addFunction("GetAgentState", &CrowdAgent::GetAgentState)
         .addFunction("GetTargetState", &CrowdAgent::GetTargetState)
-        .addFunction("GetUpdateNodePosition", &CrowdAgent::GetUpdateNodePosition)
-        .addFunction("GetAgentCrowdId", &CrowdAgent::GetAgentCrowdId)
+        .addFunction("GetUpdateNodePosition", &CrowdAgent::GetUpdateNodePosition)        
+
         .addFunction("GetMaxAccel", &CrowdAgent::GetMaxAccel)
         .addFunction("GetMaxSpeed", &CrowdAgent::GetMaxSpeed)
         .addFunction("GetRadius", &CrowdAgent::GetRadius)
@@ -120,7 +119,6 @@ static void RegisterCrowdAgent(kaguya::State& lua)
         .addProperty("agentState", &CrowdAgent::GetAgentState)
         .addProperty("targetState", &CrowdAgent::GetTargetState)
         .addProperty("updateNodePosition", &CrowdAgent::GetUpdateNodePosition, &CrowdAgent::SetUpdateNodePosition)
-        .addProperty("agentCrowdId", &CrowdAgent::GetAgentCrowdId)
         .addProperty("maxAccel", &CrowdAgent::GetMaxAccel, &CrowdAgent::SetMaxAccel)
         .addProperty("maxSpeed", &CrowdAgent::GetMaxSpeed, &CrowdAgent::SetMaxSpeed)
         .addProperty("radius", &CrowdAgent::GetRadius, &CrowdAgent::SetRadius)
@@ -244,21 +242,17 @@ static void RegisterCrowdManager(kaguya::State& lua)
         .addFunction("SetIncludeFlags", &CrowdManager::SetIncludeFlags)
         .addFunction("SetExcludeFlags", &CrowdManager::SetExcludeFlags)
         .addFunction("SetAreaCost", &CrowdManager::SetAreaCost)
-        
-        ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, GetAgents)
-        
+
+        .addFunction("SetObstacleAvoidanceParams", &CrowdManager::SetObstacleAvoidanceParams)
+
+        ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, GetAgents)        
         .addStaticFunction("FindNearestPoint", &CrowdManagerFindNearestPoint)
-
         ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, MoveAlongSurface)
-
         .addStaticFunction("FindPath", &CrowdManagerFindPath)
-
         .addStaticFunction("GetRandomPoint", &CrowdManagerGetRandomPoint)
         .addStaticFunction("GetRandomPointInCircle", &CrowdManagerGetRandomPointInCircle)
-
         .addStaticFunction("GetDistanceToWall", &CrowdManagerGetDistanceToWall)
         .addStaticFunction("Raycast", &CrowdManagerRaycast)
-
         .addFunction("GetMaxAgents", &CrowdManager::GetMaxAgents)
         .addFunction("GetMaxAgentRadius", &CrowdManager::GetMaxAgentRadius)
         .addFunction("GetNavigationMesh", &CrowdManager::GetNavigationMesh)
@@ -272,8 +266,6 @@ static void RegisterCrowdManager(kaguya::State& lua)
         .addProperty("maxAgents", &CrowdManager::GetMaxAgents, &CrowdManager::SetMaxAgents)
         .addProperty("maxAgentRadius", &CrowdManager::GetMaxAgentRadius, &CrowdManager::SetMaxAgentRadius)
         .addProperty("navigationMesh", &CrowdManager::GetNavigationMesh, &CrowdManager::SetNavigationMesh)
-        .addProperty("numQueryFilterTypes", &CrowdManager::GetNumQueryFilterTypes)
-        .addProperty("numObstacleAvoidanceTypes", &CrowdManager::GetNumObstacleAvoidanceTypes)
         );
 }
 
@@ -284,16 +276,13 @@ static void RegisterDynamicNavigationMesh(kaguya::State& lua)
     lua["DynamicNavigationMesh"].setClass(UserdataMetatable<DynamicNavigationMesh, NavigationMesh>()
         .addStaticFunction("new", &CreateObject<DynamicNavigationMesh>)
 
-        .addFunction("DrawDebugGeometry", static_cast<void(DynamicNavigationMesh::*)(bool)>(&DynamicNavigationMesh::DrawDebugGeometry))
-
         .addFunction("SetMaxObstacles", &DynamicNavigationMesh::SetMaxObstacles)
         .addFunction("SetMaxLayers", &DynamicNavigationMesh::SetMaxLayers)
-        
-        .addFunction("GetMaxObstacles", &DynamicNavigationMesh::GetMaxObstacles)
-        .addFunction("GetMaxLayers", &DynamicNavigationMesh::GetMaxLayers)
-
         .addFunction("SetDrawObstacles", &DynamicNavigationMesh::SetDrawObstacles)
+
         .addFunction("GetDrawObstacles", &DynamicNavigationMesh::GetDrawObstacles)
+        .addFunction("GetMaxLayers", &DynamicNavigationMesh::GetMaxLayers)
+        .addFunction("GetMaxObstacles", &DynamicNavigationMesh::GetMaxObstacles)
 
         .addProperty("maxObstacles", &DynamicNavigationMesh::GetMaxObstacles, &DynamicNavigationMesh::SetMaxObstacles)
         .addProperty("maxLayers", &DynamicNavigationMesh::GetMaxLayers, &DynamicNavigationMesh::SetMaxLayers)
@@ -334,24 +323,6 @@ static void RegisterNavigable(kaguya::State& lua)
 
         .addProperty("recursive", &Navigable::IsRecursive, &Navigable::SetRecursive)
         );
-}
-
-static void RegisterNavigationEvents(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["E_NAVIGATION_MESH_REBUILT"] = E_NAVIGATION_MESH_REBUILT;
-    lua["E_NAVIGATION_AREA_REBUILT"] = E_NAVIGATION_AREA_REBUILT;
-    lua["E_CROWD_AGENT_FORMATION"] = E_CROWD_AGENT_FORMATION;
-    lua["E_CROWD_AGENT_NODE_FORMATION"] = E_CROWD_AGENT_NODE_FORMATION;
-    lua["E_CROWD_AGENT_REPOSITION"] = E_CROWD_AGENT_REPOSITION;
-    lua["E_CROWD_AGENT_NODE_REPOSITION"] = E_CROWD_AGENT_NODE_REPOSITION;
-    lua["E_CROWD_AGENT_FAILURE"] = E_CROWD_AGENT_FAILURE;
-    lua["E_CROWD_AGENT_NODE_FAILURE"] = E_CROWD_AGENT_NODE_FAILURE;
-    lua["E_CROWD_AGENT_STATE_CHANGED"] = E_CROWD_AGENT_STATE_CHANGED;
-    lua["E_CROWD_AGENT_NODE_STATE_CHANGED"] = E_CROWD_AGENT_NODE_STATE_CHANGED;
-    lua["E_NAVIGATION_OBSTACLE_ADDED"] = E_NAVIGATION_OBSTACLE_ADDED;
-    lua["E_NAVIGATION_OBSTACLE_REMOVED"] = E_NAVIGATION_OBSTACLE_REMOVED;
 }
 
 static Vector3 NavigationMeshFindNearestPoint0(NavigationMesh* self, const Vector3& point)
@@ -436,23 +407,15 @@ static void RegisterNavigationMesh(kaguya::State& lua)
     lua["NAVMESH_PARTITION_WATERSHED"] = NAVMESH_PARTITION_WATERSHED;
     lua["NAVMESH_PARTITION_MONOTONE"] = NAVMESH_PARTITION_MONOTONE;
 
-    // enum NavigationPathPointFlag;
-    lua["NAVPATHFLAG_NONE"] = NAVPATHFLAG_NONE;
-    lua["NAVPATHFLAG_START"] = NAVPATHFLAG_START;
-    lua["NAVPATHFLAG_END"] = NAVPATHFLAG_END;
-    lua["NAVPATHFLAG_OFF_MESH"] = NAVPATHFLAG_OFF_MESH;
-
-    lua["NavigationPathPoint"].setClass(UserdataMetatable<NavigationPathPoint>()
-
-        .addProperty("position", &NavigationPathPoint::position_)
-        .addProperty("flag", &NavigationPathPoint::flag_)
-        .addProperty("areaID", &NavigationPathPoint::areaID_)
+    lua["NavigationGeometryInfo"].setClass(UserdataMetatable<NavigationGeometryInfo>()
+        .addProperty("component",&NavigationGeometryInfo::component_)
+        .addProperty("lodLevel", &NavigationGeometryInfo::lodLevel_)
+        .addProperty("transform", &NavigationGeometryInfo::transform_)
+        .addProperty("boundingBox", &NavigationGeometryInfo::boundingBox_)
         );
 
     lua["NavigationMesh"].setClass(UserdataMetatable<NavigationMesh, Component>()
         .addStaticFunction("new", &CreateObject<NavigationMesh>)
-
-        .addFunction("DrawDebugGeometry", static_cast<void(NavigationMesh::*)(bool)>(&NavigationMesh::DrawDebugGeometry))
 
         .addFunction("SetTileSize", &NavigationMesh::SetTileSize)
         .addFunction("SetCellSize", &NavigationMesh::SetCellSize)
@@ -470,6 +433,14 @@ static void RegisterNavigationMesh(kaguya::State& lua)
         .addFunction("SetPadding", &NavigationMesh::SetPadding)
         .addFunction("SetAreaCost", &NavigationMesh::SetAreaCost)
 
+        .addOverloadedFunctions("Build",
+            static_cast<bool(NavigationMesh::*)()>(&NavigationMesh::Build),
+            static_cast<bool(NavigationMesh::*)(const BoundingBox&)>(&NavigationMesh::Build))
+
+        .addFunction("SetPartitionType", &NavigationMesh::SetPartitionType)
+        .addFunction("SetDrawOffMeshConnections", &NavigationMesh::SetDrawOffMeshConnections)
+        .addFunction("SetDrawNavAreas", &NavigationMesh::SetDrawNavAreas)
+
         ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, FindNearestPoint)
         ADD_OVERLOADED_FUNCTIONS_3(NavigationMesh, MoveAlongSurface)
         ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, FindPath)
@@ -480,8 +451,8 @@ static void RegisterNavigationMesh(kaguya::State& lua)
         ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, GetDistanceToWall)
         ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, Raycast)
 
-        .addFunction("GetMeshName", &NavigationMesh::GetMeshName)
-        .addFunction("SetMeshName", &NavigationMesh::SetMeshName)
+        .addFunction("DrawDebugGeometry", static_cast<void (NavigationMesh::*)(bool)>(&NavigationMesh::DrawDebugGeometry))
+
         .addFunction("GetTileSize", &NavigationMesh::GetTileSize)
         .addFunction("GetCellSize", &NavigationMesh::GetCellSize)
         .addFunction("GetCellHeight", &NavigationMesh::GetCellHeight)
@@ -501,14 +472,10 @@ static void RegisterNavigationMesh(kaguya::State& lua)
         .addFunction("GetBoundingBox", &NavigationMesh::GetBoundingBox)
         .addFunction("GetWorldBoundingBox", &NavigationMesh::GetWorldBoundingBox)
         .addFunction("GetNumTiles", &NavigationMesh::GetNumTiles)
-        .addFunction("SetPartitionType", &NavigationMesh::SetPartitionType)
         .addFunction("GetPartitionType", &NavigationMesh::GetPartitionType)
-        .addFunction("SetDrawOffMeshConnections", &NavigationMesh::SetDrawOffMeshConnections)
         .addFunction("GetDrawOffMeshConnections", &NavigationMesh::GetDrawOffMeshConnections)
-        .addFunction("SetDrawNavAreas", &NavigationMesh::SetDrawNavAreas)
         .addFunction("GetDrawNavAreas", &NavigationMesh::GetDrawNavAreas)
 
-        .addProperty("meshName", &NavigationMesh::GetMeshName, &NavigationMesh::SetMeshName)
         .addProperty("tileSize", &NavigationMesh::GetTileSize, &NavigationMesh::SetTileSize)
         .addProperty("cellSize", &NavigationMesh::GetCellSize, &NavigationMesh::SetCellSize)
         .addProperty("cellHeight", &NavigationMesh::GetCellHeight, &NavigationMesh::SetCellHeight)
@@ -542,15 +509,12 @@ static void RegisterObstacle(kaguya::State& lua)
 
         .addFunction("GetHeight", &Obstacle::GetHeight)
         .addFunction("SetHeight", &Obstacle::SetHeight)
+
         .addFunction("GetRadius", &Obstacle::GetRadius)
         .addFunction("SetRadius", &Obstacle::SetRadius)
-        .addFunction("GetObstacleID", &Obstacle::GetObstacleID)
-
-        .addFunction("DrawDebugGeometry", static_cast<void(Obstacle::*)(bool)>(&Obstacle::DrawDebugGeometry))
 
         .addProperty("height", &Obstacle::GetHeight, &Obstacle::SetHeight)
         .addProperty("radius", &Obstacle::GetRadius, &Obstacle::SetRadius)
-        .addProperty("obstacleID", &Obstacle::GetObstacleID)
         );
 }
 
@@ -566,6 +530,7 @@ static void RegisterOffMeshConnection(kaguya::State& lua)
         .addFunction("SetBidirectional", &OffMeshConnection::SetBidirectional)
         .addFunction("SetMask", &OffMeshConnection::SetMask)
         .addFunction("SetAreaID", &OffMeshConnection::SetAreaID)
+        
         .addFunction("GetEndPoint", &OffMeshConnection::GetEndPoint)
         .addFunction("GetRadius", &OffMeshConnection::GetRadius)
         .addFunction("IsBidirectional", &OffMeshConnection::IsBidirectional)
@@ -587,7 +552,6 @@ void RegisterNavigationLuaAPI(kaguya::State& lua)
     RegisterDynamicNavigationMesh(lua);
     RegisterNavArea(lua);
     RegisterNavigable(lua);
-    RegisterNavigationEvents(lua);
     RegisterNavigationMesh(lua);
     RegisterObstacle(lua);
     RegisterOffMeshConnection(lua);

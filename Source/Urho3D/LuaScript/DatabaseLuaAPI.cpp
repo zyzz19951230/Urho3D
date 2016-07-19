@@ -24,7 +24,6 @@
 
 #include "../Core/Context.h"
 #include "../Database/Database.h"
-#include "../Database/DatabaseEvents.h"
 #include "../Database/DbConnection.h"
 #include "../Database/DbResult.h"
 #include "../LuaScript/LuaScriptUtils.h"
@@ -54,14 +53,9 @@ static void RegisterDatabase(kaguya::State& lua)
 
         .addProperty("pooling", &Database::IsPooling)
         .addProperty("poolSize", &Database::GetPoolSize, &Database::SetPoolSize)
-    );    
-}
+    );
 
-static void RegisterDatabaseEvents(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["E_DBCURSOR"] = E_DBCURSOR;
+    // lua["GetDBAPI"] = function(&Database::GetAPI)
 }
 
 static DbResult DbConnectionExecute0(DbConnection* self, const String& sql)
@@ -101,9 +95,7 @@ static void RegisterDbResult(kaguya::State& lua)
         .addFunction("GetNumColumns", &DbResult::GetNumColumns)
         .addFunction("GetNumRows", &DbResult::GetNumRows)
         .addFunction("GetNumAffectedRows", &DbResult::GetNumAffectedRows)
-        .addFunction("GetColumns", &DbResult::GetColumns)
-        .addFunction("GetRows", &DbResult::GetRows)
-
+        
         .addProperty("numColumns", &DbResult::GetNumColumns)
         .addProperty("numRows", &DbResult::GetNumRows)
         .addProperty("numAffectedRows", &DbResult::GetNumAffectedRows)
@@ -113,7 +105,6 @@ static void RegisterDbResult(kaguya::State& lua)
 void RegisterDatabaseLuaAPI(kaguya::State& lua)
 {
     RegisterDbResult(lua);
-    RegisterDatabaseEvents(lua);
     RegisterDbConnection(lua);
     RegisterDatabase(lua);
 

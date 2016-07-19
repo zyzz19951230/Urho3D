@@ -26,7 +26,6 @@
 #include "../Engine/Console.h"
 #include "../Engine/DebugHud.h"
 #include "../Engine/Engine.h"
-#include "../Engine/EngineEvents.h"
 #include "../LuaScript/LuaScript.h"
 #include "../LuaScript/LuaScriptUtils.h"
 
@@ -50,7 +49,6 @@ static void RegisterConsole(kaguya::State& lua)
         .addFunction("SetNumRows", &Console::SetNumRows)
         .addFunction("SetNumHistoryRows", &Console::SetNumHistoryRows)
         .addFunction("SetFocusOnShow", &Console::SetFocusOnShow)
-
         .addFunction("UpdateElements", &Console::UpdateElements)
 
         .addFunction("GetDefaultStyle", &Console::GetDefaultStyle)
@@ -62,7 +60,6 @@ static void RegisterConsole(kaguya::State& lua)
         .addFunction("GetCommandInterpreter", &Console::GetCommandInterpreter)
         .addFunction("GetNumBufferedRows", &Console::GetNumBufferedRows)
         .addFunction("GetNumRows", &Console::GetNumRows)
-
         .addFunction("CopySelectedRows", &Console::CopySelectedRows)
         .addFunction("GetNumHistoryRows", &Console::GetNumHistoryRows)
         .addFunction("GetHistoryPosition", &Console::GetHistoryPosition)
@@ -99,6 +96,8 @@ static void RegisterDebugHud(kaguya::State& lua)
 
     lua["DebugHud"].setClass(UserdataMetatable<DebugHud, Object>()
 
+        // .addFunction("Update", &DebugHud::Update)
+
         .addFunction("SetDefaultStyle", &DebugHud::SetDefaultStyle)
         .addFunction("SetMode", &DebugHud::SetMode)
         .addFunction("SetProfilerMaxDepth", &DebugHud::SetProfilerMaxDepth)
@@ -128,7 +127,6 @@ static void RegisterDebugHud(kaguya::State& lua)
         .addProperty("statsText", &DebugHud::GetStatsText)
         .addProperty("modeText", &DebugHud::GetModeText)
         .addProperty("profilerText", &DebugHud::GetProfilerText)
-        .addProperty("memoryText", &DebugHud::GetMemoryText)
         .addProperty("mode", &DebugHud::GetMode, &DebugHud::SetMode)
         .addProperty("profilerMaxDepth", &DebugHud::GetProfilerMaxDepth, &DebugHud::SetProfilerMaxDepth)
         .addProperty("profilerInterval", &DebugHud::GetProfilerInterval, &DebugHud::SetProfilerInterval)
@@ -174,6 +172,8 @@ static void RegisterEngine(kaguya::State& lua)
 
     lua["Engine"].setClass(UserdataMetatable<Engine, Object>()
 
+        .addFunction("RunFrame", &Engine::RunFrame)
+
         .addStaticFunction("CreateConsole", &EngineCreateConsole)
         .addStaticFunction("CreateDebugHud", &EngineCreateDebugHud)
 
@@ -184,16 +184,11 @@ static void RegisterEngine(kaguya::State& lua)
         .addFunction("SetPauseMinimized", &Engine::SetPauseMinimized)
         .addFunction("SetAutoExit", &Engine::SetAutoExit)
         .addFunction("SetNextTimeStep", &Engine::SetNextTimeStep)
-
         .addFunction("Exit", &Engine::Exit)
-
         .addFunction("DumpProfiler", &Engine::DumpProfiler)
-
         ADD_OVERLOADED_FUNCTIONS_2(Engine, DumpResources)
-
         .addFunction("DumpMemory", &Engine::DumpMemory)
 
-        .addFunction("GetNextTimeStep", &Engine::GetNextTimeStep)
         .addFunction("GetMinFps", &Engine::GetMinFps)
         .addFunction("GetMaxFps", &Engine::GetMaxFps)
         .addFunction("GetMaxInactiveFps", &Engine::GetMaxInactiveFps)
@@ -204,7 +199,6 @@ static void RegisterEngine(kaguya::State& lua)
         .addFunction("IsExiting", &Engine::IsExiting)
         .addFunction("IsHeadless", &Engine::IsHeadless)
 
-        .addProperty("nextTimeStep", &Engine::GetNextTimeStep, &Engine::SetNextTimeStep)
         .addProperty("minFps", &Engine::GetMinFps, &Engine::SetMinFps)
         .addProperty("maxFps", &Engine::GetMaxFps, &Engine::SetMaxFps)
         .addProperty("maxInactiveFps", &Engine::GetMaxInactiveFps, &Engine::SetMaxInactiveFps)
@@ -217,19 +211,11 @@ static void RegisterEngine(kaguya::State& lua)
         );
 }
 
-static void RegisterEngineEvents(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["E_CONSOLECOMMAND"] = E_CONSOLECOMMAND;
-}
-
 void RegisterEngineLuaAPI(kaguya::State& lua)
 {
     RegisterConsole(lua);
     RegisterDebugHud(lua);
     RegisterEngine(lua);
-    RegisterEngineEvents(lua);
 
     lua["engine"] = GetSubsystem<Engine>();
     lua["GetEngine"] = GetSubsystem<Engine>;

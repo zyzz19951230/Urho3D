@@ -68,6 +68,161 @@ static void RegisterCoroutine(kaguya::State &lua)
     );
 }
 
+//
+//
+//static void LuaScriptUnsubscribeFromEvent0(const String& eventName)
+//{
+//    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
+//    luaScript->RemoveEventHandler(eventName);
+//}
+//
+//static void LuaScriptUnsubscribeFromEvent1(Object* sender, const String& eventName)
+//{
+//    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
+//    luaScript->RemoveEventHandler(sender, eventName);
+//}
+//
+//static void LuaScriptUnsubscribeFromEvent2(const String& eventName)
+//{
+//    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
+//    luaScript->RemoveEventHandler(eventName);
+//}
+//
+//static void LuaScriptUnsubscribeFromEvent3(Object* sender, const String& eventName)
+//{
+//    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
+//    luaScript->RemoveEventHandler(sender, eventName);
+//}
+//
+//static void RegisterEventName(const char* eventName)
+//{
+//    EventNameRegistrar::RegisterEventName(eventName);
+//}
+
+static LuaScript* GetLuaScript()
+{
+    return globalContext->GetSubsystem<LuaScript>();
+}
+
+static void LuaScriptAddEventHandler0(const String& eventName, const String& functionName)
+{
+    GetLuaScript()->AddEventHandler(eventName, functionName);
+}
+
+static void LuaScriptAddEventHandler1(Object* sender, const String& eventName, const String& functionName)
+{
+    GetLuaScript()->AddEventHandler(sender, eventName, functionName);
+}
+
+static void LuaScriptAddEventHandler2(const String& eventName, const kaguya::LuaFunction& function)
+{
+    GetLuaScript()->AddEventHandler(eventName, 2); // 2 is the stack index of function
+}
+
+static void LuaScriptAddEventHandler3(Object* sender, const String& eventName, const kaguya::LuaFunction& function)
+{
+    GetLuaScript()->AddEventHandler(sender, eventName, 3); // 3 is the stack index of function
+}
+
+static void LuaScriptRemoveEventHandler0(const String& eventName)
+{
+    GetLuaScript()->RemoveEventHandler(eventName);
+}
+
+static void LuaScriptRemoveEventHandler1(Object* sender, const String& eventName)
+{
+    GetLuaScript()->RemoveEventHandler(sender, eventName);
+}
+
+static void LuaScriptRemoveEventHandlers(Object* sender)
+{
+    GetLuaScript()->RemoveEventHandlers(sender);
+}
+
+static void LuaScriptRemoveAllEventHandlers()
+{
+    GetLuaScript()->RemoveAllEventHandlers();
+}
+
+static void LuaScriptRemoveEventHandlersExcept(const Vector<String>& exceptionNames)
+{
+    GetLuaScript()->RemoveEventHandlersExcept(exceptionNames);
+}
+
+static bool LuaScriptHasSubscribedToEvent0(const String& eventName)
+{
+    return GetLuaScript()->HasSubscribedToEvent(eventName);
+}
+
+static bool LuaScriptHasSubscribedToEvent1(Object* sender, const String& eventName)
+{
+    return GetLuaScript()->HasSubscribedToEvent(sender, eventName);
+}
+
+static void LuaScriptSendEvent(const String& eventName, VariantMap& eventData)
+{
+    GetLuaScript()->SendEvent(eventName, eventData);
+}
+
+static void LuaScriptSetExecuteConsoleCommands(bool enable)
+{
+    GetLuaScript()->SetExecuteConsoleCommands(enable);
+}
+
+static bool LuaScriptGetExecuteConsoleCommands()
+{
+    return GetLuaScript()->GetExecuteConsoleCommands();
+}
+
+static void LuaScriptSetGlobalVar(const String& key, Variant value)
+{
+    GetLuaScript()->SetGlobalVar(key, value);
+}
+
+static Variant LuaScriptGetGlobalVar(const String& key)
+{
+    return GetLuaScript()->GetGlobalVar(key);
+}
+
+static const VariantMap& LuaScriptGetGlobalVars()
+{
+    return GetLuaScript()->GetGlobalVars();
+}
+
+static void RegisterEventName(const char* eventName)
+{
+    EventNameRegistrar::RegisterEventName(eventName);
+}
+
+void RegisterLuaScript(kaguya::State &lua)
+{
+    using namespace kaguya;
+
+    lua["SubscribeToEvent"] = overload(&LuaScriptAddEventHandler0,
+            &LuaScriptAddEventHandler1,
+            &LuaScriptAddEventHandler2,
+            &LuaScriptAddEventHandler3);
+
+    lua["UnsubscribeFromEvent"] = overload(&LuaScriptRemoveEventHandler0,
+        &LuaScriptRemoveEventHandler1);
+
+    lua["UnsubscribeFromEvents"] = function(LuaScriptRemoveEventHandlers);
+    lua["UnsubscribeFromAllEvents"] = function(LuaScriptRemoveAllEventHandlers);
+    lua["UnsubscribeFromAllEventsExcept"] = function(LuaScriptRemoveEventHandlersExcept);
+
+    lua["HasSubscribedToEvent"] = overload(&LuaScriptHasSubscribedToEvent0,
+        &LuaScriptHasSubscribedToEvent1);
+    
+    lua["SendEvent"] = function(LuaScriptSendEvent);
+    lua["SetExecuteConsoleCommands"] = function(LuaScriptSetExecuteConsoleCommands);
+    lua["GetExecuteConsoleCommands"] = function(LuaScriptGetExecuteConsoleCommands);
+    lua["SetGlobalVar"] = function(LuaScriptSetGlobalVar);
+    lua["GetGlobalVar"] = function(LuaScriptGetGlobalVar);
+    lua["GetGlobalVars"] = function(LuaScriptGetGlobalVars);
+
+    lua["RegisterEventName"] = function(RegisterEventName);
+}
+
 static void RegisterLuaScriptInstance(kaguya::State &lua)
 {
     using namespace kaguya;
@@ -174,7 +329,9 @@ static void RegisterLuaScriptInstance(kaguya::State &lua)
         .addFunction("SetScriptObjectType", &LuaScriptInstance::SetScriptObjectType)
         
         .addOverloadedFunctions("SubscribeToEvent",
+            static_cast<void (LuaScriptInstance::*)(const String&, int)>(&LuaScriptInstance::AddEventHandler),
             static_cast<void (LuaScriptInstance::*)(const String&, const String&)>(&LuaScriptInstance::AddEventHandler),
+            static_cast<void (LuaScriptInstance::*)(Object*, const String&, int)>(&LuaScriptInstance::AddEventHandler),
             static_cast<void (LuaScriptInstance::*)(Object*, const String&, const String&)>(&LuaScriptInstance::AddEventHandler))
 
         .addOverloadedFunctions("UnsubscribeFromEvent", 
@@ -191,70 +348,10 @@ static void RegisterLuaScriptInstance(kaguya::State &lua)
 
         .addFunction("GetScriptFile", &LuaScriptInstance::GetScriptObjectType)
         .addFunction("GetScriptObjectType", &LuaScriptInstance::GetScriptObjectType)
+
+        .addProperty("scriptFile", &LuaScriptInstance::GetScriptObjectType)
+        .addProperty("scriptObjectType", &LuaScriptInstance::GetScriptObjectType)
         );
-}
-
-static void LuaScriptSubscribeToEvent0(const String& eventName, const String& functionName)
-{
-    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-    luaScript->AddEventHandler(eventName, functionName);
-}
-
-static void LuaScriptSubscribeToEvent1(Object* sender, const String& eventName, const String& functionName)
-{
-    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-    luaScript->AddEventHandler(sender, eventName, functionName);
-}
-
-static void LuaScriptSubscribeToEvent2(const String& eventName, const kaguya::LuaFunction& function)
-{
-    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-    luaScript->AddEventHandler(eventName, 2); // 2 is the stack index of function
-}
-
-static void LuaScriptSubscribeToEvent3(Object* sender, const String& eventName, const kaguya::LuaFunction& function)
-{
-    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-    luaScript->AddEventHandler(sender, eventName, 3); // 3 is the stack index of function
-}
-
-static void LuaScriptUnsubscribeFromEvent0(const String& eventName)
-{
-    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-    luaScript->RemoveEventHandler(eventName);
-}
-
-static void LuaScriptUnsubscribeFromEvent1(Object* sender, const String& eventName)
-{
-    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-    luaScript->RemoveEventHandler(sender, eventName);
-}
-
-static void LuaScriptUnsubscribeFromEvent2(const String& eventName)
-{
-    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-    luaScript->RemoveEventHandler(eventName);
-}
-
-static void LuaScriptUnsubscribeFromEvent3(Object* sender, const String& eventName)
-{
-    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-    luaScript->RemoveEventHandler(sender, eventName);
-}
-
-void RegisterLuaScript(kaguya::State &lua)
-{
-    using namespace kaguya;
-
-    lua["SubscribeToEvent"] = overload(&LuaScriptSubscribeToEvent0, 
-        &LuaScriptSubscribeToEvent1,
-        &LuaScriptSubscribeToEvent2,
-        &LuaScriptSubscribeToEvent3);
-
-    lua["UnsubscribeFromEvent"] = overload(&LuaScriptUnsubscribeFromEvent0,
-        &LuaScriptUnsubscribeFromEvent1, 
-        &LuaScriptUnsubscribeFromEvent2, 
-        &LuaScriptUnsubscribeFromEvent3);
 }
 
 void RegisterLuaScriptLuaAPI(kaguya::State& lua)
@@ -262,8 +359,8 @@ void RegisterLuaScriptLuaAPI(kaguya::State& lua)
     using namespace kaguya;
 
     RegisterCoroutine(lua);
-    RegisterLuaScriptInstance(lua);
-    RegisterLuaScript(lua);
+    RegisterLuaScript(lua); 
+    RegisterLuaScriptInstance(lua);    
 }
 
 }

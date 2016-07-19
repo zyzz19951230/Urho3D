@@ -27,7 +27,6 @@
 #include "../LuaScript/LuaScriptUtils.h"
 #include "../Physics/CollisionShape.h"
 #include "../Physics/Constraint.h"
-#include "../Physics/PhysicsEvents.h"
 #include "../Physics/PhysicsUtils.h"
 #include "../Physics/PhysicsWorld.h"
 #include "../Physics/RigidBody.h"
@@ -266,8 +265,6 @@ static void RegisterCollisionShape(kaguya::State& lua)
         .addFunction("SetModel", &CollisionShape::SetModel)
         .addFunction("SetLodLevel", &CollisionShape::SetLodLevel)
 
-        .addFunction("GetCollisionShape", &CollisionShape::GetCollisionShape)
-        .addFunction("GetGeometryData", &CollisionShape::GetGeometryData)
         .addFunction("GetPhysicsWorld", &CollisionShape::GetPhysicsWorld)
         .addFunction("GetShapeType", &CollisionShape::GetShapeType)
         .addFunction("GetSize", &CollisionShape::GetSize)
@@ -278,8 +275,6 @@ static void RegisterCollisionShape(kaguya::State& lua)
         .addFunction("GetLodLevel", &CollisionShape::GetLodLevel)
         .addFunction("GetWorldBoundingBox", &CollisionShape::GetWorldBoundingBox)
 
-        .addProperty("collisionShape", &CollisionShape::GetCollisionShape)
-        .addProperty("geometryData", &CollisionShape::GetGeometryData)
         .addProperty("physicsWorld", &CollisionShape::GetPhysicsWorld)
         .addProperty("shapeType", &CollisionShape::GetShapeType, &CollisionShape::SetShapeType)
         .addProperty("size", &CollisionShape::GetSize, &CollisionShape::SetSize)
@@ -320,8 +315,8 @@ static void RegisterConstraint(kaguya::State& lua)
         .addFunction("SetERP", &Constraint::SetERP)
         .addFunction("SetCFM", &Constraint::SetCFM)
         .addFunction("SetDisableCollision", &Constraint::SetDisableCollision)
+        
         .addFunction("GetPhysicsWorld", &Constraint::GetPhysicsWorld)
-        .addFunction("GetConstraint", &Constraint::GetConstraint)
         .addFunction("GetConstraintType", &Constraint::GetConstraintType)
         .addFunction("GetOwnBody", &Constraint::GetOwnBody)
         .addFunction("GetOtherBody", &Constraint::GetOtherBody)
@@ -337,7 +332,6 @@ static void RegisterConstraint(kaguya::State& lua)
         .addFunction("GetDisableCollision", &Constraint::GetDisableCollision)
         
         .addProperty("physicsWorld", &Constraint::GetPhysicsWorld)
-        .addProperty("constraint", &Constraint::GetConstraint)
         .addProperty("constraintType", &Constraint::GetConstraintType, &Constraint::SetConstraintType)
         .addProperty("ownBody", &Constraint::GetOwnBody)
         .addProperty("otherBody", &Constraint::GetOtherBody, &Constraint::SetOtherBody)
@@ -348,26 +342,10 @@ static void RegisterConstraint(kaguya::State& lua)
         .addProperty("worldPosition", &Constraint::GetWorldPosition, &Constraint::SetWorldPosition)
         .addProperty("highLimit", &Constraint::GetHighLimit, &Constraint::SetHighLimit)
         .addProperty("lowLimit", &Constraint::GetLowLimit, &Constraint::SetLowLimit)
-        .addProperty("eRP", &Constraint::GetERP, &Constraint::SetERP)
-        .addProperty("cFM", &Constraint::GetCFM, &Constraint::SetCFM)
+        .addProperty("ERP", &Constraint::GetERP, &Constraint::SetERP)
+        .addProperty("CFM", &Constraint::GetCFM, &Constraint::SetCFM)
         .addProperty("disableCollision", &Constraint::GetDisableCollision, &Constraint::SetDisableCollision)
-        .addProperty("axis", &Constraint::SetAxis)
-        .addProperty("otherAxis", &Constraint::SetOtherAxis)
         );
-}
-
-static void RegisterPhysicsEvents(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["E_PHYSICSPRESTEP"] = E_PHYSICSPRESTEP;
-    lua["E_PHYSICSPOSTSTEP"] = E_PHYSICSPOSTSTEP;
-    lua["E_PHYSICSCOLLISIONSTART"] = E_PHYSICSCOLLISIONSTART;
-    lua["E_PHYSICSCOLLISION"] = E_PHYSICSCOLLISION;
-    lua["E_PHYSICSCOLLISIONEND"] = E_PHYSICSCOLLISIONEND;
-    lua["E_NODECOLLISIONSTART"] = E_NODECOLLISIONSTART;
-    lua["E_NODECOLLISION"] = E_NODECOLLISION;
-    lua["E_NODECOLLISIONEND"] = E_NODECOLLISIONEND;
 }
 
 static PODVector<PhysicsRaycastResult> PhysicsWorldRaycast0(PhysicsWorld* self, const Ray& ray, float maxDistance)
@@ -677,7 +655,6 @@ void RegisterPhysicsLuaAPI(kaguya::State& lua)
 {
     RegisterCollisionShape(lua);
     RegisterConstraint(lua);
-    RegisterPhysicsEvents(lua);
     RegisterPhysicsWorld(lua);
     RegisterRigidBody(lua);
 }
