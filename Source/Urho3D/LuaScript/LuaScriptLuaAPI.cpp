@@ -218,25 +218,25 @@ static void LuaScriptSubscribeToEvent3(Object* sender, const String& eventName, 
     luaScript->AddEventHandler(sender, eventName, 3); // 3 is the stack index of function
 }
 
-static void LuaScriptUnsubscribeFromEvent0(const String& eventName, const String& functionName)
+static void LuaScriptUnsubscribeFromEvent0(const String& eventName)
 {
     LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
     luaScript->RemoveEventHandler(eventName);
 }
 
-static void LuaScriptUnsubscribeFromEvent1(Object* sender, const String& eventName, const String& functionName)
+static void LuaScriptUnsubscribeFromEvent1(Object* sender, const String& eventName)
 {
     LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
     luaScript->RemoveEventHandler(sender, eventName);
 }
 
-static void LuaScriptUnsubscribeFromEvent2(const String& eventName, const kaguya::LuaFunction& function)
+static void LuaScriptUnsubscribeFromEvent2(const String& eventName)
 {
     LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
     luaScript->RemoveEventHandler(eventName);
 }
 
-static void LuaScriptUnsubscribeFromEvent3(Object* sender, const String& eventName, const kaguya::LuaFunction& function)
+static void LuaScriptUnsubscribeFromEvent3(Object* sender, const String& eventName)
 {
     LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
     luaScript->RemoveEventHandler(sender, eventName);

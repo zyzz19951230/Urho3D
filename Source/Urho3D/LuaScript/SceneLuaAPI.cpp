@@ -543,11 +543,6 @@ static bool NodeHasComponent(const Node* self, const char* type)
     return self->HasComponent(StringHash(type));
 }
 
-static const Variant& NodeGetVar(const Node* self, const char* key)
-{
-    return self->GetVar(StringHash(key));
-}
-
 static void RegisterNode(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -765,7 +760,7 @@ static void RegisterNode(kaguya::State& lua)
 
         // .addFunction("GetListeners", &Node::GetListeners)
 
-        .addStaticFunction("GetVar", &NodeGetVar)
+        .addFunction("GetVar", &Node::GetVar)
         .addFunction("GetVars", &Node::GetVars)
 
         .addProperty("id", &Node::GetID)
