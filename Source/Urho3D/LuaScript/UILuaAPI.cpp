@@ -45,7 +45,6 @@
 #include "../UI/ToolTip.h"
 #include "../UI/UI.h"
 #include "../UI/UIElement.h"
-#include "../UI/UIEvents.h"
 #include "../UI/View3D.h"
 #include "../UI/Window.h"
 
@@ -196,6 +195,10 @@ static SharedPtr<UIElement> DropDownListGetSelectedItem(const DropDownList* self
     return SharedPtr<UIElement>(self->GetSelectedItem());
 }
 
+static SharedPtr<UIElement> DropDownListGetPlaceholder(const DropDownList* self)
+{
+    return SharedPtr<UIElement>(self->GetPlaceholder());
+}
 
 static void RegisterDropDownList(kaguya::State& lua)
 {
@@ -217,12 +220,18 @@ static void RegisterDropDownList(kaguya::State& lua)
         .addFunction("SetResizePopup", &DropDownList::SetResizePopup)
 
         .addFunction("GetNumItems", &DropDownList::GetNumItems)
+        
         .addStaticFunction("GetItem", &DropDownListGetItem)
+
         .addFunction("GetItems", &DropDownList::GetItems)
         .addFunction("GetSelection", &DropDownList::GetSelection)
+        
         .addStaticFunction("GetSelectedItem", &DropDownListGetSelectedItem)
+
         .addFunction("GetListView", &DropDownList::GetListView)
-        .addFunction("GetPlaceholder", &DropDownList::GetPlaceholder)
+        
+        .addStaticFunction("GetPlaceholder", &DropDownListGetPlaceholder)
+
         .addFunction("GetPlaceholderText", &DropDownList::GetPlaceholderText)
         .addFunction("GetResizePopup", &DropDownList::GetResizePopup)
 
@@ -230,7 +239,7 @@ static void RegisterDropDownList(kaguya::State& lua)
         .addProperty("selection", &DropDownList::GetSelection, &DropDownList::SetSelection)
         .addProperty("selectedItem", &DropDownListGetSelectedItem)
         .addProperty("listView", &DropDownList::GetListView)
-        .addProperty("placeholder", &DropDownList::GetPlaceholder)
+        .addProperty("placeholder", &DropDownListGetPlaceholder)
         .addProperty("placeholderText", &DropDownList::GetPlaceholderText, &DropDownList::SetPlaceholderText)
         .addProperty("resizePopup", &DropDownList::GetResizePopup, &DropDownList::SetResizePopup)
     );
@@ -239,6 +248,12 @@ static void RegisterDropDownList(kaguya::State& lua)
 static void RegisterFileSelector(kaguya::State& lua)
 {
     using namespace kaguya;
+
+    lua["FileSelectorEntry"].setClass(UserdataMetatable<FileSelectorEntry>()
+
+    	.addProperty("name", &FileSelectorEntry::name_)
+    	.addProperty("directory", &FileSelectorEntry::directory_)
+    	);
 
     lua["FileSelector"].setClass(UserdataMetatable<FileSelector, Object>()
         .addStaticFunction("new", &CreateObject<FileSelector>)
@@ -250,6 +265,8 @@ static void RegisterFileSelector(kaguya::State& lua)
         .addFunction("SetFileName", &FileSelector::SetFileName)
         .addFunction("SetFilters", &FileSelector::SetFilters)
         .addFunction("SetDirectoryMode", &FileSelector::SetDirectoryMode)
+
+		.addFunction("UpdateElements", &FileSelector::UpdateElements)
 
         .addFunction("GetDefaultStyle", &FileSelector::GetDefaultStyle)
         .addFunction("GetWindow", &FileSelector::GetWindow)
@@ -275,7 +292,7 @@ static void RegisterFileSelector(kaguya::State& lua)
         .addProperty("pathEdit", &FileSelector::GetPathEdit)
         .addProperty("fileNameEdit", &FileSelector::GetFileNameEdit)
         .addProperty("filterList", &FileSelector::GetFilterList)
-        .addProperty("okButton", &FileSelector::GetOKButton)
+        .addProperty("OKButton", &FileSelector::GetOKButton)
         .addProperty("cancelButton", &FileSelector::GetCancelButton)
         .addProperty("closeButton", &FileSelector::GetCloseButton)
         .addProperty("title", &FileSelector::GetTitle, &FileSelector::SetTitle)
@@ -291,12 +308,6 @@ static void RegisterFont(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum FONT_TYPE;
-    lua["FONT_NONE"] = FONT_NONE;
-    lua["FONT_FREETYPE"] = FONT_FREETYPE;
-    lua["FONT_BITMAP"] = FONT_BITMAP;
-    lua["MAX_FONT_TYPES"] = MAX_FONT_TYPES;
-
     lua["Font"].setClass(UserdataMetatable<Font, Resource>()
         .addStaticFunction("new", &CreateObject<Font>)
 
@@ -307,8 +318,7 @@ static void RegisterFont(kaguya::State& lua)
         .addFunction("GetAbsoluteGlyphOffset", &Font::GetAbsoluteGlyphOffset)
         .addFunction("GetScaledGlyphOffset", &Font::GetScaledGlyphOffset)
         .addFunction("GetTotalGlyphOffset", &Font::GetTotalGlyphOffset)
-        .addFunction("ReleaseFaces", &Font::ReleaseFaces)
-
+        
         .addProperty("sdfFont", &Font::IsSDFFont)
         .addProperty("absoluteGlyphOffset", &Font::GetAbsoluteGlyphOffset, &Font::SetAbsoluteGlyphOffset)
         .addProperty("scaledGlyphOffset", &Font::GetScaledGlyphOffset, &Font::SetScaledGlyphOffset)
@@ -430,6 +440,7 @@ static void RegisterListView(kaguya::State& lua)
         .addFunction("AddItem", &ListView::AddItem)
 
         ADD_OVERLOADED_FUNCTIONS_2(ListView, InsertItem)
+        
         .addOverloadedFunctions("RemoveItem",
             &ListViewRemoveItem0,
             &ListViewRemoveItem1,
@@ -457,10 +468,10 @@ static void RegisterListView(kaguya::State& lua)
         ADD_OVERLOADED_FUNCTIONS_2(ListView, ToggleExpand)
 
         .addFunction("GetNumItems", &ListView::GetNumItems)
-
         .addStaticFunction("GetItem", &ListViewGetItem)
 
         .addFunction("GetItems", &ListView::GetItems)
+
         .addFunction("FindItem", &ListView::FindItem)
         .addFunction("GetSelection", &ListView::GetSelection)
         .addFunction("GetSelections", &ListView::GetSelectedItems)
@@ -469,6 +480,7 @@ static void RegisterListView(kaguya::State& lua)
         .addStaticFunction("GetSelectedItem", &ListViewGetSelectedItem)
 
         .addFunction("GetSelectedItems", &ListView::GetSelectedItems)
+        
         .addFunction("IsSelected", &ListView::IsSelected)
         .addFunction("IsExpanded", &ListView::IsExpanded)
         .addFunction("GetHighlightMode", &ListView::GetHighlightMode)
@@ -477,10 +489,6 @@ static void RegisterListView(kaguya::State& lua)
         .addFunction("GetSelectOnClickEnd", &ListView::GetSelectOnClickEnd)
         .addFunction("GetHierarchyMode", &ListView::GetHierarchyMode)
         .addFunction("GetBaseIndent", &ListView::GetBaseIndent)
-
-        .addOverloadedFunctions("EnsureItemVisibility",
-            static_cast<void(ListView::*)(unsigned)>(&ListView::EnsureItemVisibility),
-            static_cast<void(ListView::*)(UIElement*)>(&ListView::EnsureItemVisibility))
 
         .addProperty("numItems", &ListView::GetNumItems)
         .addProperty("selection", &ListView::GetSelection, &ListView::SetSelection)
@@ -617,6 +625,16 @@ static void RegisterScrollBar(kaguya::State& lua)
     );
 }
 
+static void ScrollViewSetContentElement(ScrollView* self, UIElement* contentElement)
+{
+	self->SetContentElement(contentElement);
+}
+
+static SharedPtr<UIElement> ScrollViewGetContentElement(const ScrollView* self)
+{
+	return SharedPtr<UIElement>(self->GetContentElement());
+}
+
 static void RegisterScrollView(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -640,7 +658,9 @@ static void RegisterScrollView(kaguya::State& lua)
         .addFunction("SetAutoDisableThreshold", &ScrollView::SetAutoDisableThreshold)
 
         .addFunction("GetViewPosition", &ScrollView::GetViewPosition)
-        .addFunction("GetContentElement", &ScrollView::GetContentElement)
+        
+        .addStaticFunction("GetContentElement", &ScrollViewGetContentElement)
+
         .addFunction("GetHorizontalScrollBar", &ScrollView::GetHorizontalScrollBar)
         .addFunction("GetVerticalScrollBar", &ScrollView::GetVerticalScrollBar)
         .addFunction("GetScrollPanel", &ScrollView::GetScrollPanel)
@@ -653,7 +673,9 @@ static void RegisterScrollView(kaguya::State& lua)
         .addFunction("GetAutoDisableThreshold", &ScrollView::GetAutoDisableThreshold)
 
         .addProperty("viewPosition", &ScrollView::GetViewPosition)
-        .addProperty("contentElement", &ScrollView::GetContentElement, &ScrollView::SetContentElement)
+        
+        .addProperty("contentElement", &ScrollViewGetContentElement, &ScrollViewSetContentElement)
+
         .addProperty("horizontalScrollBar", &ScrollView::GetHorizontalScrollBar)
         .addProperty("verticalScrollBar", &ScrollView::GetVerticalScrollBar)
         .addProperty("scrollPanel", &ScrollView::GetScrollPanel)
@@ -662,8 +684,6 @@ static void RegisterScrollView(kaguya::State& lua)
         .addProperty("pageStep", &ScrollView::GetPageStep, &ScrollView::SetPageStep)
         .addProperty("scrollDeceleration", &ScrollView::GetScrollDeceleration, &ScrollView::SetScrollDeceleration)
         .addProperty("scrollSnapEpsilon", &ScrollView::GetScrollSnapEpsilon, &ScrollView::SetScrollSnapEpsilon)
-        .addProperty("autoDisableChildren", &ScrollView::GetAutoDisableChildren, &ScrollView::SetAutoDisableChildren)
-        .addProperty("autoDisableThreshold", &ScrollView::GetAutoDisableThreshold, &ScrollView::SetAutoDisableThreshold)
     );
 }
 
@@ -728,6 +748,8 @@ static void RegisterSprite(kaguya::State& lua)
         .addFunction("GetImageRect", &Sprite::GetImageRect)
         .addFunction("GetBlendMode", &Sprite::GetBlendMode)
 
+        .addFunction("GetTransform", &Sprite::GetTransform)
+
         .addProperty("position", &Sprite::GetPosition, static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetPosition))
         .addProperty("hotSpot", &Sprite::GetHotSpot, static_cast<void(Sprite::*)(const IntVector2&)>(&Sprite::SetHotSpot))
         .addProperty("scale", &Sprite::GetScale, static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetScale))
@@ -735,6 +757,8 @@ static void RegisterSprite(kaguya::State& lua)
         .addProperty("texture", &Sprite::GetTexture, &Sprite::SetTexture)
         .addProperty("imageRect", &Sprite::GetImageRect, &Sprite::SetImageRect)
         .addProperty("blendMode", &Sprite::GetBlendMode, &Sprite::SetBlendMode)
+
+        .addProperty("transform", &Sprite::GetTransform)
     );
 }
 
@@ -823,6 +847,7 @@ static void RegisterText(kaguya::State& lua)
         .addFunction("GetRowWidth", &Text::GetRowWidth)
         .addFunction("GetCharPosition", &Text::GetCharPosition)
         .addFunction("GetCharSize", &Text::GetCharSize)
+
         .addFunction("SetEffectDepthBias", &Text::SetEffectDepthBias)
         .addFunction("GetEffectDepthBias", &Text::GetEffectDepthBias)
 
@@ -1064,6 +1089,8 @@ static void RegisterUI(kaguya::State& lua)
         .addFunction("SetModalElement", &UI::SetModalElement)
         .addFunction("Clear", &UI::Clear)
 
+        .addFunction("DebugDraw", &UI::DebugDraw)
+
         ADD_OVERLOADED_FUNCTIONS_2(UI, LoadLayout)
 
         .addStaticFunction("SaveLayout", &UISaveLayout)
@@ -1093,9 +1120,7 @@ static void RegisterUI(kaguya::State& lua)
         .addStaticFunction("GetFocusElement", &UIGetFocusElement)
         .addStaticFunction("GetFrontElement", &UIGetFrontElement)
 
-        .addFunction("GetDragElements", &UI::GetDragElements)
         .addFunction("GetNumDragElements", &UI::GetNumDragElements)
-
         .addStaticFunction("GetDragElement", &UIGetDragElement)
 
         .addFunction("GetClipboardText", &UI::GetClipboardText)
@@ -1119,10 +1144,9 @@ static void RegisterUI(kaguya::State& lua)
         .addProperty("cursorPosition", &UI::GetCursorPosition)
         .addProperty("focusElement", &UIGetFocusElement)
         .addProperty("frontElement", &UIGetFrontElement)
-
-        // .addProperty("dragElements", &UI::GetDragElements)
-
+        
         .addProperty("numDragElements", &UI::GetNumDragElements)
+
         .addProperty("clipboardText", &UI::GetClipboardText, &UI::SetClipboardText)
         .addProperty("doubleClickInterval", &UI::GetDoubleClickInterval, &UI::SetDoubleClickInterval)
         .addProperty("dragBeginInterval", &UI::GetDragBeginInterval, &UI::SetDragBeginInterval)
@@ -1133,11 +1157,10 @@ static void RegisterUI(kaguya::State& lua)
         .addProperty("useSystemClipboard", &UI::GetUseSystemClipboard, &UI::SetUseSystemClipboard)
         .addProperty("useScreenKeyboard", &UI::GetUseScreenKeyboard, &UI::SetUseScreenKeyboard)
         .addProperty("useMutableGlyphs", &UI::GetUseMutableGlyphs, &UI::SetUseMutableGlyphs)
-        .addProperty("forceAutoHint", &UI::GetForceAutoHint, &UI::SetForceAutoHint)
-        .addProperty("dragging", &UI::IsDragging)
+		.addProperty("forceAutoHint", &UI::GetForceAutoHint, &UI::SetForceAutoHint)
+		.addProperty("hasModalElement", &UI::HasModalElement)
+		.addProperty("dragging", &UI::IsDragging)
         .addProperty("scale", &UI::GetScale, &UI::SetScale)
-        .addProperty("width", &UI::SetWidth)
-        .addProperty("height", &UI::SetHeight)
     );
 }
 
@@ -1450,6 +1473,8 @@ static void RegisterUIElement(kaguya::State& lua)
         .addFunction("SetIndent", &UIElement::SetIndent)
         .addFunction("SetIndentSpacing", &UIElement::SetIndentSpacing)
 
+        .addFunction("UpdateLayout", &UIElement::UpdateLayout)
+
         .addFunction("DisableLayoutUpdate", &UIElement::DisableLayoutUpdate)
         .addFunction("EnableLayoutUpdate", &UIElement::EnableLayoutUpdate)
         .addFunction("BringToFront", &UIElement::BringToFront)
@@ -1554,9 +1579,6 @@ static void RegisterUIElement(kaguya::State& lua)
         .addFunction("GetIndent", &UIElement::GetIndent)
         .addFunction("GetIndentSpacing", &UIElement::GetIndentSpacing)
         .addFunction("GetIndentWidth", &UIElement::GetIndentWidth)
-        .addFunction("SetChildOffset", &UIElement::SetChildOffset)
-        .addFunction("SetHovering", &UIElement::SetHovering)
-        .addFunction("AdjustScissor", &UIElement::AdjustScissor)
 
         .addProperty("screenPosition", &UIElement::GetScreenPosition)
         .addProperty("name", &UIElement::GetName, &UIElement::SetName)
@@ -1603,75 +1625,14 @@ static void RegisterUIElement(kaguya::State& lua)
         .addProperty("parent", &UIElement::GetParent)
         .addProperty("root", &UIElement::GetRoot)
         .addProperty("derivedColor", &UIElement::GetDerivedColor)
-        .addProperty("vars", &UIElement::GetVars)
-        .addProperty("tags", &UIElement::GetTags, &UIElement::SetTags)
         .addProperty("dragButtonCombo", &UIElement::GetDragButtonCombo)
         .addProperty("dragButtonCount", &UIElement::GetDragButtonCount)
         .addProperty("combinedScreenRect", &UIElement::GetCombinedScreenRect)
         .addProperty("layoutElementMaxSize", &UIElement::GetLayoutElementMaxSize)
         .addProperty("indent", &UIElement::GetIndent, &UIElement::SetIndent)
         .addProperty("indentSpacing", &UIElement::GetIndentSpacing, &UIElement::SetIndentSpacing)
-        .addProperty("indentWidth", &UIElement::GetIndentWidth)
-        .addProperty("traversalMode", &UIElement::GetTraversalMode, &UIElement::SetTraversalMode)
-        .addProperty("elementEventSender", &UIElement::IsElementEventSender, &UIElement::SetElementEventSender)
-        .addProperty("effectiveMinSize", &UIElement::GetEffectiveMinSize)
-        .addProperty("deepEnabled", &UIElement::SetDeepEnabled)
-        .addProperty("enabledRecursive", &UIElement::SetEnabledRecursive)
-        .addProperty("focus", &UIElement::SetFocus)
-        .addProperty("styleAuto", &UIElement::SetStyleAuto)
-        .addProperty("defaultStyle", &UIElement::SetDefaultStyle)
+        .addProperty("indentWidth", &UIElement::GetIndentWidth)        
     );
-}
-
-static void RegisterUIEvents(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["E_UIMOUSECLICK"] = E_UIMOUSECLICK;
-    lua["E_UIMOUSECLICKEND"] = E_UIMOUSECLICKEND;
-    lua["E_UIMOUSEDOUBLECLICK"] = E_UIMOUSEDOUBLECLICK;
-    lua["E_CLICK"] = E_CLICK;
-    lua["E_CLICKEND"] = E_CLICKEND;
-    lua["E_DOUBLECLICK"] = E_DOUBLECLICK;
-    lua["E_DRAGDROPTEST"] = E_DRAGDROPTEST;
-    lua["E_DRAGDROPFINISH"] = E_DRAGDROPFINISH;
-    lua["E_FOCUSCHANGED"] = E_FOCUSCHANGED;
-    lua["E_NAMECHANGED"] = E_NAMECHANGED;
-    lua["E_RESIZED"] = E_RESIZED;
-    lua["E_POSITIONED"] = E_POSITIONED;
-    lua["E_VISIBLECHANGED"] = E_VISIBLECHANGED;
-    lua["E_FOCUSED"] = E_FOCUSED;
-    lua["E_DEFOCUSED"] = E_DEFOCUSED;
-    lua["E_LAYOUTUPDATED"] = E_LAYOUTUPDATED;
-    lua["E_PRESSED"] = E_PRESSED;
-    lua["E_RELEASED"] = E_RELEASED;
-    lua["E_TOGGLED"] = E_TOGGLED;
-    lua["E_SLIDERCHANGED"] = E_SLIDERCHANGED;
-    lua["E_SLIDERPAGED"] = E_SLIDERPAGED;
-    lua["E_SCROLLBARCHANGED"] = E_SCROLLBARCHANGED;
-    lua["E_VIEWCHANGED"] = E_VIEWCHANGED;
-    lua["E_MODALCHANGED"] = E_MODALCHANGED;
-    lua["E_TEXTENTRY"] = E_TEXTENTRY;
-    lua["E_TEXTCHANGED"] = E_TEXTCHANGED;
-    lua["E_TEXTFINISHED"] = E_TEXTFINISHED;
-    lua["E_MENUSELECTED"] = E_MENUSELECTED;
-    lua["E_ITEMSELECTED"] = E_ITEMSELECTED;
-    lua["E_ITEMDESELECTED"] = E_ITEMDESELECTED;
-    lua["E_SELECTIONCHANGED"] = E_SELECTIONCHANGED;
-    lua["E_ITEMCLICKED"] = E_ITEMCLICKED;
-    lua["E_ITEMDOUBLECLICKED"] = E_ITEMDOUBLECLICKED;
-    lua["E_UNHANDLEDKEY"] = E_UNHANDLEDKEY;
-    lua["E_FILESELECTED"] = E_FILESELECTED;
-    lua["E_MESSAGEACK"] = E_MESSAGEACK;
-    lua["E_ELEMENTADDED"] = E_ELEMENTADDED;
-    lua["E_ELEMENTREMOVED"] = E_ELEMENTREMOVED;
-    lua["E_HOVERBEGIN"] = E_HOVERBEGIN;
-    lua["E_HOVEREND"] = E_HOVEREND;
-    lua["E_DRAGBEGIN"] = E_DRAGBEGIN;
-    lua["E_DRAGMOVE"] = E_DRAGMOVE;
-    lua["E_DRAGEND"] = E_DRAGEND;
-    lua["E_DRAGCANCEL"] = E_DRAGCANCEL;
-    lua["E_UIDROPFILE"] = E_UIDROPFILE;
 }
 
 static void View3DSetView0(View3D* self, Scene* scene, Camera* camera)
@@ -1707,11 +1668,6 @@ static void RegisterView3D(kaguya::State& lua)
 
         .addProperty("format", &View3D::GetFormat, &View3D::SetFormat)
         .addProperty("autoUpdate", &View3D::GetAutoUpdate, &View3D::SetAutoUpdate)
-        .addProperty("scene", &View3D::GetScene)
-        .addProperty("cameraNode", &View3D::GetCameraNode)
-        .addProperty("renderTexture", &View3D::GetRenderTexture)
-        .addProperty("depthTexture", &View3D::GetDepthTexture)
-        .addProperty("viewport", &View3D::GetViewport)
     );
 }
 
@@ -1797,8 +1753,6 @@ void RegisterUILuaAPI(kaguya::State& lua)
     RegisterText3D(lua);
     RegisterToolTip(lua);
     RegisterUI(lua);
-
-    RegisterUIEvents(lua);
 
     RegisterWindow(lua);
     RegisterView3D(lua);
