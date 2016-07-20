@@ -142,8 +142,8 @@ static void RegisterCollisionBox2D(kaguya::State& lua)
         .addFunction("GetCenter", &CollisionBox2D::GetCenter)
         .addFunction("GetAngle", &CollisionBox2D::GetAngle)
 
-        .addProperty("size", &CollisionBox2D::GetSize)
-        .addProperty("center", &CollisionBox2D::GetCenter)
+        .addProperty("size", &CollisionBox2D::GetSize, static_cast<void(CollisionBox2D::*)(const Vector2&)>(&CollisionBox2D::SetSize))
+        .addProperty("center", &CollisionBox2D::GetCenter, static_cast<void(CollisionBox2D::*)(const Vector2&)>(&CollisionBox2D::SetCenter))
         .addProperty("angle", &CollisionBox2D::GetAngle, &CollisionBox2D::SetAngle)
     );
 }
@@ -187,7 +187,7 @@ static void RegisterCollisionCircle2D(kaguya::State& lua)
         .addFunction("GetCenter", &CollisionCircle2D::GetCenter)
 
         .addProperty("radius", &CollisionCircle2D::GetRadius, &CollisionCircle2D::SetRadius)
-        .addProperty("center", &CollisionCircle2D::GetCenter)
+        .addProperty("center", &CollisionCircle2D::GetCenter, static_cast<void(CollisionCircle2D::*)(const Vector2&)>(&CollisionCircle2D::SetCenter))
     );
 }
 
@@ -1114,7 +1114,6 @@ void RegisterUrho2DLuaAPI(kaguya::State& lua)
     RegisterConstraintWheel2D(lua);
     RegisterParticleEffect2D(lua);
     RegisterParticleEmitter2D(lua);
-    RegisterPhysicsEvents2D(lua);
     RegisterPhysicsWorld2D(lua);
     RegisterRigidBody2D(lua);
     RegisterSprite2D(lua);
