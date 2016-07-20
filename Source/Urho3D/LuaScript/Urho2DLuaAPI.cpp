@@ -48,9 +48,7 @@
 #include "../Urho2D/Drawable2D.h"
 #include "../Urho2D/ParticleEffect2D.h"
 #include "../Urho2D/ParticleEmitter2D.h"
-#include "../Urho2D/PhysicsEvents2D.h"
 #include "../Urho2D/PhysicsWorld2D.h"
-#include "../Urho2D/Renderer2D.h"
 #include "../Urho2D/RigidBody2D.h"
 #include "../Urho2D/Sprite2D.h"
 #include "../Urho2D/SpriteSheet2D.h"
@@ -118,10 +116,8 @@ static void RegisterAnimationSet2D(kaguya::State& lua)
         .addFunction("GetNumAnimations", &AnimationSet2D::GetNumAnimations)
         .addFunction("GetAnimation", &AnimationSet2D::GetAnimation)
         .addFunction("HasAnimation", &AnimationSet2D::HasAnimation)
-        .addFunction("GetSprite", &AnimationSet2D::GetSprite)
 
         .addProperty("numAnimations", &AnimationSet2D::GetNumAnimations)
-        .addProperty("sprite", &AnimationSet2D::GetSprite)
     );
 }
 
@@ -280,17 +276,14 @@ static void RegisterConstraint2D(kaguya::State& lua)
 
         .addFunction("SetOtherBody", &Constraint2D::SetOtherBody)
         .addFunction("SetCollideConnected", &Constraint2D::SetCollideConnected)
-        .addFunction("SetAttachedConstraint", &Constraint2D::SetAttachedConstraint)
-
+        
         .addFunction("GetOwnerBody", &Constraint2D::GetOwnerBody)
         .addFunction("GetOtherBody", &Constraint2D::GetOtherBody)
         .addFunction("GetCollideConnected", &Constraint2D::GetCollideConnected)
-        .addFunction("GetAttachedConstraint", &Constraint2D::GetAttachedConstraint)
-
+        
         .addProperty("ownerBody", &Constraint2D::GetOwnerBody)
         .addProperty("otherBody", &Constraint2D::GetOtherBody, &Constraint2D::SetOtherBody)
         .addProperty("collideConnected", &Constraint2D::GetCollideConnected, &Constraint2D::SetCollideConnected)
-        .addProperty("attachedConstraint", &Constraint2D::GetAttachedConstraint, &Constraint2D::SetAttachedConstraint)
     );
 }
 
@@ -611,115 +604,7 @@ static void RegisterParticleEffect2D(kaguya::State& lua)
 
     lua["ParticleEffect2D"].setClass(UserdataMetatable<ParticleEffect2D, Resource>()
         .addStaticFunction("new", &CreateObject<ParticleEffect2D>)
-
-        .addFunction("SetSprite", &ParticleEffect2D::SetSprite)
-        .addFunction("SetSourcePositionVariance", &ParticleEffect2D::SetSourcePositionVariance)
-        .addFunction("SetSpeed", &ParticleEffect2D::SetSpeed)
-        .addFunction("SetSpeedVariance", &ParticleEffect2D::SetSpeedVariance)
-        .addFunction("SetParticleLifeSpan", &ParticleEffect2D::SetParticleLifeSpan)
-        .addFunction("SetParticleLifespanVariance", &ParticleEffect2D::SetParticleLifespanVariance)
-        .addFunction("SetAngle", &ParticleEffect2D::SetAngle)
-        .addFunction("SetAngleVariance", &ParticleEffect2D::SetAngleVariance)
-        .addFunction("SetGravity", &ParticleEffect2D::SetGravity)
-        .addFunction("SetRadialAcceleration", &ParticleEffect2D::SetRadialAcceleration)
-        .addFunction("SetTangentialAcceleration", &ParticleEffect2D::SetTangentialAcceleration)
-        .addFunction("SetRadialAccelVariance", &ParticleEffect2D::SetRadialAccelVariance)
-        .addFunction("SetTangentialAccelVariance", &ParticleEffect2D::SetTangentialAccelVariance)
-        .addFunction("SetStartColor", &ParticleEffect2D::SetStartColor)
-        .addFunction("SetStartColorVariance", &ParticleEffect2D::SetStartColorVariance)
-        .addFunction("SetFinishColor", &ParticleEffect2D::SetFinishColor)
-        .addFunction("SetFinishColorVariance", &ParticleEffect2D::SetFinishColorVariance)
-        .addFunction("SetMaxParticles", &ParticleEffect2D::SetMaxParticles)
-        .addFunction("SetStartParticleSize", &ParticleEffect2D::SetStartParticleSize)
-        .addFunction("SetStartParticleSizeVariance", &ParticleEffect2D::SetStartParticleSizeVariance)
-        .addFunction("SetFinishParticleSize", &ParticleEffect2D::SetFinishParticleSize)
-        .addFunction("SetFinishParticleSizeVariance", &ParticleEffect2D::SetFinishParticleSizeVariance)
-        .addFunction("SetDuration", &ParticleEffect2D::SetDuration)
-        .addFunction("SetEmitterType", &ParticleEffect2D::SetEmitterType)
-        .addFunction("SetMaxRadius", &ParticleEffect2D::SetMaxRadius)
-        .addFunction("SetMaxRadiusVariance", &ParticleEffect2D::SetMaxRadiusVariance)
-        .addFunction("SetMinRadius", &ParticleEffect2D::SetMinRadius)
-        .addFunction("SetMinRadiusVariance", &ParticleEffect2D::SetMinRadiusVariance)
-        .addFunction("SetRotatePerSecond", &ParticleEffect2D::SetRotatePerSecond)
-        .addFunction("SetRotatePerSecondVariance", &ParticleEffect2D::SetRotatePerSecondVariance)
-        .addFunction("SetBlendMode", &ParticleEffect2D::SetBlendMode)
-        .addFunction("SetRotationStart", &ParticleEffect2D::SetRotationStart)
-        .addFunction("SetRotationStartVariance", &ParticleEffect2D::SetRotationStartVariance)
-        .addFunction("SetRotationEnd", &ParticleEffect2D::SetRotationEnd)
-        .addFunction("SetRotationEndVariance", &ParticleEffect2D::SetRotationEndVariance)
-
-        .addFunction("GetSprite", &ParticleEffect2D::GetSprite)
-        .addFunction("GetSourcePositionVariance", &ParticleEffect2D::GetSourcePositionVariance)
-        .addFunction("GetSpeed", &ParticleEffect2D::GetSpeed)
-        .addFunction("GetSpeedVariance", &ParticleEffect2D::GetSpeedVariance)
-        .addFunction("GetParticleLifeSpan", &ParticleEffect2D::GetParticleLifeSpan)
-        .addFunction("GetParticleLifespanVariance", &ParticleEffect2D::GetParticleLifespanVariance)
-        .addFunction("GetAngle", &ParticleEffect2D::GetAngle)
-        .addFunction("GetAngleVariance", &ParticleEffect2D::GetAngleVariance)
-        .addFunction("GetGravity", &ParticleEffect2D::GetGravity)
-        .addFunction("GetRadialAcceleration", &ParticleEffect2D::GetRadialAcceleration)
-        .addFunction("GetTangentialAcceleration", &ParticleEffect2D::GetTangentialAcceleration)
-        .addFunction("GetRadialAccelVariance", &ParticleEffect2D::GetRadialAccelVariance)
-        .addFunction("GetTangentialAccelVariance", &ParticleEffect2D::GetTangentialAccelVariance)
-        .addFunction("GetStartColor", &ParticleEffect2D::GetStartColor)
-        .addFunction("GetStartColorVariance", &ParticleEffect2D::GetStartColorVariance)
-        .addFunction("GetFinishColor", &ParticleEffect2D::GetFinishColor)
-        .addFunction("GetFinishColorVariance", &ParticleEffect2D::GetFinishColorVariance)
-        .addFunction("GetMaxParticles", &ParticleEffect2D::GetMaxParticles)
-        .addFunction("GetStartParticleSize", &ParticleEffect2D::GetStartParticleSize)
-        .addFunction("GetStartParticleSizeVariance", &ParticleEffect2D::GetStartParticleSizeVariance)
-        .addFunction("GetFinishParticleSize", &ParticleEffect2D::GetFinishParticleSize)
-        .addFunction("GetFinishParticleSizeVariance", &ParticleEffect2D::GetFinishParticleSizeVariance)
-        .addFunction("GetDuration", &ParticleEffect2D::GetDuration)
-        .addFunction("GetEmitterType", &ParticleEffect2D::GetEmitterType)
-        .addFunction("GetMaxRadius", &ParticleEffect2D::GetMaxRadius)
-        .addFunction("GetMaxRadiusVariance", &ParticleEffect2D::GetMaxRadiusVariance)
-        .addFunction("GetMinRadius", &ParticleEffect2D::GetMinRadius)
-        .addFunction("GetMinRadiusVariance", &ParticleEffect2D::GetMinRadiusVariance)
-        .addFunction("GetRotatePerSecond", &ParticleEffect2D::GetRotatePerSecond)
-        .addFunction("GetRotatePerSecondVariance", &ParticleEffect2D::GetRotatePerSecondVariance)
-        .addFunction("GetBlendMode", &ParticleEffect2D::GetBlendMode)
-        .addFunction("GetRotationStart", &ParticleEffect2D::GetRotationStart)
-        .addFunction("GetRotationStartVariance", &ParticleEffect2D::GetRotationStartVariance)
-        .addFunction("GetRotationEnd", &ParticleEffect2D::GetRotationEnd)
-        .addFunction("GetRotationEndVariance", &ParticleEffect2D::GetRotationEndVariance)
-
-        .addProperty("sprite", &ParticleEffect2D::GetSprite, &ParticleEffect2D::SetSprite)
-        .addProperty("sourcePositionVariance", &ParticleEffect2D::GetSourcePositionVariance, &ParticleEffect2D::SetSourcePositionVariance)
-        .addProperty("speed", &ParticleEffect2D::GetSpeed, &ParticleEffect2D::SetSpeed)
-        .addProperty("speedVariance", &ParticleEffect2D::GetSpeedVariance, &ParticleEffect2D::SetSpeedVariance)
-        .addProperty("particleLifeSpan", &ParticleEffect2D::GetParticleLifeSpan, &ParticleEffect2D::SetParticleLifeSpan)
-        .addProperty("particleLifespanVariance", &ParticleEffect2D::GetParticleLifespanVariance, &ParticleEffect2D::SetParticleLifespanVariance)
-        .addProperty("angle", &ParticleEffect2D::GetAngle, &ParticleEffect2D::SetAngle)
-        .addProperty("angleVariance", &ParticleEffect2D::GetAngleVariance, &ParticleEffect2D::SetAngleVariance)
-        .addProperty("gravity", &ParticleEffect2D::GetGravity, &ParticleEffect2D::SetGravity)
-        .addProperty("radialAcceleration", &ParticleEffect2D::GetRadialAcceleration, &ParticleEffect2D::SetRadialAcceleration)
-        .addProperty("tangentialAcceleration", &ParticleEffect2D::GetTangentialAcceleration, &ParticleEffect2D::SetTangentialAcceleration)
-        .addProperty("radialAccelVariance", &ParticleEffect2D::GetRadialAccelVariance, &ParticleEffect2D::SetRadialAccelVariance)
-        .addProperty("tangentialAccelVariance", &ParticleEffect2D::GetTangentialAccelVariance, &ParticleEffect2D::SetTangentialAccelVariance)
-        .addProperty("startColor", &ParticleEffect2D::GetStartColor, &ParticleEffect2D::SetStartColor)
-        .addProperty("startColorVariance", &ParticleEffect2D::GetStartColorVariance, &ParticleEffect2D::SetStartColorVariance)
-        .addProperty("finishColor", &ParticleEffect2D::GetFinishColor, &ParticleEffect2D::SetFinishColor)
-        .addProperty("finishColorVariance", &ParticleEffect2D::GetFinishColorVariance, &ParticleEffect2D::SetFinishColorVariance)
-        .addProperty("maxParticles", &ParticleEffect2D::GetMaxParticles, &ParticleEffect2D::SetMaxParticles)
-        .addProperty("startParticleSize", &ParticleEffect2D::GetStartParticleSize, &ParticleEffect2D::SetStartParticleSize)
-        .addProperty("startParticleSizeVariance", &ParticleEffect2D::GetStartParticleSizeVariance, &ParticleEffect2D::SetStartParticleSizeVariance)
-        .addProperty("finishParticleSize", &ParticleEffect2D::GetFinishParticleSize, &ParticleEffect2D::SetFinishParticleSize)
-        .addProperty("finishParticleSizeVariance", &ParticleEffect2D::GetFinishParticleSizeVariance, &ParticleEffect2D::SetFinishParticleSizeVariance)
-        .addProperty("duration", &ParticleEffect2D::GetDuration, &ParticleEffect2D::SetDuration)
-        .addProperty("emitterType", &ParticleEffect2D::GetEmitterType, &ParticleEffect2D::SetEmitterType)
-        .addProperty("maxRadius", &ParticleEffect2D::GetMaxRadius, &ParticleEffect2D::SetMaxRadius)
-        .addProperty("maxRadiusVariance", &ParticleEffect2D::GetMaxRadiusVariance, &ParticleEffect2D::SetMaxRadiusVariance)
-        .addProperty("minRadius", &ParticleEffect2D::GetMinRadius, &ParticleEffect2D::SetMinRadius)
-        .addProperty("minRadiusVariance", &ParticleEffect2D::GetMinRadiusVariance, &ParticleEffect2D::SetMinRadiusVariance)
-        .addProperty("rotatePerSecond", &ParticleEffect2D::GetRotatePerSecond, &ParticleEffect2D::SetRotatePerSecond)
-        .addProperty("rotatePerSecondVariance", &ParticleEffect2D::GetRotatePerSecondVariance, &ParticleEffect2D::SetRotatePerSecondVariance)
-        .addProperty("blendMode", &ParticleEffect2D::GetBlendMode, &ParticleEffect2D::SetBlendMode)
-        .addProperty("rotationStart", &ParticleEffect2D::GetRotationStart, &ParticleEffect2D::SetRotationStart)
-        .addProperty("rotationStartVariance", &ParticleEffect2D::GetRotationStartVariance, &ParticleEffect2D::SetRotationStartVariance)
-        .addProperty("rotationEnd", &ParticleEffect2D::GetRotationEnd, &ParticleEffect2D::SetRotationEnd)
-        .addProperty("rotationEndVariance", &ParticleEffect2D::GetRotationEndVariance, &ParticleEffect2D::SetRotationEndVariance)
-    );
+         );
 }
 
 static void RegisterParticleEmitter2D(kaguya::State& lua)
@@ -744,14 +629,6 @@ static void RegisterParticleEmitter2D(kaguya::State& lua)
         .addProperty("blendMode", &ParticleEmitter2D::GetBlendMode, &ParticleEmitter2D::SetBlendMode)
         .addProperty("maxParticles", &ParticleEmitter2D::GetMaxParticles, &ParticleEmitter2D::SetMaxParticles)
     );
-}
-
-static void RegisterPhysicsEvents2D(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["E_PHYSICSBEGINCONTACT2D"] = E_PHYSICSBEGINCONTACT2D;
-    lua["E_PHYSICSENDCONTACT2D"] = E_PHYSICSENDCONTACT2D;
 }
 
 static PODVector<PhysicsRaycastResult2D> PhysicsWorld2DRaycast0(PhysicsWorld2D* self, const Vector2& startPoint, const Vector2& endPoint)
@@ -884,15 +761,6 @@ static void RegisterPhysicsWorld2D(kaguya::State& lua)
         .addProperty("gravity", &PhysicsWorld2D::GetGravity, &PhysicsWorld2D::SetGravity)
         .addProperty("velocityIterations", &PhysicsWorld2D::GetVelocityIterations, &PhysicsWorld2D::SetVelocityIterations)
         .addProperty("positionIterations", &PhysicsWorld2D::GetPositionIterations, &PhysicsWorld2D::SetPositionIterations)
-    );
-}
-
-static void RegisterRenderer2D(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["Renderer2D"].setClass(UserdataMetatable<Renderer2D, Drawable>()
-        .addStaticFunction("new", &CreateObject<Renderer2D>)
     );
 }
 
@@ -1073,7 +941,7 @@ static void RegisterTileMap2D(kaguya::State& lua)
         .addStaticFunction("new", &CreateObject<TileMap2D>)
 
         .addFunction("DrawDebugGeometry", static_cast<void(TileMap2D::*)()>(&TileMap2D::DrawDebugGeometry))
-        .addFunction("SetTmxFile", &TileMap2D::SetTmxFile)
+        .addFunction("SetTmxFile", &TileMap2D::SetTmxFile)        
 
         .addFunction("GetTmxFile", &TileMap2D::GetTmxFile)
         .addFunction("GetInfo", &TileMap2D::GetInfo)
@@ -1081,6 +949,7 @@ static void RegisterTileMap2D(kaguya::State& lua)
         .addFunction("GetLayer", &TileMap2D::GetLayer)
         .addFunction("TileIndexToPosition", &TileMap2D::TileIndexToPosition)
         .addFunction("PositionToTileIndex", &TileMap2D::PositionToTileIndex)
+        
         .addProperty("tmxFile", &TileMap2D::GetTmxFile, &TileMap2D::SetTmxFile)
         .addProperty("info", &TileMap2D::GetInfo)
         .addProperty("numLayers", &TileMap2D::GetNumLayers)
@@ -1215,14 +1084,6 @@ static void RegisterTmxFile2D(kaguya::State& lua)
 
     lua["TmxFile2D"].setClass(UserdataMetatable<TmxFile2D, Resource>()
         .addStaticFunction("new", &CreateObject<TmxFile2D>)
-
-        .addFunction("GetInfo", &TmxFile2D::GetInfo)
-        .addFunction("GetTileSprite", &TmxFile2D::GetTileSprite)
-        .addFunction("GetTilePropertySet", &TmxFile2D::GetTilePropertySet)
-        .addFunction("GetNumLayers", &TmxFile2D::GetNumLayers)
-
-        .addProperty("info", &TmxFile2D::GetInfo)
-        .addProperty("numLayers", &TmxFile2D::GetNumLayers)
     );
 }
 
@@ -1255,7 +1116,6 @@ void RegisterUrho2DLuaAPI(kaguya::State& lua)
     RegisterParticleEmitter2D(lua);
     RegisterPhysicsEvents2D(lua);
     RegisterPhysicsWorld2D(lua);
-    RegisterRenderer2D(lua);
     RegisterRigidBody2D(lua);
     RegisterSprite2D(lua);
     RegisterSpriteSheet2D(lua);
