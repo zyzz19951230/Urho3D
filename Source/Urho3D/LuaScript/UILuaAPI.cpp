@@ -1341,6 +1341,16 @@ static const PODVector<UIElement*> UIElementGetChildrenWithTag1(const UIElement*
     return dest;
 }
 
+static void UIElementSetDefaultStyle(UIElement* self, XMLFile* style)
+{
+	self->SetDefaultStyle(style);
+}
+
+static XMLFile* UIElementGetDefaultStyle(const UIElement* self)
+{
+	return self->GetDefaultStyle(true);
+}
+
 static void RegisterUIElement(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -1498,6 +1508,7 @@ static void RegisterUIElement(kaguya::State& lua)
         .addFunction("SetTraversalMode", &UIElement::SetTraversalMode)
         .addFunction("SetElementEventSender", &UIElement::SetElementEventSender)
         .addFunction("SetTags", &UIElement::SetTags)
+		.addFunction("AddTag", &UIElement::AddTag)
 
         .addOverloadedFunctions("AddTags",
             &UIElementAddTags0,
@@ -1618,7 +1629,10 @@ static void RegisterUIElement(kaguya::State& lua)
         .addProperty("focusMode", &UIElement::GetFocusMode, &UIElement::SetFocusMode)
         .addProperty("dragDropMode", &UIElement::GetDragDropMode, &UIElement::SetDragDropMode)
         .addProperty("appliedStyle", &UIElement::GetAppliedStyle)
-        .addProperty("layoutMode", &UIElement::GetLayoutMode, &UIElement::SetLayoutMode)
+        
+		.addProperty("defaultStyle", &UIElementGetDefaultStyle, &UIElementSetDefaultStyle)
+
+		.addProperty("layoutMode", &UIElement::GetLayoutMode, &UIElement::SetLayoutMode)
         .addProperty("layoutSpacing", &UIElement::GetLayoutSpacing, &UIElement::SetLayoutSpacing)
         .addProperty("layoutBorder", &UIElement::GetLayoutBorder, &UIElement::SetLayoutBorder)
         .addProperty("layoutFlexScale", &UIElement::GetLayoutFlexScale, &UIElement::SetLayoutFlexScale)

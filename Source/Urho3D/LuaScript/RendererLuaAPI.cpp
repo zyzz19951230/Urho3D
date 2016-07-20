@@ -1217,7 +1217,9 @@ static void RegisterRenderPath(kaguya::State& lua)
     lua["RenderPath"].setClass(UserdataMetatable<RenderPath, RefCounted>()
         .setConstructors<RenderPath()>()
 
-        .addFunction("Load", &RenderPath::Load)
+        .addFunction("Clone", &RenderPath::Clone)
+
+		.addFunction("Load", &RenderPath::Load)
         .addFunction("Append", &RenderPath::Append)
         
         .addFunction("SetEnabled", &RenderPath::SetEnabled)

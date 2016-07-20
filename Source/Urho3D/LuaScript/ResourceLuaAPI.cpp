@@ -280,6 +280,8 @@ static void RegisterLocalization(kaguya::State& lua)
         .addFunction("LoadJSONFile", &Localization::LoadJSONFile)
 
         .addProperty("numLanguages", &Localization::GetNumLanguages)
+		.addProperty("languageIndex", static_cast<int(Localization::*)() const>(&Localization::GetLanguageIndex))
+		.addProperty("language", static_cast<String(Localization::*)()>(&Localization::GetLanguage))
     );
 }
 
