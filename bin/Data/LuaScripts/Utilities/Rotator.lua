@@ -2,7 +2,7 @@
 Rotator = ScriptObject()
 
 function Rotator:Start()
-    self.rotationSpeed = Vector3.new(0, 0, 0)
+    self.rotationSpeed = Vector3(0, 0, 0)
 end
 
 function Rotator:SetRotationSpeed(speed)
@@ -13,5 +13,5 @@ function Rotator:Update(timeStep)
     local x = self.rotationSpeed.x * timeStep
     local y = self.rotationSpeed.y * timeStep
     local z = self.rotationSpeed.z * timeStep
-    self.node:Rotate(Quaternion.new(x, y, z))
+    self.node:Rotate(Quaternion(x, y, z))
 end

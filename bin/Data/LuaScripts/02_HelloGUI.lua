@@ -41,16 +41,16 @@ end
 
 function InitControls()
     -- Create a CheckBox
-    local checkBox = CheckBox:new()
+    local checkBox = CheckBox()
     checkBox:SetName("CheckBox")
 
     -- Create a Button
-    local button = Button:new()
+    local button = Button()
     button:SetName("Button")
     button.minHeight = 24
 
     -- Create a LineEdit
-    local lineEdit = LineEdit:new()
+    local lineEdit = LineEdit()
     lineEdit:SetName("LineEdit")
     lineEdit.minHeight = 24
 
@@ -67,7 +67,7 @@ end
 
 function InitWindow()
     -- Create the Window and add it to the UI's root node
-    window = Window:new()
+    window = Window()
     ui.root:AddChild(window)
 
     -- Set Window size and layout settings
@@ -77,19 +77,19 @@ function InitWindow()
     window:SetName("Window")
 
     -- Create Window 'titlebar' container
-    local titleBar = UIElement:new()
+    local titleBar = UIElement()
     titleBar:SetMinSize(0, 24)
     titleBar.verticalAlignment = VA_TOP
     titleBar.layoutMode = LM_HORIZONTAL
 
     -- Create the Window title Text
-    local windowTitle = Text:new()
+    local windowTitle = Text()
     windowTitle.name = "WindowTitle"
     windowTitle.text = "Hello GUI!"
 
 
     -- Create the Window's close button
-    local buttonClose = Button:new()
+    local buttonClose = Button()
     buttonClose:SetName("CloseButton")
 
     -- Add the controls to the title bar
@@ -98,7 +98,6 @@ function InitWindow()
 
     -- Add the title bar to the Window
     window:AddChild(titleBar)
-
 
     -- Apply styles
     window:SetStyleAuto()
