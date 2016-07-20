@@ -23,19 +23,17 @@
 #include "../Precompiled.h"
 
 #include "../Core/Context.h"
+#include "../IO/VectorBuffer.h"
 #include "../Graphics/Camera.h"
 #include "../Graphics/DebugRenderer.h"
 #include "../Graphics/Geometry.h"
 #include "../Graphics/Graphics.h"
 #include "../Graphics/GraphicsDefs.h"
-#include "../Graphics/GraphicsEvents.h"
 #include "../Graphics/IndexBuffer.h"
 #include "../Graphics/Material.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/RenderPath.h"
 #include "../Graphics/RenderSurface.h"
-#include "../Graphics/Shader.h"
-#include "../Graphics/ShaderVariation.h"
 #include "../Graphics/Technique.h"
 #include "../Graphics/Texture.h"
 #include "../Graphics/Texture2D.h"
@@ -115,9 +113,9 @@ static void RegisterCamera(kaguya::State& lua)
         .addFunction("GetFrustumSize", &Camera::GetFrustumSize)
         .addFunction("GetHalfViewSize", &Camera::GetHalfViewSize)
         
-        // .addFunction("GetSplitFrustum", &Camera::GetSplitFrustum)
-        // .addFunction("GetViewSpaceFrustum", &Camera::GetViewSpaceFrustum)
-        // .addFunction("GetViewSpaceSplitFrustum", &Camera::GetViewSpaceSplitFrustum)
+        .addFunction("GetSplitFrustum", &Camera::GetSplitFrustum)
+        .addFunction("GetViewSpaceFrustum", &Camera::GetViewSpaceFrustum)
+        .addFunction("GetViewSpaceSplitFrustum", &Camera::GetViewSpaceSplitFrustum)
 
         .addFunction("GetScreenRay", &Camera::GetScreenRay)
         .addFunction("WorldToScreenPoint", &Camera::WorldToScreenPoint)
@@ -129,6 +127,12 @@ static void RegisterCamera(kaguya::State& lua)
         .addFunction("GetClipPlane", &Camera::GetClipPlane)
         .addFunction("GetFlipVertical", &Camera::GetFlipVertical)
         
+        .addFunction("GetDistance", &Camera::GetDistance)
+        .addFunction("GetDistanceSquared", &Camera::GetDistanceSquared)
+        .addFunction("GetLodDistance", &Camera::GetLodDistance)
+        .addFunction("IsProjectionValid", &Camera::IsProjectionValid)
+        .addFunction("GetEffectiveWorldTransform", &Camera::GetEffectiveWorldTransform)
+
         .addProperty("farClip", &Camera::GetFarClip, &Camera::SetFarClip)
         .addProperty("nearClip", &Camera::GetNearClip, &Camera::SetNearClip)
         .addProperty("fov", &Camera::GetFov, &Camera::SetFov)
@@ -151,6 +155,7 @@ static void RegisterCamera(kaguya::State& lua)
         .addProperty("useClipping", &Camera::GetUseClipping, &Camera::SetUseClipping)
         .addProperty("clipPlane", &Camera::GetClipPlane, &Camera::SetClipPlane)
         .addProperty("flipVertical", &Camera::GetFlipVertical, &Camera::SetFlipVertical)
+        .addProperty("projectionValid", &Camera::IsProjectionValid)
     );
 }
 
@@ -316,6 +321,17 @@ static void RegisterDebugRenderer(kaguya::State& lua)
         ADD_OVERLOADED_FUNCTIONS_3(DebugRenderer, AddCircle)
         ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddCross)
         ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddQuad)
+
+
+        .addFunction("Render", &DebugRenderer::Render)
+        .addFunction("GetView", &DebugRenderer::GetView)
+        .addFunction("GetProjection", &DebugRenderer::GetProjection)
+        .addFunction("GetFrustum", &DebugRenderer::GetFrustum)
+        .addFunction("IsInside", &DebugRenderer::IsInside)
+
+        .addProperty("view", &DebugRenderer::GetView)
+        .addProperty("projection", &DebugRenderer::GetProjection)
+        .addProperty("frustum", &DebugRenderer::GetFrustum)
     );
 }
 
@@ -352,6 +368,8 @@ static void RegisterGeometry(kaguya::State& lua)
 
         ADD_OVERLOADED_FUNCTIONS_4(Geometry, SetDrawRange)
 
+        .addFunction("SetLodDistance", &Geometry::SetLodDistance)
+
         .addFunction("GetNumVertexBuffers", &Geometry::GetNumVertexBuffers)
         .addFunction("GetVertexBuffer", &Geometry::GetVertexBuffer)
         .addFunction("GetIndexBuffer", &Geometry::GetIndexBuffer)        
@@ -361,12 +379,19 @@ static void RegisterGeometry(kaguya::State& lua)
         .addFunction("GetIndexCount", &Geometry::GetIndexCount)
         .addFunction("GetVertexStart", &Geometry::GetVertexStart)
         .addFunction("GetVertexCount", &Geometry::GetVertexCount)
+        .addFunction("GetLodDistance", &Geometry::GetLodDistance)
+        .addFunction("IsEmpty", &Geometry::IsEmpty)
 
+        .addProperty("numVertexBuffers", &Geometry::GetNumVertexBuffers)
+
+        .addProperty("indexBuffer", &Geometry::GetIndexBuffer, &Geometry::SetIndexBuffer)
         .addProperty("primitiveType", &Geometry::GetPrimitiveType)
         .addProperty("indexStart", &Geometry::GetIndexStart)
         .addProperty("indexCount", &Geometry::GetIndexCount)
         .addProperty("vertexStart", &Geometry::GetVertexStart)
         .addProperty("vertexCount", &Geometry::GetVertexCount)
+        .addProperty("lodDistance", &Geometry::GetLodDistance, &Geometry::SetLodDistance)
+        .addProperty("empty", &Geometry::IsEmpty)
     );
 }
 
@@ -391,9 +416,18 @@ static void RegisterGraphics(kaguya::State& lua)
         .addFunction("SetFlushGPU", &Graphics::SetFlushGPU)
         .addFunction("SetOrientations", &Graphics::SetOrientations)
         .addFunction("ToggleFullscreen", &Graphics::ToggleFullscreen)
+
+        .addFunction("Maximize", &Graphics::Maximize)
+        .addFunction("Minimize", &Graphics::Minimize)
+        .addFunction("Close", &Graphics::Close)
         
         .addFunction("TakeScreenShot", &Graphics::TakeScreenShot)        
-        
+
+        .addFunction("BeginDumpShaders", &Graphics::BeginDumpShaders)
+        .addFunction("EndDumpShaders", &Graphics::EndDumpShaders)
+
+        .addFunction("PrecacheShaders", &Graphics::PrecacheShaders)
+
         .addFunction("IsInitialized", &Graphics::IsInitialized)
         .addFunction("GetWindowTitle", &Graphics::GetWindowTitle)
         .addFunction("GetApiName", &Graphics::GetApiName)
@@ -404,7 +438,7 @@ static void RegisterGraphics(kaguya::State& lua)
         .addFunction("GetFullscreen", &Graphics::GetFullscreen)
         .addFunction("GetBorderless", &Graphics::GetBorderless)
         .addFunction("GetResizable", &Graphics::GetResizable)
-        .addFunction("GetHighDPI", &Graphics::GetHighDPI)
+        // .addFunction("GetHighDPI", &Graphics::GetHighDPI)
         .addFunction("GetVSync", &Graphics::GetVSync)
         .addFunction("GetTripleBuffer", &Graphics::GetTripleBuffer)
         .addFunction("GetSRGB", &Graphics::GetSRGB)
@@ -417,6 +451,7 @@ static void RegisterGraphics(kaguya::State& lua)
         .addFunction("GetDummyColorFormat", &Graphics::GetDummyColorFormat)
         .addFunction("GetShadowMapFormat", &Graphics::GetShadowMapFormat)
         .addFunction("GetHiresShadowMapFormat", &Graphics::GetHiresShadowMapFormat)
+        
         .addFunction("GetInstancingSupport", &Graphics::GetInstancingSupport)
         .addFunction("GetLightPrepassSupport", &Graphics::GetLightPrepassSupport)
         .addFunction("GetDeferredSupport", &Graphics::GetDeferredSupport)        
@@ -424,8 +459,6 @@ static void RegisterGraphics(kaguya::State& lua)
         .addFunction("GetReadableDepthSupport", &Graphics::GetReadableDepthSupport)
         .addFunction("GetSRGBSupport", &Graphics::GetSRGBSupport)
         .addFunction("GetSRGBWriteSupport", &Graphics::GetSRGBWriteSupport)
-        .addFunction("GetResolutions", &Graphics::GetResolutions)
-        .addFunction("GetMultiSampleLevels", &Graphics::GetMultiSampleLevels)
         
         .addFunction("GetDesktopResolution", &Graphics::GetDesktopResolution)
 
@@ -448,9 +481,7 @@ static void RegisterGraphics(kaguya::State& lua)
         .addStaticFunction("GetPixelUVOffset", &Graphics::GetPixelUVOffset)
         .addStaticFunction("GetMaxBones", &Graphics::GetMaxBones)
         
-        .addProperty("type", &Graphics::GetType)
         .addProperty("initialized", &Graphics::IsInitialized)
-        .addProperty("externalWindow", &Graphics::GetExternalWindow, &Graphics::SetExternalWindow)
         .addProperty("windowTitle", &Graphics::GetWindowTitle, &Graphics::SetWindowTitle)
         .addProperty("apiName", &Graphics::GetApiName)
         .addProperty("windowPosition", &Graphics::GetWindowPosition)
@@ -462,11 +493,14 @@ static void RegisterGraphics(kaguya::State& lua)
         .addProperty("borderless", &Graphics::GetBorderless)
         .addProperty("resizable", &Graphics::GetResizable)
 
-        .addProperty("highDPI", &Graphics::GetHighDPI)
+        // .addProperty("highDPI", &Graphics::GetHighDPI)
         .addProperty("vSync", &Graphics::GetVSync)
         .addProperty("tripleBuffer", &Graphics::GetTripleBuffer)
         .addProperty("sRGB", &Graphics::GetSRGB, &Graphics::SetSRGB)
+        .addProperty("flushGPU", &Graphics::GetFlushGPU, &Graphics::SetFlushGPU)
         .addProperty("orientations", &Graphics::GetOrientations, &Graphics::SetOrientations)
+
+        .addProperty("deviceLost", &Graphics::IsDeviceLost)
 
         .addProperty("numPrimitives", &Graphics::GetNumPrimitives)
         .addProperty("numBatches", &Graphics::GetNumBatches)
@@ -480,14 +514,7 @@ static void RegisterGraphics(kaguya::State& lua)
         .addProperty("readableDepthSupport", &Graphics::GetReadableDepthSupport)
         .addProperty("sRGBSupport", &Graphics::GetSRGBSupport)
         .addProperty("sRGBWriteSupport", &Graphics::GetSRGBWriteSupport)
-        .addProperty("resolutions", &Graphics::GetResolutions)
-        .addProperty("multiSampleLevels", &Graphics::GetMultiSampleLevels)
         .addProperty("desktopResolution", &Graphics::GetDesktopResolution)
-
-        .addProperty("defaultTextureFilterMode", &Graphics::GetDefaultTextureFilterMode, &Graphics::SetDefaultTextureFilterMode)
-
-        .addProperty("renderTargetDimensions", &Graphics::GetRenderTargetDimensions)
-        .addProperty("windowIcon", &Graphics::SetWindowIcon)
     );
 }
 
@@ -664,16 +691,6 @@ static void RegisterGraphicsDefs(kaguya::State& lua)
     lua["VS"] = VS;
     lua["PS"] = PS;
 
-    // enum ShaderParameterGroup;
-    lua["SP_FRAME"] = SP_FRAME;
-    lua["SP_CAMERA"] = SP_CAMERA;
-    lua["SP_ZONE"] = SP_ZONE;
-    lua["SP_LIGHT"] = SP_LIGHT;
-    lua["SP_MATERIAL"] = SP_MATERIAL;
-    lua["SP_OBJECT"] = SP_OBJECT;
-    lua["SP_CUSTOM"] = SP_CUSTOM;
-    lua["MAX_SHADER_PARAMETER_GROUPS"] = MAX_SHADER_PARAMETER_GROUPS;
-
     // enum TextureUnit;
     lua["TU_DIFFUSE"] = TU_DIFFUSE;
     lua["TU_ALBEDOBUFFER"] = TU_ALBEDOBUFFER;
@@ -682,19 +699,19 @@ static void RegisterGraphicsDefs(kaguya::State& lua)
     lua["TU_SPECULAR"] = TU_SPECULAR;
     lua["TU_EMISSIVE"] = TU_EMISSIVE;
     lua["TU_ENVIRONMENT"] = TU_ENVIRONMENT;
-    lua["TU_VOLUMEMAP"] = TU_VOLUMEMAP;
-    lua["TU_CUSTOM1"] = TU_CUSTOM1;
-    lua["TU_CUSTOM2"] = TU_CUSTOM2;
-    lua["TU_LIGHTRAMP"] = TU_LIGHTRAMP;
-    lua["TU_LIGHTSHAPE"] = TU_LIGHTSHAPE;
-    lua["TU_SHADOWMAP"] = TU_SHADOWMAP;
-    lua["TU_FACESELECT"] = TU_FACESELECT;
-    lua["TU_INDIRECTION"] = TU_INDIRECTION;
-    lua["TU_DEPTHBUFFER"] = TU_DEPTHBUFFER;
-    lua["TU_LIGHTBUFFER"] = TU_LIGHTBUFFER;
-    lua["TU_ZONE"] = TU_ZONE;
-    lua["MAX_MATERIAL_TEXTURE_UNITS"] = MAX_MATERIAL_TEXTURE_UNITS;
-    lua["MAX_TEXTURE_UNITS"] = MAX_TEXTURE_UNITS;
+    // lua["TU_VOLUMEMAP"] = TU_VOLUMEMAP;
+    // lua["TU_CUSTOM1"] = TU_CUSTOM1;
+    // lua["TU_CUSTOM2"] = TU_CUSTOM2;
+    // lua["TU_LIGHTRAMP"] = TU_LIGHTRAMP;
+    // lua["TU_LIGHTSHAPE"] = TU_LIGHTSHAPE;
+    // lua["TU_SHADOWMAP"] = TU_SHADOWMAP;
+    // lua["TU_FACESELECT"] = TU_FACESELECT;
+    // lua["TU_INDIRECTION"] = TU_INDIRECTION;
+    // lua["TU_DEPTHBUFFER"] = TU_DEPTHBUFFER;
+    // lua["TU_LIGHTBUFFER"] = TU_LIGHTBUFFER;
+    // lua["TU_ZONE"] = TU_ZONE;
+    // lua["MAX_MATERIAL_TEXTURE_UNITS"] = MAX_MATERIAL_TEXTURE_UNITS;
+    // lua["MAX_TEXTURE_UNITS"] = MAX_TEXTURE_UNITS;
 
     // enum FaceCameraMode;
     lua["FC_NONE"] = FC_NONE;
@@ -712,69 +729,15 @@ static void RegisterGraphicsDefs(kaguya::State& lua)
     lua["SHADOWQUALITY_VSM"] = SHADOWQUALITY_VSM;
     lua["SHADOWQUALITY_BLUR_VSM"] = SHADOWQUALITY_BLUR_VSM;
 
-    /*
-    lua["VSP_AMBIENTSTARTCOLOR"] = VSP_AMBIENTSTARTCOLOR;
-    lua["VSP_AMBIENTENDCOLOR"] = VSP_AMBIENTENDCOLOR;
-    lua["VSP_BILLBOARDROT"] = VSP_BILLBOARDROT;
-    lua["VSP_CAMERAPOS"] = VSP_CAMERAPOS;
-    lua["VSP_CLIPPLANE"] = VSP_CLIPPLANE;
-    lua["VSP_NEARCLIP"] = VSP_NEARCLIP;
-    lua["VSP_FARCLIP"] = VSP_FARCLIP;
-    lua["VSP_DEPTHMODE"] = VSP_DEPTHMODE;
-    lua["VSP_DELTATIME"] = VSP_DELTATIME;
-    lua["VSP_ELAPSEDTIME"] = VSP_ELAPSEDTIME;
-    lua["VSP_FRUSTUMSIZE"] = VSP_FRUSTUMSIZE;
-    lua["VSP_GBUFFEROFFSETS"] = VSP_GBUFFEROFFSETS;
-    lua["VSP_LIGHTDIR"] = VSP_LIGHTDIR;
-    lua["VSP_LIGHTPOS"] = VSP_LIGHTPOS;
-    lua["VSP_NORMALOFFSETSCALE"] = VSP_NORMALOFFSETSCALE;
-    lua["VSP_MODEL"] = VSP_MODEL;
-    lua["VSP_VIEW"] = VSP_VIEW;
-    lua["VSP_VIEWINV"] = VSP_VIEWINV;
-    lua["VSP_VIEWPROJ"] = VSP_VIEWPROJ;
-    lua["VSP_UOFFSET"] = VSP_UOFFSET;
-    lua["VSP_VOFFSET"] = VSP_VOFFSET;
-    lua["VSP_ZONE"] = VSP_ZONE;
-    lua["VSP_LIGHTMATRICES"] = VSP_LIGHTMATRICES;
-    lua["VSP_SKINMATRICES"] = VSP_SKINMATRICES;
-    lua["VSP_VERTEXLIGHTS"] = VSP_VERTEXLIGHTS;
-    lua["PSP_AMBIENTCOLOR"] = PSP_AMBIENTCOLOR;
-    lua["PSP_CAMERAPOS"] = PSP_CAMERAPOS;
-    lua["PSP_DELTATIME"] = PSP_DELTATIME;
-    lua["PSP_DEPTHRECONSTRUCT"] = PSP_DEPTHRECONSTRUCT;
-    lua["PSP_ELAPSEDTIME"] = PSP_ELAPSEDTIME;
-    lua["PSP_FOGCOLOR"] = PSP_FOGCOLOR;
-    lua["PSP_FOGPARAMS"] = PSP_FOGPARAMS;
-    lua["PSP_GBUFFERINVSIZE"] = PSP_GBUFFERINVSIZE;
-    lua["PSP_LIGHTCOLOR"] = PSP_LIGHTCOLOR;
-    lua["PSP_LIGHTDIR"] = PSP_LIGHTDIR;
-    lua["PSP_LIGHTPOS"] = PSP_LIGHTPOS;
-    lua["PSP_NORMALOFFSETSCALE"] = PSP_NORMALOFFSETSCALE;
-    lua["PSP_MATDIFFCOLOR"] = PSP_MATDIFFCOLOR;
-    lua["PSP_MATEMISSIVECOLOR"] = PSP_MATEMISSIVECOLOR;
-    lua["PSP_MATENVMAPCOLOR"] = PSP_MATENVMAPCOLOR;
-    lua["PSP_MATSPECCOLOR"] = PSP_MATSPECCOLOR;
-    lua["PSP_NEARCLIP"] = PSP_NEARCLIP;
-    lua["PSP_FARCLIP"] = PSP_FARCLIP;
-    lua["PSP_SHADOWCUBEADJUST"] = PSP_SHADOWCUBEADJUST;
-    lua["PSP_SHADOWDEPTHFADE"] = PSP_SHADOWDEPTHFADE;
-    lua["PSP_SHADOWINTENSITY"] = PSP_SHADOWINTENSITY;
-    lua["PSP_SHADOWMAPINVSIZE"] = PSP_SHADOWMAPINVSIZE;
-    lua["PSP_SHADOWSPLITS"] = PSP_SHADOWSPLITS;
-    lua["PSP_LIGHTMATRICES"] = PSP_LIGHTMATRICES;
-    lua["PSP_VSMSHADOWPARAMS"] = PSP_VSMSHADOWPARAMS;
-    lua["PSP_ROUGHNESS"] = PSP_ROUGHNESS;
-    lua["PSP_METALLIC"] = PSP_METALLIC;
-    */
-
-    lua["DOT_SCALE"] = DOT_SCALE;
     lua["QUALITY_LOW"] = QUALITY_LOW;
     lua["QUALITY_MEDIUM"] = QUALITY_MEDIUM;
     lua["QUALITY_HIGH"] = QUALITY_HIGH;
     lua["QUALITY_MAX"] = QUALITY_MAX;
+
     lua["CLEAR_COLOR"] = CLEAR_COLOR;
     lua["CLEAR_DEPTH"] = CLEAR_DEPTH;
     lua["CLEAR_STENCIL"] = CLEAR_STENCIL;
+
     lua["MASK_NONE"] = MASK_NONE;
     lua["MASK_POSITION"] = MASK_POSITION;
     lua["MASK_NORMAL"] = MASK_NORMAL;
@@ -790,28 +753,6 @@ static void RegisterGraphicsDefs(kaguya::State& lua)
     lua["MASK_INSTANCEMATRIX2"] = MASK_INSTANCEMATRIX2;
     lua["MASK_INSTANCEMATRIX3"] = MASK_INSTANCEMATRIX3;
     lua["MASK_OBJECTINDEX"] = MASK_OBJECTINDEX;
-    lua["MAX_RENDERTARGETS"] = MAX_RENDERTARGETS;
-    lua["MAX_VERTEX_STREAMS"] = MAX_VERTEX_STREAMS;
-    lua["MAX_CONSTANT_REGISTERS"] = MAX_CONSTANT_REGISTERS;
-    lua["BITS_PER_COMPONENT"] = BITS_PER_COMPONENT;
-}
-
-static void RegisterGraphicsEvents(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["E_SCREENMODE"] = E_SCREENMODE;
-    lua["E_WINDOWPOS"] = E_WINDOWPOS;
-    lua["E_RENDERSURFACEUPDATE"] = E_RENDERSURFACEUPDATE;
-    lua["E_BEGINRENDERING"] = E_BEGINRENDERING;
-    lua["E_ENDRENDERING"] = E_ENDRENDERING;
-    lua["E_BEGINVIEWUPDATE"] = E_BEGINVIEWUPDATE;
-    lua["E_ENDVIEWUPDATE"] = E_ENDVIEWUPDATE;
-    lua["E_BEGINVIEWRENDER"] = E_BEGINVIEWRENDER;
-    lua["E_ENDVIEWRENDER"] = E_ENDVIEWRENDER;
-    lua["E_RENDERPATHEVENT"] = E_RENDERPATHEVENT;
-    lua["E_DEVICELOST"] = E_DEVICELOST;
-    lua["E_DEVICERESET"] = E_DEVICERESET;
 }
 
 static bool IndexBufferSetSize0(IndexBuffer* self, unsigned int indexCount, bool largeIndices)
@@ -822,6 +763,39 @@ static bool IndexBufferSetSize0(IndexBuffer* self, unsigned int indexCount, bool
 static bool IndexBufferSetSize1(IndexBuffer* self, unsigned int indexCount, bool largeIndices, bool dynamic)
 {
     return self->SetSize(indexCount, largeIndices, dynamic);
+}
+
+static bool IndexBufferSetData0(IndexBuffer* self, VectorBuffer& src)
+{
+    // Make sure there is enough data
+    if (self->GetIndexCount() && src.GetSize() >= self->GetIndexCount() * self->GetIndexSize())
+        return self->SetData(&src.GetBuffer()[0]);
+    else
+        return false;
+}
+
+static bool IndexBufferSetData1(IndexBuffer* self, VectorBuffer& src, unsigned start, unsigned count, bool discard)
+{
+    // Make sure there is enough data
+    if (self->GetIndexCount() && src.GetSize() >= count * self->GetIndexSize())
+        return self->SetDataRange(&src.GetBuffer()[0], start, count, discard);
+    else
+        return false;
+}
+
+static VectorBuffer IndexBufferGetData(IndexBuffer* self)
+{
+    VectorBuffer ret;
+    
+    void* data = self->Lock(0, self->GetIndexCount(), false);
+    if (data)
+    {
+        ret.Write(data, self->GetIndexCount() * self->GetIndexSize());
+        ret.Seek(0);
+        self->Unlock();
+    }
+
+    return ret;
 }
 
 static void RegisterIndexBuffer(kaguya::State& lua)
@@ -835,15 +809,17 @@ static void RegisterIndexBuffer(kaguya::State& lua)
         
         ADD_OVERLOADED_FUNCTIONS_2(IndexBuffer, SetSize)
         
+        ADD_OVERLOADED_FUNCTIONS_2(IndexBuffer, SetData)
+
+        .addStaticFunction("GetData", &IndexBufferGetData)
+
         .addFunction("IsShadowed", &IndexBuffer::IsShadowed)
         .addFunction("IsDynamic", &IndexBuffer::IsDynamic)
-        .addFunction("IsLocked", &IndexBuffer::IsLocked)
         .addFunction("GetIndexCount", &IndexBuffer::GetIndexCount)
         .addFunction("GetIndexSize", &IndexBuffer::GetIndexSize)
                 
         .addProperty("shadowed", &IndexBuffer::IsShadowed, &IndexBuffer::SetShadowed)
         .addProperty("dynamic", &IndexBuffer::IsDynamic)
-        .addProperty("locked", &IndexBuffer::IsLocked)
         .addProperty("indexCount", &IndexBuffer::GetIndexCount)
         .addProperty("indexSize", &IndexBuffer::GetIndexSize)
     );
@@ -929,16 +905,15 @@ static void RegisterMaterial(kaguya::State& lua)
         .addFunction("MarkForAuxView", &Material::MarkForAuxView)
         .addFunction("GetNumTechniques", &Material::GetNumTechniques)
         .addFunction("GetTechniques", &Material::GetTechniques)
-        .addFunction("GetTechniqueEntry", &Material::GetTechniqueEntry)
         .addFunction("GetTechnique", &Material::GetTechnique)
         .addFunction("GetPass", &Material::GetPass)
+        
         .addFunction("GetTexture", &Material::GetTexture)
-        // .addFunction("GetTextures", &Material::GetTextures)
         .addFunction("GetShaderParameter", &Material::GetShaderParameter)
         .addFunction("GetShaderParameterAnimation", &Material::GetShaderParameterAnimation)
         .addFunction("GetShaderParameterAnimationWrapMode", &Material::GetShaderParameterAnimationWrapMode)
         .addFunction("GetShaderParameterAnimationSpeed", &Material::GetShaderParameterAnimationSpeed)
-        // .addFunction("GetShaderParameters", &Material::GetShaderParameters)
+        
         .addFunction("GetCullMode", &Material::GetCullMode)
         .addFunction("GetShadowCullMode", &Material::GetShadowCullMode)
         .addFunction("GetFillMode", &Material::GetFillMode)
@@ -948,24 +923,15 @@ static void RegisterMaterial(kaguya::State& lua)
         .addFunction("GetOcclusion", &Material::GetOcclusion)
         .addFunction("GetSpecular", &Material::GetSpecular)
         .addFunction("GetScene", &Material::GetScene)
-        .addFunction("GetShaderParameterHash", &Material::GetShaderParameterHash)
-        .addStaticFunction("GetTextureUnitName", &Material::GetTextureUnitName)
-        .addStaticFunction("ParseShaderParameterValue", &Material::ParseShaderParameterValue)
-
-        .addProperty("numTechniques", &Material::GetNumTechniques, &Material::SetNumTechniques)
-        .addProperty("techniques", &Material::GetTechniques)
-        // .addProperty("textures", &Material::GetTextures)
-        // .addProperty("shaderParameters", &Material::GetShaderParameters)
+        
         .addProperty("cullMode", &Material::GetCullMode, &Material::SetCullMode)
         .addProperty("shadowCullMode", &Material::GetShadowCullMode, &Material::SetShadowCullMode)
         .addProperty("fillMode", &Material::GetFillMode, &Material::SetFillMode)
         .addProperty("depthBias", &Material::GetDepthBias, &Material::SetDepthBias)
         .addProperty("renderOrder", &Material::GetRenderOrder, &Material::SetRenderOrder)
-        .addProperty("auxViewFrameNumber", &Material::GetAuxViewFrameNumber)
         .addProperty("occlusion", &Material::GetOcclusion)
         .addProperty("specular", &Material::GetSpecular)
         .addProperty("scene", &Material::GetScene, &Material::SetScene)
-        .addProperty("shaderParameterHash", &Material::GetShaderParameterHash)
     );
 }
 
@@ -1053,7 +1019,6 @@ static void RegisterRenderer(kaguya::State& lua)
         .addFunction("SetShadowMapSize", &Renderer::SetShadowMapSize)
         .addFunction("SetShadowQuality", &Renderer::SetShadowQuality)
         .addFunction("SetShadowSoftness", &Renderer::SetShadowSoftness)
-        .addFunction("SetVSMShadowParameters", &Renderer::SetVSMShadowParameters)
         .addFunction("SetShadowMapFilter", &Renderer::SetShadowMapFilter)
         .addFunction("SetReuseShadowMaps", &Renderer::SetReuseShadowMaps)
         .addFunction("SetMaxShadowMaps", &Renderer::SetMaxShadowMaps)
@@ -1070,8 +1035,7 @@ static void RegisterRenderer(kaguya::State& lua)
         .addFunction("SetMobileNormalOffsetMul", &Renderer::SetMobileNormalOffsetMul)
         
         .addFunction("ReloadShaders", &Renderer::ReloadShaders)
-        .addFunction("ApplyShadowMapFilter", &Renderer::ApplyShadowMapFilter)
-
+        
         .addFunction("GetNumViewports", &Renderer::GetNumViewports)
         .addFunction("GetViewport", &Renderer::GetViewport)
         .addFunction("GetDefaultRenderPath", &Renderer::GetDefaultRenderPath)
@@ -1086,7 +1050,6 @@ static void RegisterRenderer(kaguya::State& lua)
         .addFunction("GetShadowMapSize", &Renderer::GetShadowMapSize)
         .addFunction("GetShadowQuality", &Renderer::GetShadowQuality)
         .addFunction("GetShadowSoftness", &Renderer::GetShadowSoftness)
-        .addFunction("GetVSMShadowParameters", &Renderer::GetVSMShadowParameters)
         .addFunction("GetReuseShadowMaps", &Renderer::GetReuseShadowMaps)
         .addFunction("GetMaxShadowMaps", &Renderer::GetMaxShadowMaps)
         .addFunction("GetDynamicInstancing", &Renderer::GetDynamicInstancing)
@@ -1114,42 +1077,13 @@ static void RegisterRenderer(kaguya::State& lua)
         .addFunction("GetDefaultMaterial", &Renderer::GetDefaultMaterial)
         .addFunction("GetDefaultLightRamp", &Renderer::GetDefaultLightRamp)
         .addFunction("GetDefaultLightSpot", &Renderer::GetDefaultLightSpot)
-        .addFunction("GetFaceSelectCubeMap", &Renderer::GetFaceSelectCubeMap)
-        .addFunction("GetIndirectionCubeMap", &Renderer::GetIndirectionCubeMap)
-        .addFunction("GetInstancingBuffer", &Renderer::GetInstancingBuffer)
         
-
         .addFunction("DrawDebugGeometry", &Renderer::DrawDebugGeometry)
-        .addFunction("QueueRenderSurface", &Renderer::QueueRenderSurface)
-        .addFunction("QueueViewport", &Renderer::QueueViewport)
-        .addFunction("GetLightGeometry", &Renderer::GetLightGeometry)
-        .addFunction("GetQuadGeometry", &Renderer::GetQuadGeometry)
-        .addFunction("GetShadowMap", &Renderer::GetShadowMap)
         
-        ADD_OVERLOADED_FUNCTIONS_2(Renderer, GetScreenBuffer)
-
-        .addFunction("GetDepthStencil", &Renderer::GetDepthStencil)
-        .addFunction("GetOcclusionBuffer", &Renderer::GetOcclusionBuffer)
-        .addFunction("GetShadowCamera", &Renderer::GetShadowCamera)
-        .addFunction("StorePreparedView", &Renderer::StorePreparedView)
-        .addFunction("GetPreparedView", &Renderer::GetPreparedView)
-        
-        ADD_OVERLOADED_FUNCTIONS_2(Renderer, SetBatchShaders)
-
-        .addFunction("SetLightVolumeBatchShaders", &Renderer::SetLightVolumeBatchShaders)
-        .addFunction("SetCullMode", &Renderer::SetCullMode)
-        .addFunction("ResizeInstancingBuffer", &Renderer::ResizeInstancingBuffer)
-        .addFunction("SaveScreenBufferAllocations", &Renderer::SaveScreenBufferAllocations)
-        .addFunction("RestoreScreenBufferAllocations", &Renderer::RestoreScreenBufferAllocations)
-        .addFunction("OptimizeLightByScissor", &Renderer::OptimizeLightByScissor)
-        .addFunction("OptimizeLightByStencil", &Renderer::OptimizeLightByStencil)
-        .addFunction("GetLightScissor", &Renderer::GetLightScissor)
-        .addStaticFunction("GetActualView", &Renderer::GetActualView)
-
         .addProperty("numViewports", &Renderer::GetNumViewports, &Renderer::SetNumViewports)
         .addProperty("defaultRenderPath", &Renderer::GetDefaultRenderPath)
         .addProperty("defaultTechnique", &Renderer::GetDefaultTechnique, &Renderer::SetDefaultTechnique)
-        .addProperty("hDRRendering", &Renderer::GetHDRRendering, &Renderer::SetHDRRendering)
+        .addProperty("HDRRendering", &Renderer::GetHDRRendering, &Renderer::SetHDRRendering)
         .addProperty("specularLighting", &Renderer::GetSpecularLighting, &Renderer::SetSpecularLighting)
         .addProperty("drawShadows", &Renderer::GetDrawShadows, &Renderer::SetDrawShadows)
         .addProperty("textureAnisotropy", &Renderer::GetTextureAnisotropy, &Renderer::SetTextureAnisotropy)
@@ -1159,7 +1093,7 @@ static void RegisterRenderer(kaguya::State& lua)
         .addProperty("shadowMapSize", &Renderer::GetShadowMapSize, &Renderer::SetShadowMapSize)
         .addProperty("shadowQuality", &Renderer::GetShadowQuality, &Renderer::SetShadowQuality)
         .addProperty("shadowSoftness", &Renderer::GetShadowSoftness, &Renderer::SetShadowSoftness)
-        .addProperty("vSMShadowParameters", &Renderer::GetVSMShadowParameters)
+        
         .addProperty("reuseShadowMaps", &Renderer::GetReuseShadowMaps, &Renderer::SetReuseShadowMaps)
         .addProperty("maxShadowMaps", &Renderer::GetMaxShadowMaps, &Renderer::SetMaxShadowMaps)
         .addProperty("dynamicInstancing", &Renderer::GetDynamicInstancing, &Renderer::SetDynamicInstancing)
@@ -1173,19 +1107,14 @@ static void RegisterRenderer(kaguya::State& lua)
         .addProperty("mobileShadowBiasMul", &Renderer::GetMobileShadowBiasMul, &Renderer::SetMobileShadowBiasMul)
         .addProperty("mobileShadowBiasAdd", &Renderer::GetMobileShadowBiasAdd, &Renderer::SetMobileShadowBiasAdd)
         .addProperty("mobileNormalOffsetMul", &Renderer::GetMobileNormalOffsetMul, &Renderer::SetMobileNormalOffsetMul)
+        
         .addProperty("numViews", &Renderer::GetNumViews)
         .addProperty("numPrimitives", &Renderer::GetNumPrimitives)
         .addProperty("numBatches", &Renderer::GetNumBatches)
         .addProperty("defaultZone", &Renderer::GetDefaultZone)
         .addProperty("defaultMaterial", &Renderer::GetDefaultMaterial)
         .addProperty("defaultLightRamp", &Renderer::GetDefaultLightRamp)
-        .addProperty("defaultLightSpot", &Renderer::GetDefaultLightSpot)
-        .addProperty("faceSelectCubeMap", &Renderer::GetFaceSelectCubeMap)
-        .addProperty("indirectionCubeMap", &Renderer::GetIndirectionCubeMap)
-        .addProperty("instancingBuffer", &Renderer::GetInstancingBuffer)
-        .addProperty("frameInfo", &Renderer::GetFrameInfo)
-        .addProperty("quadGeometry", &Renderer::GetQuadGeometry)
-        .addProperty("shadowCamera", &Renderer::GetShadowCamera)
+        .addProperty("defaultLightSpot", &Renderer::GetDefaultLightSpot)        
     );
 }
 
@@ -1226,6 +1155,7 @@ static void RegisterRenderPath(kaguya::State& lua)
         .setConstructors<RenderTargetInfo()>()
 
         .addFunction("Load", &RenderTargetInfo::Load)
+        
         .addProperty("name", &RenderTargetInfo::name_)
         .addProperty("tag", &RenderTargetInfo::tag_)
         .addProperty("format", &RenderTargetInfo::format_)
@@ -1242,6 +1172,7 @@ static void RegisterRenderPath(kaguya::State& lua)
         .setConstructors<RenderPathCommand()>()
 
         .addFunction("Load", &RenderPathCommand::Load)
+
         .addFunction("SetTextureName", &RenderPathCommand::SetTextureName)
         .addFunction("SetShaderParameter", &RenderPathCommand::SetShaderParameter)
         .addFunction("RemoveShaderParameter", &RenderPathCommand::RemoveShaderParameter)
@@ -1252,6 +1183,7 @@ static void RegisterRenderPath(kaguya::State& lua)
         .addFunction("SetOutputName", &RenderPathCommand::SetOutputName)
         .addFunction("SetOutputFace", &RenderPathCommand::SetOutputFace)
         .addFunction("SetDepthStencilName", &RenderPathCommand::SetDepthStencilName)
+        
         .addFunction("GetTextureName", &RenderPathCommand::GetTextureName)
         .addFunction("GetShaderParameter", &RenderPathCommand::GetShaderParameter)
         .addFunction("GetNumOutputs", &RenderPathCommand::GetNumOutputs)
@@ -1259,9 +1191,6 @@ static void RegisterRenderPath(kaguya::State& lua)
         .addFunction("GetOutputFace", &RenderPathCommand::GetOutputFace)
         .addFunction("GetDepthStencilName", &RenderPathCommand::GetDepthStencilName)
         
-        .addProperty("numOutputs", &RenderPathCommand::GetNumOutputs, &RenderPathCommand::SetNumOutputs)
-        .addProperty("depthStencilName", &RenderPathCommand::GetDepthStencilName, &RenderPathCommand::SetDepthStencilName)
-
         .addProperty("tag", &RenderPathCommand::tag_)
         .addProperty("type", &RenderPathCommand::type_)
         .addProperty("sortMode", &RenderPathCommand::sortMode_)
@@ -1288,9 +1217,9 @@ static void RegisterRenderPath(kaguya::State& lua)
     lua["RenderPath"].setClass(UserdataMetatable<RenderPath, RefCounted>()
         .setConstructors<RenderPath()>()
 
-        .addFunction("Clone", &RenderPath::Clone)
         .addFunction("Load", &RenderPath::Load)
         .addFunction("Append", &RenderPath::Append)
+        
         .addFunction("SetEnabled", &RenderPath::SetEnabled)
         .addFunction("ToggleEnabled", &RenderPath::ToggleEnabled)
         .addFunction("SetRenderTarget", &RenderPath::SetRenderTarget)
@@ -1301,21 +1230,19 @@ static void RegisterRenderPath(kaguya::State& lua)
             static_cast<void(RenderPath::*)(const String&)>(&RenderPath::RemoveRenderTarget))
 
         .addFunction("RemoveRenderTargets", &RenderPath::RemoveRenderTargets)
+
         .addFunction("SetCommand", &RenderPath::SetCommand)
         .addFunction("AddCommand", &RenderPath::AddCommand)
         .addFunction("InsertCommand", &RenderPath::InsertCommand)
         .addFunction("RemoveCommand", &RenderPath::RemoveCommand)
         .addFunction("RemoveCommands", &RenderPath::RemoveCommands)
+
         .addFunction("SetShaderParameter", &RenderPath::SetShaderParameter)
+        
         .addFunction("GetNumRenderTargets", &RenderPath::GetNumRenderTargets)
         .addFunction("GetNumCommands", &RenderPath::GetNumCommands)
         .addFunction("GetCommand", &RenderPath::GetCommand)
         .addFunction("GetShaderParameter", &RenderPath::GetShaderParameter)
-
-        .addProperty("numRenderTargets", &RenderPath::GetNumRenderTargets)
-        .addProperty("numCommands", &RenderPath::GetNumCommands)
-        .addProperty("renderTargets", &RenderPath::renderTargets_)
-        .addProperty("commands", &RenderPath::commands_)
     );
 }
 
@@ -1333,6 +1260,7 @@ static void RegisterRenderSurface(kaguya::State& lua)
         .addFunction("SetLinkedDepthStencil", &RenderSurface::SetLinkedDepthStencil)
         .addFunction("QueueUpdate", &RenderSurface::QueueUpdate)
         .addFunction("Release", &RenderSurface::Release)
+        
         .addFunction("GetParentTexture", &RenderSurface::GetParentTexture)
         .addFunction("GetWidth", &RenderSurface::GetWidth)
         .addFunction("GetHeight", &RenderSurface::GetHeight)
@@ -1342,9 +1270,7 @@ static void RegisterRenderSurface(kaguya::State& lua)
         .addFunction("GetUpdateMode", &RenderSurface::GetUpdateMode)
         .addFunction("GetLinkedRenderTarget", &RenderSurface::GetLinkedRenderTarget)
         .addFunction("GetLinkedDepthStencil", &RenderSurface::GetLinkedDepthStencil)
-        .addFunction("IsUpdateQueued", &RenderSurface::IsUpdateQueued)
-        .addFunction("ResetUpdateQueued", &RenderSurface::ResetUpdateQueued)
-
+        
         .addProperty("parentTexture", &RenderSurface::GetParentTexture)
         .addProperty("width", &RenderSurface::GetWidth)
         .addProperty("height", &RenderSurface::GetHeight)
@@ -1353,48 +1279,6 @@ static void RegisterRenderSurface(kaguya::State& lua)
         .addProperty("updateMode", &RenderSurface::GetUpdateMode, &RenderSurface::SetUpdateMode)
         .addProperty("linkedRenderTarget", &RenderSurface::GetLinkedRenderTarget, &RenderSurface::SetLinkedRenderTarget)
         .addProperty("linkedDepthStencil", &RenderSurface::GetLinkedDepthStencil, &RenderSurface::SetLinkedDepthStencil)
-        .addProperty("updateQueued", &RenderSurface::IsUpdateQueued)
-    );
-}
-
-static void RegisterShader(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["Shader"].setClass(UserdataMetatable<Shader, Resource>()
-        .addStaticFunction("new", &CreateObject<Shader>)
-        
-        // .addFunction("GetVariation", &Shader::GetVariation)
-        // .addFunction("GetSourceCode", &Shader::GetSourceCode)
-        // .addFunction("GetTimeStamp", &Shader::GetTimeStamp)
-
-        // .addProperty("timeStamp", &Shader::GetTimeStamp)
-    );
-}
-
-static void RegisterShaderVariation(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["ShaderVariation"].setClass(UserdataMetatable<ShaderVariation, RefCounted>()
-        .setConstructors<ShaderVariation(Shader*, ShaderType)>()
-
-        .addFunction("Create", &ShaderVariation::Create)
-        .addFunction("SetName", &ShaderVariation::SetName)
-        .addFunction("SetDefines", &ShaderVariation::SetDefines)
-        .addFunction("GetOwner", &ShaderVariation::GetOwner)
-        .addFunction("GetShaderType", &ShaderVariation::GetShaderType)
-        .addFunction("GetName", &ShaderVariation::GetName)
-        .addFunction("GetDefines", &ShaderVariation::GetDefines)
-        .addFunction("GetFullName", &ShaderVariation::GetFullName)
-        .addFunction("GetCompilerOutput", &ShaderVariation::GetCompilerOutput)
-
-        .addProperty("owner", &ShaderVariation::GetOwner)
-        .addProperty("shaderType", &ShaderVariation::GetShaderType)
-        .addProperty("name", &ShaderVariation::GetName, &ShaderVariation::SetName)
-        .addProperty("defines", &ShaderVariation::GetDefines, &ShaderVariation::SetDefines)
-        .addProperty("fullName", &ShaderVariation::GetFullName)
-        .addProperty("compilerOutput", &ShaderVariation::GetCompilerOutput)
     );
 }
 
@@ -1432,7 +1316,8 @@ static void RegisterTechnique(kaguya::State& lua)
         .addFunction("SetVertexShaderDefines", &Pass::SetVertexShaderDefines)
         .addFunction("SetPixelShaderDefines", &Pass::SetPixelShaderDefines)
         .addFunction("ReleaseShaders", &Pass::ReleaseShaders)
-        .addFunction("MarkShadersLoaded", &Pass::MarkShadersLoaded)
+        
+
         .addFunction("GetName", &Pass::GetName)
         .addFunction("GetIndex", &Pass::GetIndex)
         .addFunction("GetBlendMode", &Pass::GetBlendMode)
@@ -1447,8 +1332,6 @@ static void RegisterTechnique(kaguya::State& lua)
         .addFunction("GetPixelShader", &Pass::GetPixelShader)
         .addFunction("GetVertexShaderDefines", &Pass::GetVertexShaderDefines)
         .addFunction("GetPixelShaderDefines", &Pass::GetPixelShaderDefines)
-        .addFunction("GetVertexShaders", &Pass::GetVertexShaders)
-        .addFunction("GetPixelShaders", &Pass::GetPixelShaders)
 
         .addProperty("name", &Pass::GetName)
         .addProperty("index", &Pass::GetIndex)
@@ -1463,16 +1346,12 @@ static void RegisterTechnique(kaguya::State& lua)
         .addProperty("vertexShader", &Pass::GetVertexShader, &Pass::SetVertexShader)
         .addProperty("pixelShader", &Pass::GetPixelShader, &Pass::SetPixelShader)
         .addProperty("vertexShaderDefines", &Pass::GetVertexShaderDefines, &Pass::SetVertexShaderDefines)
-        .addProperty("pixelShaderDefines", &Pass::GetPixelShaderDefines, &Pass::SetPixelShaderDefines)
-        .addProperty("vertexShaders", &Pass::GetVertexShaders)
-        .addProperty("pixelShaders", &Pass::GetPixelShaders)
-        .addProperty("isDesktop", &Pass::SetIsDesktop)
+        .addProperty("pixelShaderDefines", &Pass::GetPixelShaderDefines, &Pass::SetPixelShaderDefines)        
     );
 
     lua["Technique"].setClass(UserdataMetatable<Technique, Resource>()
         .addStaticFunction("new", &CreateObject<Technique>)
         
-        .addFunction("BeginLoad", &Technique::BeginLoad)
         .addFunction("SetIsDesktop", &Technique::SetIsDesktop)
         .addFunction("CreatePass", &Technique::CreatePass)
         .addFunction("RemovePass", &Technique::RemovePass)
@@ -1492,31 +1371,18 @@ static void RegisterTechnique(kaguya::State& lua)
             static_cast<Pass*(Technique::*)(unsigned) const>(&Technique::GetPass),
             static_cast<Pass*(Technique::*)(const String&) const>(&Technique::GetPass))
 
-
         .addOverloadedFunctions("GetSupportedPass",
             static_cast<Pass*(Technique::*)(unsigned) const>(&Technique::GetSupportedPass),
             static_cast<Pass*(Technique::*)(const String&) const>(&Technique::GetSupportedPass))
 
         .addFunction("GetNumPasses", &Technique::GetNumPasses)
+
         .addFunction("GetPassNames", &Technique::GetPassNames)
         .addFunction("GetPasses", &Technique::GetPasses)
-        .addStaticFunction("GetPassIndex", &Technique::GetPassIndex)
 
         .addProperty("desktop", &Technique::IsDesktop)
         .addProperty("supported", &Technique::IsSupported)
-        .addProperty("numPasses", &Technique::GetNumPasses)
-        .addProperty("passNames", &Technique::GetPassNames)
-        .addProperty("passes", &Technique::GetPasses)
-        .addProperty("isDesktop", &Technique::SetIsDesktop)
-
-        .addStaticField("basePassIndex", &Technique::basePassIndex)
-        .addStaticField("alphaPassIndex", &Technique::alphaPassIndex)
-        .addStaticField("materialPassIndex", &Technique::materialPassIndex)
-        .addStaticField("deferredPassIndex", &Technique::deferredPassIndex)
-        .addStaticField("lightPassIndex", &Technique::lightPassIndex)
-        .addStaticField("litBasePassIndex", &Technique::litBasePassIndex)
-        .addStaticField("litAlphaPassIndex", &Technique::litAlphaPassIndex)
-        .addStaticField("shadowPassIndex", &Technique::shadowPassIndex)
+        .addProperty("numPasses", &Technique::GetNumPasses)        
     );
 }
 
@@ -1524,15 +1390,12 @@ static void RegisterTexture(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["MAX_TEXTURE_QUALITY_LEVELS"] = MAX_TEXTURE_QUALITY_LEVELS;
-
     lua["Texture"].setClass(UserdataMetatable<Texture, Resource>()
         .addStaticFunction("new", &CreateObject<Texture>)
         
         .addFunction("SetNumLevels", &Texture::SetNumLevels)
         .addFunction("SetFilterMode", &Texture::SetFilterMode)
         .addFunction("SetAddressMode", &Texture::SetAddressMode)
-        .addFunction("SetShadowCompare", &Texture::SetShadowCompare)
         .addFunction("SetBorderColor", &Texture::SetBorderColor)
         .addFunction("SetSRGB", &Texture::SetSRGB)
         .addFunction("SetBackupTexture", &Texture::SetBackupTexture)
@@ -1546,7 +1409,6 @@ static void RegisterTexture(kaguya::State& lua)
         .addFunction("GetDepth", &Texture::GetDepth)
         .addFunction("GetFilterMode", &Texture::GetFilterMode)
         .addFunction("GetAddressMode", &Texture::GetAddressMode)
-        .addFunction("GetShadowCompare", &Texture::GetShadowCompare)
         .addFunction("GetBorderColor", &Texture::GetBorderColor)
         .addFunction("GetSRGB", &Texture::GetSRGB)
         .addFunction("GetBackupTexture", &Texture::GetBackupTexture)
@@ -1563,10 +1425,6 @@ static void RegisterTexture(kaguya::State& lua)
         .addFunction("GetRowDataSize", &Texture::GetRowDataSize)
         .addFunction("GetComponents", &Texture::GetComponents)
 
-        .addOverloadedFunctions("SetParameters",
-            static_cast<void(Texture::*)(XMLFile*)>(&Texture::SetParameters),
-            static_cast<void(Texture::*)(const XMLElement&)>(&Texture::SetParameters))
-
         .addProperty("format", &Texture::GetFormat)
         .addProperty("compressed", &Texture::IsCompressed)
         .addProperty("levels", &Texture::GetLevels)
@@ -1574,16 +1432,13 @@ static void RegisterTexture(kaguya::State& lua)
         .addProperty("height", &Texture::GetHeight)
         .addProperty("depth", &Texture::GetDepth)
         .addProperty("filterMode", &Texture::GetFilterMode, &Texture::SetFilterMode)
-        .addProperty("shadowCompare", &Texture::GetShadowCompare, &Texture::SetShadowCompare)
         .addProperty("borderColor", &Texture::GetBorderColor, &Texture::SetBorderColor)
         .addProperty("sRGB", &Texture::GetSRGB, &Texture::SetSRGB)
         .addProperty("backupTexture", &Texture::GetBackupTexture, &Texture::SetBackupTexture)
         .addProperty("usage", &Texture::GetUsage)
         .addProperty("components", &Texture::GetComponents)
-        .addProperty("numLevels", &Texture::SetNumLevels)
     );
 }
-
 
 static bool Texture2DSetSize0(Texture2D* self, int width, int height, unsigned int format)
 {
@@ -1616,6 +1471,7 @@ static void RegisterTexture2D(kaguya::State& lua)
         ADD_OVERLOADED_FUNCTIONS_2(Texture2D, SetData)
 
         .addFunction("GetRenderSurface", &Texture2D::GetRenderSurface)
+
         .addProperty("renderSurface", &Texture2D::GetRenderSurface)
     );
 }
@@ -1653,8 +1509,10 @@ static void RegisterTexture2DArray(kaguya::State& lua)
         ADD_OVERLOADED_FUNCTIONS_2(Texture2DArray, SetData)
 
         .addFunction("GetLayers", &Texture2DArray::GetLayers)
+        .addFunction("GetRenderSurface", &Texture2DArray::GetRenderSurface)
 
         .addProperty("layers", &Texture2DArray::GetLayers, &Texture2DArray::SetLayers)
+        .addProperty("renderSurface", &Texture2DArray::GetRenderSurface)
     );
 }
 
@@ -1720,6 +1578,10 @@ static void RegisterTextureCube(kaguya::State& lua)
         
         ADD_OVERLOADED_FUNCTIONS_2(TextureCube, SetSize)
         ADD_OVERLOADED_FUNCTIONS_2(TextureCube, SetData)
+
+        .addFunction("GetRenderSurface", &TextureCube::GetRenderSurface)
+
+        .addProperty("renderSurface", &TextureCube::GetRenderSurface)
     );
 }
 
@@ -1808,7 +1670,6 @@ static void RegisterVertexBuffer(kaguya::State& lua)
 
         .addFunction("IsShadowed", &VertexBuffer::IsShadowed)
         .addFunction("IsDynamic", &VertexBuffer::IsDynamic)
-        .addFunction("IsLocked", &VertexBuffer::IsLocked)
         .addFunction("GetVertexCount", &VertexBuffer::GetVertexCount)
         .addFunction("GetVertexSize", &VertexBuffer::GetVertexSize)
 
@@ -1819,8 +1680,8 @@ static void RegisterVertexBuffer(kaguya::State& lua)
 
         .addProperty("shadowed", &VertexBuffer::IsShadowed, &VertexBuffer::SetShadowed)
         .addProperty("dynamic", &VertexBuffer::IsDynamic)
-        .addProperty("locked", &VertexBuffer::IsLocked)
         .addProperty("vertexCount", &VertexBuffer::GetVertexCount)
+        .addProperty("vertexSize", &VertexBuffer::GetVertexSize)
         .addProperty("elementMask", &VertexBuffer::GetElementMask)
     );
 }
@@ -1867,21 +1728,20 @@ static void RegisterViewport(kaguya::State& lua)
 
         .addFunction("SetDrawDebug", &Viewport::SetDrawDebug)
         .addFunction("SetCullCamera", &Viewport::SetCullCamera)
+        
         .addFunction("GetScene", &Viewport::GetScene)
         .addFunction("GetCamera", &Viewport::GetCamera)
-        .addFunction("GetView", &Viewport::GetView)
         .addFunction("GetRect", &Viewport::GetRect)
         .addFunction("GetRenderPath", &Viewport::GetRenderPath)
         .addFunction("GetDrawDebug", &Viewport::GetDrawDebug)
         .addFunction("GetCullCamera", &Viewport::GetCullCamera)
+        
         .addFunction("GetScreenRay", &Viewport::GetScreenRay)
         .addFunction("WorldToScreenPoint", &Viewport::WorldToScreenPoint)
         .addFunction("ScreenToWorldPoint", &Viewport::ScreenToWorldPoint)
-        .addFunction("AllocateView", &Viewport::AllocateView)
-
+        
         .addProperty("scene", &Viewport::GetScene, &Viewport::SetScene)
         .addProperty("camera", &Viewport::GetCamera, &Viewport::SetCamera)
-        .addProperty("view", &Viewport::GetView)
         .addProperty("rect", &Viewport::GetRect, &Viewport::SetRect)
         .addProperty("renderPath", &Viewport::GetRenderPath)
         .addProperty("drawDebug", &Viewport::GetDrawDebug, &Viewport::SetDrawDebug)
@@ -1897,13 +1757,10 @@ void RegisterRendererLuaAPI(kaguya::State& lua)
     RegisterDebugRenderer(lua);
     RegisterGraphics(lua);
     RegisterGraphicsDefs(lua);
-    RegisterGraphicsEvents(lua);
     RegisterIndexBuffer(lua);
     RegisterRenderer(lua);
     RegisterRenderPath(lua);
     RegisterRenderSurface(lua);
-    RegisterShader(lua);
-    RegisterShaderVariation(lua);
     RegisterTechnique(lua);
     RegisterTexture(lua);
     RegisterTexture2D(lua);

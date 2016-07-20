@@ -41,15 +41,15 @@
 namespace Urho3D
 {
 
-    static SharedPtr<Animation> AnimationClone0(const Animation* self)
-    {
-        return self->Clone();
-    }
+static SharedPtr<Animation> AnimationClone0(const Animation* self)
+{
+    return self->Clone();
+}
 
-    static SharedPtr<Animation> AnimationClone1(const Animation* self, const String& cloneName)
-    {
-        return self->Clone(cloneName);
-    }
+static SharedPtr<Animation> AnimationClone1(const Animation* self, const String& cloneName)
+{
+    return self->Clone(cloneName);
+}
 
 static void RegisterAnimation(kaguya::State& lua)
 {
@@ -59,28 +59,69 @@ static void RegisterAnimation(kaguya::State& lua)
     lua["CHANNEL_ROTATION"] = CHANNEL_ROTATION;
     lua["CHANNEL_SCALE"] = CHANNEL_SCALE;
 
+    lua["AnimationKeyFrame"].setClass(UserdataMetatable<AnimationKeyFrame>()
+    	
+        .addProperty("time", &AnimationKeyFrame::time_)
+    	.addProperty("position", &AnimationKeyFrame::position_)
+    	.addProperty("rotation", &AnimationKeyFrame::rotation_)
+    	.addProperty("scale", &AnimationKeyFrame::scale_)
+    	);
+
+	lua["AnimationTrack"].setClass(UserdataMetatable<AnimationTrack>()
+    	
+        .addFunction("SetKeyFrame", &AnimationTrack::SetKeyFrame)
+    	.addFunction("AddKeyFrame", &AnimationTrack::AddKeyFrame)
+    	.addFunction("InsertKeyFrame", &AnimationTrack::InsertKeyFrame)
+    	.addFunction("RemoveKeyFrame", &AnimationTrack::RemoveKeyFrame)
+    	.addFunction("RemoveAllKeyFrames", &AnimationTrack::RemoveAllKeyFrames)
+    	.addFunction("GetKeyFrame", &AnimationTrack::GetKeyFrame)
+    	.addFunction("GetNumKeyFrames", &AnimationTrack::GetNumKeyFrames)
+
+    	.addProperty("name", &AnimationTrack::name_)
+    	.addProperty("nameHash", &AnimationTrack::nameHash_)
+    	.addProperty("channelMask", &AnimationTrack::channelMask_)
+    	.addProperty("keyFrames", &AnimationTrack::keyFrames_)
+    	.addProperty("numKeyFrames", &AnimationTrack::GetNumKeyFrames)
+    	);
+
+	lua["AnimationTriggerPoint"].setClass(UserdataMetatable<AnimationTriggerPoint>()
+		.setConstructors<AnimationTriggerPoint()>()
+
+		.addProperty("time", &AnimationTriggerPoint::time_)
+    	.addProperty("data", &AnimationTriggerPoint::data_)
+    	);
+
     lua["Animation"].setClass(UserdataMetatable<Animation, Resource>()
         .addStaticFunction("new", &CreateObject<Animation>)
 
         .addFunction("SetAnimationName", &Animation::SetAnimationName)
         .addFunction("SetLength", &Animation::SetLength)
+
+        .addFunction("CreateTrack", &Animation::CreateTrack)
         .addFunction("RemoveTrack", &Animation::RemoveTrack)
         .addFunction("RemoveAllTracks", &Animation::RemoveAllTracks)
 
-        .addFunction("AddTrigger", static_cast<void(Animation::*)(float, bool, const Variant&)>(&Animation::AddTrigger))
+		.addFunction("SetTrigger", &Animation::SetTrigger)
+
+        .addOverloadedFunctions("AddTrigger", 
+        	static_cast<void(Animation::*)(const AnimationTriggerPoint&)>(&Animation::AddTrigger),
+        	static_cast<void(Animation::*)(float, bool, const Variant&)>(&Animation::AddTrigger))
         
         .addFunction("RemoveTrigger", &Animation::RemoveTrigger)
         .addFunction("RemoveAllTriggers", &Animation::RemoveAllTriggers)
-        .addFunction("SetNumTriggers", &Animation::SetNumTriggers)
-
+        
         ADD_OVERLOADED_FUNCTIONS_2(Animation, Clone)
 
         .addFunction("GetAnimationName", &Animation::GetAnimationName)
         .addFunction("GetAnimationNameHash", &Animation::GetAnimationNameHash)
         .addFunction("GetLength", &Animation::GetLength)
         .addFunction("GetNumTracks", &Animation::GetNumTracks)
+        
+        .addFunction("GetTrack", static_cast<AnimationTrack*(Animation::*)(const String&)>(&Animation::GetTrack))
 
         .addFunction("GetNumTriggers", &Animation::GetNumTriggers)
+
+        .addFunction("GetTrigger", &Animation::GetTrigger)
         
         .addProperty("animationName", &Animation::GetAnimationName, &Animation::SetAnimationName)
         .addProperty("animationNameHash", &Animation::GetAnimationNameHash)
@@ -198,7 +239,6 @@ static void AnimationStateSetBoneWeight1(AnimationState* self, unsigned int inde
     self->SetBoneWeight(index, weight, recursive);
 }
 
-
 static void AnimationStateSetBoneWeight2(AnimationState* self, const String& name, float weight)
 {
     self->SetBoneWeight(name, weight);
@@ -236,15 +276,12 @@ static void RegisterAnimationState(kaguya::State& lua)
         .addFunction("GetNode", &AnimationState::GetNode)
         .addFunction("GetStartBone", &AnimationState::GetStartBone)
 
-        /*
         .addOverloadedFunctions("GetBoneWeight",
             static_cast<float(AnimationState::*)(unsigned) const>(&AnimationState::GetBoneWeight),
             static_cast<float(AnimationState::*)(const String&) const>(&AnimationState::GetBoneWeight))
         
-        .addOverloadedFunctions("GetTrackIndex",
-            static_cast<unsigned(AnimationState::*)(int*) const>(&AnimationState::GetTrackIndex),
+        .addFunction("GetTrackIndex",
             static_cast<unsigned(AnimationState::*)(const String&) const>(&AnimationState::GetTrackIndex))
-        */
 
         .addFunction("IsEnabled", &AnimationState::IsEnabled)
         .addFunction("IsLooped", &AnimationState::IsLooped)
@@ -288,31 +325,22 @@ static void RegisterModel(kaguya::State& lua)
 
         .addFunction("SetBoundingBox", &Model::SetBoundingBox)
         
-        // .addFunction("SetVertexBuffers", &Model::SetVertexBuffers)
-        // .addFunction("SetIndexBuffers", &Model::SetIndexBuffers)
-
         .addFunction("SetNumGeometries", &Model::SetNumGeometries)
         .addFunction("SetNumGeometryLodLevels", &Model::SetNumGeometryLodLevels)
         .addFunction("SetGeometry", &Model::SetGeometry)
         .addFunction("SetGeometryCenter", &Model::SetGeometryCenter)
         .addFunction("SetSkeleton", &Model::SetSkeleton)
-        .addFunction("SetGeometryBoneMappings", &Model::SetGeometryBoneMappings)
-        .addFunction("SetMorphs", &Model::SetMorphs)
         
         ADD_OVERLOADED_FUNCTIONS_2(Model, Clone)
 
         .addFunction("GetBoundingBox", &Model::GetBoundingBox)
         .addFunction("GetSkeleton", &Model::GetSkeleton)
-        // .addFunction("GetVertexBuffers", &Model::GetVertexBuffers)
-        // .addFunction("GetIndexBuffers", &Model::GetIndexBuffers)
         .addFunction("GetNumGeometries", &Model::GetNumGeometries)
         .addFunction("GetNumGeometryLodLevels", &Model::GetNumGeometryLodLevels)
         .addFunction("GetGeometries", &Model::GetGeometries)
         .addFunction("GetGeometryCenters", &Model::GetGeometryCenters)
         .addFunction("GetGeometry", &Model::GetGeometry)
         .addFunction("GetGeometryCenter", &Model::GetGeometryCenter)
-        .addFunction("GetGeometryBoneMappings", &Model::GetGeometryBoneMappings)
-        .addFunction("GetMorphs", &Model::GetMorphs)
         .addFunction("GetNumMorphs", &Model::GetNumMorphs)
 
         .addOverloadedFunctions("GetMorph",
@@ -325,9 +353,18 @@ static void RegisterModel(kaguya::State& lua)
 
 
         .addProperty("boundingBox", &Model::GetBoundingBox, &Model::SetBoundingBox)
+        .addProperty("skeleton", &Model::GetSkeleton)
         .addProperty("numGeometries", &Model::GetNumGeometries, &Model::SetNumGeometries)
         .addProperty("numMorphs", &Model::GetNumMorphs)
         );
+}
+
+static PODVector<RayQueryResult> OctreeRaycast(const Octree* self, const Ray& ray, RayQueryLevel level, float maxDistance, unsigned char drawableFlags, unsigned viewMask = DEFAULT_VIEWMASK)
+{
+    PODVector<RayQueryResult> result;
+    RayOctreeQuery query(result, ray, level, maxDistance, drawableFlags, viewMask);
+    self->Raycast(query);
+    return result;
 }
 
 static RayQueryResult OctreeRaycastSingle0(const Octree* self, const Ray& ray)
@@ -384,52 +421,9 @@ static RayQueryResult OctreeRaycastSingle4(const Octree* self, const Ray& ray, R
     return result[0];
 }
 
-static void OctantRemoveDrawable0(Octant* self, Drawable* drawable)
-{
-    self->RemoveDrawable(drawable);
-}
-
-static void OctantRemoveDrawable1(Octant* self, Drawable* drawable, bool resetOctant)
-{
-    self->RemoveDrawable(drawable, resetOctant);
-}
-
 static void RegisterOctree(kaguya::State& lua)
 {
     using namespace kaguya;
-
-    // lua["NUM_OCTANTS"] = NUM_OCTANTS;
-    // lua["ROOT_INDEX"] = ROOT_INDEX;
-
-    lua["Octant"].setClass(UserdataMetatable<Octant>()
-        .setConstructors<Octant(const BoundingBox&, unsigned, Octant*, Octree*, unsigned)>()
-
-        .addFunction("GetOrCreateChild", &Octant::GetOrCreateChild)
-        .addFunction("DeleteChild", &Octant::DeleteChild)
-        .addFunction("InsertDrawable", &Octant::InsertDrawable)
-        .addFunction("CheckDrawableFit", &Octant::CheckDrawableFit)
-        .addFunction("AddDrawable", &Octant::AddDrawable)
-        
-        ADD_OVERLOADED_FUNCTIONS_2(Octant, RemoveDrawable)
-
-        .addFunction("GetWorldBoundingBox", &Octant::GetWorldBoundingBox)
-        .addFunction("GetCullingBox", &Octant::GetCullingBox)
-        .addFunction("GetLevel", &Octant::GetLevel)
-        .addFunction("GetParent", &Octant::GetParent)
-        .addFunction("GetRoot", &Octant::GetRoot)
-        .addFunction("GetNumDrawables", &Octant::GetNumDrawables)
-        .addFunction("IsEmpty", &Octant::IsEmpty)
-        .addFunction("ResetRoot", &Octant::ResetRoot)
-        .addFunction("DrawDebugGeometry", &Octant::DrawDebugGeometry)
-
-        .addProperty("worldBoundingBox", &Octant::GetWorldBoundingBox)
-        .addProperty("cullingBox", &Octant::GetCullingBox)
-        .addProperty("level", &Octant::GetLevel)
-        .addProperty("parent", &Octant::GetParent)
-        .addProperty("root", &Octant::GetRoot)
-        .addProperty("numDrawables", &Octant::GetNumDrawables)
-        .addProperty("empty", &Octant::IsEmpty)
-        );
 
     lua["Octree"].setClass(UserdataMetatable<Octree, Component>()
         .addStaticFunction("new", &CreateObject<Octree>)
@@ -442,15 +436,16 @@ static void RegisterOctree(kaguya::State& lua)
         .addFunction("Update", &Octree::Update)
         .addFunction("AddManualDrawable", &Octree::AddManualDrawable)
         .addFunction("RemoveManualDrawable", &Octree::RemoveManualDrawable)
-        .addFunction("GetDrawables", &Octree::GetDrawables)
-        .addFunction("Raycast", &Octree::Raycast)
+
+        // .addStaticFunction("GetDrawables", &Octree::GetDrawables)
+
+        .addStaticFunction("Raycast", &OctreeRaycast)
         
         ADD_OVERLOADED_FUNCTIONS_5(Octree, RaycastSingle)
 
         .addFunction("GetNumLevels", &Octree::GetNumLevels)
         .addFunction("QueueUpdate", &Octree::QueueUpdate)
-        .addFunction("CancelUpdate", &Octree::CancelUpdate)
-
+        
         .addProperty("numLevels", &Octree::GetNumLevels)
         );
 }
@@ -493,7 +488,23 @@ static void RegisterParticleEffect(kaguya::State& lua)
     lua["EMITTER_SPHERE"] = EMITTER_SPHERE;
     lua["EMITTER_BOX"] = EMITTER_BOX;
 
-    lua["DEFAULT_NUM_PARTICLES"] = DEFAULT_NUM_PARTICLES;
+
+    lua["ColorFrame"].setClass(UserdataMetatable<ColorFrame>()
+    	.setConstructors<ColorFrame(),
+    		ColorFrame(const Color&),
+    		ColorFrame(const Color&, float)>()
+
+		.addFunction("Interpolate", &ColorFrame::Interpolate)
+    	.addProperty("color", &ColorFrame::color_)
+    	.addProperty("time", &ColorFrame::time_)
+    	);
+
+	lua["TextureFrame"].setClass(UserdataMetatable<TextureFrame>()
+		.setConstructors<TextureFrame()>()
+
+		.addProperty("uv", &TextureFrame::uv_)
+		.addProperty("time", &TextureFrame::time_)
+		);
 
     lua["ParticleEffect"].setClass(UserdataMetatable<ParticleEffect, Resource>()
         .addStaticFunction("new", &CreateObject<ParticleEffect>)
@@ -504,31 +515,37 @@ static void RegisterParticleEffect(kaguya::State& lua)
         .addFunction("SetRelative", &ParticleEffect::SetRelative)
         .addFunction("SetScaled", &ParticleEffect::SetScaled)
         .addFunction("SetSorted", &ParticleEffect::SetSorted)
+        
         .addFunction("SetFixedScreenSize", &ParticleEffect::SetFixedScreenSize)
         .addFunction("SetAnimationLodBias", &ParticleEffect::SetAnimationLodBias)
         .addFunction("SetEmitterType", &ParticleEffect::SetEmitterType)
         .addFunction("SetEmitterSize", &ParticleEffect::SetEmitterSize)
         .addFunction("SetMinDirection", &ParticleEffect::SetMinDirection)
         .addFunction("SetMaxDirection", &ParticleEffect::SetMaxDirection)
+        
         .addFunction("SetConstantForce", &ParticleEffect::SetConstantForce)
         .addFunction("SetDampingForce", &ParticleEffect::SetDampingForce)
         .addFunction("SetActiveTime", &ParticleEffect::SetActiveTime)
         .addFunction("SetInactiveTime", &ParticleEffect::SetInactiveTime)
         .addFunction("SetMinEmissionRate", &ParticleEffect::SetMinEmissionRate)
         .addFunction("SetMaxEmissionRate", &ParticleEffect::SetMaxEmissionRate)
+        
         .addFunction("SetMinParticleSize", &ParticleEffect::SetMinParticleSize)
         .addFunction("SetMaxParticleSize", &ParticleEffect::SetMaxParticleSize)
         .addFunction("SetMinTimeToLive", &ParticleEffect::SetMinTimeToLive)
         .addFunction("SetMaxTimeToLive", &ParticleEffect::SetMaxTimeToLive)
         .addFunction("SetMinVelocity", &ParticleEffect::SetMinVelocity)
         .addFunction("SetMaxVelocity", &ParticleEffect::SetMaxVelocity)
+        
         .addFunction("SetMinRotation", &ParticleEffect::SetMinRotation)
         .addFunction("SetMaxRotation", &ParticleEffect::SetMaxRotation)
         .addFunction("SetMinRotationSpeed", &ParticleEffect::SetMinRotationSpeed)
         .addFunction("SetMaxRotationSpeed", &ParticleEffect::SetMaxRotationSpeed)
         .addFunction("SetSizeAdd", &ParticleEffect::SetSizeAdd)
         .addFunction("SetSizeMul", &ParticleEffect::SetSizeMul)
+        
         .addFunction("SetFaceCameraMode", &ParticleEffect::SetFaceCameraMode)
+        
         .addFunction("AddColorTime", &ParticleEffect::AddColorTime)
         .addFunction("AddColorFrame", &ParticleEffect::AddColorFrame)
         .addFunction("RemoveColorFrame", &ParticleEffect::RemoveColorFrame)
@@ -536,6 +553,7 @@ static void RegisterParticleEffect(kaguya::State& lua)
         .addFunction("SetColorFrame", &ParticleEffect::SetColorFrame)
         .addFunction("SetNumColorFrames", &ParticleEffect::SetNumColorFrames)
         .addFunction("SortColorFrames", &ParticleEffect::SortColorFrames)
+        
         .addFunction("AddTextureTime", &ParticleEffect::AddTextureTime)
         .addFunction("AddTextureFrame", &ParticleEffect::AddTextureFrame)
         .addFunction("RemoveTextureFrame", &ParticleEffect::RemoveTextureFrame)
@@ -543,6 +561,7 @@ static void RegisterParticleEffect(kaguya::State& lua)
         .addFunction("SetTextureFrame", &ParticleEffect::SetTextureFrame)
         .addFunction("SetNumTextureFrames", &ParticleEffect::SetNumTextureFrames)
         .addFunction("SortTextureFrames", &ParticleEffect::SortTextureFrames)
+        
         .addFunction("GetMaterial", &ParticleEffect::GetMaterial)
         .addFunction("GetNumParticles", &ParticleEffect::GetNumParticles)
         .addFunction("GetUpdateInvisible", &ParticleEffect::GetUpdateInvisible)
@@ -580,13 +599,7 @@ static void RegisterParticleEffect(kaguya::State& lua)
         .addFunction("GetNumTextureFrames", &ParticleEffect::GetNumTextureFrames)
         .addFunction("GetTextureFrame", &ParticleEffect::GetTextureFrame)
         .addFunction("GetFaceCameraMode", &ParticleEffect::GetFaceCameraMode)
-        .addFunction("GetRandomDirection", &ParticleEffect::GetRandomDirection)
-        .addFunction("GetRandomSize", &ParticleEffect::GetRandomSize)
-        .addFunction("GetRandomVelocity", &ParticleEffect::GetRandomVelocity)
-        .addFunction("GetRandomTimeToLive", &ParticleEffect::GetRandomTimeToLive)
-        .addFunction("GetRandomRotationSpeed", &ParticleEffect::GetRandomRotationSpeed)
-        .addFunction("GetRandomRotation", &ParticleEffect::GetRandomRotation)
-
+        
         .addProperty("material", &ParticleEffect::GetMaterial, &ParticleEffect::SetMaterial)
         .addProperty("numParticles", &ParticleEffect::GetNumParticles, &ParticleEffect::SetNumParticles)
         .addProperty("updateInvisible", &ParticleEffect::GetUpdateInvisible, &ParticleEffect::SetUpdateInvisible)
@@ -622,12 +635,6 @@ static void RegisterParticleEffect(kaguya::State& lua)
         .addProperty("textureFrames", &ParticleEffect::GetTextureFrames, &ParticleEffect::SetTextureFrames)
         .addProperty("numTextureFrames", &ParticleEffect::GetNumTextureFrames, &ParticleEffect::SetNumTextureFrames)
         .addProperty("faceCameraMode", &ParticleEffect::GetFaceCameraMode, &ParticleEffect::SetFaceCameraMode)
-        .addProperty("randomDirection", &ParticleEffect::GetRandomDirection)
-        .addProperty("randomSize", &ParticleEffect::GetRandomSize)
-        .addProperty("randomVelocity", &ParticleEffect::GetRandomVelocity)
-        .addProperty("randomTimeToLive", &ParticleEffect::GetRandomTimeToLive)
-        .addProperty("randomRotationSpeed", &ParticleEffect::GetRandomRotationSpeed)
-        .addProperty("randomRotation", &ParticleEffect::GetRandomRotation)
         );
 }
 
@@ -639,17 +646,26 @@ static void RegisterSkeleton(kaguya::State& lua)
     lua["BONECOLLISION_SPHERE"] = BONECOLLISION_SPHERE;
     lua["BONECOLLISION_BOX"] = BONECOLLISION_BOX;
 
+	lua["Bone"].setClass(UserdataMetatable<Bone>()
+		.setConstructors<Bone()>()
+
+		.addProperty("name", &Bone::name_)
+    	.addProperty("nameHash", &Bone::nameHash_)
+    	.addProperty("parentIndex", &Bone::parentIndex_)
+    	.addProperty("initialPosition", &Bone::initialPosition_)
+    	.addProperty("initialRotation", &Bone::initialRotation_)
+    	.addProperty("initialScale", &Bone::initialScale_)
+    	.addProperty("offsetMatrix", &Bone::offsetMatrix_)
+    	.addProperty("animated", &Bone::animated_)
+    	.addProperty("collisionMask", &Bone::collisionMask_)
+    	.addProperty("radius", &Bone::radius_)
+    	.addProperty("boundingBox", &Bone::boundingBox_)
+    	.addProperty("node", &Bone::node_)
+		);
+
     lua["Skeleton"].setClass(UserdataMetatable<Skeleton>()
         .setConstructors<Skeleton()>()
 
-        .addFunction("Load", &Skeleton::Load)
-        .addFunction("Save", &Skeleton::Save)
-        .addFunction("Define", &Skeleton::Define)
-        .addFunction("SetRootBoneIndex", &Skeleton::SetRootBoneIndex)
-        .addFunction("ClearBones", &Skeleton::ClearBones)
-        .addFunction("Reset", &Skeleton::Reset)
-        .addFunction("GetBones", &Skeleton::GetBones)
-        .addFunction("GetModifiableBones", &Skeleton::GetModifiableBones)
         .addFunction("GetNumBones", &Skeleton::GetNumBones)
         .addFunction("GetRootBone", &Skeleton::GetRootBone)
 
@@ -658,13 +674,8 @@ static void RegisterSkeleton(kaguya::State& lua)
             static_cast<Bone*(Skeleton::*)(const char*)>(&Skeleton::GetBone),
             static_cast<Bone*(Skeleton::*)(StringHash)>(&Skeleton::GetBone))
 
-        .addFunction("ResetSilent", &Skeleton::ResetSilent)
-
-        .addProperty("bones", &Skeleton::GetBones)
-        .addProperty("modifiableBones", &Skeleton::GetModifiableBones)
         .addProperty("numBones", &Skeleton::GetNumBones)
         .addProperty("rootBone", &Skeleton::GetRootBone)
-        .addProperty("rootBoneIndex", &Skeleton::SetRootBoneIndex)
         );
 }
 
@@ -704,6 +715,7 @@ static void RegisterTerrain(kaguya::State& lua)
         .addFunction("SetOccluder", &Terrain::SetOccluder)
         .addFunction("SetOccludee", &Terrain::SetOccludee)
         .addFunction("ApplyHeightMap", &Terrain::ApplyHeightMap)
+        
         .addFunction("GetPatchSize", &Terrain::GetPatchSize)
         .addFunction("GetSpacing", &Terrain::GetSpacing)
         .addFunction("GetNumVertices", &Terrain::GetNumVertices)

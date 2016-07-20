@@ -28,7 +28,6 @@
 #include "../Graphics/CustomGeometry.h"
 #include "../Graphics/DecalSet.h"
 #include "../Graphics/Drawable.h"
-#include "../Graphics/DrawableEvents.h"
 #include "../Graphics/Light.h"
 #include "../Graphics/ParticleEffect.h"
 #include "../Graphics/ParticleEmitter.h"
@@ -37,6 +36,7 @@
 #include "../Graphics/StaticModel.h"
 #include "../Graphics/StaticModelGroup.h"
 #include "../Graphics/TerrainPatch.h"
+#include "../Graphics/VertexBuffer.h"
 #include "../Graphics/Zone.h"
 #include "../LuaScript/LuaScriptUtils.h"
 
@@ -88,8 +88,9 @@ static void RegisterAnimatedModel(kaguya::State& lua)
             static_cast<void(AnimatedModel::*)(StringHash, float)>(&AnimatedModel::SetMorphWeight))
 
         .addFunction("ResetMorphWeights", &AnimatedModel::ResetMorphWeights)
+
         .addFunction("GetSkeleton", &AnimatedModel::GetSkeleton)
-        .addFunction("GetAnimationStates", &AnimatedModel::GetAnimationStates)
+        
         .addFunction("GetNumAnimationStates", &AnimatedModel::GetNumAnimationStates)
 
         .addOverloadedFunctions("GetAnimationState",
@@ -101,7 +102,6 @@ static void RegisterAnimatedModel(kaguya::State& lua)
         .addFunction("GetAnimationLodBias", &AnimatedModel::GetAnimationLodBias)
         .addFunction("GetUpdateInvisible", &AnimatedModel::GetUpdateInvisible)
         .addFunction("GetMorphs", &AnimatedModel::GetMorphs)
-        // .addFunction("GetMorphVertexBuffers", &AnimatedModel::GetMorphVertexBuffers)
         .addFunction("GetNumMorphs", &AnimatedModel::GetNumMorphs)
 
         .addOverloadedFunctions("GetMorphWeight",
@@ -110,24 +110,18 @@ static void RegisterAnimatedModel(kaguya::State& lua)
             static_cast<float(AnimatedModel::*)(StringHash) const>(&AnimatedModel::GetMorphWeight))
 
         .addFunction("IsMaster", &AnimatedModel::IsMaster)
-        .addFunction("GetGeometryBoneMappings", &AnimatedModel::GetGeometryBoneMappings)
-        .addFunction("GetGeometrySkinMatrices", &AnimatedModel::GetGeometrySkinMatrices)
+        
         .addFunction("UpdateBoneBoundingBox", &AnimatedModel::UpdateBoneBoundingBox)
 
         .addProperty("model", &AnimatedModelGetModel, &AnimatedModelSetModel0)
 
         .addProperty("updateGeometryType", &AnimatedModel::GetUpdateGeometryType)
         .addProperty("skeleton", &AnimatedModel::GetSkeleton)
-        .addProperty("animationStates", &AnimatedModel::GetAnimationStates)
         .addProperty("numAnimationStates", &AnimatedModel::GetNumAnimationStates)
         .addProperty("animationLodBias", &AnimatedModel::GetAnimationLodBias, &AnimatedModel::SetAnimationLodBias)
         .addProperty("updateInvisible", &AnimatedModel::GetUpdateInvisible, &AnimatedModel::SetUpdateInvisible)
-        // .addProperty("morphs", &AnimatedModel::GetMorphs)
-        // .addProperty("morphVertexBuffers", &AnimatedModel::GetMorphVertexBuffers)
         .addProperty("numMorphs", &AnimatedModel::GetNumMorphs)
         .addProperty("master", &AnimatedModel::IsMaster)
-        .addProperty("geometryBoneMappings", &AnimatedModel::GetGeometryBoneMappings)
-        .addProperty("geometrySkinMatrices", &AnimatedModel::GetGeometrySkinMatrices)
         );
 }
 
@@ -144,11 +138,7 @@ static void RegisterBillboardSet(kaguya::State& lua)
         .addProperty("rotation", &Billboard::rotation_)
         .addProperty("direction", &Billboard::direction_)
         .addProperty("enabled", &Billboard::enabled_)
-        .addProperty("sortDistance", &Billboard::sortDistance_)
-        .addProperty("screenScaleFactor", &Billboard::screenScaleFactor_)
         );
-
-    lua["MAX_BILLBOARDS"] = MAX_BILLBOARDS;
 
     lua["BillboardSet"].setClass(UserdataMetatable<BillboardSet, Drawable>()
         .addStaticFunction("new", &CreateObject<BillboardSet>)
@@ -159,12 +149,13 @@ static void RegisterBillboardSet(kaguya::State& lua)
         .addFunction("SetScaled", &BillboardSet::SetScaled)
         .addFunction("SetSorted", &BillboardSet::SetSorted)
         .addFunction("SetFixedScreenSize", &BillboardSet::SetFixedScreenSize)
-        .addFunction("SetFaceCameraMode", &BillboardSet::SetFaceCameraMode)
+        .addFunction("SetFaceCameraMode", &BillboardSet::SetFaceCameraMode)        
         .addFunction("SetAnimationLodBias", &BillboardSet::SetAnimationLodBias)
+        
         .addFunction("Commit", &BillboardSet::Commit)
+
         .addFunction("GetMaterial", &BillboardSet::GetMaterial)
         .addFunction("GetNumBillboards", &BillboardSet::GetNumBillboards)
-        .addFunction("GetBillboards", &BillboardSet::GetBillboards)
         .addFunction("GetBillboard", &BillboardSet::GetBillboard)
         .addFunction("IsRelative", &BillboardSet::IsRelative)
         .addFunction("IsScaled", &BillboardSet::IsScaled)
@@ -175,14 +166,18 @@ static void RegisterBillboardSet(kaguya::State& lua)
 
         .addProperty("material", &BillboardSet::GetMaterial, &BillboardSet::SetMaterial)
         .addProperty("numBillboards", &BillboardSet::GetNumBillboards, &BillboardSet::SetNumBillboards)
-        .addProperty("billboards", &BillboardSet::GetBillboards)
         .addProperty("relative", &BillboardSet::IsRelative, &BillboardSet::SetRelative)
         .addProperty("scaled", &BillboardSet::IsScaled, &BillboardSet::SetScaled)
         .addProperty("sorted", &BillboardSet::IsSorted, &BillboardSet::SetSorted)
         .addProperty("fixedScreenSize", &BillboardSet::IsFixedScreenSize, &BillboardSet::SetFixedScreenSize)
-        // .addProperty("faceCameraMode", &BillboardSet::GetFaceCameraMode, &BillboardSet::SetFaceCameraMode)
+        .addProperty("faceCameraMode", &BillboardSet::GetFaceCameraMode, &BillboardSet::SetFaceCameraMode)
         .addProperty("animationLodBias", &BillboardSet::GetAnimationLodBias, &BillboardSet::SetAnimationLodBias)
         );
+}
+
+static void CustomGeometrySetMaterial(CustomGeometry* self, Material* material)
+{
+    self->SetMaterial(material);
 }
 
 static Material* CustomGeometryGetMaterial0(const CustomGeometry* self)
@@ -199,12 +194,18 @@ static void RegisterCustomGeometry(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    lua["CustomGeometryVertex"].setClass(UserdataMetatable<CustomGeometryVertex>()
+    
+    .addProperty("position", &CustomGeometryVertex::position_)
+    .addProperty("normal", &CustomGeometryVertex::normal_)
+    .addProperty("color", &CustomGeometryVertex::color_)
+    .addProperty("texCoord", &CustomGeometryVertex::texCoord_)
+    .addProperty("tangent", &CustomGeometryVertex::tangent_)
+    );
+
     lua["CustomGeometry"].setClass(UserdataMetatable<CustomGeometry, Drawable>()
         .addStaticFunction("new", &CreateObject<CustomGeometry>)
 
-        .addFunction("GetLodGeometry", &CustomGeometry::GetLodGeometry)
-        .addFunction("GetNumOccluderTriangles", &CustomGeometry::GetNumOccluderTriangles)
-        .addFunction("DrawOcclusion", &CustomGeometry::DrawOcclusion)
         .addFunction("Clear", &CustomGeometry::Clear)
         .addFunction("SetNumGeometries", &CustomGeometry::SetNumGeometries)
         .addFunction("SetDynamic", &CustomGeometry::SetDynamic)
@@ -227,13 +228,11 @@ static void RegisterCustomGeometry(kaguya::State& lua)
         
         ADD_OVERLOADED_FUNCTIONS_2(CustomGeometry, GetMaterial)
 
-        .addFunction("GetVertices", &CustomGeometry::GetVertices)
         .addFunction("GetVertex", &CustomGeometry::GetVertex)
 
-        .addProperty("numOccluderTriangles", &CustomGeometry::GetNumOccluderTriangles)
         .addProperty("numGeometries", &CustomGeometry::GetNumGeometries, &CustomGeometry::SetNumGeometries)
         .addProperty("dynamic", &CustomGeometry::IsDynamic, &CustomGeometry::SetDynamic)
-        // .addProperty("vertices", &CustomGeometry::GetVertices)
+        .addProperty("material", &CustomGeometryGetMaterial0, &CustomGeometrySetMaterial)
         );
 }
 
@@ -272,6 +271,7 @@ static void RegisterDecalSet(kaguya::State& lua)
 
         .addFunction("RemoveDecals", &DecalSet::RemoveDecals)
         .addFunction("RemoveAllDecals", &DecalSet::RemoveAllDecals)
+
         .addFunction("GetMaterial", &DecalSet::GetMaterial)
         .addFunction("GetNumDecals", &DecalSet::GetNumDecals)
         .addFunction("GetNumVertices", &DecalSet::GetNumVertices)
@@ -279,7 +279,6 @@ static void RegisterDecalSet(kaguya::State& lua)
         .addFunction("GetMaxVertices", &DecalSet::GetMaxVertices)
         .addFunction("GetMaxIndices", &DecalSet::GetMaxIndices)
 
-        .addProperty("updateGeometryType", &DecalSet::GetUpdateGeometryType)
         .addProperty("material", &DecalSet::GetMaterial, &DecalSet::SetMaterial)
         .addProperty("numDecals", &DecalSet::GetNumDecals)
         .addProperty("numVertices", &DecalSet::GetNumVertices)
@@ -305,25 +304,6 @@ static void RegisterDrawable(kaguya::State& lua)
     lua["MAX_VERTEX_LIGHTS"] = MAX_VERTEX_LIGHTS;
     lua["ANIMATION_LOD_BASESCALE"] = ANIMATION_LOD_BASESCALE;
 
-    // enum UpdateGeometryType;
-    lua["UPDATE_NONE"] = UPDATE_NONE;
-    lua["UPDATE_MAIN_THREAD"] = UPDATE_MAIN_THREAD;
-    lua["UPDATE_WORKER_THREAD"] = UPDATE_WORKER_THREAD;
-
-    lua["SourceBatch"].setClass(UserdataMetatable<SourceBatch>()
-        .setConstructors<SourceBatch(),
-        SourceBatch(const SourceBatch&)>()
-
-        .addProperty("distance", &SourceBatch::distance_)
-        .addProperty("geometry", &SourceBatch::geometry_)
-        /*
-        .addProperty("material", &SourceBatch::material_)
-        .addProperty("worldTransform", &SourceBatch::worldTransform_)
-        .addProperty("numWorldTransforms", &SourceBatch::numWorldTransforms_)
-        .addProperty("geometryType", &SourceBatch::geometryType_)
-        */
-        );
-
     lua["Drawable"].setClass(UserdataMetatable<Drawable, Component>()
 
         .addFunction("SetDrawDistance", &Drawable::SetDrawDistance)
@@ -338,8 +318,13 @@ static void RegisterDrawable(kaguya::State& lua)
         .addFunction("SetOccluder", &Drawable::SetOccluder)
         .addFunction("SetOccludee", &Drawable::SetOccludee)
 
+        .addFunction("MarkForUpdate", &Drawable::MarkForUpdate)
+
         .addFunction("GetBoundingBox", &Drawable::GetBoundingBox)
         .addFunction("GetWorldBoundingBox", &Drawable::GetWorldBoundingBox)
+        
+        .addFunction("GetDrawableFlags", &Drawable::GetDrawableFlags)
+
         .addFunction("GetDrawDistance", &Drawable::GetDrawDistance)
         .addFunction("GetShadowDistance", &Drawable::GetShadowDistance)
         .addFunction("GetLodBias", &Drawable::GetLodBias)
@@ -357,7 +342,7 @@ static void RegisterDrawable(kaguya::State& lua)
             static_cast<bool(Drawable::*)(Camera*) const>(&Drawable::IsInView))
 
         .addProperty("boundingBox", &Drawable::GetBoundingBox)
-        .addProperty("worldBoundingBox", &Drawable::GetWorldBoundingBox)
+        .addProperty("drawableFlags", &Drawable::GetDrawableFlags)
         .addProperty("drawDistance", &Drawable::GetDrawDistance, &Drawable::SetDrawDistance)
         .addProperty("shadowDistance", &Drawable::GetShadowDistance, &Drawable::SetShadowDistance)
         .addProperty("lodBias", &Drawable::GetLodBias, &Drawable::SetLodBias)
@@ -367,21 +352,12 @@ static void RegisterDrawable(kaguya::State& lua)
         .addProperty("zoneMask", &Drawable::GetZoneMask, &Drawable::SetZoneMask)
         .addProperty("maxLights", &Drawable::GetMaxLights, &Drawable::SetMaxLights)
         .addProperty("castShadows", &Drawable::GetCastShadows, &Drawable::SetCastShadows)
-
         .addProperty("occluder", &Drawable::IsOccluder, &Drawable::SetOccluder)
         .addProperty("occludee", &Drawable::IsOccludee, &Drawable::SetOccludee)
+
+        .addProperty("inView", static_cast<bool(Drawable::*)() const>(&Drawable::IsInView))
+        .addProperty("zone", &Drawable::GetZone)
         );
-}
-
-static void RegisterDrawableEvents(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["E_BONEHIERARCHYCREATED"] = E_BONEHIERARCHYCREATED;
-    lua["E_ANIMATIONTRIGGER"] = E_ANIMATIONTRIGGER;
-    lua["E_ANIMATIONFINISHED"] = E_ANIMATIONFINISHED;
-    lua["E_PARTICLEEFFECTFINISHED"] = E_PARTICLEEFFECTFINISHED;
-    lua["E_TERRAINCREATED"] = E_TERRAINCREATED;
 }
 
 static void RegisterLight(kaguya::State& lua)
@@ -402,8 +378,6 @@ static void RegisterLight(kaguya::State& lua)
         .setConstructors<BiasParameters(),
         BiasParameters(float, float, float)>()
 
-        .addFunction("Validate", &BiasParameters::Validate)
-
         .addProperty("constantBias", &BiasParameters::constantBias_)
         .addProperty("slopeScaledBias", &BiasParameters::slopeScaledBias_)
         .addProperty("normalOffset", &BiasParameters::normalOffset_)
@@ -413,10 +387,6 @@ static void RegisterLight(kaguya::State& lua)
         .setConstructors<CascadeParameters(),
         CascadeParameters(float, float, float, float, float, float)>()
 
-        .addFunction("Validate", &CascadeParameters::Validate)
-        .addFunction("GetShadowRange", &CascadeParameters::GetShadowRange)
-
-        .addProperty("shadowRange", &CascadeParameters::GetShadowRange)
         .addProperty("fadeStart", &CascadeParameters::fadeStart_)
         .addProperty("biasAutoAdjust", &CascadeParameters::biasAutoAdjust_)
         );
@@ -522,6 +492,7 @@ static void RegisterParticleEmitter(kaguya::State& lua)
         .addFunction("RemoveAllParticles", &ParticleEmitter::RemoveAllParticles)
         .addFunction("Reset", &ParticleEmitter::Reset)
         .addFunction("ApplyEffect", &ParticleEmitter::ApplyEffect)
+        
         .addFunction("GetEffect", &ParticleEmitter::GetEffect)
         .addFunction("GetNumParticles", &ParticleEmitter::GetNumParticles)
         .addFunction("IsEmitting", &ParticleEmitter::IsEmitting)
@@ -542,17 +513,6 @@ static void RegisterRibbonTrail(kaguya::State& lua)
     lua["TT_FACE_CAMERA"] = TT_FACE_CAMERA;
     lua["TT_BONE"] = TT_BONE;
 
-    lua["TrailPoint"].setClass(UserdataMetatable<TrailPoint>()
-
-        .addProperty("position", &TrailPoint::position_)
-        .addProperty("forward", &TrailPoint::forward_)
-        .addProperty("parentPos", &TrailPoint::parentPos_)
-        .addProperty("elapsedLength", &TrailPoint::elapsedLength_)
-        .addProperty("next", &TrailPoint::next_)
-        .addProperty("lifetime", &TrailPoint::lifetime_)
-        .addProperty("sortDistance", &TrailPoint::sortDistance_)
-        );
-
     lua["RibbonTrail"].setClass(UserdataMetatable<RibbonTrail, Drawable>()
         .addStaticFunction("new", &CreateObject<RibbonTrail>)
 
@@ -570,7 +530,9 @@ static void RegisterRibbonTrail(kaguya::State& lua)
         .addFunction("SetUpdateInvisible", &RibbonTrail::SetUpdateInvisible)
         .addFunction("SetTailColumn", &RibbonTrail::SetTailColumn)
         .addFunction("SetAnimationLodBias", &RibbonTrail::SetAnimationLodBias)
+        
         .addFunction("Commit", &RibbonTrail::Commit)
+        
         .addFunction("GetMaterial", &RibbonTrail::GetMaterial)
         .addFunction("GetVertexDistance", &RibbonTrail::GetVertexDistance)
         .addFunction("GetWidth", &RibbonTrail::GetWidth)
@@ -622,14 +584,19 @@ static void StaticModelApplyMaterialList1(StaticModel* self, const String& fileN
     self->ApplyMaterialList(fileName);
 }
 
-static Material* StaticModelGetMaterial(const StaticModel* staticModle)
+static void StaticModelSetMaterial(StaticModel* staticModel, Material* material)
+{
+    staticModel->SetMaterial(material);
+}
+
+static Material* StaticModelGetMaterial0(const StaticModel* staticModle)
 {
     return staticModle->GetMaterial();
 }
 
-static void StaticModelSetMaterial(StaticModel* staticModel, Material* material)
+static Material* StaticModelGetMaterial1(const StaticModel* staticModle, unsigned index)
 {
-    staticModel->SetMaterial(material);
+    return staticModle->GetMaterial(index);
 }
 
 static void RegisterStaticModel(kaguya::State& lua)
@@ -652,16 +619,17 @@ static void RegisterStaticModel(kaguya::State& lua)
         .addFunction("GetModel", &StaticModel::GetModel)
         .addFunction("GetNumGeometries", &StaticModel::GetNumGeometries)
 
-        .addFunction("GetMaterial", &StaticModel::GetMaterial)
 
+        ADD_OVERLOADED_FUNCTIONS_2(StaticModel, GetMaterial)
+        
         .addFunction("GetOcclusionLodLevel", &StaticModel::GetOcclusionLodLevel)
         .addFunction("IsInside", &StaticModel::IsInside)
         .addFunction("IsInsideLocal", &StaticModel::IsInsideLocal)
 
         .addProperty("model", &StaticModel::GetModel, &StaticModel::SetModel)
+        .addProperty("material", &StaticModelGetMaterial0, &StaticModelSetMaterial)
 
-        .addProperty("material", &StaticModelGetMaterial, &StaticModelSetMaterial)
-
+        .addProperty("boundingBox", &StaticModel::GetBoundingBox)
         .addProperty("numGeometries", &StaticModel::GetNumGeometries)
         .addProperty("occlusionLodLevel", &StaticModel::GetOcclusionLodLevel, &StaticModel::SetOcclusionLodLevel)
         );
@@ -677,10 +645,10 @@ static void RegisterStaticModelGroup(kaguya::State& lua)
         .addFunction("AddInstanceNode", &StaticModelGroup::AddInstanceNode)
         .addFunction("RemoveInstanceNode", &StaticModelGroup::RemoveInstanceNode)
         .addFunction("RemoveAllInstanceNodes", &StaticModelGroup::RemoveAllInstanceNodes)
+        
         .addFunction("GetNumInstanceNodes", &StaticModelGroup::GetNumInstanceNodes)
         .addFunction("GetInstanceNode", &StaticModelGroup::GetInstanceNode)
 
-        .addProperty("numOccluderTriangles", &StaticModelGroup::GetNumOccluderTriangles)
         .addProperty("numInstanceNodes", &StaticModelGroup::GetNumInstanceNodes)
         );
 }
@@ -697,39 +665,31 @@ static void RegisterTerrainPatch(kaguya::State& lua)
         .addFunction("SetMaterial", &TerrainPatch::SetMaterial)
         .addFunction("SetBoundingBox", &TerrainPatch::SetBoundingBox)
         .addFunction("SetCoordinates", &TerrainPatch::SetCoordinates)
+        
         .addFunction("ResetLod", &TerrainPatch::ResetLod)
+        
         .addFunction("GetGeometry", &TerrainPatch::GetGeometry)
         .addFunction("GetMaxLodGeometry", &TerrainPatch::GetMaxLodGeometry)
-        .addFunction("GetOcclusionGeometry", &TerrainPatch::GetOcclusionGeometry)
-        
-        // .addFunction("GetVertexBuffer", &TerrainPatch::GetVertexBuffer)
-
+        .addFunction("GetOcclusionGeometry", &TerrainPatch::GetOcclusionGeometry)        
+        .addFunction("GetVertexBuffer", &TerrainPatch::GetVertexBuffer)
         .addFunction("GetOwner", &TerrainPatch::GetOwner)
         .addFunction("GetNorthPatch", &TerrainPatch::GetNorthPatch)
         .addFunction("GetSouthPatch", &TerrainPatch::GetSouthPatch)
         .addFunction("GetWestPatch", &TerrainPatch::GetWestPatch)
         .addFunction("GetEastPatch", &TerrainPatch::GetEastPatch)
-        .addFunction("GetLodErrors", &TerrainPatch::GetLodErrors)
         .addFunction("GetCoordinates", &TerrainPatch::GetCoordinates)
         .addFunction("GetLodLevel", &TerrainPatch::GetLodLevel)
 
-        .addProperty("updateGeometryType", &TerrainPatch::GetUpdateGeometryType)
-        .addProperty("numOccluderTriangles", &TerrainPatch::GetNumOccluderTriangles)
         .addProperty("geometry", &TerrainPatch::GetGeometry)
         .addProperty("maxLodGeometry", &TerrainPatch::GetMaxLodGeometry)
         .addProperty("occlusionGeometry", &TerrainPatch::GetOcclusionGeometry)
-        
-        // .addProperty("vertexBuffer", &TerrainPatch::GetVertexBuffer)
-
         .addProperty("owner", &TerrainPatch::GetOwner, &TerrainPatch::SetOwner)
         .addProperty("northPatch", &TerrainPatch::GetNorthPatch)
         .addProperty("southPatch", &TerrainPatch::GetSouthPatch)
         .addProperty("westPatch", &TerrainPatch::GetWestPatch)
         .addProperty("eastPatch", &TerrainPatch::GetEastPatch)
-        .addProperty("lodErrors", &TerrainPatch::GetLodErrors)
         .addProperty("coordinates", &TerrainPatch::GetCoordinates, &TerrainPatch::SetCoordinates)
         .addProperty("lodLevel", &TerrainPatch::GetLodLevel)
-        .addProperty("material", &TerrainPatch::SetMaterial)
         .addProperty("boundingBox", &TerrainPatch::SetBoundingBox)
         );
 }
@@ -753,6 +713,7 @@ static void RegisterZone(kaguya::State& lua)
         .addFunction("SetOverride", &Zone::SetOverride)
         .addFunction("SetAmbientGradient", &Zone::SetAmbientGradient)
         .addFunction("SetZoneTexture", &Zone::SetZoneTexture)
+        
         .addFunction("GetInverseWorldTransform", &Zone::GetInverseWorldTransform)
         .addFunction("GetAmbientColor", &Zone::GetAmbientColor)
         .addFunction("GetAmbientStartColor", &Zone::GetAmbientStartColor)
@@ -767,6 +728,7 @@ static void RegisterZone(kaguya::State& lua)
         .addFunction("GetOverride", &Zone::GetOverride)
         .addFunction("GetAmbientGradient", &Zone::GetAmbientGradient)
         .addFunction("GetZoneTexture", &Zone::GetZoneTexture)
+        
         .addFunction("IsInside", &Zone::IsInside)
 
         .addProperty("inverseWorldTransform", &Zone::GetInverseWorldTransform)
@@ -796,7 +758,6 @@ void RegisterDrawableLuaAPI(kaguya::State& lua)
     RegisterBillboardSet(lua);
     RegisterCustomGeometry(lua);
     RegisterDecalSet(lua);
-    RegisterDrawableEvents(lua);
     RegisterLight(lua);
     RegisterParticleEmitter(lua);
     RegisterRibbonTrail(lua);
