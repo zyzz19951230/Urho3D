@@ -34,14 +34,8 @@ extern "C" {
 #include <boost/make_shared.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/static_assert.hpp>
-#include "kaguya/preprocess.hpp"
-#include "kaguya/preprocess.hpp"
 #endif
-
-
-#ifndef KAGUYA_ERROR_NO_THROW
-#define KAGUYA_ERROR_NO_THROW 1
-#endif
+#include "kaguya/preprocess.hpp"
 
 
 
@@ -68,6 +62,13 @@ extern "C" {
 #define KAGUYA_DETECT_USE_DEPRECATED_FEATURE 0
 #endif
 
+#ifndef KAGUYA_NOEXCEPT
+# if KAGUYA_USE_CPP11 && (!defined(_MSC_VER) || _MSC_VER >= 1900)
+#  define KAGUYA_NOEXCEPT noexcept
+# else
+#  define KAGUYA_NOEXCEPT throw()
+# endif
+#endif
 
 #ifndef KAGUYA_DEPRECATED_FEATURE
 #if __cplusplus >= 201402L && defined(__has_cpp_attribute)
@@ -82,7 +83,7 @@ extern "C" {
 //MSVC depecated
 #define KAGUYA_DEPRECATED_FEATURE(MSG) __declspec(deprecated(MSG)) 
 #elif defined(__GNUC__) || defined(__clang__)
-#define KAGUYA_DEPRECATED_FEATURE(MSG) __attribute__((deprecated(MSG)))
+#define KAGUYA_DEPRECATED_FEATURE(MSG) __attribute__((deprecated))
 #else
 #define KAGUYA_DEPRECATED_FEATURE(MSG)
 #endif

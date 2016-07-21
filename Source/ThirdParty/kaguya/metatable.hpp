@@ -39,6 +39,8 @@ namespace kaguya
 		std::string code_;
 	};
 
+	/// @ingroup lua_type_traits
+	/// @brief lua_type_traits for LuaCodeChunk
 	template<>	struct lua_type_traits<LuaCodeChunk> {
 		static int push(lua_State* state, const LuaCodeChunk& ref)
 		{
@@ -51,6 +53,8 @@ namespace kaguya
 		LuaCodeChunkResult(const std::string& src) :LuaCodeChunk(src) {}
 		LuaCodeChunkResult(const char* src) :LuaCodeChunk(src) {}
 	};
+	/// @ingroup lua_type_traits
+	/// @brief lua_type_traits for LuaCodeChunkResult
 	template<>	struct lua_type_traits<LuaCodeChunkResult> {
 		static int push(lua_State* state, const LuaCodeChunkResult& ref)
 		{
@@ -277,7 +281,9 @@ namespace kaguya
 #endif
 
 
-		//add member property
+		/// @brief add member property with getter function.(experimental)
+		/// @param name function name for lua
+		/// @param mem bind member data
 		template<typename Ret>
 		UserdataMetatable& addProperty(const char* name, Ret class_type::* mem)
 		{
@@ -286,16 +292,13 @@ namespace kaguya
 				throw KaguyaException("already registered.");
 				return *this;
 			}
-			property_map_[name] = AnyDataPusher(function(mem));
+			property_map_[name] = AnyDataPusher(kaguya::function(mem));
 			return *this;
 		}
 
-		/**
-		* @name addProperty
-		* @brief add member property with getter function.(experimental)
-		* @param name function name for lua
-		* @param getter getter function
-		*/
+		/// @brief add member property with getter function.(experimental)
+		/// @param name function name for lua
+		/// @param getter getter function
 		template<typename GetType>
 		UserdataMetatable& addProperty(const char* name, GetType(class_type::*getter)()const)
 		{
@@ -304,17 +307,14 @@ namespace kaguya
 				throw KaguyaException("already registered.");
 				return *this;
 			}
-			property_map_[name] = AnyDataPusher(function(getter));
+			property_map_[name] = AnyDataPusher(kaguya::function(getter));
 			return *this;
 		}
 
-		/**
-		* @name addProperty
-		* @brief add member property with setter, getter functions.(experimental)
-		* @param name function name for lua
-		* @param getter getter function
-		* @param setter setter function
-		*/
+		/// @brief add member property with setter, getter functions.(experimental)
+		/// @param name function name for lua
+		/// @param getter getter function
+		/// @param setter setter function
 		template<typename GetType, typename SetType>
 		UserdataMetatable& addProperty(const char* name, GetType(class_type::*getter)()const, void (class_type::*setter)(SetType))
 		{
@@ -327,13 +327,9 @@ namespace kaguya
 			return *this;
 		}
 
-        /**
-        * @name addProperty
-        * @brief add member property with external getter function.(experimental)
-        * @param name function name for lua
-        * @param getter getter function
-        * @param setter setter function
-        */
+        /// @brief add member property with external getter function.(experimental)
+        /// @param name function name for lua
+        /// @param getter getter function
         template<typename GetType>
         UserdataMetatable& addProperty(const char* name, GetType(*getter)(const class_type*))
         {
@@ -344,15 +340,12 @@ namespace kaguya
             }
             property_map_[name] = AnyDataPusher(function(getter));
             return *this;
-        }
+		}
         
-        /**
-        * @name addProperty
-        * @brief add member property with external setter, getter functions.(experimental)
-        * @param name function name for lua
-        * @param getter getter function
-        * @param setter setter function
-        */
+        /// @brief add member property with external setter, getter functions.(experimental)
+        /// @param name function name for lua
+        /// @param getter getter function
+        /// @param setter setter function
         template<typename GetType, typename SetType>
         UserdataMetatable& addProperty(const char* name, GetType(*getter)(const class_type*), void (*setter)(class_type*, SetType))
         {
@@ -364,13 +357,10 @@ namespace kaguya
             property_map_[name] = AnyDataPusher(overload(getter, setter));
             return *this;
         }
-
-		/**
-		* @name addStaticFunction
-		* @brief add non member function
-		* @param name function name for lua
-		* @param f function
-		*/
+		
+		/// @brief add non member function
+		/// @param name function name for lua
+		/// @param f function
 		template<typename Fun>
 		UserdataMetatable& addStaticFunction(const char* name, Fun f)
 		{
@@ -379,11 +369,12 @@ namespace kaguya
 				throw KaguyaException("already registered.");
 				return *this;
 			}
-			member_map_[name] = AnyDataPusher(function(f));
+			member_map_[name] = AnyDataPusher(kaguya::function(f));
 			return *this;
 		}
 
-		//add field to 
+		/// @brief assign data by return value from evaluate code chunk. 
+		/// this function is deprecated.  use addStaticField(kaguya::LuaCodeChunkResult(\"luacode\")).
 		KAGUYA_DEPRECATED_FEATURE("addCodeChunkResult is deprecated. use addStaticField(kaguya::LuaCodeChunkResult(\"luacode\")).")
 		UserdataMetatable& addCodeChunkResult(const char* name, const std::string& lua_code_chunk)
 		{
@@ -397,8 +388,9 @@ namespace kaguya
 			return *this;
 		}
 
-
-
+		/// @brief assign data by argument value. 
+		/// @param name name for lua
+		/// @param d data
 		template<typename Data>
 		UserdataMetatable& addStaticField(const char* name, const Data& d)
 		{
@@ -411,6 +403,9 @@ namespace kaguya
 			return *this;
 		}
 #if KAGUYA_USE_CPP11
+		/// @brief assign overloaded from functions. 
+		/// @param name name for lua
+		/// @param f functions
 		template<typename... Funcs>
 		UserdataMetatable& addOverloadedFunctions(const char* name, Funcs... f)
 		{
@@ -424,6 +419,10 @@ namespace kaguya
 
 			return *this;
 		}
+
+		/// @brief assign data by argument value. 
+		/// @param name name for lua
+		/// @param d data
 		template<typename Data>
 		UserdataMetatable& addStaticField(const char* name, Data&& d)
 		{
@@ -448,7 +447,7 @@ namespace kaguya
 				throw KaguyaException("already registered.");\
 				return *this;\
 			}\
-			member_map_[name] = AnyDataPusher(overload(KAGUYA_PP_ARG_REPEAT(N)));\
+			member_map_[name] = AnyDataPusher(kaguya::overload(KAGUYA_PP_ARG_REPEAT(N)));\
 			return *this;\
 		}
 		KAGUYA_PP_REPEAT_DEF(9, KAGUYA_ADD_OVERLOAD_FUNCTION_DEF)
@@ -468,10 +467,13 @@ namespace kaguya
 				throw KaguyaException("already registered. if you want function overload,use addOverloadedFunctions");
 				return *this;
 			}
-			member_map_[name] = AnyDataPusher(function(f));
+			member_map_[name] = AnyDataPusher(kaguya::function(f));
 			return *this;
 		}
 #else
+		/// @brief assign function
+		/// @param name name for lua
+		/// @param f pointer to member function.
 		template<typename Ret>
 		UserdataMetatable& addFunction(const char* name, Ret class_type::* f)
 		{
@@ -480,10 +482,23 @@ namespace kaguya
 				throw KaguyaException("already registered. if you want function overload,use addOverloadedFunctions");
 				return *this;
 			}
-			member_map_[name] = AnyDataPusher(function(f));
+			member_map_[name] = AnyDataPusher(kaguya::function(f));
 			return *this;
 		}
 #endif
+		/// @brief assign function
+		/// @param name name for lua
+		/// @param f member function object.
+		UserdataMetatable& addFunction(const char* name, PolymorphicMemberInvoker f)
+		{
+			if (has_key(name))
+			{
+				throw KaguyaException("already registered. if you want function overload,use addOverloadedFunctions");
+				return *this;
+			}
+			member_map_[name] = AnyDataPusher(kaguya::function(f));
+			return *this;
+		}
 
 
 #if defined(_MSC_VER) && _MSC_VER <= 1800
@@ -635,5 +650,16 @@ namespace kaguya
 
 		PropMapType property_map_;
 		MemberMapType member_map_;
+	};
+
+	/// @ingroup lua_type_traits
+	/// @brief lua_type_traits for UserdataMetatable
+	template<typename T,typename Base>	struct lua_type_traits<UserdataMetatable<T,Base> > {
+		typedef const UserdataMetatable<T, Base>& push_type;
+
+		static int push(lua_State* l, push_type ref)
+		{
+			return ref.createMatatable(l).push(l);
+		}
 	};
 }

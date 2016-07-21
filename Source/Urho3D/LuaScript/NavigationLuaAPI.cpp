@@ -227,6 +227,20 @@ static void RegisterCrowdManager(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    lua["CrowdObstacleAvoidanceParams"].setClass(UserdataMetatable<CrowdObstacleAvoidanceParams>()
+
+        .addProperty("velBias", &CrowdObstacleAvoidanceParams::velBias)
+        .addProperty("weightDesVel", &CrowdObstacleAvoidanceParams::weightDesVel)
+        .addProperty("weightCurVel", &CrowdObstacleAvoidanceParams::weightCurVel)
+        .addProperty("weightSide", &CrowdObstacleAvoidanceParams::weightSide)
+        .addProperty("weightToi", &CrowdObstacleAvoidanceParams::weightToi)
+        .addProperty("horizTime", &CrowdObstacleAvoidanceParams::horizTime)
+        .addProperty("gridSize", &CrowdObstacleAvoidanceParams::gridSize)
+        .addProperty("adaptiveDivs", &CrowdObstacleAvoidanceParams::adaptiveDivs)
+        .addProperty("adaptiveRings", &CrowdObstacleAvoidanceParams::adaptiveRings)
+        .addProperty("adaptiveDepth", &CrowdObstacleAvoidanceParams::adaptiveDepth)
+        );
+
     lua["CrowdManager"].setClass(UserdataMetatable<CrowdManager, Component>()
         .addStaticFunction("new", &CreateObject<CrowdManager>)
 
@@ -262,6 +276,7 @@ static void RegisterCrowdManager(kaguya::State& lua)
         .addFunction("GetExcludeFlags", &CrowdManager::GetExcludeFlags)
         .addFunction("GetAreaCost", &CrowdManager::GetAreaCost)
         .addFunction("GetNumObstacleAvoidanceTypes", &CrowdManager::GetNumObstacleAvoidanceTypes)
+        .addFunction("GetObstacleAvoidanceParams", &CrowdManager::GetObstacleAvoidanceParams)
         
         .addProperty("maxAgents", &CrowdManager::GetMaxAgents, &CrowdManager::SetMaxAgents)
         .addProperty("maxAgentRadius", &CrowdManager::GetMaxAgentRadius, &CrowdManager::SetMaxAgentRadius)
@@ -547,12 +562,13 @@ static void RegisterOffMeshConnection(kaguya::State& lua)
 
 void RegisterNavigationLuaAPI(kaguya::State& lua)
 {
+    RegisterNavigationMesh(lua);
+
     RegisterCrowdAgent(lua);
     RegisterCrowdManager(lua);
     RegisterDynamicNavigationMesh(lua);
     RegisterNavArea(lua);
-    RegisterNavigable(lua);
-    RegisterNavigationMesh(lua);
+    RegisterNavigable(lua);    
     RegisterObstacle(lua);
     RegisterOffMeshConnection(lua);
 }

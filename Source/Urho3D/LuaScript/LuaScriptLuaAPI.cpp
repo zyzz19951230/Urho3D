@@ -7,9 +7,8 @@
 namespace Urho3D
 {
 
-static void RegisterCoroutine(kaguya::State &lua)
+static void RegisterCoroutine(kaguya::State& lua)
 {
-    // The following code copy from Coroutine.pkg file
     lua.dostring(
         "local totalTime_ = 0                                                \n"
         "local sleepedCoroutines_ = {}                                       \n"
@@ -67,37 +66,6 @@ static void RegisterCoroutine(kaguya::State &lua)
         "end                                                                 \n"
     );
 }
-
-//
-//
-//static void LuaScriptUnsubscribeFromEvent0(const String& eventName)
-//{
-//    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-//    luaScript->RemoveEventHandler(eventName);
-//}
-//
-//static void LuaScriptUnsubscribeFromEvent1(Object* sender, const String& eventName)
-//{
-//    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-//    luaScript->RemoveEventHandler(sender, eventName);
-//}
-//
-//static void LuaScriptUnsubscribeFromEvent2(const String& eventName)
-//{
-//    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-//    luaScript->RemoveEventHandler(eventName);
-//}
-//
-//static void LuaScriptUnsubscribeFromEvent3(Object* sender, const String& eventName)
-//{
-//    LuaScript* luaScript = globalContext->GetSubsystem<LuaScript>();
-//    luaScript->RemoveEventHandler(sender, eventName);
-//}
-//
-//static void RegisterEventName(const char* eventName)
-//{
-//    EventNameRegistrar::RegisterEventName(eventName);
-//}
 
 static LuaScript* GetLuaScript()
 {
@@ -227,7 +195,6 @@ static void RegisterLuaScriptInstance(kaguya::State &lua)
 {
     using namespace kaguya;
 
-    // The following code copy from LuaScriptInstance.pkg file
     lua.dostring(
         "LuaScriptObject = {}                                                \n"
         "function LuaScriptObject:Start()                                    \n"

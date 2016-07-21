@@ -47,12 +47,17 @@
 namespace Urho3D
 {
 
-static void AnimatableSetAttributeAnimation0(Animatable* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode)
+static void AnimatableSetAttributeAnimation0(Animatable* self, const String& name, ValueAnimation* attributeAnimation)
+{
+    self->SetAttributeAnimation(name, attributeAnimation);
+}
+
+static void AnimatableSetAttributeAnimation1(Animatable* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode)
 {
     self->SetAttributeAnimation(name, attributeAnimation, wrapMode);
 }
 
-static void AnimatableSetAttributeAnimation1(Animatable* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode, float speed)
+static void AnimatableSetAttributeAnimation2(Animatable* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode, float speed)
 {
     self->SetAttributeAnimation(name, attributeAnimation, wrapMode, speed);
 }
@@ -67,7 +72,7 @@ static void RegisterAnimatable(kaguya::State& lua)
         .addFunction("SetAnimationTime", &Animatable::SetAnimationTime)
         .addFunction("SetObjectAnimation", &Animatable::SetObjectAnimation)
 
-        ADD_OVERLOADED_FUNCTIONS_2(Animatable, SetAttributeAnimation)
+        ADD_OVERLOADED_FUNCTIONS_3(Animatable, SetAttributeAnimation)
 
         .addFunction("SetAttributeAnimationWrapMode", &Animatable::SetAttributeAnimationWrapMode)
         .addFunction("SetAttributeAnimationSpeed", &Animatable::SetAttributeAnimationSpeed)

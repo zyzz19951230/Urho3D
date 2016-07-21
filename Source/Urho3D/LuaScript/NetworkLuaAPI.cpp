@@ -274,6 +274,16 @@ static void NetworkBroadcastRemoteEvent5(Network* self, Node* node, StringHash e
     self->BroadcastRemoteEvent(node, eventType, inOrder, eventData);
 }
 
+static void NetworkRegisterRemoteEvent(Network* self, const char* eventType)
+{
+    self->RegisterRemoteEvent(StringHash(eventType));
+}
+
+static void NetworkUnregisterRemoteEvent(Network* self, const char* eventType)
+{
+    self->UnregisterRemoteEvent(StringHash(eventType));
+}
+
 static SharedPtr<HttpRequest> NetworkMakeHttpRequest0(Network* self, const String& url)
 {
     return self->MakeHttpRequest(url);
@@ -313,8 +323,8 @@ static void RegisterNetwork(kaguya::State& lua)
         .addFunction("SetSimulatedLatency", &Network::SetSimulatedLatency)
         .addFunction("SetSimulatedPacketLoss", &Network::SetSimulatedPacketLoss)
 
-        .addFunction("RegisterRemoteEvent", &Network::RegisterRemoteEvent)
-        .addFunction("UnregisterRemoteEvent", &Network::UnregisterRemoteEvent)
+        .addStaticFunction("RegisterRemoteEvent", &NetworkRegisterRemoteEvent)
+        .addStaticFunction("UnregisterRemoteEvent", &NetworkUnregisterRemoteEvent)
         .addFunction("UnregisterAllRemoteEvents", &Network::UnregisterAllRemoteEvents)
         
         .addFunction("SetPackageCacheDir", &Network::SetPackageCacheDir)

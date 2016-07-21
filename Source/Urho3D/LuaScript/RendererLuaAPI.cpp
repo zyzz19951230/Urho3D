@@ -628,6 +628,8 @@ static void RegisterGraphicsDefs(kaguya::State& lua)
 
     lua["VertexElement"].setClass(UserdataMetatable<VertexElement>()
         .setConstructors<VertexElement(),
+        VertexElement(VertexElementType, VertexElementSemantic), 
+        VertexElement(VertexElementType, VertexElementSemantic, unsigned char), 
         VertexElement(VertexElementType, VertexElementSemantic, unsigned char, bool)>()
 
         .addFunction("__eq", &VertexElement::operator==)
@@ -1620,7 +1622,7 @@ static VectorBuffer VertexBufferGetData(VertexBuffer* self)
 {
     VectorBuffer ret;
 
-    void* data = self->Lock(0, self->GetVertexCount() * self->GetVertexSize(), false);
+    void* data = self->Lock(0, self->GetVertexCount(), false);
     if (data)
     {
         ret.Write(data, self->GetVertexCount() * self->GetVertexSize());

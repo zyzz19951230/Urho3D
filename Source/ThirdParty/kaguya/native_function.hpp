@@ -22,6 +22,103 @@
 
 namespace kaguya
 {
+
+	struct FunctionImpl
+	{
+		virtual int invoke(lua_State *state) = 0;
+		virtual std::string argTypeNames()const = 0;
+		virtual bool checkArgTypes(lua_State* state)const = 0;
+		virtual bool strictCheckArgTypes(lua_State* state)const = 0;
+		virtual int minArgCount()const=0;
+		virtual int maxArgCount()const=0;
+		virtual ~FunctionImpl() {}
+	};
+	struct PolymorphicInvoker
+	{
+		typedef standard::shared_ptr<FunctionImpl> holder_type;
+		PolymorphicInvoker(const holder_type& fptr) :fnc(fptr) {}
+		int invoke(lua_State *state)const { return fnc->invoke(state); }
+		std::string argTypeNames()const { return fnc->argTypeNames(); }
+		bool checkArgTypes(lua_State* state)const { return fnc->checkArgTypes(state); }
+		bool strictCheckArgTypes(lua_State* state)const { return fnc->strictCheckArgTypes(state); }
+		int minArgCount()const { return fnc->minArgCount(); }
+		int maxArgCount()const { return fnc->maxArgCount(); }
+		~PolymorphicInvoker() {}
+	private:
+		holder_type fnc;
+	};
+	struct PolymorphicMemberInvoker : PolymorphicInvoker{
+		PolymorphicMemberInvoker(const holder_type& fptr) :PolymorphicInvoker(fptr) {}
+	};
+
+	namespace nativefunction
+	{
+		inline int call(lua_State* state, const PolymorphicInvoker& f)
+		{
+			return f.invoke(state);
+		}
+		inline int call(lua_State* state, PolymorphicInvoker& f)
+		{
+			return f.invoke(state);
+		}
+		inline bool checkArgTypes(lua_State* state, const PolymorphicInvoker& f)
+		{
+			return f.checkArgTypes(state);
+		}
+		inline bool strictCheckArgTypes(lua_State* state, const PolymorphicInvoker& f)
+		{
+			return f.strictCheckArgTypes(state);
+		}
+		inline std::string argTypesName(const PolymorphicInvoker& f)
+		{
+			return f.argTypeNames();
+		}
+		inline int minArgCount(const PolymorphicInvoker& f)
+		{
+			return f.minArgCount();
+		}
+		inline int maxArgCount(const PolymorphicInvoker& f)
+		{
+			return f.maxArgCount();
+		}
+
+		template<>
+		struct is_callable<PolymorphicInvoker>:traits::integral_constant<bool, true> {};
+
+
+		inline int call(lua_State* state, const PolymorphicMemberInvoker& f)
+		{
+			return f.invoke(state);
+		}
+		inline int call(lua_State* state, PolymorphicMemberInvoker& f)
+		{
+			return f.invoke(state);
+		}
+		inline bool checkArgTypes(lua_State* state, const PolymorphicMemberInvoker& f)
+		{
+			return f.checkArgTypes(state);
+		}
+		inline bool strictCheckArgTypes(lua_State* state, const PolymorphicMemberInvoker& f)
+		{
+			return f.strictCheckArgTypes(state);
+		}
+		inline std::string argTypesName(const PolymorphicMemberInvoker& f)
+		{
+			return f.argTypeNames();
+		}
+		inline int minArgCount(const PolymorphicMemberInvoker& f)
+		{
+			return f.minArgCount();
+		}
+		inline int maxArgCount(const PolymorphicMemberInvoker& f)
+		{
+			return f.maxArgCount();
+		}
+
+		template<>
+		struct is_callable<PolymorphicMemberInvoker> :traits::integral_constant<bool, true> {};
+	}
+
 	class VariadicArgType
 	{
 	public:
@@ -88,6 +185,11 @@ namespace kaguya
 				stack_index_ += n;
 				return iterator(state_, stack_index_);
 			}
+			/**
+			* @name relational operators
+			* @brief
+			*/
+			//@{
 			bool operator==(const iterator& other)const
 			{
 				return state_ == other.state_ && stack_index_ == other.stack_index_;
@@ -96,6 +198,7 @@ namespace kaguya
 			{
 				return !(*this == other);
 			}
+			//@}
 		private:
 			lua_State* state_;
 			int stack_index_;
@@ -153,6 +256,8 @@ namespace kaguya
 		int startIndex_;
 		int endIndex_;
 	};
+	/// @ingroup lua_type_traits
+	/// @brief lua_type_traits for VariadicArgType
 	template<> struct lua_type_traits<VariadicArgType>
 	{
 		typedef VariadicArgType get_type;
@@ -178,28 +283,33 @@ namespace kaguya
 		{
 			int argcount = lua_gettop(state);
 
+
 			if (strictCheckArgTypes(state, fn))
 			{
-				int fnargcount = argCount(fn);
-				if (argcount == fnargcount)
+				const int minargcount = minArgCount(fn);
+				const int maxargcount = maxArgCount(fn);
+				if (minargcount <= argcount && maxargcount >= argcount)
 				{
 					return MAX_OVERLOAD_SCORE;
 				}
 				else
 				{
-					return std::max(100 - std::abs(argcount - fnargcount), 51);
+					int diff = std::min(std::abs(argcount - minargcount), std::abs(argcount - maxargcount));
+					return std::max(100 - diff, 51);
 				}
 			}
 			else if (checkArgTypes(state, fn))
 			{
-				int fnargcount = argCount(fn);
-				if (argcount == fnargcount)
+				const int minargcount = minArgCount(fn);
+				const int maxargcount = maxArgCount(fn);
+				if (minargcount <= argcount && maxargcount >= argcount)
 				{
 					return 200;
 				}
 				else
 				{
-					return std::max(50 - std::abs(argcount - fnargcount), 1);
+					int diff = std::min(std::abs(argcount - minargcount), std::abs(argcount - maxargcount));
+					return std::max(50 - diff, 1);
 				}
 			}
 			else
@@ -309,7 +419,7 @@ namespace kaguya
 			return 0;
 		}
 
-		template<typename TupleType, std::size_t ...S> int invoke_tuple_impl(lua_State* state, TupleType&& tuple, nativefunction::cpp11impl::index_tuple<S...>)
+		template<typename TupleType, std::size_t ...S> int invoke_tuple_impl(lua_State* state, TupleType&& tuple, nativefunction::index_tuple<S...>)
 		{
 			return best_match_invoke(state, std::get<S>(tuple)...);
 		}
@@ -317,11 +427,11 @@ namespace kaguya
 		{
 			typedef typename std::decay<TupleType>::type ttype;
 
-			typedef typename nativefunction::cpp11impl::index_range<0, std::tuple_size<ttype>::value>::type indexrange;
+			typedef typename nativefunction::index_range<0, std::tuple_size<ttype>::value>::type indexrange;
 
 			return invoke_tuple_impl(state, tuple, indexrange());
 		}
-		
+
 		template<typename Fun> void  push_arg_typename(lua_State *state,const Fun& fn)
 		{
 			lua_pushliteral(state, "\t\t");
@@ -336,14 +446,14 @@ namespace kaguya
 			lua_pushliteral(state, "\n");
 			push_arg_typename(state,fns...);
 		}
-		template<typename TupleType, std::size_t ...S> void  push_arg_typename_tuple_impl(lua_State *state, TupleType&& tuple, nativefunction::cpp11impl::index_tuple<S...>)
+		template<typename TupleType, std::size_t ...S> void  push_arg_typename_tuple_impl(lua_State *state, TupleType&& tuple, nativefunction::index_tuple<S...>)
 		{
 			return push_arg_typename(state,std::get<S>(tuple)...);
 		}
 		template<typename TupleType>void push_arg_typename_tuple(lua_State *state, TupleType&& tuple)
 		{
 			typedef typename std::decay<TupleType>::type ttype;
-			typedef typename nativefunction::cpp11impl::index_range<0, std::tuple_size<ttype>::value>::type indexrange;
+			typedef typename nativefunction::index_range<0, std::tuple_size<ttype>::value>::type indexrange;
 
 			return push_arg_typename_tuple_impl(state,tuple, indexrange());
 		}
@@ -419,6 +529,7 @@ namespace kaguya
 		return f;
 	}
 
+
 	template<typename FTYPE, typename T>
 	inline FunctionInvokerType<standard::tuple<standard::function<FTYPE> > > function(T f)
 	{
@@ -452,11 +563,13 @@ namespace kaguya
 #endif
 
 
+	/// @ingroup lua_type_traits
+	/// @brief lua_type_traits for FunctionInvokerType
 	template<typename FunctionTuple> struct lua_type_traits<FunctionInvokerType<FunctionTuple> >
 	{
 		typedef FunctionInvokerType<FunctionTuple> userdatatype;
 		typedef const FunctionInvokerType<FunctionTuple>& push_type;
-		
+
 		static const char* build_arg_error_message(lua_State *state,const char* msg, FunctionTuple* tuple)
 		{
 			int stack_top = lua_gettop(state);
@@ -520,16 +633,18 @@ namespace kaguya
 	};
 
 
-	//specialize for c function
+	/// @ingroup lua_type_traits
+	/// @brief lua_type_traits for c function
 	template<typename T> struct lua_type_traits < T
 		, typename traits::enable_if<traits::is_function<typename traits::remove_pointer<T>::type>::value>::type >
 	{
 		static int push(lua_State* l, T f)
 		{
-			return util::one_push(l, function(f));
+			return util::one_push(l, kaguya::function(f));
 		}
 	};
-	//specialize for lua_CFunction
+	/// @ingroup lua_type_traits
+	/// @brief lua_type_traits for lua_CFunction
 	template<> struct lua_type_traits < lua_CFunction >
 	{
 		typedef lua_CFunction push_type;
@@ -555,6 +670,8 @@ namespace kaguya
 
 
 
+	/// @ingroup lua_type_traits
+	/// @brief lua_type_traits for std::function or boost::function
 	template<typename T> struct lua_type_traits<standard::function<T> > {
 		typedef const standard::function<T>& push_type;
 		typedef standard::function<T> get_type;
@@ -578,7 +695,95 @@ namespace kaguya
 
 		static int push(lua_State* l, push_type v)
 		{
-			return util::one_push(l, function(v));
+			return util::one_push(l, kaguya::function(v));
 		}
 	};
 }
+
+
+
+#define KAGUYA_INTERNAL_OVERLOAD_FUNCTION_GET_REP(N) kaguya::LuaStackRef(state, N)
+#define KAGUYA_INTERNAL_OVERLOAD_FUNCTION_GET_REPEAT(N) KAGUYA_PP_REPEAT_ARG(N,KAGUYA_INTERNAL_OVERLOAD_FUNCTION_GET_REP)
+
+
+#define KAGUYA_FUNCTION_OVERLOADS_INTERNAL(GENERATE_NAME,FNAME, MINARG, MAXARG,INVOKE_TYPE)\
+struct KAGUYA_PP_CAT(GENERATE_NAME,Functor) : kaguya::FunctionImpl\
+{\
+	virtual int invoke(lua_State *state)\
+	{\
+		int argcount = lua_gettop(state);\
+		KAGUYA_PP_REPEAT_DEF_VA_ARG(KAGUYA_PP_INC(KAGUYA_PP_SUB(MAXARG, MINARG)), INVOKE_TYPE,FNAME,MINARG, MAXARG)\
+		throw kaguya::LuaTypeMismatch("argument count mismatch");\
+		return 0;\
+	}\
+	virtual std::string argTypeNames()const { return kaguya::nativefunction::argTypesName(FNAME); }\
+	virtual bool checkArgTypes(lua_State* state)const { return true; }\
+	virtual bool strictCheckArgTypes(lua_State* state)const { return true; }\
+	virtual int minArgCount()const { return MINARG; }\
+	virtual int maxArgCount()const { return MAXARG; }\
+};\
+kaguya::FunctionImpl* KAGUYA_PP_CAT(GENERATE_NAME, FunctorPtr) = new KAGUYA_PP_CAT(GENERATE_NAME, Functor);\
+kaguya::PolymorphicInvoker GENERATE_NAME = kaguya::PolymorphicInvoker::holder_type(KAGUYA_PP_CAT(GENERATE_NAME, FunctorPtr));
+
+
+#define KAGUYA_INTERNAL_OVERLOAD_MEMBER_FUNCTION_GET_REP(N) kaguya::LuaStackRef(state, N + 1)
+#define KAGUYA_INTERNAL_OVERLOAD_MEMBER_FUNCTION_GET_REPEAT(N) KAGUYA_PP_REPEAT_ARG(N,KAGUYA_INTERNAL_OVERLOAD_MEMBER_FUNCTION_GET_REP)
+
+
+#define KAGUYA_MEMBER_FUNCTION_OVERLOADS_INTERNAL(GENERATE_NAME,CLASS,FNAME, MINARG, MAXARG,INVOKE_TYPE)\
+struct KAGUYA_PP_CAT(GENERATE_NAME,Functor) : kaguya::FunctionImpl\
+{\
+	virtual int invoke(lua_State *state)\
+	{\
+		int argcount = lua_gettop(state);\
+		CLASS* this_ = kaguya::LuaStackRef(state, 1);\
+		KAGUYA_PP_REPEAT_DEF_VA_ARG(KAGUYA_PP_INC(KAGUYA_PP_SUB(MAXARG, MINARG)), INVOKE_TYPE,FNAME,MINARG, MAXARG)\
+		throw kaguya::LuaTypeMismatch("argument count mismatch");\
+		return 0;\
+	}\
+	virtual std::string argTypeNames()const { return kaguya::nativefunction::argTypesName(&CLASS::FNAME); }\
+	virtual bool checkArgTypes(lua_State* state)const { return true; }\
+	virtual bool strictCheckArgTypes(lua_State* state)const { return true; }\
+	virtual int minArgCount()const { return MINARG + 1; }\
+	virtual int maxArgCount()const { return MAXARG + 1; }\
+};\
+kaguya::FunctionImpl* KAGUYA_PP_CAT(GENERATE_NAME, FunctorPtr) = new KAGUYA_PP_CAT(GENERATE_NAME, Functor);\
+kaguya::PolymorphicMemberInvoker GENERATE_NAME = kaguya::PolymorphicMemberInvoker::holder_type(KAGUYA_PP_CAT(GENERATE_NAME, FunctorPtr));
+
+#define KAGUYA_INTERNAL_OVERLOAD_FUNCTION_INVOKE(N,FNAME,MINARG, MAXARG) if (argcount == KAGUYA_PP_ADD(MINARG,KAGUYA_PP_DEC(N))) { return kaguya::util::push_args(state, FNAME(KAGUYA_INTERNAL_OVERLOAD_FUNCTION_GET_REPEAT(KAGUYA_PP_ADD(MINARG,KAGUYA_PP_DEC(N))))); }
+#define KAGUYA_INTERNAL_OVERLOAD_MEMBER_FUNCTION_INVOKE(N,FNAME,MINARG, MAXARG) if (argcount == 1 + KAGUYA_PP_ADD(MINARG,KAGUYA_PP_DEC(N))) { return kaguya::util::push_args(state, this_->FNAME(KAGUYA_INTERNAL_OVERLOAD_MEMBER_FUNCTION_GET_REPEAT(KAGUYA_PP_ADD(MINARG,KAGUYA_PP_DEC(N))))); }
+
+
+#define KAGUYA_INTERNAL_OVERLOAD_VOID_FUNCTION_INVOKE(N,FNAME,MINARG, MAXARG) if (argcount == KAGUYA_PP_ADD(MINARG,KAGUYA_PP_DEC(N))) { FNAME(KAGUYA_INTERNAL_OVERLOAD_FUNCTION_GET_REPEAT(KAGUYA_PP_ADD(MINARG,KAGUYA_PP_DEC(N)))); return 0; }
+#define KAGUYA_INTERNAL_OVERLOAD_MEMBER_VOID_FUNCTION_INVOKE(N,FNAME,MINARG, MAXARG) if (argcount == 1 + KAGUYA_PP_ADD(MINARG,KAGUYA_PP_DEC(N))) { this_->FNAME(KAGUYA_INTERNAL_OVERLOAD_MEMBER_FUNCTION_GET_REPEAT(KAGUYA_PP_ADD(MINARG,KAGUYA_PP_DEC(N)))); return 0; }
+
+
+/// @brief Generate wrapper function object for count based overloads with nonvoid return function. Include default arguments parameter function
+/// @param GENERATE_NAME generate function object name
+/// @param FNAME target function name
+/// @param MINARG minimum arguments count
+/// @param MAXARG maximum arguments count
+#define KAGUYA_FUNCTION_OVERLOADS(GENERATE_NAME,FNAME, MINARG, MAXARG) KAGUYA_FUNCTION_OVERLOADS_INTERNAL(GENERATE_NAME,FNAME, MINARG, MAXARG,KAGUYA_INTERNAL_OVERLOAD_FUNCTION_INVOKE)
+
+/// @brief Generate wrapper function object for count based overloads with void return function. Include default arguments parameter function
+/// @param GENERATE_NAME generate function object name
+/// @param FNAME target function name
+/// @param MINARG minimum arguments count
+/// @param MAXARG maximum arguments count
+#define KAGUYA_VOID_FUNCTION_OVERLOADS(GENERATE_NAME,FNAME, MINARG, MAXARG) KAGUYA_FUNCTION_OVERLOADS_INTERNAL(GENERATE_NAME,FNAME, MINARG, MAXARG,KAGUYA_INTERNAL_OVERLOAD_VOID_FUNCTION_INVOKE)
+
+/// @brief Generate wrapper function object for count based overloads with nonvoid return function. Include default arguments parameter function
+/// @param GENERATE_NAME generate function object name
+/// @param CLASS target class name
+/// @param FNAME target function name
+/// @param MINARG minimum arguments count
+/// @param MAXARG maximum arguments count
+#define KAGUYA_MEMBER_FUNCTION_OVERLOADS(GENERATE_NAME,CLASS,FNAME, MINARG, MAXARG) KAGUYA_MEMBER_FUNCTION_OVERLOADS_INTERNAL(GENERATE_NAME,CLASS,FNAME, MINARG, MAXARG,KAGUYA_INTERNAL_OVERLOAD_MEMBER_FUNCTION_INVOKE)
+
+/// @brief Generate wrapper function object for count based overloads with void return function. Include default arguments parameter function
+/// @param GENERATE_NAME generate function object name
+/// @param CLASS target class name
+/// @param FNAME target function name
+/// @param MINARG minimum arguments count
+/// @param MAXARG maximum arguments count
+#define KAGUYA_MEMBER_VOID_FUNCTION_OVERLOADS(GENERATE_NAME,CLASS,FNAME, MINARG, MAXARG) KAGUYA_MEMBER_FUNCTION_OVERLOADS_INTERNAL(GENERATE_NAME,CLASS,FNAME, MINARG, MAXARG,KAGUYA_INTERNAL_OVERLOAD_MEMBER_VOID_FUNCTION_INVOKE)

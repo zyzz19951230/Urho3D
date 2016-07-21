@@ -73,9 +73,6 @@ function HandleUpdate(eventType, eventData)
                     text.text =  "Your IP is: " .. val:GetString()
                 end
 
-                json:delete()
-                httpRequest:delete()
-
                 UnsubscribeFromEvent("Update")
             end       
         end
