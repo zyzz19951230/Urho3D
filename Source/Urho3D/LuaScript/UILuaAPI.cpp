@@ -1021,6 +1021,16 @@ static SharedPtr<UIElement> UILoadLayout1(UI* self, const char* filepath, XMLFil
     return self->LoadLayout(*file, styleFile);
 }
 
+static SharedPtr<UIElement> UILoadLayout2(UI* self, XMLFile* file)
+{
+    return self->LoadLayout(file);
+}
+
+static SharedPtr<UIElement> UILoadLayout3(UI* self, XMLFile* file, XMLFile* styleFile)
+{
+    return self->LoadLayout(file, styleFile);
+}
+
 static bool UISaveLayout(UI* self, const char* filepath, UIElement* element)
 {
     if (!element)
@@ -1091,7 +1101,7 @@ static void RegisterUI(kaguya::State& lua)
 
         .addFunction("DebugDraw", &UI::DebugDraw)
 
-        ADD_OVERLOADED_FUNCTIONS_2(UI, LoadLayout)
+        ADD_OVERLOADED_FUNCTIONS_4(UI, LoadLayout)
 
         .addStaticFunction("SaveLayout", &UISaveLayout)
 

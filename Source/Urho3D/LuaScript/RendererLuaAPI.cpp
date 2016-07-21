@@ -324,7 +324,7 @@ static void RegisterDebugRenderer(kaguya::State& lua)
 
 
         .addFunction("Render", &DebugRenderer::Render)
-        .addFunction("GetView", &DebugRenderer::GetView, &DebugRenderer::SetView)
+        .addFunction("GetView", &DebugRenderer::GetView)
         .addFunction("GetProjection", &DebugRenderer::GetProjection)
         .addFunction("GetFrustum", &DebugRenderer::GetFrustum)
         .addFunction("IsInside", &DebugRenderer::IsInside)
@@ -382,7 +382,7 @@ static void RegisterGeometry(kaguya::State& lua)
         .addFunction("GetLodDistance", &Geometry::GetLodDistance)
         .addFunction("IsEmpty", &Geometry::IsEmpty)
 
-        .addProperty("numVertexBuffers", &Geometry::GetNumVertexBuffers, &Geometry::SetNumVertexBuffers)
+        .addProperty("numVertexBuffers", &Geometry::GetNumVertexBuffers)
 
         .addProperty("indexBuffer", &Geometry::GetIndexBuffer, &Geometry::SetIndexBuffer)
         .addProperty("primitiveType", &Geometry::GetPrimitiveType)
