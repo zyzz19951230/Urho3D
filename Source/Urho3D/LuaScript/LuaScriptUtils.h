@@ -168,7 +168,7 @@ namespace kaguya
             std::vector<T> std_res = lua_type_traits<std::vector<T>>::get(l, index);
 
             get_type res;
-            res.Reserve(std_res.size());
+            res.Resize(std_res.size());
 
             for (size_t i = 0; i < std_res.size(); ++i)
                 res[i] = std_res[i];
@@ -178,7 +178,7 @@ namespace kaguya
         static int push(lua_State* l, push_type p)
         {
             std::vector<T> std_p;
-            std_p.reserve(p.Size());
+            std_p.resize(p.Size());
 
             for (unsigned i = 0; i < p.Size(); ++i)
                 std_p[i] = p[i];
@@ -207,7 +207,7 @@ namespace kaguya
             std::vector<T> std_res = lua_type_traits<std::vector<T>>::get(l, index);
             
             get_type res;
-            res.Reserve(std_res.size());
+            res.Resize(std_res.size());
 
             for (size_t i = 0; i < std_res.size(); ++i)
                 res[i] = std_res[i];
@@ -217,7 +217,7 @@ namespace kaguya
         static int push(lua_State* l, push_type p)
         {
             std::vector<T> std_p;
-            std_p.reserve(p.Size());
+            std_p.resize(p.Size());
 
             for (unsigned i = 0; i < p.Size(); ++i)
                 std_p[i] = p[i];

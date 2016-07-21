@@ -1089,10 +1089,10 @@ static void RegisterTmxFile2D(kaguya::State& lua)
 
 void RegisterUrho2DLuaAPI(kaguya::State& lua)
 {
+    RegisterDrawable2D(lua); 
     RegisterStaticSprite2D(lua);
     RegisterCollisionShape2D(lua);
     RegisterConstraint2D(lua);
-    RegisterDrawable2D(lua);
 
     RegisterAnimatedSprite2D(lua);
     RegisterAnimationSet2D(lua);

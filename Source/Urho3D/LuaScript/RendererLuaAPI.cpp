@@ -324,7 +324,7 @@ static void RegisterDebugRenderer(kaguya::State& lua)
 
 
         .addFunction("Render", &DebugRenderer::Render)
-        .addFunction("GetView", &DebugRenderer::GetView)
+        .addFunction("GetView", &DebugRenderer::GetView, &DebugRenderer::SetView)
         .addFunction("GetProjection", &DebugRenderer::GetProjection)
         .addFunction("GetFrustum", &DebugRenderer::GetFrustum)
         .addFunction("IsInside", &DebugRenderer::IsInside)
@@ -382,7 +382,7 @@ static void RegisterGeometry(kaguya::State& lua)
         .addFunction("GetLodDistance", &Geometry::GetLodDistance)
         .addFunction("IsEmpty", &Geometry::IsEmpty)
 
-        .addProperty("numVertexBuffers", &Geometry::GetNumVertexBuffers)
+        .addProperty("numVertexBuffers", &Geometry::GetNumVertexBuffers, &Geometry::SetNumVertexBuffers)
 
         .addProperty("indexBuffer", &Geometry::GetIndexBuffer, &Geometry::SetIndexBuffer)
         .addProperty("primitiveType", &Geometry::GetPrimitiveType)
@@ -484,7 +484,7 @@ static void RegisterGraphics(kaguya::State& lua)
         .addProperty("initialized", &Graphics::IsInitialized)
         .addProperty("windowTitle", &Graphics::GetWindowTitle, &Graphics::SetWindowTitle)
         .addProperty("apiName", &Graphics::GetApiName)
-        .addProperty("windowPosition", &Graphics::GetWindowPosition)
+        .addProperty("windowPosition", &Graphics::GetWindowPosition, static_cast<void(Graphics::*)(const IntVector2&)>(&Graphics::SetWindowPosition))
         .addProperty("width", &Graphics::GetWidth)
         .addProperty("height", &Graphics::GetHeight)
         .addProperty("multiSample", &Graphics::GetMultiSample)
@@ -1081,9 +1081,9 @@ static void RegisterRenderer(kaguya::State& lua)
         .addFunction("DrawDebugGeometry", &Renderer::DrawDebugGeometry)
         
         .addProperty("numViewports", &Renderer::GetNumViewports, &Renderer::SetNumViewports)
-        .addProperty("defaultRenderPath", &Renderer::GetDefaultRenderPath)
+        .addProperty("defaultRenderPath", &Renderer::GetDefaultRenderPath, static_cast<void(Renderer::*)(RenderPath*)>(&Renderer::SetDefaultRenderPath))
         .addProperty("defaultTechnique", &Renderer::GetDefaultTechnique, &Renderer::SetDefaultTechnique)
-        .addProperty("HDRRendering", &Renderer::GetHDRRendering, &Renderer::SetHDRRendering)
+        .addProperty("hdrRendering", &Renderer::GetHDRRendering, &Renderer::SetHDRRendering)
         .addProperty("specularLighting", &Renderer::GetSpecularLighting, &Renderer::SetSpecularLighting)
         .addProperty("drawShadows", &Renderer::GetDrawShadows, &Renderer::SetDrawShadows)
         .addProperty("textureAnisotropy", &Renderer::GetTextureAnisotropy, &Renderer::SetTextureAnisotropy)
@@ -1607,6 +1607,30 @@ static bool VertexBufferSetSize3(VertexBuffer* self, unsigned int vertexCount, u
     return self->SetSize(vertexCount, elementMask, dynamic);
 }
 
+static bool VertexBufferSetData(VertexBuffer* self, VectorBuffer& src)
+{
+    // Make sure there is enough data
+    if (self->GetVertexCount() && src.GetSize() >= self->GetVertexCount() * self->GetVertexSize())
+        return self->SetData(&src.GetBuffer()[0]);
+    else
+        return false;
+}
+
+static VectorBuffer VertexBufferGetData(VertexBuffer* self)
+{
+    VectorBuffer ret;
+
+    void* data = self->Lock(0, self->GetVertexCount() * self->GetVertexSize(), false);
+    if (data)
+    {
+        ret.Write(data, self->GetVertexCount() * self->GetVertexSize());
+        ret.Seek(0);
+        self->Unlock();
+    }
+
+    return ret;
+}
+
 static bool VertexBufferSetDataRange0(VertexBuffer* self, const void* data, unsigned int start, unsigned int count)
 {
     return self->SetDataRange(data, start, count);
@@ -1663,11 +1687,15 @@ static void RegisterVertexBuffer(kaguya::State& lua)
     using namespace kaguya;
 
     lua["VertexBuffer"].setClass(UserdataMetatable<VertexBuffer, GPUObject>()
-        .setConstructors<VertexBuffer(Context*, bool)>()
+        .addStaticFunction("new", &CreateObject<VertexBuffer>)        
 
         .addFunction("SetShadowed", &VertexBuffer::SetShadowed)
 
         ADD_OVERLOADED_FUNCTIONS_4(VertexBuffer, SetSize)
+
+        .addStaticFunction("SetData", &VertexBufferSetData)
+        .addStaticFunction("GetData", &VertexBufferGetData)
+
         ADD_OVERLOADED_FUNCTIONS_2(VertexBuffer, SetDataRange)
 
         .addFunction("IsShadowed", &VertexBuffer::IsShadowed)
@@ -1745,7 +1773,7 @@ static void RegisterViewport(kaguya::State& lua)
         .addProperty("scene", &Viewport::GetScene, &Viewport::SetScene)
         .addProperty("camera", &Viewport::GetCamera, &Viewport::SetCamera)
         .addProperty("rect", &Viewport::GetRect, &Viewport::SetRect)
-        .addProperty("renderPath", &Viewport::GetRenderPath)
+        .addProperty("renderPath", &Viewport::GetRenderPath, static_cast<void (Viewport::*)(RenderPath*)>(&Viewport::SetRenderPath))
         .addProperty("drawDebug", &Viewport::GetDrawDebug, &Viewport::SetDrawDebug)
         .addProperty("cullCamera", &Viewport::GetCullCamera, &Viewport::SetCullCamera)
     );

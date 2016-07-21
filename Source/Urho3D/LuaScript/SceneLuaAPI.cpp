@@ -997,10 +997,14 @@ static void RegisterScene(kaguya::State& lua)
     lua["Scene"].setClass(UserdataMetatable<Scene, Node>()
         .addStaticFunction("new", &CreateObject<Scene>)
 
-        .addStaticFunction("LoadXML", &SceneLoadXML)
-        .addStaticFunction("LoadJSON", &SceneLoadJSON)
-        .addStaticFunction("SaveXML", &SceneSaveXML)
-        .addStaticFunction("SaveJSON", &SceneSaveJSON)
+        .addOverloadedFunctions("LoadXML", &SceneLoadXML,
+            static_cast<bool (Scene::*)(Deserializer&)>(&Scene::LoadXML))
+        .addOverloadedFunctions("LoadJSON", &SceneLoadJSON,
+            static_cast<bool (Scene::*)(Deserializer&)>(&Scene::LoadJSON))
+        .addOverloadedFunctions("SaveXML", &SceneSaveXML,
+            static_cast<bool (Scene::*)(Serializer&, const String&) const>(&Scene::SaveXML))
+        .addOverloadedFunctions("SaveJSON", &SceneSaveJSON,
+            static_cast<bool (Scene::*)(Serializer&, const String&) const>(&Scene::SaveJSON))
 
         ADD_OVERLOADED_FUNCTIONS_2(Scene, LoadAsync)
         ADD_OVERLOADED_FUNCTIONS_2(Scene, LoadAsyncXML)

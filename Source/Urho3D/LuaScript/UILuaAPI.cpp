@@ -85,7 +85,7 @@ static void RegisterBorderImage(kaguya::State& lua)
         .addProperty("imageRect", &BorderImage::GetImageRect, &BorderImage::SetImageRect)
         .addProperty("border", &BorderImage::GetBorder, &BorderImage::SetBorder)
         .addProperty("imageBorder", &BorderImage::GetImageBorder, &BorderImage::SetImageBorder)
-        .addProperty("hoverOffset", &BorderImage::GetHoverOffset)
+        .addProperty("hoverOffset", &BorderImage::GetHoverOffset, static_cast<void(BorderImage::*)(const IntVector2&)>(&BorderImage::SetHoverOffset))
         .addProperty("blendMode", &BorderImage::GetBlendMode, &BorderImage::SetBlendMode)
         .addProperty("tiled", &BorderImage::IsTiled, &BorderImage::SetTiled)
     );
@@ -141,7 +141,7 @@ static void RegisterCheckBox(kaguya::State& lua)
         .addFunction("GetCheckedOffset", &CheckBox::GetCheckedOffset)
 
         .addProperty("checked", &CheckBox::IsChecked, static_cast<void(CheckBox::*)(const IntVector2&)>(&CheckBox::SetCheckedOffset))
-        .addProperty("checkedOffset", &CheckBox::GetCheckedOffset)
+        .addProperty("checkedOffset", &CheckBox::GetCheckedOffset, static_cast<void(CheckBox::*)(const IntVector2&)>(&CheckBox::SetCheckedOffset))
     );
 }
 
@@ -180,7 +180,7 @@ static void RegisterCursor(kaguya::State& lua)
         .addFunction("GetShape", &Cursor::GetShape)
         .addFunction("GetUseSystemShapes", &Cursor::GetUseSystemShapes)
 
-        .addProperty("shape", &Cursor::GetShape)
+        .addProperty("shape", &Cursor::GetShape, static_cast<void(Cursor::*)(const String&)>(&Cursor::SetShape))
         .addProperty("useSystemShapes", &Cursor::GetUseSystemShapes, &Cursor::SetUseSystemShapes)
     );
 }
@@ -531,7 +531,7 @@ static void RegisterMenu(kaguya::State& lua)
         .addFunction("GetAcceleratorQualifiers", &Menu::GetAcceleratorQualifiers)
 
         .addProperty("popup", &MenuGetPopup)
-        .addProperty("popupOffset", &Menu::GetPopupOffset)
+        .addProperty("popupOffset", &Menu::GetPopupOffset, static_cast<void(Menu::*)(const IntVector2&)>(&Menu::SetPopupOffset))
         .addProperty("showPopup", &Menu::GetShowPopup)
         .addProperty("acceleratorKey", &Menu::GetAcceleratorKey)
         .addProperty("acceleratorQualifiers", &Menu::GetAcceleratorQualifiers)
@@ -672,7 +672,7 @@ static void RegisterScrollView(kaguya::State& lua)
         .addFunction("GetAutoDisableChildren", &ScrollView::GetAutoDisableChildren)
         .addFunction("GetAutoDisableThreshold", &ScrollView::GetAutoDisableThreshold)
 
-        .addProperty("viewPosition", &ScrollView::GetViewPosition)
+        .addProperty("viewPosition", &ScrollView::GetViewPosition, static_cast<void(ScrollView::*)(const IntVector2&)>(&ScrollView::SetViewPosition))
         
         .addProperty("contentElement", &ScrollViewGetContentElement, &ScrollViewSetContentElement)
 
@@ -1593,17 +1593,17 @@ static void RegisterUIElement(kaguya::State& lua)
 
         .addProperty("screenPosition", &UIElement::GetScreenPosition)
         .addProperty("name", &UIElement::GetName, &UIElement::SetName)
-        .addProperty("position", &UIElement::GetPosition)
-        .addProperty("size", &UIElement::GetSize)
+        .addProperty("position", &UIElement::GetPosition, static_cast<void(UIElement::*)(const IntVector2&)>(&UIElement::SetPosition))
+        .addProperty("size", &UIElement::GetSize, static_cast<void(UIElement::*)(const IntVector2&)>(&UIElement::SetSize))
         .addProperty("width", &UIElement::GetWidth, &UIElement::SetWidth)
         .addProperty("height", &UIElement::GetHeight, &UIElement::SetHeight)
-        .addProperty("minSize", &UIElement::GetMinSize)
+        .addProperty("minSize", &UIElement::GetMinSize, static_cast<void(UIElement::*)(const IntVector2&)>(&UIElement::SetMinSize))
         .addProperty("minWidth", &UIElement::GetMinWidth, &UIElement::SetMinWidth)
         .addProperty("minHeight", &UIElement::GetMinHeight, &UIElement::SetMinHeight)
-        .addProperty("maxSize", &UIElement::GetMaxSize)
+        .addProperty("maxSize", &UIElement::GetMaxSize, static_cast<void(UIElement::*)(const IntVector2&)>(&UIElement::SetMaxSize))
         .addProperty("maxWidth", &UIElement::GetMaxWidth, &UIElement::SetMaxWidth)
         .addProperty("maxHeight", &UIElement::GetMaxHeight, &UIElement::SetMaxHeight)
-        .addProperty("fixedSize", &UIElement::IsFixedSize)
+        .addProperty("fixedSize", &UIElement::IsFixedSize, static_cast<void(UIElement::*)(const IntVector2&)>(&UIElement::SetFixedSize))
         .addProperty("fixedWidth", &UIElement::IsFixedWidth, &UIElement::SetFixedWidth)
         .addProperty("fixedHeight", &UIElement::IsFixedHeight, &UIElement::SetFixedHeight)
         .addProperty("childOffset", &UIElement::GetChildOffset, &UIElement::SetChildOffset)

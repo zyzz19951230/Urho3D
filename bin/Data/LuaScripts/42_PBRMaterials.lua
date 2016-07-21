@@ -32,7 +32,7 @@ function CreateScene()
     local file = cache:GetFile("Scenes/PBRExample.xml")
     scene_:LoadXML(file)
     -- In Lua the file returned by GetFile() needs to be deleted manually
-    file:delete()
+    -- file:delete()
 
     -- Create the camera (not included in the scene file)
     cameraNode = scene_:CreateChild("Camera")

@@ -7,6 +7,9 @@
 
 require "LuaScripts/Utilities/Sample"
 
+local VAR_MOVE_SPEED = StringHash('MoveSpeed')
+local VAR_ROTATE_SPEED = StringHash('RotateSpeed')
+
 function Start()
     -- Execute the common startup for samples
     SampleStart()
@@ -67,17 +70,17 @@ function CreateScene()
         staticSprite.sprite = sprite
 
         -- Set move speed
-        spriteNode.moveSpeed = Vector3(Random(-2.0, 2.0), Random(-2.0, 2.0), 0.0)
+        spriteNode:SetVar(VAR_MOVE_SPEED, Variant(Vector3(Random(-2.0, 2.0), Random(-2.0, 2.0), 0.0)))
         -- Set rotate speed
-        spriteNode.rotateSpeed = Random(-90.0, 90.0)
+        spriteNode:SetVar(VAR_ROTATE_SPEED, Variant(Random(-90.0, 90.0)))
 
         table.insert(spriteNodes, spriteNode)
     end
 
-    scene_.Update = function(self, timeStep)
+    SceneUpdate_ = function(timeStep)
         for _, spriteNode in ipairs(spriteNodes) do
             local position = spriteNode.position
-            local moveSpeed = spriteNode.moveSpeed
+            local moveSpeed = spriteNode:GetVar(VAR_MOVE_SPEED):GetVector3()
             local newPosition = position + moveSpeed * timeStep
 
             if newPosition.x < -halfWidth or newPosition.x > halfWidth then
@@ -91,7 +94,8 @@ function CreateScene()
             end
 
             spriteNode.position = newPosition
-            spriteNode:Roll(spriteNode.rotateSpeed * timeStep)
+            local rotateSpeed = spriteNode:GetVar(VAR_ROTATE_SPEED):GetFloat()
+            spriteNode:Roll(rotateSpeed * timeStep)
         end
     end
 
@@ -179,7 +183,7 @@ function HandleUpdate(eventType, eventData)
     MoveCamera(timeStep)
 
     -- Update scene
-    scene_:Update(timeStep)
+    SceneUpdate_(timeStep)
 end
 
 -- Create XML patch instructions for screen joystick layout specific to this sample app
