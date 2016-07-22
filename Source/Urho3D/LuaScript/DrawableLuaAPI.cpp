@@ -376,6 +376,7 @@ static void RegisterLight(kaguya::State& lua)
 
     lua["BiasParameters"].setClass(UserdataMetatable<BiasParameters>()
         .setConstructors<BiasParameters(),
+        BiasParameters(float, float),
         BiasParameters(float, float, float)>()
 
         .addProperty("constantBias", &BiasParameters::constantBias_)
@@ -385,6 +386,7 @@ static void RegisterLight(kaguya::State& lua)
 
     lua["CascadeParameters"].setClass(UserdataMetatable<CascadeParameters>()
         .setConstructors<CascadeParameters(),
+        CascadeParameters(float, float, float, float, float), 
         CascadeParameters(float, float, float, float, float, float)>()
 
         .addProperty("fadeStart", &CascadeParameters::fadeStart_)
