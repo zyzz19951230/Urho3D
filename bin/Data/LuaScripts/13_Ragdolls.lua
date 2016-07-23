@@ -363,8 +363,8 @@ function CreateRagdoll:CreateRagdollConstraint(boneName, parentName, type, axis,
     -- Position the constraint at the child bone we are connecting
     constraint.worldPosition = boneNode.worldPosition
     -- Configure axes and limits
-    constraint:SetAxis(axis)
-    constraint:SetOtherAxis(parentAxis)
+    constraint.axis = axis
+    constraint.otherAxis = parentAxis
     constraint.highLimit = highLimit
     constraint.lowLimit = lowLimit
 end

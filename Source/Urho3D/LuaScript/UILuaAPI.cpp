@@ -894,6 +894,16 @@ static bool Text3DSetFont3(Text3D* self, Font* font, int size)
     return self->SetFont(font, size);
 }
 
+static void Text3DSetColor(Text3D* self, const Color& color)
+{
+	self->SetColor(color);
+}
+
+static const Color& Text3DGetColor(const Text3D* self)
+{
+	return self->GetColor(C_TOPLEFT);
+}
+
 static void RegisterText3D(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -949,7 +959,9 @@ static void RegisterText3D(kaguya::State& lua)
         .addFunction("GetRowWidth", &Text3D::GetRowWidth)
         .addFunction("GetCharPosition", &Text3D::GetCharPosition)
         .addFunction("GetCharSize", &Text3D::GetCharSize)
-        .addFunction("GetColor", &Text3D::GetColor)
+
+        .addOverloadedFunctions("GetColor", &Text3DGetColor, &Text3D::GetColor)
+
         .addFunction("GetOpacity", &Text3D::GetOpacity)
         .addFunction("IsFixedScreenSize", &Text3D::IsFixedScreenSize)
         .addFunction("GetFaceCameraMode", &Text3D::GetFaceCameraMode)
@@ -973,6 +985,7 @@ static void RegisterText3D(kaguya::State& lua)
         .addProperty("rowHeight", &Text3D::GetRowHeight)
         .addProperty("numRows", &Text3D::GetNumRows)
         .addProperty("numChars", &Text3D::GetNumChars)
+		.addProperty("color", &Text3DGetColor, &Text3DSetColor)
         .addProperty("opacity", &Text3D::GetOpacity, &Text3D::SetOpacity)
         .addProperty("fixedScreenSize", &Text3D::IsFixedScreenSize, &Text3D::SetFixedScreenSize)
         .addProperty("faceCameraMode", &Text3D::GetFaceCameraMode, &Text3D::SetFaceCameraMode)
@@ -1278,6 +1291,16 @@ static void UIElementAddTags1(UIElement* self, const String& tags, char separato
     self->AddTags(tags, separator);
 }
 
+static void UIElementSetColor(UIElement* self, const Color& color)
+{
+	self->SetColor(color);
+}
+
+static const Color& UIElementGetColor(const UIElement* self)
+{
+	return self->GetColor(C_TOPLEFT);
+}
+
 static XMLFile* UIElementGetDefaultStyle0(const UIElement* self)
 {
     return self->GetDefaultStyle();
@@ -1546,7 +1569,9 @@ static void RegisterUIElement(kaguya::State& lua)
         .addFunction("GetHorizontalAlignment", &UIElement::GetHorizontalAlignment)
         .addFunction("GetVerticalAlignment", &UIElement::GetVerticalAlignment)
         .addFunction("GetClipBorder", &UIElement::GetClipBorder)
-        .addFunction("GetColor", &UIElement::GetColor)
+        
+		.addOverloadedFunctions("GetColor", &UIElementGetColor, &UIElement::GetColor)
+
         .addFunction("GetPriority", &UIElement::GetPriority)
         .addFunction("GetOpacity", &UIElement::GetOpacity)
         .addFunction("GetDerivedOpacity", &UIElement::GetDerivedOpacity)
@@ -1620,7 +1645,10 @@ static void RegisterUIElement(kaguya::State& lua)
         .addProperty("horizontalAlignment", &UIElement::GetHorizontalAlignment, &UIElement::SetHorizontalAlignment)
         .addProperty("verticalAlignment", &UIElement::GetVerticalAlignment, &UIElement::SetVerticalAlignment)
         .addProperty("clipBorder", &UIElement::GetClipBorder, &UIElement::SetClipBorder)
-        .addProperty("priority", &UIElement::GetPriority, &UIElement::SetPriority)
+		.addProperty("priority", &UIElement::GetPriority, &UIElement::SetPriority)
+		
+			.addProperty("color", &UIElementGetColor, &UIElementSetColor)
+
         .addProperty("opacity", &UIElement::GetOpacity, &UIElement::SetOpacity)
         .addProperty("derivedOpacity", &UIElement::GetDerivedOpacity)
         .addProperty("bringToFront", &UIElement::GetBringToFront, &UIElement::SetBringToFront)

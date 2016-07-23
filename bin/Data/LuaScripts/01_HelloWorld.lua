@@ -29,9 +29,7 @@ function CreateText()
 
     -- Set font and text color
     helloText:SetFont(cache:GetResource("Font", "Fonts/Anonymous Pro.ttf"), 30)
-    -- helloText.color = Color(0.0, 1.0, 0.0)
-    -- TODO:
-    helloText:SetColor(Color(0.0, 1.0, 0.0), 0)
+    helloText.color = Color(0.0, 1.0, 0.0)
 
     -- Align Text center-screen
     helloText.horizontalAlignment = HA_CENTER

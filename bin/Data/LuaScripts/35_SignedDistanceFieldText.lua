@@ -74,16 +74,16 @@ function CreateScene()
         mushroomTitleText.text = "Mushroom " .. i
 
         mushroomTitleText:SetFont(cache:GetResource("Font", "Fonts/BlueHighway.sdf"), 24)
-        mushroomTitleText:SetColor(Color(1.0, 0.0, 0.0))
+        mushroomTitleText.color = Color(1.0, 0.0, 0.0)
 
         if (i % 3) == 1 then
-            mushroomTitleText:SetColor(Color(0.0, 1.0, 0.0))
+            mushroomTitleText.color = Color(0.0, 1.0, 0.0)
             mushroomTitleText.textEffect = TE_SHADOW
             mushroomTitleText.effectColor = Color(0.5, 0.5, 0.5)
         end
 
         if (i % 3) == 2 then
-            mushroomTitleText:SetColor(Color(1.0, 1.0, 0.0))
+            mushroomTitleText.color = Color(1.0, 1.0, 0.0)
             mushroomTitleText.textEffect = TE_STROKE
             mushroomTitleText.effectColor = Color(0.5, 0.5, 0.5)
         end

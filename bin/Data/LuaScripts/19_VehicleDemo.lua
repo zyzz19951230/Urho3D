@@ -327,12 +327,12 @@ function Vehicle:InitWheel(name, offset)
     wheelConstraint.constraintType = CONSTRAINT_HINGE
     wheelConstraint.otherBody = node:GetComponent("RigidBody")
     wheelConstraint.worldPosition = wheelNode.worldPosition -- Set constraint's both ends at wheel's location
-    wheelConstraint:SetAxis(Vector3(0.0, 1.0, 0.0)) -- Wheel rotates around its local Y-axis
+    wheelConstraint.axis = Vector3(0.0, 1.0, 0.0) -- Wheel rotates around its local Y-axis
 
     if offset.x >= 0.0 then -- Wheel's hull axis points either left or right
-        wheelConstraint:SetOtherAxis(Vector3(1.0, 0.0, 0.0))
+        wheelConstraint.otherAxis = Vector3(1.0, 0.0, 0.0)
     else
-        wheelConstraint:SetOtherAxis(Vector3(-1.0, 0.0, 0.0))
+        wheelConstraint.otherAxis = Vector3(-1.0, 0.0, 0.0)
     end
 
     wheelConstraint.lowLimit = Vector2(-180.0, 0.0) -- Let the wheel rotate freely around the axis
@@ -369,8 +369,8 @@ function Vehicle:FixedUpdate(timeStep)
     end
 
     local steeringRot = Quaternion(0.0, self.steering * MAX_WHEEL_ANGLE, 0.0)
-    self.frontLeftAxis:SetOtherAxis(steeringRot * Vector3(-1.0, 0.0, 0.0))
-    self.frontRightAxis:SetOtherAxis(steeringRot * Vector3(1.0, 0.0, 0.0))
+    self.frontLeftAxis.otherAxis = steeringRot * Vector3(-1.0, 0.0, 0.0)
+    self.frontRightAxis.otherAxis = steeringRot * Vector3(1.0, 0.0, 0.0)
 
     if accelerator ~= 0.0 then
         -- Torques are applied in world space, so need to take the vehicle & wheel rotation into account

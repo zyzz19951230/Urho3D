@@ -337,8 +337,16 @@ static void RegisterConstraint(kaguya::State& lua)
         .addProperty("otherBody", &Constraint::GetOtherBody, &Constraint::SetOtherBody)
         .addProperty("position", &Constraint::GetPosition, &Constraint::SetPosition)
         .addProperty("rotation", &Constraint::GetRotation, &Constraint::SetRotation)
+
+		// Write only property
+		.addProperty("axis", &Constraint::SetAxis)
+
         .addProperty("otherPosition", &Constraint::GetOtherPosition, &Constraint::SetOtherPosition)
         .addProperty("otherRotation", &Constraint::GetOtherRotation, &Constraint::SetOtherRotation)
+
+		// Write only property
+		.addProperty("otherAxis", &Constraint::SetOtherAxis)
+
         .addProperty("worldPosition", &Constraint::GetWorldPosition, &Constraint::SetWorldPosition)
         .addProperty("highLimit", &Constraint::GetHighLimit, &Constraint::SetHighLimit)
         .addProperty("lowLimit", &Constraint::GetLowLimit, &Constraint::SetLowLimit)
