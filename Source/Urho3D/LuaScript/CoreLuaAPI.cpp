@@ -109,43 +109,19 @@ static void RegisterObject(kaguya::State& lua)
     );
 }
 
-static void ErrorExit0()
-{
-    return ErrorExit();
-}
-
-static void ErrorExit1(const String& message)
-{
-    return ErrorExit(message);
-}
-
-static void ErrorExit2(const String& message, int exitCode)
-{
-    return ErrorExit(message, exitCode);
-}
-
-
-static void PrintLine0(const String& str)
-{
-    return PrintLine(str);
-}
-
-static void PrintLine1(const String& str, bool error)
-{
-    return PrintLine(str, error);
-}
-
 static void RegisterProcessUtils(kaguya::State& lua)
 {
     using namespace kaguya;
 
     lua["ErrorDialog"] = function(&ErrorDialog);
 
-    lua["ErrorExit"] = overload(&ErrorExit0, &ErrorExit1, &ErrorExit2);
+    KAGUYA_VOID_FUNCTION_OVERLOADS(ErrorExitOverloads, ErrorExit, 0, 2);
+    lua["ErrorExit"] = ErrorExitOverloads;
 
     lua["OpenConsoleWindow"] = function(&OpenConsoleWindow);
 
-    lua["PrintLine"] = overload(&PrintLine0, &PrintLine1);
+    KAGUYA_VOID_FUNCTION_OVERLOADS(PrintLine_, PrintLine, 1, 2);
+    lua["PrintLine"] = PrintLine_;
 
     lua["GetArguments"] = function(&GetArguments);
 
