@@ -95,6 +95,47 @@ static void RegisterBoundingBox(kaguya::State& lua)
         );
 }
 
+static void ColorFromHSL0(Color* self, float h, float s, float l)
+{
+    self->FromHSL(h, s, l);
+}
+
+static void ColorFromHSL1(Color* self, float h, float s, float l, float a)
+{
+    self->FromHSL(h, s, l, a);
+}
+
+
+static void ColorFromHSV0(Color* self, float h, float s, float v)
+{
+    self->FromHSV(h, s, v);
+}
+
+static void ColorFromHSV1(Color* self, float h, float s, float v, float a)
+{
+    self->FromHSV(h, s, v, a);
+}
+
+static void ColorClip0(Color* color)
+{
+    color->Clip();
+}
+
+static void ColorClip1(Color* color, bool clipAlpha)
+{
+    color->Clip(clipAlpha);
+}
+
+static void ColorInvert0(Color* color)
+{
+    color->Invert();
+}
+
+static void ColorInvert1(Color* color, bool invertAlpha)
+{
+    color->Invert(invertAlpha);
+}
+
 static void RegisterColor(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -114,8 +155,8 @@ static void RegisterColor(kaguya::State& lua)
         .addFunction("ToHSL", &Color::ToHSL)
         .addFunction("ToHSV", &Color::ToHSV)
 
-		.addOverloadedFunctions("FromHSL", (void (Color::*)(float, float, float))&Color::FromHSL, &Color::FromHSL)
-		.addOverloadedFunctions("FromHSV", (void (Color::*)(float, float, float))&Color::FromHSV, &Color::FromHSV)
+        ADD_OVERLOADED_FUNCTIONS_2(Color, FromHSL)
+        ADD_OVERLOADED_FUNCTIONS_2(Color, FromHSV)
 
         .addFunction("ToVector3", &Color::ToVector3)
         .addFunction("ToVector4", &Color::ToVector4)
@@ -135,8 +176,8 @@ static void RegisterColor(kaguya::State& lua)
         .addFunction("MinRGB", &Color::MinRGB)
         .addFunction("Range", &Color::Range)
 
-		.addOverloadedFunctions("Clip", (void (Color::*)())&Color::Clip, &Color::Clip)
-		.addOverloadedFunctions("Invert", (void (Color::*)())&Color::Invert, &Color::Invert)
+        ADD_OVERLOADED_FUNCTIONS_2(Color, Clip)
+        ADD_OVERLOADED_FUNCTIONS_2(Color, Invert)
 
         .addFunction("Lerp", &Color::Lerp)
         .addFunction("Abs", &Color::Abs)
@@ -162,6 +203,46 @@ static void RegisterColor(kaguya::State& lua)
         );
 }
 
+static void FrustumDefine0(Frustum* self, float fov, float aspectRatio, float zoom, float nearZ, float farZ)
+{
+    self->Define(fov, aspectRatio, zoom, nearZ, farZ);
+}
+
+static void FrustumDefine1(Frustum* self, float fov, float aspectRatio, float zoom, float nearZ, float farZ, const Matrix3x4& transform)
+{
+    self->Define(fov, aspectRatio, zoom, nearZ, farZ, transform);
+}
+
+static void FrustumDefine2(Frustum* self, const Vector3& near, const Vector3& far)
+{
+    self->Define(near, far);
+}
+
+static void FrustumDefine3(Frustum* self, const Vector3& near, const Vector3& far, const Matrix3x4& transform)
+{
+    self->Define(near, far, transform);
+}
+
+static void FrustumDefine4(Frustum* self, const BoundingBox& box)
+{
+    self->Define(box);
+}
+
+static void FrustumDefine5(Frustum* self, const BoundingBox& box, const Matrix3x4& transform)
+{
+    self->Define(box, transform);
+}
+
+static void FrustumDefineOrtho0(Frustum* self, float orthoSize, float aspectRatio, float zoom, float nearZ, float farZ)
+{
+    self->DefineOrtho(orthoSize, aspectRatio, zoom, nearZ, farZ);
+}
+
+static void FrustumDefineOrtho1(Frustum* self, float orthoSize, float aspectRatio, float zoom, float nearZ, float farZ, const Matrix3x4& transform)
+{
+    self->DefineOrtho(orthoSize, aspectRatio, zoom, nearZ, farZ, transform);
+}
+
 static void RegisterFrustum(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -177,21 +258,12 @@ static void RegisterFrustum(kaguya::State& lua)
     lua["NUM_FRUSTUM_PLANES"] = NUM_FRUSTUM_PLANES;
     lua["NUM_FRUSTUM_VERTICES"] = NUM_FRUSTUM_VERTICES;
 
-
-	auto Define0 = static_cast<void(Frustum::*)(float, float, float, float, float, const Matrix3x4&)>(&Frustum::Define);
-	auto Define1 = static_cast<void(Frustum::*)(const Vector3&, const Vector3&, const Matrix3x4&)>(&Frustum::Define);
-	auto Define2 = static_cast<void(Frustum::*)(const BoundingBox&, const Matrix3x4&)>(&Frustum::Define);
-
     lua["Frustum"].setClass(UserdataMetatable<Frustum>()
         .setConstructors<Frustum(), 
-			Frustum(const Frustum&)>()
+        Frustum(const Frustum&)>()
 
-		.addOverloadedFunctions("Define", 
-			(void(Frustum::*)(float, float, float, float, float))Define0, Define0,
-			(void(Frustum::*)(const Vector3&, const Vector3&))Define1, Define1,			
-			(void(Frustum::*)(const BoundingBox&))Define2, Define2)
-
-		.addOverloadedFunctions("DefineOrtho", (void(Frustum::*)(float, float, float, float, float))&Frustum::DefineOrtho, &Frustum::DefineOrtho)
+        ADD_OVERLOADED_FUNCTIONS_6(Frustum, Define)
+        ADD_OVERLOADED_FUNCTIONS_2(Frustum, DefineOrtho)
 
         .addOverloadedFunctions("Transform",
             static_cast<void(Frustum::*)(const Matrix3&)>(&Frustum::Transform),
@@ -596,6 +668,26 @@ static void RegisterPolyhedron(kaguya::State& lua)
         );
 }
 
+static bool QuaternionFromLookRotation0(Quaternion* self, const Vector3& direction)
+{
+    return self->FromLookRotation(direction);
+}
+
+static bool QuaternionFromLookRotation1(Quaternion* self, const Vector3& direction, const Vector3& up)
+{
+    return self->FromLookRotation(direction, up);
+}
+
+static Quaternion QuaternionNlerp0(const Quaternion* self, Quaternion rhs, float t)
+{
+    return self->Nlerp(rhs, t);
+}
+
+static Quaternion QuaternionNlerp1(const Quaternion* self, Quaternion rhs, float t, bool shortestPath)
+{
+    return self->Nlerp(rhs, t, shortestPath);
+}
+
 static void RegisterQuaternion(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -630,9 +722,9 @@ static void RegisterQuaternion(kaguya::State& lua)
         .addFunction("FromAxes", &Quaternion::FromAxes)
         .addFunction("FromRotationMatrix", &Quaternion::FromRotationMatrix)
 
-		.addOverloadedFunctions("FromLookRotation", (bool (Quaternion::*)(const Vector3&))&Quaternion::FromLookRotation, &Quaternion::FromLookRotation)
+        ADD_OVERLOADED_FUNCTIONS_2(Quaternion, FromLookRotation)
 
-		.addFunction("Normalize", &Quaternion::Normalize)
+        .addFunction("Normalize", &Quaternion::Normalize)
 
         .addFunction("Normalized", &Quaternion::Normalized)
         .addFunction("Inverse", &Quaternion::Inverse)
@@ -649,7 +741,7 @@ static void RegisterQuaternion(kaguya::State& lua)
         .addFunction("RotationMatrix", &Quaternion::RotationMatrix)
         .addFunction("Slerp", &Quaternion::Slerp)
 
-		.addOverloadedFunctions("Nlerp", (Quaternion(Quaternion::*)(Quaternion, float))&Quaternion::Nlerp, &Quaternion::Nlerp)
+        ADD_OVERLOADED_FUNCTIONS_2(Quaternion, Nlerp)
 
         .addFunction("ToString", &Quaternion::ToString)
 
