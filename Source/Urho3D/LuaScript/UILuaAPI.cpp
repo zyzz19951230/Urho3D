@@ -365,55 +365,11 @@ static void RegisterLineEdit(kaguya::State& lua)
     );
 }
 
-static void ListViewInsertItem0(ListView* self, unsigned int index, UIElement* item)
-{
-    self->InsertItem(index, item);
-}
-
-static void ListViewInsertItem1(ListView* self, unsigned int index, UIElement* item, UIElement* parentItem)
-{
-    self->InsertItem(index, item, parentItem);
-}
-
-static void ListViewRemoveItem0(ListView* self, UIElement* item)
-{
-    self->RemoveItem(item);
-}
-
-static void ListViewRemoveItem1(ListView* self, UIElement* item, unsigned int index)
-{
-    self->RemoveItem(item, index);
-}
-
-static void ListViewChangeSelection0(ListView* self, int delta)
-{
-    self->ChangeSelection(delta);
-}
-
-static void ListViewChangeSelection1(ListView* self, int delta, bool additive)
-{
-    self->ChangeSelection(delta, additive);
-}
-
-static void ListViewExpand0(ListView* self, unsigned int index, bool enable)
-{
-    self->Expand(index, enable);
-}
-
-static void ListViewExpand1(ListView* self, unsigned int index, bool enable, bool recursive)
-{
-    self->Expand(index, enable, recursive);
-}
-
-static void ListViewToggleExpand0(ListView* self, unsigned int index)
-{
-    self->ToggleExpand(index);
-}
-
-static void ListViewToggleExpand1(ListView* self, unsigned int index, bool recursive)
-{
-    self->ToggleExpand(index, recursive);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(ListViewInsertItem, ListView, InsertItem, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(ListViewRemoveItem, ListView, RemoveItem, 1, 2, void(ListView::*)(UIElement*, unsigned));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(ListViewChangeSelection, ListView, ChangeSelection, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(ListViewExpand, ListView, Expand, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(ListViewToggleExpand, ListView, ToggleExpand, 1, 2);
 
 static SharedPtr<UIElement> ListViewGetItem(const ListView* self, unsigned index)
 {
@@ -439,11 +395,10 @@ static void RegisterListView(kaguya::State& lua)
 
         .addFunction("AddItem", &ListView::AddItem)
 
-        ADD_OVERLOADED_FUNCTIONS_2(ListView, InsertItem)
+        .addFunction("InsertItem", ListViewInsertItem())
         
         .addOverloadedFunctions("RemoveItem",
-            &ListViewRemoveItem0,
-            &ListViewRemoveItem1,
+            ListViewRemoveItem(),
             static_cast<void (ListView::*)(unsigned)>(&ListView::RemoveItem))
 
         .addFunction("RemoveAllItems", &ListView::RemoveAllItems)
@@ -454,7 +409,7 @@ static void RegisterListView(kaguya::State& lua)
         .addFunction("RemoveSelection", &ListView::RemoveSelection)
         .addFunction("ToggleSelection", &ListView::ToggleSelection)
 
-        ADD_OVERLOADED_FUNCTIONS_2(ListView, ChangeSelection)
+		.addFunction("ChangeSelection", ListViewChangeSelection())
 
         .addFunction("ClearSelection", &ListView::ClearSelection)
         .addFunction("SetHighlightMode", &ListView::SetHighlightMode)
@@ -464,8 +419,8 @@ static void RegisterListView(kaguya::State& lua)
         .addFunction("SetClearSelectionOnDefocus", &ListView::SetClearSelectionOnDefocus)
         .addFunction("SetSelectOnClickEnd", &ListView::SetSelectOnClickEnd)
 
-        ADD_OVERLOADED_FUNCTIONS_2(ListView, Expand)
-        ADD_OVERLOADED_FUNCTIONS_2(ListView, ToggleExpand)
+		.addFunction("Expand", ListViewExpand())
+		.addFunction("ToggleExpand", ListViewToggleExpand())
 
         .addFunction("GetNumItems", &ListView::GetNumItems)
         .addStaticFunction("GetItem", &ListViewGetItem)
@@ -538,25 +493,12 @@ static void RegisterMenu(kaguya::State& lua)
     );
 }
 
-static SharedPtr<MessageBox> CreateMessageBox0(Context* context, const String& messageString)
-{
-    return SharedPtr<MessageBox>(new MessageBox(globalContext, messageString));
-}
-
-static SharedPtr<MessageBox> CreateMessageBox1(Context* context, const String& messageString, const String& titleString)
-{
-    return SharedPtr<MessageBox>(new MessageBox(globalContext, messageString, titleString));
-}
-
-static SharedPtr<MessageBox> CreateMessageBox2(Context* context, const String& messageString, const String& titleString, XMLFile* layoutFile)
-{
-    return SharedPtr<MessageBox>(new MessageBox(globalContext, messageString, titleString, layoutFile));
-}
-
-static SharedPtr<MessageBox> CreateMessageBox3(Context* context, const String& messageString, const String& titleString, XMLFile* layoutFile, XMLFile* styleFile)
+static SharedPtr<MessageBox> CreateMessageBox(Context* context, const String& messageString, const String& titleString = "", XMLFile* layoutFile = 0, XMLFile* styleFile = 0)
 {
     return SharedPtr<MessageBox>(new MessageBox(globalContext, messageString, titleString, layoutFile, styleFile));
 }
+
+KAGUYA_FUNCTION_OVERLOADS(CreateMessageBoxOverloads, CreateMessageBox, 2, 5);
 
 static SharedPtr<UIElement> MessageBoxGetWindow(const MessageBox* self)
 {
@@ -568,10 +510,7 @@ static void RegisterMessageBox(kaguya::State& lua)
     using namespace kaguya;
 
     lua["MessageBox"].setClass(UserdataMetatable<MessageBox, Object>()
-        .addOverloadedFunctions("new", &CreateMessageBox0,
-            &CreateMessageBox1,
-            &CreateMessageBox2,
-            &CreateMessageBox3)
+        .addStaticFunction("new", CreateMessageBoxOverloads())
 
         .addFunction("SetTitle", &MessageBox::SetTitle)
         .addFunction("SetMessage", &MessageBox::SetMessage)
@@ -762,35 +701,9 @@ static void RegisterSprite(kaguya::State& lua)
     );
 }
 
-static bool TextSetFont0(Text* self, const String& fontName)
-{
-    return self->SetFont(fontName);
-}
-
-static bool TextSetFont1(Text* self, const String& fontName, int size)
-{
-    return self->SetFont(fontName, size);
-}
-
-static bool TextSetFont2(Text* self, Font* font)
-{
-    return self->SetFont(font);
-}
-
-static bool TextSetFont3(Text* self, Font* font, int size)
-{
-    return self->SetFont(font, size);
-}
-
-static void TextSetSelection0(Text* self, unsigned int start)
-{
-    self->SetSelection(start);
-}
-
-static void TextSetSelection1(Text* self, unsigned int start, unsigned int length)
-{
-    self->SetSelection(start, length);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(TextSetFont0, Text, SetFont, 1, 2, bool(Text::*)(const String&, int));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(TextSetFont1, Text, SetFont, 1, 2, bool(Text::*)(Font*, int));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(TextSetSelection, Text, SetSelection, 1, 2);
 
 static void RegisterText(kaguya::State& lua)
 {
@@ -806,7 +719,7 @@ static void RegisterText(kaguya::State& lua)
     lua["Text"].setClass(UserdataMetatable<Text, UIElement>()
         .addStaticFunction("new", &CreateObject<Text>)
 
-        ADD_OVERLOADED_FUNCTIONS_4(Text, SetFont)
+        .addOverloadedFunctions("SetFont", TextSetFont0(), TextSetFont1())
 
         .addFunction("SetText", &Text::SetText)
         .addFunction("SetTextAlignment", &Text::SetTextAlignment)
@@ -814,7 +727,7 @@ static void RegisterText(kaguya::State& lua)
         .addFunction("SetWordwrap", &Text::SetWordwrap)
         .addFunction("SetAutoLocalizable", &Text::SetAutoLocalizable)
 
-        ADD_OVERLOADED_FUNCTIONS_2(Text, SetSelection)
+        .addFunction("SetSelection", TextSetSelection())
 
         .addFunction("ClearSelection", &Text::ClearSelection)
         .addFunction("SetSelectionColor", &Text::SetSelectionColor)
@@ -874,25 +787,8 @@ static void RegisterText(kaguya::State& lua)
     );
 }
 
-static bool Text3DSetFont0(Text3D* self, const String& fontName)
-{
-    return self->SetFont(fontName);
-}
-
-static bool Text3DSetFont1(Text3D* self, const String& fontName, int size)
-{
-    return self->SetFont(fontName, size);
-}
-
-static bool Text3DSetFont2(Text3D* self, Font* font)
-{
-    return self->SetFont(font);
-}
-
-static bool Text3DSetFont3(Text3D* self, Font* font, int size)
-{
-    return self->SetFont(font, size);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(Text3DSetFont0, Text3D, SetFont, 1, 2, bool(Text3D::*)(const String&, int));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(Text3DSetFont1, Text3D, SetFont, 1, 2, bool(Text3D::*)(Font*, int));
 
 static void Text3DSetColor(Text3D* self, const Color& color)
 {
@@ -911,7 +807,7 @@ static void RegisterText3D(kaguya::State& lua)
     lua["Text3D"].setClass(UserdataMetatable<Text3D, Drawable>()
         .addStaticFunction("new", &CreateObject<Text3D>)
 
-        ADD_OVERLOADED_FUNCTIONS_4(Text3D, SetFont)
+		.addOverloadedFunctions("SetFont", Text3DSetFont0(), Text3DSetFont1())
 
         .addFunction("SetMaterial", &Text3D::SetMaterial)
         .addFunction("SetText", &Text3D::SetText)

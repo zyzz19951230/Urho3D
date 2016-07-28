@@ -186,7 +186,12 @@ KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeYaw, Node, Yaw, 1, 2);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeRoll, Node, Roll, 1, 2);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeLookAt, Node, LookAt, 2, 3);
 
-KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(NodeCreateChild, Node, CreateChild, 0, 3, Node*(Node::*)(const String&, CreateMode, unsigned));
+static SharedPtr<Node> NodeCreateChild(Node* self, const String& name = String::EMPTY, CreateMode mode = REPLICATED, unsigned id = 0)
+{
+	return SharedPtr<Node>(self->CreateChild(name, mode, id));
+}
+
+KAGUYA_FUNCTION_OVERLOADS(NodeCreateChildOverloads, NodeCreateChild, 1, 4);
 
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeAddChild, Node, AddChild, 1, 2);
 
@@ -436,7 +441,8 @@ static void RegisterNode(kaguya::State& lua)
         .addFunction("SetOwner", &Node::SetOwner)
         .addFunction("MarkDirty", &Node::MarkDirty)
 
-        .addFunction("CreateChild", NodeCreateChild())
+        .addStaticFunction("CreateChild", NodeCreateChildOverloads())
+
         .addFunction("AddChild", NodeAddChild())
 
         .addFunction("RemoveChild", static_cast<void(Node::*)(Node*)>(&Node::RemoveChild))
