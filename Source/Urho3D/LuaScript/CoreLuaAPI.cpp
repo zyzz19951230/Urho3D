@@ -109,19 +109,19 @@ static void RegisterObject(kaguya::State& lua)
     );
 }
 
+KAGUYA_FUNCTION_OVERLOADS(ErrorExitOverloads, ErrorExit, 0, 2);
+KAGUYA_FUNCTION_OVERLOADS(PrintLineOverloads, PrintLine, 1, 2);
+
 static void RegisterProcessUtils(kaguya::State& lua)
 {
     using namespace kaguya;
 
     lua["ErrorDialog"] = function(&ErrorDialog);
 
-    KAGUYA_VOID_FUNCTION_OVERLOADS(ErrorExitOverloads, ErrorExit, 0, 2);
-    lua["ErrorExit"] = ErrorExitOverloads;
-
+    
+    lua["ErrorExit"] = ErrorExitOverloads();
     lua["OpenConsoleWindow"] = function(&OpenConsoleWindow);
-
-    KAGUYA_VOID_FUNCTION_OVERLOADS(PrintLine_, PrintLine, 1, 2);
-    lua["PrintLine"] = PrintLine_;
+    lua["PrintLine"] = PrintLineOverloads();
 
     lua["GetArguments"] = function(&GetArguments);
 
@@ -171,15 +171,7 @@ static void RegisterSpline(kaguya::State& lua)
     );
 }
 
-static Vector4 ToVector40(const char* source)
-{
-    return ToVector4(source);
-}
-
-static Vector4 ToVector41(const char* source, bool allowMissingCoords)
-{
-    return ToVector4(source, allowMissingCoords);
-}
+KAGUYA_FUNCTION_OVERLOADS_WITH_SIGNATURE(ToVector4Overloads, ToVector4, 1, 2, Vector4(const char*, bool));
 
 static void RegisterStringUtils(kaguya::State& lua)
 {
@@ -198,7 +190,9 @@ static void RegisterStringUtils(kaguya::State& lua)
     lua["ToRect"] = static_cast<Rect(*)(const char*)>(&ToRect);
     lua["ToVector2"] = static_cast<Vector2(*)(const char*)>(&ToVector2);
     lua["ToVector3"] = static_cast<Vector3(*)(const char*)>(&ToVector3);    
-    lua["ToVector4"] = overload(&ToVector40, &ToVector41);
+    
+    lua["ToVector4"] = ToVector4Overloads();
+
     lua["ToMatrix3"] = static_cast<Matrix3(*)(const char*)>(&ToMatrix3);
     lua["ToMatrix3x4"] = static_cast<Matrix3x4(*)(const char*)>(&ToMatrix3x4);
     lua["ToMatrix4"] = static_cast<Matrix4(*)(const char*)>(&ToMatrix4);

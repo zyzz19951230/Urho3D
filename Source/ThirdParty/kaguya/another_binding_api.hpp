@@ -9,6 +9,7 @@
 
 /// @addtogroup another_binding_api
 /// @brief Boost.python like binding API.(experimental)
+/// this api is not multi-thread-safe.
 /// @{
 
 
@@ -52,6 +53,10 @@ namespace kaguya
 				stack.pop_back();
 			}
 		private:
+			scope_stack() {}
+			scope_stack(const scope_stack&);
+			scope_stack& operator=(const scope_stack&);
+
 			std::vector<LuaTable> stack;
 		};
 	}
@@ -61,7 +66,7 @@ namespace kaguya
 	/// @brief binding scope
 	struct scope
 	{
-		scope(const std::string& name)
+		scope(const std::string& name) :pushed_(true)
 		{
 			detail::scope_stack& stack = detail::scope_stack::instance();
 			LuaTable current = stack.current_scope();
@@ -69,16 +74,38 @@ namespace kaguya
 			{
 				current[name] = NewTable();
 			}
-			stack.push(current[name]);
+			scope_table_ = current[name];
+			stack.push(scope_table_);
 		}
-		scope(const LuaTable& t)
+		scope(const LuaTable& t) :pushed_(true)
 		{
-			detail::scope_stack::instance().push(t);
+			scope_table_ = t;
+			detail::scope_stack::instance().push(scope_table_);
 		}
+		scope():pushed_(false)
+		{
+			detail::scope_stack& stack = detail::scope_stack::instance();
+			scope_table_ = stack.current_scope();
+		}
+
+		TableKeyReferenceProxy<std::string> attr(const std::string& name) {
+			return scope_table_.operator[]<std::string>(name);
+		}
+		LuaTable table() {
+			return scope_table_;
+		}
+
 		~scope()
 		{
-			detail::scope_stack::instance().pop();
+			if (pushed_)
+			{
+				detail::scope_stack::instance().pop();
+			}
 		}
+
+	private:
+		LuaTable scope_table_;
+		bool pushed_;
 	};
 
 
@@ -134,11 +161,11 @@ namespace kaguya
 
 		/// @brief property binding 
 		template<typename F>
-		class_& property(const char* name, F f) { this->addPropaty(name, f); return *this; }
+		class_& property(const char* name, F f) { this->addProperty(name, f); return *this; }
 
 		/// @brief property binding with getter and sette function
 		template<typename Getter, typename Setter>
-		class_& property(const char* name, Getter getter, Setter setter) { this->addPropaty(name, getter, setter); return *this; }
+		class_& property(const char* name, Getter getter, Setter setter) { this->addProperty(name, getter, setter); return *this; }
 
 		/// @brief class function binding
 		template<typename F>

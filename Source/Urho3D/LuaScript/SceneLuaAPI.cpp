@@ -47,20 +47,7 @@
 namespace Urho3D
 {
 
-static void AnimatableSetAttributeAnimation0(Animatable* self, const String& name, ValueAnimation* attributeAnimation)
-{
-    self->SetAttributeAnimation(name, attributeAnimation);
-}
-
-static void AnimatableSetAttributeAnimation1(Animatable* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode)
-{
-    self->SetAttributeAnimation(name, attributeAnimation, wrapMode);
-}
-
-static void AnimatableSetAttributeAnimation2(Animatable* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode, float speed)
-{
-    self->SetAttributeAnimation(name, attributeAnimation, wrapMode, speed);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(AnimatableSetAttributeAnimation, Animatable, SetAttributeAnimation, 2, 4);
 
 static void RegisterAnimatable(kaguya::State& lua)
 {
@@ -72,7 +59,7 @@ static void RegisterAnimatable(kaguya::State& lua)
         .addFunction("SetAnimationTime", &Animatable::SetAnimationTime)
         .addFunction("SetObjectAnimation", &Animatable::SetObjectAnimation)
 
-        ADD_OVERLOADED_FUNCTIONS_3(Animatable, SetAttributeAnimation)
+        .addFunction("SetAttributeAnimation", AnimatableSetAttributeAnimation())
 
         .addFunction("SetAttributeAnimationWrapMode", &Animatable::SetAttributeAnimationWrapMode)
         .addFunction("SetAttributeAnimationSpeed", &Animatable::SetAttributeAnimationSpeed)
@@ -166,15 +153,7 @@ static void RegisterLogicComponent(kaguya::State& lua)
         );
 }
 
-static bool NodeSaveXML0(const Node* self, const char* filepath)
-{
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
-    if (!file->IsOpen())
-        return false;
-    return self->SaveXML(*file);
-}
-
-static bool NodeSaveXML1(const Node* self, const char* filepath, const String& indentation)
+static bool NodeSaveXML(const Node* self, const char* filepath, const String& indentation = "\t")
 {
     SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
     if (!file->IsOpen())
@@ -182,15 +161,9 @@ static bool NodeSaveXML1(const Node* self, const char* filepath, const String& i
     return self->SaveXML(*file, indentation);
 }
 
-static bool NodeSaveJSON0(const Node* self, const char* filepath)
-{
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
-    if (!file->IsOpen())
-        return false;
-    return self->SaveJSON(*file);
-}
+KAGUYA_FUNCTION_OVERLOADS(NodeSaveXMLOverloads, NodeSaveXML, 2, 3);
 
-static bool NodeSaveJSON1(const Node* self, const char* filepath, const String& indentation)
+static bool NodeSaveJSON(const Node* self, const char* filepath, const String& indentation = "\t")
 {
     SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
     if (!file->IsOpen())
@@ -198,180 +171,38 @@ static bool NodeSaveJSON1(const Node* self, const char* filepath, const String& 
     return self->SaveJSON(*file, indentation);
 }
 
-static void NodeAddTags0(Node* self, const String& tags)
-{
-    self->AddTags(tags);
-}
+KAGUYA_FUNCTION_OVERLOADS(NodeSaveJSONOverloads, NodeSaveJSON, 2, 3);
 
-static void NodeAddTags1(Node* self, const String& tags, char separator)
-{
-    self->AddTags(tags, separator);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(NodeAddTags, Node, AddTags, 1, 2, void(Node::*)(const String&, char));
 
-static void NodeTranslate0(Node* self, const Vector3& delta)
-{
-    self->Translate(delta);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeTranslate, Node, Translate, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeTranslate2D, Node, Translate2D, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeRotate, Node, Rotate, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeRotate2D, Node, Rotate2D, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeRotateAround, Node, RotateAround, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeRotateAround2D, Node, RotateAround2D, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodePitch, Node, Pitch, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeYaw, Node, Yaw, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeRoll, Node, Roll, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeLookAt, Node, LookAt, 2, 3);
 
-static void NodeTranslate1(Node* self, const Vector3& delta, TransformSpace space)
-{
-    self->Translate(delta, space);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(NodeCreateChild, Node, CreateChild, 0, 3, Node*(Node::*)(const String&, CreateMode, unsigned));
 
-static void NodeTranslate2D0(Node* self, const Vector2& delta)
-{
-    self->Translate2D(delta);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeAddChild, Node, AddChild, 1, 2);
 
-static void NodeTranslate2D1(Node* self, const Vector2& delta, TransformSpace space)
-{
-    self->Translate2D(delta, space);
-}
-
-static void NodeRotate0(Node* node, const Quaternion& delta)
-{
-    node->Rotate(delta);
-}
-
-static void NodeRotate1(Node* node, const Quaternion& delta, TransformSpace space)
-{
-    node->Rotate(delta, space);
-}
-
-static void NodeRotate2D0(Node* self, float delta)
-{
-    self->Rotate2D(delta);
-}
-
-static void NodeRotate2D1(Node* self, float delta, TransformSpace space)
-{
-    self->Rotate2D(delta, space);
-}
-
-static void NodeRotateAround0(Node* self, const Vector3& point, const Quaternion& delta)
-{
-    self->RotateAround(point, delta);
-}
-
-static void NodeRotateAround1(Node* self, const Vector3& point, const Quaternion& delta, TransformSpace space)
-{
-    self->RotateAround(point, delta, space);
-}
-
-static void NodeRotateAround2D0(Node* self, const Vector2& point, float delta)
-{
-    self->RotateAround2D(point, delta);
-}
-
-static void NodeRotateAround2D1(Node* self, const Vector2& point, float delta, TransformSpace space)
-{
-    self->RotateAround2D(point, delta, space);
-}
-
-static void NodePitch0(Node* self, float angle)
-{
-    self->Pitch(angle);
-}
-
-static void NodePitch1(Node* self, float angle, TransformSpace space)
-{
-    self->Pitch(angle, space);
-}
-
-static void NodeYaw0(Node* self, float angle)
-{
-    self->Yaw(angle);
-}
-
-static void NodeYaw1(Node* self, float angle, TransformSpace space)
-{
-    self->Yaw(angle, space);
-}
-
-static void NodeRoll0(Node* self, float angle)
-{
-    self->Roll(angle);
-}
-
-static void NodeRoll1(Node* self, float angle, TransformSpace space)
-{
-    self->Roll(angle, space);
-}
-
-static bool NodeLookAt0(Node* self, const Vector3& target)
-{
-    return self->LookAt(target);
-}
-
-static bool NodeLookAt1(Node* self, const Vector3& target, const Vector3& up)
-{
-    return self->LookAt(target, up);
-}
-
-static bool NodeLookAt2(Node* self, const Vector3& target, const Vector3& up, TransformSpace space)
-{
-    return self->LookAt(target, up, space);
-}
-
-static Node* NodeCreateChild0(Node* self)
-{
-    return self->CreateChild();
-}
-
-static Node* NodeCreateChild1(Node* self, const String& name)
-{
-    return self->CreateChild(name);
-}
-
-static Node* NodeCreateChild2(Node* self, const String& name, CreateMode mode)
-{
-    return self->CreateChild(name, mode);
-}
-
-static Node* NodeCreateChild3(Node* self, const String& name, CreateMode mode, unsigned id)
-{
-    return self->CreateChild(name, mode, id);
-}
-
-static void NodeAddChild0(Node* self, Node* node)
-{
-    self->AddChild(node);
-}
-
-static void NodeAddChild1(Node* self, Node* node, unsigned index)
-{
-    self->AddChild(node, index);
-}
-
-static SharedPtr<Component> NodeCreateComponent0(Node* self, const char* type)
-{
-    return SharedPtr<Component>(self->CreateComponent(StringHash(type)));
-}
-
-static SharedPtr<Component> NodeCreateComponent1(Node* self, const char* type, CreateMode mode)
-{
-    return SharedPtr<Component>(self->CreateComponent(StringHash(type), mode));
-}
-
-static SharedPtr<Component> NodeCreateComponent2(Node* self, const char* type, CreateMode mode, unsigned id)
+static SharedPtr<Component> NodeCreateComponent(Node* self, const char* type, CreateMode mode = REPLICATED, unsigned id = 0)
 {
     return SharedPtr<Component>(self->CreateComponent(StringHash(type), mode, id));
 }
 
-static SharedPtr<Component> NodeGetOrCreateComponent0(Node* self, const char* type)
-{
-    return SharedPtr<Component>(self->GetOrCreateComponent(StringHash(type)));
-}
+KAGUYA_FUNCTION_OVERLOADS(NodeCreateComponentOverloads, NodeCreateComponent, 2, 4);
 
-static SharedPtr<Component> NodeGetOrCreateComponent1(Node* self, const char* type, CreateMode mode)
-{
-    return SharedPtr<Component>(self->GetOrCreateComponent(StringHash(type), mode));
-}
-
-static SharedPtr<Component> NodeGetOrCreateComponent2(Node* self, const char* type, CreateMode mode, unsigned id)
+static SharedPtr<Component> NodeGetOrCreateComponent(Node* self, const char* type, CreateMode mode = REPLICATED, unsigned id = 0)
 {
     return SharedPtr<Component>(self->GetOrCreateComponent(StringHash(type), mode, id));
 }
+
+KAGUYA_FUNCTION_OVERLOADS(NodeGetOrCreateComponentOverloads, NodeGetOrCreateComponent, 2, 4);
 
 static kaguya::LuaTable NodeCreateScriptObject0(Node* node, const char* scriptObjectType)
 {
@@ -407,25 +238,19 @@ static kaguya::LuaTable NodeGetScriptObject(Node* self)
     return kaguya::LuaTable(instance->GetLuaState(), kaguya::StackTop());
 }
 
-static SharedPtr<Component> NodeCloneComponent0(Node* self, Component* component)
-{
-    return SharedPtr<Component>(self->CloneComponent(component));
-}
-
-static SharedPtr<Component> NodeCloneComponent1(Node* self, Component* component, unsigned id)
+static SharedPtr<Component> NodeCloneComponent0(Node* self, Component* component, unsigned id = 0)
 {
     return SharedPtr<Component>(self->CloneComponent(component, id));
 }
 
-static SharedPtr<Component> NodeCloneComponent2(Node* self, Component* component, CreateMode mode)
-{
-    return SharedPtr<Component>(self->CloneComponent(component, mode));
-}
+KAGUYA_FUNCTION_OVERLOADS(NodeCloneComponentOverloads0, NodeCloneComponent0, 2, 3);
 
-static SharedPtr<Component> NodeCloneComponent3(Node* self, Component* component, CreateMode mode, unsigned id)
+static SharedPtr<Component> NodeCloneComponent1(Node* self, Component* component, CreateMode mode, unsigned id = 0)
 {
     return SharedPtr<Component>(self->CloneComponent(component, mode, id));
 }
+
+KAGUYA_FUNCTION_OVERLOADS(NodeCloneComponentOverloads1, NodeCloneComponent1, 3, 4);
 
 static void NodeRemoveComponent(Node* self, const char* type)
 {
@@ -437,111 +262,66 @@ static void NodeRemoveComponents(Node* self, const char* type)
     self->RemoveComponents(StringHash(type));
 }
 
-static SharedPtr<Node> NodeClone0(Node* self)
-{
-    return SharedPtr<Node>(self->Clone());
-}
-
-static SharedPtr<Node> NodeClone1(Node* self, CreateMode mode)
+static SharedPtr<Node> NodeClone(Node* self, CreateMode mode = REPLICATED)
 {
     return SharedPtr<Node>(self->Clone(mode));
 }
 
-static unsigned NodeGetNumChildren0(const Node* self)
-{
-    return self->GetNumChildren();
-}
+KAGUYA_FUNCTION_OVERLOADS(NodeCloneOverloads, NodeClone, 1, 2);
 
-static unsigned NodeGetNumChildren1(const Node* self, bool recursive)
-{
-    return self->GetNumChildren(recursive);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeGetNumChildren, Node, GetNumChildren, 0, 1);
 
-static PODVector<Node*> NodeGetChildren0(const Node* self)
-{
-    PODVector<Node*> dest;
-    self->GetChildren(dest);
-    return dest;
-}
-
-static PODVector<Node*> NodeGetChildren1(const Node* self, bool recursive)
+static PODVector<Node*> NodeGetChildren(const Node* self, bool recursive = false)
 {
     PODVector<Node*> dest;
     self->GetChildren(dest, recursive);
     return dest;
 }
 
-static PODVector<Node*> NodeGetChildrenWithComponent0(const Node* self, const char* type)
-{
-    PODVector<Node*> dest;
-    self->GetChildrenWithComponent(dest, StringHash(type));
-    return dest;
-}
+KAGUYA_FUNCTION_OVERLOADS(NodeGetChildrenOverloads, NodeGetChildren, 1, 2);
 
-static PODVector<Node*> NodeGetChildrenWithComponent1(const Node* self, const char* type, bool recursive)
+static PODVector<Node*> NodeGetChildrenWithComponent(const Node* self, const char* type, bool recursive = false)
 {
     PODVector<Node*> dest;
     self->GetChildrenWithComponent(dest, StringHash(type), recursive);
     return dest;
 }
 
-static PODVector<Node*> NodeGetChildrenWithTag0(const Node* self, const String& tag)
-{
-    PODVector<Node*> dest;
-    self->GetChildrenWithTag(dest, tag);
-    return dest;
-}
+KAGUYA_FUNCTION_OVERLOADS(NodeGetChildrenWithComponentOverloads, NodeGetChildrenWithComponent, 2, 3);
 
-static PODVector<Node*> NodeGetChildrenWithTag1(const Node* self, const String& tag, bool recursive)
+static PODVector<Node*> NodeGetChildrenWithTag(const Node* self, const String& tag, bool recursive = false)
 {
     PODVector<Node*> dest;
     self->GetChildrenWithTag(dest, tag, recursive);
     return dest;
 }
 
-static Node* NodeGetChild0(const Node* self, const String& name)
-{
-    return self->GetChild(name);
-}
+KAGUYA_FUNCTION_OVERLOADS(NodeGetChildrenWithTagOverloads, NodeGetChildrenWithTag, 2, 3);
 
-static Node* NodeGetChild1(const Node* self, const String& name, bool recursive)
-{
-    return self->GetChild(name, recursive);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(NodeGetChild, Node, GetChild, 1, 2, Node*(Node::*)(const char*, bool)const);
 
-static PODVector<Component*> NodeGetComponents0(const Node* self, const char* type)
-{
-    PODVector<Component*> dest;
-    self->GetComponents(dest, StringHash(type));
-    return dest;
-}
-
-static PODVector<Component*> NodeGetComponents1(const Node* self, const char* type, bool recursive)
+static PODVector<Component*> NodeGetComponents(const Node* self, const char* type, bool recursive = false)
 {
     PODVector<Component*> dest;
     self->GetComponents(dest, StringHash(type), recursive);
     return dest;
 }
 
-static SharedPtr<Component> NodeGetComponent0(const Node* node, const char* type)
-{
-    return SharedPtr<Component>(node->GetComponent(StringHash(type)));
-}
+KAGUYA_FUNCTION_OVERLOADS(NodeGetComponentsOverloads, NodeGetComponents, 2, 3);
 
-static SharedPtr<Component> NodeGetComponent1(const Node* node, const char* type, bool recursive)
+static SharedPtr<Component> NodeGetComponent(const Node* node, const char* type, bool recursive = false)
 {
     return SharedPtr<Component>(node->GetComponent(StringHash(type), recursive));
 }
 
-static SharedPtr<Component> NodeGetParentComponent0(const Node* node, const char* type)
-{
-    return SharedPtr<Component>(node->GetParentComponent(StringHash(type)));
-}
+KAGUYA_FUNCTION_OVERLOADS(NodeGetComponentOverloads, NodeGetComponent, 2, 3);
 
-static SharedPtr<Component> NodeGetParentComponent1(const Node* node, const char* type, bool fullTraversal)
+static SharedPtr<Component> NodeGetParentComponent(const Node* node, const char* type, bool fullTraversal = false)
 {
     return SharedPtr<Component>(node->GetParentComponent(StringHash(type), fullTraversal));
 }
+
+KAGUYA_FUNCTION_OVERLOADS(NodeGetParentComponentOverloads, NodeGetParentComponent, 2, 3);
 
 static bool NodeHasComponent(const Node* self, const char* type)
 {
@@ -564,15 +344,15 @@ static void RegisterNode(kaguya::State& lua)
     lua["Node"].setClass(UserdataMetatable<Node, Animatable>()
         .addStaticFunction("new", &CreateObject<Node>)
 
-        ADD_OVERLOADED_FUNCTIONS_2(Node, SaveXML)
-        ADD_OVERLOADED_FUNCTIONS_2(Node, SaveJSON)
+        .addStaticFunction("SaveXML", NodeSaveXMLOverloads())
+        .addStaticFunction("SaveJSON", NodeSaveJSONOverloads())
+        
 
         .addFunction("SetName", &Node::SetName)
         .addFunction("SetTags", &Node::SetTags)
         .addFunction("AddTag", &Node::AddTag)
         .addOverloadedFunctions("AddTags",
-            &NodeAddTags0,
-            &NodeAddTags1,
+            NodeAddTags(),
             static_cast<void(Node::*)(const StringVector&)>(&Node::AddTags))
         .addFunction("RemoveTag", &Node::RemoveTag)
         .addFunction("RemoveAllTags", &Node::RemoveAllTags)
@@ -629,19 +409,19 @@ static void RegisterNode(kaguya::State& lua)
             static_cast<void(Node::*)(const Vector2&, float, float)>(&Node::SetWorldTransform2D),
             static_cast<void(Node::*)(const Vector2&, float, const Vector2&)>(&Node::SetWorldTransform2D))
 
-        ADD_OVERLOADED_FUNCTIONS_2(Node, Translate)
-        ADD_OVERLOADED_FUNCTIONS_2(Node, Translate2D)
+        .addFunction("Translate", NodeTranslate())
+        .addFunction("Translate2D", NodeTranslate2D())
 
-        ADD_OVERLOADED_FUNCTIONS_2(Node, Rotate)
-        ADD_OVERLOADED_FUNCTIONS_2(Node, Rotate2D)
+        .addFunction("Rotate", NodeRotate())
+        .addFunction("Rotate2D", NodeRotate2D())
 
-        ADD_OVERLOADED_FUNCTIONS_2(Node, RotateAround)
-        ADD_OVERLOADED_FUNCTIONS_2(Node, RotateAround2D)
+        .addFunction("RotateAround", NodeRotateAround())
+        .addFunction("RotateAround2D", NodeRotateAround2D())
 
-        ADD_OVERLOADED_FUNCTIONS_2(Node, Pitch)
-        ADD_OVERLOADED_FUNCTIONS_2(Node, Yaw)
-        ADD_OVERLOADED_FUNCTIONS_2(Node, Roll)
-        ADD_OVERLOADED_FUNCTIONS_3(Node, LookAt)
+        .addFunction("Pitch", NodePitch())
+        .addFunction("Yaw", NodeYaw())
+        .addFunction("Roll", NodeRoll())
+        .addFunction("LookAt", NodeLookAt())
 
         .addOverloadedFunctions("Scale",
             static_cast<void(Node::*)(float)>(&Node::Scale),
@@ -656,20 +436,23 @@ static void RegisterNode(kaguya::State& lua)
         .addFunction("SetOwner", &Node::SetOwner)
         .addFunction("MarkDirty", &Node::MarkDirty)
 
-        ADD_OVERLOADED_FUNCTIONS_4(Node, CreateChild)
-        ADD_OVERLOADED_FUNCTIONS_2(Node, AddChild)
+        .addFunction("CreateChild", NodeCreateChild())
+        .addFunction("AddChild", NodeAddChild())
 
         .addFunction("RemoveChild", static_cast<void(Node::*)(Node*)>(&Node::RemoveChild))
         .addFunction("RemoveAllChildren", &Node::RemoveAllChildren)
         .addFunction("RemoveChildren", &Node::RemoveChildren)
 
-        ADD_OVERLOADED_FUNCTIONS_3(Node, CreateComponent)
-        ADD_OVERLOADED_FUNCTIONS_3(Node, GetOrCreateComponent)
-        ADD_OVERLOADED_FUNCTIONS_2(Node, CreateScriptObject)
+        .addStaticFunction("CreateComponent", NodeCreateComponentOverloads())
+        .addStaticFunction("GetOrCreateComponent", NodeGetOrCreateComponentOverloads())
+
+        .addOverloadedFunctions("CreateScriptObject", &NodeCreateScriptObject0, &NodeCreateScriptObject1)
 
         .addStaticFunction("GetScriptObject", &NodeGetScriptObject)
 
-        ADD_OVERLOADED_FUNCTIONS_4(Node, CloneComponent)
+        .addOverloadedFunctions("CloneComponent", 
+            NodeCloneComponentOverloads0(), 
+            NodeCloneComponentOverloads1())
 
         .addOverloadedFunctions("RemoveComponent",
             static_cast<void(Node::*)(Component*)>(&Node::RemoveComponent),
@@ -681,7 +464,7 @@ static void RegisterNode(kaguya::State& lua)
 
         .addFunction("RemoveAllComponents", &Node::RemoveAllComponents)
 
-        ADD_OVERLOADED_FUNCTIONS_2(Node, Clone)
+        .addStaticFunction("Clone", NodeCloneOverloads())
 
         .addFunction("Remove", &Node::Remove)
         .addFunction("SetParent", &Node::SetParent)
@@ -739,27 +522,25 @@ static void RegisterNode(kaguya::State& lua)
 
         .addFunction("IsDirty", &Node::IsDirty)
 
-        ADD_OVERLOADED_FUNCTIONS_2(Node, GetNumChildren)
+        .addFunction("GetNumChildren", NodeGetNumChildren())
 
-        ADD_OVERLOADED_FUNCTIONS_2(Node, GetChildren)
-        ADD_OVERLOADED_FUNCTIONS_2(Node, GetChildrenWithComponent)
-        ADD_OVERLOADED_FUNCTIONS_2(Node, GetChildrenWithTag)
+        .addStaticFunction("GetChildren", NodeGetChildrenOverloads())
+        .addStaticFunction("GetChildrenWithComponent", NodeGetChildrenWithComponentOverloads())
+        .addStaticFunction("GetChildrenWithTag", NodeGetChildrenWithTagOverloads())
 
         .addOverloadedFunctions("GetChild",
             static_cast<Node*(Node::*)(unsigned) const>(&Node::GetChild),
-            &NodeGetChild0,
-            &NodeGetChild1)
+            NodeGetChild())
 
         .addFunction("GetNumComponents", &Node::GetNumComponents)
         .addFunction("GetNumNetworkComponents", &Node::GetNumNetworkComponents)
 
         .addOverloadedFunctions("GetComponents",
             static_cast<const Vector<SharedPtr<Component> >&(Node::*)() const>(&Node::GetComponents),
-            &NodeGetComponents0,
-            &NodeGetComponents1)
+            NodeGetComponentsOverloads())
 
-        ADD_OVERLOADED_FUNCTIONS_2(Node, GetComponent)
-        ADD_OVERLOADED_FUNCTIONS_2(Node, GetParentComponent)
+        .addStaticFunction("GetComponent", NodeGetComponentsOverloads())
+        .addStaticFunction("GetParentComponent", NodeGetParentComponentOverloads())
 
         .addStaticFunction("HasComponent", &NodeHasComponent)
 
@@ -808,20 +589,7 @@ static void RegisterNode(kaguya::State& lua)
         );
 }
 
-static void ObjectAnimationAddAttributeAnimation0(ObjectAnimation* self, const String& name, ValueAnimation* attributeAnimation)
-{
-    self->AddAttributeAnimation(name, attributeAnimation);
-}
-
-static void ObjectAnimationAddAttributeAnimation1(ObjectAnimation* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode)
-{
-    self->AddAttributeAnimation(name, attributeAnimation, wrapMode);
-}
-
-static void ObjectAnimationAddAttributeAnimation2(ObjectAnimation* self, const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode, float speed)
-{
-    self->AddAttributeAnimation(name, attributeAnimation, wrapMode, speed);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(ObjectAnimationAddAttributeAnimation, ObjectAnimation, AddAttributeAnimation, 2, 4);
 
 static void RegisterObjectAnimation(kaguya::State& lua)
 {
@@ -830,7 +598,7 @@ static void RegisterObjectAnimation(kaguya::State& lua)
     lua["ObjectAnimation"].setClass(UserdataMetatable<ObjectAnimation, Resource>()
         .addStaticFunction("new", &CreateObject<ObjectAnimation>)
 
-        ADD_OVERLOADED_FUNCTIONS_3(ObjectAnimation, AddAttributeAnimation)
+        .addFunction("AddAttributeAnimation", ObjectAnimationAddAttributeAnimation())
 
         .addOverloadedFunctions("RemoveAttributeAnimation",
             static_cast<void(ObjectAnimation::*)(const String&)>(&ObjectAnimation::RemoveAttributeAnimation),
@@ -866,6 +634,8 @@ static bool SceneSaveXML(const Scene* scene, const char* filepath, const String&
     return scene->SaveXML(*file, indentation);
 }
 
+KAGUYA_FUNCTION_OVERLOADS(SceneSaveXMLOverloads, SceneSaveXML, 2, 3);
+
 static bool SceneSaveJSON(const Scene* scene, const char* filepath, const String& indentation = "\t")
 {
     SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
@@ -874,15 +644,9 @@ static bool SceneSaveJSON(const Scene* scene, const char* filepath, const String
     return scene->SaveJSON(*file, indentation);
 }
 
-static bool SceneLoadAsync0(Scene* self, const char* filepath)
-{
-    SharedPtr<File> file(new File(globalContext, filepath));
-    if (!file->IsOpen())
-        return false;
-    return self->LoadAsync(file);
-}
+KAGUYA_FUNCTION_OVERLOADS(SceneSaveJSONOverloads, SceneSaveJSON, 2, 3);
 
-static bool SceneLoadAsync1(Scene* self, const char* filepath, LoadMode mode)
+static bool SceneLoadAsync(Scene* self, const char* filepath, LoadMode mode = LOAD_SCENE_AND_RESOURCES)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
     if (!file->IsOpen())
@@ -890,15 +654,9 @@ static bool SceneLoadAsync1(Scene* self, const char* filepath, LoadMode mode)
     return self->LoadAsync(file, mode);
 }
 
-static bool SceneLoadAsyncXML0(Scene* self, const char* filepath)
-{
-    SharedPtr<File> file(new File(globalContext, filepath));
-    if (!file->IsOpen())
-        return false;
-    return self->LoadAsyncXML(file);
-}
+KAGUYA_FUNCTION_OVERLOADS(SceneLoadAsyncOverloads, SceneLoadAsync, 2, 3);
 
-static bool SceneLoadAsyncXML1(Scene* self, const char* filepath, LoadMode mode)
+static bool SceneLoadAsyncXML(Scene* self, const char* filepath, LoadMode mode = LOAD_SCENE_AND_RESOURCES)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
     if (!file->IsOpen())
@@ -906,15 +664,9 @@ static bool SceneLoadAsyncXML1(Scene* self, const char* filepath, LoadMode mode)
     return self->LoadAsyncXML(file, mode);
 }
 
-static bool SceneLoadAsyncJSON0(Scene* self, const char* filepath)
-{
-    SharedPtr<File> file(new File(globalContext, filepath));
-    if (!file->IsOpen())
-        return false;
-    return self->LoadAsyncJSON(file);
-}
+KAGUYA_FUNCTION_OVERLOADS(SceneLoadAsyncXMLOverloads, SceneLoadAsyncXML, 2, 3);
 
-static bool SceneLoadAsyncJSON1(Scene* self, const char* filepath, LoadMode mode)
+static bool SceneLoadAsyncJSON(Scene* self, const char* filepath, LoadMode mode = LOAD_SCENE_AND_RESOURCES)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
     if (!file->IsOpen())
@@ -922,15 +674,9 @@ static bool SceneLoadAsyncJSON1(Scene* self, const char* filepath, LoadMode mode
     return self->LoadAsyncJSON(file, mode);
 }
 
-static SharedPtr<Node> SceneInstantiate0(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation)
-{
-    SharedPtr<File> file(new File(globalContext, filepath));
-    if (!file->IsOpen())
-        return SharedPtr<Node>();
-    return SharedPtr<Node>(self->Instantiate(*file, position, rotation));
-}
+KAGUYA_FUNCTION_OVERLOADS(SceneLoadAsyncJSONOverloads, SceneLoadAsyncJSON, 2, 3);
 
-static SharedPtr<Node> SceneInstantiate1(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation, CreateMode mode)
+static SharedPtr<Node> SceneInstantiate(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
     if (!file->IsOpen())
@@ -938,15 +684,9 @@ static SharedPtr<Node> SceneInstantiate1(Scene* self, const char* filepath, cons
     return SharedPtr<Node>(self->Instantiate(*file, position, rotation, mode));
 }
 
-static SharedPtr<Node> SceneInstantiateXML0(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation)
-{
-    SharedPtr<File> file(new File(globalContext, filepath));
-    if (!file->IsOpen())
-        return SharedPtr<Node>();
-    return SharedPtr<Node>(self->InstantiateXML(*file, position, rotation));
-}
+KAGUYA_FUNCTION_OVERLOADS(SceneInstantiateOverloads, SceneInstantiate, 4, 5);
 
-static SharedPtr<Node> SceneInstantiateXML1(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation, CreateMode mode)
+static SharedPtr<Node> SceneInstantiateXML(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
     if (!file->IsOpen())
@@ -954,15 +694,9 @@ static SharedPtr<Node> SceneInstantiateXML1(Scene* self, const char* filepath, c
     return SharedPtr<Node>(self->InstantiateXML(*file, position, rotation, mode));
 }
 
-static SharedPtr<Node> SceneInstantiateJSON0(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation)
-{
-    SharedPtr<File> file(new File(globalContext, filepath));
-    if (!file->IsOpen())
-        return SharedPtr<Node>();
-    return SharedPtr<Node>(self->InstantiateJSON(*file, position, rotation));
-}
+KAGUYA_FUNCTION_OVERLOADS(SceneInstantiateXMLOverloads, SceneInstantiateXML, 4, 5);
 
-static SharedPtr<Node> SceneInstantiateJSON1(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation, CreateMode mode)
+static SharedPtr<Node> SceneInstantiateJSON(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
     if (!file->IsOpen())
@@ -970,20 +704,9 @@ static SharedPtr<Node> SceneInstantiateJSON1(Scene* self, const char* filepath, 
     return SharedPtr<Node>(self->InstantiateJSON(*file, position, rotation, mode));
 }
 
-static void SceneClear0(Scene* self)
-{
-    self->Clear();
-}
+KAGUYA_FUNCTION_OVERLOADS(SceneInstantiateJSONOverloads, SceneInstantiateJSON, 4, 5);
 
-static void SceneClear1(Scene* self, bool clearReplicated)
-{
-    self->Clear(clearReplicated);
-}
-
-static void SceneClear2(Scene* self, bool clearReplicated, bool clearLocal)
-{
-    self->Clear(clearReplicated, clearLocal);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(SceneClear, Scene, Clear, 0, 2);
 
 static void RegisterScene(kaguya::State& lua)
 {
@@ -1006,21 +729,22 @@ static void RegisterScene(kaguya::State& lua)
             static_cast<bool (Scene::*)(Deserializer&)>(&Scene::LoadXML))
         .addOverloadedFunctions("LoadJSON", &SceneLoadJSON,
             static_cast<bool (Scene::*)(Deserializer&)>(&Scene::LoadJSON))
-        .addOverloadedFunctions("SaveXML", &SceneSaveXML,
+        .addOverloadedFunctions("SaveXML", SceneSaveXMLOverloads(),
             static_cast<bool (Scene::*)(Serializer&, const String&) const>(&Scene::SaveXML))
-        .addOverloadedFunctions("SaveJSON", &SceneSaveJSON,
+        .addOverloadedFunctions("SaveJSON", SceneSaveJSONOverloads(),
             static_cast<bool (Scene::*)(Serializer&, const String&) const>(&Scene::SaveJSON))
 
-        ADD_OVERLOADED_FUNCTIONS_2(Scene, LoadAsync)
-        ADD_OVERLOADED_FUNCTIONS_2(Scene, LoadAsyncXML)
-        ADD_OVERLOADED_FUNCTIONS_2(Scene, LoadAsyncJSON)
+        .addStaticFunction("LoadAsync", SceneLoadAsyncOverloads())
+        .addStaticFunction("LoadAsyncXML", SceneLoadAsyncXMLOverloads())
+        .addStaticFunction("LoadAsyncJSON", SceneLoadAsyncJSONOverloads())
+
         .addFunction("StopAsyncLoading", &Scene::StopAsyncLoading)
 
-        ADD_OVERLOADED_FUNCTIONS_2(Scene, Instantiate)
-        ADD_OVERLOADED_FUNCTIONS_2(Scene, InstantiateXML)
-        ADD_OVERLOADED_FUNCTIONS_2(Scene, InstantiateJSON)
+        .addStaticFunction("Instantiate", SceneInstantiateOverloads())
+        .addStaticFunction("InstantiateXML", SceneInstantiateXMLOverloads())
+        .addStaticFunction("InstantiateJSON", SceneInstantiateJSONOverloads())
 
-        ADD_OVERLOADED_FUNCTIONS_3(Scene, Clear)
+        .addFunction("Clear", SceneClear())
 
         .addFunction("SetUpdateEnabled", &Scene::SetUpdateEnabled)
         .addFunction("SetTimeScale", &Scene::SetTimeScale)
