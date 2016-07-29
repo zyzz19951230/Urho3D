@@ -357,7 +357,7 @@ static void RegisterNavigationMesh(kaguya::State& lua)
         .addFunction("FindNearestPoint", NavigationMeshFindNearestPoint())
         .addFunction("MoveAlongSurface", NavigationMeshMoveAlongSurface())
         
-        .addStaticFunction("FindPath", NavigationMeshFindPathOverloads)
+        .addStaticFunction("FindPath", NavigationMeshFindPathOverloads())
 
         .addFunction("GetRandomPoint", NavigationMeshGetRandomPoint())
         .addFunction("GetRandomPointInCircle", NavigationMeshGetRandomPointInCircle())
