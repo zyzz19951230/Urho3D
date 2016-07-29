@@ -554,7 +554,8 @@ namespace kaguya
 	/// @ingroup lua_type_traits
 	/// @brief lua_type_traits for cstring
 	template<>	struct lua_type_traits<const char*> {
-		typedef std::string get_type;
+		// typedef std::string get_type;
+		typedef const char* get_type;
 		typedef const char* push_type;
 
 		static bool strictCheckType(lua_State* l, int index)
@@ -583,7 +584,8 @@ namespace kaguya
 	/// @ingroup lua_type_traits
 	/// @brief lua_type_traits for cstring
 	template<int N>	struct lua_type_traits<char[N]> {
-		typedef std::string get_type;
+		// typedef std::string get_type;
+		typedef const char* get_type;
 		typedef const char* push_type;
 
 		static bool strictCheckType(lua_State* l, int index)
