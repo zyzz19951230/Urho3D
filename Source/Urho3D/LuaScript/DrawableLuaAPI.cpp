@@ -45,17 +45,14 @@
 namespace Urho3D
 {
 
-static void AnimatedModelSetModel0(AnimatedModel* self, Model* model)
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(AnimatedModelSetModel, AnimatedModel, SetModel, 1, 2);
+
+static void AnimatedModelModelSetter(AnimatedModel* self, Model* model)
 {
     self->SetModel(model);
 }
 
-static void AnimatedModelSetModel1(AnimatedModel* self, Model* model, bool createBones)
-{
-    self->SetModel(model, createBones);
-}
-
-static Model* AnimatedModelGetModel(const AnimatedModel* self)
+static Model* AnimatedModelModelGetter(const AnimatedModel* self)
 {
     return self->GetModel();
 }
@@ -67,7 +64,7 @@ static void RegisterAnimatedModel(kaguya::State& lua)
     lua["AnimatedModel"].setClass(UserdataMetatable<AnimatedModel, StaticModel>()
         .addStaticFunction("new", &CreateObject<AnimatedModel>)
 
-        ADD_OVERLOADED_FUNCTIONS_2(AnimatedModel, SetModel)
+        .addFunction("SetModel", AnimatedModelSetModel())
 
         .addFunction("AddAnimationState", &AnimatedModel::AddAnimationState)
 
@@ -113,7 +110,7 @@ static void RegisterAnimatedModel(kaguya::State& lua)
         
         .addFunction("UpdateBoneBoundingBox", &AnimatedModel::UpdateBoneBoundingBox)
 
-        .addProperty("model", &AnimatedModelGetModel, &AnimatedModelSetModel0)
+        .addProperty("model", &AnimatedModelModelGetter, &AnimatedModelModelSetter)
 
         .addProperty("updateGeometryType", &AnimatedModel::GetUpdateGeometryType)
         .addProperty("skeleton", &AnimatedModel::GetSkeleton)
@@ -175,19 +172,16 @@ static void RegisterBillboardSet(kaguya::State& lua)
         );
 }
 
-static void CustomGeometrySetMaterial(CustomGeometry* self, Material* material)
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(CustomGeometryGetMaterial, CustomGeometry, GetMaterial, 0, 1);
+
+static void CustomGeometryMaterialSetter(CustomGeometry* self, Material* material)
 {
     self->SetMaterial(material);
 }
 
-static Material* CustomGeometryGetMaterial0(const CustomGeometry* self)
+static Material* CustomGeometryMaterialGetter(const CustomGeometry* self)
 {
     return self->GetMaterial();
-}
-
-static Material* CustomGeometryGetMaterial1(const CustomGeometry* self, unsigned int index)
-{
-    return self->GetMaterial(index);
 }
 
 static void RegisterCustomGeometry(kaguya::State& lua)
@@ -226,13 +220,13 @@ static void RegisterCustomGeometry(kaguya::State& lua)
         .addFunction("GetNumVertices", &CustomGeometry::GetNumVertices)
         .addFunction("IsDynamic", &CustomGeometry::IsDynamic)
         
-        ADD_OVERLOADED_FUNCTIONS_2(CustomGeometry, GetMaterial)
+        .addFunction("GetMaterial", CustomGeometryGetMaterial())
 
         .addFunction("GetVertex", &CustomGeometry::GetVertex)
 
         .addProperty("numGeometries", &CustomGeometry::GetNumGeometries, &CustomGeometry::SetNumGeometries)
         .addProperty("dynamic", &CustomGeometry::IsDynamic, &CustomGeometry::SetDynamic)
-        .addProperty("material", &CustomGeometryGetMaterial0, &CustomGeometrySetMaterial)
+        .addProperty("material", &CustomGeometryMaterialGetter, &CustomGeometryMaterialSetter)
         );
 }
 
@@ -256,6 +250,8 @@ static bool DecalSetAddDecal3(DecalSet* self, Drawable* target, const Vector3& w
     return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive, normalCutoff, subGeometry);
 }
 
+// KAGUYA_MEMBER_FUNCTION_OVERLOADS(DecalSetAddDecal, DecalSet, AddDecal, 8, 11);
+
 static void RegisterDecalSet(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -268,6 +264,7 @@ static void RegisterDecalSet(kaguya::State& lua)
         .addFunction("SetMaxIndices", &DecalSet::SetMaxIndices)
         
         ADD_OVERLOADED_FUNCTIONS_4(DecalSet, AddDecal)
+        // .addFunction("AddDecal", DecalSetAddDecal())
 
         .addFunction("RemoveDecals", &DecalSet::RemoveDecals)
         .addFunction("RemoveAllDecals", &DecalSet::RemoveAllDecals)
@@ -576,29 +573,17 @@ static void RegisterSkybox(kaguya::State& lua)
         );
 }
 
-static void StaticModelApplyMaterialList0(StaticModel* self)
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(StaticModelApplyMaterialList, StaticModel, ApplyMaterialList, 0, 1);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(StaticModelGetMaterial, StaticModel, GetMaterial, 0, 1);
+
+static void StaticModelMaterialSetter(StaticModel* self, Material* material)
 {
-    self->ApplyMaterialList();
+    self->SetMaterial(material);
 }
 
-static void StaticModelApplyMaterialList1(StaticModel* self, const String& fileName)
+static Material* StaticModelMaterialGetter(const StaticModel* self)
 {
-    self->ApplyMaterialList(fileName);
-}
-
-static void StaticModelSetMaterial(StaticModel* staticModel, Material* material)
-{
-    staticModel->SetMaterial(material);
-}
-
-static Material* StaticModelGetMaterial0(const StaticModel* staticModle)
-{
-    return staticModle->GetMaterial();
-}
-
-static Material* StaticModelGetMaterial1(const StaticModel* staticModle, unsigned index)
-{
-    return staticModle->GetMaterial(index);
+    return self->GetMaterial();
 }
 
 static void RegisterStaticModel(kaguya::State& lua)
@@ -616,20 +601,20 @@ static void RegisterStaticModel(kaguya::State& lua)
 
         .addFunction("SetOcclusionLodLevel", &StaticModel::SetOcclusionLodLevel)
         
-        ADD_OVERLOADED_FUNCTIONS_2(StaticModel, ApplyMaterialList)
+        .addFunction("ApplyMaterialList", StaticModelApplyMaterialList())
 
         .addFunction("GetModel", &StaticModel::GetModel)
         .addFunction("GetNumGeometries", &StaticModel::GetNumGeometries)
 
-
-        ADD_OVERLOADED_FUNCTIONS_2(StaticModel, GetMaterial)
+        .addFunction("GetMaterial", StaticModelGetMaterial())
         
         .addFunction("GetOcclusionLodLevel", &StaticModel::GetOcclusionLodLevel)
         .addFunction("IsInside", &StaticModel::IsInside)
         .addFunction("IsInsideLocal", &StaticModel::IsInsideLocal)
 
         .addProperty("model", &StaticModel::GetModel, &StaticModel::SetModel)
-        .addProperty("material", &StaticModelGetMaterial0, &StaticModelSetMaterial)
+
+        .addProperty("material", &StaticModelMaterialGetter, &StaticModelMaterialSetter)
 
         .addProperty("boundingBox", &StaticModel::GetBoundingBox)
         .addProperty("numGeometries", &StaticModel::GetNumGeometries)

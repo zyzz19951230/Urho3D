@@ -41,15 +41,7 @@
 namespace Urho3D
 {
 
-static SharedPtr<Animation> AnimationClone0(const Animation* self)
-{
-    return self->Clone();
-}
-
-static SharedPtr<Animation> AnimationClone1(const Animation* self, const String& cloneName)
-{
-    return self->Clone(cloneName);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(AnimationClone, Animation, Clone, 0, 1);
 
 static void RegisterAnimation(kaguya::State& lua)
 {
@@ -110,7 +102,7 @@ static void RegisterAnimation(kaguya::State& lua)
         .addFunction("RemoveTrigger", &Animation::RemoveTrigger)
         .addFunction("RemoveAllTriggers", &Animation::RemoveAllTriggers)
         
-        ADD_OVERLOADED_FUNCTIONS_2(Animation, Clone)
+        .addFunction("Clone", AnimationClone())
 
         .addFunction("GetAnimationName", &Animation::GetAnimationName)
         .addFunction("GetAnimationNameHash", &Animation::GetAnimationNameHash)
@@ -131,55 +123,11 @@ static void RegisterAnimation(kaguya::State& lua)
         );
 }
 
-static bool AnimationControllerPlay0(AnimationController* self, const String& name, unsigned char layer, bool looped)
-{
-    return self->Play(name, layer, looped);
-}
-
-static bool AnimationControllerPlay1(AnimationController* self, const String& name, unsigned char layer, bool looped, float fadeInTime)
-{
-    return self->Play(name, layer, looped, fadeInTime);
-}
-
-static bool AnimationControllerPlayExclusive0(AnimationController* self, const String& name, unsigned char layer, bool looped)
-{
-    return self->PlayExclusive(name, layer, looped);
-}
-
-static bool AnimationControllerPlayExclusive1(AnimationController* self, const String& name, unsigned char layer, bool looped, float fadeTime)
-{
-    return self->PlayExclusive(name, layer, looped, fadeTime);
-}
-
-static bool AnimationControllerStop0(AnimationController* self, const String& name)
-{
-    return self->Stop(name);
-}
-
-static bool AnimationControllerStop1(AnimationController* self, const String& name, float fadeOutTime)
-{
-    return self->Stop(name, fadeOutTime);
-}
-
-static void AnimationControllerStopLayer0(AnimationController* self, unsigned char layer)
-{
-    self->StopLayer(layer);
-}
-
-static void AnimationControllerStopLayer1(AnimationController* self, unsigned char layer, float fadeOutTime)
-{
-    self->StopLayer(layer, fadeOutTime);
-}
-
-static void AnimationControllerStopAll0(AnimationController* self)
-{
-    self->StopAll();
-}
-
-static void AnimationControllerStopAll1(AnimationController* self, float fadeTime)
-{
-    self->StopAll(fadeTime);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(AnimationControllerPlay, AnimationController, Play, 3, 4);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(AnimationControllerPlayExclusive, AnimationController, PlayExclusive, 3, 4);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(AnimationControllerStop, AnimationController, Stop, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(AnimationControllerStopLayer, AnimationController, StopLayer, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(AnimationControllerStopAll, AnimationController, StopAll, 0, 1);
 
 static void RegisterAnimationController(kaguya::State& lua)
 {
@@ -188,11 +136,11 @@ static void RegisterAnimationController(kaguya::State& lua)
     lua["AnimationController"].setClass(UserdataMetatable<AnimationController, Component>()
         .addStaticFunction("new", &CreateObject<AnimationController>)
 
-        ADD_OVERLOADED_FUNCTIONS_2(AnimationController, Play)
-        ADD_OVERLOADED_FUNCTIONS_2(AnimationController, PlayExclusive)
-        ADD_OVERLOADED_FUNCTIONS_2(AnimationController, Stop)
-        ADD_OVERLOADED_FUNCTIONS_2(AnimationController, StopLayer)
-        ADD_OVERLOADED_FUNCTIONS_2(AnimationController, StopAll)
+        .addFunction("Play", AnimationControllerPlay())
+        .addFunction("PlayExclusive", AnimationControllerPlayExclusive())
+        .addFunction("Stop", AnimationControllerStop())
+        .addFunction("StopLayer", AnimationControllerStopLayer())
+        .addFunction("StopAll", AnimationControllerStopAll())
 
         .addFunction("Fade", &AnimationController::Fade)
         .addFunction("FadeOthers", &AnimationController::FadeOthers)
@@ -229,25 +177,8 @@ static void RegisterAnimationController(kaguya::State& lua)
         );
 }
 
-static void AnimationStateSetBoneWeight0(AnimationState* self, unsigned int index, float weight)
-{
-    self->SetBoneWeight(index, weight);
-}
-
-static void AnimationStateSetBoneWeight1(AnimationState* self, unsigned int index, float weight, bool recursive)
-{
-    self->SetBoneWeight(index, weight, recursive);
-}
-
-static void AnimationStateSetBoneWeight2(AnimationState* self, const String& name, float weight)
-{
-    self->SetBoneWeight(name, weight);
-}
-
-static void AnimationStateSetBoneWeight3(AnimationState* self, const String& name, float weight, bool recursive)
-{
-    self->SetBoneWeight(name, weight, recursive);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(AnimationStateSetBoneWeight0, AnimationState, SetBoneWeight, 2, 3, void(AnimationState::*)(unsigned, float, bool));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(AnimationStateSetBoneWeight1, AnimationState, SetBoneWeight, 2, 3, void(AnimationState::*)(const String&, float, bool));
 
 static void RegisterAnimationState(kaguya::State& lua)
 {
@@ -266,7 +197,9 @@ static void RegisterAnimationState(kaguya::State& lua)
         .addFunction("SetBlendMode", &AnimationState::SetBlendMode)
         .addFunction("SetTime", &AnimationState::SetTime)
 
-        ADD_OVERLOADED_FUNCTIONS_4(AnimationState, SetBoneWeight)
+        .addOverloadedFunctions("SetBoneWeight", 
+            AnimationStateSetBoneWeight0(),
+            AnimationStateSetBoneWeight1())
 
         .addFunction("AddWeight", &AnimationState::AddWeight)
         .addFunction("AddTime", &AnimationState::AddTime)
@@ -306,15 +239,7 @@ static void RegisterAnimationState(kaguya::State& lua)
         );
 }
 
-static SharedPtr<Model> ModelClone0(const Model* self)
-{
-    return self->Clone();
-}
-
-static SharedPtr<Model> ModelClone1(const Model* self, const String& cloneName)
-{
-    return self->Clone(cloneName);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(ModelClone, Model, Clone, 0, 1);
 
 static void RegisterModel(kaguya::State& lua)
 {
@@ -331,7 +256,7 @@ static void RegisterModel(kaguya::State& lua)
         .addFunction("SetGeometryCenter", &Model::SetGeometryCenter)
         .addFunction("SetSkeleton", &Model::SetSkeleton)
         
-        ADD_OVERLOADED_FUNCTIONS_2(Model, Clone)
+        .addFunction("Clone", ModelClone())
 
         .addFunction("GetBoundingBox", &Model::GetBoundingBox)
         .addFunction("GetSkeleton", &Model::GetSkeleton)

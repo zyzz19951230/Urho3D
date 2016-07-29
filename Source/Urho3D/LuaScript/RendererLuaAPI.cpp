@@ -159,145 +159,22 @@ static void RegisterCamera(kaguya::State& lua)
     );
 }
 
-static void DebugRendererAddLine0(DebugRenderer* self, const Vector3& start, const Vector3& end, const Color& color)
-{
-    self->AddLine(start, end, color);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(DebugRendererAddLine, DebugRenderer, AddLine, 3, 4, void(DebugRenderer::*)(const Vector3&, const Vector3&, const Color&, bool));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(DebugRendererAddTriangle, DebugRenderer, AddTriangle, 4, 5, void(DebugRenderer::*)(const Vector3&, const Vector3&, const Vector3&, const Color&, bool));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddNode, DebugRenderer, AddNode, 1, 3);
 
-static void DebugRendererAddLine1(DebugRenderer* self, const Vector3& start, const Vector3& end, const Color& color, bool depthTest)
-{
-    self->AddLine(start, end, color, depthTest);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(DebugRendererAddBoundingBox0, DebugRenderer, AddBoundingBox, 2, 3, void(DebugRenderer::*)(const BoundingBox&, const Color&, bool));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(DebugRendererAddBoundingBox1, DebugRenderer, AddBoundingBox, 3, 4, void(DebugRenderer::*)(const BoundingBox&, const Matrix3x4&, const Color&, bool));
 
-static void DebugRendererAddTriangle0(DebugRenderer* self, const Vector3& v1, const Vector3& v2, const Vector3& v3, const Color& color)
-{
-    self->AddTriangle(v1, v2, v3, color);
-}
-
-static void DebugRendererAddTriangle1(DebugRenderer* self, const Vector3& v1, const Vector3& v2, const Vector3& v3, const Color& color, bool depthTest)
-{
-    self->AddTriangle(v1, v2, v3, color, depthTest);
-}
-
-static void DebugRendererAddNode0(DebugRenderer* self, Node* node)
-{
-    self->AddNode(node);
-}
-
-static void DebugRendererAddNode1(DebugRenderer* self, Node* node, float scale)
-{
-    self->AddNode(node, scale);
-}
-
-static void DebugRendererAddNode2(DebugRenderer* self, Node* node, float scale, bool depthTest)
-{
-    self->AddNode(node, scale, depthTest);
-}
-
-static void DebugRendererAddBoundingBox0(DebugRenderer* self, const BoundingBox& box, const Color& color)
-{
-    self->AddBoundingBox(box, color);
-}
-
-static void DebugRendererAddBoundingBox1(DebugRenderer* self, const BoundingBox& box, const Color& color, bool depthTest)
-{
-    self->AddBoundingBox(box, color, depthTest);
-}
-
-static void DebugRendererAddFrustum0(DebugRenderer* self, const Frustum& frustum, const Color& color)
-{
-    self->AddFrustum(frustum, color);
-}
-
-static void DebugRendererAddFrustum1(DebugRenderer* self, const Frustum& frustum, const Color& color, bool depthTest)
-{
-    self->AddFrustum(frustum, color, depthTest);
-}
-
-static void DebugRendererAddPolyhedron0(DebugRenderer* self, const Polyhedron& poly, const Color& color)
-{
-    self->AddPolyhedron(poly, color);
-}
-
-static void DebugRendererAddPolyhedron1(DebugRenderer* self, const Polyhedron& poly, const Color& color, bool depthTest)
-{
-    self->AddPolyhedron(poly, color, depthTest);
-}
-
-static void DebugRendererAddSphere0(DebugRenderer* self, const Sphere& sphere, const Color& color)
-{
-    self->AddSphere(sphere, color);
-}
-
-static void DebugRendererAddSphere1(DebugRenderer* self, const Sphere& sphere, const Color& color, bool depthTest)
-{
-    self->AddSphere(sphere, color, depthTest);
-}
-
-static void DebugRendererAddCylinder0(DebugRenderer* self, const Vector3& position, float radius, float height, const Color& color)
-{
-    self->AddCylinder(position, radius, height, color);
-}
-
-static void DebugRendererAddCylinder1(DebugRenderer* self, const Vector3& position, float radius, float height, const Color& color, bool depthTest)
-{
-    self->AddCylinder(position, radius, height, color, depthTest);
-}
-
-static void DebugRendererAddSkeleton0(DebugRenderer* self, const Skeleton& skeleton, const Color& color)
-{
-    self->AddSkeleton(skeleton, color);
-}
-
-static void DebugRendererAddSkeleton1(DebugRenderer* self, const Skeleton& skeleton, const Color& color, bool depthTest)
-{
-    self->AddSkeleton(skeleton, color, depthTest);
-}
-
-static void DebugRendererAddTriangleMesh0(DebugRenderer* self, const void* vertexData, unsigned int vertexSize, const void* indexData, unsigned int indexSize, unsigned int indexStart, unsigned int indexCount, const Matrix3x4& transform, const Color& color)
-{
-    self->AddTriangleMesh(vertexData, vertexSize, indexData, indexSize, indexStart, indexCount, transform, color);
-}
-
-static void DebugRendererAddTriangleMesh1(DebugRenderer* self, const void* vertexData, unsigned int vertexSize, const void* indexData, unsigned int indexSize, unsigned int indexStart, unsigned int indexCount, const Matrix3x4& transform, const Color& color, bool depthTest)
-{
-    self->AddTriangleMesh(vertexData, vertexSize, indexData, indexSize, indexStart, indexCount, transform, color, depthTest);
-}
-
-static void DebugRendererAddCircle0(DebugRenderer* self, const Vector3& center, const Vector3& normal, float radius, const Color& color)
-{
-    self->AddCircle(center, normal, radius, color);
-}
-
-static void DebugRendererAddCircle1(DebugRenderer* self, const Vector3& center, const Vector3& normal, float radius, const Color& color, int steps)
-{
-    self->AddCircle(center, normal, radius, color, steps);
-}
-
-static void DebugRendererAddCircle2(DebugRenderer* self, const Vector3& center, const Vector3& normal, float radius, const Color& color, int steps, bool depthTest)
-{
-    self->AddCircle(center, normal, radius, color, steps, depthTest);
-}
-
-static void DebugRendererAddCross0(DebugRenderer* self, const Vector3& center, float size, const Color& color)
-{
-    self->AddCross(center, size, color);
-}
-
-static void DebugRendererAddCross1(DebugRenderer* self, const Vector3& center, float size, const Color& color, bool depthTest)
-{
-    self->AddCross(center, size, color, depthTest);
-}
-
-static void DebugRendererAddQuad0(DebugRenderer* self, const Vector3& center, float width, float height, const Color& color)
-{
-    self->AddQuad(center, width, height, color);
-}
-
-static void DebugRendererAddQuad1(DebugRenderer* self, const Vector3& center, float width, float height, const Color& color, bool depthTest)
-{
-    self->AddQuad(center, width, height, color, depthTest);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddFrustum, DebugRenderer, AddFrustum, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddPolyhedron, DebugRenderer, AddPolyhedron, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddSphere, DebugRenderer, AddSphere, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddCylinder, DebugRenderer, AddCylinder, 4, 5);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddSkeleton, DebugRenderer, AddSkeleton, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddTriangleMesh, DebugRenderer, AddTriangleMesh, 8, 9);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddCircle, DebugRenderer, AddCircle, 4, 6);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddCross, DebugRenderer, AddCross, 3, 4);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddQuad, DebugRenderer, AddQuad, 4, 5);
 
 static void RegisterDebugRenderer(kaguya::State& lua)
 {
@@ -308,20 +185,23 @@ static void RegisterDebugRenderer(kaguya::State& lua)
         
         .addFunction("SetView", &DebugRenderer::SetView)
 
-        ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddLine)
-        ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddTriangle)
-        ADD_OVERLOADED_FUNCTIONS_3(DebugRenderer, AddNode)
-        ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddBoundingBox)
-        ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddFrustum)
-        ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddPolyhedron)
-        ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddSphere)
-        ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddCylinder)
-        ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddSkeleton)
-        ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddTriangleMesh)
-        ADD_OVERLOADED_FUNCTIONS_3(DebugRenderer, AddCircle)
-        ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddCross)
-        ADD_OVERLOADED_FUNCTIONS_2(DebugRenderer, AddQuad)
+        .addFunction("AddLine", DebugRendererAddLine())
+        .addFunction("AddTriangle", DebugRendererAddTriangle())
+        .addFunction("AddNode", DebugRendererAddNode())
+        
+        .addOverloadedFunctions("AddBoundingBox", 
+            DebugRendererAddBoundingBox0(),
+            DebugRendererAddBoundingBox1())
 
+        .addFunction("AddFrustum", DebugRendererAddFrustum())
+        .addFunction("AddPolyhedron", DebugRendererAddPolyhedron())
+        .addFunction("AddSphere", DebugRendererAddSphere())
+        .addFunction("AddCylinder", DebugRendererAddCylinder())
+        .addFunction("AddSkeleton", DebugRendererAddSkeleton())
+        .addFunction("AddTriangleMesh", DebugRendererAddTriangleMesh())
+        .addFunction("AddCircle", DebugRendererAddCircle())
+        .addFunction("AddCross", DebugRendererAddCross())
+        .addFunction("AddQuad", DebugRendererAddQuad())
 
         .addFunction("Render", &DebugRenderer::Render)
         .addFunction("GetView", &DebugRenderer::GetView)
@@ -335,25 +215,8 @@ static void RegisterDebugRenderer(kaguya::State& lua)
     );
 }
 
-static bool GeometrySetDrawRange0(Geometry* self, PrimitiveType type, unsigned int indexStart, unsigned int indexCount)
-{
-    return self->SetDrawRange(type, indexStart, indexCount);
-}
-
-static bool GeometrySetDrawRange1(Geometry* self, PrimitiveType type, unsigned int indexStart, unsigned int indexCount, bool getUsedVertexRange)
-{
-    return self->SetDrawRange(type, indexStart, indexCount, getUsedVertexRange);
-}
-
-static bool GeometrySetDrawRange2(Geometry* self, PrimitiveType type, unsigned int indexStart, unsigned int indexCount, unsigned int vertexStart, unsigned int vertexCount)
-{
-    return self->SetDrawRange(type, indexStart, indexCount, vertexStart, vertexCount);
-}
-
-static bool GeometrySetDrawRange3(Geometry* self, PrimitiveType type, unsigned int indexStart, unsigned int indexCount, unsigned int vertexStart, unsigned int vertexCount, bool checkIllegal)
-{
-    return self->SetDrawRange(type, indexStart, indexCount, vertexStart, vertexCount, checkIllegal);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(GeometrySetDrawRange0, Geometry, SetDrawRange, 3, 4, bool(Geometry::*)(PrimitiveType, unsigned, unsigned, bool));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(GeometrySetDrawRange1, Geometry, SetDrawRange, 5, 6, bool(Geometry::*)(PrimitiveType, unsigned, unsigned, unsigned, unsigned, bool));
 
 static void RegisterGeometry(kaguya::State& lua)
 {
@@ -366,7 +229,9 @@ static void RegisterGeometry(kaguya::State& lua)
         .addFunction("SetVertexBuffer", &Geometry::SetVertexBuffer)
         .addFunction("SetIndexBuffer", &Geometry::SetIndexBuffer)
 
-        ADD_OVERLOADED_FUNCTIONS_4(Geometry, SetDrawRange)
+        .addOverloadedFunctions("SetDrawRange", 
+            GeometrySetDrawRange0(),
+            GeometrySetDrawRange1())
 
         .addFunction("SetLodDistance", &Geometry::SetLodDistance)
 
@@ -757,30 +622,20 @@ static void RegisterGraphicsDefs(kaguya::State& lua)
     lua["MASK_OBJECTINDEX"] = MASK_OBJECTINDEX;
 }
 
-static bool IndexBufferSetSize0(IndexBuffer* self, unsigned int indexCount, bool largeIndices)
+static SharedPtr<IndexBuffer> CreateIndexBuffer(bool forceHeadless = false)
 {
-    return self->SetSize(indexCount, largeIndices);
+    return SharedPtr<IndexBuffer>(new IndexBuffer(globalContext, forceHeadless));
 }
 
-static bool IndexBufferSetSize1(IndexBuffer* self, unsigned int indexCount, bool largeIndices, bool dynamic)
-{
-    return self->SetSize(indexCount, largeIndices, dynamic);
-}
+KAGUYA_FUNCTION_OVERLOADS(CreateIndexBufferOverloads, CreateIndexBuffer, 0, 1);
 
-static bool IndexBufferSetData0(IndexBuffer* self, VectorBuffer& src)
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(IndexBufferSetSize, IndexBuffer, SetSize, 2, 3);
+
+static bool IndexBufferSetData(IndexBuffer* self, VectorBuffer& src)
 {
     // Make sure there is enough data
     if (self->GetIndexCount() && src.GetSize() >= self->GetIndexCount() * self->GetIndexSize())
         return self->SetData(&src.GetBuffer()[0]);
-    else
-        return false;
-}
-
-static bool IndexBufferSetData1(IndexBuffer* self, VectorBuffer& src, unsigned start, unsigned count, bool discard)
-{
-    // Make sure there is enough data
-    if (self->GetIndexCount() && src.GetSize() >= count * self->GetIndexSize())
-        return self->SetDataRange(&src.GetBuffer()[0], start, count, discard);
     else
         return false;
 }
@@ -805,14 +660,14 @@ static void RegisterIndexBuffer(kaguya::State& lua)
     using namespace kaguya;
 
     lua["IndexBuffer"].setClass(UserdataMetatable<IndexBuffer, Object>()
-        .addStaticFunction("new", &CreateObject<IndexBuffer>)
+        .addStaticFunction("new", 
+            CreateIndexBufferOverloads())
         
         .addFunction("SetShadowed", &IndexBuffer::SetShadowed)
         
-        ADD_OVERLOADED_FUNCTIONS_2(IndexBuffer, SetSize)
+        .addFunction("SetSize", IndexBufferSetSize())
         
-        ADD_OVERLOADED_FUNCTIONS_2(IndexBuffer, SetData)
-
+        .addStaticFunction("SetData", &IndexBufferSetData)
         .addStaticFunction("GetData", &IndexBufferGetData)
 
         .addFunction("IsShadowed", &IndexBuffer::IsShadowed)
@@ -827,45 +682,9 @@ static void RegisterIndexBuffer(kaguya::State& lua)
     );
 }
 
-static void MaterialSetTechnique0(Material* material, unsigned index, Technique* tech)
-{
-    material->SetTechnique(index, tech);
-}
-
-static void MaterialSetTechnique1(Material* material, unsigned index, Technique* tech, unsigned qualityLevel)
-{
-    material->SetTechnique(index, tech, qualityLevel);
-}
-
-static void MaterialSetTechnique2(Material* material, unsigned index, Technique* tech, unsigned qualityLevel, float lodDistance)
-{
-    material->SetTechnique(index, tech, qualityLevel, lodDistance);
-}
-
-static void MaterialSetShaderParameterAnimation0(Material* self, const String& name, ValueAnimation* animation)
-{
-    self->SetShaderParameterAnimation(name, animation);
-}
-
-static void MaterialSetShaderParameterAnimation1(Material* self, const String& name, ValueAnimation* animation, WrapMode wrapMode)
-{
-    self->SetShaderParameterAnimation(name, animation, wrapMode);
-}
-
-static void MaterialSetShaderParameterAnimation2(Material* self, const String& name, ValueAnimation* animation, WrapMode wrapMode, float speed)
-{
-    self->SetShaderParameterAnimation(name, animation, wrapMode, speed);
-}
-
-static SharedPtr<Material> MaterialClone0(const Material* self)
-{
-    return self->Clone();
-}
-
-static SharedPtr<Material> MaterialClone1(const Material* self, const String& cloneName)
-{
-    return self->Clone(cloneName);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(MaterialSetTechnique, Material, SetTechnique, 2, 4);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(MaterialSetShaderParameterAnimation, Material, SetShaderParameterAnimation, 2, 4);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(MaterialClone, Material, Clone, 0, 1);
 
 static void RegisterMaterial(kaguya::State& lua)
 {
@@ -876,13 +695,10 @@ static void RegisterMaterial(kaguya::State& lua)
     lua["Material"].setClass(UserdataMetatable<Material, Resource>()
         .addStaticFunction("new", &CreateObject<Material>)
         
-        .addFunction("SetNumTechniques", &Material::SetNumTechniques)
-        
-        ADD_OVERLOADED_FUNCTIONS_3(Material, SetTechnique)
-
-        .addFunction("SetShaderParameter", &Material::SetShaderParameter)
-        
-        ADD_OVERLOADED_FUNCTIONS_3(Material, SetShaderParameterAnimation)
+        .addFunction("SetNumTechniques", &Material::SetNumTechniques)        
+        .addFunction("SetTechnique", MaterialSetTechnique())        
+        .addFunction("SetShaderParameter", &Material::SetShaderParameter)        
+        .addFunction("SetShaderParameterAnimation", MaterialSetShaderParameterAnimation())
 
         .addFunction("SetShaderParameterAnimationWrapMode", &Material::SetShaderParameterAnimationWrapMode)
         .addFunction("SetShaderParameterAnimationSpeed", &Material::SetShaderParameterAnimationSpeed)
@@ -901,7 +717,7 @@ static void RegisterMaterial(kaguya::State& lua)
         .addFunction("RemoveShaderParameter", &Material::RemoveShaderParameter)
         .addFunction("ReleaseShaders", &Material::ReleaseShaders)
         
-        ADD_OVERLOADED_FUNCTIONS_2(Material, Clone)
+        .addFunction("Clone", MaterialClone())
 
         .addFunction("SortTechniques", &Material::SortTechniques)
         .addFunction("MarkForAuxView", &Material::MarkForAuxView)
@@ -937,65 +753,12 @@ static void RegisterMaterial(kaguya::State& lua)
     );
 }
 
-static unsigned int RendererGetNumGeometries0(const Renderer* self)
-{
-    return self->GetNumGeometries();
-}
-
-static unsigned int RendererGetNumGeometries1(const Renderer* self, bool allViews)
-{
-    return self->GetNumGeometries(allViews);
-}
-
-static unsigned int RendererGetNumLights0(const Renderer* self)
-{
-    return self->GetNumLights();
-}
-
-static unsigned int RendererGetNumLights1(const Renderer* self, bool allViews)
-{
-    return self->GetNumLights(allViews);
-}
-
-static unsigned int RendererGetNumShadowMaps0(const Renderer* self)
-{
-    return self->GetNumShadowMaps();
-}
-
-static unsigned int RendererGetNumShadowMaps1(const Renderer* self, bool allViews)
-{
-    return self->GetNumShadowMaps(allViews);
-}
-
-static unsigned int RendererGetNumOccluders0(const Renderer* self)
-{
-    return self->GetNumOccluders();
-}
-
-static unsigned int RendererGetNumOccluders1(const Renderer* self, bool allViews)
-{
-    return self->GetNumOccluders(allViews);
-}
-
-static Texture* RendererGetScreenBuffer0(Renderer* self, int width, int height, unsigned int format, bool cubemap, bool filtered, bool srgb)
-{
-    return self->GetScreenBuffer(width, height, format, cubemap, filtered, srgb);
-}
-
-static Texture* RendererGetScreenBuffer1(Renderer* self, int width, int height, unsigned int format, bool cubemap, bool filtered, bool srgb, unsigned int persistentKey)
-{
-    return self->GetScreenBuffer(width, height, format, cubemap, filtered, srgb, persistentKey);
-}
-
-static void RendererSetBatchShaders0(Renderer* self, Batch& batch, Technique* tech)
-{
-    self->SetBatchShaders(batch, tech);
-}
-
-static void RendererSetBatchShaders1(Renderer* self, Batch& batch, Technique* tech, bool allowShadows)
-{
-    self->SetBatchShaders(batch, tech, allowShadows);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(RendererGetNumGeometries, Renderer, GetNumGeometries, 0, 1);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(RendererGetNumLights, Renderer, GetNumLights, 0, 1);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(RendererGetNumShadowMaps, Renderer, GetNumShadowMaps, 0, 1);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(RendererGetNumOccluders, Renderer, GetNumOccluders, 0, 1);
+// KAGUYA_MEMBER_FUNCTION_OVERLOADS(RendererGetScreenBuffer, Renderer, GetScreenBuffer, 6, 7);
+// KAGUYA_MEMBER_FUNCTION_OVERLOADS(RendererSetBatchShaders, Renderer, SetBatchShaders, 2, 3);
 
 static void RegisterRenderer(kaguya::State& lua)
 {
@@ -1069,12 +832,14 @@ static void RegisterRenderer(kaguya::State& lua)
         .addFunction("GetNumPrimitives", &Renderer::GetNumPrimitives)
         .addFunction("GetNumBatches", &Renderer::GetNumBatches)
         
-        ADD_OVERLOADED_FUNCTIONS_2(Renderer, GetNumGeometries)
-        ADD_OVERLOADED_FUNCTIONS_2(Renderer, GetNumLights)
+        .addFunction("GetNumGeometries", RendererGetNumGeometries())
+        .addFunction("GetNumLights", RendererGetNumLights())
+        .addFunction("GetNumShadowMaps", RendererGetNumShadowMaps())
+        .addFunction("GetNumOccluders", RendererGetNumOccluders())
 
-        ADD_OVERLOADED_FUNCTIONS_2(Renderer, GetNumShadowMaps)
-        ADD_OVERLOADED_FUNCTIONS_2(Renderer, GetNumOccluders)
-
+        // .addFunction("GetScreenBuffer", RendererGetScreenBuffer())
+        // .addFunction("SetBatchShaders", RendererSetBatchShaders())
+        
         .addFunction("GetDefaultZone", &Renderer::GetDefaultZone)
         .addFunction("GetDefaultMaterial", &Renderer::GetDefaultMaterial)
         .addFunction("GetDefaultLightRamp", &Renderer::GetDefaultLightRamp)
@@ -1120,15 +885,7 @@ static void RegisterRenderer(kaguya::State& lua)
     );
 }
 
-static void RenderPathCommandSetOutput0(RenderPathCommand* self, unsigned int index, const String& name)
-{
-    self->SetOutput(index, name);
-}
-
-static void RenderPathCommandSetOutput1(RenderPathCommand* self, unsigned int index, const String& name, CubeMapFace face)
-{
-    self->SetOutput(index, name, face);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(RenderPathCommandSetOutput, RenderPathCommand, SetOutput, 2, 3);
 
 static void RegisterRenderPath(kaguya::State& lua)
 {
@@ -1180,12 +937,11 @@ static void RegisterRenderPath(kaguya::State& lua)
         .addFunction("RemoveShaderParameter", &RenderPathCommand::RemoveShaderParameter)
         .addFunction("SetNumOutputs", &RenderPathCommand::SetNumOutputs)
         
-        ADD_OVERLOADED_FUNCTIONS_2(RenderPathCommand, SetOutput)
+        .addFunction("SetOutput", RenderPathCommandSetOutput())
 
         .addFunction("SetOutputName", &RenderPathCommand::SetOutputName)
         .addFunction("SetOutputFace", &RenderPathCommand::SetOutputFace)
         .addFunction("SetDepthStencilName", &RenderPathCommand::SetDepthStencilName)
-        
         .addFunction("GetTextureName", &RenderPathCommand::GetTextureName)
         .addFunction("GetShaderParameter", &RenderPathCommand::GetShaderParameter)
         .addFunction("GetNumOutputs", &RenderPathCommand::GetNumOutputs)
@@ -1286,15 +1042,7 @@ static void RegisterRenderSurface(kaguya::State& lua)
     );
 }
 
-static SharedPtr<Technique> TechniqueClone0(const Technique* self)
-{
-    return self->Clone();
-}
-
-static SharedPtr<Technique> TechniqueClone1(const Technique* self, const String& cloneName)
-{
-    return self->Clone(cloneName);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(TechniqueClone, Technique, Clone, 0, 1);
 
 static void RegisterTechnique(kaguya::State& lua)
 {
@@ -1361,7 +1109,7 @@ static void RegisterTechnique(kaguya::State& lua)
         .addFunction("RemovePass", &Technique::RemovePass)
         .addFunction("ReleaseShaders", &Technique::ReleaseShaders)
         
-        ADD_OVERLOADED_FUNCTIONS_2(Technique, Clone)
+        .addFunction("Clone", TechniqueClone())
 
         .addFunction("IsDesktop", &Technique::IsDesktop)
         .addFunction("IsSupported", &Technique::IsSupported)
@@ -1444,25 +1192,8 @@ static void RegisterTexture(kaguya::State& lua)
     );
 }
 
-static bool Texture2DSetSize0(Texture2D* self, int width, int height, unsigned int format)
-{
-    return self->SetSize(width, height, format);
-}
-
-static bool Texture2DSetSize1(Texture2D* self, int width, int height, unsigned int format, TextureUsage usage)
-{
-    return self->SetSize(width, height, format, usage);
-}
-
-static bool Texture2DSetData0(Texture2D* self, Image* image)
-{
-    return self->SetData(image);
-}
-
-static bool Texture2DSetData1(Texture2D* self, Image* image, bool useAlpha)
-{
-    return self->SetData(image, useAlpha);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(Texture2DSetSize, Texture2D, SetSize, 3, 4);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(Texture2DSetData, Texture2D, SetData, 1, 2, bool(Texture2D::*)(Image*, bool));
 
 static void RegisterTexture2D(kaguya::State& lua)
 {
@@ -1471,8 +1202,8 @@ static void RegisterTexture2D(kaguya::State& lua)
     lua["Texture2D"].setClass(UserdataMetatable<Texture2D, Texture>()
         .addStaticFunction("new", &CreateObject<Texture2D>)
         
-        ADD_OVERLOADED_FUNCTIONS_2(Texture2D, SetSize)
-        ADD_OVERLOADED_FUNCTIONS_2(Texture2D, SetData)
+        .addFunction("SetSize", Texture2DSetSize())
+        .addFunction("SetData", Texture2DSetData())
 
         .addFunction("GetRenderSurface", &Texture2D::GetRenderSurface)
 
@@ -1480,25 +1211,8 @@ static void RegisterTexture2D(kaguya::State& lua)
     );
 }
 
-static bool Texture2DArraySetSize0(Texture2DArray* self, unsigned int layers, int width, int height, unsigned int format)
-{
-    return self->SetSize(layers, width, height, format);
-}
-
-static bool Texture2DArraySetSize1(Texture2DArray* self, unsigned int layers, int width, int height, unsigned int format, TextureUsage usage)
-{
-    return self->SetSize(layers, width, height, format, usage);
-}
-
-static bool Texture2DArraySetData0(Texture2DArray* self, unsigned int layer, Image* image)
-{
-    return self->SetData(layer, image);
-}
-
-static bool Texture2DArraySetData1(Texture2DArray* self, unsigned int layer, Image* image, bool useAlpha)
-{
-    return self->SetData(layer, image, useAlpha);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(Texture2DArraySetSize, Texture2DArray, SetSize, 4, 5);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(Texture2DArraySetData, Texture2DArray, SetData, 1, 2, bool(Texture2D::*)(Image*, bool));
 
 static void RegisterTexture2DArray(kaguya::State& lua)
 {
@@ -1509,8 +1223,8 @@ static void RegisterTexture2DArray(kaguya::State& lua)
         
         .addFunction("SetLayers", &Texture2DArray::SetLayers)
         
-        ADD_OVERLOADED_FUNCTIONS_2(Texture2DArray, SetSize)
-        ADD_OVERLOADED_FUNCTIONS_2(Texture2DArray, SetData)
+        .addFunction("SetSize", Texture2DArraySetSize())
+        .addFunction("SetData", Texture2DArraySetData())
 
         .addFunction("GetLayers", &Texture2DArray::GetLayers)
         .addFunction("GetRenderSurface", &Texture2DArray::GetRenderSurface)
@@ -1520,26 +1234,8 @@ static void RegisterTexture2DArray(kaguya::State& lua)
     );
 }
 
-static bool Texture3DSetSize0(Texture3D* self, int width, int height, int depth, unsigned int format)
-{
-    return self->SetSize(width, height, depth, format);
-}
-
-static bool Texture3DSetSize1(Texture3D* self, int width, int height, int depth, unsigned int format, TextureUsage usage)
-{
-    return self->SetSize(width, height, depth, format, usage);
-}
-
-static bool Texture3DSetData0(Texture3D* self, Image* image)
-{
-    return self->SetData(image);
-}
-
-static bool Texture3DSetData1(Texture3D* self, Image* image, bool useAlpha)
-{
-    return self->SetData(image, useAlpha);
-}
-
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(Texture3DSetSize, Texture3D, SetSize, 4, 5);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(Texture3DSetData, Texture3D, SetData, 1, 2, bool(Texture3D::*)(Image*, bool));
 
 static void RegisterTexture3D(kaguya::State& lua)
 {
@@ -1548,30 +1244,13 @@ static void RegisterTexture3D(kaguya::State& lua)
     lua["Texture3D"].setClass(UserdataMetatable<Texture3D, Texture>()
         .addStaticFunction("new", &CreateObject<Texture3D>)
         
-        ADD_OVERLOADED_FUNCTIONS_2(Texture3D, SetSize)
-        ADD_OVERLOADED_FUNCTIONS_2(Texture3D, SetData)
+        .addFunction("SetSize", Texture3DSetSize())
+        .addFunction("SetData", Texture3DSetData())
     );
 }
 
-static bool TextureCubeSetSize0(TextureCube* self, int size, unsigned int format)
-{
-    return self->SetSize(size, format);
-}
-
-static bool TextureCubeSetSize1(TextureCube* self, int size, unsigned int format, TextureUsage usage)
-{
-    return self->SetSize(size, format, usage);
-}
-
-static bool TextureCubeSetData0(TextureCube* self, CubeMapFace face, Image* image)
-{
-    return self->SetData(face, image);
-}
-
-static bool TextureCubeSetData1(TextureCube* self, CubeMapFace face, Image* image, bool useAlpha)
-{
-    return self->SetData(face, image, useAlpha);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(TextureCubeSetSize, TextureCube, SetSize, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(TextureCubeSetData, TextureCube, SetData, 2, 3, bool(TextureCube::*)(CubeMapFace, Image*, bool));
 
 static void RegisterTextureCube(kaguya::State& lua)
 {
@@ -1580,8 +1259,8 @@ static void RegisterTextureCube(kaguya::State& lua)
     lua["TextureCube"].setClass(UserdataMetatable<TextureCube, Texture>()
         .addStaticFunction("new", &CreateObject<TextureCube>)
         
-        ADD_OVERLOADED_FUNCTIONS_2(TextureCube, SetSize)
-        ADD_OVERLOADED_FUNCTIONS_2(TextureCube, SetData)
+        .addFunction("SetSize", TextureCubeSetSize())
+        .addFunction("SetData", TextureCubeSetData())
 
         .addFunction("GetRenderSurface", &TextureCube::GetRenderSurface)
 
@@ -1589,25 +1268,8 @@ static void RegisterTextureCube(kaguya::State& lua)
     );
 }
 
-static bool VertexBufferSetSize0(VertexBuffer* self, unsigned int vertexCount, const PODVector<VertexElement>& elements)
-{
-    return self->SetSize(vertexCount, elements);
-}
-
-static bool VertexBufferSetSize1(VertexBuffer* self, unsigned int vertexCount, const PODVector<VertexElement>& elements, bool dynamic)
-{
-    return self->SetSize(vertexCount, elements, dynamic);
-}
-
-static bool VertexBufferSetSize2(VertexBuffer* self, unsigned int vertexCount, unsigned int elementMask)
-{
-    return self->SetSize(vertexCount, elementMask);
-}
-
-static bool VertexBufferSetSize3(VertexBuffer* self, unsigned int vertexCount, unsigned int elementMask, bool dynamic)
-{
-    return self->SetSize(vertexCount, elementMask, dynamic);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferSetSize0, VertexBuffer, SetSize, 2, 3, bool(VertexBuffer::*)(unsigned, const PODVector<VertexElement>&, bool));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferSetSize1, VertexBuffer, SetSize, 2, 3, bool(VertexBuffer::*)(unsigned, unsigned, bool));
 
 static bool VertexBufferSetData(VertexBuffer* self, VectorBuffer& src)
 {
@@ -1633,80 +1295,52 @@ static VectorBuffer VertexBufferGetData(VertexBuffer* self)
     return ret;
 }
 
-static bool VertexBufferSetDataRange0(VertexBuffer* self, const void* data, unsigned int start, unsigned int count)
+static SharedPtr<VertexBuffer> CreateVertexBuffer(bool forceHeadless = false)
 {
-    return self->SetDataRange(data, start, count);
+    return SharedPtr<VertexBuffer>(new VertexBuffer(globalContext, forceHeadless));
 }
 
-static bool VertexBufferSetDataRange1(VertexBuffer* self, const void* data, unsigned int start, unsigned int count, bool discard)
-{
-    return self->SetDataRange(data, start, count, discard);
-}
+KAGUYA_FUNCTION_OVERLOADS(CreateVertexBufferOverloads, CreateVertexBuffer, 0, 1);
 
-static const VertexElement* VertexBufferGetElement0(const VertexBuffer* self, VertexElementSemantic semantic)
-{
-    return self->GetElement(semantic);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(VertexBufferSetDataRange, VertexBuffer, SetDataRange, 3, 4);
 
-static const VertexElement* VertexBufferGetElement1(const VertexBuffer* self, VertexElementSemantic semantic, unsigned char index)
-{
-    return self->GetElement(semantic, index);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferGetElement0, VertexBuffer, GetElement, 1, 2, const VertexElement*(VertexBuffer::*)(VertexElementSemantic, unsigned char)const);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferGetElement1, VertexBuffer, GetElement, 2, 3, const VertexElement*(VertexBuffer::*)(VertexElementType, VertexElementSemantic, unsigned char)const);
 
-static const VertexElement* VertexBufferGetElement2(const VertexBuffer* self, VertexElementType type, VertexElementSemantic semantic)
-{
-    return self->GetElement(type, semantic);
-}
-
-static const VertexElement* VertexBufferGetElement3(const VertexBuffer* self, VertexElementType type, VertexElementSemantic semantic, unsigned char index)
-{
-    return self->GetElement(type, semantic, index);
-}
-
-
-static bool VertexBufferHasElement0(const VertexBuffer* self, VertexElementSemantic semantic)
-{
-    return self->HasElement(semantic);
-}
-
-static bool VertexBufferHasElement1(const VertexBuffer* self, VertexElementSemantic semantic, unsigned char index)
-{
-    return self->HasElement(semantic, index);
-}
-
-static bool VertexBufferHasElement2(const VertexBuffer* self, VertexElementType type, VertexElementSemantic semantic)
-{
-    return self->HasElement(type, semantic);
-}
-
-static bool VertexBufferHasElement3(const VertexBuffer* self, VertexElementType type, VertexElementSemantic semantic, unsigned char index)
-{
-    return self->HasElement(type, semantic, index);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferHasElement0, VertexBuffer, HasElement, 1, 2, bool(VertexBuffer::*)(VertexElementSemantic, unsigned char)const);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferHasElement1, VertexBuffer, HasElement, 2, 3, bool(VertexBuffer::*)(VertexElementType, VertexElementSemantic, unsigned char)const);
 
 static void RegisterVertexBuffer(kaguya::State& lua)
 {
     using namespace kaguya;
 
     lua["VertexBuffer"].setClass(UserdataMetatable<VertexBuffer, GPUObject>()
-        .addStaticFunction("new", &CreateObject<VertexBuffer>)        
+        .addStaticFunction("new", 
+            CreateVertexBufferOverloads())
 
         .addFunction("SetShadowed", &VertexBuffer::SetShadowed)
 
-        ADD_OVERLOADED_FUNCTIONS_4(VertexBuffer, SetSize)
+        .addOverloadedFunctions("SetSize", 
+            VertexBufferSetSize0(), 
+            VertexBufferSetSize1())
 
         .addStaticFunction("SetData", &VertexBufferSetData)
         .addStaticFunction("GetData", &VertexBufferGetData)
 
-        ADD_OVERLOADED_FUNCTIONS_2(VertexBuffer, SetDataRange)
+        .addFunction("SetDataRange", VertexBufferSetDataRange())
 
         .addFunction("IsShadowed", &VertexBuffer::IsShadowed)
         .addFunction("IsDynamic", &VertexBuffer::IsDynamic)
         .addFunction("GetVertexCount", &VertexBuffer::GetVertexCount)
         .addFunction("GetVertexSize", &VertexBuffer::GetVertexSize)
 
-        ADD_OVERLOADED_FUNCTIONS_4(VertexBuffer, GetElement)
-        ADD_OVERLOADED_FUNCTIONS_4(VertexBuffer, HasElement)
+        .addOverloadedFunctions("GetElement",
+            VertexBufferGetElement0(),
+            VertexBufferGetElement1())
+
+        .addOverloadedFunctions("HasElement",
+            VertexBufferHasElement0(),
+            VertexBufferHasElement1())
 
         .addFunction("GetElementMask", &VertexBuffer::GetElementMask)
 

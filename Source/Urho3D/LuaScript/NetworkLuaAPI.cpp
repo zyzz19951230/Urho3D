@@ -35,57 +35,13 @@
 namespace Urho3D
 {
 
-static void ConnectionSendMessage0(Connection* self, int msgID, bool reliable, bool inOrder, const VectorBuffer& msg)
-{
-    self->SendMessage(msgID, reliable, inOrder, msg);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(ConnectionSendMessage0, Connection, SendMessage, 4, 5, void(Connection::*)(int, bool, bool, const VectorBuffer&, unsigned));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(ConnectionSendMessage1, Connection, SendMessage, 5, 6, void(Connection::*)(int, bool, bool, const unsigned char*, unsigned, unsigned));
 
-static void ConnectionSendMessage1(Connection* self, int msgID, bool reliable, bool inOrder, const VectorBuffer& msg, unsigned int contentID)
-{
-    self->SendMessage(msgID, reliable, inOrder, msg, contentID);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(ConnectionSendRemoteEvent0, Connection, SendRemoteEvent, 2, 3, void(Connection::*)(StringHash, bool, const VariantMap&));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(ConnectionSendRemoteEvent1, Connection, SendRemoteEvent, 3, 4, void(Connection::*)(Node*, StringHash, bool, const VariantMap&));
 
-static void ConnectionSendMessage2(Connection* self, int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned int numBytes)
-{
-    self->SendMessage(msgID, reliable, inOrder, data, numBytes);
-}
-
-static void ConnectionSendMessage3(Connection* self, int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned int numBytes, unsigned int contentID)
-{
-    self->SendMessage(msgID, reliable, inOrder, data, numBytes, contentID);
-}
-
-static void ConnectionSendRemoteEvent0(Connection* self, StringHash eventType, bool inOrder)
-{
-    self->SendRemoteEvent(eventType, inOrder);
-}
-
-static void ConnectionSendRemoteEvent1(Connection* self, StringHash eventType, bool inOrder, const VariantMap& eventData)
-{
-    self->SendRemoteEvent(eventType, inOrder, eventData);
-}
-
-static void ConnectionSendRemoteEvent2(Connection* self, Node* node, StringHash eventType, bool inOrder)
-{
-    self->SendRemoteEvent(node, eventType, inOrder);
-}
-
-static void ConnectionSendRemoteEvent3(Connection* self, Node* node, StringHash eventType, bool inOrder, const VariantMap& eventData)
-{
-    self->SendRemoteEvent(node, eventType, inOrder, eventData);
-}
-
-static void ConnectionDisconnect0(Connection* self)
-{
-    self->Disconnect();
-}
-
-static void ConnectionDisconnect1(Connection* self, int waitMSec)
-{
-    self->Disconnect(waitMSec);
-}
-
-
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(ConnectionDisconnect, Connection, Disconnect, 0, 1);
 
 static void RegisterConnection(kaguya::State& lua)
 {
@@ -100,8 +56,13 @@ static void RegisterConnection(kaguya::State& lua)
 
     lua["Connection"].setClass(UserdataMetatable<Connection, Object>()
 
-        ADD_OVERLOADED_FUNCTIONS_4(Connection, SendMessage)
-        ADD_OVERLOADED_FUNCTIONS_4(Connection, SendRemoteEvent)
+        .addOverloadedFunctions("SendMessage", 
+            ConnectionSendMessage0(),
+            ConnectionSendMessage1())
+
+        .addOverloadedFunctions("SendRemoteEvent", 
+            ConnectionSendRemoteEvent0(), 
+            ConnectionSendRemoteEvent1())
 
         .addFunction("SetScene", &Connection::SetScene)
         .addFunction("SetIdentity", &Connection::SetIdentity)
@@ -111,7 +72,7 @@ static void RegisterConnection(kaguya::State& lua)
         .addFunction("SetConnectPending", &Connection::SetConnectPending)
         .addFunction("SetLogStatistics", &Connection::SetLogStatistics)
 
-        ADD_OVERLOADED_FUNCTIONS_2(Connection, Disconnect)
+        .addFunction("Disconnect", ConnectionDisconnect())
 
         .addFunction("GetIdentity", &Connection::GetIdentity)
         .addFunction("GetScene", &Connection::GetScene)
@@ -182,7 +143,6 @@ static void RegisterHttpRequest(kaguya::State& lua)
     lua["HTTP_OPEN"] = HTTP_OPEN;
     lua["HTTP_CLOSED"] = HTTP_CLOSED;
 
-    // Deserializer
     lua["HttpRequest"].setClass(UserdataMetatable<HttpRequest, RefCounted>()
         .setConstructors<HttpRequest(const String&, const String&, const Vector<String>&, const String&)>()
 
@@ -204,105 +164,17 @@ static void RegisterHttpRequest(kaguya::State& lua)
         );
 }
 
-static bool NetworkConnect0(Network* self, const String& address, unsigned short port, Scene* scene)
-{
-    return self->Connect(address, port, scene);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NetworkConnect, Network, Connect, 3, 4);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NetworkDisconnect, Network, Disconnect, 0, 1);
 
-static bool NetworkConnect1(Network* self, const String& address, unsigned short port, Scene* scene, const VariantMap& identity)
-{
-    return self->Connect(address, port, scene, identity);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(NetworkBroadcastMessage0, Network, BroadcastMessage, 4, 5, void(Network::*)(int, bool, bool, const VectorBuffer&, unsigned));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(NetworkBroadcastMessage1, Network, BroadcastMessage, 5, 6, void(Network::*)(int, bool, bool, const unsigned char*, unsigned, unsigned));
 
-static void NetworkDisconnect0(Network* self)
-{
-    self->Disconnect();
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(NetworkBroadcastRemoteEvent0, Network, BroadcastRemoteEvent, 2, 3, void(Network::*)(StringHash, bool, const VariantMap&));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(NetworkBroadcastRemoteEvent1, Network, BroadcastRemoteEvent, 3, 4, void(Network::*)(Scene*, StringHash, bool, const VariantMap&));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(NetworkBroadcastRemoteEvent2, Network, BroadcastRemoteEvent, 3, 4, void(Network::*)(Node*, StringHash, bool, const VariantMap&));
 
-static void NetworkDisconnect1(Network* self, int waitMSec)
-{
-    self->Disconnect(waitMSec);
-}
-
-static void NetworkBroadcastMessage0(Network* self, int msgID, bool reliable, bool inOrder, const VectorBuffer& msg)
-{
-    self->BroadcastMessage(msgID, reliable, inOrder, msg);
-}
-
-static void NetworkBroadcastMessage1(Network* self, int msgID, bool reliable, bool inOrder, const VectorBuffer& msg, unsigned int contentID)
-{
-    self->BroadcastMessage(msgID, reliable, inOrder, msg, contentID);
-}
-
-static void NetworkBroadcastMessage2(Network* self, int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned int numBytes)
-{
-    self->BroadcastMessage(msgID, reliable, inOrder, data, numBytes);
-}
-
-static void NetworkBroadcastMessage3(Network* self, int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned int numBytes, unsigned int contentID)
-{
-    self->BroadcastMessage(msgID, reliable, inOrder, data, numBytes, contentID);
-}
-
-static void NetworkBroadcastRemoteEvent0(Network* self, StringHash eventType, bool inOrder)
-{
-    self->BroadcastRemoteEvent(eventType, inOrder);
-}
-
-static void NetworkBroadcastRemoteEvent1(Network* self, StringHash eventType, bool inOrder, const VariantMap& eventData)
-{
-    self->BroadcastRemoteEvent(eventType, inOrder, eventData);
-}
-
-static void NetworkBroadcastRemoteEvent2(Network* self, Scene* scene, StringHash eventType, bool inOrder)
-{
-    self->BroadcastRemoteEvent(scene, eventType, inOrder);
-}
-
-static void NetworkBroadcastRemoteEvent3(Network* self, Scene* scene, StringHash eventType, bool inOrder, const VariantMap& eventData)
-{
-    self->BroadcastRemoteEvent(scene, eventType, inOrder, eventData);
-}
-
-static void NetworkBroadcastRemoteEvent4(Network* self, Node* node, StringHash eventType, bool inOrder)
-{
-    self->BroadcastRemoteEvent(node, eventType, inOrder);
-}
-
-static void NetworkBroadcastRemoteEvent5(Network* self, Node* node, StringHash eventType, bool inOrder, const VariantMap& eventData)
-{
-    self->BroadcastRemoteEvent(node, eventType, inOrder, eventData);
-}
-
-static void NetworkRegisterRemoteEvent(Network* self, const char* eventType)
-{
-    self->RegisterRemoteEvent(StringHash(eventType));
-}
-
-static void NetworkUnregisterRemoteEvent(Network* self, const char* eventType)
-{
-    self->UnregisterRemoteEvent(StringHash(eventType));
-}
-
-static SharedPtr<HttpRequest> NetworkMakeHttpRequest0(Network* self, const String& url)
-{
-    return self->MakeHttpRequest(url);
-}
-
-static SharedPtr<HttpRequest> NetworkMakeHttpRequest1(Network* self, const String& url, const String& verb)
-{
-    return self->MakeHttpRequest(url, verb);
-}
-
-static SharedPtr<HttpRequest> NetworkMakeHttpRequest2(Network* self, const String& url, const String& verb, const Vector<String>& headers)
-{
-    return self->MakeHttpRequest(url, verb, headers);
-}
-
-static SharedPtr<HttpRequest> NetworkMakeHttpRequest3(Network* self, const String& url, const String& verb, const Vector<String>& headers, const String& postData)
-{
-    return self->MakeHttpRequest(url, verb, headers, postData);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NetworkMakeHttpRequest, Network, MakeHttpRequest, 1, 4);
 
 static void RegisterNetwork(kaguya::State& lua)
 {
@@ -310,27 +182,33 @@ static void RegisterNetwork(kaguya::State& lua)
 
     lua["Network"].setClass(UserdataMetatable<Network, Object>()
 
-        ADD_OVERLOADED_FUNCTIONS_2(Network, Connect)
-        ADD_OVERLOADED_FUNCTIONS_2(Network, Disconnect)
+        .addFunction("Connect", NetworkConnect())
+        .addFunction("Disconnect", NetworkDisconnect())
 
         .addFunction("StartServer", &Network::StartServer)
         .addFunction("StopServer", &Network::StopServer)
 
-        ADD_OVERLOADED_FUNCTIONS_4(Network, BroadcastMessage)
-        ADD_OVERLOADED_FUNCTIONS_6(Network, BroadcastRemoteEvent)
+        .addOverloadedFunctions("BroadcastMessage", 
+            NetworkBroadcastMessage0(),
+            NetworkBroadcastMessage1())
+
+        .addOverloadedFunctions("BroadcastRemoteEvent", 
+            NetworkBroadcastRemoteEvent0(),
+            NetworkBroadcastRemoteEvent1(),
+            NetworkBroadcastRemoteEvent2())
 
         .addFunction("SetUpdateFps", &Network::SetUpdateFps)
         .addFunction("SetSimulatedLatency", &Network::SetSimulatedLatency)
         .addFunction("SetSimulatedPacketLoss", &Network::SetSimulatedPacketLoss)
 
-        .addStaticFunction("RegisterRemoteEvent", &NetworkRegisterRemoteEvent)
-        .addStaticFunction("UnregisterRemoteEvent", &NetworkUnregisterRemoteEvent)
+        .addFunction("RegisterRemoteEvent", &Network::RegisterRemoteEvent)
+        .addFunction("UnregisterRemoteEvent", &Network::UnregisterRemoteEvent)
         .addFunction("UnregisterAllRemoteEvents", &Network::UnregisterAllRemoteEvents)
         
         .addFunction("SetPackageCacheDir", &Network::SetPackageCacheDir)
         .addFunction("SendPackageToClients", &Network::SendPackageToClients)
 
-        ADD_OVERLOADED_FUNCTIONS_4(Network, MakeHttpRequest)
+        .addFunction("MakeHttpRequest", NetworkMakeHttpRequest())
 
         .addFunction("GetUpdateFps", &Network::GetUpdateFps)
         .addFunction("GetSimulatedLatency", &Network::GetSimulatedLatency)
