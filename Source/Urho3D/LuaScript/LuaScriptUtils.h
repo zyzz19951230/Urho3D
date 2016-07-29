@@ -17,9 +17,6 @@
 #define ADD_OVERLOADED_FUNCTIONS_5(Class, Name) \
 .addOverloadedFunctions(#Name, &Class##Name##0, &Class##Name##1, &Class##Name##2, &Class##Name##3, &Class##Name##4)
 
-#define ADD_OVERLOADED_FUNCTIONS_6(Class, Name) \
-.addOverloadedFunctions(#Name, &Class##Name##0, &Class##Name##1, &Class##Name##2, &Class##Name##3, &Class##Name##4, &Class##Name##5)
-
 namespace Urho3D
 {
     class Context;

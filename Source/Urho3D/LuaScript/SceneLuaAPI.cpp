@@ -829,19 +829,13 @@ static void RegisterSceneEvents(kaguya::State& lua)
     lua["E_INTERCEPTNETWORKUPDATE"] = E_INTERCEPTNETWORKUPDATE;
 }
 
-static bool SerializableLoad0(Serializable* self, const char* filepath)
-{
-    SharedPtr<File> file(new File(globalContext, filepath));
-    if (!file->IsOpen())
-        return false;
-    return self->Load(*file);
-}
-
-static bool SerializableLoad1(Serializable* self, const char* filepath, bool setInstanceDefault)
+static bool SerializableLoad(Serializable* self, const char* filepath, bool setInstanceDefault = false)
 {
     SharedPtr<File> file(new File(globalContext, filepath));
     return self->Load(*file, setInstanceDefault);
 }
+
+KAGUYA_FUNCTION_OVERLOADS(SerializableLoadOverloads, SerializableLoad, 2, 3);
 
 static bool SerializableSave(const Serializable* self, const char* filepath)
 {
@@ -855,7 +849,7 @@ static void RegisterSerializable(kaguya::State& lua)
 
     lua["Serializable"].setClass(UserdataMetatable<Serializable, Object>()
 
-        ADD_OVERLOADED_FUNCTIONS_2(Serializable, Load)
+        .addStaticFunction("Load", SerializableLoadOverloads())
         .addStaticFunction("Save", &SerializableSave)
 
         .addOverloadedFunctions("SetAttribute",
@@ -953,15 +947,7 @@ static void RegisterSplinePath(kaguya::State& lua)
         );
 }
 
-static void ValueAnimationSetEventFrame0(ValueAnimation* self, float time, const StringHash& eventType)
-{
-    self->SetEventFrame(time, eventType);
-}
-
-static void ValueAnimationSetEventFrame1(ValueAnimation* self, float time, const StringHash& eventType, const VariantMap& eventData)
-{
-    self->SetEventFrame(time, eventType, eventData);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(ValueAnimationSetEventFrame, ValueAnimation, SetEventFrame, 2, 3);
 
 static void RegisterValueAnimation(kaguya::State& lua)
 {
@@ -980,7 +966,7 @@ static void RegisterValueAnimation(kaguya::State& lua)
         .addFunction("SetValueType", &ValueAnimation::SetValueType)
         .addFunction("SetKeyFrame", &ValueAnimation::SetKeyFrame)
 
-        ADD_OVERLOADED_FUNCTIONS_2(ValueAnimation, SetEventFrame)
+        .addFunction("SetEventFrame", ValueAnimationSetEventFrame())
 
         .addFunction("IsValid", &ValueAnimation::IsValid)
         .addFunction("GetInterpolationMethod", &ValueAnimation::GetInterpolationMethod)
