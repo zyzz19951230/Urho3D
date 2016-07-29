@@ -107,6 +107,8 @@ namespace kaguya
                 Urho3D::Object* object = dynamic_cast<Urho3D::Object*>(o);
                 if (object)
                 {
+					// Convert abstract object to concrete object
+					// For example convert Resource to Image
                     class_userdata::setmetatable(l, object->GetStdTypeInfo());
                 }
                 else
