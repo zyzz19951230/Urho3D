@@ -205,15 +205,7 @@ static SharedPtr<File> CreateFile3(PackageFile* package, const String& fileName)
     return SharedPtr<File>(new File(globalContext, package, fileName));
 }
 
-static bool FileOpen0(File* self, const String& fileName)
-{
-    return self->Open(fileName);
-}
-
-static bool FileOpen1(File* self, const String& fileName, FileMode mode)
-{
-    return self->Open(fileName, mode);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(FileOpen, File, Open, 1, 2, bool(File::*)(const String&, FileMode));
 
 static void RegisterFile(kaguya::State& lua)
 {
@@ -227,13 +219,12 @@ static void RegisterFile(kaguya::State& lua)
     lua["File"].setClass(UserdataMetatable<File, MultipleBase<Object, Deserializer, Serializer>>()
         .addOverloadedFunctions("new", 
             &CreateFile0, 
-            &CreateFile1, 
-            &CreateFile2, 
+            &CreateFile1,
+            &CreateFile2,
             &CreateFile3)
 
         .addOverloadedFunctions("Open",
-            FileOpen0,
-            FileOpen1,
+            FileOpen(),
             static_cast<bool(File::*)(PackageFile*, const String&)>(&File::Open))
 
         .addFunction("Close", &File::Close)
@@ -252,25 +243,8 @@ static void RegisterFile(kaguya::State& lua)
         );
 }
 
-static int FileSystemSystemCommand0(FileSystem* self, const String& commandLine)
-{
-    return self->SystemCommand(commandLine);
-}
-
-static int FileSystemSystemCommand1(FileSystem* self, const String& commandLine, bool redirectStdOutToLog)
-{
-    return self->SystemCommand(commandLine, redirectStdOutToLog);
-}
-
-static bool FileSystemSystemOpen0(FileSystem* self, const String& fileName)
-{
-    return self->SystemOpen(fileName);
-}
-
-static bool FileSystemSystemOpen1(FileSystem* self, const String& fileName, const String& mode)
-{
-    return self->SystemOpen(fileName, mode);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(FileSystemSystemCommand, FileSystem, SystemCommand, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(FileSystemSystemOpen, FileSystem, SystemOpen, 1, 2);
 
 static Vector<String> FileSystemScanDir(const FileSystem* self, const String& pathName, const String& filter, unsigned flags, bool recursive)
 {
@@ -279,25 +253,8 @@ static Vector<String> FileSystemScanDir(const FileSystem* self, const String& pa
     return result;
 }
 
-static String GetExtension0(const String& fullPath)
-{
-    return GetExtension(fullPath);
-}
-
-static String GetExtension1(const String& fullPath, bool lowercaseExtension)
-{
-    return GetExtension(fullPath, lowercaseExtension);
-}
-
-static String GetFileNameAndExtension0(const String& fullPath)
-{
-    return GetFileNameAndExtension(fullPath);
-}
-
-static String GetFileNameAndExtension1(const String& fullPath, bool lowercaseExtension)
-{
-    return GetFileNameAndExtension(fullPath, lowercaseExtension);
-}
+KAGUYA_FUNCTION_OVERLOADS(GetExtensionOverloads, GetExtension, 1, 2);
+KAGUYA_FUNCTION_OVERLOADS(GetFileNameAndExtensionOverloads, GetFileNameAndExtension, 1, 2);
 
 static void RegisterFileSystem(kaguya::State& lua)
 {
@@ -313,13 +270,13 @@ static void RegisterFileSystem(kaguya::State& lua)
         .addFunction("CreateDir", &FileSystem::CreateDir)
         .addFunction("SetExecuteConsoleCommands", &FileSystem::SetExecuteConsoleCommands)
 
-        ADD_OVERLOADED_FUNCTIONS_2(FileSystem, SystemCommand)
+        .addFunction("SystemCommand", FileSystemSystemCommand())
 
         .addFunction("SystemRun", &FileSystem::SystemRun)
         .addFunction("SystemCommandAsync", &FileSystem::SystemCommandAsync)
         .addFunction("SystemRunAsync", &FileSystem::SystemRunAsync)
 
-        ADD_OVERLOADED_FUNCTIONS_2(FileSystem, SystemOpen)
+        .addFunction("SystemOpen", FileSystemSystemOpen())
 
         .addFunction("Copy", &FileSystem::Copy)
         .addFunction("Rename", &FileSystem::Rename)
@@ -344,8 +301,9 @@ static void RegisterFileSystem(kaguya::State& lua)
 
     lua["GetPath"] = function(&GetPath);
     lua["GetFileName"] = function(&GetFileName);
-    lua["GetExtension"] = overload(&GetExtension0, &GetExtension1);
-    lua["GetFileNameAndExtension"] = overload(&GetFileNameAndExtension0, &GetFileNameAndExtension1);
+    
+    lua["GetExtension"] = GetExtensionOverloads();
+    lua["GetFileNameAndExtension"] = GetFileNameAndExtensionOverloads();
 
     lua["ReplaceExtension"] = function(&ReplaceExtension);
     lua["AddTrailingSlash"] = function(&AddTrailingSlash);
@@ -429,15 +387,7 @@ static SharedPtr<PackageFile> CreatePackageFile2(const String& fileName, unsigne
     return SharedPtr<PackageFile>(new PackageFile(globalContext, fileName, startOffset));
 }
 
-static bool PackageFileOpen0(PackageFile* self, const String& fileName)
-{
-    return self->Open(fileName);
-}
-
-static bool PackageFileOpen1(PackageFile* self, const String& fileName, unsigned int startOffset)
-{
-    return self->Open(fileName, startOffset);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(PackageFileOpen, PackageFile, Open, 1, 2);
 
 static void RegisterPackageFile(kaguya::State& lua)
 {
@@ -454,7 +404,7 @@ static void RegisterPackageFile(kaguya::State& lua)
             &CreatePackageFile1,
             &CreatePackageFile2)
 
-        ADD_OVERLOADED_FUNCTIONS_2(PackageFile, Open)
+        .addFunction("Open", PackageFileOpen())
 
         .addFunction("Exists", &PackageFile::Exists)
         .addFunction("GetEntry", &PackageFile::GetEntry)

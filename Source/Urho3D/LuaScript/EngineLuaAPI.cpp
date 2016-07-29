@@ -156,15 +156,7 @@ static DebugHud* EngineCreateDebugHud(Engine* self)
     return debugHud;
 }
 
-static void EngineDumpResources0(Engine* self)
-{
-    self->DumpResources();
-}
-
-static void EngineDumpResources1(Engine* self, bool dumpFileName)
-{
-    self->DumpResources(dumpFileName);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(EngineDumpResources, Engine, DumpResources, 0, 1);
 
 static void RegisterEngine(kaguya::State& lua)
 {
@@ -186,7 +178,9 @@ static void RegisterEngine(kaguya::State& lua)
         .addFunction("SetNextTimeStep", &Engine::SetNextTimeStep)
         .addFunction("Exit", &Engine::Exit)
         .addFunction("DumpProfiler", &Engine::DumpProfiler)
-        ADD_OVERLOADED_FUNCTIONS_2(Engine, DumpResources)
+        
+        .addFunction("DumpResources", EngineDumpResources())
+
         .addFunction("DumpMemory", &Engine::DumpMemory)
 
         .addFunction("GetMinFps", &Engine::GetMinFps)

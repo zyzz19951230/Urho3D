@@ -36,15 +36,7 @@ namespace Urho3D
 
 extern Context* globalContext;
 
-static void ControlsSet0(Controls* self, unsigned int buttons)
-{
-    self->Set(buttons);
-}
-
-static void ControlsSet1(Controls* self, unsigned int buttons, bool down)
-{
-    self->Set(buttons, down);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(ControlsSet, Controls, Set, 1, 2);
 
 static void RegisterControls(kaguya::State& lua)
 {
@@ -55,7 +47,7 @@ static void RegisterControls(kaguya::State& lua)
 
         .addFunction("Reset", &Controls::Reset)
 
-        ADD_OVERLOADED_FUNCTIONS_2(Controls, Set)
+        .addFunction("Set", ControlsSet())
 
         .addFunction("IsDown", &Controls::IsDown)
         .addFunction("IsPressed", &Controls::IsPressed)
@@ -67,55 +59,10 @@ static void RegisterControls(kaguya::State& lua)
         );
 }
 
-static void InputSetMouseVisible0(Input* self, bool enable)
-{
-    self->SetMouseVisible(enable);
-}
-
-static void InputSetMouseVisible1(Input* self, bool enable, bool suppressEvent)
-{
-    self->SetMouseVisible(enable, suppressEvent);
-}
-
-static void InputSetMouseGrabbed0(Input* self, bool grab)
-{
-    self->SetMouseGrabbed(grab);
-}
-
-static void InputSetMouseGrabbed1(Input* self, bool grab, bool suppressEvent)
-{
-    self->SetMouseGrabbed(grab, suppressEvent);
-}
-
-static void InputSetMouseMode0(Input* self, MouseMode mode)
-{
-    self->SetMouseMode(mode);
-}
-
-static void InputSetMouseMode1(Input* self, MouseMode mode, bool suppressEvent)
-{
-    self->SetMouseMode(mode, suppressEvent);
-}
-
-static bool InputIsMouseVisible(const Input* input)
-{
-    return input->IsMouseVisible();
-}
-
-static int InputAddScreenJoystick0(Input* self)
-{
-    return self->AddScreenJoystick();
-}
-
-static int InputAddScreenJoystick1(Input* self, XMLFile* layoutFile)
-{
-    return self->AddScreenJoystick(layoutFile);
-}
-
-static int InputAddScreenJoystick2(Input* self, XMLFile* layoutFile, XMLFile* styleFile)
-{
-    return self->AddScreenJoystick(layoutFile, styleFile);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(InputSetMouseVisible, Input, SetMouseVisible, 1, 2); 
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(InputSetMouseGrabbed, Input, SetMouseGrabbed, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(InputSetMouseMode, Input, SetMouseMode, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(InputAddScreenJoystick, Input, AddScreenJoystick, 0, 2);
 
 static bool InputSaveGestures(Input* self, const char* filepath)
 {
@@ -139,6 +86,16 @@ static unsigned InputLoadGestures(Input* self, const char* filepath)
     if (!file->IsOpen())
         return false;
     return self->LoadGestures(*file);
+}
+
+static void InputMouseVisibleSetter(Input* self, bool enable)
+{
+    return self->SetMouseVisible(enable);
+}
+
+static bool InputMouseVisibleGetter(const Input* self)
+{
+    return self->IsMouseVisible();
 }
 
 static void RegisterInput(kaguya::State& lua)
@@ -185,13 +142,14 @@ static void RegisterInput(kaguya::State& lua)
 
         .addFunction("SetToggleFullscreen", &Input::SetToggleFullscreen)
 
-        ADD_OVERLOADED_FUNCTIONS_2(Input, SetMouseVisible)
-        ADD_OVERLOADED_FUNCTIONS_2(Input, SetMouseGrabbed)
-        ADD_OVERLOADED_FUNCTIONS_2(Input, SetMouseMode)
+        .addFunction("SetMouseVisible", InputSetMouseVisible())
+        .addFunction("SetMouseGrabbed", InputSetMouseGrabbed())
+        .addFunction("SetMouseMode", InputSetMouseMode())
 
         .addFunction("IsMouseLocked", &Input::IsMouseLocked)
 
-        ADD_OVERLOADED_FUNCTIONS_3(Input, AddScreenJoystick)
+        .addFunction("AddScreenJoystick", InputAddScreenJoystick())
+
         .addFunction("RemoveScreenJoystick", &Input::RemoveScreenJoystick)
         .addFunction("SetScreenJoystickVisible", &Input::SetScreenJoystickVisible)
 
@@ -259,7 +217,9 @@ static void RegisterInput(kaguya::State& lua)
         .addProperty("screenKeyboardSupport", &Input::GetScreenKeyboardSupport)
         .addProperty("screenKeyboardVisible", &Input::IsScreenKeyboardVisible, &Input::SetScreenKeyboardVisible)
         .addProperty("touchEmulation", &Input::GetTouchEmulation, &Input::SetTouchEmulation)
-        .addProperty("mouseVisible", &InputIsMouseVisible, &InputSetMouseVisible0)
+        
+        .addProperty("mouseVisible", &InputMouseVisibleGetter, &InputMouseVisibleSetter)
+
         .addProperty("mouseGrabbed", &Input::IsMouseGrabbed)
         .addProperty("mouseLocked", &Input::IsMouseLocked)
         .addProperty("mouseMode", &Input::GetMouseMode)

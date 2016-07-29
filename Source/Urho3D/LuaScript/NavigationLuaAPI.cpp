@@ -131,65 +131,13 @@ static void RegisterCrowdAgent(kaguya::State& lua)
         );
 }
 
-static void CrowdManagerSetCrowdTarget0(CrowdManager* self, const Vector3& position)
-{
-    self->SetCrowdTarget(position);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(CrowdManagerSetCrowdTarget, CrowdManager, SetCrowdTarget, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(CrowdManagerSetCrowdVelocity, CrowdManager, SetCrowdVelocity, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(CrowdManagerResetCrowdTarget, CrowdManager, ResetCrowdTarget, 0, 1);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(CrowdManagerGetAgents, CrowdManager, GetAgents, 0, 2);
 
-static void CrowdManagerSetCrowdTarget1(CrowdManager* self, const Vector3& position, Node* node)
-{
-    self->SetCrowdTarget(position, node);
-}
-
-static void CrowdManagerSetCrowdVelocity0(CrowdManager* self, const Vector3& velocity)
-{
-    self->SetCrowdVelocity(velocity);
-}
-
-static void CrowdManagerSetCrowdVelocity1(CrowdManager* self, const Vector3& velocity, Node* node)
-{
-    self->SetCrowdVelocity(velocity, node);
-}
-
-static void CrowdManagerResetCrowdTarget0(CrowdManager* self)
-{
-    self->ResetCrowdTarget();
-}
-
-static void CrowdManagerResetCrowdTarget1(CrowdManager* self, Node* node)
-{
-    self->ResetCrowdTarget(node);
-}
-
-static PODVector<CrowdAgent*> CrowdManagerGetAgents0(const CrowdManager* self)
-{
-    return self->GetAgents();
-}
-
-static PODVector<CrowdAgent*> CrowdManagerGetAgents1(const CrowdManager* self, Node* node)
-{
-    return self->GetAgents(node);
-}
-
-static PODVector<CrowdAgent*> CrowdManagerGetAgents2(const CrowdManager* self, Node* node, bool inCrowdFilter)
-{
-    return self->GetAgents(node, inCrowdFilter);
-}
-
-static Vector3 CrowdManagerFindNearestPoint(CrowdManager* self, const Vector3& point, int queryFilterType)
-{
-    return self->FindNearestPoint(point, queryFilterType);
-}
-
-static Vector3 CrowdManagerMoveAlongSurface0(CrowdManager* self, const Vector3& start, const Vector3& end, int queryFilterType)
-{
-    return self->MoveAlongSurface(start, end, queryFilterType);
-}
-
-static Vector3 CrowdManagerMoveAlongSurface1(CrowdManager* self, const Vector3& start, const Vector3& end, int queryFilterType, int maxVisited)
-{
-    return self->MoveAlongSurface(start, end, queryFilterType, maxVisited);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(CrowdManagerFindNearestPoint, CrowdManager, FindNearestPoint, 2, 3, Vector3(CrowdManager::*)(const Vector3&, int, dtPolyRef*));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(CrowdManagerMoveAlongSurface, CrowdManager, MoveAlongSurface, 3, 4, Vector3(CrowdManager::*)(const Vector3&, const Vector3&, int, int));
 
 static PODVector<Vector3> CrowdManagerFindPath(CrowdManager* self, Vector3& start, const Vector3& end, int queryFilterType)
 {
@@ -198,15 +146,8 @@ static PODVector<Vector3> CrowdManagerFindPath(CrowdManager* self, Vector3& star
     return dest;
 }
 
-static Vector3 CrowdManagerGetRandomPoint(CrowdManager* self, int queryFilterType)
-{
-    return self->GetRandomPoint(queryFilterType);
-}
-
-static Vector3 CrowdManagerGetRandomPointInCircle(CrowdManager* self, const Vector3& center, float radius, int queryFilterType)
-{
-    return self->GetRandomPointInCircle(center, radius, queryFilterType);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(CrowdManagerGetRandomPoint, CrowdManager, GetRandomPoint, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(CrowdManagerGetRandomPointInCircle, CrowdManager, GetRandomPointInCircle, 3, 4);
 
 static std::tuple<float, Vector3, Vector3> CrowdManagerGetDistanceToWall(CrowdManager* self, const Vector3& point, float radius, int queryFilterType)
 {
@@ -246,9 +187,9 @@ static void RegisterCrowdManager(kaguya::State& lua)
 
         .addFunction("DrawDebugGeometry", static_cast<void(CrowdManager::*)(bool)>(&CrowdManager::DrawDebugGeometry))
 
-        ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, SetCrowdTarget)
-        ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, SetCrowdVelocity)
-        ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, ResetCrowdTarget)
+        .addFunction("SetCrowdTarget", CrowdManagerSetCrowdTarget())
+        .addFunction("SetCrowdVelocity", CrowdManagerSetCrowdVelocity())
+        .addFunction("ResetCrowdTarget", CrowdManagerResetCrowdTarget())
 
         .addFunction("SetMaxAgents", &CrowdManager::SetMaxAgents)
         .addFunction("SetMaxAgentRadius", &CrowdManager::SetMaxAgentRadius)
@@ -259,14 +200,20 @@ static void RegisterCrowdManager(kaguya::State& lua)
 
         .addFunction("SetObstacleAvoidanceParams", &CrowdManager::SetObstacleAvoidanceParams)
 
-        ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, GetAgents)        
-        .addStaticFunction("FindNearestPoint", &CrowdManagerFindNearestPoint)
-        ADD_OVERLOADED_FUNCTIONS_2(CrowdManager, MoveAlongSurface)
+        .addFunction("GetAgents", CrowdManagerGetAgents())
+
+        .addFunction("FindNearestPoint", CrowdManagerFindNearestPoint())
+        
+        .addFunction("MoveAlongSurface", CrowdManagerMoveAlongSurface())
+
         .addStaticFunction("FindPath", &CrowdManagerFindPath)
-        .addStaticFunction("GetRandomPoint", &CrowdManagerGetRandomPoint)
-        .addStaticFunction("GetRandomPointInCircle", &CrowdManagerGetRandomPointInCircle)
-        .addStaticFunction("GetDistanceToWall", &CrowdManagerGetDistanceToWall)
+        
+        .addFunction("GetRandomPoint", CrowdManagerGetRandomPoint())
+        .addFunction("GetRandomPointInCircle", CrowdManagerGetRandomPointInCircle())
+
+        .addStaticFunction("GetDistanceToWall", &CrowdManagerGetDistanceToWall)        
         .addStaticFunction("Raycast", &CrowdManagerRaycast)
+
         .addFunction("GetMaxAgents", &CrowdManager::GetMaxAgents)
         .addFunction("GetMaxAgentRadius", &CrowdManager::GetMaxAgentRadius)
         .addFunction("GetNavigationMesh", &CrowdManager::GetNavigationMesh)
@@ -340,79 +287,30 @@ static void RegisterNavigable(kaguya::State& lua)
         );
 }
 
-static Vector3 NavigationMeshFindNearestPoint0(NavigationMesh* self, const Vector3& point)
-{
-    return self->FindNearestPoint(point);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NavigationMeshFindNearestPoint, NavigationMesh, FindNearestPoint, 1, 4);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NavigationMeshMoveAlongSurface, NavigationMesh, MoveAlongSurface, 2, 5);
 
-static Vector3 NavigationMeshFindNearestPoint1(NavigationMesh* self, const Vector3& point, const Vector3& extents)
-{
-    return self->FindNearestPoint(point, extents);
-}
-
-static Vector3 NavigationMeshMoveAlongSurface0(NavigationMesh* self, const Vector3& start, const Vector3& end)
-{
-    return self->MoveAlongSurface(start, end);
-}
-
-static Vector3 NavigationMeshMoveAlongSurface1(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents)
-{
-    return self->MoveAlongSurface(start, end, extents);
-}
-
-static Vector3 NavigationMeshMoveAlongSurface2(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents, int maxVisited)
-{
-    return self->MoveAlongSurface(start, end, extents, maxVisited);
-}
-
-static PODVector<Vector3> NavigationMeshFindPath0(NavigationMesh* self, const Vector3& start, const Vector3& end)
+static PODVector<Vector3> NavigationMeshFindPath(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents = Vector3::ONE, const dtQueryFilter* filter = 0)
 {
     PODVector<Vector3> dest;
-    self->FindPath(dest, start, end);
+    self->FindPath(dest, start, end, extents, filter);
     return dest;
 }
 
-static PODVector<Vector3> NavigationMeshFindPath1(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents)
+KAGUYA_FUNCTION_OVERLOADS(NavigationMeshFindPathOverloads, NavigationMeshFindPath, 3, 5);
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NavigationMeshGetRandomPoint, NavigationMesh, GetRandomPoint, 0, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NavigationMeshGetRandomPointInCircle, NavigationMesh, GetRandomPointInCircle, 2, 5);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NavigationMeshGetDistanceToWall, NavigationMesh, GetDistanceToWall, 2, 6);
+
+static std::tuple<Vector3, Vector3> NavigationMeshRaycast(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents = Vector3::ONE)
 {
-    PODVector<Vector3> dest;
-    self->FindPath(dest, start, end, extents);
-    return dest;
+    Vector3 hitNormal;
+    Vector3 result = self->Raycast(start, end, extents, 0, &hitNormal);
+    return std::make_tuple(result, hitNormal);
 }
 
-static Vector3 NavigationMeshGetRandomPoint(NavigationMesh* self)
-{
-    return self->GetRandomPoint();
-}
-
-static Vector3 NavigationMeshGetRandomPointInCircle0(NavigationMesh* self, const Vector3& center, float radius)
-{
-    return self->GetRandomPointInCircle(center, radius);
-}
-
-static Vector3 NavigationMeshGetRandomPointInCircle1(NavigationMesh* self, const Vector3& center, float radius, const Vector3& extents)
-{
-    return self->GetRandomPointInCircle(center, radius, extents);
-}
-
-static float NavigationMeshGetDistanceToWall0(NavigationMesh* self, const Vector3& point, float radius)
-{
-    return self->GetDistanceToWall(point, radius);
-}
-
-static float NavigationMeshGetDistanceToWall1(NavigationMesh* self, const Vector3& point, float radius, const Vector3& extents)
-{
-    return self->GetDistanceToWall(point, radius, extents);
-}
-
-static Vector3 NavigationMeshRaycast0(NavigationMesh* self, const Vector3& start, const Vector3& end)
-{
-    return self->Raycast(start, end);
-}
-
-static Vector3 NavigationMeshRaycast1(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents)
-{
-    return self->Raycast(start, end, extents);
-}
+KAGUYA_FUNCTION_OVERLOADS(NavigationMeshRaycastOverloads, NavigationMeshRaycast, 3, 4);
 
 static void RegisterNavigationMesh(kaguya::State& lua)
 {
@@ -456,15 +354,16 @@ static void RegisterNavigationMesh(kaguya::State& lua)
         .addFunction("SetDrawOffMeshConnections", &NavigationMesh::SetDrawOffMeshConnections)
         .addFunction("SetDrawNavAreas", &NavigationMesh::SetDrawNavAreas)
 
-        ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, FindNearestPoint)
-        ADD_OVERLOADED_FUNCTIONS_3(NavigationMesh, MoveAlongSurface)
-        ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, FindPath)
+        .addFunction("FindNearestPoint", NavigationMeshFindNearestPoint())
+        .addFunction("MoveAlongSurface", NavigationMeshMoveAlongSurface())
+        
+        .addStaticFunction("FindPath", NavigationMeshFindPathOverloads)
 
-        .addStaticFunction("GetRandomPoint", &NavigationMeshGetRandomPoint)
-
-        ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, GetRandomPointInCircle)
-        ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, GetDistanceToWall)
-        ADD_OVERLOADED_FUNCTIONS_2(NavigationMesh, Raycast)
+        .addFunction("GetRandomPoint", NavigationMeshGetRandomPoint())
+        .addFunction("GetRandomPointInCircle", NavigationMeshGetRandomPointInCircle())
+        .addFunction("GetDistanceToWall", NavigationMeshGetDistanceToWall())
+        
+        .addStaticFunction("Raycast", NavigationMeshRaycastOverloads())
 
         .addFunction("DrawDebugGeometry", static_cast<void (NavigationMesh::*)(bool)>(&NavigationMesh::DrawDebugGeometry))
 

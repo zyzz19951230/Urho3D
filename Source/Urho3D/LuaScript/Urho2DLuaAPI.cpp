@@ -62,15 +62,8 @@
 
 namespace Urho3D
 {
-static void AnimatedSprite2DSetAnimation0(AnimatedSprite2D* self, const String& name)
-{
-    self->SetAnimation(name);
-}
 
-static void AnimatedSprite2DSetAnimation1(AnimatedSprite2D* self, const String& name, LoopMode2D loopMode)
-{
-    self->SetAnimation(name, loopMode);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(AnimatedSprite2DSetAnimation, AnimatedSprite2D, SetAnimation, 1, 2);
 
 static void RegisterAnimatedSprite2D(kaguya::State& lua)
 {
@@ -87,7 +80,7 @@ static void RegisterAnimatedSprite2D(kaguya::State& lua)
         .addFunction("SetAnimationSet", &AnimatedSprite2D::SetAnimationSet)
         .addFunction("SetEntity", &AnimatedSprite2D::SetEntity)
 
-        ADD_OVERLOADED_FUNCTIONS_2(AnimatedSprite2D, SetAnimation)
+        .addFunction("SetAnimation", AnimatedSprite2DSetAnimation())
 
         .addFunction("SetLoopMode", &AnimatedSprite2D::SetLoopMode)
         .addFunction("SetSpeed", &AnimatedSprite2D::SetSpeed)
@@ -631,67 +624,35 @@ static void RegisterParticleEmitter2D(kaguya::State& lua)
     );
 }
 
-static PODVector<PhysicsRaycastResult2D> PhysicsWorld2DRaycast0(PhysicsWorld2D* self, const Vector2& startPoint, const Vector2& endPoint)
-{
-    PODVector<PhysicsRaycastResult2D> results;
-    self->Raycast(results, startPoint, endPoint);
-    return results;
-}
-
-static PODVector<PhysicsRaycastResult2D> PhysicsWorld2DRaycast1(PhysicsWorld2D* self, const Vector2& startPoint, const Vector2& endPoint, unsigned int collisionMask)
+static PODVector<PhysicsRaycastResult2D> PhysicsWorld2DRaycast(PhysicsWorld2D* self, const Vector2& startPoint, const Vector2& endPoint, unsigned int collisionMask = M_MAX_UNSIGNED)
 {
     PODVector<PhysicsRaycastResult2D> results;
     self->Raycast(results, startPoint, endPoint, collisionMask);
     return results;
 }
 
-static PhysicsRaycastResult2D PhysicsWorld2DRaycastSingle0(PhysicsWorld2D* self, const Vector2& startPoint, const Vector2& endPoint)
-{
-    PhysicsRaycastResult2D result;
-    self->RaycastSingle(result, startPoint, endPoint);
-    return result;
-}
+KAGUYA_FUNCTION_OVERLOADS(PhysicsWorld2DRaycastOverloads, PhysicsWorld2DRaycast, 3, 4);
 
-static PhysicsRaycastResult2D PhysicsWorld2DRaycastSingle1(PhysicsWorld2D* self, const Vector2& startPoint, const Vector2& endPoint, unsigned int collisionMask)
+static PhysicsRaycastResult2D PhysicsWorld2DRaycastSingle(PhysicsWorld2D* self, const Vector2& startPoint, const Vector2& endPoint, unsigned int collisionMask = M_MAX_UNSIGNED)
 {
     PhysicsRaycastResult2D result;
     self->RaycastSingle(result, startPoint, endPoint, collisionMask);
     return result;
 }
 
-static RigidBody2D* PhysicsWorld2DGetRigidBody0(PhysicsWorld2D* self, const Vector2& point)
-{
-    return self->GetRigidBody(point);
-}
+KAGUYA_FUNCTION_OVERLOADS(PhysicsWorld2DRaycastSingleOverloads, PhysicsWorld2DRaycastSingle, 3, 4);
 
-static RigidBody2D* PhysicsWorld2DGetRigidBody1(PhysicsWorld2D* self, const Vector2& point, unsigned int collisionMask)
-{
-    return self->GetRigidBody(point, collisionMask);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(PhysicsWorld2DGetRigidBody0, PhysicsWorld2D, GetRigidBody, 1, 2, RigidBody2D*(PhysicsWorld2D::*)(const Vector2&, unsigned));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(PhysicsWorld2DGetRigidBody1, PhysicsWorld2D, GetRigidBody, 2, 3, RigidBody2D*(PhysicsWorld2D::*)(int, int, unsigned));
 
-static RigidBody2D* PhysicsWorld2DGetRigidBody2(PhysicsWorld2D* self, int screenX, int screenY)
-{
-    return self->GetRigidBody(screenX, screenY);
-}
-
-static RigidBody2D* PhysicsWorld2DGetRigidBody3(PhysicsWorld2D* self, int screenX, int screenY, unsigned int collisionMask)
-{
-    return self->GetRigidBody(screenX, screenY, collisionMask);
-}
-
-static PODVector<RigidBody2D*> PhysicsWorld2DGetRigidBodies0(PhysicsWorld2D* self, const Rect& aabb)
-{
-    PODVector<RigidBody2D*> result;
-    self->GetRigidBodies(result, aabb);
-    return result;
-}
-
-static PODVector<RigidBody2D*> PhysicsWorld2DGetRigidBodies1(PhysicsWorld2D* self, const Rect& aabb, unsigned int collisionMask)
+static PODVector<RigidBody2D*> PhysicsWorld2DGetRigidBodies(PhysicsWorld2D* self, const Rect& aabb, unsigned int collisionMask = M_MAX_UNSIGNED)
 {
     PODVector<RigidBody2D*> result;
     self->GetRigidBodies(result, aabb, collisionMask);
     return result;
 }
+
+KAGUYA_FUNCTION_OVERLOADS(PhysicsWorld2DGetRigidBodiesOverloads, PhysicsWorld2DGetRigidBodies, 2, 3);
 
 static void RegisterPhysicsWorld2D(kaguya::State& lua)
 {
@@ -726,11 +687,13 @@ static void RegisterPhysicsWorld2D(kaguya::State& lua)
         .addFunction("SetVelocityIterations", &PhysicsWorld2D::SetVelocityIterations)
         .addFunction("SetPositionIterations", &PhysicsWorld2D::SetPositionIterations)
 
-        ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld2D, Raycast)
-        ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld2D, RaycastSingle)
+        .addStaticFunction("Raycast", PhysicsWorld2DRaycastOverloads())
 
-        ADD_OVERLOADED_FUNCTIONS_4(PhysicsWorld2D, GetRigidBody)
-        ADD_OVERLOADED_FUNCTIONS_2(PhysicsWorld2D, GetRigidBodies)
+        .addStaticFunction("RaycastSingle", PhysicsWorld2DRaycastSingleOverloads())
+        
+        .addOverloadedFunctions("GetRigidBody", PhysicsWorld2DGetRigidBody0(), PhysicsWorld2DGetRigidBody1())
+
+        .addStaticFunction("GetRigidBodies", PhysicsWorld2DGetRigidBodiesOverloads())
 
         .addFunction("IsUpdateEnabled", &PhysicsWorld2D::IsUpdateEnabled)
         .addFunction("GetDrawShape", &PhysicsWorld2D::GetDrawShape)
@@ -860,20 +823,7 @@ static void RegisterSprite2D(kaguya::State& lua)
     );
 }
 
-static void SpriteSheet2DDefineSprite0(SpriteSheet2D* self, const String& name, const IntRect& rectangle)
-{
-    self->DefineSprite(name, rectangle);
-}
-
-static void SpriteSheet2DDefineSprite1(SpriteSheet2D* self, const String& name, const IntRect& rectangle, const Vector2& hotSpot)
-{
-    self->DefineSprite(name, rectangle, hotSpot);
-}
-
-static void SpriteSheet2DDefineSprite2(SpriteSheet2D* self, const String& name, const IntRect& rectangle, const Vector2& hotSpot, const IntVector2& offset)
-{
-    self->DefineSprite(name, rectangle, hotSpot, offset);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(SpriteSheet2DDefineSprite, SpriteSheet2D, DefineSprite, 2, 4);
 
 static void RegisterSpriteSheet2D(kaguya::State& lua)
 {
@@ -884,7 +834,7 @@ static void RegisterSpriteSheet2D(kaguya::State& lua)
 
         .addFunction("SetTexture", &SpriteSheet2D::SetTexture)
 
-        ADD_OVERLOADED_FUNCTIONS_3(SpriteSheet2D, DefineSprite)
+        .addFunction("DefineSprite", SpriteSheet2DDefineSprite())
 
         .addFunction("GetTexture", &SpriteSheet2D::GetTexture)
         .addFunction("GetSprite", &SpriteSheet2D::GetSprite)

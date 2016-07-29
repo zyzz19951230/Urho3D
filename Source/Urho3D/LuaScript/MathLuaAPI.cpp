@@ -168,10 +168,10 @@ static void RegisterColor(kaguya::State& lua)
         );
 }
 
-KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(FrustumDefine0, Frustum, Define, 5, 6, void(Frustum::*)(float, float, float, float, float, const Matrix3x4&))
-KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(FrustumDefine1, Frustum, Define, 2, 3, void(Frustum::*)(const Vector3&, const Vector3&, const Matrix3x4&))
-KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(FrustumDefine2, Frustum, Define, 1, 2, void(Frustum::*)(const BoundingBox&, const Matrix3x4&))
-KAGUYA_MEMBER_FUNCTION_OVERLOADS(FrustumDefineOrtho, Frustum, DefineOrtho, 5, 6)
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(FrustumDefine0, Frustum, Define, 5, 6, void(Frustum::*)(float, float, float, float, float, const Matrix3x4&));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(FrustumDefine1, Frustum, Define, 2, 3, void(Frustum::*)(const Vector3&, const Vector3&, const Matrix3x4&));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(FrustumDefine2, Frustum, Define, 1, 2, void(Frustum::*)(const BoundingBox&, const Matrix3x4&));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(FrustumDefineOrtho, Frustum, DefineOrtho, 5, 6);
 
 static void RegisterFrustum(kaguya::State& lua)
 {
@@ -681,17 +681,9 @@ static void RegisterRandom(kaguya::State& lua)
     lua["RandStandardNormal"] = function(RandStandardNormal);
 }
 
-static float RayHitDistance0(const Ray* self, const Frustum& frustum)
-{
-    return self->HitDistance(frustum);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(RayHitDistance0, Ray, HitDistance, 1, 2, float(Ray::*)(const Frustum&, bool)const);
 
-static float RayHitDistance1(const Ray* self, const Frustum& frustum, bool solidInside)
-{
-    return self->HitDistance(frustum, solidInside);
-}
-
-static std::tuple<float, Vector3, Vector3> RayHitDistance2(const Ray* self, const Vector3& v0, const Vector3& v1, const Vector3& v2)
+static std::tuple<float, Vector3, Vector3> RayHitDistance1(const Ray* self, const Vector3& v0, const Vector3& v1, const Vector3& v2)
 {
     Vector3 outNormal;
     Vector3 outBary;
@@ -718,10 +710,9 @@ static void RegisterRay(kaguya::State& lua)
         .addOverloadedFunctions("HitDistance",
             static_cast<float(Ray::*)(const Plane&) const>(&Ray::HitDistance),
             static_cast<float(Ray::*)(const BoundingBox&) const>(&Ray::HitDistance),
-            &RayHitDistance0,
-            &RayHitDistance1,
+            RayHitDistance0(),
             static_cast<float(Ray::*)(const Sphere&) const>(&Ray::HitDistance),
-            &RayHitDistance2)
+            &RayHitDistance1)
 
         .addFunction("Transformed", &Ray::Transformed)
 

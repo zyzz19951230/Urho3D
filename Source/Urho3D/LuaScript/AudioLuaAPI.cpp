@@ -38,22 +38,14 @@ namespace Urho3D
 
 extern Context* globalContext;
 
-static bool AudioSetMode0(Audio* self, int bufferLengthMSec, int mixRate, bool stereo)
-{
-    return self->SetMode(bufferLengthMSec, mixRate, stereo);
-}
-
-static bool AudioSetMode1(Audio* self, int bufferLengthMSec, int mixRate, bool stereo, bool interpolation)
-{
-    return self->SetMode(bufferLengthMSec, mixRate, stereo, interpolation);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(AudioSetMode, Audio, SetMode, 3, 4);
 
 static void RegisterAudio(kaguya::State& lua)
 {
     using namespace kaguya;
 
     lua["Audio"].setClass(UserdataMetatable<Audio, Object>()
-        ADD_OVERLOADED_FUNCTIONS_2(Audio, SetMode)
+        .addFunction("SetMode", AudioSetMode())
 
         .addFunction("Play", &Audio::Play)
         .addFunction("Stop", &Audio::Stop)

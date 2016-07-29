@@ -58,15 +58,7 @@ static void RegisterDatabase(kaguya::State& lua)
     // lua["GetDBAPI"] = function(&Database::GetAPI)
 }
 
-static DbResult DbConnectionExecute0(DbConnection* self, const String& sql)
-{
-    return self->Execute(sql);
-}
-
-static DbResult DbConnectionExecute1(DbConnection* self, const String& sql, bool useCursorEvent)
-{
-    return self->Execute(sql, useCursorEvent);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DbConnectionExecute, DbConnection, Execute, 1, 2);
 
 static void RegisterDbConnection(kaguya::State& lua)
 {
@@ -76,7 +68,7 @@ static void RegisterDbConnection(kaguya::State& lua)
         
         .addFunction("Finalize", &DbConnection::Finalize)
         
-        ADD_OVERLOADED_FUNCTIONS_2(DbConnection, Execute)
+        .addFunction("Execute", DbConnectionExecute())
 
         .addFunction("GetConnectionString", &DbConnection::GetConnectionString)
         .addFunction("IsConnected", &DbConnection::IsConnected)
