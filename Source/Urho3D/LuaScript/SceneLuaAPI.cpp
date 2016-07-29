@@ -90,9 +90,9 @@ static void RegisterAnimationDefs(kaguya::State& lua)
     lua["WM_CLAMP"] = WM_CLAMP;
 }
 
-static SharedPtr<Component> ComponentGetComponent(const Component* self, const char* type)
+static SharedPtr<Component> ComponentGetComponent(const Component* self, StringHash type)
 {
-    return SharedPtr<Component>(self->GetComponent(StringHash(type)));
+    return SharedPtr<Component>(self->GetComponent(type));
 }
 
 static PODVector<Component*> ComponentGetComponents(const Component* self)
@@ -195,16 +195,16 @@ KAGUYA_FUNCTION_OVERLOADS(NodeCreateChildOverloads, NodeCreateChild, 1, 4);
 
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeAddChild, Node, AddChild, 1, 2);
 
-static SharedPtr<Component> NodeCreateComponent(Node* self, const char* type, CreateMode mode = REPLICATED, unsigned id = 0)
+static SharedPtr<Component> NodeCreateComponent(Node* self, StringHash type, CreateMode mode = REPLICATED, unsigned id = 0)
 {
-    return SharedPtr<Component>(self->CreateComponent(StringHash(type), mode, id));
+    return SharedPtr<Component>(self->CreateComponent(type, mode, id));
 }
 
 KAGUYA_FUNCTION_OVERLOADS(NodeCreateComponentOverloads, NodeCreateComponent, 2, 4);
 
-static SharedPtr<Component> NodeGetOrCreateComponent(Node* self, const char* type, CreateMode mode = REPLICATED, unsigned id = 0)
+static SharedPtr<Component> NodeGetOrCreateComponent(Node* self, StringHash type, CreateMode mode = REPLICATED, unsigned id = 0)
 {
-    return SharedPtr<Component>(self->GetOrCreateComponent(StringHash(type), mode, id));
+    return SharedPtr<Component>(self->GetOrCreateComponent(type, mode, id));
 }
 
 KAGUYA_FUNCTION_OVERLOADS(NodeGetOrCreateComponentOverloads, NodeGetOrCreateComponent, 2, 4);
@@ -257,16 +257,6 @@ static SharedPtr<Component> NodeCloneComponent1(Node* self, Component* component
 
 KAGUYA_FUNCTION_OVERLOADS(NodeCloneComponentOverloads1, NodeCloneComponent1, 3, 4);
 
-static void NodeRemoveComponent(Node* self, const char* type)
-{
-    self->RemoveComponent(StringHash(type));
-}
-
-static void NodeRemoveComponents(Node* self, const char* type)
-{
-    self->RemoveComponents(StringHash(type));
-}
-
 static SharedPtr<Node> NodeClone(Node* self, CreateMode mode = REPLICATED)
 {
     return SharedPtr<Node>(self->Clone(mode));
@@ -285,10 +275,10 @@ static PODVector<Node*> NodeGetChildren(const Node* self, bool recursive = false
 
 KAGUYA_FUNCTION_OVERLOADS(NodeGetChildrenOverloads, NodeGetChildren, 1, 2);
 
-static PODVector<Node*> NodeGetChildrenWithComponent(const Node* self, const char* type, bool recursive = false)
+static PODVector<Node*> NodeGetChildrenWithComponent(const Node* self, StringHash type, bool recursive = false)
 {
     PODVector<Node*> dest;
-    self->GetChildrenWithComponent(dest, StringHash(type), recursive);
+    self->GetChildrenWithComponent(dest, type, recursive);
     return dest;
 }
 
@@ -305,33 +295,28 @@ KAGUYA_FUNCTION_OVERLOADS(NodeGetChildrenWithTagOverloads, NodeGetChildrenWithTa
 
 KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(NodeGetChild, Node, GetChild, 1, 2, Node*(Node::*)(const char*, bool)const);
 
-static PODVector<Component*> NodeGetComponents(const Node* self, const char* type, bool recursive = false)
+static PODVector<Component*> NodeGetComponents(const Node* self, StringHash type, bool recursive = false)
 {
     PODVector<Component*> dest;
-    self->GetComponents(dest, StringHash(type), recursive);
+    self->GetComponents(dest, type, recursive);
     return dest;
 }
 
 KAGUYA_FUNCTION_OVERLOADS(NodeGetComponentsOverloads, NodeGetComponents, 2, 3);
 
-static SharedPtr<Component> NodeGetComponent(const Node* node, const char* type, bool recursive = false)
+static SharedPtr<Component> NodeGetComponent(const Node* node, StringHash type, bool recursive = false)
 {
-    return SharedPtr<Component>(node->GetComponent(StringHash(type), recursive));
+    return SharedPtr<Component>(node->GetComponent(type, recursive));
 }
 
 KAGUYA_FUNCTION_OVERLOADS(NodeGetComponentOverloads, NodeGetComponent, 2, 3);
 
-static SharedPtr<Component> NodeGetParentComponent(const Node* node, const char* type, bool fullTraversal = false)
+static SharedPtr<Component> NodeGetParentComponent(const Node* node, StringHash type, bool fullTraversal = false)
 {
-    return SharedPtr<Component>(node->GetParentComponent(StringHash(type), fullTraversal));
+    return SharedPtr<Component>(node->GetParentComponent(type, fullTraversal));
 }
 
 KAGUYA_FUNCTION_OVERLOADS(NodeGetParentComponentOverloads, NodeGetParentComponent, 2, 3);
-
-static bool NodeHasComponent(const Node* self, const char* type)
-{
-    return self->HasComponent(StringHash(type));
-}
 
 static void RegisterNode(kaguya::State& lua)
 {
@@ -351,7 +336,6 @@ static void RegisterNode(kaguya::State& lua)
 
         .addStaticFunction("SaveXML", NodeSaveXMLOverloads())
         .addStaticFunction("SaveJSON", NodeSaveJSONOverloads())
-        
 
         .addFunction("SetName", &Node::SetName)
         .addFunction("SetTags", &Node::SetTags)
@@ -462,11 +446,11 @@ static void RegisterNode(kaguya::State& lua)
 
         .addOverloadedFunctions("RemoveComponent",
             static_cast<void(Node::*)(Component*)>(&Node::RemoveComponent),
-            &NodeRemoveComponent)
+			static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponent))
 
         .addOverloadedFunctions("RemoveComponents",
             static_cast<void(Node::*)(bool, bool)>(&Node::RemoveComponents),
-            &NodeRemoveComponents)
+			static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponents))
 
         .addFunction("RemoveAllComponents", &Node::RemoveAllComponents)
 
@@ -548,7 +532,8 @@ static void RegisterNode(kaguya::State& lua)
         .addStaticFunction("GetComponent", NodeGetComponentOverloads())
         .addStaticFunction("GetParentComponent", NodeGetParentComponentOverloads())
 
-        .addStaticFunction("HasComponent", &NodeHasComponent)
+        .addFunction("HasComponent", 
+			static_cast<bool(Node::*)(StringHash)const>(&Node::HasComponent))
 
         // .addFunction("GetListeners", &Node::GetListeners)
 

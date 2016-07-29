@@ -70,38 +70,23 @@ static void RegisterContext(kaguya::State& lua)
     // lua["GetEventHandler"] = function(GlobalGetEventHandler);
 }
 
-static void ObjectSendEvent0(Object* self, const String& eventName)
-{
-    self->SendEvent(StringHash(eventName));
-}
-
-static void ObjectSendEvent1(Object* self, const String& eventName, VariantMap* eventData)
-{
-    self->SendEvent(StringHash(eventName), *eventData);
-}
-
-static bool ObjectHasSubscribedToEvent0(const Object* self, const String& eventName)
-{
-    return self->HasSubscribedToEvent(StringHash(eventName));
-}
-
-static bool ObjectHasSubscribedToEvent1(const Object* self, Object* sender, const String& eventName)
-{
-    return self->HasSubscribedToEvent(sender, StringHash(eventName));
-}
-
 static void RegisterObject(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["Object"].setClass(UserdataMetatable<Object, RefCounted>()
+	lua["Object"].setClass(UserdataMetatable<Object, RefCounted>()
 
-        .addFunction("GetType", &Object::GetType)
-        .addFunction("GetTypeName", &Object::GetTypeName)
-        .addFunction("GetCategory", &Object::GetCategory)
+		.addFunction("GetType", &Object::GetType)
+		.addFunction("GetTypeName", &Object::GetTypeName)
+		.addFunction("GetCategory", &Object::GetCategory)
 
-        ADD_OVERLOADED_FUNCTIONS_2(Object, SendEvent)
-        ADD_OVERLOADED_FUNCTIONS_2(Object, HasSubscribedToEvent)
+		.addOverloadedFunctions("SendEvent",
+			static_cast<void(Object::*)(StringHash)>(&Object::SendEvent),
+			static_cast<void(Object::*)(StringHash, VariantMap&)>(&Object::SendEvent))
+
+		.addOverloadedFunctions("HasSubscribedToEvent",
+			static_cast<bool(Object::*)(StringHash)const>(&Object::HasSubscribedToEvent),
+			static_cast<bool(Object::*)(Object*, StringHash)const>(&Object::HasSubscribedToEvent))
 
         .addProperty("type", &Object::GetType)
         .addProperty("typeName", &Object::GetTypeName)
@@ -361,18 +346,18 @@ static void RegisterVariant(kaguya::State& lua)
     );
 }
 
-static const Variant& VariantMapGetVariant(const VariantMap& variantMap, const char* key)
+static const Variant& VariantMapGetVariant(const VariantMap& variantMap, StringHash key)
 {
-    VariantMap::ConstIterator i = variantMap.Find(StringHash(key));
+    VariantMap::ConstIterator i = variantMap.Find(key);
     if (i == variantMap.End())
         return Variant::EMPTY;
 
     return i->second_;
 }
 
-static void VariantMapSetVariant(VariantMap& variantMap, const char* key, const Variant& value)
+static void VariantMapSetVariant(VariantMap& variantMap, StringHash key, const Variant& value)
 {
-    variantMap[StringHash(key)] = value;
+    variantMap[key] = value;
 }
 
 static void RegisterVariantMap(kaguya::State& lua)

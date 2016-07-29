@@ -2,6 +2,7 @@
 
 #include "../Container/Ptr.h"
 #include "../Container/Str.h"
+#include "../Math/StringHash.h"
 
 #include <kaguya.hpp>
 
@@ -222,4 +223,41 @@ namespace kaguya
             return lua_type_traits<std::vector<T>>::push(l, std_p);
         }
     };
+
+	// Urho3D::StringHash type traits.
+	template<>
+	struct lua_type_traits<Urho3D::StringHash>
+	{
+		typedef void Registerable;
+		typedef Urho3D::StringHash get_type;
+		typedef const Urho3D::StringHash& push_type;
+
+		static bool strictCheckType(lua_State* l, int index)
+		{
+			return lua_type(l, index) == LUA_TSTRING || object_wrapper<Urho3D::StringHash>(l, index) != 0;
+		}
+		static bool checkType(lua_State* l, int index)
+		{
+			return lua_isstring(l, index) != 0 || object_wrapper<Urho3D::StringHash>(l , index) != 0;
+		}
+		static get_type get(lua_State* l, int index)
+		{
+			const char* str = lua_tostring(l, index);
+			if (str)
+				return Urho3D::StringHash(str);
+
+			const Urho3D::StringHash* pointer = get_const_pointer(l, index, types::typetag<Urho3D::StringHash>());
+			if (pointer)
+				return *pointer;
+
+			throw LuaTypeMismatch("type mismatch!!");
+		}
+		static int push(lua_State* l, push_type s)
+		{
+			void *storage = lua_newuserdata(l, sizeof(ObjectWrapper<Urho3D::StringHash>));
+			new(storage) ObjectWrapper<Urho3D::StringHash>(s);
+			class_userdata::setmetatable<Urho3D::StringHash>(l);
+			return 1;
+		}
+	};
 }

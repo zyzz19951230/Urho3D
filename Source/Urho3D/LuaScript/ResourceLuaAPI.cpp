@@ -406,30 +406,30 @@ KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(ResourceCacheReleaseResources2, 
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(ResourceCacheReleaseAllResources, ResourceCache, ReleaseAllResources, 0, 1);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(ResourceCacheGetFile, ResourceCache, GetFile, 1, 2);
 
-static SharedPtr<Resource> ResourceCacheGetResource(ResourceCache* cache, const char* type, const char* name, bool sendEventOnFailure = true)
+static SharedPtr<Resource> ResourceCacheGetResource(ResourceCache* cache, StringHash type, const String& name, bool sendEventOnFailure = true)
 {
-    return SharedPtr<Resource>(cache->GetResource(StringHash(type), String(name), sendEventOnFailure));
+    return SharedPtr<Resource>(cache->GetResource(type, name, sendEventOnFailure));
 }
 
 KAGUYA_FUNCTION_OVERLOADS(ResourceCacheGetResourceOverloads, ResourceCacheGetResource, 3, 4);
 
-static SharedPtr<Resource> ResourceCacheGetTempResource(ResourceCache* cache, const char* type, const char* name, bool sendEventOnFailure = true)
+static SharedPtr<Resource> ResourceCacheGetTempResource(ResourceCache* cache, StringHash type, const String& name, bool sendEventOnFailure = true)
 {
-    return SharedPtr<Resource>(cache->GetTempResource(StringHash(type), String(name), sendEventOnFailure));
+    return SharedPtr<Resource>(cache->GetTempResource(type, name, sendEventOnFailure));
 }
 
 KAGUYA_FUNCTION_OVERLOADS(ResourceCacheGetTempResourceOverloads, ResourceCacheGetTempResource, 3, 4);
 
-static PODVector<Resource*> ResourceCacheGetResources(const ResourceCache* self, const char* type)
+static PODVector<Resource*> ResourceCacheGetResources(const ResourceCache* self, StringHash type)
 {
     PODVector<Resource*> dest;
-    self->GetResources(dest, StringHash(type));
+    self->GetResources(dest, type);
     return dest;
 }
 
-static SharedPtr<Resource> ResourceCacheGetExistingResource(ResourceCache* cache, const char* type, const char* name)
+static SharedPtr<Resource> ResourceCacheGetExistingResource(ResourceCache* cache, StringHash type, const String& name)
 {
-    return SharedPtr<Resource>(cache->GetExistingResource(StringHash(type), String(name)));
+    return SharedPtr<Resource>(cache->GetExistingResource(type, name));
 }
 
 static void RegisterResourceCache(kaguya::State& lua)

@@ -48,7 +48,7 @@ LuaScriptEventInvoker::~LuaScriptEventInvoker()
 {
 }
 
-void LuaScriptEventInvoker::AddEventHandler(Object* sender, const StringHash& eventType, LuaFunction* function)
+void LuaScriptEventInvoker::AddEventHandler(Object* sender, StringHash eventType, LuaFunction* function)
 {
     if (!function)
         return;

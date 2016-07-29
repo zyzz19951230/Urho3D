@@ -49,27 +49,27 @@ public:
     ~LuaScript();
 
     /// Add a scripted event handler by function at the given stack index.
-    virtual void AddEventHandler(const String& eventName, int index);
+    virtual void AddEventHandler(StringHash eventType, int index);
     /// Add a scripted event handler by function name.
-    virtual void AddEventHandler(const String& eventName, const String& functionName);
+    virtual void AddEventHandler(StringHash eventType, const String& functionName);
     /// Add a scripted event handler by function at the given stack index for a specific sender.
-    virtual void AddEventHandler(Object* sender, const String& eventName, int index);
+    virtual void AddEventHandler(Object* sender, StringHash eventType, int index);
     /// Add a scripted event handler by function name for a specific sender.
-    virtual void AddEventHandler(Object* sender, const String& eventName, const String& functionName);
+    virtual void AddEventHandler(Object* sender, StringHash eventType, const String& functionName);
     /// Remove a scripted event handler.
-    virtual void RemoveEventHandler(const String& eventName);
+    virtual void RemoveEventHandler(StringHash eventType);
     /// Remove a scripted event handler for a specific sender.
-    virtual void RemoveEventHandler(Object* sender, const String& eventName);
+    virtual void RemoveEventHandler(Object* sender, StringHash eventType);
     /// Remove all scripted event handlers for a specific sender.
     virtual void RemoveEventHandlers(Object* sender);
     /// Remove all scripted event handlers.
     virtual void RemoveAllEventHandlers();
     /// Remove all scripted event handlers, except those listed.
-    virtual void RemoveEventHandlersExcept(const Vector<String>& exceptionNames);
+    virtual void RemoveEventHandlersExcept(const PODVector<StringHash>& exceptionTypes);
     /// Return whether has subscribed to an event.
-    virtual bool HasEventHandler(const String& eventName) const;
+    virtual bool HasEventHandler(StringHash eventType) const;
     /// Return whether has subscribed to a specific sender's event.
-    virtual bool HasEventHandler(Object* sender, const String& eventName) const;
+    virtual bool HasEventHandler(Object* sender, StringHash eventType) const;
 
     /// Execute script file. Return true if successful.
     bool ExecuteFile(const String& fileName);

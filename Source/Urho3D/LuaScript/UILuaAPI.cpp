@@ -1079,9 +1079,9 @@ KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(UIElementSetStyle, UIElement, Se
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(UIElementSetStyleAuto, UIElement, SetStyleAuto, 0, 1);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(UIElementSetLayout, UIElement, SetLayout, 1, 3);
 
-static SharedPtr<UIElement> UIElementCreateChild(UIElement* self, const char* type, const String& name = String::EMPTY, unsigned index = M_MAX_UNSIGNED)
+static SharedPtr<UIElement> UIElementCreateChild(UIElement* self, StringHash type, const String& name = String::EMPTY, unsigned index = M_MAX_UNSIGNED)
 {
-    return SharedPtr<UIElement>(self->CreateChild(StringHash(type), name, index));
+    return SharedPtr<UIElement>(self->CreateChild(type, name, index));
 }
 
 KAGUYA_FUNCTION_OVERLOADS(UIElementCreateChildOverloads, UIElementCreateChild, 2, 4);
@@ -1103,9 +1103,9 @@ static SharedPtr<UIElement> UIElementGetChild1(const UIElement* self, const Stri
     return SharedPtr<UIElement>(self->GetChild(name, recursive));
 }
 
-static SharedPtr<UIElement> UIElementGetChild2(const UIElement* self, const char* key, const Variant& value, bool recursive = false)
+static SharedPtr<UIElement> UIElementGetChild2(const UIElement* self, StringHash key, const Variant& value, bool recursive = false)
 {
-    return SharedPtr<UIElement>(self->GetChild(StringHash(key), value, recursive));
+    return SharedPtr<UIElement>(self->GetChild(key, value, recursive));
 }
 
 KAGUYA_FUNCTION_OVERLOADS(UIElementGetChildOverloads1, UIElementGetChild1, 2, 3);

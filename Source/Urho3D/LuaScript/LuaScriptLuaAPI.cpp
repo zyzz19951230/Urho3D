@@ -1,3 +1,27 @@
+//
+// Copyright (c) 2008-2016 the Urho3D project.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+
+#include "../Precompiled.h"
+
 #include "../LuaScript/LuaScript.h"
 #include "../LuaScript/LuaScriptInstance.h"
 #include "../LuaScript/LuaScriptUtils.h"
@@ -72,34 +96,34 @@ static LuaScript* GetLuaScript()
     return globalContext->GetSubsystem<LuaScript>();
 }
 
-static void LuaScriptAddEventHandler0(const String& eventName, const String& functionName)
+static void LuaScriptAddEventHandler0(StringHash eventType, const String& functionName)
 {
-    GetLuaScript()->AddEventHandler(eventName, functionName);
+    GetLuaScript()->AddEventHandler(eventType, functionName);
 }
 
-static void LuaScriptAddEventHandler1(Object* sender, const String& eventName, const String& functionName)
+static void LuaScriptAddEventHandler1(Object* sender, StringHash eventType, const String& functionName)
 {
-    GetLuaScript()->AddEventHandler(sender, eventName, functionName);
+    GetLuaScript()->AddEventHandler(sender, eventType, functionName);
 }
 
-static void LuaScriptAddEventHandler2(const String& eventName, const kaguya::LuaFunction& function)
+static void LuaScriptAddEventHandler2(StringHash eventType, const kaguya::LuaFunction& function)
 {
-    GetLuaScript()->AddEventHandler(eventName, 2); // 2 is the stack index of function
+    GetLuaScript()->AddEventHandler(eventType, 2); // 2 is the stack index of function
 }
 
-static void LuaScriptAddEventHandler3(Object* sender, const String& eventName, const kaguya::LuaFunction& function)
+static void LuaScriptAddEventHandler3(Object* sender, StringHash eventType, const kaguya::LuaFunction& function)
 {
-    GetLuaScript()->AddEventHandler(sender, eventName, 3); // 3 is the stack index of function
+    GetLuaScript()->AddEventHandler(sender, eventType, 3); // 3 is the stack index of function
 }
 
-static void LuaScriptRemoveEventHandler0(const String& eventName)
+static void LuaScriptRemoveEventHandler0(StringHash eventType)
 {
-    GetLuaScript()->RemoveEventHandler(eventName);
+    GetLuaScript()->RemoveEventHandler(eventType);
 }
 
-static void LuaScriptRemoveEventHandler1(Object* sender, const String& eventName)
+static void LuaScriptRemoveEventHandler1(Object* sender, StringHash eventType)
 {
-    GetLuaScript()->RemoveEventHandler(sender, eventName);
+    GetLuaScript()->RemoveEventHandler(sender, eventType);
 }
 
 static void LuaScriptRemoveEventHandlers(Object* sender)
@@ -112,24 +136,24 @@ static void LuaScriptRemoveAllEventHandlers()
     GetLuaScript()->RemoveAllEventHandlers();
 }
 
-static void LuaScriptRemoveEventHandlersExcept(const Vector<String>& exceptionNames)
+static void LuaScriptRemoveEventHandlersExcept(const PODVector<StringHash>& exceptionTypes)
 {
-    GetLuaScript()->RemoveEventHandlersExcept(exceptionNames);
+    GetLuaScript()->RemoveEventHandlersExcept(exceptionTypes);
 }
 
-static bool LuaScriptHasSubscribedToEvent0(const String& eventName)
+static bool LuaScriptHasSubscribedToEvent0(StringHash eventType)
 {
-    return GetLuaScript()->HasSubscribedToEvent(eventName);
+    return GetLuaScript()->HasSubscribedToEvent(eventType);
 }
 
-static bool LuaScriptHasSubscribedToEvent1(Object* sender, const String& eventName)
+static bool LuaScriptHasSubscribedToEvent1(Object* sender, StringHash eventType)
 {
-    return GetLuaScript()->HasSubscribedToEvent(sender, eventName);
+    return GetLuaScript()->HasSubscribedToEvent(sender, eventType);
 }
 
-static void LuaScriptSendEvent(const String& eventName, VariantMap& eventData)
+static void LuaScriptSendEvent(StringHash eventType, VariantMap& eventData)
 {
-    GetLuaScript()->SendEvent(eventName, eventData);
+    GetLuaScript()->SendEvent(eventType, eventData);
 }
 
 static void LuaScriptSetExecuteConsoleCommands(bool enable)
@@ -296,22 +320,22 @@ static void RegisterLuaScriptInstance(kaguya::State &lua)
         .addFunction("SetScriptObjectType", &LuaScriptInstance::SetScriptObjectType)
         
         .addOverloadedFunctions("SubscribeToEvent",
-            static_cast<void (LuaScriptInstance::*)(const String&, int)>(&LuaScriptInstance::AddEventHandler),
-            static_cast<void (LuaScriptInstance::*)(const String&, const String&)>(&LuaScriptInstance::AddEventHandler),
-            static_cast<void (LuaScriptInstance::*)(Object*, const String&, int)>(&LuaScriptInstance::AddEventHandler),
-            static_cast<void (LuaScriptInstance::*)(Object*, const String&, const String&)>(&LuaScriptInstance::AddEventHandler))
+            static_cast<void (LuaScriptInstance::*)(StringHash, int)>(&LuaScriptInstance::AddEventHandler),
+            static_cast<void (LuaScriptInstance::*)(StringHash, const String&)>(&LuaScriptInstance::AddEventHandler),
+            static_cast<void (LuaScriptInstance::*)(Object*, StringHash, int)>(&LuaScriptInstance::AddEventHandler),
+            static_cast<void (LuaScriptInstance::*)(Object*, StringHash, const String&)>(&LuaScriptInstance::AddEventHandler))
 
         .addOverloadedFunctions("UnsubscribeFromEvent", 
-                static_cast<void (LuaScriptInstance::*)(const String&)>(&LuaScriptInstance::RemoveEventHandler),
-                static_cast<void (LuaScriptInstance::*)(Object*, const String&)>(&LuaScriptInstance::RemoveEventHandler))
+                static_cast<void (LuaScriptInstance::*)(StringHash)>(&LuaScriptInstance::RemoveEventHandler),
+                static_cast<void (LuaScriptInstance::*)(Object*, StringHash)>(&LuaScriptInstance::RemoveEventHandler))
 
         .addFunction("UnsubscribeFromEvents", &LuaScriptInstance::RemoveEventHandlers)
         .addFunction("UnsubscribeFromAllEvents", &LuaScriptInstance::RemoveAllEventHandlers)
         .addFunction("UnsubscribeFromAllEventsExcept", &LuaScriptInstance::RemoveEventHandlersExcept)
 
         .addOverloadedFunctions("HasSubscribedToEvent", 
-            static_cast<bool (LuaScriptInstance::*)(const String&) const>(&LuaScriptInstance::HasEventHandler),
-            static_cast<bool (LuaScriptInstance::*)(Object*, const String&) const>(&LuaScriptInstance::HasEventHandler))
+            static_cast<bool (LuaScriptInstance::*)(StringHash) const>(&LuaScriptInstance::HasEventHandler),
+            static_cast<bool (LuaScriptInstance::*)(Object*, StringHash) const>(&LuaScriptInstance::HasEventHandler))
 
         .addFunction("GetScriptFile", &LuaScriptInstance::GetScriptObjectType)
         .addFunction("GetScriptObjectType", &LuaScriptInstance::GetScriptObjectType)
