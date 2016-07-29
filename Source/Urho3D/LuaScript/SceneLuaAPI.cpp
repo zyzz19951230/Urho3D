@@ -545,7 +545,7 @@ static void RegisterNode(kaguya::State& lua)
             static_cast<const Vector<SharedPtr<Component> >&(Node::*)() const>(&Node::GetComponents),
             NodeGetComponentsOverloads())
 
-        .addStaticFunction("GetComponent", NodeGetComponentsOverloads())
+        .addStaticFunction("GetComponent", NodeGetComponentOverloads())
         .addStaticFunction("GetParentComponent", NodeGetParentComponentOverloads())
 
         .addStaticFunction("HasComponent", &NodeHasComponent)
