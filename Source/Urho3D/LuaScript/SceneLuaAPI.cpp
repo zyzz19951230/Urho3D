@@ -153,9 +153,9 @@ static void RegisterLogicComponent(kaguya::State& lua)
         );
 }
 
-static bool NodeSaveXML(const Node* self, const char* filepath, const String& indentation = "\t")
+static bool NodeSaveXML(const Node* self, const String& fileName, const String& indentation = "\t")
 {
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    SharedPtr<File> file(new File(globalContext, fileName, FILE_WRITE));
     if (!file->IsOpen())
         return false;
     return self->SaveXML(*file, indentation);
@@ -163,9 +163,9 @@ static bool NodeSaveXML(const Node* self, const char* filepath, const String& in
 
 KAGUYA_FUNCTION_OVERLOADS(NodeSaveXMLOverloads, NodeSaveXML, 2, 3);
 
-static bool NodeSaveJSON(const Node* self, const char* filepath, const String& indentation = "\t")
+static bool NodeSaveJSON(const Node* self, const String& fileName, const String& indentation = "\t")
 {
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    SharedPtr<File> file(new File(globalContext, fileName, FILE_WRITE));
     if (!file->IsOpen())
         return false;
     return self->SaveJSON(*file, indentation);
@@ -601,25 +601,25 @@ static void RegisterObjectAnimation(kaguya::State& lua)
         );
 }
 
-static bool SceneLoadXML(Scene* scene, const char* filepath)
+static bool SceneLoadXML(Scene* scene, const String& fileName)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return false;
     return scene->LoadXML(*file);
 }
 
-static bool SceneLoadJSON(Scene* scene, const char* filepath)
+static bool SceneLoadJSON(Scene* scene, const String& fileName)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return false;
     return scene->LoadJSON(*file);
 }
 
-static bool SceneSaveXML(const Scene* scene, const char* filepath, const String& indentation = "\t")
+static bool SceneSaveXML(const Scene* scene, const String& fileName, const String& indentation = "\t")
 {
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    SharedPtr<File> file(new File(globalContext, fileName, FILE_WRITE));
     if (!file->IsOpen())
         return false;
     return scene->SaveXML(*file, indentation);
@@ -627,9 +627,9 @@ static bool SceneSaveXML(const Scene* scene, const char* filepath, const String&
 
 KAGUYA_FUNCTION_OVERLOADS(SceneSaveXMLOverloads, SceneSaveXML, 2, 3);
 
-static bool SceneSaveJSON(const Scene* scene, const char* filepath, const String& indentation = "\t")
+static bool SceneSaveJSON(const Scene* scene, const String& fileName, const String& indentation = "\t")
 {
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    SharedPtr<File> file(new File(globalContext, fileName, FILE_WRITE));
     if (!file->IsOpen())
         return false;
     return scene->SaveJSON(*file, indentation);
@@ -637,9 +637,9 @@ static bool SceneSaveJSON(const Scene* scene, const char* filepath, const String
 
 KAGUYA_FUNCTION_OVERLOADS(SceneSaveJSONOverloads, SceneSaveJSON, 2, 3);
 
-static bool SceneLoadAsync(Scene* self, const char* filepath, LoadMode mode = LOAD_SCENE_AND_RESOURCES)
+static bool SceneLoadAsync(Scene* self, const String& fileName, LoadMode mode = LOAD_SCENE_AND_RESOURCES)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return false;
     return self->LoadAsync(file, mode);
@@ -647,9 +647,9 @@ static bool SceneLoadAsync(Scene* self, const char* filepath, LoadMode mode = LO
 
 KAGUYA_FUNCTION_OVERLOADS(SceneLoadAsyncOverloads, SceneLoadAsync, 2, 3);
 
-static bool SceneLoadAsyncXML(Scene* self, const char* filepath, LoadMode mode = LOAD_SCENE_AND_RESOURCES)
+static bool SceneLoadAsyncXML(Scene* self, const String& fileName, LoadMode mode = LOAD_SCENE_AND_RESOURCES)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return false;
     return self->LoadAsyncXML(file, mode);
@@ -657,9 +657,9 @@ static bool SceneLoadAsyncXML(Scene* self, const char* filepath, LoadMode mode =
 
 KAGUYA_FUNCTION_OVERLOADS(SceneLoadAsyncXMLOverloads, SceneLoadAsyncXML, 2, 3);
 
-static bool SceneLoadAsyncJSON(Scene* self, const char* filepath, LoadMode mode = LOAD_SCENE_AND_RESOURCES)
+static bool SceneLoadAsyncJSON(Scene* self, const String& fileName, LoadMode mode = LOAD_SCENE_AND_RESOURCES)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return false;
     return self->LoadAsyncJSON(file, mode);
@@ -667,9 +667,9 @@ static bool SceneLoadAsyncJSON(Scene* self, const char* filepath, LoadMode mode 
 
 KAGUYA_FUNCTION_OVERLOADS(SceneLoadAsyncJSONOverloads, SceneLoadAsyncJSON, 2, 3);
 
-static SharedPtr<Node> SceneInstantiate(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
+static SharedPtr<Node> SceneInstantiate(Scene* self, const String& fileName, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return SharedPtr<Node>();
     return SharedPtr<Node>(self->Instantiate(*file, position, rotation, mode));
@@ -677,9 +677,9 @@ static SharedPtr<Node> SceneInstantiate(Scene* self, const char* filepath, const
 
 KAGUYA_FUNCTION_OVERLOADS(SceneInstantiateOverloads, SceneInstantiate, 4, 5);
 
-static SharedPtr<Node> SceneInstantiateXML(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
+static SharedPtr<Node> SceneInstantiateXML(Scene* self, const String& fileName, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return SharedPtr<Node>();
     return SharedPtr<Node>(self->InstantiateXML(*file, position, rotation, mode));
@@ -687,9 +687,9 @@ static SharedPtr<Node> SceneInstantiateXML(Scene* self, const char* filepath, co
 
 KAGUYA_FUNCTION_OVERLOADS(SceneInstantiateXMLOverloads, SceneInstantiateXML, 4, 5);
 
-static SharedPtr<Node> SceneInstantiateJSON(Scene* self, const char* filepath, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
+static SharedPtr<Node> SceneInstantiateJSON(Scene* self, const String& fileName, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return SharedPtr<Node>();
     return SharedPtr<Node>(self->InstantiateJSON(*file, position, rotation, mode));
@@ -814,19 +814,23 @@ static void RegisterSceneEvents(kaguya::State& lua)
     lua["E_INTERCEPTNETWORKUPDATE"] = E_INTERCEPTNETWORKUPDATE;
 }
 
-static bool SerializableLoad(Serializable* self, const char* filepath, bool setInstanceDefault = false)
+static bool SerializableLoad0(Serializable* self, const String& fileName, bool setInstanceDefault = false)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     return self->Load(*file, setInstanceDefault);
 }
 
-KAGUYA_FUNCTION_OVERLOADS(SerializableLoadOverloads, SerializableLoad, 2, 3);
+KAGUYA_FUNCTION_OVERLOADS(SerializableLoadOverloads0, SerializableLoad0, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(SerializableLoad1, Serializable, Load, 1, 2);
 
-static bool SerializableSave(const Serializable* self, const char* filepath)
+static bool SerializableSave(const Serializable* self, const String& fileName)
 {
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    SharedPtr<File> file(new File(globalContext, fileName, FILE_WRITE));
     return self->Save(*file);
 }
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(SerializableLoadXML, Serializable, LoadXML, 1, 2);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(SerializableLoadJSON, Serializable, LoadJSON, 1, 2);
 
 static void RegisterSerializable(kaguya::State& lua)
 {
@@ -834,8 +838,19 @@ static void RegisterSerializable(kaguya::State& lua)
 
     lua["Serializable"].setClass(UserdataMetatable<Serializable, Object>()
 
-        .addStaticFunction("Load", SerializableLoadOverloads())
-        .addStaticFunction("Save", &SerializableSave)
+        .addOverloadedFunctions("Load", 
+            SerializableLoadOverloads0(),
+            SerializableLoad1())
+
+        .addOverloadedFunctions("Save", 
+            &SerializableSave, 
+            &Serializable::Save)
+
+        .addFunction("LoadXML", SerializableLoadXML())
+        .addFunction("SaveXML", &Serializable::SaveXML)
+
+        .addFunction("LoadJSON", SerializableLoadJSON())
+        .addFunction("SaveJSON", &Serializable::SaveJSON)
 
         .addOverloadedFunctions("SetAttribute",
             static_cast<bool(Serializable::*)(unsigned, const Variant&)>(&Serializable::SetAttribute),

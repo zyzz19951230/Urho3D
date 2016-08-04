@@ -337,17 +337,17 @@ static void RegisterPListFile(kaguya::State& lua)
     );
 }
 
-static bool ResourceLoad(Resource* self, const char* filepath)
+static bool ResourceLoad(Resource* self, const String& fileName)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return false;
     return self->Load(*file);
 }
 
-static bool ResourceSave(const Resource* self, const char* filepath)
+static bool ResourceSave(const Resource* self, const String& fileName)
 {
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    SharedPtr<File> file(new File(globalContext, fileName, FILE_WRITE));
     if (!file->IsOpen())
         return false;
     return self->Save(*file);
@@ -367,8 +367,13 @@ static void RegisterResource(kaguya::State& lua)
     lua["Resource"].setClass(UserdataMetatable<Resource, Object>()
         .addStaticFunction("new", &CreateObject<Resource>)
 
-        .addStaticFunction("Load", &ResourceLoad)
-        .addStaticFunction("Save", &ResourceSave)
+        .addOverloadedFunctions("Load", 
+            &ResourceLoad, 
+            &Resource::Load)
+
+        .addOverloadedFunctions("Save", 
+            &ResourceSave, 
+            &Resource::Save)
 
         .addFunction("SetName", &Resource::SetName)
         .addFunction("SetMemoryUse", &Resource::SetMemoryUse)
