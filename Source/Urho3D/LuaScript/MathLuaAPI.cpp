@@ -282,7 +282,8 @@ static void RegisterMathDefs(kaguya::State& lua)
         static_cast<float(*)(float)>(&Random),
         static_cast<float(*)(float, float)>(&Random));
 
-    lua["RandomInt"] = overload(static_cast<int(*)(int)>(&Random),
+    lua["RandomInt"] = overload(&Rand,
+        static_cast<int(*)(int)>(&Random),
         static_cast<int(*)(int, int)>(&Random));
 
     lua["RandomNormal"] = function(&RandomNormal);
