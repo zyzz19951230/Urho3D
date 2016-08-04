@@ -23,6 +23,10 @@
 # Define target name
 set (TARGET_NAME kaguya)
 
+# Enable C++11 for kaguya
+set (URHO3D_C++11 1)
+add_definitions (-DKAGUYA_USE_CPP11=1)
+
 # Setup target
 add_custom_target (${TARGET_NAME} ALL)   # Dummy target just so that its post-build step can install headers to the build tree
 set (STATIC_LIBRARY_TARGETS ${STATIC_LIBRARY_TARGETS} ${TARGET_NAME} PARENT_SCOPE)
