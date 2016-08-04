@@ -20,6 +20,8 @@
 // THE SOFTWARE.
 //
 
+#ifdef URHO3D_NAVIGATION
+
 #include "../Precompiled.h"
 
 #include "../LuaScript/LuaScriptUtils.h"
@@ -474,3 +476,5 @@ void RegisterNavigationLuaAPI(kaguya::State& lua)
     RegisterOffMeshConnection(lua);
 }
 }
+
+#endif

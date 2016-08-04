@@ -11,14 +11,18 @@ extern "C" {
 #include <lualib.h>
 }
 
-#ifndef KAGUYA_USE_CPP11
-#if defined(__cpp_decltype) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
-#define KAGUYA_USE_CPP11 1
-#else
-#define KAGUYA_USE_CPP11 0
-#endif
-#endif
+// #ifndef KAGUYA_USE_CPP11
+// #if defined(__cpp_decltype) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
+// #define KAGUYA_USE_CPP11 1
+// #else
+// #define KAGUYA_USE_CPP11 0
+// #endif
+// #endif
 
+// Modified by Aster Jian for Urho3D.
+#ifndef KAGUYA_USE_CPP11
+#define KAGUYA_USE_CPP11 1
+#endif
 
 #if KAGUYA_USE_CPP11
 #include <functional>

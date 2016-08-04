@@ -22,6 +22,8 @@
 
 #ifdef URHO3D_DATABASE
 
+#include "../Precompiled.h"
+
 #include "../Database/Database.h"
 #include "../Database/DbConnection.h"
 #include "../Database/DbResult.h"

@@ -130,7 +130,7 @@ function CreateScene()
 
     local constraintFriction = boxNode:CreateComponent("ConstraintFriction2D") -- Apply ConstraintDistance2D to box
     constraintFriction.otherBody = ballNode:GetComponent("RigidBody2D") -- Constraint ball to box
-    constraintFriction.ownerBodyAnchor = boxNode.position2D
+    --constraintFriction.ownerBodyAnchor = boxNode.position2D
     --constraintFriction.otherBodyAnchor = ballNode.position2D
     --constraintFriction.maxForce = 10 -- ballBody.mass * gravity
     --constraintDistance.maxTorque = 10 -- ballBody.mass * radius * gravity

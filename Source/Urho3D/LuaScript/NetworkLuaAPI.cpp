@@ -20,6 +20,8 @@
 // THE SOFTWARE.
 //
 
+#ifdef URHO3D_NETWORK
+
 #include "../Precompiled.h"
 
 #include "../IO/PackageFile.h"
@@ -268,3 +270,5 @@ void RegisterNetworkLuaAPI(kaguya::State& lua)
     lua["GetNetwork"] = GetSubsystem<Network>;
 }
 }
+
+#endif

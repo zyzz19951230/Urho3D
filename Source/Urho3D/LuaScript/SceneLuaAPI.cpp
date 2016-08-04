@@ -27,7 +27,6 @@
 #include "../LuaScript/LuaFile.h"
 #include "../LuaScript/LuaScriptInstance.h"
 #include "../LuaScript/LuaScriptUtils.h"
-#include "../Network/Connection.h"
 #include "../Resource/ResourceCache.h"
 #include "../Scene/Animatable.h"
 #include "../Scene/AnimationDefs.h"
@@ -43,7 +42,6 @@
 #include "../Scene/SplinePath.h"
 #include "../Scene/ValueAnimation.h"
 #include "../Scene/ValueAnimationInfo.h"
-
 
 #include <kaguya.hpp>
 
@@ -125,7 +123,7 @@ static void RegisterComponent(kaguya::State& lua)
 
         .addFunction("AddReplicationState", &Component::AddReplicationState)
         .addFunction("PrepareNetworkUpdate", &Component::PrepareNetworkUpdate)
-        .addFunction("CleanupConnection", &Component::CleanupConnection)
+        // .addFunction("CleanupConnection", &Component::CleanupConnection)
 
         .addProperty("id", &Component::GetID)
         .addProperty("node", &Component::GetNode)
@@ -425,7 +423,8 @@ static void RegisterNode(kaguya::State& lua)
         .addFunction("SetDeepEnabled", &Node::SetDeepEnabled)
         .addFunction("ResetDeepEnabled", &Node::ResetDeepEnabled)
         .addFunction("SetEnabledRecursive", &Node::SetEnabledRecursive)
-        .addFunction("SetOwner", &Node::SetOwner)
+
+        // .addFunction("SetOwner", &Node::SetOwner)
         .addFunction("MarkDirty", &Node::MarkDirty)
 
         .addStaticFunction("CreateChild", NodeCreateChildOverloads())
@@ -475,8 +474,8 @@ static void RegisterNode(kaguya::State& lua)
         .addFunction("GetScene", &Node::GetScene)
         .addFunction("IsEnabled", &Node::IsEnabled)
         .addFunction("IsEnabledSelf", &Node::IsEnabledSelf)
-        .addFunction("GetOwner", &Node::GetOwner)
 
+        // .addFunction("GetOwner", &Node::GetOwner)
         .addFunction("GetPosition", &Node::GetPosition)
         .addFunction("GetPosition2D", &Node::GetPosition2D)
         .addFunction("GetRotation", &Node::GetRotation)
@@ -554,7 +553,7 @@ static void RegisterNode(kaguya::State& lua)
         .addProperty("enabled", &Node::IsEnabled, static_cast<void(Node::*)(bool)>(&Node::SetEnabled))
         .addProperty("enabledSelf", &Node::IsEnabledSelf)
 
-        .addProperty("owner", &Node::GetOwner, &Node::SetOwner)
+        // .addProperty("owner", &Node::GetOwner, &Node::SetOwner)
         .addProperty("position", &Node::GetPosition, &Node::SetPosition)
         .addProperty("position2D", &Node::GetPosition2D, static_cast<void(Node::*)(const Vector2&)>(&Node::SetPosition2D))
         .addProperty("rotation", &Node::GetRotation, &Node::SetRotation)

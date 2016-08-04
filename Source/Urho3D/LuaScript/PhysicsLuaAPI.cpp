@@ -20,6 +20,8 @@
 // THE SOFTWARE.
 //
 
+#ifdef URHO3D_PHYSICS
+
 #include "../Precompiled.h"
 
 #include "../Graphics/Model.h"
@@ -456,3 +458,5 @@ void RegisterPhysicsLuaAPI(kaguya::State& lua)
     RegisterRigidBody(lua);
 }
 }
+
+#endif

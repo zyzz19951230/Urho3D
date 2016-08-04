@@ -20,6 +20,8 @@
 // THE SOFTWARE.
 //
 
+#ifdef URHO3D_URHO2D
+
 #include "../Precompiled.h"
 
 #include "../Graphics/Material.h"
@@ -1075,3 +1077,5 @@ void RegisterUrho2DLuaAPI(kaguya::State& lua)
     RegisterTmxFile2D(lua);
 }
 }
+
+#endif

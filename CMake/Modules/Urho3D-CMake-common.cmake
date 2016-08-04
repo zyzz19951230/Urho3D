@@ -430,6 +430,7 @@ if (URHO3D_LUAJIT)
     set (URHO3D_LUA 1)
 endif ()
 if (URHO3D_LUA)
+    set (URHO3D_C++11 1)
     add_definitions (-DURHO3D_LUA)
     # Optionally enable Lua / C++ wrapper safety checks
     if (NOT URHO3D_SAFE_LUA)
