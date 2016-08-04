@@ -27,6 +27,7 @@
 #include "../LuaScript/LuaFile.h"
 #include "../LuaScript/LuaScriptInstance.h"
 #include "../LuaScript/LuaScriptUtils.h"
+#include "../Network/Connection.h"
 #include "../Resource/ResourceCache.h"
 #include "../Scene/Animatable.h"
 #include "../Scene/AnimationDefs.h"
@@ -34,6 +35,7 @@
 #include "../Scene/LogicComponent.h"
 #include "../Scene/Node.h"
 #include "../Scene/ObjectAnimation.h"
+#include "../Scene/ReplicationState.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneEvents.h"
 #include "../Scene/Serializable.h"
@@ -41,6 +43,7 @@
 #include "../Scene/SplinePath.h"
 #include "../Scene/ValueAnimation.h"
 #include "../Scene/ValueAnimationInfo.h"
+
 
 #include <kaguya.hpp>
 

@@ -24,6 +24,8 @@
 
 #include "../Container/RefCounted.h"
 
+#include <kaguya.hpp>
+
 struct lua_State;
 typedef int (*lua_CFunction) (lua_State *L);
 

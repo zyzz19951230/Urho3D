@@ -2,6 +2,8 @@
 
 #include "../Container/Ptr.h"
 #include "../Container/Str.h"
+#include "../Core/Context.h"
+#include "../Core/Object.h"
 #include "../Math/StringHash.h"
 
 #include <kaguya.hpp>

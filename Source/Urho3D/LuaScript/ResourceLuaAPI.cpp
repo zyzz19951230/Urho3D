@@ -22,7 +22,6 @@
 
 #include "../Precompiled.h"
 
-#include "../Core/Context.h"
 #include "../IO/File.h"
 #include "../IO/PackageFile.h"
 #include "../LuaScript/LuaScriptUtils.h"

@@ -22,15 +22,18 @@
 
 #include "../Precompiled.h"
 
-#include "../Core/Context.h"
 #include "../Graphics/Model.h"
+#include "../Graphics/CustomGeometry.h"
 #include "../LuaScript/LuaScriptUtils.h"
+#include "../Math/Ray.h"
 #include "../Physics/CollisionShape.h"
 #include "../Physics/Constraint.h"
 #include "../Physics/PhysicsUtils.h"
 #include "../Physics/PhysicsWorld.h"
 #include "../Physics/RigidBody.h"
 
+#include <Bullet/BulletDynamics/Dynamics/btRigidBody.h>
+#include <Bullet/BulletCollision/CollisionShapes/btCompoundShape.h>
 #include <kaguya.hpp>
 
 namespace Urho3D

@@ -22,19 +22,24 @@
 
 #include "../Precompiled.h"
 
+#include "../Graphics/AnimatedModel.h"
 #include "../Graphics/Animation.h"
 #include "../Graphics/AnimationController.h"
 #include "../Graphics/AnimationState.h"
+#include "../Graphics/DebugRenderer.h"
 #include "../Graphics/DrawableEvents.h"
 #include "../Graphics/Geometry.h"
 #include "../Graphics/IndexBuffer.h"
+#include "../Graphics/Material.h"
 #include "../Graphics/Model.h"
 #include "../Graphics/Octree.h"
 #include "../Graphics/OctreeQuery.h"
 #include "../Graphics/ParticleEffect.h"
 #include "../Graphics/Terrain.h"
+#include "../Graphics/TerrainPatch.h"
 #include "../Graphics/VertexBuffer.h"
 #include "../LuaScript/LuaScriptUtils.h"
+#include "../Resource/Image.h"
 
 #include <kaguya.hpp>
 

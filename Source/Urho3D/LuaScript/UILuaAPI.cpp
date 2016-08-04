@@ -22,9 +22,14 @@
 
 #include "../Precompiled.h"
 
-#include "../Core/Context.h"
+#include "../Graphics/Camera.h"
+#include "../Graphics/Material.h"
+#include "../Graphics/Texture2D.h"
+#include "../Graphics/Viewport.h"
 #include "../IO/File.h"
 #include "../LuaScript/LuaScriptUtils.h"
+#include "../Scene/Node.h"
+#include "../Scene/Scene.h"
 #include "../UI/BorderImage.h"
 #include "../UI/Button.h"
 #include "../UI/CheckBox.h"

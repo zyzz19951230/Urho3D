@@ -27,7 +27,6 @@
 #include "../Audio/SoundListener.h"
 #include "../Audio/SoundSource.h"
 #include "../Audio/SoundSource3D.h"
-#include "../Core/Context.h"
 #include "../IO/File.h"
 #include "../LuaScript/LuaScriptUtils.h"
 

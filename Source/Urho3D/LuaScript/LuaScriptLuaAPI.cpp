@@ -22,6 +22,7 @@
 
 #include "../Precompiled.h"
 
+#include "../LuaScript/LuaFile.h"
 #include "../LuaScript/LuaScript.h"
 #include "../LuaScript/LuaScriptInstance.h"
 #include "../LuaScript/LuaScriptUtils.h"

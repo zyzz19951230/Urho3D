@@ -28,6 +28,10 @@
 #include "../Engine/Engine.h"
 #include "../LuaScript/LuaScript.h"
 #include "../LuaScript/LuaScriptUtils.h"
+#include "../UI/BorderImage.h"
+#include "../UI/Button.h"
+#include "../UI/LineEdit.h"
+#include "../UI/Text.h"
 
 #include <kaguya.hpp>
 

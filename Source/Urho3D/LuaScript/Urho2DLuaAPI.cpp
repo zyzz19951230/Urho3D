@@ -22,9 +22,10 @@
 
 #include "../Precompiled.h"
 
-#include "../Core/Context.h"
 #include "../Graphics/Material.h"
+#include "../Graphics/Texture2D.h"
 #include "../LuaScript/LuaScriptUtils.h"
+#include "../Scene/Node.h"
 #include "../Urho2D/AnimatedSprite2D.h"
 #include "../Urho2D/AnimationSet2D.h"
 #include "../Urho2D/CollisionBox2D.h"

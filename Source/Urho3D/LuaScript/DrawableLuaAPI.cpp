@@ -23,18 +23,23 @@
 #include "../Precompiled.h"
 
 #include "../Graphics/AnimatedModel.h"
+#include "../Graphics/Animation.h"
 #include "../Graphics/AnimationState.h"
 #include "../Graphics/BillboardSet.h"
+#include "../Graphics/Camera.h"
 #include "../Graphics/CustomGeometry.h"
 #include "../Graphics/DecalSet.h"
 #include "../Graphics/Drawable.h"
+#include "../Graphics/Geometry.h"
 #include "../Graphics/Light.h"
+#include "../Graphics/Material.h"
 #include "../Graphics/ParticleEffect.h"
 #include "../Graphics/ParticleEmitter.h"
 #include "../Graphics/RibbonTrail.h"
 #include "../Graphics/Skybox.h"
 #include "../Graphics/StaticModel.h"
 #include "../Graphics/StaticModelGroup.h"
+#include "../Graphics/Terrain.h"
 #include "../Graphics/TerrainPatch.h"
 #include "../Graphics/VertexBuffer.h"
 #include "../Graphics/Zone.h"
@@ -616,7 +621,6 @@ static void RegisterStaticModel(kaguya::State& lua)
 
         .addProperty("material", &StaticModelMaterialGetter, &StaticModelMaterialSetter)
 
-        .addProperty("boundingBox", &StaticModel::GetBoundingBox)
         .addProperty("numGeometries", &StaticModel::GetNumGeometries)
         .addProperty("occlusionLodLevel", &StaticModel::GetOcclusionLodLevel, &StaticModel::SetOcclusionLodLevel)
         );

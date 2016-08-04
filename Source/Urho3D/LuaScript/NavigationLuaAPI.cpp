@@ -31,7 +31,9 @@
 #include "../Navigation/NavigationMesh.h"
 #include "../Navigation/Obstacle.h"
 #include "../Navigation/OffMeshConnection.h"
+#include "../Scene/Node.h"
 
+#include <Detour/DetourNavMeshQuery.h>
 #include <kaguya.hpp>
 
 namespace Urho3D

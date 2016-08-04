@@ -22,7 +22,6 @@
 
 #include "../Precompiled.h"
 
-#include "../Core/Context.h"
 #include "../IO/Compression.h"
 #include "../IO/Deserializer.h"
 #include "../IO/File.h"

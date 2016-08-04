@@ -22,8 +22,6 @@
 
 #include "../Precompiled.h"
 
-#include "../Core/Context.h"
-#include "../IO/VectorBuffer.h"
 #include "../Graphics/Camera.h"
 #include "../Graphics/DebugRenderer.h"
 #include "../Graphics/Geometry.h"
@@ -34,6 +32,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/RenderPath.h"
 #include "../Graphics/RenderSurface.h"
+#include "../Graphics/Skeleton.h"
 #include "../Graphics/Technique.h"
 #include "../Graphics/Texture.h"
 #include "../Graphics/Texture2D.h"
@@ -42,7 +41,14 @@
 #include "../Graphics/TextureCube.h"
 #include "../Graphics/VertexBuffer.h"
 #include "../Graphics/Viewport.h"
+#include "../Graphics/Zone.h"
+#include "../IO/VectorBuffer.h"
 #include "../LuaScript/LuaScriptUtils.h"
+#include "../Math/Polyhedron.h"
+#include "../Resource/XMLElement.h"
+#include "../Resource/XMLFile.h"
+#include "../Scene/Scene.h"
+#include "../Scene/ValueAnimation.h"
 
 #include <kaguya.hpp>
 

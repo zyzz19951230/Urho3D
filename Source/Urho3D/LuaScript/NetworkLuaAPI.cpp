@@ -22,15 +22,17 @@
 
 #include "../Precompiled.h"
 
-#include "../Core/Context.h"
+#include "../IO/PackageFile.h"
 #include "../LuaScript/LuaScriptUtils.h"
 #include "../Network/Connection.h"
 #include "../Network/HttpRequest.h"
 #include "../Network/Network.h"
 #include "../Network/NetworkPriority.h"
 #include "../Network/Protocol.h"
+#include "../Scene/Scene.h"
 
 #include <kaguya.hpp>
+#include <kNet/kNet.h>
 
 namespace Urho3D
 {
