@@ -24,8 +24,10 @@
 
 #include "../../Precompiled.h"
 
+#include "../../IO/PackageFile.h"
 #include "../../Network/HttpRequest.h"
 #include "../../Network/Network.h"
+#include "../../Scene/Scene.h"
 #include "../../LuaScript/LuaScriptUtils.h"
 
 #include <kaguya.hpp>

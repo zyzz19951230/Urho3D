@@ -24,8 +24,8 @@
 
 #include "../Precompiled.h"
 
-#include "../LuaScript/LuaScriptUtils.h"
 #include "../Network/Network.h"
+#include "../LuaScript/LuaScriptUtils.h"
 
 #include <kaguya.hpp>
 #include <kNet/kNet.h>
