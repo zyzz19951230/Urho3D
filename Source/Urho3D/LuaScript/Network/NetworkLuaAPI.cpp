@@ -30,6 +30,7 @@
 #include "../../Scene/Scene.h"
 #include "../../LuaScript/LuaScriptUtils.h"
 
+#include <kNet/kNet.h>
 #include <kaguya.hpp>
 
 namespace Urho3D
