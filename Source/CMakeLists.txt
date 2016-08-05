@@ -65,7 +65,8 @@ if (URHO3D_ANGELSCRIPT)
 endif ()
 
 if (URHO3D_LUA)
-    add_subdirectory (ThirdParty/Lua${JIT})
+    add_subdirectory (ThirdParty/Lua${JIT})    
+    add_subdirectory (ThirdParty/boost)
     add_subdirectory (ThirdParty/kaguya)
 endif ()
 

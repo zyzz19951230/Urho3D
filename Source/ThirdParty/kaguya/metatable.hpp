@@ -23,8 +23,23 @@ namespace kaguya
 {
 	template<class A1, class A2 = void
 		, class A3 = void, class A4 = void, class A5 = void
-		, class A6 = void, class A7 = void, class A8 = void,
-		class A9 = void>struct MultipleBase {
+		, class A6 = void, class A7 = void, class A8 = void
+		, class A9 = void
+		, class A10 = void
+		, class A11 = void
+		, class A12 = void
+		, class A13 = void
+		, class A14 = void
+		, class A15 = void
+		, class A16 = void
+		, class A17 = void
+		, class A18 = void
+		, class A19 = void
+		, class A20 = void
+		, class A21 = void
+		, class A22 = void
+		, class A23 = void
+		, class A24 = void>struct MultipleBase {
 	};
 }
 
@@ -275,7 +290,7 @@ namespace kaguya
 		addOverloadedFunctions("new",KAGUYA_PP_REPEAT_ARG(N,KAGUYA_SET_CON_TYPE_DEF));\
 		return *this;\
 	}
-		KAGUYA_PP_REPEAT_DEF(9, KAGUYA_SET_CON_FN_DEF)
+		KAGUYA_PP_REPEAT_DEF(KAGUYA_FUNCTION_MAX_OVERLOADS, KAGUYA_SET_CON_FN_DEF)
 #undef KAGUYA_TEMPLATE_PARAMETER
 #undef KAGUYA_SET_CON_FN_DEF
 #undef KAGUYA_SET_CON_TYPE_DEF
@@ -482,7 +497,7 @@ namespace kaguya
 			member_map_[name] = AnyDataPusher(kaguya::overload(KAGUYA_PP_ARG_REPEAT(N)));\
 			return *this;\
 		}
-		KAGUYA_PP_REPEAT_DEF(9, KAGUYA_ADD_OVERLOAD_FUNCTION_DEF)
+		KAGUYA_PP_REPEAT_DEF(KAGUYA_FUNCTION_MAX_OVERLOADS, KAGUYA_ADD_OVERLOAD_FUNCTION_DEF)
 #undef KAGUYA_PP_TEMPLATE
 #undef KAGUYA_PP_FARG
 #undef KAGUYA_PP_FUNCS
@@ -631,7 +646,7 @@ namespace kaguya
 			set_multiple_base(state, metatable, metabases);\
 		}\
 
-		KAGUYA_PP_REPEAT_DEF(9, KAGUYA_MULTIPLE_INHERITANCE_SETBASE_DEF)
+		KAGUYA_PP_REPEAT_DEF(KAGUYA_FUNCTION_MAX_TUPLE_SIZE, KAGUYA_MULTIPLE_INHERITANCE_SETBASE_DEF)
 #undef KAGUYA_TEMPLATE_PARAMETER
 #undef KAGUYA_MULTIPLE_INHERITANCE_SETBASE_DEF
 #undef KAGUYA_GET_BASE_METATABLE

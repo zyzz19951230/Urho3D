@@ -120,7 +120,7 @@ namespace kaguya
 
 
 			KAGUYA_CALL_DEF(0)
-				KAGUYA_PP_REPEAT_DEF(9, KAGUYA_CALL_DEF)
+				KAGUYA_PP_REPEAT_DEF(KAGUYA_FUNCTION_MAX_ARGS, KAGUYA_CALL_DEF)
 
 
 #undef KAGUYA_PUSH_DEF
@@ -148,7 +148,7 @@ namespace kaguya
 #define KAGUYA_PP_TEMPLATE(N) KAGUYA_PP_CAT(typename A,N)
 #define KAGUYA_PUSH_ARG_DEF(N) KAGUYA_PP_CAT(a,N) 
 
-				KAGUYA_PP_REPEAT_DEF(9, KAGUYA_OP_FN_DEF)
+				KAGUYA_PP_REPEAT_DEF(KAGUYA_FUNCTION_MAX_ARGS, KAGUYA_OP_FN_DEF)
 #undef KAGUYA_OP_FN_DEF
 #undef KAGUYA_TEMPLATE_PARAMETER
 
@@ -190,7 +190,12 @@ namespace kaguya
 				}
 				util::ScopedSavedStack save(state);
 				int corStackIndex = pushStackIndex_(state);
-				lua_State* thread = lua_type_traits<lua_State*>::get(state, corStackIndex);
+				lua_State* thread = lua_tothread(state, corStackIndex);
+				if (!thread)
+				{
+					except::typeMismatchError(state, "not thread");
+					return Result();
+				}
 				int argstart = 1;//exist function in stack at first resume.
 				if (lua_status(thread) == LUA_YIELD)
 				{
@@ -223,7 +228,12 @@ namespace kaguya
 			}\
 			util::ScopedSavedStack save(state);\
 			int corStackIndex = pushStackIndex_(state);\
-			lua_State* thread = lua_type_traits<lua_State*>::get(state, corStackIndex);\
+			lua_State* thread = lua_tothread(state, corStackIndex);\
+			if (!thread)\
+			{\
+				except::typeMismatchError(state, "not thread");\
+				return Result();\
+			}\
 			int argstart = 1;\
 			if (lua_status(thread) == LUA_YIELD)\
 			{\
@@ -238,7 +248,7 @@ namespace kaguya
 		}
 
 			KAGUYA_RESUME_DEF(0)
-				KAGUYA_PP_REPEAT_DEF(9, KAGUYA_RESUME_DEF)
+				KAGUYA_PP_REPEAT_DEF(KAGUYA_FUNCTION_MAX_ARGS, KAGUYA_RESUME_DEF)
 
 #undef KAGUYA_PUSH_DEF
 #undef KAGUYA_PUSH_ARG_DEF
@@ -265,7 +275,7 @@ namespace kaguya
 #define KAGUYA_PP_TEMPLATE(N) KAGUYA_PP_CAT(typename A,N)
 #define KAGUYA_PUSH_ARG_DEF(N) KAGUYA_PP_CAT(a,N) 
 
-				KAGUYA_PP_REPEAT_DEF(9, KAGUYA_OP_FN_DEF)
+				KAGUYA_PP_REPEAT_DEF(KAGUYA_FUNCTION_MAX_ARGS, KAGUYA_OP_FN_DEF)
 #undef KAGUYA_OP_FN_DEF
 #undef KAGUYA_TEMPLATE_PARAMETER
 
@@ -292,7 +302,7 @@ namespace kaguya
 				}
 				util::ScopedSavedStack save(state);
 				int corStackIndex = pushStackIndex_(state);
-				lua_State* thread = lua_type_traits<lua_State*>::get(state, corStackIndex);
+				lua_State* thread = lua_tothread(state, corStackIndex);
 
 				if (!thread)
 				{
@@ -321,7 +331,7 @@ namespace kaguya
 				}
 				util::ScopedSavedStack save(state);
 				int corStackIndex = pushStackIndex_(state);
-				lua_State* thread = lua_type_traits<lua_State*>::get(state, corStackIndex);
+				lua_State* thread = lua_tothread(state, corStackIndex);
 
 				if (!thread)
 				{

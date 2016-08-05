@@ -60,17 +60,61 @@ namespace kaguya
 			return lua_type_traits<typename util::ArgumentType<INDEX, F>::type>::get(state, INDEX + 1);
 		}
 
-		/*
-		template<class MemType, class T>
-		struct PropertyAccessor
-		{
-			PropertyAccessor(MemType T::* ptr) :dataptr(ptr){}
-			MemType T::* dataptr;
-		};
 
-		///! for data member
+		template< typename T, typename Enable = void>
+		struct is_callable : traits::integral_constant<bool, !traits::is_same<void, typename util::FunctionSignature<T>::type>::value> {};
+
 		template<class MemType, class T>
-		int call(lua_State* state,const PropertyAccessor<MemType,T>& m)
+		struct is_callable<MemType T::*> : traits::integral_constant<bool, true> {};
+
+
+
+		template<typename T>
+		struct is_callable<ConstructorFunctor<T> > :traits::integral_constant<bool, true> {};
+
+		// for constructors
+		template<class T>
+		int call(lua_State* state, ConstructorFunctor<T>& con)
+		{
+			return con(state);
+		}
+		template<class T>
+		int call(lua_State* state, const ConstructorFunctor<T>& con)
+		{
+			return con(state);
+		}
+		template<class T>
+		bool checkArgTypes(lua_State* state, const ConstructorFunctor<T>& con, int opt_count = 0)
+		{
+			return con.checkArgTypes(state, opt_count);
+		}
+		template<class T>
+		bool strictCheckArgTypes(lua_State* state, const ConstructorFunctor<T>& con, int opt_count = 0)
+		{
+			return con.strictCheckArgTypes(state, opt_count);
+		}
+		template<class T>
+		std::string argTypesName(const ConstructorFunctor<T>& con)
+		{
+			return con.argTypesName();
+		}
+		template<class T>
+		int minArgCount(const ConstructorFunctor<T>& con)
+		{
+			return ConstructorFunctor<T>::signature_type::argument_count;
+		}
+		template<class T>
+		int maxArgCount(const ConstructorFunctor<T>& con)
+		{
+			return ConstructorFunctor<T>::signature_type::argument_count;
+		}
+
+
+		// for data member
+		//using is_member_function_pointer in MSVC2010 : fatal error LNK1179: invalid or corrupt file: duplicate COMDAT '?value@?$result_@P8ABC@test_02_classreg@@AE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ@?$is_mem_fun_pointer_select@$0A@@detail@boost@@2_NB'
+		template<class MemType, class T>
+		typename traits::enable_if<traits::is_object<MemType>::value, int>::type
+		call(lua_State* state, MemType T::* mptr)
 		{
 			T* this_ = lua_type_traits<T*>::get(state, 1);
 			if (lua_gettop(state) == 1)
@@ -80,22 +124,22 @@ namespace kaguya
 					const T& this_ = lua_type_traits<const T&>::get(state, 1);
 					if (is_usertype<MemType>::value && !traits::is_pointer<MemType>::value)
 					{
-						return util::push_args(state, standard::reference_wrapper<const MemType>(this_.*(m.dataptr)));
+						return util::push_args(state, standard::reference_wrapper<const MemType>(this_.*mptr));
 					}
 					else
 					{
-						return util::push_args(state, this_.*(m.dataptr));
+						return util::push_args(state, this_.*mptr);
 					}
 				}
 				else
 				{
 					if (is_usertype<MemType>::value && !traits::is_pointer<MemType>::value)
 					{
-						return util::push_args(state, standard::reference_wrapper<MemType>(this_->*(m.dataptr)));
+						return util::push_args(state, standard::reference_wrapper<MemType>(this_->*mptr));
 					}
 					else
 					{
-						return util::push_args(state, this_->*(m.dataptr));
+						return util::push_args(state, this_->*mptr);
 					}
 				}
 			}
@@ -105,19 +149,13 @@ namespace kaguya
 				{
 					throw LuaTypeMismatch("type mismatch!!");
 				}
-				this_->*(m.dataptr) = lua_type_traits<MemType>::get(state, 2);
+				this_->*mptr = lua_type_traits<MemType>::get(state, 2);
 				return 0;
 			}
 		}
 		template<class MemType, class T>
-		int call(lua_State* state, PropertyAccessor<MemType, T>& m)
-		{
-			return call(state, static_cast<const PropertyAccessor<MemType, T>&>(m));
-		}
-
-
-		template<class MemType, class T>
-		bool checkArgTypes(lua_State* state, const PropertyAccessor<MemType, T>& m, int opt_count = 0)
+		typename traits::enable_if<traits::is_object<MemType>::value, bool>::type
+		checkArgTypes(lua_State* state, MemType T::* mptr, int opt_count = 0)
 		{
 			if (lua_gettop(state) >= 2)
 			{
@@ -128,7 +166,8 @@ namespace kaguya
 			return  lua_type_traits<T>::checkType(state, 1);
 		}
 		template<class MemType, class T>
-		bool strictCheckArgTypes(lua_State* state, const PropertyAccessor<MemType, T>& m, int opt_count = 0)
+		typename traits::enable_if<traits::is_object<MemType>::value, bool>::type
+		 strictCheckArgTypes(lua_State* state, MemType T::* mptr, int opt_count = 0)
 		{
 			if (lua_gettop(state) == 2)
 			{
@@ -139,24 +178,24 @@ namespace kaguya
 			return  lua_type_traits<T>::strictCheckType(state, 1);
 		}
 		template<class MemType, class T>
-		std::string argTypesName(const PropertyAccessor<MemType, T>&)
+		typename traits::enable_if<traits::is_object<MemType>::value, std::string>::type
+		argTypesName(MemType T::* mptr)
 		{
 			return std::string(typeid(T*).name()) + ",[OPT] " + typeid(MemType).name();
 		}
 		template<class MemType, class T>
-		int minArgCount(const PropertyAccessor<MemType, T>&)
+		typename traits::enable_if<traits::is_object<MemType>::value, int>::type
+		minArgCount(MemType T::* mptr)
 		{
 			return 1;
 		}
 		template<class MemType, class T>
-		int maxArgCount(const PropertyAccessor<MemType, T>&)
+		typename traits::enable_if<traits::is_object<MemType>::value, int>::type
+		maxArgCount(MemType T::* mptr)
 		{
 			return 2;
 		}
-		template<class MemType, class T>
-		struct is_callable<PropertyAccessor<MemType,T> > : traits::integral_constant<bool, true> {};
 
-		*/
 
 		inline int call(lua_State* state, const PolymorphicInvoker& f)
 		{
@@ -186,6 +225,7 @@ namespace kaguya
 		{
 			return f.maxArgCount();
 		}
+
 
 		template<>
 		struct is_callable<PolymorphicInvoker>:traits::integral_constant<bool, true> {};
@@ -600,7 +640,7 @@ namespace kaguya
 			KAGUYA_PP_REPEAT(N, KAGUYA_ARG_PUSH_TYPENAMES);\
 		}\
 
-		KAGUYA_PP_REPEAT_DEF(9, KAGUYA_TUPLE_INVOKE_DEF)
+		KAGUYA_PP_REPEAT_DEF(KAGUYA_FUNCTION_MAX_OVERLOADS, KAGUYA_TUPLE_INVOKE_DEF)
 #undef KAGUYA_TEMPLATE_PARAMETER
 #undef KAGUYA_TUPLE_INVOKE_DEF
 #undef KAGUYA_ARG_TYPENAMES
@@ -622,18 +662,15 @@ namespace kaguya
 		FunctionTuple functions;
 		FunctionInvokerType(const FunctionTuple& t) :functions(t) {}
 	};
+	
+
+
 	template<typename T>
 	inline FunctionInvokerType<standard::tuple<T> > function(T f)
 	{
 		KAGUYA_STATIC_ASSERT(nativefunction::is_callable<typename traits::decay<T>::type>::value, "argument need callable");
 		return FunctionInvokerType<standard::tuple<T> >(standard::tuple<T>(f));
 	}
-	//specialize for lua_CFunction
-	inline lua_CFunction function(lua_CFunction f)
-	{
-		return f;
-	}
-
 
 	template<typename FTYPE, typename T>
 	inline FunctionInvokerType<standard::tuple<standard::function<FTYPE> > > function(T f)
@@ -659,13 +696,21 @@ namespace kaguya
 			typedef typename standard::tuple<KAGUYA_PP_REPEAT_ARG(N,KAGUYA_TEMPLATE_ARG_DEF)> ttype;\
 			return FunctionInvokerType<ttype>(ttype(KAGUYA_PP_REPEAT_ARG(N,KAGUYA_TUPLE_ARG_DEF)));\
 		}
-	KAGUYA_PP_REPEAT_DEF(9, KAGUYA_FOVERLOAD_DEF)
+	KAGUYA_PP_REPEAT_DEF(KAGUYA_FUNCTION_MAX_OVERLOADS, KAGUYA_FOVERLOAD_DEF)
 #undef KAGUYA_DEF_TEMPLATE
 #undef KAGUYA_TEMPLATE_ARG_DEF
 #undef KAGUYA_TUPLE_ARG_DEF
 #undef KAGUYA_ARG_DEF
 #undef KAGUYA_FOVERLOAD_DEF
 #endif
+
+	struct luacfunction
+	{
+		lua_CFunction ptr;
+
+		luacfunction(lua_CFunction f) :ptr(f) {}
+		operator lua_CFunction() { return ptr; }
+	};
 
 
 	/// @ingroup lua_type_traits
@@ -749,11 +794,11 @@ namespace kaguya
 		}
 	};
 	/// @ingroup lua_type_traits
-	/// @brief lua_type_traits for lua_CFunction
-	template<> struct lua_type_traits < lua_CFunction >
+	/// @brief lua_type_traits for luacfunction
+	template<> struct lua_type_traits < luacfunction >
 	{
-		typedef lua_CFunction push_type;
-		typedef lua_CFunction get_type;
+		typedef luacfunction push_type;
+		typedef luacfunction get_type;
 		static bool strictCheckType(lua_State* l, int index)
 		{
 			return lua_iscfunction(l, index) != 0;
@@ -766,13 +811,12 @@ namespace kaguya
 		{
 			return lua_tocfunction(l,index);
 		}
-		static int push(lua_State* l, lua_CFunction f)
+		static int push(lua_State* l, push_type f)
 		{
 			lua_pushcfunction(l, f);
 			return 1;
 		}
 	};
-
 
 
 	/// @ingroup lua_type_traits
@@ -817,7 +861,7 @@ namespace kaguya
 		{
 			return util::push_args(state, invoke_type(state));
 		}
-		virtual std::string argTypeNames()const { return nativefunction::argTypesName(c_function_type(0)); }
+		virtual std::string argTypeNames()const { return nativefunction::argTypesName(c_function_type(0), maxArgCount() - minArgCount()); }
 		virtual bool checkArgTypes(lua_State* state)const { return kaguya::nativefunction::checkArgTypes(state, c_function_type(0), maxArgCount() - minArgCount()); }
 		virtual bool strictCheckArgTypes(lua_State* state)const { return kaguya::nativefunction::strictCheckArgTypes(state, c_function_type(0), maxArgCount() - minArgCount()); }
 	};
@@ -835,12 +879,13 @@ namespace kaguya
 			invoke_type(state);
 			return 0;
 		}
-		virtual std::string argTypeNames()const { return nativefunction::argTypesName(c_function_type(0)); }
+		virtual std::string argTypeNames()const { return nativefunction::argTypesName(c_function_type(0), maxArgCount() - minArgCount()); }
 		virtual bool checkArgTypes(lua_State* state)const { return kaguya::nativefunction::checkArgTypes(state, c_function_type(0), maxArgCount() - minArgCount()); }
 		virtual bool strictCheckArgTypes(lua_State* state)const { return kaguya::nativefunction::strictCheckArgTypes(state, c_function_type(0), maxArgCount() - minArgCount()); }
 	};
 }
 
+#include "kaguya/preprocess.hpp"
 #define KAGUYA_INTERNAL_OVERLOAD_FUNCTION_GET_REP(N) getArgument<N-1,F>(state)
 #define KAGUYA_INTERNAL_OVERLOAD_FUNCTION_GET_REPEAT(N) KAGUYA_PP_REPEAT_ARG(N,KAGUYA_INTERNAL_OVERLOAD_FUNCTION_GET_REP)
 #define KAGUYA_INTERNAL_OVERLOAD_FUNCTION_INVOKE(N,FNAME,MINARG, MAXARG) if (argcount == KAGUYA_PP_ADD(MINARG,KAGUYA_PP_DEC(N))) { return FNAME(KAGUYA_INTERNAL_OVERLOAD_FUNCTION_GET_REPEAT(KAGUYA_PP_ADD(MINARG,KAGUYA_PP_DEC(N)))); }

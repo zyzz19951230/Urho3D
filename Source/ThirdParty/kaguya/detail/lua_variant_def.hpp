@@ -39,17 +39,32 @@ namespace kaguya
 			using LuaBasicTypeFunctions<Derived>::type;
 			using LuaBasicTypeFunctions<Derived>::typeName;
 
-			/// @brief typetest
+			/// @brief deprecated, use isType instead.
 			template<typename T>
 			bool typeTest()const
+			{
+				return isType<T>();
+			}
+
+
+			/// @brief deprecated, use isConvertible instead.
+			template<typename T>
+			bool weakTypeTest()const
+			{
+				return isConvertible<T>();
+			}
+
+			/// @brief is type test
+			template<typename T>
+			bool isType()const
 			{
 				lua_State* state = state_();
 				util::ScopedSavedStack save(state);
 				return lua_type_traits<T>::strictCheckType(state, pushStackIndex_(state));
 			}
-			/// @brief typetest
+
 			template<typename T>
-			bool weakTypeTest()const
+			bool isConvertible()const
 			{
 				lua_State* state = state_();
 				util::ScopedSavedStack save(state);
@@ -79,7 +94,7 @@ namespace kaguya
 #define KAGUYA_PP_TEMPLATE(N) KAGUYA_PP_CAT(typename A,N)
 #define KAGUYA_PUSH_ARG_DEF(N) KAGUYA_PP_CAT(a,N) 
 
-				KAGUYA_PP_REPEAT_DEF(9, KAGUYA_OP_FN_DEF)
+				KAGUYA_PP_REPEAT_DEF(KAGUYA_FUNCTION_MAX_ARGS, KAGUYA_OP_FN_DEF)
 #undef KAGUYA_OP_FN_DEF
 #undef KAGUYA_TEMPLATE_PARAMETER
 
