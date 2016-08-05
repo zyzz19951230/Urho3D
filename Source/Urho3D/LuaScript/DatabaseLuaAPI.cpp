@@ -24,9 +24,6 @@
 
 #include "../Precompiled.h"
 
-#include "../Database/Database.h"
-#include "../Database/DbConnection.h"
-#include "../Database/DbResult.h"
 #include "../LuaScript/LuaScriptUtils.h"
 
 #include <kaguya.hpp>
@@ -34,66 +31,9 @@
 namespace Urho3D
 {
 
-static void RegisterDatabase(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    // enum DBAPI;
-    lua["DBAPI_SQLITE"] = DBAPI_SQLITE;
-    lua["DBAPI_ODBC"] = DBAPI_ODBC;
-
-    lua["Database"].setClass(UserdataMetatable<Database, Object>()
-
-        .addStaticFunction("GetAPI", &Database::GetAPI)
-
-        .addFunction("Connect", &Database::Connect)
-        .addFunction("Disconnect", &Database::Disconnect)
-        .addFunction("IsPooling", &Database::IsPooling)
-        .addFunction("GetPoolSize", &Database::GetPoolSize)
-        .addFunction("SetPoolSize", &Database::SetPoolSize)
-
-        .addProperty("pooling", &Database::IsPooling)
-        .addProperty("poolSize", &Database::GetPoolSize, &Database::SetPoolSize)
-    );
-
-    // lua["GetDBAPI"] = function(&Database::GetAPI)
-}
-
-KAGUYA_MEMBER_FUNCTION_OVERLOADS(DbConnectionExecute, DbConnection, Execute, 1, 2);
-
-static void RegisterDbConnection(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["DbConnection"].setClass(UserdataMetatable<DbConnection, Object>()
-        
-        .addFunction("Finalize", &DbConnection::Finalize)
-        
-        .addFunction("Execute", DbConnectionExecute())
-
-        .addFunction("GetConnectionString", &DbConnection::GetConnectionString)
-        .addFunction("IsConnected", &DbConnection::IsConnected)
-
-        .addProperty("connectionString", &DbConnection::GetConnectionString)
-        .addProperty("connected", &DbConnection::IsConnected)
-    );
-}
-
-static void RegisterDbResult(kaguya::State& lua)
-{
-    using namespace kaguya;
-
-    lua["DbResult"].setClass(UserdataMetatable<DbResult>()
-        
-        .addFunction("GetNumColumns", &DbResult::GetNumColumns)
-        .addFunction("GetNumRows", &DbResult::GetNumRows)
-        .addFunction("GetNumAffectedRows", &DbResult::GetNumAffectedRows)
-        
-        .addProperty("numColumns", &DbResult::GetNumColumns)
-        .addProperty("numRows", &DbResult::GetNumRows)
-        .addProperty("numAffectedRows", &DbResult::GetNumAffectedRows)
-    );
-}
+extern void RegisterDbResult(kaguya::State& lua);
+extern void RegisterDbConnection(kaguya::State& lua);
+extern void RegisterDatabase(kaguya::State& lua);
 
 void RegisterDatabaseLuaAPI(kaguya::State& lua)
 {
