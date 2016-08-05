@@ -27,21 +27,21 @@
 #include "../Graphics/Geometry.h"
 #include "../Graphics/Graphics.h"
 #include "../Graphics/GraphicsDefs.h"
-// #include "../Graphics/IndexBuffer.h"
+#include "../Graphics/IndexBuffer.h"
 #include "../Graphics/Material.h"
 #include "../Graphics/Renderer.h"
-// #include "../Graphics/RenderPath.h"
-// #include "../Graphics/RenderSurface.h"
+#include "../Graphics/RenderPath.h"
+#include "../Graphics/RenderSurface.h"
 #include "../Graphics/Skeleton.h"
 #include "../Graphics/Technique.h"
-// #include "../Graphics/Texture.h"
-// #include "../Graphics/Texture2D.h"
-// #include "../Graphics/Texture2DArray.h"
-// #include "../Graphics/Texture3D.h"
-// #include "../Graphics/TextureCube.h"
-// #include "../Graphics/VertexBuffer.h"
-// #include "../Graphics/Viewport.h"
-// #include "../Graphics/Zone.h"
+#include "../Graphics/Texture.h"
+#include "../Graphics/Texture2D.h"
+#include "../Graphics/Texture2DArray.h"
+#include "../Graphics/Texture3D.h"
+#include "../Graphics/TextureCube.h"
+#include "../Graphics/VertexBuffer.h"
+#include "../Graphics/Viewport.h"
+#include "../Graphics/Zone.h"
 #include "../IO/VectorBuffer.h"
 #include "../LuaScript/LuaScriptUtils.h"
 #include "../Math/Polyhedron.h"
@@ -165,106 +165,106 @@ static void RegisterCamera(kaguya::State& lua)
     );
 }
 
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(DebugRendererAddLine, DebugRenderer, AddLine, 3, 4, void(DebugRenderer::*)(const Vector3&, const Vector3&, const Color&, bool));
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(DebugRendererAddTriangle, DebugRenderer, AddTriangle, 4, 5, void(DebugRenderer::*)(const Vector3&, const Vector3&, const Vector3&, const Color&, bool));
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddNode, DebugRenderer, AddNode, 1, 3);
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(DebugRendererAddBoundingBox0, DebugRenderer, AddBoundingBox, 2, 3, void(DebugRenderer::*)(const BoundingBox&, const Color&, bool));
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(DebugRendererAddBoundingBox1, DebugRenderer, AddBoundingBox, 3, 4, void(DebugRenderer::*)(const BoundingBox&, const Matrix3x4&, const Color&, bool));
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddFrustum, DebugRenderer, AddFrustum, 2, 3);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddPolyhedron, DebugRenderer, AddPolyhedron, 2, 3);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddSphere, DebugRenderer, AddSphere, 2, 3);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddCylinder, DebugRenderer, AddCylinder, 4, 5);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddSkeleton, DebugRenderer, AddSkeleton, 2, 3);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddTriangleMesh, DebugRenderer, AddTriangleMesh, 8, 9);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddCircle, DebugRenderer, AddCircle, 4, 6);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddCross, DebugRenderer, AddCross, 3, 4);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddQuad, DebugRenderer, AddQuad, 4, 5);
-//
-//static void RegisterDebugRenderer(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    lua["DebugRenderer"].setClass(UserdataMetatable<DebugRenderer, Component>()
-//        .addStaticFunction("new", &CreateObject<DebugRenderer>)
-//        
-//        .addFunction("SetView", &DebugRenderer::SetView)
-//
-//        .addFunction("AddLine", DebugRendererAddLine())
-//        .addFunction("AddTriangle", DebugRendererAddTriangle())
-//        .addFunction("AddNode", DebugRendererAddNode())
-//        
-//        .addOverloadedFunctions("AddBoundingBox", 
-//            DebugRendererAddBoundingBox0(),
-//            DebugRendererAddBoundingBox1())
-//
-//        .addFunction("AddFrustum", DebugRendererAddFrustum())
-//        .addFunction("AddPolyhedron", DebugRendererAddPolyhedron())
-//        .addFunction("AddSphere", DebugRendererAddSphere())
-//        .addFunction("AddCylinder", DebugRendererAddCylinder())
-//        .addFunction("AddSkeleton", DebugRendererAddSkeleton())
-//        .addFunction("AddTriangleMesh", DebugRendererAddTriangleMesh())
-//        .addFunction("AddCircle", DebugRendererAddCircle())
-//        .addFunction("AddCross", DebugRendererAddCross())
-//        .addFunction("AddQuad", DebugRendererAddQuad())
-//
-//        .addFunction("Render", &DebugRenderer::Render)
-//        .addFunction("GetView", &DebugRenderer::GetView)
-//        .addFunction("GetProjection", &DebugRenderer::GetProjection)
-//        .addFunction("GetFrustum", &DebugRenderer::GetFrustum)
-//        .addFunction("IsInside", &DebugRenderer::IsInside)
-//
-//        .addProperty("view", &DebugRenderer::GetView)
-//        .addProperty("projection", &DebugRenderer::GetProjection)
-//        .addProperty("frustum", &DebugRenderer::GetFrustum)
-//    );
-//}
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(GeometrySetDrawRange0, Geometry, SetDrawRange, 3, 4, bool(Geometry::*)(PrimitiveType, unsigned, unsigned, bool));
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(GeometrySetDrawRange1, Geometry, SetDrawRange, 5, 6, bool(Geometry::*)(PrimitiveType, unsigned, unsigned, unsigned, unsigned, bool));
-//
-//static void RegisterGeometry(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    lua["Geometry"].setClass(UserdataMetatable<Geometry, Object>()
-//        .addStaticFunction("new", &CreateObject<Geometry>)
-//        
-//        .addFunction("SetNumVertexBuffers", &Geometry::SetNumVertexBuffers)
-//        .addFunction("SetVertexBuffer", &Geometry::SetVertexBuffer)
-//        .addFunction("SetIndexBuffer", &Geometry::SetIndexBuffer)
-//
-//        .addOverloadedFunctions("SetDrawRange", 
-//            GeometrySetDrawRange0(),
-//            GeometrySetDrawRange1())
-//
-//        .addFunction("SetLodDistance", &Geometry::SetLodDistance)
-//
-//        .addFunction("GetNumVertexBuffers", &Geometry::GetNumVertexBuffers)
-//        .addFunction("GetVertexBuffer", &Geometry::GetVertexBuffer)
-//        .addFunction("GetIndexBuffer", &Geometry::GetIndexBuffer)        
-//        .addFunction("GetPrimitiveType", &Geometry::GetPrimitiveType)
-//
-//        .addFunction("GetIndexStart", &Geometry::GetIndexStart)
-//        .addFunction("GetIndexCount", &Geometry::GetIndexCount)
-//        .addFunction("GetVertexStart", &Geometry::GetVertexStart)
-//        .addFunction("GetVertexCount", &Geometry::GetVertexCount)
-//        .addFunction("GetLodDistance", &Geometry::GetLodDistance)
-//        .addFunction("IsEmpty", &Geometry::IsEmpty)
-//
-//        .addProperty("numVertexBuffers", &Geometry::GetNumVertexBuffers)
-//
-//        .addProperty("indexBuffer", &Geometry::GetIndexBuffer, &Geometry::SetIndexBuffer)
-//        .addProperty("primitiveType", &Geometry::GetPrimitiveType)
-//        .addProperty("indexStart", &Geometry::GetIndexStart)
-//        .addProperty("indexCount", &Geometry::GetIndexCount)
-//        .addProperty("vertexStart", &Geometry::GetVertexStart)
-//        .addProperty("vertexCount", &Geometry::GetVertexCount)
-//        .addProperty("lodDistance", &Geometry::GetLodDistance, &Geometry::SetLodDistance)
-//        .addProperty("empty", &Geometry::IsEmpty)
-//    );
-//}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(DebugRendererAddLine, DebugRenderer, AddLine, 3, 4, void(DebugRenderer::*)(const Vector3&, const Vector3&, const Color&, bool));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(DebugRendererAddTriangle, DebugRenderer, AddTriangle, 4, 5, void(DebugRenderer::*)(const Vector3&, const Vector3&, const Vector3&, const Color&, bool));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddNode, DebugRenderer, AddNode, 1, 3);
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(DebugRendererAddBoundingBox0, DebugRenderer, AddBoundingBox, 2, 3, void(DebugRenderer::*)(const BoundingBox&, const Color&, bool));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(DebugRendererAddBoundingBox1, DebugRenderer, AddBoundingBox, 3, 4, void(DebugRenderer::*)(const BoundingBox&, const Matrix3x4&, const Color&, bool));
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddFrustum, DebugRenderer, AddFrustum, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddPolyhedron, DebugRenderer, AddPolyhedron, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddSphere, DebugRenderer, AddSphere, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddCylinder, DebugRenderer, AddCylinder, 4, 5);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddSkeleton, DebugRenderer, AddSkeleton, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddTriangleMesh, DebugRenderer, AddTriangleMesh, 8, 9);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddCircle, DebugRenderer, AddCircle, 4, 6);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddCross, DebugRenderer, AddCross, 3, 4);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DebugRendererAddQuad, DebugRenderer, AddQuad, 4, 5);
+
+static void RegisterDebugRenderer(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["DebugRenderer"].setClass(UserdataMetatable<DebugRenderer, Component>()
+        .addStaticFunction("new", &CreateObject<DebugRenderer>)
+        
+        .addFunction("SetView", &DebugRenderer::SetView)
+
+        .addFunction("AddLine", DebugRendererAddLine())
+        .addFunction("AddTriangle", DebugRendererAddTriangle())
+        .addFunction("AddNode", DebugRendererAddNode())
+        
+        .addOverloadedFunctions("AddBoundingBox", 
+            DebugRendererAddBoundingBox0(),
+            DebugRendererAddBoundingBox1())
+
+        .addFunction("AddFrustum", DebugRendererAddFrustum())
+        .addFunction("AddPolyhedron", DebugRendererAddPolyhedron())
+        .addFunction("AddSphere", DebugRendererAddSphere())
+        .addFunction("AddCylinder", DebugRendererAddCylinder())
+        .addFunction("AddSkeleton", DebugRendererAddSkeleton())
+        .addFunction("AddTriangleMesh", DebugRendererAddTriangleMesh())
+        .addFunction("AddCircle", DebugRendererAddCircle())
+        .addFunction("AddCross", DebugRendererAddCross())
+        .addFunction("AddQuad", DebugRendererAddQuad())
+
+        .addFunction("Render", &DebugRenderer::Render)
+        .addFunction("GetView", &DebugRenderer::GetView)
+        .addFunction("GetProjection", &DebugRenderer::GetProjection)
+        .addFunction("GetFrustum", &DebugRenderer::GetFrustum)
+        .addFunction("IsInside", &DebugRenderer::IsInside)
+
+        .addProperty("view", &DebugRenderer::GetView)
+        .addProperty("projection", &DebugRenderer::GetProjection)
+        .addProperty("frustum", &DebugRenderer::GetFrustum)
+    );
+}
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(GeometrySetDrawRange0, Geometry, SetDrawRange, 3, 4, bool(Geometry::*)(PrimitiveType, unsigned, unsigned, bool));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(GeometrySetDrawRange1, Geometry, SetDrawRange, 5, 6, bool(Geometry::*)(PrimitiveType, unsigned, unsigned, unsigned, unsigned, bool));
+
+static void RegisterGeometry(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["Geometry"].setClass(UserdataMetatable<Geometry, Object>()
+        .addStaticFunction("new", &CreateObject<Geometry>)
+        
+        .addFunction("SetNumVertexBuffers", &Geometry::SetNumVertexBuffers)
+        .addFunction("SetVertexBuffer", &Geometry::SetVertexBuffer)
+        .addFunction("SetIndexBuffer", &Geometry::SetIndexBuffer)
+
+        .addOverloadedFunctions("SetDrawRange", 
+            GeometrySetDrawRange0(),
+            GeometrySetDrawRange1())
+
+        .addFunction("SetLodDistance", &Geometry::SetLodDistance)
+
+        .addFunction("GetNumVertexBuffers", &Geometry::GetNumVertexBuffers)
+        .addFunction("GetVertexBuffer", &Geometry::GetVertexBuffer)
+        .addFunction("GetIndexBuffer", &Geometry::GetIndexBuffer)        
+        .addFunction("GetPrimitiveType", &Geometry::GetPrimitiveType)
+
+        .addFunction("GetIndexStart", &Geometry::GetIndexStart)
+        .addFunction("GetIndexCount", &Geometry::GetIndexCount)
+        .addFunction("GetVertexStart", &Geometry::GetVertexStart)
+        .addFunction("GetVertexCount", &Geometry::GetVertexCount)
+        .addFunction("GetLodDistance", &Geometry::GetLodDistance)
+        .addFunction("IsEmpty", &Geometry::IsEmpty)
+
+        .addProperty("numVertexBuffers", &Geometry::GetNumVertexBuffers)
+
+        .addProperty("indexBuffer", &Geometry::GetIndexBuffer, &Geometry::SetIndexBuffer)
+        .addProperty("primitiveType", &Geometry::GetPrimitiveType)
+        .addProperty("indexStart", &Geometry::GetIndexStart)
+        .addProperty("indexCount", &Geometry::GetIndexCount)
+        .addProperty("vertexStart", &Geometry::GetVertexStart)
+        .addProperty("vertexCount", &Geometry::GetVertexCount)
+        .addProperty("lodDistance", &Geometry::GetLodDistance, &Geometry::SetLodDistance)
+        .addProperty("empty", &Geometry::IsEmpty)
+    );
+}
 
 static void RegisterGraphics(kaguya::State& lua)
 {
@@ -627,67 +627,67 @@ static void RegisterGraphicsDefs(kaguya::State& lua)
     lua["MASK_INSTANCEMATRIX3"] = MASK_INSTANCEMATRIX3;
     lua["MASK_OBJECTINDEX"] = MASK_OBJECTINDEX;
 }
-//
-//static SharedPtr<IndexBuffer> CreateIndexBuffer(bool forceHeadless = false)
-//{
-//    return SharedPtr<IndexBuffer>(new IndexBuffer(globalContext, forceHeadless));
-//}
-//
-//KAGUYA_FUNCTION_OVERLOADS(CreateIndexBufferOverloads, CreateIndexBuffer, 0, 1);
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(IndexBufferSetSize, IndexBuffer, SetSize, 2, 3);
-//
-//static bool IndexBufferSetData(IndexBuffer* self, VectorBuffer& src)
-//{
-//    // Make sure there is enough data
-//    if (self->GetIndexCount() && src.GetSize() >= self->GetIndexCount() * self->GetIndexSize())
-//        return self->SetData(&src.GetBuffer()[0]);
-//    else
-//        return false;
-//}
-//
-//static VectorBuffer IndexBufferGetData(IndexBuffer* self)
-//{
-//    VectorBuffer ret;
-//    
-//    void* data = self->Lock(0, self->GetIndexCount(), false);
-//    if (data)
-//    {
-//        ret.Write(data, self->GetIndexCount() * self->GetIndexSize());
-//        ret.Seek(0);
-//        self->Unlock();
-//    }
-//
-//    return ret;
-//}
-//
-//static void RegisterIndexBuffer(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    lua["IndexBuffer"].setClass(UserdataMetatable<IndexBuffer, Object>()
-//        .addStaticFunction("new", 
-//            CreateIndexBufferOverloads())
-//        
-//        .addFunction("SetShadowed", &IndexBuffer::SetShadowed)
-//        
-//        .addFunction("SetSize", IndexBufferSetSize())
-//        
-//        .addStaticFunction("SetData", &IndexBufferSetData)
-//        .addStaticFunction("GetData", &IndexBufferGetData)
-//
-//        .addFunction("IsShadowed", &IndexBuffer::IsShadowed)
-//        .addFunction("IsDynamic", &IndexBuffer::IsDynamic)
-//        .addFunction("GetIndexCount", &IndexBuffer::GetIndexCount)
-//        .addFunction("GetIndexSize", &IndexBuffer::GetIndexSize)
-//                
-//        .addProperty("shadowed", &IndexBuffer::IsShadowed, &IndexBuffer::SetShadowed)
-//        .addProperty("dynamic", &IndexBuffer::IsDynamic)
-//        .addProperty("indexCount", &IndexBuffer::GetIndexCount)
-//        .addProperty("indexSize", &IndexBuffer::GetIndexSize)
-//    );
-//}
-//
+
+static SharedPtr<IndexBuffer> CreateIndexBuffer(bool forceHeadless = false)
+{
+    return SharedPtr<IndexBuffer>(new IndexBuffer(globalContext, forceHeadless));
+}
+
+KAGUYA_FUNCTION_OVERLOADS(CreateIndexBufferOverloads, CreateIndexBuffer, 0, 1);
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(IndexBufferSetSize, IndexBuffer, SetSize, 2, 3);
+
+static bool IndexBufferSetData(IndexBuffer* self, VectorBuffer& src)
+{
+    // Make sure there is enough data
+    if (self->GetIndexCount() && src.GetSize() >= self->GetIndexCount() * self->GetIndexSize())
+        return self->SetData(&src.GetBuffer()[0]);
+    else
+        return false;
+}
+
+static VectorBuffer IndexBufferGetData(IndexBuffer* self)
+{
+    VectorBuffer ret;
+    
+    void* data = self->Lock(0, self->GetIndexCount(), false);
+    if (data)
+    {
+        ret.Write(data, self->GetIndexCount() * self->GetIndexSize());
+        ret.Seek(0);
+        self->Unlock();
+    }
+
+    return ret;
+}
+
+static void RegisterIndexBuffer(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["IndexBuffer"].setClass(UserdataMetatable<IndexBuffer, Object>()
+        .addStaticFunction("new", 
+            CreateIndexBufferOverloads())
+        
+        .addFunction("SetShadowed", &IndexBuffer::SetShadowed)
+        
+        .addFunction("SetSize", IndexBufferSetSize())
+        
+        .addStaticFunction("SetData", &IndexBufferSetData)
+        .addStaticFunction("GetData", &IndexBufferGetData)
+
+        .addFunction("IsShadowed", &IndexBuffer::IsShadowed)
+        .addFunction("IsDynamic", &IndexBuffer::IsDynamic)
+        .addFunction("GetIndexCount", &IndexBuffer::GetIndexCount)
+        .addFunction("GetIndexSize", &IndexBuffer::GetIndexSize)
+                
+        .addProperty("shadowed", &IndexBuffer::IsShadowed, &IndexBuffer::SetShadowed)
+        .addProperty("dynamic", &IndexBuffer::IsDynamic)
+        .addProperty("indexCount", &IndexBuffer::GetIndexCount)
+        .addProperty("indexSize", &IndexBuffer::GetIndexSize)
+    );
+}
+
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(MaterialSetTechnique, Material, SetTechnique, 2, 4);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(MaterialSetShaderParameterAnimation, Material, SetShaderParameterAnimation, 2, 4);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(MaterialClone, Material, Clone, 0, 1);
@@ -890,566 +890,557 @@ static void RegisterRenderer(kaguya::State& lua)
         .addProperty("defaultLightSpot", &Renderer::GetDefaultLightSpot)        
     );
 }
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(RenderPathCommandSetOutput, RenderPathCommand, SetOutput, 2, 3);
-//
-//static void RegisterRenderPath(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    // enum RenderCommandType;
-//    lua["CMD_NONE"] = CMD_NONE;
-//    lua["CMD_CLEAR"] = CMD_CLEAR;
-//    lua["CMD_SCENEPASS"] = CMD_SCENEPASS;
-//    lua["CMD_QUAD"] = CMD_QUAD;
-//    lua["CMD_FORWARDLIGHTS"] = CMD_FORWARDLIGHTS;
-//    lua["CMD_LIGHTVOLUMES"] = CMD_LIGHTVOLUMES;
-//    lua["CMD_RENDERUI"] = CMD_RENDERUI;
-//    lua["CMD_SENDEVENT"] = CMD_SENDEVENT;
-//
-//    // enum RenderCommandSortMode;
-//    lua["SORT_FRONTTOBACK"] = SORT_FRONTTOBACK;
-//    lua["SORT_BACKTOFRONT"] = SORT_BACKTOFRONT;
-//
-//    // enum RenderTargetSizeMode;
-//    lua["SIZE_ABSOLUTE"] = SIZE_ABSOLUTE;
-//    lua["SIZE_VIEWPORTDIVISOR"] = SIZE_VIEWPORTDIVISOR;
-//    lua["SIZE_VIEWPORTMULTIPLIER"] = SIZE_VIEWPORTMULTIPLIER;
-//
-//    lua["RenderTargetInfo"].setClass(UserdataMetatable<RenderTargetInfo>()
-//        .setConstructors<RenderTargetInfo()>()
-//
-//        .addFunction("Load", &RenderTargetInfo::Load)
-//        
-//        .addProperty("name", &RenderTargetInfo::name_)
-//        .addProperty("tag", &RenderTargetInfo::tag_)
-//        .addProperty("format", &RenderTargetInfo::format_)
-//        .addProperty("size", &RenderTargetInfo::size_)
-//        .addProperty("sizeMode", &RenderTargetInfo::sizeMode_)
-//        .addProperty("enabled", &RenderTargetInfo::enabled_)
-//        .addProperty("cubemap", &RenderTargetInfo::cubemap_)
-//        .addProperty("filtered", &RenderTargetInfo::filtered_)
-//        .addProperty("sRGB", &RenderTargetInfo::sRGB_)
-//        .addProperty("persistent", &RenderTargetInfo::persistent_)
-//    );
-//
-//    lua["RenderPathCommand"].setClass(UserdataMetatable<RenderPathCommand>()
-//        .setConstructors<RenderPathCommand()>()
-//
-//        .addFunction("Load", &RenderPathCommand::Load)
-//
-//        .addFunction("SetTextureName", &RenderPathCommand::SetTextureName)
-//        .addFunction("SetShaderParameter", &RenderPathCommand::SetShaderParameter)
-//        .addFunction("RemoveShaderParameter", &RenderPathCommand::RemoveShaderParameter)
-//        .addFunction("SetNumOutputs", &RenderPathCommand::SetNumOutputs)
-//        
-//        .addFunction("SetOutput", RenderPathCommandSetOutput())
-//
-//        .addFunction("SetOutputName", &RenderPathCommand::SetOutputName)
-//        .addFunction("SetOutputFace", &RenderPathCommand::SetOutputFace)
-//        .addFunction("SetDepthStencilName", &RenderPathCommand::SetDepthStencilName)
-//        .addFunction("GetTextureName", &RenderPathCommand::GetTextureName)
-//        .addFunction("GetShaderParameter", &RenderPathCommand::GetShaderParameter)
-//        .addFunction("GetNumOutputs", &RenderPathCommand::GetNumOutputs)
-//        .addFunction("GetOutputName", &RenderPathCommand::GetOutputName)
-//        .addFunction("GetOutputFace", &RenderPathCommand::GetOutputFace)
-//        .addFunction("GetDepthStencilName", &RenderPathCommand::GetDepthStencilName)
-//        
-//        .addProperty("tag", &RenderPathCommand::tag_)
-//        .addProperty("type", &RenderPathCommand::type_)
-//        .addProperty("sortMode", &RenderPathCommand::sortMode_)
-//        .addProperty("pass", &RenderPathCommand::pass_)
-//        .addProperty("passIndex", &RenderPathCommand::passIndex_)
-//        .addProperty("metadata", &RenderPathCommand::metadata_)
-//        .addProperty("vertexShaderName", &RenderPathCommand::vertexShaderName_)
-//        .addProperty("pixelShaderName", &RenderPathCommand::pixelShaderName_)
-//        .addProperty("vertexShaderDefines", &RenderPathCommand::vertexShaderDefines_)
-//        .addProperty("pixelShaderDefines", &RenderPathCommand::pixelShaderDefines_)
-//        .addProperty("clearFlags", &RenderPathCommand::clearFlags_)
-//        .addProperty("clearColor", &RenderPathCommand::clearColor_)
-//        .addProperty("clearDepth", &RenderPathCommand::clearDepth_)
-//        .addProperty("clearStencil", &RenderPathCommand::clearStencil_)
-//        .addProperty("blendMode", &RenderPathCommand::blendMode_)
-//        .addProperty("enabled", &RenderPathCommand::enabled_)
-//        .addProperty("useFogColor", &RenderPathCommand::useFogColor_)
-//        .addProperty("markToStencil", &RenderPathCommand::markToStencil_)
-//        .addProperty("useLitBase", &RenderPathCommand::useLitBase_)
-//        .addProperty("vertexLights", &RenderPathCommand::vertexLights_)
-//        .addProperty("eventName", &RenderPathCommand::eventName_)
-//    );
-//
-//    lua["RenderPath"].setClass(UserdataMetatable<RenderPath, RefCounted>()
-//        .setConstructors<RenderPath()>()
-//
-//        .addFunction("Clone", &RenderPath::Clone)
-//
-//		.addFunction("Load", &RenderPath::Load)
-//        .addFunction("Append", &RenderPath::Append)
-//        
-//        .addFunction("SetEnabled", &RenderPath::SetEnabled)
-//        .addFunction("ToggleEnabled", &RenderPath::ToggleEnabled)
-//        .addFunction("SetRenderTarget", &RenderPath::SetRenderTarget)
-//        .addFunction("AddRenderTarget", &RenderPath::AddRenderTarget)
-//
-//        .addOverloadedFunctions("RemoveRenderTarget",
-//            static_cast<void(RenderPath::*)(unsigned)>(&RenderPath::RemoveRenderTarget),
-//            static_cast<void(RenderPath::*)(const String&)>(&RenderPath::RemoveRenderTarget))
-//
-//        .addFunction("RemoveRenderTargets", &RenderPath::RemoveRenderTargets)
-//
-//        .addFunction("SetCommand", &RenderPath::SetCommand)
-//        .addFunction("AddCommand", &RenderPath::AddCommand)
-//        .addFunction("InsertCommand", &RenderPath::InsertCommand)
-//        .addFunction("RemoveCommand", &RenderPath::RemoveCommand)
-//        .addFunction("RemoveCommands", &RenderPath::RemoveCommands)
-//
-//        .addFunction("SetShaderParameter", &RenderPath::SetShaderParameter)
-//        
-//        .addFunction("GetNumRenderTargets", &RenderPath::GetNumRenderTargets)
-//        .addFunction("GetNumCommands", &RenderPath::GetNumCommands)
-//        .addFunction("GetCommand", &RenderPath::GetCommand)
-//        .addFunction("GetShaderParameter", &RenderPath::GetShaderParameter)
-//    );
-////}
-//
-//static void RegisterRenderSurface(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    lua["RenderSurface"].setClass(UserdataMetatable<RenderSurface, RefCounted>()
-//        .setConstructors<RenderSurface(Texture*)>()
-//        
-//        .addFunction("SetNumViewports", &RenderSurface::SetNumViewports)
-//        .addFunction("SetViewport", &RenderSurface::SetViewport)
-//        .addFunction("SetUpdateMode", &RenderSurface::SetUpdateMode)
-//        .addFunction("SetLinkedRenderTarget", &RenderSurface::SetLinkedRenderTarget)
-//        .addFunction("SetLinkedDepthStencil", &RenderSurface::SetLinkedDepthStencil)
-//        .addFunction("QueueUpdate", &RenderSurface::QueueUpdate)
-//        .addFunction("Release", &RenderSurface::Release)
-//        
-//        .addFunction("GetParentTexture", &RenderSurface::GetParentTexture)
-//        .addFunction("GetWidth", &RenderSurface::GetWidth)
-//        .addFunction("GetHeight", &RenderSurface::GetHeight)
-//        .addFunction("GetUsage", &RenderSurface::GetUsage)
-//        .addFunction("GetNumViewports", &RenderSurface::GetNumViewports)
-//        .addFunction("GetViewport", &RenderSurface::GetViewport)
-//        .addFunction("GetUpdateMode", &RenderSurface::GetUpdateMode)
-//        .addFunction("GetLinkedRenderTarget", &RenderSurface::GetLinkedRenderTarget)
-//        .addFunction("GetLinkedDepthStencil", &RenderSurface::GetLinkedDepthStencil)
-//        
-//        .addProperty("parentTexture", &RenderSurface::GetParentTexture)
-//        .addProperty("width", &RenderSurface::GetWidth)
-//        .addProperty("height", &RenderSurface::GetHeight)
-//        .addProperty("usage", &RenderSurface::GetUsage)
-//        .addProperty("numViewports", &RenderSurface::GetNumViewports, &RenderSurface::SetNumViewports)
-//        .addProperty("updateMode", &RenderSurface::GetUpdateMode, &RenderSurface::SetUpdateMode)
-//        .addProperty("linkedRenderTarget", &RenderSurface::GetLinkedRenderTarget, &RenderSurface::SetLinkedRenderTarget)
-//        .addProperty("linkedDepthStencil", &RenderSurface::GetLinkedDepthStencil, &RenderSurface::SetLinkedDepthStencil)
-//    );
-//}
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(TechniqueClone, Technique, Clone, 0, 1);
-//
-//static void RegisterTechnique(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    // enum PassLightingMode;
-//    lua["LIGHTING_UNLIT"] = LIGHTING_UNLIT;
-//    lua["LIGHTING_PERVERTEX"] = LIGHTING_PERVERTEX;
-//    lua["LIGHTING_PERPIXEL"] = LIGHTING_PERPIXEL;
-//
-//    lua["Pass"].setClass(UserdataMetatable<Pass, RefCounted>()
-//        .setConstructors<Pass(const String&)>()
-//        
-//        .addFunction("SetBlendMode", &Pass::SetBlendMode)
-//        .addFunction("SetCullMode", &Pass::SetCullMode)
-//        .addFunction("SetDepthTestMode", &Pass::SetDepthTestMode)
-//        .addFunction("SetLightingMode", &Pass::SetLightingMode)
-//        .addFunction("SetDepthWrite", &Pass::SetDepthWrite)
-//        .addFunction("SetAlphaMask", &Pass::SetAlphaMask)
-//        .addFunction("SetIsDesktop", &Pass::SetIsDesktop)
-//        .addFunction("SetVertexShader", &Pass::SetVertexShader)
-//        .addFunction("SetPixelShader", &Pass::SetPixelShader)
-//        .addFunction("SetVertexShaderDefines", &Pass::SetVertexShaderDefines)
-//        .addFunction("SetPixelShaderDefines", &Pass::SetPixelShaderDefines)
-//        .addFunction("ReleaseShaders", &Pass::ReleaseShaders)
-//        
-//
-//        .addFunction("GetName", &Pass::GetName)
-//        .addFunction("GetIndex", &Pass::GetIndex)
-//        .addFunction("GetBlendMode", &Pass::GetBlendMode)
-//        .addFunction("GetCullMode", &Pass::GetCullMode)
-//        .addFunction("GetDepthTestMode", &Pass::GetDepthTestMode)
-//        .addFunction("GetLightingMode", &Pass::GetLightingMode)
-//        .addFunction("GetShadersLoadedFrameNumber", &Pass::GetShadersLoadedFrameNumber)
-//        .addFunction("GetDepthWrite", &Pass::GetDepthWrite)
-//        .addFunction("GetAlphaMask", &Pass::GetAlphaMask)
-//        .addFunction("IsDesktop", &Pass::IsDesktop)
-//        .addFunction("GetVertexShader", &Pass::GetVertexShader)
-//        .addFunction("GetPixelShader", &Pass::GetPixelShader)
-//        .addFunction("GetVertexShaderDefines", &Pass::GetVertexShaderDefines)
-//        .addFunction("GetPixelShaderDefines", &Pass::GetPixelShaderDefines)
-//
-//        .addProperty("name", &Pass::GetName)
-//        .addProperty("index", &Pass::GetIndex)
-//        .addProperty("blendMode", &Pass::GetBlendMode, &Pass::SetBlendMode)
-//        .addProperty("cullMode", &Pass::GetCullMode, &Pass::SetCullMode)
-//        .addProperty("depthTestMode", &Pass::GetDepthTestMode, &Pass::SetDepthTestMode)
-//        .addProperty("lightingMode", &Pass::GetLightingMode, &Pass::SetLightingMode)
-//        .addProperty("shadersLoadedFrameNumber", &Pass::GetShadersLoadedFrameNumber)
-//        .addProperty("depthWrite", &Pass::GetDepthWrite, &Pass::SetDepthWrite)
-//        .addProperty("alphaMask", &Pass::GetAlphaMask, &Pass::SetAlphaMask)
-//        .addProperty("desktop", &Pass::IsDesktop)
-//        .addProperty("vertexShader", &Pass::GetVertexShader, &Pass::SetVertexShader)
-//        .addProperty("pixelShader", &Pass::GetPixelShader, &Pass::SetPixelShader)
-//        .addProperty("vertexShaderDefines", &Pass::GetVertexShaderDefines, &Pass::SetVertexShaderDefines)
-//        .addProperty("pixelShaderDefines", &Pass::GetPixelShaderDefines, &Pass::SetPixelShaderDefines)        
-//    );
-//
-//    lua["Technique"].setClass(UserdataMetatable<Technique, Resource>()
-//        .addStaticFunction("new", &CreateObject<Technique>)
-//        
-//        .addFunction("SetIsDesktop", &Technique::SetIsDesktop)
-//        .addFunction("CreatePass", &Technique::CreatePass)
-//        .addFunction("RemovePass", &Technique::RemovePass)
-//        .addFunction("ReleaseShaders", &Technique::ReleaseShaders)
-//        
-//        .addFunction("Clone", TechniqueClone())
-//
-//        .addFunction("IsDesktop", &Technique::IsDesktop)
-//        .addFunction("IsSupported", &Technique::IsSupported)
-//
-//        .addOverloadedFunctions("HasPass",
-//            static_cast<bool(Technique::*)(unsigned) const>(&Technique::HasPass),
-//            static_cast<bool(Technique::*)(const String&) const>(&Technique::HasPass))
-//
-//
-//        .addOverloadedFunctions("GetPass",
-//            static_cast<Pass*(Technique::*)(unsigned) const>(&Technique::GetPass),
-//            static_cast<Pass*(Technique::*)(const String&) const>(&Technique::GetPass))
-//
-//        .addOverloadedFunctions("GetSupportedPass",
-//            static_cast<Pass*(Technique::*)(unsigned) const>(&Technique::GetSupportedPass),
-//            static_cast<Pass*(Technique::*)(const String&) const>(&Technique::GetSupportedPass))
-//
-//        .addFunction("GetNumPasses", &Technique::GetNumPasses)
-//
-//        .addFunction("GetPassNames", &Technique::GetPassNames)
-//        .addFunction("GetPasses", &Technique::GetPasses)
-//
-//        .addProperty("desktop", &Technique::IsDesktop)
-//        .addProperty("supported", &Technique::IsSupported)
-//        .addProperty("numPasses", &Technique::GetNumPasses)        
-//    );
-//}
 
-//static void RegisterTexture(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    lua["Texture"].setClass(UserdataMetatable<Texture, Resource>()
-//        .addStaticFunction("new", &CreateObject<Texture>)
-//        
-//        .addFunction("SetNumLevels", &Texture::SetNumLevels)
-//        .addFunction("SetFilterMode", &Texture::SetFilterMode)
-//        .addFunction("SetAddressMode", &Texture::SetAddressMode)
-//        .addFunction("SetBorderColor", &Texture::SetBorderColor)
-//        .addFunction("SetSRGB", &Texture::SetSRGB)
-//        .addFunction("SetBackupTexture", &Texture::SetBackupTexture)
-//        .addFunction("SetMipsToSkip", &Texture::SetMipsToSkip)
-//
-//        .addFunction("GetFormat", &Texture::GetFormat)
-//        .addFunction("IsCompressed", &Texture::IsCompressed)
-//        .addFunction("GetLevels", &Texture::GetLevels)
-//        .addFunction("GetWidth", &Texture::GetWidth)
-//        .addFunction("GetHeight", &Texture::GetHeight)
-//        .addFunction("GetDepth", &Texture::GetDepth)
-//        .addFunction("GetFilterMode", &Texture::GetFilterMode)
-//        .addFunction("GetAddressMode", &Texture::GetAddressMode)
-//        .addFunction("GetBorderColor", &Texture::GetBorderColor)
-//        .addFunction("GetSRGB", &Texture::GetSRGB)
-//        .addFunction("GetBackupTexture", &Texture::GetBackupTexture)
-//        .addFunction("GetMipsToSkip", &Texture::GetMipsToSkip)
-//        .addFunction("GetLevelWidth", &Texture::GetLevelWidth)
-//        .addFunction("GetLevelHeight", &Texture::GetLevelHeight)
-//        .addFunction("GetLevelDepth", &Texture::GetLevelDepth)
-//        .addFunction("GetUsage", &Texture::GetUsage)
-//
-//        .addOverloadedFunctions("GetDataSize",
-//            static_cast<unsigned(Texture::*)(int, int) const>(&Texture::GetDataSize),
-//            static_cast<unsigned(Texture::*)(int, int, int) const>(&Texture::GetDataSize))
-//
-//        .addFunction("GetRowDataSize", &Texture::GetRowDataSize)
-//        .addFunction("GetComponents", &Texture::GetComponents)
-//
-//        .addProperty("format", &Texture::GetFormat)
-//        .addProperty("compressed", &Texture::IsCompressed)
-//        .addProperty("levels", &Texture::GetLevels)
-//        .addProperty("width", &Texture::GetWidth)
-//        .addProperty("height", &Texture::GetHeight)
-//        .addProperty("depth", &Texture::GetDepth)
-//        .addProperty("filterMode", &Texture::GetFilterMode, &Texture::SetFilterMode)
-//        .addProperty("borderColor", &Texture::GetBorderColor, &Texture::SetBorderColor)
-//        .addProperty("sRGB", &Texture::GetSRGB, &Texture::SetSRGB)
-//        .addProperty("backupTexture", &Texture::GetBackupTexture, &Texture::SetBackupTexture)
-//        .addProperty("usage", &Texture::GetUsage)
-//        .addProperty("components", &Texture::GetComponents)
-//    );
-//}
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(Texture2DSetSize, Texture2D, SetSize, 3, 4);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(Texture2DSetData, Texture2D, SetData, 1, 2, bool(Texture2D::*)(Image*, bool));
-//
-//static void RegisterTexture2D(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    lua["Texture2D"].setClass(UserdataMetatable<Texture2D, Texture>()
-//        .addStaticFunction("new", &CreateObject<Texture2D>)
-//        
-//        .addFunction("SetSize", Texture2DSetSize())
-//        .addFunction("SetData", Texture2DSetData())
-//
-//        .addFunction("GetRenderSurface", &Texture2D::GetRenderSurface)
-//
-//        .addProperty("renderSurface", &Texture2D::GetRenderSurface)
-//    );
-//}
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(Texture2DArraySetSize, Texture2DArray, SetSize, 4, 5);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(Texture2DArraySetData, Texture2DArray, SetData, 1, 2, bool(Texture2D::*)(Image*, bool));
-//
-//static void RegisterTexture2DArray(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    lua["Texture2DArray"].setClass(UserdataMetatable<Texture2DArray, Texture>()
-//        .addStaticFunction("new", &CreateObject<Texture2DArray>)
-//        
-//        .addFunction("SetLayers", &Texture2DArray::SetLayers)
-//        
-//        .addFunction("SetSize", Texture2DArraySetSize())
-//        .addFunction("SetData", Texture2DArraySetData())
-//
-//        .addFunction("GetLayers", &Texture2DArray::GetLayers)
-//        .addFunction("GetRenderSurface", &Texture2DArray::GetRenderSurface)
-//
-//        .addProperty("layers", &Texture2DArray::GetLayers, &Texture2DArray::SetLayers)
-//        .addProperty("renderSurface", &Texture2DArray::GetRenderSurface)
-//    );
-//}
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(Texture3DSetSize, Texture3D, SetSize, 4, 5);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(Texture3DSetData, Texture3D, SetData, 1, 2, bool(Texture3D::*)(Image*, bool));
-//
-//static void RegisterTexture3D(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    lua["Texture3D"].setClass(UserdataMetatable<Texture3D, Texture>()
-//        .addStaticFunction("new", &CreateObject<Texture3D>)
-//        
-//        .addFunction("SetSize", Texture3DSetSize())
-//        .addFunction("SetData", Texture3DSetData())
-//    );
-//}
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(TextureCubeSetSize, TextureCube, SetSize, 2, 3);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(TextureCubeSetData, TextureCube, SetData, 2, 3, bool(TextureCube::*)(CubeMapFace, Image*, bool));
-//
-//static void RegisterTextureCube(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    lua["TextureCube"].setClass(UserdataMetatable<TextureCube, Texture>()
-//        .addStaticFunction("new", &CreateObject<TextureCube>)
-//        
-//        .addFunction("SetSize", TextureCubeSetSize())
-//        .addFunction("SetData", TextureCubeSetData())
-//
-//        .addFunction("GetRenderSurface", &TextureCube::GetRenderSurface)
-//
-//        .addProperty("renderSurface", &TextureCube::GetRenderSurface)
-//    );
-//}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(RenderPathCommandSetOutput, RenderPathCommand, SetOutput, 2, 3);
 
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferSetSize0, VertexBuffer, SetSize, 2, 3, bool(VertexBuffer::*)(unsigned, const PODVector<VertexElement>&, bool));
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferSetSize1, VertexBuffer, SetSize, 2, 3, bool(VertexBuffer::*)(unsigned, unsigned, bool));
-//
-//static bool VertexBufferSetData(VertexBuffer* self, VectorBuffer& src)
-//{
-//    // Make sure there is enough data
-//    if (self->GetVertexCount() && src.GetSize() >= self->GetVertexCount() * self->GetVertexSize())
-//        return self->SetData(&src.GetBuffer()[0]);
-//    else
-//        return false;
-//}
-//
-//static VectorBuffer VertexBufferGetData(VertexBuffer* self)
-//{
-//    VectorBuffer ret;
-//
-//    void* data = self->Lock(0, self->GetVertexCount(), false);
-//    if (data)
-//    {
-//        ret.Write(data, self->GetVertexCount() * self->GetVertexSize());
-//        ret.Seek(0);
-//        self->Unlock();
-//    }
-//
-//    return ret;
-//}
-//
-//static SharedPtr<VertexBuffer> CreateVertexBuffer(bool forceHeadless = false)
-//{
-//    return SharedPtr<VertexBuffer>(new VertexBuffer(globalContext, forceHeadless));
-//}
-//
-//KAGUYA_FUNCTION_OVERLOADS(CreateVertexBufferOverloads, CreateVertexBuffer, 0, 1);
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS(VertexBufferSetDataRange, VertexBuffer, SetDataRange, 3, 4);
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferGetElement0, VertexBuffer, GetElement, 1, 2, const VertexElement*(VertexBuffer::*)(VertexElementSemantic, unsigned char)const);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferGetElement1, VertexBuffer, GetElement, 2, 3, const VertexElement*(VertexBuffer::*)(VertexElementType, VertexElementSemantic, unsigned char)const);
-//
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferHasElement0, VertexBuffer, HasElement, 1, 2, bool(VertexBuffer::*)(VertexElementSemantic, unsigned char)const);
-//KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferHasElement1, VertexBuffer, HasElement, 2, 3, bool(VertexBuffer::*)(VertexElementType, VertexElementSemantic, unsigned char)const);
-//
-//static void RegisterVertexBuffer(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    lua["VertexBuffer"].setClass(UserdataMetatable<VertexBuffer, GPUObject>()
-//        .addStaticFunction("new", 
-//            CreateVertexBufferOverloads())
-//
-//        .addFunction("SetShadowed", &VertexBuffer::SetShadowed)
-//
-//        .addOverloadedFunctions("SetSize", 
-//            VertexBufferSetSize0(), 
-//            VertexBufferSetSize1())
-//
-//        .addStaticFunction("SetData", &VertexBufferSetData)
-//        .addStaticFunction("GetData", &VertexBufferGetData)
-//
-//        .addFunction("SetDataRange", VertexBufferSetDataRange())
-//
-//        .addFunction("IsShadowed", &VertexBuffer::IsShadowed)
-//        .addFunction("IsDynamic", &VertexBuffer::IsDynamic)
-//        .addFunction("GetVertexCount", &VertexBuffer::GetVertexCount)
-//        .addFunction("GetVertexSize", &VertexBuffer::GetVertexSize)
-//
-//        .addOverloadedFunctions("GetElement",
-//            VertexBufferGetElement0(),
-//            VertexBufferGetElement1())
-//
-//        .addOverloadedFunctions("HasElement",
-//            VertexBufferHasElement0(),
-//            VertexBufferHasElement1())
-//
-//        .addFunction("GetElementMask", &VertexBuffer::GetElementMask)
-//
-//        .addProperty("shadowed", &VertexBuffer::IsShadowed, &VertexBuffer::SetShadowed)
-//        .addProperty("dynamic", &VertexBuffer::IsDynamic)
-//        .addProperty("vertexCount", &VertexBuffer::GetVertexCount)
-//        .addProperty("vertexSize", &VertexBuffer::GetVertexSize)
-//        .addProperty("elementMask", &VertexBuffer::GetElementMask)
-//    );
-//}
-//
-//static SharedPtr<Viewport> CreateViewport0()
-//{
-//    return SharedPtr<Viewport>(new Viewport(globalContext));
-//}
-//
-//static SharedPtr<Viewport> CreateViewport1(Scene* scene, Camera* camera)
-//{
-//    return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera));
-//}
-//
-//static SharedPtr<Viewport> CreateViewport2(Scene* scene, Camera* camera, RenderPath* renderPath)
-//{
-//    return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera, renderPath));
-//}
-//
-//static SharedPtr<Viewport> CreateViewport3(Scene* scene, Camera* camera, const IntRect& rect)
-//{
-//    return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera, rect));
-//}
-//
-//static SharedPtr<Viewport> CreateViewport4(Scene* scene, Camera* camera, const IntRect& rect, RenderPath* renderPath)
-//{
-//    return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera, rect, renderPath));
-//}
-//
-//static void RegisterViewport(kaguya::State& lua)
-//{
-//    using namespace kaguya;
-//
-//    lua["Viewport"].setClass(UserdataMetatable<Viewport, Object>()
-//        .addOverloadedFunctions("new", &CreateViewport0, &CreateViewport1, &CreateViewport2, &CreateViewport3, &CreateViewport4)
-//
-//        .addFunction("SetScene", &Viewport::SetScene)
-//        .addFunction("SetCamera", &Viewport::SetCamera)
-//        .addFunction("SetRect", &Viewport::SetRect)
-//
-//        .addOverloadedFunctions("SetRenderPath",
-//            static_cast<void(Viewport::*)(RenderPath*)>(&Viewport::SetRenderPath),
-//            static_cast<void(Viewport::*)(XMLFile*)>(&Viewport::SetRenderPath))
-//
-//        .addFunction("SetDrawDebug", &Viewport::SetDrawDebug)
-//        .addFunction("SetCullCamera", &Viewport::SetCullCamera)
-//        
-//        .addFunction("GetScene", &Viewport::GetScene)
-//        .addFunction("GetCamera", &Viewport::GetCamera)
-//        .addFunction("GetRect", &Viewport::GetRect)
-//        .addFunction("GetRenderPath", &Viewport::GetRenderPath)
-//        .addFunction("GetDrawDebug", &Viewport::GetDrawDebug)
-//        .addFunction("GetCullCamera", &Viewport::GetCullCamera)
-//        
-//        .addFunction("GetScreenRay", &Viewport::GetScreenRay)
-//        .addFunction("WorldToScreenPoint", &Viewport::WorldToScreenPoint)
-//        .addFunction("ScreenToWorldPoint", &Viewport::ScreenToWorldPoint)
-//        
-//        .addProperty("scene", &Viewport::GetScene, &Viewport::SetScene)
-//        .addProperty("camera", &Viewport::GetCamera, &Viewport::SetCamera)
-//        .addProperty("rect", &Viewport::GetRect, &Viewport::SetRect)
-//        .addProperty("renderPath", &Viewport::GetRenderPath, static_cast<void (Viewport::*)(RenderPath*)>(&Viewport::SetRenderPath))
-//        .addProperty("drawDebug", &Viewport::GetDrawDebug, &Viewport::SetDrawDebug)
-//        .addProperty("cullCamera", &Viewport::GetCullCamera, &Viewport::SetCullCamera)
-//    );
-//}
+static void RegisterRenderPath(kaguya::State& lua)
+{
+    using namespace kaguya;
 
-extern void RegisterRendererLuaAPI2(kaguya::State& lua);
+    // enum RenderCommandType;
+    lua["CMD_NONE"] = CMD_NONE;
+    lua["CMD_CLEAR"] = CMD_CLEAR;
+    lua["CMD_SCENEPASS"] = CMD_SCENEPASS;
+    lua["CMD_QUAD"] = CMD_QUAD;
+    lua["CMD_FORWARDLIGHTS"] = CMD_FORWARDLIGHTS;
+    lua["CMD_LIGHTVOLUMES"] = CMD_LIGHTVOLUMES;
+    lua["CMD_RENDERUI"] = CMD_RENDERUI;
+    lua["CMD_SENDEVENT"] = CMD_SENDEVENT;
+
+    // enum RenderCommandSortMode;
+    lua["SORT_FRONTTOBACK"] = SORT_FRONTTOBACK;
+    lua["SORT_BACKTOFRONT"] = SORT_BACKTOFRONT;
+
+    // enum RenderTargetSizeMode;
+    lua["SIZE_ABSOLUTE"] = SIZE_ABSOLUTE;
+    lua["SIZE_VIEWPORTDIVISOR"] = SIZE_VIEWPORTDIVISOR;
+    lua["SIZE_VIEWPORTMULTIPLIER"] = SIZE_VIEWPORTMULTIPLIER;
+
+    lua["RenderTargetInfo"].setClass(UserdataMetatable<RenderTargetInfo>()
+        .setConstructors<RenderTargetInfo()>()
+
+        .addFunction("Load", &RenderTargetInfo::Load)
+        
+        .addProperty("name", &RenderTargetInfo::name_)
+        .addProperty("tag", &RenderTargetInfo::tag_)
+        .addProperty("format", &RenderTargetInfo::format_)
+        .addProperty("size", &RenderTargetInfo::size_)
+        .addProperty("sizeMode", &RenderTargetInfo::sizeMode_)
+        .addProperty("enabled", &RenderTargetInfo::enabled_)
+        .addProperty("cubemap", &RenderTargetInfo::cubemap_)
+        .addProperty("filtered", &RenderTargetInfo::filtered_)
+        .addProperty("sRGB", &RenderTargetInfo::sRGB_)
+        .addProperty("persistent", &RenderTargetInfo::persistent_)
+    );
+
+    lua["RenderPathCommand"].setClass(UserdataMetatable<RenderPathCommand>()
+        .setConstructors<RenderPathCommand()>()
+
+        .addFunction("Load", &RenderPathCommand::Load)
+
+        .addFunction("SetTextureName", &RenderPathCommand::SetTextureName)
+        .addFunction("SetShaderParameter", &RenderPathCommand::SetShaderParameter)
+        .addFunction("RemoveShaderParameter", &RenderPathCommand::RemoveShaderParameter)
+        .addFunction("SetNumOutputs", &RenderPathCommand::SetNumOutputs)
+        
+        .addFunction("SetOutput", RenderPathCommandSetOutput())
+
+        .addFunction("SetOutputName", &RenderPathCommand::SetOutputName)
+        .addFunction("SetOutputFace", &RenderPathCommand::SetOutputFace)
+        .addFunction("SetDepthStencilName", &RenderPathCommand::SetDepthStencilName)
+        .addFunction("GetTextureName", &RenderPathCommand::GetTextureName)
+        .addFunction("GetShaderParameter", &RenderPathCommand::GetShaderParameter)
+        .addFunction("GetNumOutputs", &RenderPathCommand::GetNumOutputs)
+        .addFunction("GetOutputName", &RenderPathCommand::GetOutputName)
+        .addFunction("GetOutputFace", &RenderPathCommand::GetOutputFace)
+        .addFunction("GetDepthStencilName", &RenderPathCommand::GetDepthStencilName)
+        
+        .addProperty("tag", &RenderPathCommand::tag_)
+        .addProperty("type", &RenderPathCommand::type_)
+        .addProperty("sortMode", &RenderPathCommand::sortMode_)
+        .addProperty("pass", &RenderPathCommand::pass_)
+        .addProperty("passIndex", &RenderPathCommand::passIndex_)
+        .addProperty("metadata", &RenderPathCommand::metadata_)
+        .addProperty("vertexShaderName", &RenderPathCommand::vertexShaderName_)
+        .addProperty("pixelShaderName", &RenderPathCommand::pixelShaderName_)
+        .addProperty("vertexShaderDefines", &RenderPathCommand::vertexShaderDefines_)
+        .addProperty("pixelShaderDefines", &RenderPathCommand::pixelShaderDefines_)
+        .addProperty("clearFlags", &RenderPathCommand::clearFlags_)
+        .addProperty("clearColor", &RenderPathCommand::clearColor_)
+        .addProperty("clearDepth", &RenderPathCommand::clearDepth_)
+        .addProperty("clearStencil", &RenderPathCommand::clearStencil_)
+        .addProperty("blendMode", &RenderPathCommand::blendMode_)
+        .addProperty("enabled", &RenderPathCommand::enabled_)
+        .addProperty("useFogColor", &RenderPathCommand::useFogColor_)
+        .addProperty("markToStencil", &RenderPathCommand::markToStencil_)
+        .addProperty("useLitBase", &RenderPathCommand::useLitBase_)
+        .addProperty("vertexLights", &RenderPathCommand::vertexLights_)
+        .addProperty("eventName", &RenderPathCommand::eventName_)
+    );
+
+    lua["RenderPath"].setClass(UserdataMetatable<RenderPath, RefCounted>()
+        .setConstructors<RenderPath()>()
+
+        .addFunction("Clone", &RenderPath::Clone)
+
+		.addFunction("Load", &RenderPath::Load)
+        .addFunction("Append", &RenderPath::Append)
+        
+        .addFunction("SetEnabled", &RenderPath::SetEnabled)
+        .addFunction("ToggleEnabled", &RenderPath::ToggleEnabled)
+        .addFunction("SetRenderTarget", &RenderPath::SetRenderTarget)
+        .addFunction("AddRenderTarget", &RenderPath::AddRenderTarget)
+
+        .addOverloadedFunctions("RemoveRenderTarget",
+            static_cast<void(RenderPath::*)(unsigned)>(&RenderPath::RemoveRenderTarget),
+            static_cast<void(RenderPath::*)(const String&)>(&RenderPath::RemoveRenderTarget))
+
+        .addFunction("RemoveRenderTargets", &RenderPath::RemoveRenderTargets)
+
+        .addFunction("SetCommand", &RenderPath::SetCommand)
+        .addFunction("AddCommand", &RenderPath::AddCommand)
+        .addFunction("InsertCommand", &RenderPath::InsertCommand)
+        .addFunction("RemoveCommand", &RenderPath::RemoveCommand)
+        .addFunction("RemoveCommands", &RenderPath::RemoveCommands)
+
+        .addFunction("SetShaderParameter", &RenderPath::SetShaderParameter)
+        
+        .addFunction("GetNumRenderTargets", &RenderPath::GetNumRenderTargets)
+        .addFunction("GetNumCommands", &RenderPath::GetNumCommands)
+        .addFunction("GetCommand", &RenderPath::GetCommand)
+        .addFunction("GetShaderParameter", &RenderPath::GetShaderParameter)
+    );
+}
+
+static void RegisterRenderSurface(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["RenderSurface"].setClass(UserdataMetatable<RenderSurface, RefCounted>()
+        .setConstructors<RenderSurface(Texture*)>()
+        
+        .addFunction("SetNumViewports", &RenderSurface::SetNumViewports)
+        .addFunction("SetViewport", &RenderSurface::SetViewport)
+        .addFunction("SetUpdateMode", &RenderSurface::SetUpdateMode)
+        .addFunction("SetLinkedRenderTarget", &RenderSurface::SetLinkedRenderTarget)
+        .addFunction("SetLinkedDepthStencil", &RenderSurface::SetLinkedDepthStencil)
+        .addFunction("QueueUpdate", &RenderSurface::QueueUpdate)
+        .addFunction("Release", &RenderSurface::Release)
+        
+        .addFunction("GetParentTexture", &RenderSurface::GetParentTexture)
+        .addFunction("GetWidth", &RenderSurface::GetWidth)
+        .addFunction("GetHeight", &RenderSurface::GetHeight)
+        .addFunction("GetUsage", &RenderSurface::GetUsage)
+        .addFunction("GetNumViewports", &RenderSurface::GetNumViewports)
+        .addFunction("GetViewport", &RenderSurface::GetViewport)
+        .addFunction("GetUpdateMode", &RenderSurface::GetUpdateMode)
+        .addFunction("GetLinkedRenderTarget", &RenderSurface::GetLinkedRenderTarget)
+        .addFunction("GetLinkedDepthStencil", &RenderSurface::GetLinkedDepthStencil)
+        
+        .addProperty("parentTexture", &RenderSurface::GetParentTexture)
+        .addProperty("width", &RenderSurface::GetWidth)
+        .addProperty("height", &RenderSurface::GetHeight)
+        .addProperty("usage", &RenderSurface::GetUsage)
+        .addProperty("numViewports", &RenderSurface::GetNumViewports, &RenderSurface::SetNumViewports)
+        .addProperty("updateMode", &RenderSurface::GetUpdateMode, &RenderSurface::SetUpdateMode)
+        .addProperty("linkedRenderTarget", &RenderSurface::GetLinkedRenderTarget, &RenderSurface::SetLinkedRenderTarget)
+        .addProperty("linkedDepthStencil", &RenderSurface::GetLinkedDepthStencil, &RenderSurface::SetLinkedDepthStencil)
+    );
+}
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(TechniqueClone, Technique, Clone, 0, 1);
+
+static void RegisterTechnique(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    // enum PassLightingMode;
+    lua["LIGHTING_UNLIT"] = LIGHTING_UNLIT;
+    lua["LIGHTING_PERVERTEX"] = LIGHTING_PERVERTEX;
+    lua["LIGHTING_PERPIXEL"] = LIGHTING_PERPIXEL;
+
+    lua["Pass"].setClass(UserdataMetatable<Pass, RefCounted>()
+        .setConstructors<Pass(const String&)>()
+        
+        .addFunction("SetBlendMode", &Pass::SetBlendMode)
+        .addFunction("SetCullMode", &Pass::SetCullMode)
+        .addFunction("SetDepthTestMode", &Pass::SetDepthTestMode)
+        .addFunction("SetLightingMode", &Pass::SetLightingMode)
+        .addFunction("SetDepthWrite", &Pass::SetDepthWrite)
+        .addFunction("SetAlphaMask", &Pass::SetAlphaMask)
+        .addFunction("SetIsDesktop", &Pass::SetIsDesktop)
+        .addFunction("SetVertexShader", &Pass::SetVertexShader)
+        .addFunction("SetPixelShader", &Pass::SetPixelShader)
+        .addFunction("SetVertexShaderDefines", &Pass::SetVertexShaderDefines)
+        .addFunction("SetPixelShaderDefines", &Pass::SetPixelShaderDefines)
+        .addFunction("ReleaseShaders", &Pass::ReleaseShaders)
+        
+
+        .addFunction("GetName", &Pass::GetName)
+        .addFunction("GetIndex", &Pass::GetIndex)
+        .addFunction("GetBlendMode", &Pass::GetBlendMode)
+        .addFunction("GetCullMode", &Pass::GetCullMode)
+        .addFunction("GetDepthTestMode", &Pass::GetDepthTestMode)
+        .addFunction("GetLightingMode", &Pass::GetLightingMode)
+        .addFunction("GetShadersLoadedFrameNumber", &Pass::GetShadersLoadedFrameNumber)
+        .addFunction("GetDepthWrite", &Pass::GetDepthWrite)
+        .addFunction("GetAlphaMask", &Pass::GetAlphaMask)
+        .addFunction("IsDesktop", &Pass::IsDesktop)
+        .addFunction("GetVertexShader", &Pass::GetVertexShader)
+        .addFunction("GetPixelShader", &Pass::GetPixelShader)
+        .addFunction("GetVertexShaderDefines", &Pass::GetVertexShaderDefines)
+        .addFunction("GetPixelShaderDefines", &Pass::GetPixelShaderDefines)
+
+        .addProperty("name", &Pass::GetName)
+        .addProperty("index", &Pass::GetIndex)
+        .addProperty("blendMode", &Pass::GetBlendMode, &Pass::SetBlendMode)
+        .addProperty("cullMode", &Pass::GetCullMode, &Pass::SetCullMode)
+        .addProperty("depthTestMode", &Pass::GetDepthTestMode, &Pass::SetDepthTestMode)
+        .addProperty("lightingMode", &Pass::GetLightingMode, &Pass::SetLightingMode)
+        .addProperty("shadersLoadedFrameNumber", &Pass::GetShadersLoadedFrameNumber)
+        .addProperty("depthWrite", &Pass::GetDepthWrite, &Pass::SetDepthWrite)
+        .addProperty("alphaMask", &Pass::GetAlphaMask, &Pass::SetAlphaMask)
+        .addProperty("desktop", &Pass::IsDesktop)
+        .addProperty("vertexShader", &Pass::GetVertexShader, &Pass::SetVertexShader)
+        .addProperty("pixelShader", &Pass::GetPixelShader, &Pass::SetPixelShader)
+        .addProperty("vertexShaderDefines", &Pass::GetVertexShaderDefines, &Pass::SetVertexShaderDefines)
+        .addProperty("pixelShaderDefines", &Pass::GetPixelShaderDefines, &Pass::SetPixelShaderDefines)        
+    );
+
+    lua["Technique"].setClass(UserdataMetatable<Technique, Resource>()
+        .addStaticFunction("new", &CreateObject<Technique>)
+        
+        .addFunction("SetIsDesktop", &Technique::SetIsDesktop)
+        .addFunction("CreatePass", &Technique::CreatePass)
+        .addFunction("RemovePass", &Technique::RemovePass)
+        .addFunction("ReleaseShaders", &Technique::ReleaseShaders)
+        
+        .addFunction("Clone", TechniqueClone())
+
+        .addFunction("IsDesktop", &Technique::IsDesktop)
+        .addFunction("IsSupported", &Technique::IsSupported)
+
+        .addOverloadedFunctions("HasPass",
+            static_cast<bool(Technique::*)(unsigned) const>(&Technique::HasPass),
+            static_cast<bool(Technique::*)(const String&) const>(&Technique::HasPass))
+
+
+        .addOverloadedFunctions("GetPass",
+            static_cast<Pass*(Technique::*)(unsigned) const>(&Technique::GetPass),
+            static_cast<Pass*(Technique::*)(const String&) const>(&Technique::GetPass))
+
+        .addOverloadedFunctions("GetSupportedPass",
+            static_cast<Pass*(Technique::*)(unsigned) const>(&Technique::GetSupportedPass),
+            static_cast<Pass*(Technique::*)(const String&) const>(&Technique::GetSupportedPass))
+
+        .addFunction("GetNumPasses", &Technique::GetNumPasses)
+
+        .addFunction("GetPassNames", &Technique::GetPassNames)
+        .addFunction("GetPasses", &Technique::GetPasses)
+
+        .addProperty("desktop", &Technique::IsDesktop)
+        .addProperty("supported", &Technique::IsSupported)
+        .addProperty("numPasses", &Technique::GetNumPasses)        
+    );
+}
+
+static void RegisterTexture(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["Texture"].setClass(UserdataMetatable<Texture, Resource>()
+        .addStaticFunction("new", &CreateObject<Texture>)
+        
+        .addFunction("SetNumLevels", &Texture::SetNumLevels)
+        .addFunction("SetFilterMode", &Texture::SetFilterMode)
+        .addFunction("SetAddressMode", &Texture::SetAddressMode)
+        .addFunction("SetBorderColor", &Texture::SetBorderColor)
+        .addFunction("SetSRGB", &Texture::SetSRGB)
+        .addFunction("SetBackupTexture", &Texture::SetBackupTexture)
+        .addFunction("SetMipsToSkip", &Texture::SetMipsToSkip)
+
+        .addFunction("GetFormat", &Texture::GetFormat)
+        .addFunction("IsCompressed", &Texture::IsCompressed)
+        .addFunction("GetLevels", &Texture::GetLevels)
+        .addFunction("GetWidth", &Texture::GetWidth)
+        .addFunction("GetHeight", &Texture::GetHeight)
+        .addFunction("GetDepth", &Texture::GetDepth)
+        .addFunction("GetFilterMode", &Texture::GetFilterMode)
+        .addFunction("GetAddressMode", &Texture::GetAddressMode)
+        .addFunction("GetBorderColor", &Texture::GetBorderColor)
+        .addFunction("GetSRGB", &Texture::GetSRGB)
+        .addFunction("GetBackupTexture", &Texture::GetBackupTexture)
+        .addFunction("GetMipsToSkip", &Texture::GetMipsToSkip)
+        .addFunction("GetLevelWidth", &Texture::GetLevelWidth)
+        .addFunction("GetLevelHeight", &Texture::GetLevelHeight)
+        .addFunction("GetLevelDepth", &Texture::GetLevelDepth)
+        .addFunction("GetUsage", &Texture::GetUsage)
+
+        .addOverloadedFunctions("GetDataSize",
+            static_cast<unsigned(Texture::*)(int, int) const>(&Texture::GetDataSize),
+            static_cast<unsigned(Texture::*)(int, int, int) const>(&Texture::GetDataSize))
+
+        .addFunction("GetRowDataSize", &Texture::GetRowDataSize)
+        .addFunction("GetComponents", &Texture::GetComponents)
+
+        .addProperty("format", &Texture::GetFormat)
+        .addProperty("compressed", &Texture::IsCompressed)
+        .addProperty("levels", &Texture::GetLevels)
+        .addProperty("width", &Texture::GetWidth)
+        .addProperty("height", &Texture::GetHeight)
+        .addProperty("depth", &Texture::GetDepth)
+        .addProperty("filterMode", &Texture::GetFilterMode, &Texture::SetFilterMode)
+        .addProperty("borderColor", &Texture::GetBorderColor, &Texture::SetBorderColor)
+        .addProperty("sRGB", &Texture::GetSRGB, &Texture::SetSRGB)
+        .addProperty("backupTexture", &Texture::GetBackupTexture, &Texture::SetBackupTexture)
+        .addProperty("usage", &Texture::GetUsage)
+        .addProperty("components", &Texture::GetComponents)
+    );
+}
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(Texture2DSetSize, Texture2D, SetSize, 3, 4);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(Texture2DSetData, Texture2D, SetData, 1, 2, bool(Texture2D::*)(Image*, bool));
+
+static void RegisterTexture2D(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["Texture2D"].setClass(UserdataMetatable<Texture2D, Texture>()
+        .addStaticFunction("new", &CreateObject<Texture2D>)
+        
+        .addFunction("SetSize", Texture2DSetSize())
+        .addFunction("SetData", Texture2DSetData())
+
+        .addFunction("GetRenderSurface", &Texture2D::GetRenderSurface)
+
+        .addProperty("renderSurface", &Texture2D::GetRenderSurface)
+    );
+}
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(Texture2DArraySetSize, Texture2DArray, SetSize, 4, 5);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(Texture2DArraySetData, Texture2DArray, SetData, 1, 2, bool(Texture2D::*)(Image*, bool));
+
+static void RegisterTexture2DArray(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["Texture2DArray"].setClass(UserdataMetatable<Texture2DArray, Texture>()
+        .addStaticFunction("new", &CreateObject<Texture2DArray>)
+        
+        .addFunction("SetLayers", &Texture2DArray::SetLayers)
+        
+        .addFunction("SetSize", Texture2DArraySetSize())
+        .addFunction("SetData", Texture2DArraySetData())
+
+        .addFunction("GetLayers", &Texture2DArray::GetLayers)
+        .addFunction("GetRenderSurface", &Texture2DArray::GetRenderSurface)
+
+        .addProperty("layers", &Texture2DArray::GetLayers, &Texture2DArray::SetLayers)
+        .addProperty("renderSurface", &Texture2DArray::GetRenderSurface)
+    );
+}
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(Texture3DSetSize, Texture3D, SetSize, 4, 5);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(Texture3DSetData, Texture3D, SetData, 1, 2, bool(Texture3D::*)(Image*, bool));
+
+static void RegisterTexture3D(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["Texture3D"].setClass(UserdataMetatable<Texture3D, Texture>()
+        .addStaticFunction("new", &CreateObject<Texture3D>)
+        
+        .addFunction("SetSize", Texture3DSetSize())
+        .addFunction("SetData", Texture3DSetData())
+    );
+}
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(TextureCubeSetSize, TextureCube, SetSize, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(TextureCubeSetData, TextureCube, SetData, 2, 3, bool(TextureCube::*)(CubeMapFace, Image*, bool));
+
+static void RegisterTextureCube(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["TextureCube"].setClass(UserdataMetatable<TextureCube, Texture>()
+        .addStaticFunction("new", &CreateObject<TextureCube>)
+        
+        .addFunction("SetSize", TextureCubeSetSize())
+        .addFunction("SetData", TextureCubeSetData())
+
+        .addFunction("GetRenderSurface", &TextureCube::GetRenderSurface)
+
+        .addProperty("renderSurface", &TextureCube::GetRenderSurface)
+    );
+}
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferSetSize0, VertexBuffer, SetSize, 2, 3, bool(VertexBuffer::*)(unsigned, const PODVector<VertexElement>&, bool));
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferSetSize1, VertexBuffer, SetSize, 2, 3, bool(VertexBuffer::*)(unsigned, unsigned, bool));
+
+static bool VertexBufferSetData(VertexBuffer* self, VectorBuffer& src)
+{
+    // Make sure there is enough data
+    if (self->GetVertexCount() && src.GetSize() >= self->GetVertexCount() * self->GetVertexSize())
+        return self->SetData(&src.GetBuffer()[0]);
+    else
+        return false;
+}
+
+static VectorBuffer VertexBufferGetData(VertexBuffer* self)
+{
+    VectorBuffer ret;
+
+    void* data = self->Lock(0, self->GetVertexCount(), false);
+    if (data)
+    {
+        ret.Write(data, self->GetVertexCount() * self->GetVertexSize());
+        ret.Seek(0);
+        self->Unlock();
+    }
+
+    return ret;
+}
+
+static SharedPtr<VertexBuffer> CreateVertexBuffer(bool forceHeadless = false)
+{
+    return SharedPtr<VertexBuffer>(new VertexBuffer(globalContext, forceHeadless));
+}
+
+KAGUYA_FUNCTION_OVERLOADS(CreateVertexBufferOverloads, CreateVertexBuffer, 0, 1);
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(VertexBufferSetDataRange, VertexBuffer, SetDataRange, 3, 4);
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferGetElement0, VertexBuffer, GetElement, 1, 2, const VertexElement*(VertexBuffer::*)(VertexElementSemantic, unsigned char)const);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferGetElement1, VertexBuffer, GetElement, 2, 3, const VertexElement*(VertexBuffer::*)(VertexElementType, VertexElementSemantic, unsigned char)const);
+
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferHasElement0, VertexBuffer, HasElement, 1, 2, bool(VertexBuffer::*)(VertexElementSemantic, unsigned char)const);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(VertexBufferHasElement1, VertexBuffer, HasElement, 2, 3, bool(VertexBuffer::*)(VertexElementType, VertexElementSemantic, unsigned char)const);
+
+static void RegisterVertexBuffer(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["VertexBuffer"].setClass(UserdataMetatable<VertexBuffer, GPUObject>()
+        .addStaticFunction("new", 
+            CreateVertexBufferOverloads())
+
+        .addFunction("SetShadowed", &VertexBuffer::SetShadowed)
+
+        .addOverloadedFunctions("SetSize", 
+            VertexBufferSetSize0(), 
+            VertexBufferSetSize1())
+
+        .addStaticFunction("SetData", &VertexBufferSetData)
+        .addStaticFunction("GetData", &VertexBufferGetData)
+
+        .addFunction("SetDataRange", VertexBufferSetDataRange())
+
+        .addFunction("IsShadowed", &VertexBuffer::IsShadowed)
+        .addFunction("IsDynamic", &VertexBuffer::IsDynamic)
+        .addFunction("GetVertexCount", &VertexBuffer::GetVertexCount)
+        .addFunction("GetVertexSize", &VertexBuffer::GetVertexSize)
+
+        .addOverloadedFunctions("GetElement",
+            VertexBufferGetElement0(),
+            VertexBufferGetElement1())
+
+        .addOverloadedFunctions("HasElement",
+            VertexBufferHasElement0(),
+            VertexBufferHasElement1())
+
+        .addFunction("GetElementMask", &VertexBuffer::GetElementMask)
+
+        .addProperty("shadowed", &VertexBuffer::IsShadowed, &VertexBuffer::SetShadowed)
+        .addProperty("dynamic", &VertexBuffer::IsDynamic)
+        .addProperty("vertexCount", &VertexBuffer::GetVertexCount)
+        .addProperty("vertexSize", &VertexBuffer::GetVertexSize)
+        .addProperty("elementMask", &VertexBuffer::GetElementMask)
+    );
+}
+
+static SharedPtr<Viewport> CreateViewport0()
+{
+    return SharedPtr<Viewport>(new Viewport(globalContext));
+}
+
+static SharedPtr<Viewport> CreateViewport1(Scene* scene, Camera* camera)
+{
+    return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera));
+}
+
+static SharedPtr<Viewport> CreateViewport2(Scene* scene, Camera* camera, RenderPath* renderPath)
+{
+    return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera, renderPath));
+}
+
+static SharedPtr<Viewport> CreateViewport3(Scene* scene, Camera* camera, const IntRect& rect)
+{
+    return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera, rect));
+}
+
+static SharedPtr<Viewport> CreateViewport4(Scene* scene, Camera* camera, const IntRect& rect, RenderPath* renderPath)
+{
+    return SharedPtr<Viewport>(new Viewport(globalContext, scene, camera, rect, renderPath));
+}
+
+static void RegisterViewport(kaguya::State& lua)
+{
+    using namespace kaguya;
+
+    lua["Viewport"].setClass(UserdataMetatable<Viewport, Object>()
+        .addOverloadedFunctions("new", &CreateViewport0, &CreateViewport1, &CreateViewport2, &CreateViewport3, &CreateViewport4)
+
+        .addFunction("SetScene", &Viewport::SetScene)
+        .addFunction("SetCamera", &Viewport::SetCamera)
+        .addFunction("SetRect", &Viewport::SetRect)
+
+        .addOverloadedFunctions("SetRenderPath",
+            static_cast<void(Viewport::*)(RenderPath*)>(&Viewport::SetRenderPath),
+            static_cast<void(Viewport::*)(XMLFile*)>(&Viewport::SetRenderPath))
+
+        .addFunction("SetDrawDebug", &Viewport::SetDrawDebug)
+        .addFunction("SetCullCamera", &Viewport::SetCullCamera)
+        
+        .addFunction("GetScene", &Viewport::GetScene)
+        .addFunction("GetCamera", &Viewport::GetCamera)
+        .addFunction("GetRect", &Viewport::GetRect)
+        .addFunction("GetRenderPath", &Viewport::GetRenderPath)
+        .addFunction("GetDrawDebug", &Viewport::GetDrawDebug)
+        .addFunction("GetCullCamera", &Viewport::GetCullCamera)
+        
+        .addFunction("GetScreenRay", &Viewport::GetScreenRay)
+        .addFunction("WorldToScreenPoint", &Viewport::WorldToScreenPoint)
+        .addFunction("ScreenToWorldPoint", &Viewport::ScreenToWorldPoint)
+        
+        .addProperty("scene", &Viewport::GetScene, &Viewport::SetScene)
+        .addProperty("camera", &Viewport::GetCamera, &Viewport::SetCamera)
+        .addProperty("rect", &Viewport::GetRect, &Viewport::SetRect)
+        .addProperty("renderPath", &Viewport::GetRenderPath, static_cast<void (Viewport::*)(RenderPath*)>(&Viewport::SetRenderPath))
+        .addProperty("drawDebug", &Viewport::GetDrawDebug, &Viewport::SetDrawDebug)
+        .addProperty("cullCamera", &Viewport::GetCullCamera, &Viewport::SetCullCamera)
+    );
+}
 
 void RegisterRendererLuaAPI(kaguya::State& lua)
 {
     RegisterCamera(lua);
-    // RegisterGeometry(lua);
+    RegisterGeometry(lua);
     RegisterMaterial(lua);
-    // RegisterDebugRenderer(lua);
+    RegisterDebugRenderer(lua);
     RegisterGraphics(lua);
     RegisterGraphicsDefs(lua);
-    // RegisterIndexBuffer(lua);
+    RegisterIndexBuffer(lua);
     RegisterRenderer(lua);
-
-    RegisterRendererLuaAPI2(lua);
-
-    /*
     RegisterRenderPath(lua);
     RegisterRenderSurface(lua);
     RegisterTechnique(lua);
-    
     RegisterTexture(lua);
     RegisterTexture2D(lua);
     RegisterTexture2DArray(lua);
     RegisterTexture3D(lua);
     RegisterTextureCube(lua);
-    
     RegisterVertexBuffer(lua);
     RegisterViewport(lua);
-    */
 
     lua["graphics"] = GetSubsystem<Graphics>();
     lua["GetGraphics"] = GetSubsystem<Graphics>();
