@@ -24,6 +24,7 @@
 
 #include "../Precompiled.h"
 
+#include "../Database/Database.h"
 #include "../LuaScript/LuaScriptUtils.h"
 
 #include <kaguya.hpp>
