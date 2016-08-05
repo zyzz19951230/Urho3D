@@ -113,8 +113,8 @@ private:
     static int Loader(lua_State* L);
     /// Print function.
     static int Print(lua_State* L);
-    /// Kaguya error handler.
-    static void KaguyaErrorHandler(int statusCode, const char* errorMessage);
+    /// Error handler.
+    static void ErrorHandler(int statusCode, const char* errorMessage);
 
     /// Lua state.
     lua_State* luaState_;

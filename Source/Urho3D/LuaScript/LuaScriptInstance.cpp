@@ -121,7 +121,7 @@ void LuaScriptInstance::OnSetAttribute(const AttributeInfo& attr, const Variant&
     {
         if (function->BeginCall(this))
         {
-            function->PushUserType(src);
+            function->PushVariant(src);
             function->EndCall();
         }
     }
@@ -379,7 +379,7 @@ void LuaScriptInstance::SetScriptObjectType(const String& scriptObjectType)
         return;
 
     function->PushLuaTable(scriptObjectType);
-    function->PushUserType(this);
+    function->PushLuaScriptInstance(this);
 
     // Return script object and attribute names
     if (!function->EndCall(2))
@@ -402,7 +402,7 @@ void LuaScriptInstance::SetScriptDataAttr(const PODVector<unsigned char>& data)
     if (function && function->BeginCall(this))
     {
         MemoryBuffer buf(data);
-        function->PushUserType(buf);
+        function->PushMemoryBuffer(buf);
         function->EndCall();
     }
 }
@@ -416,7 +416,7 @@ void LuaScriptInstance::SetScriptNetworkDataAttr(const PODVector<unsigned char>&
     if (function && function->BeginCall(this))
     {
         MemoryBuffer buf(data);
-        function->PushUserType(buf);
+        function->PushMemoryBuffer(buf);
         function->EndCall();
     }
 }
@@ -436,7 +436,7 @@ PODVector<unsigned char> LuaScriptInstance::GetScriptDataAttr() const
     LuaFunction* function = scriptObjectMethods_[LSOM_SAVE];
     if (function && function->BeginCall(this))
     {
-        function->PushUserType(buf);
+        function->PushVectorBuffer(buf);
         function->EndCall();
     }
 
@@ -453,7 +453,7 @@ PODVector<unsigned char> LuaScriptInstance::GetScriptNetworkDataAttr() const
     LuaFunction* function = scriptObjectMethods_[LSOM_WRITENETWORKUPDATE];
     if (function && function->BeginCall(this))
     {
-        function->PushUserType(buf);
+        function->PushVectorBuffer(buf);
         function->EndCall();
     }
 

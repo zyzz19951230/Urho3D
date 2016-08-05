@@ -23,8 +23,8 @@
 #pragma once
 
 #include "../Container/RefCounted.h"
-
-#include <kaguya.hpp>
+#include "../Core/Variant.h"
+#include "../Math/StringHash.h"
 
 struct lua_State;
 typedef int (*lua_CFunction) (lua_State *L);
@@ -34,7 +34,9 @@ namespace Urho3D
 
 class LuaScript;
 class LuaScriptInstance;
+class MemoryBuffer; 
 class Variant;
+class VectorBuffer;
 
 /// C++ representation of Lua function object.
 class URHO3D_API LuaFunction : public RefCounted
@@ -61,18 +63,21 @@ public:
     void PushDouble(double value);
     /// Push string to stack.
     void PushString(const String& string);
-    /// Push user type to stack.
-    template <typename T> void PushUserType(const T& userType)
-    {
-        // PushUserType((void*)&userType, T::GetTypeName().CString());
-        assert(numArguments_ >= 0);
-        ++numArguments_;
-        kaguya::util::push_args(luaState_, userType);
-    }
-    /// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.
+	/// Push StringHash to stack.
+	void PushStringHash(StringHash stringHash);
+	/// Push Variant to stack.
+	void PushVariant(const Variant& variant);
+	/// Push VariantMap to stack.
+	void PushVariantMap(const VariantMap& variantMap);
+	void PushVectorBuffer(const VectorBuffer& buffer);
+	void PushMemoryBuffer(const MemoryBuffer& buffer);
+	/// Push LuaScriptInstance to stack.
+	void PushLuaScriptInstance(const LuaScriptInstance* instance);
+	/// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.
     void PushLuaTable(const char* tableName);
     /// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.
     void PushLuaTable(const String& tableName) { PushLuaTable(tableName.CString()); }
+	
 
     /// Return lua state.
     lua_State* GetLuaState() const { return luaState_; }

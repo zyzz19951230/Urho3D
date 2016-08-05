@@ -23,10 +23,13 @@
 #include "../Precompiled.h"
 
 #include "../IO/Log.h"
+#include "../IO/MemoryBuffer.h"
 #include "../IO/VectorBuffer.h"
 #include "../LuaScript/LuaFunction.h"
 #include "../LuaScript/LuaScript.h"
 #include "../LuaScript/LuaScriptInstance.h"
+
+#include <kaguya.hpp>
 
 #include "../DebugNew.h"
 
@@ -123,6 +126,48 @@ void LuaFunction::PushString(const String& string)
     assert(numArguments_ >= 0);
     ++numArguments_;
     kaguya::util::push_args(luaState_, string);
+}
+
+void LuaFunction::PushStringHash(StringHash stringHash)
+{
+	assert(numArguments_ >= 0);
+	++numArguments_;
+	kaguya::util::push_args(luaState_, stringHash);
+}
+
+void LuaFunction::PushVariant(const Variant& variant)
+{
+	assert(numArguments_ >= 0);
+	++numArguments_;
+	kaguya::util::push_args(luaState_, variant);
+}
+
+void LuaFunction::PushVariantMap(const VariantMap& variantMap)
+{
+	assert(numArguments_ >= 0);
+	++numArguments_;
+	kaguya::util::push_args(luaState_, variantMap);
+}
+
+void LuaFunction::PushVectorBuffer(const VectorBuffer& buffer)
+{
+	assert(numArguments_ >= 0);
+	++numArguments_;
+	kaguya::util::push_args(luaState_, buffer);
+}
+
+void LuaFunction::PushMemoryBuffer(const MemoryBuffer& buffer)
+{
+	assert(numArguments_ >= 0);
+	++numArguments_;
+	kaguya::util::push_args(luaState_, buffer);
+}
+
+void LuaFunction::PushLuaScriptInstance(const LuaScriptInstance* instance)
+{
+	assert(numArguments_ >= 0);
+	++numArguments_;
+	kaguya::util::push_args(luaState_, instance);
 }
 
 void LuaFunction::PushLuaTable(const char* tableName)

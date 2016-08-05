@@ -412,7 +412,7 @@ int LuaScript::Print(lua_State* L)
     return 0;
 }
 
-void LuaScript::KaguyaErrorHandler(int statusCode, const char* errorMessage)
+void LuaScript::ErrorHandler(int statusCode, const char* errorMessage)
 {
     URHO3D_LOGERRORF("Lua error: Error Code %d, Error message = %s", statusCode, errorMessage);
 }

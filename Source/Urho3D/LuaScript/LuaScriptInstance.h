@@ -24,7 +24,6 @@
 
 #include "../LuaScript/LuaScriptEventListener.h"
 #include "../Scene/Component.h"
-#include <kaguya.hpp>
 
 struct lua_State;
 
