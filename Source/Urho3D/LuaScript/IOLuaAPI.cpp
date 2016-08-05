@@ -432,8 +432,7 @@ static void RegisterVectorBuffer(kaguya::State& lua)
     using namespace kaguya;
 
     lua["VectorBuffer"].setClass(UserdataMetatable<VectorBuffer, MultipleBase<Deserializer, Serializer> >()
-        .setConstructors<VectorBuffer(),
-        VectorBuffer(Deserializer&, unsigned)>()
+        .setConstructors<VectorBuffer()>()
 
         .addFunction("SetData", static_cast<void(VectorBuffer::*)(Deserializer&, unsigned)>(&VectorBuffer::SetData))
         .addFunction("Clear", &VectorBuffer::Clear)

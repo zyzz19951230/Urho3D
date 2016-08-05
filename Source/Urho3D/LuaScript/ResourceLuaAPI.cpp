@@ -31,7 +31,7 @@
 #include "../Resource/JSONFile.h"
 #include "../Resource/JSONValue.h"
 #include "../Resource/Localization.h"
-#include "../Resource/PListFile.h"
+// #include "../Resource/PListFile.h"
 #include "../Resource/Resource.h"
 #include "../Resource/ResourceCache.h"
 #include "../Resource/ResourceEvents.h"
@@ -158,6 +158,46 @@ static void RegisterJSONFile(kaguya::State& lua)
     );
 }
 
+static void JSONValueSetBool(JSONValue& self, bool value)
+{
+    self = value;
+}
+
+static void JSONValueSetInt(JSONValue& self, int value)
+{
+    self = value;
+}
+
+static void JSONValueSetUInt(JSONValue& self, unsigned value)
+{
+    self = value;
+}
+
+static void JSONValueSetFloat(JSONValue& self, float value)
+{
+    self = value;
+}
+
+static void JSONValueSetDouble(JSONValue& self, double value)
+{
+    self = value;
+}
+
+static void JSONValueSetString(JSONValue& self, const char* value)
+{
+    self = value;
+}
+
+static void JSONValueSetArray(JSONValue& self, const JSONArray& value)
+{
+    self = value;
+}
+
+static void JSONValueSetObject(JSONValue& self, const JSONObject& value)
+{
+    self = value;
+}
+
 static void RegisterJSONValue(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -196,14 +236,14 @@ static void RegisterJSONValue(kaguya::State& lua)
         .addFunction("IsArray", &JSONValue::IsArray)
         .addFunction("IsObject", &JSONValue::IsObject)
 
-        .addStaticFunction("SetBool", [](JSONValue& jsonValue, bool value) { jsonValue = value; })
-        .addStaticFunction("SetInt", [](JSONValue& jsonValue, int value) { jsonValue = value; })
-        .addStaticFunction("SetUInt", [](JSONValue& jsonValue, unsigned value) { jsonValue = value; })
-        .addStaticFunction("SetFloat", [](JSONValue& jsonValue, float value) { jsonValue = value; })
-        .addStaticFunction("SetDouble", [](JSONValue& jsonValue, double value) { jsonValue = value; })
-        .addStaticFunction("SetString", [](JSONValue& jsonValue, const char* value) { jsonValue = value; })
-        .addStaticFunction("SetArray", [](JSONValue& jsonValue, const JSONArray& value) { jsonValue = value; })
-        .addStaticFunction("SetObject", [](JSONValue& jsonValue, const JSONObject& value) { jsonValue = value; })
+        .addStaticFunction("SetBool", &JSONValueSetBool)
+        .addStaticFunction("SetInt", &JSONValueSetInt)
+        .addStaticFunction("SetUInt", &JSONValueSetUInt)
+        .addStaticFunction("SetFloat", &JSONValueSetFloat)
+        .addStaticFunction("SetDouble", &JSONValueSetDouble)
+        .addStaticFunction("SetString", &JSONValueSetString)
+        .addStaticFunction("SetArray", &JSONValueSetArray)
+        .addStaticFunction("SetObject", &JSONValueSetObject)
 
         .addFunction("GetBool", &JSONValue::GetBool)
         .addFunction("GetInt", &JSONValue::GetInt)
@@ -284,57 +324,57 @@ static void RegisterLocalization(kaguya::State& lua)
     );
 }
 
-static void RegisterPListFile(kaguya::State& lua)
-{
-    using namespace kaguya;
+//static void RegisterPListFile(kaguya::State& lua)
+//{
+//    using namespace kaguya;
 
-    // enum PListValueType;
-    lua["PLVT_NONE"] = PLVT_NONE;
-    lua["PLVT_INT"] = PLVT_INT;
-    lua["PLVT_BOOL"] = PLVT_BOOL;
-    lua["PLVT_FLOAT"] = PLVT_FLOAT;
-    lua["PLVT_STRING"] = PLVT_STRING;
-    lua["PLVT_VALUEMAP"] = PLVT_VALUEMAP;
-    lua["PLVT_VALUEVECTOR"] = PLVT_VALUEVECTOR;
+//    // enum PListValueType;
+//    lua["PLVT_NONE"] = PLVT_NONE;
+//    lua["PLVT_INT"] = PLVT_INT;
+//    lua["PLVT_BOOL"] = PLVT_BOOL;
+//    lua["PLVT_FLOAT"] = PLVT_FLOAT;
+//    lua["PLVT_STRING"] = PLVT_STRING;
+//    lua["PLVT_VALUEMAP"] = PLVT_VALUEMAP;
+//    lua["PLVT_VALUEVECTOR"] = PLVT_VALUEVECTOR;
 
-    lua["PListValue"].setClass(UserdataMetatable<PListValue>()
-        .setConstructors<PListValue(),
-        PListValue(int),
-        PListValue(bool),
-        PListValue(float),
-        PListValue(const String&),
-        PListValue(PListValueMap&),
-        PListValue(PListValueVector&),
-        PListValue(const PListValue&)>()
+//    lua["PListValue"].setClass(UserdataMetatable<PListValue>()
+//        .setConstructors<PListValue(),
+//        PListValue(int),
+//        PListValue(bool),
+//        PListValue(float),
+//        PListValue(const String&),
+//        PListValue(PListValueMap&),
+//        PListValue(PListValueVector&),
+//        PListValue(const PListValue&)>()
 
-        .addFunction("SetInt", &PListValue::SetInt)
-        .addFunction("SetBool", &PListValue::SetBool)
-        .addFunction("SetFloat", &PListValue::SetFloat)
-        .addFunction("SetString", &PListValue::SetString)
-        .addFunction("SetValueMap", &PListValue::SetValueMap)
-        .addFunction("SetValueVector", &PListValue::SetValueVector)
+//        .addFunction("SetInt", &PListValue::SetInt)
+//        .addFunction("SetBool", &PListValue::SetBool)
+//        .addFunction("SetFloat", &PListValue::SetFloat)
+//        .addFunction("SetString", &PListValue::SetString)
+//        .addFunction("SetValueMap", &PListValue::SetValueMap)
+//        .addFunction("SetValueVector", &PListValue::SetValueVector)
 
-        .addFunction("GetType", &PListValue::GetType)
+//        .addFunction("GetType", &PListValue::GetType)
 
-        .addFunction("GetInt", &PListValue::GetInt)
-        .addFunction("GetBool", &PListValue::GetBool)
-        .addFunction("GetFloat", &PListValue::GetFloat)
-        .addFunction("GetString", &PListValue::GetString)
-        .addFunction("GetIntRect", &PListValue::GetIntRect)
-        .addFunction("GetIntVector2", &PListValue::GetIntVector2)
-        .addFunction("GetValueMap", &PListValue::GetValueMap)
-        .addFunction("GetValueVector", &PListValue::GetValueVector)
+//        .addFunction("GetInt", &PListValue::GetInt)
+//        .addFunction("GetBool", &PListValue::GetBool)
+//        .addFunction("GetFloat", &PListValue::GetFloat)
+//        .addFunction("GetString", &PListValue::GetString)
+//        .addFunction("GetIntRect", &PListValue::GetIntRect)
+//        .addFunction("GetIntVector2", &PListValue::GetIntVector2)
+//        .addFunction("GetValueMap", &PListValue::GetValueMap)
+//        .addFunction("GetValueVector", &PListValue::GetValueVector)
 
-        .addProperty("type", &PListValue::GetType)
-    );
+//        .addProperty("type", &PListValue::GetType)
+//    );
 
-    lua["PListFile"].setClass(UserdataMetatable<PListFile, Resource>()
-        .addStaticFunction("new", &CreateObject<PListFile>)
+//    lua["PListFile"].setClass(UserdataMetatable<PListFile, Resource>()
+//        .addStaticFunction("new", &CreateObject<PListFile>)
 
-        .addFunction("GetRoot", &PListFile::GetRoot)
-        .addProperty("root", &PListFile::GetRoot)
-    );
-}
+//        .addFunction("GetRoot", &PListFile::GetRoot)
+//        .addProperty("root", &PListFile::GetRoot)
+//    );
+//}
 
 static bool ResourceLoad(Resource* self, const String& fileName)
 {
@@ -714,7 +754,7 @@ void RegisterResourceLuaAPI(kaguya::State& lua)
     RegisterJSONFile(lua);
     RegisterJSONValue(lua);
     RegisterLocalization(lua);
-    RegisterPListFile(lua);
+    // RegisterPListFile(lua);
     RegisterResourceCache(lua);
     RegisterResourceEvents(lua);
     RegisterXMLElement(lua);

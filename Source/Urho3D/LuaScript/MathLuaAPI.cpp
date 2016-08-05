@@ -394,7 +394,6 @@ static void RegisterMatrix3x4(kaguya::State& lua)
         Matrix3x4(const Matrix3x4&),
         Matrix3x4(const Matrix3&),
         Matrix3x4(const Matrix4&),
-        Matrix3x4(float, float, float, float, float, float, float, float, float, float, float, float),
         Matrix3x4(const Vector3&, const Quaternion&, float),
         Matrix3x4(const Vector3&, const Quaternion&, const Vector3&)>()
 
@@ -465,8 +464,7 @@ static void RegisterMatrix4(kaguya::State& lua)
     lua["Matrix4"].setClass(UserdataMetatable<Matrix4>()
         .setConstructors<Matrix4(),
         Matrix4(const Matrix4&),
-        Matrix4(const Matrix3&),
-        Matrix4(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float)>()
+        Matrix4(const Matrix3&)>()
 
         .addFunction("__eq", &Matrix4::operator==)
 
