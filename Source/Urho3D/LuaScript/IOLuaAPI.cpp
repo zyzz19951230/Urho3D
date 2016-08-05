@@ -215,7 +215,7 @@ static void RegisterFile(kaguya::State& lua)
     lua["FILE_WRITE"] = FILE_WRITE;
     lua["FILE_READWRITE"] = FILE_READWRITE;
 
-    lua["File"].setClass(UserdataMetatable<File, MultipleBase<Object, Deserializer, Serializer>>()
+    lua["File"].setClass(UserdataMetatable<File, MultipleBase<Object, Deserializer, Serializer> >()
         .addOverloadedFunctions("new", 
             &CreateFile0, 
             &CreateFile1,
@@ -363,7 +363,7 @@ static void RegisterNamedPipe(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["NamedPipe"].setClass(UserdataMetatable<NamedPipe, MultipleBase<Object, Deserializer, Serializer>>()
+    lua["NamedPipe"].setClass(UserdataMetatable<NamedPipe, MultipleBase<Object, Deserializer, Serializer> >()
         
         .addFunction("Open", &NamedPipe::Open)
         .addFunction("Close", &NamedPipe::Close)
@@ -431,7 +431,7 @@ static void RegisterVectorBuffer(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["VectorBuffer"].setClass(UserdataMetatable<VectorBuffer, MultipleBase<Deserializer, Serializer>>()
+    lua["VectorBuffer"].setClass(UserdataMetatable<VectorBuffer, MultipleBase<Deserializer, Serializer> >()
         .setConstructors<VectorBuffer(),
         VectorBuffer(Deserializer&, unsigned)>()
 

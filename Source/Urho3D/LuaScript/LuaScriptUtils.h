@@ -89,7 +89,7 @@ namespace kaguya
 
     // SharedPtr<T> type traits.
     template<typename T>
-    struct lua_type_traits<Urho3D::SharedPtr<T>>
+    struct lua_type_traits<Urho3D::SharedPtr<T> >
     {
         typedef const Urho3D::SharedPtr<T>& push_type;
         static int push(lua_State* l, push_type p)
@@ -152,22 +152,22 @@ namespace kaguya
 
     // PODVector<T> type traits.
     template<typename T>
-    struct lua_type_traits<Urho3D::PODVector<T>>
+    struct lua_type_traits<Urho3D::PODVector<T> >
     {
         typedef Urho3D::PODVector<T> get_type;
         typedef const Urho3D::PODVector<T>& push_type;
 
         static bool checkType(lua_State* l, int index)
         {
-            return lua_type_traits<std::vector<T>>::checkType(l, index);
+            return lua_type_traits<std::vector<T> >::checkType(l, index);
         }
         static bool strictCheckType(lua_State* l, int index)
         {
-            return lua_type_traits<std::vector<T>>::strictCheckType(l, index);
+            return lua_type_traits<std::vector<T> >::strictCheckType(l, index);
         }
         static get_type get(lua_State* l, int index)
         {
-            std::vector<T> std_res = lua_type_traits<std::vector<T>>::get(l, index);
+            std::vector<T> std_res = lua_type_traits<std::vector<T> >::get(l, index);
 
             get_type res;
             res.Resize(std_res.size());
@@ -185,28 +185,28 @@ namespace kaguya
             for (unsigned i = 0; i < p.Size(); ++i)
                 std_p[i] = p[i];
 
-            return lua_type_traits<std::vector<T>>::push(l, std_p);
+            return lua_type_traits<std::vector<T> >::push(l, std_p);
         }
     };
 
     // Vector<T> type traits.
     template<typename T>
-    struct lua_type_traits<Urho3D::Vector<T>>
+    struct lua_type_traits<Urho3D::Vector<T> >
     {
         typedef Urho3D::Vector<T> get_type;
         typedef const Urho3D::Vector<T>& push_type;
 
         static bool checkType(lua_State* l, int index)
         {
-            return lua_type_traits<std::vector<T>>::checkType(l, index);
+            return lua_type_traits<std::vector<T> >::checkType(l, index);
         }
         static bool strictCheckType(lua_State* l, int index)
         {
-            return lua_type_traits<std::vector<T>>::strictCheckType(l, index);
+            return lua_type_traits<std::vector<T> >::strictCheckType(l, index);
         }
         static get_type get(lua_State* l, int index)
         {
-            std::vector<T> std_res = lua_type_traits<std::vector<T>>::get(l, index);
+            std::vector<T> std_res = lua_type_traits<std::vector<T> >::get(l, index);
             
             get_type res;
             res.Resize(std_res.size());
@@ -224,7 +224,7 @@ namespace kaguya
             for (unsigned i = 0; i < p.Size(); ++i)
                 std_p[i] = p[i];
 
-            return lua_type_traits<std::vector<T>>::push(l, std_p);
+            return lua_type_traits<std::vector<T> >::push(l, std_p);
         }
     };
 
