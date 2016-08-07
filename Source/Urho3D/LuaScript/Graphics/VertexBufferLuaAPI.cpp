@@ -96,7 +96,7 @@ void RegisterVertexBuffer(kaguya::State& lua)
         .addFunction("IsShadowed", &VertexBuffer::IsShadowed)
         .addFunction("IsDynamic", &VertexBuffer::IsDynamic)
         .addFunction("GetVertexCount", &VertexBuffer::GetVertexCount)
-        .addFunction("GetVertexSize", &VertexBuffer::GetVertexSize)
+        .addFunction("GetVertexSize", static_cast<unsigned(VertexBuffer::*)()const>(&VertexBuffer::GetVertexSize))
 
         .addOverloadedFunctions("GetElement",
             VertexBufferGetElement0(),
@@ -111,7 +111,7 @@ void RegisterVertexBuffer(kaguya::State& lua)
         .addProperty("shadowed", &VertexBuffer::IsShadowed, &VertexBuffer::SetShadowed)
         .addProperty("dynamic", &VertexBuffer::IsDynamic)
         .addProperty("vertexCount", &VertexBuffer::GetVertexCount)
-        .addProperty("vertexSize", &VertexBuffer::GetVertexSize)
+        .addProperty("vertexSize", static_cast<unsigned(VertexBuffer::*)()const>(&VertexBuffer::GetVertexSize))
         .addProperty("elementMask", &VertexBuffer::GetElementMask)
     );
 }
