@@ -122,7 +122,7 @@ void LuaIntegration::CreateScene()
         LuaFunction* function = instance->GetScriptObjectFunction("SetRotationSpeed");
         if (function && function->BeginCall(instance))
         {
-            function->PushUserType(Vector3(10.0f, 20.0f, 30.0f), "Vector3");
+            function->PushVector3(Vector3(10.0f, 20.0f, 30.0f));
             function->EndCall();
         }
     }

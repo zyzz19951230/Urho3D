@@ -114,13 +114,6 @@ void LuaFunction::PushFloat(float value)
     lua_pushnumber(luaState_, value);
 }
 
-void LuaFunction::PushDouble(double value)
-{
-    assert(numArguments_ >= 0);
-    ++numArguments_;
-    lua_pushnumber(luaState_, value);
-}
-
 void LuaFunction::PushString(const String& string)
 {
     assert(numArguments_ >= 0);
@@ -133,6 +126,34 @@ void LuaFunction::PushStringHash(StringHash stringHash)
 	assert(numArguments_ >= 0);
 	++numArguments_;
 	kaguya::util::push_args(luaState_, stringHash);
+}
+
+void LuaFunction::PushVector2(const Vector2& vector)
+{
+	assert(numArguments_ >= 0);
+	++numArguments_;
+	kaguya::util::push_args(luaState_, vector);
+}
+
+void LuaFunction::PushVector3(const Vector3& vector)
+{
+	assert(numArguments_ >= 0);
+	++numArguments_;
+	kaguya::util::push_args(luaState_, vector);
+}
+
+void LuaFunction::PushVector4(const Vector4& vector)
+{
+	assert(numArguments_ >= 0);
+	++numArguments_;
+	kaguya::util::push_args(luaState_, vector);
+}
+
+void LuaFunction::PushQuaternion(const Quaternion& quaternion)
+{
+	assert(numArguments_ >= 0);
+	++numArguments_;
+	kaguya::util::push_args(luaState_, quaternion);
 }
 
 void LuaFunction::PushVariant(const Variant& variant)
