@@ -164,7 +164,7 @@ private:
     /// Release the script object.
     void ReleaseObject();
 
-    // Lua Script subsystem.
+    /// Lua Script subsystem.
     LuaScript* luaScript_;
     /// Lua state.
     lua_State* luaState_;

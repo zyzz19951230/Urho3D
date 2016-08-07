@@ -25,17 +25,16 @@
 #include "../Audio/Audio.h"
 #include "../Core/Context.h"
 #include "../Core/CoreEvents.h"
-#include "../Core/ProcessUtils.h"
-#include "../Core/Profiler.h"
 #include "../Core/EventProfiler.h"
+#include "../Core/ProcessUtils.h"
 #include "../Core/WorkQueue.h"
 #include "../Engine/Console.h"
 #include "../Engine/DebugHud.h"
 #include "../Engine/Engine.h"
 #include "../Graphics/Graphics.h"
 #include "../Graphics/Renderer.h"
-#include "../IO/FileSystem.h"
 #include "../Input/Input.h"
+#include "../IO/FileSystem.h"
 #include "../IO/Log.h"
 #include "../IO/PackageFile.h"
 #ifdef URHO3D_NAVIGATION
@@ -415,15 +414,6 @@ bool Engine::Initialize(const VariantMap& parameters)
         timeOut_ = GetParameter(parameters, "TimeOut", 0).GetInt() * 1000000LL;
 #endif
 
-    // In debug mode, check now that all factory created objects can be created without crashing
-#ifdef _DEBUG
-    if (!resourcePaths.Empty())
-    {
-        const HashMap<StringHash, SharedPtr<ObjectFactory> >& factories = context_->GetObjectFactories();
-        for (HashMap<StringHash, SharedPtr<ObjectFactory> >::ConstIterator i = factories.Begin(); i != factories.End(); ++i)
-            SharedPtr<Object> object = i->second_->CreateObject();
-    }
-#endif
 #ifdef URHO3D_PROFILING
     if (GetParameter(parameters, "EventProfiler", true).GetBool())
     {
@@ -575,35 +565,39 @@ void Engine::Exit()
 
 void Engine::DumpProfiler()
 {
+#ifdef URHO3D_LOGGING
+    if (!Thread::IsMainThread())
+        return;
+
     Profiler* profiler = GetSubsystem<Profiler>();
     if (profiler)
         URHO3D_LOGRAW(profiler->PrintData(true, true) + "\n");
+#endif
 }
 
 void Engine::DumpResources(bool dumpFileName)
 {
 #ifdef URHO3D_LOGGING
+    if (!Thread::IsMainThread())
+        return;
+
     ResourceCache* cache = GetSubsystem<ResourceCache>();
     const HashMap<StringHash, ResourceGroup>& resourceGroups = cache->GetAllResources();
-    URHO3D_LOGRAW("\n");
-
     if (dumpFileName)
     {
         URHO3D_LOGRAW("Used resources:\n");
-        for (HashMap<StringHash, ResourceGroup>::ConstIterator i = resourceGroups.Begin();
-            i != resourceGroups.End(); ++i)
+        for (HashMap<StringHash, ResourceGroup>::ConstIterator i = resourceGroups.Begin(); i != resourceGroups.End(); ++i)
         {
             const HashMap<StringHash, SharedPtr<Resource> >& resources = i->second_.resources_;
             if (dumpFileName)
             {
-                for (HashMap<StringHash, SharedPtr<Resource> >::ConstIterator j = resources.Begin();
-                    j != resources.End(); ++j)
+                for (HashMap<StringHash, SharedPtr<Resource> >::ConstIterator j = resources.Begin(); j != resources.End(); ++j)
                     URHO3D_LOGRAW(j->second_->GetName() + "\n");
             }
         }
     }
     else
-        URHO3D_LOGRAW(cache->PrintMemoryUsage());
+        URHO3D_LOGRAW(cache->PrintMemoryUsage() + "\n");
 #endif
 }
 
