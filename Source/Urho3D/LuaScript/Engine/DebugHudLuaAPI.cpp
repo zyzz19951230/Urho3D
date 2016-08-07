@@ -42,7 +42,6 @@ void RegisterDebugHud(kaguya::State& lua)
     lua["DEBUGHUD_SHOW_PROFILER"] = DEBUGHUD_SHOW_PROFILER;
     lua["DEBUGHUD_SHOW_MEMORY"] = DEBUGHUD_SHOW_MEMORY;
     lua["DEBUGHUD_SHOW_ALL"] = DEBUGHUD_SHOW_ALL;
-    lua["DEBUGHUD_SHOW_ALL_MEMORY"] = DEBUGHUD_SHOW_ALL_MEMORY;
     lua["DEBUGHUD_SHOW_EVENTPROFILER"] = DEBUGHUD_SHOW_EVENTPROFILER;
 
     lua["DebugHud"].setClass(UserdataMetatable<DebugHud, Object>()

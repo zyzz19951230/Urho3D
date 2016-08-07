@@ -51,6 +51,8 @@ void RegisterText(kaguya::State& lua)
 
         .addOverloadedFunctions("SetFont", TextSetFont0(), TextSetFont1())
 
+        .addFunction("SetFontSize", &Text::SetFontSize)
+
         .addFunction("SetText", &Text::SetText)
         .addFunction("SetTextAlignment", &Text::SetTextAlignment)
         .addFunction("SetRowSpacing", &Text::SetRowSpacing)
@@ -95,7 +97,7 @@ void RegisterText(kaguya::State& lua)
         .addFunction("GetEffectDepthBias", &Text::GetEffectDepthBias)
 
         .addProperty("font", &Text::GetFont)
-        .addProperty("fontSize", &Text::GetFontSize)
+        .addProperty("fontSize", &Text::GetFontSize, &Text::SetFontSize)
         .addProperty("text", &Text::GetText, &Text::SetText)
         .addProperty("textAlignment", &Text::GetTextAlignment, &Text::SetTextAlignment)
         .addProperty("rowSpacing", &Text::GetRowSpacing, &Text::SetRowSpacing)

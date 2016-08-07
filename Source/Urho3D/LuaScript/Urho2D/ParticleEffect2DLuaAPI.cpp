@@ -32,6 +32,8 @@
 namespace Urho3D
 {
 
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(ParticleEffect2DClone, ParticleEffect2D, Clone, 0, 1);
+
 void RegisterParticleEffect2D(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -42,6 +44,8 @@ void RegisterParticleEffect2D(kaguya::State& lua)
 
     lua["ParticleEffect2D"].setClass(UserdataMetatable<ParticleEffect2D, Resource>()
         .addStaticFunction("new", &CreateObject<ParticleEffect2D>)
+
+        .addFunction("Clone", ParticleEffect2DClone())
          );
 }
 }

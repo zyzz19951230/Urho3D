@@ -30,6 +30,9 @@
 namespace Urho3D
 {
 
+KAGUYA_FUNCTION_OVERLOADS_WITH_SIGNATURE(ToIntOverloads, ToInt, 1, 2, int(const char*, int));
+KAGUYA_FUNCTION_OVERLOADS_WITH_SIGNATURE(ToUIntOverloads, ToUInt, 1, 2, int(const char*, int));
+
 KAGUYA_FUNCTION_OVERLOADS_WITH_SIGNATURE(ToVector4Overloads, ToVector4, 1, 2, Vector4(const char*, bool));
 
 void RegisterStringUtils(kaguya::State& lua)
@@ -39,8 +42,8 @@ void RegisterStringUtils(kaguya::State& lua)
     lua["ToBool"] = static_cast<bool(*)(const char*)>(&ToBool);
     lua["ToFloat"] = static_cast<float(*)(const char*)>(&ToFloat);
     lua["ToDouble"] = static_cast<double(*)(const char*)>(&ToDouble);
-    lua["ToInt"] = static_cast<int(*)(const char*)>(&ToInt);
-    lua["ToUInt"] = static_cast<unsigned(*)(const char*)>(&ToUInt);
+    lua["ToInt"] = ToIntOverloads();
+    lua["ToUInt"] = ToUIntOverloads();
     
     lua["ToColor"] = static_cast<Color(*)(const char*)>(&ToColor);
     lua["ToIntRect"] = static_cast<IntRect(*)(const char*)>(&ToIntRect);

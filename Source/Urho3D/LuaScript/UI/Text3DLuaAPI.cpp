@@ -55,6 +55,8 @@ void RegisterText3D(kaguya::State& lua)
 
         .addOverloadedFunctions("SetFont", Text3DSetFont0(), Text3DSetFont1())
 
+		.addFunction("SetFontSize", &Text3D::SetFontSize)
+
         .addFunction("SetMaterial", &Text3D::SetMaterial)
         .addFunction("SetText", &Text3D::SetText)
         .addFunction("SetAlignment", &Text3D::SetAlignment)
@@ -109,7 +111,7 @@ void RegisterText3D(kaguya::State& lua)
         .addFunction("GetFaceCameraMode", &Text3D::GetFaceCameraMode)
 
         .addProperty("font", &Text3D::GetFont)
-        .addProperty("fontSize", &Text3D::GetFontSize)
+        .addProperty("fontSize", &Text3D::GetFontSize, &Text3D::SetFontSize)
         .addProperty("material", &Text3D::GetMaterial, &Text3D::SetMaterial)
         .addProperty("text", &Text3D::GetText, &Text3D::SetText)
         .addProperty("textAlignment", &Text3D::GetTextAlignment, &Text3D::SetTextAlignment)

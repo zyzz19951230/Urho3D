@@ -31,6 +31,8 @@
 namespace Urho3D
 {
 
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(ParticleEffectClone, ParticleEffect, Clone, 0, 1);
+    
 void RegisterParticleEffect(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -112,6 +114,8 @@ void RegisterParticleEffect(kaguya::State& lua)
         .addFunction("SetTextureFrame", &ParticleEffect::SetTextureFrame)
         .addFunction("SetNumTextureFrames", &ParticleEffect::SetNumTextureFrames)
         .addFunction("SortTextureFrames", &ParticleEffect::SortTextureFrames)
+
+        .addFunction("Clone", ParticleEffectClone())
         
         .addFunction("GetMaterial", &ParticleEffect::GetMaterial)
         .addFunction("GetNumParticles", &ParticleEffect::GetNumParticles)

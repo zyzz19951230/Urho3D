@@ -219,6 +219,7 @@ void RegisterNode(kaguya::State& lua)
         .addStaticFunction("SaveXML", NodeSaveXMLOverloads())
         .addStaticFunction("SaveJSON", NodeSaveJSONOverloads())
 
+        .addFunction("SetID", &Node::SetID)
         .addFunction("SetName", &Node::SetName)
         .addFunction("SetTags", &Node::SetTags)
         .addFunction("AddTag", &Node::AddTag)
@@ -336,6 +337,7 @@ void RegisterNode(kaguya::State& lua)
 			static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponents))
 
         .addFunction("RemoveAllComponents", &Node::RemoveAllComponents)
+        .addFunction("ReorderComponent", &Node::ReorderComponent)
 
         .addStaticFunction("Clone", NodeCloneOverloads())
 
