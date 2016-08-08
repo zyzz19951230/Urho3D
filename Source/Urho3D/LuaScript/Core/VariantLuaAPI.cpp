@@ -31,6 +31,21 @@
 namespace Urho3D
 {
 
+static Variant VariantFromInt(int value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromFloat(float value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromDouble(double value)
+{
+    return Variant(value);
+}
+
 static SharedPtr<RefCounted> VariantGetPtr(const Variant* self)
 {
     return SharedPtr<RefCounted>(self->GetPtr());
@@ -90,9 +105,10 @@ void RegisterVariant(kaguya::State& lua)
 
     // todo from here:
     lua["Variant"].setClass(UserdataMetatable<Variant>()
-        .setConstructors<Variant(),
-        Variant(int),
-        Variant(unsigned),
+        .setConstructors<
+        // Variant(),
+        // Variant(int), 
+        // Variant(unsigned),
         Variant(const StringHash&),
         Variant(bool),
         Variant(float),
@@ -114,6 +130,10 @@ void RegisterVariant(kaguya::State& lua)
         Variant(const Matrix3&),
         Variant(const Matrix3x4&),
         Variant(const Matrix4&)> ()
+
+        .addStaticFunction("FromInt", &VariantFromInt)
+        .addStaticFunction("FromFloat", &VariantFromFloat)
+        .addStaticFunction("FromDouble", &VariantFromDouble)
 
         .addFunction("Clear", &Variant::Clear)
 
