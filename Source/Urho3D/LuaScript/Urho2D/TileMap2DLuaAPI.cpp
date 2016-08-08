@@ -34,6 +34,14 @@
 namespace Urho3D
 {
 
+static kaguya::standard::tuple<bool, int, int> TileMap2DPositionToTileIndex(const TileMap2D* self, const Vector2& position)
+{
+    int x;
+    int y;
+    bool result = self->PositionToTileIndex(x, y, position);
+    return kaguya::standard::make_tuple(result, x, y);
+}
+
 void RegisterTileMap2D(kaguya::State& lua)
 {
     using namespace kaguya;
@@ -49,7 +57,8 @@ void RegisterTileMap2D(kaguya::State& lua)
         .addFunction("GetNumLayers", &TileMap2D::GetNumLayers)
         .addFunction("GetLayer", &TileMap2D::GetLayer)
         .addFunction("TileIndexToPosition", &TileMap2D::TileIndexToPosition)
-        .addFunction("PositionToTileIndex", &TileMap2D::PositionToTileIndex)
+
+        .addStaticFunction("PositionToTileIndex", &TileMap2DPositionToTileIndex)
         
         .addProperty("tmxFile", &TileMap2D::GetTmxFile, &TileMap2D::SetTmxFile)
         .addProperty("info", &TileMap2D::GetInfo)
