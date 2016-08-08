@@ -37,12 +37,12 @@ namespace Urho3D
 
 KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(RayHitDistance0, Ray, HitDistance, 1, 2, float(Ray::*)(const Frustum&, bool)const);
 
-static std::tuple<float, Vector3, Vector3> RayHitDistance1(const Ray* self, const Vector3& v0, const Vector3& v1, const Vector3& v2)
+static kaguya::standard::tuple<float, Vector3, Vector3> RayHitDistance1(const Ray* self, const Vector3& v0, const Vector3& v1, const Vector3& v2)
 {
     Vector3 outNormal;
     Vector3 outBary;
     float distance = self->HitDistance(v0, v1, v2, &outNormal, &outBary);
-    return std::make_tuple(distance, outNormal, outBary);
+    return kaguya::standard::make_tuple(distance, outNormal, outBary);
 }
 
 void RegisterRay(kaguya::State& lua)

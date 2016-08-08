@@ -30,13 +30,13 @@
 namespace Urho3D
 {
 
-static std::tuple<Vector3, Quaternion, Vector3> Matrix3x4Decompose(const Matrix3x4* self)
+static kaguya::standard::tuple<Vector3, Quaternion, Vector3> Matrix3x4Decompose(const Matrix3x4* self)
 {
     Vector3 translation;
     Quaternion rotation;
     Vector3 scale;
     self->Decompose(translation, rotation, scale);
-    return std::make_tuple(translation, rotation, scale);
+    return kaguya::standard::make_tuple(translation, rotation, scale);
 }
 
 void RegisterMatrix3x4(kaguya::State& lua)

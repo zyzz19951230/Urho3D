@@ -49,11 +49,11 @@ KAGUYA_MEMBER_FUNCTION_OVERLOADS(NavigationMeshGetRandomPoint, NavigationMesh, G
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(NavigationMeshGetRandomPointInCircle, NavigationMesh, GetRandomPointInCircle, 2, 5);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(NavigationMeshGetDistanceToWall, NavigationMesh, GetDistanceToWall, 2, 6);
 
-static std::tuple<Vector3, Vector3> NavigationMeshRaycast(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents = Vector3::ONE)
+static kaguya::standard::tuple<Vector3, Vector3> NavigationMeshRaycast(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents = Vector3::ONE)
 {
     Vector3 hitNormal;
     Vector3 result = self->Raycast(start, end, extents, 0, &hitNormal);
-    return std::make_tuple(result, hitNormal);
+    return kaguya::standard::make_tuple(result, hitNormal);
 }
 
 KAGUYA_FUNCTION_OVERLOADS(NavigationMeshRaycastOverloads, NavigationMeshRaycast, 3, 4);

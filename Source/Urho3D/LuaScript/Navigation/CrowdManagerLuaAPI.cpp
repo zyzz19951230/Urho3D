@@ -53,19 +53,19 @@ static PODVector<Vector3> CrowdManagerFindPath(CrowdManager* self, Vector3& star
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(CrowdManagerGetRandomPoint, CrowdManager, GetRandomPoint, 1, 2);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(CrowdManagerGetRandomPointInCircle, CrowdManager, GetRandomPointInCircle, 3, 4);
 
-static std::tuple<float, Vector3, Vector3> CrowdManagerGetDistanceToWall(CrowdManager* self, const Vector3& point, float radius, int queryFilterType)
+static kaguya::standard::tuple<float, Vector3, Vector3> CrowdManagerGetDistanceToWall(CrowdManager* self, const Vector3& point, float radius, int queryFilterType)
 {
     Vector3 hitPos;
     Vector3 hitNormal;
     float distance = self->GetDistanceToWall(point, radius, queryFilterType, &hitPos, &hitNormal);
-    return std::make_tuple(distance, hitPos, hitNormal);
+    return kaguya::standard::make_tuple(distance, hitPos, hitNormal);
 }
 
-static std::tuple<Vector3, Vector3> CrowdManagerRaycast(CrowdManager* self, const Vector3& start, const Vector3& end, int queryFilterType)
+static kaguya::standard::tuple<Vector3, Vector3> CrowdManagerRaycast(CrowdManager* self, const Vector3& start, const Vector3& end, int queryFilterType)
 {
     Vector3 hitNormal;
     Vector3 result = self->Raycast(start, end, queryFilterType, &hitNormal);
-    return std::make_tuple(result, hitNormal);
+    return kaguya::standard::make_tuple(result, hitNormal);
 }
 
 void RegisterCrowdManager(kaguya::State& lua)
