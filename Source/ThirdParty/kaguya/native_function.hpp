@@ -16,13 +16,13 @@
 #if KAGUYA_USE_CPP11
 #include "kaguya/native_function_cxx11.hpp"
 #else
-#include "kaguya/preprocess.hpp"
 #include "kaguya/native_function_cxx03.hpp"
 #endif
 
+#include "kaguya/function_tuple_def.hpp"
+
 namespace kaguya
 {
-
 	struct FunctionImpl
 	{
 		virtual int invoke(lua_State *state) = 0;
@@ -147,7 +147,7 @@ namespace kaguya
 			{
 				if (!this_)
 				{
-					throw LuaTypeMismatch("type mismatch!!");
+					throw LuaTypeMismatch();
 				}
 				this_->*mptr = lua_type_traits<MemType>::get(state, 2);
 				return 0;
@@ -559,20 +559,20 @@ namespace kaguya
 			}
 			else
 			{
-				throw LuaTypeMismatch("type mismatch!!");
+				throw LuaTypeMismatch();
 			}
 			return 0;
 		}
 
 		template<typename TupleType, std::size_t ...S> int invoke_tuple_impl(lua_State* state, TupleType&& tuple, nativefunction::index_tuple<S...>)
 		{
-			return best_match_invoke(state, std::get<S>(tuple)...);
+			return best_match_invoke(state, fntuple::get<S>(tuple)...);
 		}
 		template<typename TupleType> int invoke_tuple(lua_State* state, TupleType&& tuple)
 		{
 			typedef typename std::decay<TupleType>::type ttype;
 
-			typedef typename nativefunction::index_range<0, std::tuple_size<ttype>::value>::type indexrange;
+			typedef typename nativefunction::index_range<0, fntuple::tuple_size<ttype>::value>::type indexrange;
 
 			return invoke_tuple_impl(state, tuple, indexrange());
 		}
@@ -593,12 +593,12 @@ namespace kaguya
 		}
 		template<typename TupleType, std::size_t ...S> void  push_arg_typename_tuple_impl(lua_State *state, TupleType&& tuple, nativefunction::index_tuple<S...>)
 		{
-			return push_arg_typename(state,std::get<S>(tuple)...);
+			return push_arg_typename(state, fntuple::get<S>(tuple)...);
 		}
 		template<typename TupleType>void push_arg_typename_tuple(lua_State *state, TupleType&& tuple)
 		{
 			typedef typename std::decay<TupleType>::type ttype;
-			typedef typename nativefunction::index_range<0, std::tuple_size<ttype>::value>::type indexrange;
+			typedef typename nativefunction::index_range<0, fntuple::tuple_size<ttype>::value>::type indexrange;
 
 			return push_arg_typename_tuple_impl(state,tuple, indexrange());
 		}
@@ -610,32 +610,32 @@ namespace kaguya
 	namespace detail
 	{
 #define KAGUYA_FUNCTION_SCOREING(N) if (currentbestscore < nativefunction::MAX_OVERLOAD_SCORE) {\
-		int score = nativefunction::compute_function_matching_score(state, standard::get<N - 1>(tuple));\
+		int score = nativefunction::compute_function_matching_score(state, fntuple::get<N - 1>(tuple));\
 		if (currentbestscore < score) {\
 			currentbestscore = score;\
 			currentbestindex = N;\
 		}\
 		}
 #define KAGUYA_FUNCTION_INVOKE(N) if (currentbestindex == N) {\
-			 return nativefunction::call(state,  standard::get<N - 1>(tuple));\
+			 return nativefunction::call(state,  fntuple::get<N - 1>(tuple));\
 		}\
 
 
-#define KAGUYA_ARG_PUSH_TYPENAMES(N)lua_pushliteral(state, "\t\t"); lua_pushstring(state, nativefunction::argTypesName(standard::get<N-1>(tuple)).c_str());lua_pushliteral(state, "\n");
+#define KAGUYA_ARG_PUSH_TYPENAMES(N)lua_pushliteral(state, "\t\t"); lua_pushstring(state, nativefunction::argTypesName(fntuple::get<N-1>(tuple)).c_str());lua_pushliteral(state, "\n");
 #define KAGUYA_TEMPLATE_PARAMETER(N) template<KAGUYA_PP_TEMPLATE_DEF_REPEAT(N)>
 #define KAGUYA_TUPLE_INVOKE_DEF(N) \
 		KAGUYA_TEMPLATE_PARAMETER(N)\
-		int invoke_tuple(lua_State* state, standard::tuple<KAGUYA_PP_TEMPLATE_ARG_REPEAT(N)>& tuple)\
+		int invoke_tuple(lua_State* state, fntuple::tuple<KAGUYA_PP_TEMPLATE_ARG_REPEAT(N)>& tuple)\
 		{\
-			if(N==1){return nativefunction::call(state,  standard::get<0>(tuple));}\
+			if(N==1){return nativefunction::call(state,  fntuple::get<0>(tuple));}\
 			int32_t currentbestscore = 0;\
 			int32_t currentbestindex = -1;\
 			KAGUYA_PP_REPEAT(N, KAGUYA_FUNCTION_SCOREING);\
 			KAGUYA_PP_REPEAT(N, KAGUYA_FUNCTION_INVOKE);\
-			throw LuaTypeMismatch("type mismatch!!"); \
+			throw LuaTypeMismatch(); \
 		}\
 		KAGUYA_TEMPLATE_PARAMETER(N)\
-		void push_arg_typename_tuple(lua_State *state,standard::tuple<KAGUYA_PP_TEMPLATE_ARG_REPEAT(N)>& tuple)\
+		void push_arg_typename_tuple(lua_State *state,fntuple::tuple<KAGUYA_PP_TEMPLATE_ARG_REPEAT(N)>& tuple)\
 		{\
 			KAGUYA_PP_REPEAT(N, KAGUYA_ARG_PUSH_TYPENAMES);\
 		}\
@@ -666,41 +666,32 @@ namespace kaguya
 
 
 	template<typename T>
-	inline FunctionInvokerType<standard::tuple<T> > function(T f)
+	inline FunctionInvokerType<fntuple::tuple<T> > function(T f)
 	{
 		KAGUYA_STATIC_ASSERT(nativefunction::is_callable<typename traits::decay<T>::type>::value, "argument need callable");
-		return FunctionInvokerType<standard::tuple<T> >(standard::tuple<T>(f));
+		return FunctionInvokerType<fntuple::tuple<T> >(fntuple::tuple<T>(f));
 	}
 
 	template<typename FTYPE, typename T>
-	inline FunctionInvokerType<standard::tuple<standard::function<FTYPE> > > function(T f)
+	inline FunctionInvokerType<fntuple::tuple<standard::function<FTYPE> > > function(T f)
 	{
-		return FunctionInvokerType<standard::tuple<standard::function<FTYPE> > >(standard::tuple<standard::function<FTYPE> >(standard::function<FTYPE>(f)));
+		return FunctionInvokerType<fntuple::tuple<standard::function<FTYPE> > >(fntuple::tuple<standard::function<FTYPE> >(standard::function<FTYPE>(f)));
 	}
 #if KAGUYA_USE_CPP11
 
-
 	template<typename... Functions>
-	FunctionInvokerType<standard::tuple<Functions...> > overload(Functions... fns)
+	FunctionInvokerType<fntuple::tuple<Functions...> > overload(Functions... fns)
 	{
-		return FunctionInvokerType<standard::tuple<Functions...> >(standard::tuple<Functions...>(fns...));
+		return FunctionInvokerType<fntuple::tuple<Functions...> >(fntuple::tuple<Functions...>(fns...));
 	}
 #else
-#define KAGUYA_DEF_TEMPLATE(N) KAGUYA_PP_CAT(typename F,N)
-#define KAGUYA_TEMPLATE_ARG_DEF(N) KAGUYA_PP_CAT(F,N)
-#define KAGUYA_TUPLE_ARG_DEF(N) KAGUYA_PP_CAT(f,N)
-#define KAGUYA_ARG_DEF(N) KAGUYA_PP_CAT(F,N) KAGUYA_PP_CAT(f,N)
-#define KAGUYA_FOVERLOAD_DEF(N) template<KAGUYA_PP_REPEAT_ARG(N,KAGUYA_DEF_TEMPLATE)>\
-		FunctionInvokerType<standard::tuple<KAGUYA_PP_REPEAT_ARG(N,KAGUYA_TEMPLATE_ARG_DEF)> > overload(KAGUYA_PP_REPEAT_ARG(N,KAGUYA_ARG_DEF))\
+#define KAGUYA_FOVERLOAD_DEF(N) template<KAGUYA_PP_TEMPLATE_DEF_REPEAT(N)>\
+		FunctionInvokerType<fntuple::tuple<KAGUYA_PP_TEMPLATE_ARG_REPEAT(N)> > overload(KAGUYA_PP_ARG_DEF_REPEAT(N))\
 		{\
-			typedef typename standard::tuple<KAGUYA_PP_REPEAT_ARG(N,KAGUYA_TEMPLATE_ARG_DEF)> ttype;\
-			return FunctionInvokerType<ttype>(ttype(KAGUYA_PP_REPEAT_ARG(N,KAGUYA_TUPLE_ARG_DEF)));\
+			typedef typename fntuple::tuple<KAGUYA_PP_TEMPLATE_ARG_REPEAT(N)> ttype;\
+			return FunctionInvokerType<ttype>(ttype(KAGUYA_PP_ARG_REPEAT(N)));\
 		}
 	KAGUYA_PP_REPEAT_DEF(KAGUYA_FUNCTION_MAX_OVERLOADS, KAGUYA_FOVERLOAD_DEF)
-#undef KAGUYA_DEF_TEMPLATE
-#undef KAGUYA_TEMPLATE_ARG_DEF
-#undef KAGUYA_TUPLE_ARG_DEF
-#undef KAGUYA_ARG_DEF
 #undef KAGUYA_FOVERLOAD_DEF
 #endif
 
@@ -743,8 +734,15 @@ namespace kaguya
 				try {
 					return detail::invoke_tuple(state, *t);
 				}
-				catch (LuaTypeMismatch &) {
-					util::traceBack(state, build_arg_error_message(state, "maybe...", t));
+				catch (LuaTypeMismatch &e) {
+					if (strcmp(e.what(), "type mismatch!!") == 0)
+					{
+						util::traceBack(state, build_arg_error_message(state, "maybe...", t));
+					}
+					else
+					{
+						util::traceBack(state, e.what());
+					}			
 				}
 				catch (std::exception & e) {
 					util::traceBack(state, e.what());

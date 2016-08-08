@@ -64,55 +64,12 @@ namespace kaguya
 #else
 
 		ObjectWrapper() : object_() {}
-		template<class Arg1>
-		ObjectWrapper(const Arg1& v1) : object_(v1) {}
-		template<class Arg1, class Arg2>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2) : object_(v1, v2) {}
-		template<class Arg1, class Arg2, class Arg3>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3) : object_(v1, v2, v3) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4) : object_(v1, v2, v3, v4) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5) : object_(v1, v2, v3, v4, v5) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6) : object_(v1, v2, v3, v4, v5, v6) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7) : object_(v1, v2, v3, v4, v5, v6, v7) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8) : object_(v1, v2, v3, v4, v5, v6, v7, v8) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12, const Arg13& v13) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12, const Arg13& v13, const Arg14& v14) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12, const Arg13& v13, const Arg14& v14, const Arg15& v15) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12, const Arg13& v13, const Arg14& v14, const Arg15& v15, const Arg16& v16) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12, const Arg13& v13, const Arg14& v14, const Arg15& v15, const Arg16& v16, const Arg17& v17) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12, const Arg13& v13, const Arg14& v14, const Arg15& v15, const Arg16& v16, const Arg17& v17, const Arg18& v18) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12, const Arg13& v13, const Arg14& v14, const Arg15& v15, const Arg16& v16, const Arg17& v17, const Arg18& v18, const Arg19& v19) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12, const Arg13& v13, const Arg14& v14, const Arg15& v15, const Arg16& v16, const Arg17& v17, const Arg18& v18, const Arg19& v19, const Arg20& v20) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12, const Arg13& v13, const Arg14& v14, const Arg15& v15, const Arg16& v16, const Arg17& v17, const Arg18& v18, const Arg19& v19, const Arg20& v20, const Arg21& v21) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12, const Arg13& v13, const Arg14& v14, const Arg15& v15, const Arg16& v16, const Arg17& v17, const Arg18& v18, const Arg19& v19, const Arg20& v20, const Arg21& v21, const Arg22& v22) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12, const Arg13& v13, const Arg14& v14, const Arg15& v15, const Arg16& v16, const Arg17& v17, const Arg18& v18, const Arg19& v19, const Arg20& v20, const Arg21& v21, const Arg22& v22, const Arg23& v23) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23) {}
-		template<class Arg1, class Arg2, class Arg3, class Arg4, class Arg5, class Arg6, class Arg7, class Arg8, class Arg9, class Arg10, class Arg11, class Arg12, class Arg13, class Arg14, class Arg15, class Arg16, class Arg17, class Arg18, class Arg19, class Arg20, class Arg21, class Arg22, class Arg23, class Arg24>
-		ObjectWrapper(const Arg1& v1, const Arg2& v2, const Arg3& v3, const Arg4& v4, const Arg5& v5, const Arg6& v6, const Arg7& v7, const Arg8& v8, const Arg9& v9, const Arg10& v10, const Arg11& v11, const Arg12& v12, const Arg13& v13, const Arg14& v14, const Arg15& v15, const Arg16& v16, const Arg17& v17, const Arg18& v18, const Arg19& v19, const Arg20& v20, const Arg21& v21, const Arg22& v22, const Arg23& v23, const Arg24& v24) : object_(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24) {}
+#define KAGUYA_OBJECT_WRAPPER_CONSTRUCTOR_DEF(N) \
+		template<KAGUYA_PP_TEMPLATE_DEF_REPEAT(N)>\
+			ObjectWrapper(KAGUYA_PP_ARG_DEF_REPEAT(N)):object_(KAGUYA_PP_ARG_REPEAT(N)){}
 
+		KAGUYA_PP_REPEAT_DEF(KAGUYA_FUNCTION_MAX_ARGS, KAGUYA_OBJECT_WRAPPER_CONSTRUCTOR_DEF);
+#undef KAGUYA_OBJECT_WRAPPER_CONSTRUCTOR_DEF
 #endif
 
 		virtual const std::type_info& type()

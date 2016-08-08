@@ -11,16 +11,16 @@ extern "C" {
 #include <lualib.h>
 }
 
-//#ifndef KAGUYA_USE_CPP11
-//#if defined(__cpp_decltype) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
-//#define KAGUYA_USE_CPP11 1
-//#else
-//#define KAGUYA_USE_CPP11 0
-//#endif
-//#endif
-
-// Force use boost for testing
+#ifndef KAGUYA_USE_CPP11
+#if defined(__cpp_decltype) || __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1800)
+#define KAGUYA_USE_CPP11 1
+#else
 #define KAGUYA_USE_CPP11 0
+#endif
+#endif
+
+// // Force use boost for testing
+// #define KAGUYA_USE_CPP11 0
 
 #if KAGUYA_USE_CPP11
 #include <functional>
@@ -32,11 +32,7 @@ extern "C" {
 #include <array>
 #else
 #include <boost/function.hpp>
-
-// #include <boost/tuple/tuple.hpp>
-#define FUSION_MAX_VECTOR_SIZE 24
-#include <boost/fusion/tuple.hpp>
-
+#include <boost/tuple/tuple.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/type_traits.hpp>
@@ -64,19 +60,17 @@ extern "C" {
 #define KAGUYA_NO_STD_MAP_TO_TABLE
 #endif
 
-
-#ifndef KAGUYA_DETECT_USE_DEPRECATED_FEATURE
-#define KAGUYA_DETECT_USE_DEPRECATED_FEATURE 0
-#endif
-
 #ifndef KAGUYA_FUNCTION_MAX_ARGS
-#define KAGUYA_FUNCTION_MAX_ARGS 12
+///! max argumeent number for binding function. this define used C++03 only.
+#define KAGUYA_FUNCTION_MAX_ARGS 25
 #endif
 #ifndef KAGUYA_FUNCTION_MAX_TUPLE_SIZE
-#define KAGUYA_FUNCTION_MAX_TUPLE_SIZE 24
+///! this define used C++03 only.
+#define KAGUYA_FUNCTION_MAX_TUPLE_SIZE 9
 #endif
 #ifndef KAGUYA_FUNCTION_MAX_OVERLOADS
-#define KAGUYA_FUNCTION_MAX_OVERLOADS KAGUYA_FUNCTION_MAX_TUPLE_SIZE
+///! this define used C++03 only.
+#define KAGUYA_FUNCTION_MAX_OVERLOADS 25
 #endif
 
 #ifndef KAGUYA_NOEXCEPT
@@ -123,7 +117,6 @@ namespace kaguya
 
 #else
 		using namespace boost;
-        using namespace boost::fusion;
 #define KAGUYA_STATIC_ASSERT BOOST_STATIC_ASSERT_MSG
 #endif
 	}
