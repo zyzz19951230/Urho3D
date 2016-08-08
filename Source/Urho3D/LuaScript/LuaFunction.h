@@ -32,11 +32,11 @@ typedef int (*lua_CFunction) (lua_State *L);
 namespace Urho3D
 {
 
+class Deserializer; 
 class LuaScript;
 class LuaScriptInstance;
-class MemoryBuffer; 
+class Serializer; 
 class Variant;
-class VectorBuffer;
 
 /// C++ representation of Lua function object.
 class URHO3D_API LuaFunction : public RefCounted
@@ -84,10 +84,10 @@ public:
     /// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.
     void PushLuaTable(const String& tableName) { PushLuaTable(tableName.CString()); }
     
-    /// Push VectorBuffer to stack.
-    void PushVectorBuffer(const VectorBuffer& buffer);
-    /// Push MomoryBuffer to stack.
-    void PushMemoryBuffer(const MemoryBuffer& buffer);
+    /// Push Deserializer to stack.
+    void PushDeserializer(Deserializer* deserializer);
+    /// Push Serializer to stack.
+    void PushSerializer(Serializer* serializer);
     /// Push LuaScriptInstance to stack.
     void PushLuaScriptInstance(LuaScriptInstance* instance);
 

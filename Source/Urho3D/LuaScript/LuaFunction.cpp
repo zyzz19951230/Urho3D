@@ -23,8 +23,8 @@
 #include "../Precompiled.h"
 
 #include "../IO/Log.h"
-#include "../IO/MemoryBuffer.h"
-#include "../IO/VectorBuffer.h"
+#include "../IO/Deserializer.h"
+#include "../IO/Serializer.h"
 #include "../LuaScript/LuaFunction.h"
 #include "../LuaScript/LuaScript.h"
 #include "../LuaScript/LuaScriptInstance.h"
@@ -179,18 +179,17 @@ void LuaFunction::PushLuaTable(const char* tableName)
         URHO3D_LOGERRORF("Could not find lua table %s", tableName); // nil is pushed instead
 }
 
-void LuaFunction::PushVectorBuffer(const VectorBuffer& buffer)
+void LuaFunction::PushDeserializer(Deserializer* deserializer)
 {
     assert(numArguments_ >= 0);
     ++numArguments_;
-    kaguya::util::push_args(luaState_, buffer);
+    kaguya::util::push_args(luaState_, deserializer);
 }
-
-void LuaFunction::PushMemoryBuffer(const MemoryBuffer& buffer)
+void LuaFunction::PushSerializer(Serializer* serializer)
 {
     assert(numArguments_ >= 0);
     ++numArguments_;
-    kaguya::util::push_args(luaState_, buffer);
+    kaguya::util::push_args(luaState_, serializer);
 }
 
 void LuaFunction::PushLuaScriptInstance(LuaScriptInstance* instance)
