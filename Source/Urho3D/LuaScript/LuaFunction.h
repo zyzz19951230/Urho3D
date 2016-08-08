@@ -85,7 +85,7 @@ public:
 	void PushMemoryBuffer(const MemoryBuffer& buffer);
 
 	/// Push LuaScriptInstance to stack.
-	void PushLuaScriptInstance(const LuaScriptInstance* instance);
+	void PushLuaScriptInstance(LuaScriptInstance* instance);
 	
 	/// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.
     void PushLuaTable(const char* tableName);

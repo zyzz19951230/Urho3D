@@ -184,7 +184,7 @@ void LuaFunction::PushMemoryBuffer(const MemoryBuffer& buffer)
 	kaguya::util::push_args(luaState_, buffer);
 }
 
-void LuaFunction::PushLuaScriptInstance(const LuaScriptInstance* instance)
+void LuaFunction::PushLuaScriptInstance(LuaScriptInstance* instance)
 {
 	assert(numArguments_ >= 0);
 	++numArguments_;
