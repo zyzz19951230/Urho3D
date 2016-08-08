@@ -79,18 +79,17 @@ public:
 	/// Push VariantMap to stack.
 	void PushVariantMap(const VariantMap& variantMap);
 
-	/// Push VectorBuffer to stack.
-	void PushVectorBuffer(const VectorBuffer& buffer);
-	/// Push MomoryBuffer to stack.
-	void PushMemoryBuffer(const MemoryBuffer& buffer);
-
-	/// Push LuaScriptInstance to stack.
-	void PushLuaScriptInstance(LuaScriptInstance* instance);
-	
 	/// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.
     void PushLuaTable(const char* tableName);
     /// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.
     void PushLuaTable(const String& tableName) { PushLuaTable(tableName.CString()); }
+    
+    /// Push VectorBuffer to stack.
+    void PushVectorBuffer(const VectorBuffer& buffer);
+    /// Push MomoryBuffer to stack.
+    void PushMemoryBuffer(const MemoryBuffer& buffer);
+    /// Push LuaScriptInstance to stack.
+    void PushLuaScriptInstance(LuaScriptInstance* instance);
 
 	/// Return lua state.
     lua_State* GetLuaState() const { return luaState_; }

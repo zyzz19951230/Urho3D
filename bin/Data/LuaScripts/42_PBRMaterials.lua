@@ -52,8 +52,6 @@ function CreateScene()
     -- which scene.LoadXML() will read
     local file = cache:GetFile("Scenes/PBRExample.xml")
     scene_:LoadXML(file)
-    -- In Lua the file returned by GetFile() needs to be deleted manually
-    file:delete()
     
     local sphereWithDynamicMatNode = scene_:GetChild("SphereWithDynamicMat")
     local staticModel = sphereWithDynamicMatNode:GetComponent("StaticModel")
@@ -148,7 +146,7 @@ function SetupViewport()
     renderer.hdrRendering = true;
 
     -- Set up a viewport to the Renderer subsystem so that the 3D scene can be seen
-    local viewport = Viewport:new(scene_, cameraNode:GetComponent("Camera"))
+    local viewport = Viewport(scene_, cameraNode:GetComponent("Camera"))
     renderer:SetViewport(0, viewport)
 
     -- Add post-processing effects appropriate with the example scene

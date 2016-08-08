@@ -170,27 +170,6 @@ void LuaFunction::PushVariantMap(const VariantMap& variantMap)
 	kaguya::util::push_args(luaState_, variantMap);
 }
 
-void LuaFunction::PushVectorBuffer(const VectorBuffer& buffer)
-{
-	assert(numArguments_ >= 0);
-	++numArguments_;
-	kaguya::util::push_args(luaState_, buffer);
-}
-
-void LuaFunction::PushMemoryBuffer(const MemoryBuffer& buffer)
-{
-	assert(numArguments_ >= 0);
-	++numArguments_;
-	kaguya::util::push_args(luaState_, buffer);
-}
-
-void LuaFunction::PushLuaScriptInstance(LuaScriptInstance* instance)
-{
-	assert(numArguments_ >= 0);
-	++numArguments_;
-	kaguya::util::push_args(luaState_, instance);
-}
-
 void LuaFunction::PushLuaTable(const char* tableName)
 {
     assert(numArguments_ >= 0);
@@ -200,4 +179,24 @@ void LuaFunction::PushLuaTable(const char* tableName)
         URHO3D_LOGERRORF("Could not find lua table %s", tableName); // nil is pushed instead
 }
 
+void LuaFunction::PushVectorBuffer(const VectorBuffer& buffer)
+{
+    assert(numArguments_ >= 0);
+    ++numArguments_;
+    kaguya::util::push_args(luaState_, buffer);
+}
+
+void LuaFunction::PushMemoryBuffer(const MemoryBuffer& buffer)
+{
+    assert(numArguments_ >= 0);
+    ++numArguments_;
+    kaguya::util::push_args(luaState_, buffer);
+}
+
+void LuaFunction::PushLuaScriptInstance(LuaScriptInstance* instance)
+{
+    assert(numArguments_ >= 0);
+    ++numArguments_;
+    kaguya::util::push_args(luaState_, instance);
+}
 }

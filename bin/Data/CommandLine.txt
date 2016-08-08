@@ -1,1 +1,1 @@
-LuaScripts/42_PBRMaterials.lua -w
+Scripts/NinjaSnowWar.as -w
