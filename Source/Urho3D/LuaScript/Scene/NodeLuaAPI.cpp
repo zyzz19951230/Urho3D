@@ -66,7 +66,7 @@ KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeRotateAround2D, Node, RotateAround2D, 2, 3)
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodePitch, Node, Pitch, 1, 2);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeYaw, Node, Yaw, 1, 2);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeRoll, Node, Roll, 1, 2);
-KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeLookAt, Node, LookAt, 2, 3);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeLookAt, Node, LookAt, 1, 3);
 
 static SharedPtr<Node> NodeCreateChild(Node* self, const String& name = String::EMPTY, CreateMode mode = REPLICATED, unsigned id = 0)
 {
