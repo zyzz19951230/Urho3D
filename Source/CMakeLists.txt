@@ -57,17 +57,23 @@ foreach (TARGET FreeType JO LZ4 PugiXml rapidjson SDL StanHull STB)
     add_subdirectory (ThirdParty/${TARGET})
 endforeach ()
 
+set(URHO3D_BOOST 0)
+
 if (URHO3D_ANGELSCRIPT)
     add_subdirectory (ThirdParty/AngelScript)
     if (EMSCRIPTEN OR (ARM AND NATIVE_64BIT))
-        add_subdirectory (ThirdParty/boost)
+    	set(URHO3D_BOOST 1)
     endif ()
 endif ()
 
 if (URHO3D_LUA)
     add_subdirectory (ThirdParty/Lua${JIT})    
-    add_subdirectory (ThirdParty/boost)
     add_subdirectory (ThirdParty/kaguya)
+    set(URHO3D_BOOST 1)
+endif ()
+
+if (URHO3D_BOOST)
+	add_subdirectory (ThirdParty/boost)
 endif ()
 
 if (URHO3D_NETWORK)
