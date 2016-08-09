@@ -55,6 +55,7 @@ void RegisterSerializable(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Serializable : Object
     lua["Serializable"].setClass(UserdataMetatable<Serializable, Object>()
 
         .addOverloadedFunctions("Load", 
@@ -65,10 +66,14 @@ void RegisterSerializable(kaguya::State& lua)
             &SerializableSave, 
             &Serializable::Save)
 
+        // [Method] bool LoadXML(const XMLElement& source, bool setInstanceDefault = false)
         .addFunction("LoadXML", SerializableLoadXML())
+        // [Method] bool SaveXML(XMLElement& dest) const
         .addFunction("SaveXML", &Serializable::SaveXML)
 
+        // [Method] bool LoadJSON(const JSONValue& source, bool setInstanceDefault = false)
         .addFunction("LoadJSON", SerializableLoadJSON())
+        // [Method] bool SaveJSON(JSONValue& dest) const
         .addFunction("SaveJSON", &Serializable::SaveJSON)
 
         .addOverloadedFunctions("SetAttribute",
@@ -83,7 +88,9 @@ void RegisterSerializable(kaguya::State& lua)
             static_cast<Variant(Serializable::*)(unsigned) const>(&Serializable::GetAttributeDefault),
             static_cast<Variant(Serializable::*)(const String&) const>(&Serializable::GetAttributeDefault))
 
+        // [Method] unsigned GetNumAttributes() const
         .addFunction("GetNumAttributes", &Serializable::GetNumAttributes)
+        // [Method] unsigned GetNumNetworkAttributes() const
         .addFunction("GetNumNetworkAttributes", &Serializable::GetNumNetworkAttributes)
         );
 }

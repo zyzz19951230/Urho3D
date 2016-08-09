@@ -50,38 +50,58 @@ KAGUYA_MEMBER_FUNCTION_OVERLOADS(PackageFileOpen, PackageFile, Open, 1, 2);
 void RegisterPackageFile(kaguya::State& lua)
 {
     using namespace kaguya;
+    // [Class] PackageEntry
     lua["PackageEntry"].setClass(UserdataMetatable<PackageEntry>()
         .addProperty("offset", &PackageEntry::offset_)
         .addProperty("size", &PackageEntry::size_)
         .addProperty("checksum", &PackageEntry::checksum_)
         );
 
+    // [Class] PackageFile : Object
     lua["PackageFile"].setClass(UserdataMetatable<PackageFile, Object>()
         .addOverloadedFunctions("new",
             &CreatePackageFile0,
             &CreatePackageFile1,
             &CreatePackageFile2)
 
+        // [Method] bool Open(const String& fileName, unsigned startOffset = 0)
         .addFunction("Open", PackageFileOpen())
 
+        // [Method] bool Exists(const String& fileName) const
         .addFunction("Exists", &PackageFile::Exists)
+        // [Method] const PackageEntry* GetEntry(const String& fileName) const
         .addFunction("GetEntry", &PackageFile::GetEntry)
+        // [Method] const HashMap<String, PackageEntry>& GetEntries() const
         .addFunction("GetEntries", &PackageFile::GetEntries)
         
+        // [Method] const String& GetName() const
         .addFunction("GetName", &PackageFile::GetName)
+        // [Method] StringHash GetNameHash() const
         .addFunction("GetNameHash", &PackageFile::GetNameHash)
+        // [Method] unsigned GetNumFiles() const
         .addFunction("GetNumFiles", &PackageFile::GetNumFiles)
+        // [Method] unsigned GetTotalSize() const
         .addFunction("GetTotalSize", &PackageFile::GetTotalSize)
+        // [Method] unsigned GetTotalDataSize() const
         .addFunction("GetTotalDataSize", &PackageFile::GetTotalDataSize)
+        // [Method] unsigned GetChecksum() const
         .addFunction("GetChecksum", &PackageFile::GetChecksum)
+        // [Method] bool IsCompressed() const
         .addFunction("IsCompressed", &PackageFile::IsCompressed)
 
+        // [Property(ReadOnly)] const String& name
         .addProperty("name", &PackageFile::GetName)
+        // [Property(ReadOnly)] StringHash nameHash
         .addProperty("nameHash", &PackageFile::GetNameHash)
+        // [Property(ReadOnly)] unsigned numFiles
         .addProperty("numFiles", &PackageFile::GetNumFiles)
+        // [Property(ReadOnly)] unsigned totalSize
         .addProperty("totalSize", &PackageFile::GetTotalSize)
+        // [Property(ReadOnly)] unsigned totalDataSize
         .addProperty("totalDataSize", &PackageFile::GetTotalDataSize)
+        // [Property(ReadOnly)] unsigned checksum
         .addProperty("checksum", &PackageFile::GetChecksum)
+        // [Property(ReadOnly)] bool compressed
         .addProperty("compressed", &PackageFile::IsCompressed)
         );
 }

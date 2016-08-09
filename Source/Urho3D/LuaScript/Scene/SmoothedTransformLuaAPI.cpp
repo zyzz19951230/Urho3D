@@ -34,30 +34,48 @@ void RegisterSmoothedTransform(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Constant] unsigned SMOOTH_NONE
     lua["SMOOTH_NONE"] = SMOOTH_NONE;
+    // [Constant] unsigned SMOOTH_POSITION
     lua["SMOOTH_POSITION"] = SMOOTH_POSITION;
+    // [Constant] unsigned SMOOTH_ROTATION
     lua["SMOOTH_ROTATION"] = SMOOTH_ROTATION;
 
+    // [Class] SmoothedTransform : Component
     lua["SmoothedTransform"].setClass(UserdataMetatable<SmoothedTransform, Component>()
         .addStaticFunction("new", &CreateObject<SmoothedTransform>)
 
+        // [Method] void SetTargetPosition(const Vector3& position)
         .addFunction("SetTargetPosition", &SmoothedTransform::SetTargetPosition)
+        // [Method] void SetTargetRotation(const Quaternion& rotation)
         .addFunction("SetTargetRotation", &SmoothedTransform::SetTargetRotation)
+        // [Method] void SetTargetWorldPosition(const Vector3& position)
         .addFunction("SetTargetWorldPosition", &SmoothedTransform::SetTargetWorldPosition)
+        // [Method] void SetTargetWorldRotation(const Quaternion& rotation)
         .addFunction("SetTargetWorldRotation", &SmoothedTransform::SetTargetWorldRotation)
 
+        // [Method] const Vector3& GetTargetPosition() const
         .addFunction("GetTargetPosition", &SmoothedTransform::GetTargetPosition)
+        // [Method] const Quaternion& GetTargetRotation() const
         .addFunction("GetTargetRotation", &SmoothedTransform::GetTargetRotation)
+        // [Method] Vector3 GetTargetWorldPosition() const
         .addFunction("GetTargetWorldPosition", &SmoothedTransform::GetTargetWorldPosition)
+        // [Method] Quaternion GetTargetWorldRotation() const
         .addFunction("GetTargetWorldRotation", &SmoothedTransform::GetTargetWorldRotation)
 
+        // [Method] bool IsInProgress() const
         .addFunction("IsInProgress", &SmoothedTransform::IsInProgress)
 
+        // [Property] const Vector3& targetPosition
         .addProperty("targetPosition", &SmoothedTransform::GetTargetPosition, &SmoothedTransform::SetTargetPosition)
+        // [Property] const Quaternion& targetRotation
         .addProperty("targetRotation", &SmoothedTransform::GetTargetRotation, &SmoothedTransform::SetTargetRotation)
+        // [Property] Vector3 targetWorldPosition
         .addProperty("targetWorldPosition", &SmoothedTransform::GetTargetWorldPosition, &SmoothedTransform::SetTargetWorldPosition)
+        // [Property] Quaternion targetWorldRotation
         .addProperty("targetWorldRotation", &SmoothedTransform::GetTargetWorldRotation, &SmoothedTransform::SetTargetWorldRotation)
 
+        // [Property(ReadOnly)] bool inProgress
         .addProperty("inProgress", &SmoothedTransform::IsInProgress)
         );
 }

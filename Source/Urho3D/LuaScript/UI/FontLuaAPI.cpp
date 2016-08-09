@@ -34,19 +34,29 @@ void RegisterFont(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Font : Resource
     lua["Font"].setClass(UserdataMetatable<Font, Resource>()
         .addStaticFunction("new", &CreateObject<Font>)
 
+        // [Method] void SetAbsoluteGlyphOffset(const IntVector2& offset)
         .addFunction("SetAbsoluteGlyphOffset", &Font::SetAbsoluteGlyphOffset)
+        // [Method] void SetScaledGlyphOffset(const Vector2& offset)
         .addFunction("SetScaledGlyphOffset", &Font::SetScaledGlyphOffset)
 
+        // [Method] bool IsSDFFont() const
         .addFunction("IsSDFFont", &Font::IsSDFFont)
+        // [Method] const IntVector2& GetAbsoluteGlyphOffset() const
         .addFunction("GetAbsoluteGlyphOffset", &Font::GetAbsoluteGlyphOffset)
+        // [Method] const Vector2& GetScaledGlyphOffset() const
         .addFunction("GetScaledGlyphOffset", &Font::GetScaledGlyphOffset)
+        // [Method] IntVector2 GetTotalGlyphOffset(int pointSize) const
         .addFunction("GetTotalGlyphOffset", &Font::GetTotalGlyphOffset)
 
+        // [Property(ReadOnly)] bool sdfFont
         .addProperty("sdfFont", &Font::IsSDFFont)
+        // [Property] const IntVector2& absoluteGlyphOffset
         .addProperty("absoluteGlyphOffset", &Font::GetAbsoluteGlyphOffset, &Font::SetAbsoluteGlyphOffset)
+        // [Property] const Vector2& scaledGlyphOffset
         .addProperty("scaledGlyphOffset", &Font::GetScaledGlyphOffset, &Font::SetScaledGlyphOffset)
         );
 }

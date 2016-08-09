@@ -35,16 +35,23 @@ void RegisterStaticModelGroup(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] StaticModelGroup : StaticModel
     lua["StaticModelGroup"].setClass(UserdataMetatable<StaticModelGroup, StaticModel>()
         .addStaticFunction("new", &CreateObject<StaticModelGroup>)
 
+        // [Method] void AddInstanceNode(Node* node)
         .addFunction("AddInstanceNode", &StaticModelGroup::AddInstanceNode)
+        // [Method] void RemoveInstanceNode(Node* node)
         .addFunction("RemoveInstanceNode", &StaticModelGroup::RemoveInstanceNode)
+        // [Method] void RemoveAllInstanceNodes()
         .addFunction("RemoveAllInstanceNodes", &StaticModelGroup::RemoveAllInstanceNodes)
         
+        // [Method] unsigned GetNumInstanceNodes() const
         .addFunction("GetNumInstanceNodes", &StaticModelGroup::GetNumInstanceNodes)
+        // [Method] Node* GetInstanceNode(unsigned index) const
         .addFunction("GetInstanceNode", &StaticModelGroup::GetInstanceNode)
 
+        // [Property(ReadOnly)] unsigned numInstanceNodes
         .addProperty("numInstanceNodes", &StaticModelGroup::GetNumInstanceNodes)
         );
 }

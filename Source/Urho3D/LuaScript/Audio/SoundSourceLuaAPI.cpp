@@ -35,8 +35,10 @@ void RegisterSoundSource(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Constant] int STREAM_BUFFER_LENGTH
     lua["STREAM_BUFFER_LENGTH"] = STREAM_BUFFER_LENGTH;
 
+    // [Class] SoundSource : Component
     lua["SoundSource"].setClass(UserdataMetatable<SoundSource, Component>()
         .addStaticFunction("new", &CreateObject<SoundSource>)
 
@@ -46,32 +48,54 @@ void RegisterSoundSource(kaguya::State& lua)
             static_cast<void(SoundSource::*)(Sound*, float, float)>(&SoundSource::Play),
             static_cast<void(SoundSource::*)(Sound*, float, float, float)>(&SoundSource::Play))
 
+        // [Method] void Stop()
         .addFunction("Stop", &SoundSource::Stop)
+        // [Method] void SetSoundType(const String& type)
         .addFunction("SetSoundType", &SoundSource::SetSoundType)
+        // [Method] void SetFrequency(float frequency)
         .addFunction("SetFrequency", &SoundSource::SetFrequency)
+        // [Method] void SetGain(float gain)
         .addFunction("SetGain", &SoundSource::SetGain)
+        // [Method] void SetAttenuation(float attenuation)
         .addFunction("SetAttenuation", &SoundSource::SetAttenuation)
+        // [Method] void SetPanning(float panning)
         .addFunction("SetPanning", &SoundSource::SetPanning)
         // .addFunction("SetAutoRemove", &SoundSource::SetAutoRemove)
         
+        // [Method] Sound* GetSound() const
         .addFunction("GetSound", &SoundSource::GetSound)
+        // [Method] String GetSoundType() const
         .addFunction("GetSoundType", &SoundSource::GetSoundType)
+        // [Method] float GetTimePosition() const
         .addFunction("GetTimePosition", &SoundSource::GetTimePosition)
+        // [Method] float GetFrequency() const
         .addFunction("GetFrequency", &SoundSource::GetFrequency)
+        // [Method] float GetGain() const
         .addFunction("GetGain", &SoundSource::GetGain)
+        // [Method] float GetAttenuation() const
         .addFunction("GetAttenuation", &SoundSource::GetAttenuation)
+        // [Method] float GetPanning() const
         .addFunction("GetPanning", &SoundSource::GetPanning)
         // .addFunction("GetAutoRemove", &SoundSource::GetAutoRemove)
+        // [Method] bool IsPlaying() const
         .addFunction("IsPlaying", &SoundSource::IsPlaying)
         
+        // [Property(ReadOnly)] Sound* sound
         .addProperty("sound", &SoundSource::GetSound)
+        // [Property] String soundType
         .addProperty("soundType", &SoundSource::GetSoundType, &SoundSource::SetSoundType)
+        // [Property(ReadOnly)] float timePosition
         .addProperty("timePosition", &SoundSource::GetTimePosition)
+        // [Property] float frequency
         .addProperty("frequency", &SoundSource::GetFrequency, &SoundSource::SetFrequency)
+        // [Property] float gain
         .addProperty("gain", &SoundSource::GetGain, &SoundSource::SetGain)
+        // [Property] float attenuation
         .addProperty("attenuation", &SoundSource::GetAttenuation, &SoundSource::SetAttenuation)
+        // [Property] float panning
         .addProperty("panning", &SoundSource::GetPanning, &SoundSource::SetPanning)
         // .addProperty("autoRemove", &SoundSource::GetAutoRemove, &SoundSource::SetAutoRemove)
+        // [Property(ReadOnly)] bool playing
         .addProperty("playing", &SoundSource::IsPlaying)
         );
 }

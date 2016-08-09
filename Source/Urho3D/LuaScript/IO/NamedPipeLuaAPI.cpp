@@ -34,10 +34,14 @@ void RegisterNamedPipe(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] NamedPipe : MultipleBase<Object, Deserializer, Serializer> 
     lua["NamedPipe"].setClass(UserdataMetatable<NamedPipe, MultipleBase<Object, Deserializer, Serializer> >()
         
+        // [Method] bool Open(const String& pipeName, bool isServer)
         .addFunction("Open", &NamedPipe::Open)
+        // [Method] void Close()
         .addFunction("Close", &NamedPipe::Close)
+        // [Method] bool IsOpen() const
         .addFunction("IsOpen", &NamedPipe::IsOpen)
         );
 }

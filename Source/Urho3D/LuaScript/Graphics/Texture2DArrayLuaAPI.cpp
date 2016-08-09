@@ -39,18 +39,26 @@ void RegisterTexture2DArray(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Texture2DArray : Texture
     lua["Texture2DArray"].setClass(UserdataMetatable<Texture2DArray, Texture>()
         .addStaticFunction("new", &CreateObject<Texture2DArray>)
         
+        // [Method] void SetLayers(unsigned layers)
         .addFunction("SetLayers", &Texture2DArray::SetLayers)
         
+        // [Method] bool SetSize(unsigned layers, int width, int height, unsigned format, TextureUsage usage = TEXTURE_STATIC)
         .addFunction("SetSize", Texture2DArraySetSize())
+        // [Method] bool SetData(unsigned layer, unsigned level, int x, int y, int width, int height, const void* data)
         .addFunction("SetData", Texture2DArraySetData())
 
+        // [Method] unsigned GetLayers() const
         .addFunction("GetLayers", &Texture2DArray::GetLayers)
+        // [Method] RenderSurface* GetRenderSurface() const
         .addFunction("GetRenderSurface", &Texture2DArray::GetRenderSurface)
 
+        // [Property] unsigned layers
         .addProperty("layers", &Texture2DArray::GetLayers, &Texture2DArray::SetLayers)
+        // [Property(ReadOnly)] RenderSurface* renderSurface
         .addProperty("renderSurface", &Texture2DArray::GetRenderSurface)
     );
 }

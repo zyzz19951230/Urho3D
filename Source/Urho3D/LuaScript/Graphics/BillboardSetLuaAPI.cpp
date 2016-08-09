@@ -35,6 +35,7 @@ void RegisterBillboardSet(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Billboard
     lua["Billboard"].setClass(UserdataMetatable<Billboard>()
 
         .addProperty("position", &Billboard::position_)
@@ -46,37 +47,64 @@ void RegisterBillboardSet(kaguya::State& lua)
         .addProperty("enabled", &Billboard::enabled_)
         );
 
+    // [Class] BillboardSet : Drawable
     lua["BillboardSet"].setClass(UserdataMetatable<BillboardSet, Drawable>()
         .addStaticFunction("new", &CreateObject<BillboardSet>)
 
+        // [Method] void SetMaterial(Material* material)
         .addFunction("SetMaterial", &BillboardSet::SetMaterial)
+        // [Method] void SetNumBillboards(unsigned num)
         .addFunction("SetNumBillboards", &BillboardSet::SetNumBillboards)
+        // [Method] void SetRelative(bool enable)
         .addFunction("SetRelative", &BillboardSet::SetRelative)
+        // [Method] void SetScaled(bool enable)
         .addFunction("SetScaled", &BillboardSet::SetScaled)
+        // [Method] void SetSorted(bool enable)
         .addFunction("SetSorted", &BillboardSet::SetSorted)
+        // [Method] void SetFixedScreenSize(bool enable)
         .addFunction("SetFixedScreenSize", &BillboardSet::SetFixedScreenSize)
+        // [Method] void SetFaceCameraMode(FaceCameraMode mode)
         .addFunction("SetFaceCameraMode", &BillboardSet::SetFaceCameraMode)        
+        // [Method] void SetAnimationLodBias(float bias)
         .addFunction("SetAnimationLodBias", &BillboardSet::SetAnimationLodBias)
         
+        // [Method] void Commit()
         .addFunction("Commit", &BillboardSet::Commit)
 
+        // [Method] Material* GetMaterial() const
         .addFunction("GetMaterial", &BillboardSet::GetMaterial)
+        // [Method] unsigned GetNumBillboards() const
         .addFunction("GetNumBillboards", &BillboardSet::GetNumBillboards)
+        // [Method] Billboard* GetBillboard(unsigned index)
         .addFunction("GetBillboard", &BillboardSet::GetBillboard)
+        // [Method] bool IsRelative() const
         .addFunction("IsRelative", &BillboardSet::IsRelative)
+        // [Method] bool IsScaled() const
         .addFunction("IsScaled", &BillboardSet::IsScaled)
+        // [Method] bool IsSorted() const
         .addFunction("IsSorted", &BillboardSet::IsSorted)
+        // [Method] bool IsFixedScreenSize() const
         .addFunction("IsFixedScreenSize", &BillboardSet::IsFixedScreenSize)
+        // [Method] FaceCameraMode GetFaceCameraMode() const
         .addFunction("GetFaceCameraMode", &BillboardSet::GetFaceCameraMode)
+        // [Method] float GetAnimationLodBias() const
         .addFunction("GetAnimationLodBias", &BillboardSet::GetAnimationLodBias)
 
+        // [Property] Material* material
         .addProperty("material", &BillboardSet::GetMaterial, &BillboardSet::SetMaterial)
+        // [Property] unsigned numBillboards
         .addProperty("numBillboards", &BillboardSet::GetNumBillboards, &BillboardSet::SetNumBillboards)
+        // [Property] bool relative
         .addProperty("relative", &BillboardSet::IsRelative, &BillboardSet::SetRelative)
+        // [Property] bool scaled
         .addProperty("scaled", &BillboardSet::IsScaled, &BillboardSet::SetScaled)
+        // [Property] bool sorted
         .addProperty("sorted", &BillboardSet::IsSorted, &BillboardSet::SetSorted)
+        // [Property] bool fixedScreenSize
         .addProperty("fixedScreenSize", &BillboardSet::IsFixedScreenSize, &BillboardSet::SetFixedScreenSize)
+        // [Property] FaceCameraMode faceCameraMode
         .addProperty("faceCameraMode", &BillboardSet::GetFaceCameraMode, &BillboardSet::SetFaceCameraMode)
+        // [Property] float animationLodBias
         .addProperty("animationLodBias", &BillboardSet::GetAnimationLodBias, &BillboardSet::SetAnimationLodBias)
         );
 }

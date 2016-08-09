@@ -34,8 +34,10 @@ void RegisterLocalization(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Localization : Object
     lua["Localization"].setClass(UserdataMetatable<Localization, Object>()
 
+        // [Method] int GetNumLanguages() const
         .addFunction("GetNumLanguages", &Localization::GetNumLanguages)
 
         .addOverloadedFunctions("GetLanguageIndex",
@@ -50,11 +52,16 @@ void RegisterLocalization(kaguya::State& lua)
             static_cast<void(Localization::*)(int)>(&Localization::SetLanguage),
             static_cast<void(Localization::*)(const String&)>(&Localization::SetLanguage))
 
+        // [Method] String Get(const String& id)
         .addFunction("Get", &Localization::Get)
+        // [Method] void Reset()
         .addFunction("Reset", &Localization::Reset)
+        // [Method] void LoadJSON(const JSONValue& source)
         .addFunction("LoadJSON", &Localization::LoadJSON)
+        // [Method] void LoadJSONFile(const String& name)
         .addFunction("LoadJSONFile", &Localization::LoadJSONFile)
 
+        // [Property(ReadOnly)] int numLanguages
         .addProperty("numLanguages", &Localization::GetNumLanguages)
 		.addProperty("languageIndex", static_cast<int(Localization::*)() const>(&Localization::GetLanguageIndex))
 		.addProperty("language", static_cast<String(Localization::*)()>(&Localization::GetLanguage))

@@ -34,6 +34,7 @@ void RegisterStringHash(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] StringHash
     lua["StringHash"].setClass(UserdataMetatable<StringHash>()
         .setConstructors<StringHash(),
         StringHash(const StringHash&),
@@ -45,13 +46,17 @@ void RegisterStringHash(kaguya::State& lua)
 
         .addFunction("__less", &StringHash::operator<)
 
+        // [Method] unsigned Value() const
         .addFunction("Value", &StringHash::Value)
 
+        // [Method] String ToString() const
         .addFunction("ToString", &StringHash::ToString)
+        // [Method] unsigned ToHash() const
         .addFunction("ToHash", &StringHash::ToHash)
 
         .addStaticFunction("Calculate", &StringHash::Calculate)
 
+        // [Property(ReadOnly)] unsigned value
         .addProperty("value", &StringHash::Value)
 
         .addStaticField("ZERO", &StringHash::ZERO)

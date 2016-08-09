@@ -36,22 +36,35 @@ void RegisterConstraintMouse2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] ConstraintMouse2D : Constraint2D
     lua["ConstraintMouse2D"].setClass(UserdataMetatable<ConstraintMouse2D, Constraint2D>()
         .addStaticFunction("new", &CreateObject<ConstraintMouse2D>)
 
+        // [Method] void SetTarget(const Vector2& target)
         .addFunction("SetTarget", &ConstraintMouse2D::SetTarget)
+        // [Method] void SetMaxForce(float maxForce)
         .addFunction("SetMaxForce", &ConstraintMouse2D::SetMaxForce)
+        // [Method] void SetFrequencyHz(float frequencyHz)
         .addFunction("SetFrequencyHz", &ConstraintMouse2D::SetFrequencyHz)
+        // [Method] void SetDampingRatio(float dampingRatio)
         .addFunction("SetDampingRatio", &ConstraintMouse2D::SetDampingRatio)
 
+        // [Method] const Vector2& GetTarget() const
         .addFunction("GetTarget", &ConstraintMouse2D::GetTarget)
+        // [Method] float GetMaxForce() const
         .addFunction("GetMaxForce", &ConstraintMouse2D::GetMaxForce)
+        // [Method] float GetFrequencyHz() const
         .addFunction("GetFrequencyHz", &ConstraintMouse2D::GetFrequencyHz)
+        // [Method] float GetDampingRatio() const
         .addFunction("GetDampingRatio", &ConstraintMouse2D::GetDampingRatio)
 
+        // [Property] const Vector2& target
         .addProperty("target", &ConstraintMouse2D::GetTarget, &ConstraintMouse2D::SetTarget)
+        // [Property] float maxForce
         .addProperty("maxForce", &ConstraintMouse2D::GetMaxForce, &ConstraintMouse2D::SetMaxForce)
+        // [Property] float frequencyHz
         .addProperty("frequencyHz", &ConstraintMouse2D::GetFrequencyHz, &ConstraintMouse2D::SetFrequencyHz)
+        // [Property] float dampingRatio
         .addProperty("dampingRatio", &ConstraintMouse2D::GetDampingRatio, &ConstraintMouse2D::SetDampingRatio)
     );
 }

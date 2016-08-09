@@ -34,6 +34,7 @@ void RegisterRect(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Rect
     lua["Rect"].setClass(UserdataMetatable<Rect>()
         .setConstructors<Rect(),
         Rect(const Vector2&, const Vector2&),
@@ -52,24 +53,37 @@ void RegisterRect(kaguya::State& lua)
             static_cast<void(Rect::*)(const Vector2&)>(&Rect::Merge),
             static_cast<void(Rect::*)(const Rect&)>(&Rect::Merge))
 
+        // [Method] void Clear()
         .addFunction("Clear", &Rect::Clear)
+        // [Method] void Clip(const Rect& rect)
         .addFunction("Clip", &Rect::Clip)
 
+        // [Method] bool Defined() const
         .addFunction("Defined", &Rect::Defined)
+        // [Method] Vector2 Center() const
         .addFunction("Center", &Rect::Center)
+        // [Method] Vector2 Size() const
         .addFunction("Size", &Rect::Size)
+        // [Method] Vector2 HalfSize() const
         .addFunction("HalfSize", &Rect::HalfSize)
+        // [Method] bool Equals(const Rect& rhs) const
         .addFunction("Equals", &Rect::Equals)
+        // [Method] Intersection IsInside(const Vector2& point) const
         .addFunction("IsInside", &Rect::IsInside)
+        // [Method] Vector4 ToVector4() const
         .addFunction("ToVector4", &Rect::ToVector4)
 
+        // [Method] String ToString() const
         .addFunction("ToString", &Rect::ToString)
 
         .addProperty("min", &Rect::min_)
         .addProperty("max", &Rect::max_)
 
+        // [Property(ReadOnly)] Vector2 center
         .addProperty("center", &Rect::Center)
+        // [Property(ReadOnly)] Vector2 size
         .addProperty("size", &Rect::Size)
+        // [Property(ReadOnly)] Vector2 halfSize
         .addProperty("halfSize", &Rect::HalfSize)
 
         .addStaticField("FULL", &Rect::FULL)
@@ -77,17 +91,23 @@ void RegisterRect(kaguya::State& lua)
         .addStaticField("ZERO", &Rect::ZERO)
         );
 
+    // [Class] IntRect
     lua["IntRect"].setClass(UserdataMetatable<IntRect>()
         .setConstructors<IntRect(),
         IntRect(int, int, int, int)>()
 
         .addFunction("__eq", &IntRect::operator==)
 
+        // [Method] Vector2 Size() const
         .addFunction("Size", &IntRect::Size)
+        // [Method] int Width() const
         .addFunction("Width", &IntRect::Width)
+        // [Method] IntVector2 Size() const
         .addFunction("Height", &IntRect::Height)
+        // [Method] Intersection IsInside(const Vector2& point) const
         .addFunction("IsInside", &IntRect::IsInside)
 
+        // [Method] String ToString() const
         .addFunction("ToString", &IntRect::ToString)
 
         .addProperty("left", &IntRect::left_)
@@ -95,8 +115,11 @@ void RegisterRect(kaguya::State& lua)
         .addProperty("right", &IntRect::right_)
         .addProperty("bottom", &IntRect::bottom_)
 
+        // [Property(ReadOnly)] Vector2 size
         .addProperty("size", &IntRect::Size)
+        // [Property(ReadOnly)] int width
         .addProperty("width", &IntRect::Width)
+        // [Property(ReadOnly)] IntVector2 Size() cons height
         .addProperty("height", &IntRect::Height)
 
         .addStaticField("ZERO", &IntRect::ZERO)

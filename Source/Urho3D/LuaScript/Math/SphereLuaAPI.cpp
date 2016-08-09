@@ -36,6 +36,7 @@ void RegisterSphere(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Sphere
     lua["Sphere"].setClass(UserdataMetatable<Sphere>()
         .setConstructors<Sphere(),
         Sphere(const Sphere&),
@@ -63,8 +64,10 @@ void RegisterSphere(kaguya::State& lua)
             static_cast<void(Sphere::*)(const Polyhedron&)>(&Sphere::Merge),
             static_cast<void(Sphere::*)(const Sphere&)>(&Sphere::Merge))
 
+        // [Method] void Clear()
         .addFunction("Clear", &Sphere::Clear)
 
+        // [Method] bool Defined() const
         .addFunction("Defined", &Sphere::Defined)
 
         .addOverloadedFunctions("IsInside",

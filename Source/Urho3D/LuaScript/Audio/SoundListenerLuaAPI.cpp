@@ -34,6 +34,7 @@ void RegisterSoundListener(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] SoundListener : Component
     lua["SoundListener"].setClass(UserdataMetatable<SoundListener, Component>()
         .addStaticFunction("new", &CreateObject<SoundListener>)
         );

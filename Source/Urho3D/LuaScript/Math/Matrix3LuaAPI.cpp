@@ -34,6 +34,7 @@ void RegisterMatrix3(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Matrix3
     lua["Matrix3"].setClass(UserdataMetatable<Matrix3>()
         .setConstructors<Matrix3(),
         Matrix3(const Matrix3&),
@@ -53,12 +54,18 @@ void RegisterMatrix3(kaguya::State& lua)
             static_cast<void(Matrix3::*)(const Vector3&)>(&Matrix3::SetScale),
             static_cast<void(Matrix3::*)(float)>(&Matrix3::SetScale))
 
+        // [Method] Vector3 Scale() const
         .addFunction("Scale", &Matrix3::Scale)
+        // [Method] Matrix3 Transpose() const
         .addFunction("Transpose", &Matrix3::Transpose)
+        // [Method] Matrix3 Scaled(const Vector3& scale) const
         .addFunction("Scaled", &Matrix3::Scaled)
+        // [Method] bool Equals(const Matrix3& rhs) const
         .addFunction("Equals", &Matrix3::Equals)
+        // [Method] Matrix3 Inverse() const
         .addFunction("Inverse", &Matrix3::Inverse)
 
+        // [Method] String ToString() const
         .addFunction("ToString", &Matrix3::ToString)
 
         .addProperty("m00", &Matrix3::m00_)

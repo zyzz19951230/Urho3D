@@ -37,13 +37,18 @@ void RegisterXMLFile(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] XMLFile : Resource
     lua["XMLFile"].setClass(UserdataMetatable<XMLFile, Resource>()
         .addStaticFunction("new", &CreateObject<XMLFile>)
 
+        // [Method] bool FromString(const String& source)
         .addFunction("FromString", &XMLFile::FromString)
+        // [Method] XMLElement CreateRoot(const String& name)
         .addFunction("CreateRoot", &XMLFile::CreateRoot)
 
+        // [Method] XMLElement GetRoot(const String& name = String::EMPTY)
         .addFunction("GetRoot", XMLFileGetRoot())
+        // [Method] String ToString(const String& indentation = "\t") const
         .addFunction("ToString", XMLFileToString())
 
         .addOverloadedFunctions("Patch",

@@ -34,6 +34,7 @@ void RegisterVector3(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Vector3
     lua["Vector3"].setClass(UserdataMetatable<Vector3>()
         .setConstructors<Vector3(),
         Vector3(const Vector3&),
@@ -57,19 +58,32 @@ void RegisterVector3(kaguya::State& lua)
             static_cast<Vector3(Vector3::*)(float) const>(&Vector3::operator/),
             static_cast<Vector3(Vector3::*)(const Vector3&) const>(&Vector3::operator/))
 
+        // [Method] void Normalize()
         .addFunction("Normalize", &Vector3::Normalize)
+        // [Method] float Length() const
         .addFunction("Length", &Vector3::Length)
+        // [Method] float lenSquared = LengthSquared()
         .addFunction("LengthSquared", &Vector3::LengthSquared)
+        // [Method] float DotProduct(const Vector3& rhs) const
         .addFunction("DotProduct", &Vector3::DotProduct)
+        // [Method] float AbsDotProduct(const Vector3& rhs) const
         .addFunction("AbsDotProduct", &Vector3::AbsDotProduct)
+        // [Method] Vector3 CrossProduct(const Vector3& rhs) const
         .addFunction("CrossProduct", &Vector3::CrossProduct)
+        // [Method] Vector3 Abs() const
         .addFunction("Abs", &Vector3::Abs)
+        // [Method] Vector3 Lerp(const Vector3& rhs, float t) const
         .addFunction("Lerp", &Vector3::Lerp)
+        // [Method] bool Equals(const Vector3& rhs) const
         .addFunction("Equals", &Vector3::Equals)
+        // [Method] float Angle(const Vector3& rhs) const
         .addFunction("Angle", &Vector3::Angle)
+        // [Method] bool IsNaN() const
         .addFunction("IsNaN", &Vector3::IsNaN)
+        // [Method] Vector3 Normalized() const
         .addFunction("Normalized", &Vector3::Normalized)
 
+        // [Method] String ToString() const
         .addFunction("ToString", &Vector3::ToString)
 
         .addProperty("x", &Vector3::x_)

@@ -52,12 +52,17 @@ void RegisterNetwork(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Network : Object
     lua["Network"].setClass(UserdataMetatable<Network, Object>()
 
+        // [Method] bool Connect(const String& address, unsigned short port, Scene* scene, const VariantMap& identity = Variant::emptyVariantMap)
         .addFunction("Connect", NetworkConnect())
+        // [Method] void Disconnect(int waitMSec = 0)
         .addFunction("Disconnect", NetworkDisconnect())
 
+        // [Method] bool StartServer(unsigned short port)
         .addFunction("StartServer", &Network::StartServer)
+        // [Method] void StopServer()
         .addFunction("StopServer", &Network::StopServer)
 
         .addOverloadedFunctions("BroadcastMessage", 
@@ -69,34 +74,56 @@ void RegisterNetwork(kaguya::State& lua)
             NetworkBroadcastRemoteEvent1(),
             NetworkBroadcastRemoteEvent2())
 
+        // [Method] void SetUpdateFps(int fps)
         .addFunction("SetUpdateFps", &Network::SetUpdateFps)
+        // [Method] void SetSimulatedLatency(int ms)
         .addFunction("SetSimulatedLatency", &Network::SetSimulatedLatency)
+        // [Method] void SetSimulatedPacketLoss(float probability)
         .addFunction("SetSimulatedPacketLoss", &Network::SetSimulatedPacketLoss)
 
+        // [Method] void RegisterRemoteEvent(StringHash eventType)
         .addFunction("RegisterRemoteEvent", &Network::RegisterRemoteEvent)
+        // [Method] void UnregisterRemoteEvent(StringHash eventType)
         .addFunction("UnregisterRemoteEvent", &Network::UnregisterRemoteEvent)
+        // [Method] void UnregisterAllRemoteEvents()
         .addFunction("UnregisterAllRemoteEvents", &Network::UnregisterAllRemoteEvents)
         
+        // [Method] void SetPackageCacheDir(const String& path)
         .addFunction("SetPackageCacheDir", &Network::SetPackageCacheDir)
+        // [Method] void SendPackageToClients(Scene* scene, PackageFile* package)
         .addFunction("SendPackageToClients", &Network::SendPackageToClients)
 
         .addFunction("MakeHttpRequest", NetworkMakeHttpRequest())
 
+        // [Method] int GetUpdateFps() const
         .addFunction("GetUpdateFps", &Network::GetUpdateFps)
+        // [Method] int GetSimulatedLatency() const
         .addFunction("GetSimulatedLatency", &Network::GetSimulatedLatency)
+        // [Method] float GetSimulatedPacketLoss() const
         .addFunction("GetSimulatedPacketLoss", &Network::GetSimulatedPacketLoss)
+        // [Method] Connection* GetConnection(kNet::MessageConnection* connection) const
         .addFunction("GetConnection", &Network::GetConnection)
+        // [Method] Connection* GetServerConnection() const
         .addFunction("GetServerConnection", &Network::GetServerConnection)
         
+        // [Method] bool IsServerRunning() const
         .addFunction("IsServerRunning", &Network::IsServerRunning)
+        // [Method] bool CheckRemoteEvent(StringHash eventType) const
         .addFunction("CheckRemoteEvent", &Network::CheckRemoteEvent)
+        // [Method] const String& GetPackageCacheDir() const
         .addFunction("GetPackageCacheDir", &Network::GetPackageCacheDir)
 
+        // [Property] int updateFps
         .addProperty("updateFps", &Network::GetUpdateFps, &Network::SetUpdateFps)
+        // [Property] int simulatedLatency
         .addProperty("simulatedLatency", &Network::GetSimulatedLatency, &Network::SetSimulatedLatency)
+        // [Property] float simulatedPacketLoss
         .addProperty("simulatedPacketLoss", &Network::GetSimulatedPacketLoss, &Network::SetSimulatedPacketLoss)
+        // [Property(ReadOnly)] Connection* serverConnection
         .addProperty("serverConnection", &Network::GetServerConnection)
+        // [Property(ReadOnly)] bool serverRunning
         .addProperty("serverRunning", &Network::IsServerRunning)
+        // [Property] const String& packageCacheDir
         .addProperty("packageCacheDir", &Network::GetPackageCacheDir, &Network::SetPackageCacheDir)
         );
 }

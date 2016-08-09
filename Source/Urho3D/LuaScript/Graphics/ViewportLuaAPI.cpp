@@ -63,36 +63,57 @@ void RegisterViewport(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Viewport : Object
     lua["Viewport"].setClass(UserdataMetatable<Viewport, Object>()
         .addOverloadedFunctions("new", &CreateViewport0, &CreateViewport1, &CreateViewport2, &CreateViewport3, &CreateViewport4)
 
+        // [Method] void SetScene(Scene* scene)
         .addFunction("SetScene", &Viewport::SetScene)
+        // [Method] void SetCamera(Camera* camera)
         .addFunction("SetCamera", &Viewport::SetCamera)
+        // [Method] void SetRect(const IntRect& rect)
         .addFunction("SetRect", &Viewport::SetRect)
 
         .addOverloadedFunctions("SetRenderPath",
             static_cast<void(Viewport::*)(RenderPath*)>(&Viewport::SetRenderPath),
             static_cast<void(Viewport::*)(XMLFile*)>(&Viewport::SetRenderPath))
 
+        // [Method] void SetDrawDebug(bool enable)
         .addFunction("SetDrawDebug", &Viewport::SetDrawDebug)
+        // [Method] void SetCullCamera(Camera* camera)
         .addFunction("SetCullCamera", &Viewport::SetCullCamera)
         
+        // [Method] Scene* GetScene() const
         .addFunction("GetScene", &Viewport::GetScene)
+        // [Method] Camera* GetCamera() const
         .addFunction("GetCamera", &Viewport::GetCamera)
+        // [Method] const IntRect& GetRect() const
         .addFunction("GetRect", &Viewport::GetRect)
+        // [Method] RenderPath* GetRenderPath() const
         .addFunction("GetRenderPath", &Viewport::GetRenderPath)
+        // [Method] bool GetDrawDebug() const
         .addFunction("GetDrawDebug", &Viewport::GetDrawDebug)
+        // [Method] Camera* GetCullCamera() const
         .addFunction("GetCullCamera", &Viewport::GetCullCamera)
         
+        // [Method] Ray GetScreenRay(int x, int y) const
         .addFunction("GetScreenRay", &Viewport::GetScreenRay)
+        // [Method] IntVector2 WorldToScreenPoint(const Vector3& worldPos) const
         .addFunction("WorldToScreenPoint", &Viewport::WorldToScreenPoint)
+        // [Method] Vector3 ScreenToWorldPoint(int x, int y, float depth) const
         .addFunction("ScreenToWorldPoint", &Viewport::ScreenToWorldPoint)
         
+        // [Property] Scene* scene
         .addProperty("scene", &Viewport::GetScene, &Viewport::SetScene)
+        // [Property] Camera* camera
         .addProperty("camera", &Viewport::GetCamera, &Viewport::SetCamera)
+        // [Property] const IntRect& rect
         .addProperty("rect", &Viewport::GetRect, &Viewport::SetRect)
+        // [Property] RenderPath* renderPath
         .addProperty("renderPath", &Viewport::GetRenderPath, static_cast<void (Viewport::*)(RenderPath*)>(&Viewport::SetRenderPath))
+        // [Property] bool drawDebug
         .addProperty("drawDebug", &Viewport::GetDrawDebug, &Viewport::SetDrawDebug)
+        // [Property] Camera* cullCamera
         .addProperty("cullCamera", &Viewport::GetCullCamera, &Viewport::SetCullCamera)
     );
 }

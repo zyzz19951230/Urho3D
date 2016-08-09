@@ -38,45 +38,82 @@ void RegisterConsole(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Console : Object
     lua["Console"].setClass(UserdataMetatable<Console, Object>()
 
+        // [Method] void SetDefaultStyle(XMLFile* style)
         .addFunction("SetDefaultStyle", &Console::SetDefaultStyle)
+        // [Method] void SetVisible(bool enable)
         .addFunction("SetVisible", &Console::SetVisible)
+        // [Method] void Toggle()
         .addFunction("Toggle", &Console::Toggle)
+        // [Method] void SetAutoVisibleOnError(bool enable)
         .addFunction("SetAutoVisibleOnError", &Console::SetAutoVisibleOnError)
+        // [Method] void SetCommandInterpreter(const String& interpreter)
         .addFunction("SetCommandInterpreter", &Console::SetCommandInterpreter)
+        // [Method] void SetNumBufferedRows(unsigned rows)
         .addFunction("SetNumBufferedRows", &Console::SetNumBufferedRows)
+        // [Method] void SetNumRows(unsigned rows)
         .addFunction("SetNumRows", &Console::SetNumRows)
+        // [Method] void SetNumHistoryRows(unsigned rows)
         .addFunction("SetNumHistoryRows", &Console::SetNumHistoryRows)
+        // [Method] void SetFocusOnShow(bool enable)
         .addFunction("SetFocusOnShow", &Console::SetFocusOnShow)
+        // [Method] void UpdateElements()
         .addFunction("UpdateElements", &Console::UpdateElements)
 
+        // [Method] XMLFile* GetDefaultStyle() const
         .addFunction("GetDefaultStyle", &Console::GetDefaultStyle)
+        // [Method] BorderImage* GetBackground() const
         .addFunction("GetBackground", &Console::GetBackground)
+        // [Method] LineEdit* GetLineEdit() const
         .addFunction("GetLineEdit", &Console::GetLineEdit)
+        // [Method] Button* GetCloseButton() const
         .addFunction("GetCloseButton", &Console::GetCloseButton)
+        // [Method] bool IsVisible() const
         .addFunction("IsVisible", &Console::IsVisible)
+        // [Method] bool IsAutoVisibleOnError() const
         .addFunction("IsAutoVisibleOnError", &Console::IsAutoVisibleOnError)
+        // [Method] const String& GetCommandInterpreter() const
         .addFunction("GetCommandInterpreter", &Console::GetCommandInterpreter)
+        // [Method] unsigned GetNumBufferedRows() const
         .addFunction("GetNumBufferedRows", &Console::GetNumBufferedRows)
+        // [Method] unsigned GetNumRows() const
         .addFunction("GetNumRows", &Console::GetNumRows)
+        // [Method] void CopySelectedRows() const
         .addFunction("CopySelectedRows", &Console::CopySelectedRows)
+        // [Method] unsigned GetNumHistoryRows() const
         .addFunction("GetNumHistoryRows", &Console::GetNumHistoryRows)
+        // [Method] unsigned GetHistoryPosition() const
         .addFunction("GetHistoryPosition", &Console::GetHistoryPosition)
+        // [Method] const String& GetHistoryRow(unsigned index) const
         .addFunction("GetHistoryRow", &Console::GetHistoryRow)
+        // [Method] bool GetFocusOnShow() const
         .addFunction("GetFocusOnShow", &Console::GetFocusOnShow)
 
+        // [Property] XMLFile* defaultStyle
         .addProperty("defaultStyle", &Console::GetDefaultStyle, &Console::SetDefaultStyle)
+        // [Property(ReadOnly)] BorderImage* background
         .addProperty("background", &Console::GetBackground)
+        // [Property(ReadOnly)] LineEdit* lineEdit
         .addProperty("lineEdit", &Console::GetLineEdit)
+        // [Property(ReadOnly)] Button* closeButton
         .addProperty("closeButton", &Console::GetCloseButton)
+        // [Property] bool visible
         .addProperty("visible", &Console::IsVisible, &Console::SetVisible)
+        // [Property] bool autoVisibleOnError
         .addProperty("autoVisibleOnError", &Console::IsAutoVisibleOnError, &Console::SetAutoVisibleOnError)
+        // [Property] const String& commandInterpreter
         .addProperty("commandInterpreter", &Console::GetCommandInterpreter, &Console::SetCommandInterpreter)
+        // [Property] unsigned numBufferedRows
         .addProperty("numBufferedRows", &Console::GetNumBufferedRows, &Console::SetNumBufferedRows)
+        // [Property] unsigned numRows
         .addProperty("numRows", &Console::GetNumRows, &Console::SetNumRows)
+        // [Property] unsigned numHistoryRows
         .addProperty("numHistoryRows", &Console::GetNumHistoryRows, &Console::SetNumHistoryRows)
+        // [Property(ReadOnly)] unsigned historyPosition
         .addProperty("historyPosition", &Console::GetHistoryPosition)
+        // [Property] bool focusOnShow
         .addProperty("focusOnShow", &Console::GetFocusOnShow, &Console::SetFocusOnShow)
         );
 }

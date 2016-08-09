@@ -38,14 +38,19 @@ void RegisterControls(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Controls
     lua["Controls"].setClass(UserdataMetatable<Controls>()
         .setConstructors<Controls()>()
 
+        // [Method] void Reset()
         .addFunction("Reset", &Controls::Reset)
 
+        // [Method] void Set(unsigned buttons, bool down = true)
         .addFunction("Set", ControlsSet())
 
+        // [Method] bool IsDown(unsigned button) const
         .addFunction("IsDown", &Controls::IsDown)
+        // [Method] bool IsPressed(unsigned button, const Controls& previousControls) const
         .addFunction("IsPressed", &Controls::IsPressed)
 
         .addProperty("buttons", &Controls::buttons_)

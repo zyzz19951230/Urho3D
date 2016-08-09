@@ -36,13 +36,18 @@ void RegisterAnimationSet2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] AnimationSet2D : Resource
     lua["AnimationSet2D"].setClass(UserdataMetatable<AnimationSet2D, Resource>()
         .addStaticFunction("new", &CreateObject<AnimationSet2D>)
 
+        // [Method] unsigned GetNumAnimations() const
         .addFunction("GetNumAnimations", &AnimationSet2D::GetNumAnimations)
+        // [Method] String GetAnimation(unsigned index) const
         .addFunction("GetAnimation", &AnimationSet2D::GetAnimation)
+        // [Method] bool HasAnimation(const String& animation) const
         .addFunction("HasAnimation", &AnimationSet2D::HasAnimation)
 
+        // [Property(WriteOnly)] unsigned numAnimations
         .addProperty("numAnimations", &AnimationSet2D::GetNumAnimations)
     );
 }

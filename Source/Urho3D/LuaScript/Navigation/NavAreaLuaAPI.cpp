@@ -36,19 +36,28 @@ void RegisterNavArea(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] NavArea : Component
     lua["NavArea"].setClass(UserdataMetatable<NavArea, Component>()
         .addStaticFunction("new", &CreateObject<NavArea>)
 
+        // [Method] unsigned GetAreaID() const
         .addFunction("GetAreaID", &NavArea::GetAreaID)
+        // [Method] void SetAreaID(unsigned newID)
         .addFunction("SetAreaID", &NavArea::SetAreaID)
 
+        // [Method] BoundingBox GetBoundingBox() const
         .addFunction("GetBoundingBox", &NavArea::GetBoundingBox)
+        // [Method] void SetBoundingBox(const BoundingBox& bnds)
         .addFunction("SetBoundingBox", &NavArea::SetBoundingBox)
 
+        // [Method] BoundingBox GetWorldBoundingBox() const
         .addFunction("GetWorldBoundingBox", &NavArea::GetWorldBoundingBox)
 
+        // [Property] unsigned areaID
         .addProperty("areaID", &NavArea::GetAreaID, &NavArea::SetAreaID)
+        // [Property] BoundingBox boundingBox
         .addProperty("boundingBox", &NavArea::GetBoundingBox, &NavArea::SetBoundingBox)
+        // [Property(ReadOnly)] BoundingBox worldBoundingBox
         .addProperty("worldBoundingBox", &NavArea::GetWorldBoundingBox)
         );
 }

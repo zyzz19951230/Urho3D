@@ -76,20 +76,31 @@ void RegisterJSONValue(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum JSONValueType;
+    // [Enum] JSONValueType
+    // [Variable] JSON_NULL
     lua["JSON_NULL"] = JSON_NULL;
+    // [Variable] JSON_BOOL,
     lua["JSON_BOOL"] = JSON_BOOL;
+    // [Variable] JSON_NUMBER,
     lua["JSON_NUMBER"] = JSON_NUMBER;
+    // [Variable] JSON_STRING,
     lua["JSON_STRING"] = JSON_STRING;
+    // [Variable] JSON_ARRAY,
     lua["JSON_ARRAY"] = JSON_ARRAY;
+    // [Variable] JSON_OBJECT,
     lua["JSON_OBJECT"] = JSON_OBJECT;
 
-    // enum JSONNumberType;
+    // [Enum] JSONNumberType
+    // [Variable] void SetType(JSONValueType valueType, JSONNumberType numberType
     lua["JSONNT_NAN"] = JSONNT_NAN;
+    // [Variable] JSONNT_INT,
     lua["JSONNT_INT"] = JSONNT_INT;
+    // [Variable] JSONNT_UINT,
     lua["JSONNT_UINT"] = JSONNT_UINT;
+    // [Variable] JSONNT_FLOAT_DOUBLE,
     lua["JSONNT_FLOAT_DOUBLE"] = JSONNT_FLOAT_DOUBLE;
 
+    // [Class] JSONValue
     lua["JSONValue"].setClass(UserdataMetatable<JSONValue>()
         .setConstructors<JSONValue(),
         JSONValue(bool),
@@ -100,14 +111,22 @@ void RegisterJSONValue(kaguya::State& lua)
         JSONValue(const char*),
         JSONValue(const JSONValue&)>()
 
+        // [Method] JSONValueType GetValueType() const
         .addFunction("GetValueType", &JSONValue::GetValueType)
+        // [Method] JSONNumberType GetNumberType() const
         .addFunction("GetNumberType", &JSONValue::GetNumberType)
 
+        // [Method] bool IsNull() const
         .addFunction("IsNull", &JSONValue::IsNull)
+        // [Method] bool IsBool() const
         .addFunction("IsBool", &JSONValue::IsBool)
+        // [Method] bool IsNumber() const
         .addFunction("IsNumber", &JSONValue::IsNumber)
+        // [Method] bool IsString() const
         .addFunction("IsString", &JSONValue::IsString)
+        // [Method] bool IsArray() const
         .addFunction("IsArray", &JSONValue::IsArray)
+        // [Method] bool IsObject() const
         .addFunction("IsObject", &JSONValue::IsObject)
 
         .addStaticFunction("SetBool", &JSONValueSetBool)
@@ -119,13 +138,21 @@ void RegisterJSONValue(kaguya::State& lua)
         .addStaticFunction("SetArray", &JSONValueSetArray)
         .addStaticFunction("SetObject", &JSONValueSetObject)
 
+        // [Method] bool GetBool() const
         .addFunction("GetBool", &JSONValue::GetBool)
+        // [Method] int GetInt() const
         .addFunction("GetInt", &JSONValue::GetInt)
+        // [Method] unsigned GetUInt() const
         .addFunction("GetUInt", &JSONValue::GetUInt)
+        // [Method] float GetFloat() const
         .addFunction("GetFloat", &JSONValue::GetFloat)
+        // [Method] double GetDouble() const
         .addFunction("GetDouble", &JSONValue::GetDouble)
+        // [Method] const char* GetString() const
         .addFunction("GetString", &JSONValue::GetCString)
+        // [Method] const JSONArray& GetArray() const
         .addFunction("GetArray", &JSONValue::GetArray)
+        // [Method] const JSONObject& GetObject() const
         .addFunction("GetObject", &JSONValue::GetObject)
 
         .addOverloadedFunctions("__index",
@@ -136,31 +163,48 @@ void RegisterJSONValue(kaguya::State& lua)
             static_cast<JSONValue&(JSONValue::*)(unsigned)>(&JSONValue::operator[]),
             static_cast<JSONValue&(JSONValue::*)(const String&)>(&JSONValue::operator[]))
 
+        // [Method] void Push(const JSONValue& value)
         .addFunction("Push", &JSONValue::Push)
+        // [Method] void Pop()
         .addFunction("Pop", &JSONValue::Pop)
+        // [Method] void Insert(unsigned pos, const JSONValue& value)
         .addFunction("Insert", &JSONValue::Insert)
 
         .addOverloadedFunctions("Erase",
             static_cast<void(JSONValue::*)(unsigned, unsigned)>(&JSONValue::Erase),
             static_cast<bool(JSONValue::*)(const String&)>(&JSONValue::Erase))
 
+        // [Method] void Resize(unsigned newSize)
         .addFunction("Resize", &JSONValue::Resize)
+        // [Method] unsigned Size() const
         .addFunction("Size", &JSONValue::Size)
 
+        // [Method] void Set(const String& key, const JSONValue& value)
         .addFunction("Set", &JSONValue::Set)
+        // [Method] const JSONValue& Get(const String& key) const
         .addFunction("Get", &JSONValue::Get)
+        // [Method] bool Contains(const String& key) const
         .addFunction("Contains", &JSONValue::Contains)
 
+        // [Method] void Clear()
         .addFunction("Clear", &JSONValue::Clear)
 
+        // [Property(ReadOnly)] JSONValueType valueType
         .addProperty("valueType", &JSONValue::GetValueType)
+        // [Property(ReadOnly)] JSONNumberType numberType
         .addProperty("numberType", &JSONValue::GetNumberType)
 
+        // [Property(ReadOnly)] bool isNull
         .addProperty("isNull", &JSONValue::IsNull)
+        // [Property(ReadOnly)] bool isBool
         .addProperty("isBool", &JSONValue::IsBool)
+        // [Property(ReadOnly)] bool isNumber
         .addProperty("isNumber", &JSONValue::IsNumber)
+        // [Property(ReadOnly)] bool isString
         .addProperty("isString", &JSONValue::IsString)
+        // [Property(ReadOnly)] bool isArray
         .addProperty("isArray", &JSONValue::IsArray)
+        // [Property(ReadOnly)] bool isObject
         .addProperty("isObject", &JSONValue::IsObject)
 
         .addStaticField("EMPTY", &JSONValue::EMPTY)

@@ -36,6 +36,7 @@ void RegisterPolyhedron(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Polyhedron
     lua["Polyhedron"].setClass(UserdataMetatable<Polyhedron>()
         .setConstructors<Polyhedron(),
         Polyhedron(const Polyhedron&),
@@ -55,6 +56,7 @@ void RegisterPolyhedron(kaguya::State& lua)
             static_cast<void(Polyhedron::*)(const BoundingBox&)>(&Polyhedron::Clip),
             static_cast<void(Polyhedron::*)(const Frustum&)>(&Polyhedron::Clip))
 
+        // [Method] void Clear()
         .addFunction("Clear", &Polyhedron::Clear)
 
         .addOverloadedFunctions("Transform",
@@ -65,8 +67,10 @@ void RegisterPolyhedron(kaguya::State& lua)
             static_cast<Polyhedron(Polyhedron::*)(const Matrix3&) const>(&Polyhedron::Transformed),
             static_cast<Polyhedron(Polyhedron::*)(const Matrix3x4&) const>(&Polyhedron::Transformed))
 
+        // [Method] bool Empty() const
         .addFunction("Empty", &Polyhedron::Empty)
 
+        // [Property(ReadOnly)] bool empty
         .addProperty("empty", &Polyhedron::Empty)
         );
 }

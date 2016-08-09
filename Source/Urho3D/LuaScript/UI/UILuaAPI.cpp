@@ -102,39 +102,61 @@ void RegisterUI(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] UI : Object
     lua["UI"].setClass(UserdataMetatable<UI, Object>()
 
+        // [Method] void SetCursor(Cursor* cursor)
         .addFunction("SetCursor", &UI::SetCursor)
 
+        // [Method] void SetFocusElement(UIElement* element, bool byKey = false)
         .addFunction("SetFocusElement", UISetFocusElement())
 
+        // [Method] bool SetModalElement(UIElement* modalElement, bool enable)
         .addFunction("SetModalElement", &UI::SetModalElement)
+        // [Method] void Clear()
         .addFunction("Clear", &UI::Clear)
 
+        // [Method] void DebugDraw(UIElement* element)
         .addFunction("DebugDraw", &UI::DebugDraw)
 
         .addOverloadedFunctions("LoadLayout", UILoadLayoutOverloads0(), UILoadLayoutOverloads1())
 
         .addStaticFunction("SaveLayout", &UISaveLayout)
 
+        // [Method] void SetClipboardText(const String& text)
         .addFunction("SetClipboardText", &UI::SetClipboardText)
+        // [Method] void SetDoubleClickInterval(float interval)
         .addFunction("SetDoubleClickInterval", &UI::SetDoubleClickInterval)
+        // [Method] void SetDragBeginInterval(float interval)
         .addFunction("SetDragBeginInterval", &UI::SetDragBeginInterval)
+        // [Method] void SetDragBeginDistance(int pixels)
         .addFunction("SetDragBeginDistance", &UI::SetDragBeginDistance)
+        // [Method] void SetDefaultToolTipDelay(float delay)
         .addFunction("SetDefaultToolTipDelay", &UI::SetDefaultToolTipDelay)
+        // [Method] void SetMaxFontTextureSize(int size)
         .addFunction("SetMaxFontTextureSize", &UI::SetMaxFontTextureSize)
+        // [Method] void SetNonFocusedMouseWheel(bool nonFocusedMouseWheel)
         .addFunction("SetNonFocusedMouseWheel", &UI::SetNonFocusedMouseWheel)
+        // [Method] void SetUseSystemClipboard(bool enable)
         .addFunction("SetUseSystemClipboard", &UI::SetUseSystemClipboard)
+        // [Method] void SetUseScreenKeyboard(bool enable)
         .addFunction("SetUseScreenKeyboard", &UI::SetUseScreenKeyboard)
+        // [Method] void SetUseMutableGlyphs(bool enable)
         .addFunction("SetUseMutableGlyphs", &UI::SetUseMutableGlyphs)
+        // [Method] void SetForceAutoHint(bool enable)
         .addFunction("SetForceAutoHint", &UI::SetForceAutoHint)
+        // [Method] void SetScale(float scale)
         .addFunction("SetScale", &UI::SetScale)
+        // [Method] void SetWidth(float size)
         .addFunction("SetWidth", &UI::SetWidth)
+        // [Method] void SetHeight(float size)
         .addFunction("SetHeight", &UI::SetHeight)
 
         .addStaticFunction("GetRoot", &UIGetRoot)
         .addStaticFunction("GetRootModalElement", &UIGetRootModalElement)
+        // [Method] Cursor* GetCursor() const
         .addFunction("GetCursor", &UI::GetCursor)
+        // [Method] IntVector2 GetCursorPosition() const
         .addFunction("GetCursorPosition", &UI::GetCursorPosition)
 
         .addOverloadedFunctions("GetElementAt", UIGetElementAtOverloads0(), UIGetElementAtOverloads1())
@@ -142,46 +164,78 @@ void RegisterUI(kaguya::State& lua)
         .addStaticFunction("GetFocusElement", &UIGetFocusElement)
         .addStaticFunction("GetFrontElement", &UIGetFrontElement)
 
+        // [Method] unsigned GetNumDragElements() const
         .addFunction("GetNumDragElements", &UI::GetNumDragElements)
         .addStaticFunction("GetDragElement", &UIGetDragElement)
 
+        // [Method] const String& GetClipboardText() const
         .addFunction("GetClipboardText", &UI::GetClipboardText)
+        // [Method] float GetDoubleClickInterval() const
         .addFunction("GetDoubleClickInterval", &UI::GetDoubleClickInterval)
+        // [Method] float GetDragBeginInterval() const
         .addFunction("GetDragBeginInterval", &UI::GetDragBeginInterval)
+        // [Method] int GetDragBeginDistance() const
         .addFunction("GetDragBeginDistance", &UI::GetDragBeginDistance)
+        // [Method] float GetDefaultToolTipDelay() const
         .addFunction("GetDefaultToolTipDelay", &UI::GetDefaultToolTipDelay)
+        // [Method] int GetMaxFontTextureSize() const
         .addFunction("GetMaxFontTextureSize", &UI::GetMaxFontTextureSize)
+        // [Method] bool IsNonFocusedMouseWheel() const
         .addFunction("IsNonFocusedMouseWheel", &UI::IsNonFocusedMouseWheel)
+        // [Method] bool GetUseSystemClipboard() const
         .addFunction("GetUseSystemClipboard", &UI::GetUseSystemClipboard)
+        // [Method] bool GetUseScreenKeyboard() const
         .addFunction("GetUseScreenKeyboard", &UI::GetUseScreenKeyboard)
+        // [Method] bool GetUseMutableGlyphs() const
         .addFunction("GetUseMutableGlyphs", &UI::GetUseMutableGlyphs)
+        // [Method] bool GetForceAutoHint() const
         .addFunction("GetForceAutoHint", &UI::GetForceAutoHint)
+        // [Method] bool HasModalElement() const
         .addFunction("HasModalElement", &UI::HasModalElement)
+        // [Method] bool IsDragging() const
         .addFunction("IsDragging", &UI::IsDragging)
+        // [Method] float GetScale() const
         .addFunction("GetScale", &UI::GetScale)
 
         .addProperty("root", &UIGetRoot)
         .addProperty("rootModalElement", &UIGetRootModalElement)
+        // [Property] Cursor* cursor
         .addProperty("cursor", &UI::GetCursor, &UI::SetCursor)
+        // [Property(ReadOnly)] IntVector2 cursorPosition
         .addProperty("cursorPosition", &UI::GetCursorPosition)
         .addProperty("focusElement", &UIGetFocusElement)
         .addProperty("frontElement", &UIGetFrontElement)
 
+        // [Property(ReadOnly)] unsigned numDragElements
         .addProperty("numDragElements", &UI::GetNumDragElements)
 
+        // [Property] const String& clipboardText
         .addProperty("clipboardText", &UI::GetClipboardText, &UI::SetClipboardText)
+        // [Property] float doubleClickInterval
         .addProperty("doubleClickInterval", &UI::GetDoubleClickInterval, &UI::SetDoubleClickInterval)
+        // [Property] float dragBeginInterval
         .addProperty("dragBeginInterval", &UI::GetDragBeginInterval, &UI::SetDragBeginInterval)
+        // [Property] int dragBeginDistance
         .addProperty("dragBeginDistance", &UI::GetDragBeginDistance, &UI::SetDragBeginDistance)
+        // [Property] float defaultToolTipDelay
         .addProperty("defaultToolTipDelay", &UI::GetDefaultToolTipDelay, &UI::SetDefaultToolTipDelay)
+        // [Property] int maxFontTextureSize
         .addProperty("maxFontTextureSize", &UI::GetMaxFontTextureSize, &UI::SetMaxFontTextureSize)
+        // [Property] bool nonFocusedMouseWheel
         .addProperty("nonFocusedMouseWheel", &UI::IsNonFocusedMouseWheel, &UI::SetNonFocusedMouseWheel)
+        // [Property] bool useSystemClipboard
         .addProperty("useSystemClipboard", &UI::GetUseSystemClipboard, &UI::SetUseSystemClipboard)
+        // [Property] bool useScreenKeyboard
         .addProperty("useScreenKeyboard", &UI::GetUseScreenKeyboard, &UI::SetUseScreenKeyboard)
+        // [Property] bool useMutableGlyphs
         .addProperty("useMutableGlyphs", &UI::GetUseMutableGlyphs, &UI::SetUseMutableGlyphs)
+        // [Property] bool forceAutoHint
         .addProperty("forceAutoHint", &UI::GetForceAutoHint, &UI::SetForceAutoHint)
+        // [Property(ReadOnly)] bool hasModalElement
         .addProperty("hasModalElement", &UI::HasModalElement)
+        // [Property(ReadOnly)] bool dragging
         .addProperty("dragging", &UI::IsDragging)
+        // [Property] float scale
         .addProperty("scale", &UI::GetScale, &UI::SetScale)
         );
 }

@@ -38,25 +38,41 @@ void RegisterOffMeshConnection(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] OffMeshConnection : Component
     lua["OffMeshConnection"].setClass(UserdataMetatable<OffMeshConnection, Component>()
         .addStaticFunction("new", &CreateObject<OffMeshConnection>)
 
+        // [Method] void SetEndPoint(Node* node)
         .addFunction("SetEndPoint", &OffMeshConnection::SetEndPoint)
+        // [Method] void SetRadius(float radius)
         .addFunction("SetRadius", &OffMeshConnection::SetRadius)
+        // [Method] void SetBidirectional(bool enabled)
         .addFunction("SetBidirectional", &OffMeshConnection::SetBidirectional)
+        // [Method] void SetMask(unsigned newMask)
         .addFunction("SetMask", &OffMeshConnection::SetMask)
+        // [Method] void SetAreaID(unsigned newAreaID)
         .addFunction("SetAreaID", &OffMeshConnection::SetAreaID)
         
+        // [Method] Node* GetEndPoint() const
         .addFunction("GetEndPoint", &OffMeshConnection::GetEndPoint)
+        // [Method] float GetRadius() const
         .addFunction("GetRadius", &OffMeshConnection::GetRadius)
+        // [Method] bool IsBidirectional() const
         .addFunction("IsBidirectional", &OffMeshConnection::IsBidirectional)
+        // [Method] unsigned GetMask() const
         .addFunction("GetMask", &OffMeshConnection::GetMask)
+        // [Method] unsigned GetAreaID() const
         .addFunction("GetAreaID", &OffMeshConnection::GetAreaID)
 
+        // [Property] Node* endPoint
         .addProperty("endPoint", &OffMeshConnection::GetEndPoint, &OffMeshConnection::SetEndPoint)
+        // [Property] float radius
         .addProperty("radius", &OffMeshConnection::GetRadius, &OffMeshConnection::SetRadius)
+        // [Property] bool bidirectional
         .addProperty("bidirectional", &OffMeshConnection::IsBidirectional, &OffMeshConnection::SetBidirectional)
+        // [Property] unsigned mask
         .addProperty("mask", &OffMeshConnection::GetMask, &OffMeshConnection::SetMask)
+        // [Property] unsigned areaID
         .addProperty("areaID", &OffMeshConnection::GetAreaID, &OffMeshConnection::SetAreaID)
         );
 }

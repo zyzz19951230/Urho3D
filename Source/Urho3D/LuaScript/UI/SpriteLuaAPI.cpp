@@ -35,6 +35,7 @@ void RegisterSprite(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Sprite : UIElement
     lua["Sprite"].setClass(UserdataMetatable<Sprite, UIElement>()
         .addStaticFunction("new", &CreateObject<Sprite>)
 
@@ -51,30 +52,51 @@ void RegisterSprite(kaguya::State& lua)
             static_cast<void(Sprite::*)(float, float)>(&Sprite::SetScale),
             static_cast<void(Sprite::*)(float)>(&Sprite::SetScale))
 
+        // [Method] void SetRotation(float angle)
         .addFunction("SetRotation", &Sprite::SetRotation)
+        // [Method] void SetTexture(Texture* texture)
         .addFunction("SetTexture", &Sprite::SetTexture)
+        // [Method] void SetImageRect(const IntRect& rect)
         .addFunction("SetImageRect", &Sprite::SetImageRect)
+        // [Method] void SetFullImageRect()
         .addFunction("SetFullImageRect", &Sprite::SetFullImageRect)
+        // [Method] void SetBlendMode(BlendMode mode)
         .addFunction("SetBlendMode", &Sprite::SetBlendMode)
 
+        // [Method] const Vector2& GetPosition() const
         .addFunction("GetPosition", &Sprite::GetPosition)
+        // [Method] const IntVector2& GetHotSpot() const
         .addFunction("GetHotSpot", &Sprite::GetHotSpot)
+        // [Method] const Vector2& GetScale() const
         .addFunction("GetScale", &Sprite::GetScale)
+        // [Method] float GetRotation() const
         .addFunction("GetRotation", &Sprite::GetRotation)
+        // [Method] Texture* GetTexture() const
         .addFunction("GetTexture", &Sprite::GetTexture)
+        // [Method] const IntRect& GetImageRect() const
         .addFunction("GetImageRect", &Sprite::GetImageRect)
+        // [Method] BlendMode GetBlendMode() const
         .addFunction("GetBlendMode", &Sprite::GetBlendMode)
 
+        // [Method] const Matrix3x4& GetTransform() const
         .addFunction("GetTransform", &Sprite::GetTransform)
 
+        // [Property] const Vector2& position
         .addProperty("position", &Sprite::GetPosition, static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetPosition))
+        // [Property] const IntVector2& hotSpot
         .addProperty("hotSpot", &Sprite::GetHotSpot, static_cast<void(Sprite::*)(const IntVector2&)>(&Sprite::SetHotSpot))
+        // [Property] const Vector2& scale
         .addProperty("scale", &Sprite::GetScale, static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetScale))
+        // [Property] float rotation
         .addProperty("rotation", &Sprite::GetRotation, &Sprite::SetRotation)
+        // [Property] Texture* texture
         .addProperty("texture", &Sprite::GetTexture, &Sprite::SetTexture)
+        // [Property] const IntRect& imageRect
         .addProperty("imageRect", &Sprite::GetImageRect, &Sprite::SetImageRect)
+        // [Property] BlendMode blendMode
         .addProperty("blendMode", &Sprite::GetBlendMode, &Sprite::SetBlendMode)
 
+        // [Property(ReadOnly)] const Matrix3x4& transform
         .addProperty("transform", &Sprite::GetTransform)
         );
 }

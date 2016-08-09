@@ -36,36 +36,63 @@ void RegisterScrollBar(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] ScrollBar : BorderImage
     lua["ScrollBar"].setClass(UserdataMetatable<ScrollBar, BorderImage>()
         .addStaticFunction("new", &CreateObject<ScrollBar>)
 
+        // [Method] void SetOrientation(Orientation orientation)
         .addFunction("SetOrientation", &ScrollBar::SetOrientation)
+        // [Method] void SetRange(float range)
         .addFunction("SetRange", &ScrollBar::SetRange)
+        // [Method] void SetValue(float value)
         .addFunction("SetValue", &ScrollBar::SetValue)
+        // [Method] void ChangeValue(float delta)
         .addFunction("ChangeValue", &ScrollBar::ChangeValue)
+        // [Method] void SetScrollStep(float step)
         .addFunction("SetScrollStep", &ScrollBar::SetScrollStep)
+        // [Method] void SetStepFactor(float factor)
         .addFunction("SetStepFactor", &ScrollBar::SetStepFactor)
+        // [Method] void StepBack()
         .addFunction("StepBack", &ScrollBar::StepBack)
+        // [Method] void StepForward()
         .addFunction("StepForward", &ScrollBar::StepForward)
 
+        // [Method] Orientation GetOrientation() const
         .addFunction("GetOrientation", &ScrollBar::GetOrientation)
+        // [Method] float GetRange() const
         .addFunction("GetRange", &ScrollBar::GetRange)
+        // [Method] float GetValue() const
         .addFunction("GetValue", &ScrollBar::GetValue)
+        // [Method] float GetScrollStep() const
         .addFunction("GetScrollStep", &ScrollBar::GetScrollStep)
+        // [Method] float GetStepFactor() const
         .addFunction("GetStepFactor", &ScrollBar::GetStepFactor)
+        // [Method] float GetEffectiveScrollStep() const
         .addFunction("GetEffectiveScrollStep", &ScrollBar::GetEffectiveScrollStep)
+        // [Method] Button* GetBackButton() const
         .addFunction("GetBackButton", &ScrollBar::GetBackButton)
+        // [Method] Button* GetForwardButton() const
         .addFunction("GetForwardButton", &ScrollBar::GetForwardButton)
+        // [Method] Slider* GetSlider() const
         .addFunction("GetSlider", &ScrollBar::GetSlider)
 
+        // [Property] Orientation orientation
         .addProperty("orientation", &ScrollBar::GetOrientation, &ScrollBar::SetOrientation)
+        // [Property] float range
         .addProperty("range", &ScrollBar::GetRange, &ScrollBar::SetRange)
+        // [Property] float value
         .addProperty("value", &ScrollBar::GetValue, &ScrollBar::SetValue)
+        // [Property] float scrollStep
         .addProperty("scrollStep", &ScrollBar::GetScrollStep, &ScrollBar::SetScrollStep)
+        // [Property] float stepFactor
         .addProperty("stepFactor", &ScrollBar::GetStepFactor, &ScrollBar::SetStepFactor)
+        // [Property(ReadOnly)] float effectiveScrollStep
         .addProperty("effectiveScrollStep", &ScrollBar::GetEffectiveScrollStep)
+        // [Property(ReadOnly)] Button* backButton
         .addProperty("backButton", &ScrollBar::GetBackButton)
+        // [Property(ReadOnly)] Button* forwardButton
         .addProperty("forwardButton", &ScrollBar::GetForwardButton)
+        // [Property(ReadOnly)] Slider* slider
         .addProperty("slider", &ScrollBar::GetSlider)
         );
 }

@@ -39,32 +39,51 @@ void RegisterAnimatedSprite2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum LoopMode2D;
+    // [Enum] LoopMode2D
+    // [Constant] void SetAnimation(String& name, LoopMode2D loopMode
     lua["LM_DEFAULT"] = LM_DEFAULT;
+    // [Variable] LM_FORCE_LOOPED,
     lua["LM_FORCE_LOOPED"] = LM_FORCE_LOOPED;
+    // [Variable] LM_FORCE_CLAMPED
     lua["LM_FORCE_CLAMPED"] = LM_FORCE_CLAMPED;
 
+    // [Class] AnimatedSprite2D : StaticSprite2D
     lua["AnimatedSprite2D"].setClass(UserdataMetatable<AnimatedSprite2D, StaticSprite2D>()
         .addStaticFunction("new", &CreateObject<AnimatedSprite2D>)
 
+        // [Method] void SetAnimationSet(AnimationSet2D* animationSet)
         .addFunction("SetAnimationSet", &AnimatedSprite2D::SetAnimationSet)
+        // [Method] void SetEntity(const String& name)
         .addFunction("SetEntity", &AnimatedSprite2D::SetEntity)
 
+        // [Method] void SetAnimation(const String& name, LoopMode2D loopMode = LM_DEFAULT)
         .addFunction("SetAnimation", AnimatedSprite2DSetAnimation())
 
+        // [Method] void SetLoopMode(LoopMode2D loopMode)
         .addFunction("SetLoopMode", &AnimatedSprite2D::SetLoopMode)
+        // [Method] void SetSpeed(float speed)
         .addFunction("SetSpeed", &AnimatedSprite2D::SetSpeed)
 
+        // [Method] AnimationSet2D* GetAnimationSet() const
         .addFunction("GetAnimationSet", &AnimatedSprite2D::GetAnimationSet)
+        // [Method] const String& GetEntity() const
         .addFunction("GetEntity", &AnimatedSprite2D::GetEntity)
+        // [Method] const String& GetAnimation() const
         .addFunction("GetAnimation", &AnimatedSprite2D::GetAnimation)
+        // [Method] LoopMode2D GetLoopMode() const
         .addFunction("GetLoopMode", &AnimatedSprite2D::GetLoopMode)
+        // [Method] float GetSpeed() const
         .addFunction("GetSpeed", &AnimatedSprite2D::GetSpeed)
 
+        // [Property] AnimationSet2D* animationSet
         .addProperty("animationSet", &AnimatedSprite2D::GetAnimationSet, &AnimatedSprite2D::SetAnimationSet)
+        // [Property] const String& entity
         .addProperty("entity", &AnimatedSprite2D::GetEntity, &AnimatedSprite2D::SetEntity)
+        // [Property(ReadOnly)] const String& animation
         .addProperty("animation", &AnimatedSprite2D::GetAnimation)
+        // [Property] LoopMode2D loopMode
         .addProperty("loopMode", &AnimatedSprite2D::GetLoopMode, &AnimatedSprite2D::SetLoopMode)
+        // [Property] float speed
         .addProperty("speed", &AnimatedSprite2D::GetSpeed, &AnimatedSprite2D::SetSpeed)
     );
 }

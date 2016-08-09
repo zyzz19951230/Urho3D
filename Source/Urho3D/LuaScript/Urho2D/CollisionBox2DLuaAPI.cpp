@@ -36,6 +36,7 @@ void RegisterCollisionBox2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] CollisionBox2D : CollisionShape2D
     lua["CollisionBox2D"].setClass(UserdataMetatable<CollisionBox2D, CollisionShape2D>()
         .addStaticFunction("new", &CreateObject<CollisionBox2D>)
 
@@ -47,14 +48,21 @@ void RegisterCollisionBox2D(kaguya::State& lua)
             static_cast<void(CollisionBox2D::*)(const Vector2&)>(&CollisionBox2D::SetCenter),
             static_cast<void(CollisionBox2D::*)(float, float)>(&CollisionBox2D::SetCenter))
 
+        // [Method] void SetAngle(float angle)
         .addFunction("SetAngle", &CollisionBox2D::SetAngle)
 
+        // [Method] const Vector2& GetSize() const
         .addFunction("GetSize", &CollisionBox2D::GetSize)
+        // [Method] const Vector2& GetCenter() const
         .addFunction("GetCenter", &CollisionBox2D::GetCenter)
+        // [Method] float GetAngle() const
         .addFunction("GetAngle", &CollisionBox2D::GetAngle)
 
+        // [Property] const Vector2& size
         .addProperty("size", &CollisionBox2D::GetSize, static_cast<void(CollisionBox2D::*)(const Vector2&)>(&CollisionBox2D::SetSize))
+        // [Property] const Vector2& center
         .addProperty("center", &CollisionBox2D::GetCenter, static_cast<void(CollisionBox2D::*)(const Vector2&)>(&CollisionBox2D::SetCenter))
+        // [Property] float angle
         .addProperty("angle", &CollisionBox2D::GetAngle, &CollisionBox2D::SetAngle)
     );
 }

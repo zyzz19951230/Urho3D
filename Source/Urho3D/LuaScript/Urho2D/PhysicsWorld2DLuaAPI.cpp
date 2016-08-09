@@ -67,6 +67,7 @@ void RegisterPhysicsWorld2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] PhysicsRaycastResult2D
     lua["PhysicsRaycastResult2D"].setClass(UserdataMetatable<PhysicsRaycastResult2D>()
         .setConstructors<PhysicsRaycastResult2D()>()
 
@@ -76,24 +77,40 @@ void RegisterPhysicsWorld2D(kaguya::State& lua)
         .addProperty("body", &PhysicsRaycastResult2D::body_)
     );
 
+    // [Class] PhysicsWorld2D : Component
     lua["PhysicsWorld2D"].setClass(UserdataMetatable<PhysicsWorld2D, Component>()
         .addStaticFunction("new", &CreateObject<PhysicsWorld2D>)
 
+        // [Method] void DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
         .addFunction("DrawDebugGeometry", static_cast<void(PhysicsWorld2D::*)()>(&PhysicsWorld2D::DrawDebugGeometry))
 
+        // [Method] void SetUpdateEnabled(bool enable)
         .addFunction("SetUpdateEnabled", &PhysicsWorld2D::SetUpdateEnabled)
+        // [Method] void SetDrawShape(bool drawShape)
         .addFunction("SetDrawShape", &PhysicsWorld2D::SetDrawShape)
+        // [Method] void SetDrawJoint(bool drawJoint)
         .addFunction("SetDrawJoint", &PhysicsWorld2D::SetDrawJoint)
+        // [Method] void SetDrawAabb(bool drawAabb)
         .addFunction("SetDrawAabb", &PhysicsWorld2D::SetDrawAabb)
+        // [Method] void SetDrawPair(bool drawPair)
         .addFunction("SetDrawPair", &PhysicsWorld2D::SetDrawPair)
+        // [Method] void SetDrawCenterOfMass(bool drawCenterOfMass)
         .addFunction("SetDrawCenterOfMass", &PhysicsWorld2D::SetDrawCenterOfMass)
+        // [Method] void SetAllowSleeping(bool enable)
         .addFunction("SetAllowSleeping", &PhysicsWorld2D::SetAllowSleeping)
+        // [Method] void SetWarmStarting(bool enable)
         .addFunction("SetWarmStarting", &PhysicsWorld2D::SetWarmStarting)
+        // [Method] void SetContinuousPhysics(bool enable)
         .addFunction("SetContinuousPhysics", &PhysicsWorld2D::SetContinuousPhysics)
+        // [Method] void SetSubStepping(bool enable)
         .addFunction("SetSubStepping", &PhysicsWorld2D::SetSubStepping)
+        // [Method] void SetGravity(const Vector2& gravity)
         .addFunction("SetGravity", &PhysicsWorld2D::SetGravity)
+        // [Method] void SetAutoClearForces(bool enable)
         .addFunction("SetAutoClearForces", &PhysicsWorld2D::SetAutoClearForces)
+        // [Method] void SetVelocityIterations(int velocityIterations)
         .addFunction("SetVelocityIterations", &PhysicsWorld2D::SetVelocityIterations)
+        // [Method] void SetPositionIterations(int positionIterations)
         .addFunction("SetPositionIterations", &PhysicsWorld2D::SetPositionIterations)
 
         .addStaticFunction("Raycast", PhysicsWorld2DRaycastOverloads())
@@ -104,34 +121,62 @@ void RegisterPhysicsWorld2D(kaguya::State& lua)
 
         .addStaticFunction("GetRigidBodies", PhysicsWorld2DGetRigidBodiesOverloads())
 
+        // [Method] bool IsUpdateEnabled() const
         .addFunction("IsUpdateEnabled", &PhysicsWorld2D::IsUpdateEnabled)
+        // [Method] bool GetDrawShape() const
         .addFunction("GetDrawShape", &PhysicsWorld2D::GetDrawShape)
+        // [Method] bool GetDrawJoint() const
         .addFunction("GetDrawJoint", &PhysicsWorld2D::GetDrawJoint)
+        // [Method] bool GetDrawAabb() const
         .addFunction("GetDrawAabb", &PhysicsWorld2D::GetDrawAabb)
+        // [Method] bool GetDrawPair() const
         .addFunction("GetDrawPair", &PhysicsWorld2D::GetDrawPair)
+        // [Method] bool GetDrawCenterOfMass() const
         .addFunction("GetDrawCenterOfMass", &PhysicsWorld2D::GetDrawCenterOfMass)
+        // [Method] bool GetAllowSleeping() const
         .addFunction("GetAllowSleeping", &PhysicsWorld2D::GetAllowSleeping)
+        // [Method] bool GetWarmStarting() const
         .addFunction("GetWarmStarting", &PhysicsWorld2D::GetWarmStarting)
+        // [Method] bool GetContinuousPhysics() const
         .addFunction("GetContinuousPhysics", &PhysicsWorld2D::GetContinuousPhysics)
+        // [Method] bool GetSubStepping() const
         .addFunction("GetSubStepping", &PhysicsWorld2D::GetSubStepping)
+        // [Method] bool GetAutoClearForces() const
         .addFunction("GetAutoClearForces", &PhysicsWorld2D::GetAutoClearForces)
+        // [Method] const Vector2& GetGravity() const
         .addFunction("GetGravity", &PhysicsWorld2D::GetGravity)
+        // [Method] int GetVelocityIterations() const
         .addFunction("GetVelocityIterations", &PhysicsWorld2D::GetVelocityIterations)
+        // [Method] int GetPositionIterations() const
         .addFunction("GetPositionIterations", &PhysicsWorld2D::GetPositionIterations)
 
+        // [Property] bool updateEnabled
         .addProperty("updateEnabled", &PhysicsWorld2D::IsUpdateEnabled, &PhysicsWorld2D::SetUpdateEnabled)
+        // [Property] bool drawShape
         .addProperty("drawShape", &PhysicsWorld2D::GetDrawShape, &PhysicsWorld2D::SetDrawShape)
+        // [Property] bool drawJoint
         .addProperty("drawJoint", &PhysicsWorld2D::GetDrawJoint, &PhysicsWorld2D::SetDrawJoint)
+        // [Property] bool drawAabb
         .addProperty("drawAabb", &PhysicsWorld2D::GetDrawAabb, &PhysicsWorld2D::SetDrawAabb)
+        // [Property] bool drawPair
         .addProperty("drawPair", &PhysicsWorld2D::GetDrawPair, &PhysicsWorld2D::SetDrawPair)
+        // [Property] bool drawCenterOfMass
         .addProperty("drawCenterOfMass", &PhysicsWorld2D::GetDrawCenterOfMass, &PhysicsWorld2D::SetDrawCenterOfMass)
+        // [Property] bool allowSleeping
         .addProperty("allowSleeping", &PhysicsWorld2D::GetAllowSleeping, &PhysicsWorld2D::SetAllowSleeping)
+        // [Property] bool warmStarting
         .addProperty("warmStarting", &PhysicsWorld2D::GetWarmStarting, &PhysicsWorld2D::SetWarmStarting)
+        // [Property] bool continuousPhysics
         .addProperty("continuousPhysics", &PhysicsWorld2D::GetContinuousPhysics, &PhysicsWorld2D::SetContinuousPhysics)
+        // [Property] bool subStepping
         .addProperty("subStepping", &PhysicsWorld2D::GetSubStepping, &PhysicsWorld2D::SetSubStepping)
+        // [Property] bool autoClearForces
         .addProperty("autoClearForces", &PhysicsWorld2D::GetAutoClearForces, &PhysicsWorld2D::SetAutoClearForces)
+        // [Property] const Vector2& gravity
         .addProperty("gravity", &PhysicsWorld2D::GetGravity, &PhysicsWorld2D::SetGravity)
+        // [Property] int velocityIterations
         .addProperty("velocityIterations", &PhysicsWorld2D::GetVelocityIterations, &PhysicsWorld2D::SetVelocityIterations)
+        // [Property] int positionIterations
         .addProperty("positionIterations", &PhysicsWorld2D::GetPositionIterations, &PhysicsWorld2D::SetPositionIterations)
     );
 }

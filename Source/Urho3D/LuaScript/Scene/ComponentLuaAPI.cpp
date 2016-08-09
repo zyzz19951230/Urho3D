@@ -48,28 +48,43 @@ void RegisterComponent(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Component : Animatable
     lua["Component"].setClass(UserdataMetatable<Component, Animatable>()
         .addStaticFunction("new", &CreateObject<Component>)
 
+        // [Method] void SetEnabled(bool enable)
         .addFunction("SetEnabled", &Component::SetEnabled)
+        // [Method] void Remove()
         .addFunction("Remove", &Component::Remove)
+        // [Method] unsigned GetID() const
         .addFunction("GetID", &Component::GetID)
+        // [Method] Node* GetNode() const
         .addFunction("GetNode", &Component::GetNode)
+        // [Method] Scene* GetScene() const
         .addFunction("GetScene", &Component::GetScene)
+        // [Method] bool IsEnabled() const
         .addFunction("IsEnabled", &Component::IsEnabled)
+        // [Method] bool IsEnabledEffective() const
         .addFunction("IsEnabledEffective", &Component::IsEnabledEffective)
 
         .addStaticFunction("GetComponent", &ComponentGetComponent)
         .addStaticFunction("GetComponents", &ComponentGetComponents)
 
+        // [Method] void AddReplicationState(ComponentReplicationState* state)
         .addFunction("AddReplicationState", &Component::AddReplicationState)
+        // [Method] void PrepareNetworkUpdate()
         .addFunction("PrepareNetworkUpdate", &Component::PrepareNetworkUpdate)
         // .addFunction("CleanupConnection", &Component::CleanupConnection)
 
+        // [Property(ReadOnly)] unsigned id
         .addProperty("id", &Component::GetID)
+        // [Property(ReadOnly)] Node* node
         .addProperty("node", &Component::GetNode)
+        // [Property(ReadOnly)] Scene* scene
         .addProperty("scene", &Component::GetScene)
+        // [Property] bool enabled
         .addProperty("enabled", &Component::IsEnabled, &Component::SetEnabled)
+        // [Property(ReadOnly)] bool enabledEffective
         .addProperty("enabledEffective", &Component::IsEnabledEffective)
         );
 }

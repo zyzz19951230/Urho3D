@@ -36,16 +36,23 @@ void RegisterObstacle(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Obstacle : Component
     lua["Obstacle"].setClass(UserdataMetatable<Obstacle, Component>()
         .addStaticFunction("new", &CreateObject<Obstacle>)
 
+        // [Method] float GetHeight() const
         .addFunction("GetHeight", &Obstacle::GetHeight)
+        // [Method] void SetHeight(float)
         .addFunction("SetHeight", &Obstacle::SetHeight)
 
+        // [Method] float GetRadius() const
         .addFunction("GetRadius", &Obstacle::GetRadius)
+        // [Method] void SetRadius(float)
         .addFunction("SetRadius", &Obstacle::SetRadius)
 
+        // [Property] float height
         .addProperty("height", &Obstacle::GetHeight, &Obstacle::SetHeight)
+        // [Property] float radius
         .addProperty("radius", &Obstacle::GetRadius, &Obstacle::SetRadius)
         );
 }

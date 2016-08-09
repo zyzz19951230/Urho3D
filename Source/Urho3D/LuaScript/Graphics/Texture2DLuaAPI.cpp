@@ -38,14 +38,19 @@ void RegisterTexture2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Texture2D : Texture
     lua["Texture2D"].setClass(UserdataMetatable<Texture2D, Texture>()
         .addStaticFunction("new", &CreateObject<Texture2D>)
         
+        // [Method] bool SetSize(int width, int height, unsigned format, TextureUsage usage = TEXTURE_STATIC)
         .addFunction("SetSize", Texture2DSetSize())
+        // [Method] bool SetData(unsigned level, int x, int y, int width, int height, const void* data)
         .addFunction("SetData", Texture2DSetData())
 
+        // [Method] RenderSurface* GetRenderSurface() const
         .addFunction("GetRenderSurface", &Texture2D::GetRenderSurface)
 
+        // [Property(ReadOnly)] RenderSurface* renderSurface
         .addProperty("renderSurface", &Texture2D::GetRenderSurface)
     );
 }

@@ -78,27 +78,35 @@ void RegisterResourceCache(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Constant] bool AddResourceDir(String& pathName, unsigned priority
     lua["PRIORITY_LAST"] = PRIORITY_LAST;
 
-    // enum ResourceRequest;
+    // [Enum] ResourceRequest
+    // [Variable] RESOURCE_CHECKEXISTS
     lua["RESOURCE_CHECKEXISTS"] = RESOURCE_CHECKEXISTS;
+    // [Variable] RESOURCE_GETFILE
     lua["RESOURCE_GETFILE"] = RESOURCE_GETFILE;
 
+    // [Class] ResourceCache : Object
     lua["ResourceCache"].setClass(UserdataMetatable<ResourceCache, Object>()
 
+        // [Method] bool AddResourceDir(const String& pathName, unsigned priority = PRIORITY_LAST)
         .addFunction("AddResourceDir", ResourceCacheAddResourceDir())
         
         .addOverloadedFunctions("AddPackageFile", 
             ResourceCacheAddPackageFile0(), 
             ResourceCacheAddPackageFile1())
 
+        // [Method] bool AddManualResource(Resource* resource)
         .addFunction("AddManualResource", &ResourceCache::AddManualResource)
+        // [Method] void RemoveResourceDir(const String& pathName)
         .addFunction("RemoveResourceDir", &ResourceCache::RemoveResourceDir)
 
         .addOverloadedFunctions("RemovePackageFile",
             ResourceCacheRemovePackageFile0(),
             ResourceCacheRemovePackageFile1())
 
+        // [Method] void ReleaseResource(StringHash type, const String& name, bool force = false)
         .addFunction("ReleaseResource", ResourceCacheReleaseResource())
         
         .addOverloadedFunctions("ReleaseResources",
@@ -106,16 +114,25 @@ void RegisterResourceCache(kaguya::State& lua)
             ResourceCacheReleaseResources1(),
             ResourceCacheReleaseResources2())
 
+        // [Method] void ReleaseAllResources(bool force = false)
         .addFunction("ReleaseAllResources", ResourceCacheReleaseAllResources())
 
+        // [Method] bool ReloadResource(Resource* resource)
         .addFunction("ReloadResource", &ResourceCache::ReloadResource)
+        // [Method] void ReloadResourceWithDependencies(const String& fileName)
         .addFunction("ReloadResourceWithDependencies", &ResourceCache::ReloadResourceWithDependencies)
+        // [Method] void SetMemoryBudget(StringHash type, unsigned long long budget)
         .addFunction("SetMemoryBudget", &ResourceCache::SetMemoryBudget)
+        // [Method] void SetAutoReloadResources(bool enable)
         .addFunction("SetAutoReloadResources", &ResourceCache::SetAutoReloadResources)
+        // [Method] void SetReturnFailedResources(bool enable)
         .addFunction("SetReturnFailedResources", &ResourceCache::SetReturnFailedResources)
+        // [Method] void SetSearchPackagesFirst(bool value)
         .addFunction("SetSearchPackagesFirst", &ResourceCache::SetSearchPackagesFirst)
+        // [Method] void SetFinishBackgroundResourcesMs(int ms)
         .addFunction("SetFinishBackgroundResourcesMs", &ResourceCache::SetFinishBackgroundResourcesMs)
 
+        // [Method] SharedPtr<File> GetFile(const String& name, bool sendEventOnFailure = true)
         .addFunction("GetFile", ResourceCacheGetFile())
 
         .addStaticFunction("GetResource", ResourceCacheGetResourceOverloads())
@@ -124,29 +141,49 @@ void RegisterResourceCache(kaguya::State& lua)
         .addStaticFunction("GetResources", &ResourceCacheGetResources)
         .addStaticFunction("GetExistingResource", &ResourceCacheGetExistingResource)
 
+        // [Method] const Vector<String>& GetResourceDirs() const
         .addFunction("GetResourceDirs", &ResourceCache::GetResourceDirs)
+        // [Method] const Vector<SharedPtr<PackageFile> >& GetPackageFiles() const
         .addFunction("GetPackageFiles", &ResourceCache::GetPackageFiles)
 
+        // [Method] bool Exists(const String& name) const
         .addFunction("Exists", &ResourceCache::Exists)
+        // [Method] unsigned long long GetMemoryBudget(StringHash type) const
         .addFunction("GetMemoryBudget", &ResourceCache::GetMemoryBudget)
+        // [Method] unsigned long long GetMemoryUse(StringHash type) const
         .addFunction("GetMemoryUse", &ResourceCache::GetMemoryUse)
+        // [Method] unsigned long long GetTotalMemoryUse() const
         .addFunction("GetTotalMemoryUse", &ResourceCache::GetTotalMemoryUse)
+        // [Method] String GetResourceFileName(const String& name) const
         .addFunction("GetResourceFileName", &ResourceCache::GetResourceFileName)
 
+        // [Method] bool GetAutoReloadResources() const
         .addFunction("GetAutoReloadResources", &ResourceCache::GetAutoReloadResources)
+        // [Method] bool GetReturnFailedResources() const
         .addFunction("GetReturnFailedResources", &ResourceCache::GetReturnFailedResources)
+        // [Method] bool GetSearchPackagesFirst() const
         .addFunction("GetSearchPackagesFirst", &ResourceCache::GetSearchPackagesFirst)
+        // [Method] String GetPreferredResourceDir(const String& path) const
         .addFunction("GetPreferredResourceDir", &ResourceCache::GetPreferredResourceDir)
+        // [Method] String SanitateResourceName(const String& name) const
         .addFunction("SanitateResourceName", &ResourceCache::SanitateResourceName)
 
+        // [Method] String SanitateResourceDirName(const String& name) const
         .addFunction("SanitateResourceDirName", &ResourceCache::SanitateResourceDirName)
+        // [Method] void StoreResourceDependency(Resource* resource, const String& dependency)
         .addFunction("StoreResourceDependency", &ResourceCache::StoreResourceDependency)
+        // [Method] void ResetDependencies(Resource* resource)
         .addFunction("ResetDependencies", &ResourceCache::ResetDependencies)
+        // [Method] String PrintMemoryUsage() const
         .addFunction("PrintMemoryUsage", &ResourceCache::PrintMemoryUsage)
 
+        // [Property(ReadOnly)] unsigned long long totalMemoryUse
         .addProperty("totalMemoryUse", &ResourceCache::GetTotalMemoryUse)
+        // [Property] bool autoReloadResources
         .addProperty("autoReloadResources", &ResourceCache::GetAutoReloadResources, &ResourceCache::SetAutoReloadResources)
+        // [Property] bool returnFailedResources
         .addProperty("returnFailedResources", &ResourceCache::GetReturnFailedResources, &ResourceCache::SetReturnFailedResources)
+        // [Property] bool searchPackagesFirst
         .addProperty("searchPackagesFirst", &ResourceCache::GetSearchPackagesFirst, &ResourceCache::SetSearchPackagesFirst)
     );
 }

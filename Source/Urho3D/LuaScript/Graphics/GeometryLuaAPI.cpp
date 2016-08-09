@@ -39,40 +39,64 @@ void RegisterGeometry(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Geometry : Object
     lua["Geometry"].setClass(UserdataMetatable<Geometry, Object>()
         .addStaticFunction("new", &CreateObject<Geometry>)
         
+        // [Method] bool SetNumVertexBuffers(unsigned num)
         .addFunction("SetNumVertexBuffers", &Geometry::SetNumVertexBuffers)
+        // [Method] bool SetVertexBuffer(unsigned index, VertexBuffer* buffer)
         .addFunction("SetVertexBuffer", &Geometry::SetVertexBuffer)
+        // [Method] void SetIndexBuffer(IndexBuffer* buffer)
         .addFunction("SetIndexBuffer", &Geometry::SetIndexBuffer)
 
         .addOverloadedFunctions("SetDrawRange", 
             GeometrySetDrawRange0(),
             GeometrySetDrawRange1())
 
+        // [Method] void SetLodDistance(float distance)
         .addFunction("SetLodDistance", &Geometry::SetLodDistance)
 
+        // [Method] unsigned GetNumVertexBuffers() const
         .addFunction("GetNumVertexBuffers", &Geometry::GetNumVertexBuffers)
+        // [Method] VertexBuffer* GetVertexBuffer(unsigned index) const
         .addFunction("GetVertexBuffer", &Geometry::GetVertexBuffer)
+        // [Method] IndexBuffer* GetIndexBuffer() const
         .addFunction("GetIndexBuffer", &Geometry::GetIndexBuffer)        
+        // [Method] PrimitiveType GetPrimitiveType() const
         .addFunction("GetPrimitiveType", &Geometry::GetPrimitiveType)
 
+        // [Method] unsigned GetIndexStart() const
         .addFunction("GetIndexStart", &Geometry::GetIndexStart)
+        // [Method] unsigned GetIndexCount() const
         .addFunction("GetIndexCount", &Geometry::GetIndexCount)
+        // [Method] unsigned GetVertexStart() const
         .addFunction("GetVertexStart", &Geometry::GetVertexStart)
+        // [Method] unsigned GetVertexCount() const
         .addFunction("GetVertexCount", &Geometry::GetVertexCount)
+        // [Method] float GetLodDistance() const
         .addFunction("GetLodDistance", &Geometry::GetLodDistance)
+        // [Method] bool IsEmpty() const
         .addFunction("IsEmpty", &Geometry::IsEmpty)
 
+        // [Property(ReadOnly)] unsigned numVertexBuffers
         .addProperty("numVertexBuffers", &Geometry::GetNumVertexBuffers)
 
+        // [Property] IndexBuffer* indexBuffer
         .addProperty("indexBuffer", &Geometry::GetIndexBuffer, &Geometry::SetIndexBuffer)
+        // [Property(ReadOnly)] PrimitiveType primitiveType
         .addProperty("primitiveType", &Geometry::GetPrimitiveType)
+        // [Property(ReadOnly)] unsigned indexStart
         .addProperty("indexStart", &Geometry::GetIndexStart)
+        // [Property(ReadOnly)] unsigned indexCount
         .addProperty("indexCount", &Geometry::GetIndexCount)
+        // [Property(ReadOnly)] unsigned vertexStart
         .addProperty("vertexStart", &Geometry::GetVertexStart)
+        // [Property(ReadOnly)] unsigned vertexCount
         .addProperty("vertexCount", &Geometry::GetVertexCount)
+        // [Property] float lodDistance
         .addProperty("lodDistance", &Geometry::GetLodDistance, &Geometry::SetLodDistance)
+        // [Property(ReadOnly)] bool empty
         .addProperty("empty", &Geometry::IsEmpty)
     );
 }

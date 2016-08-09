@@ -34,6 +34,7 @@ void RegisterVector2(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Vector2
     lua["Vector2"].setClass(UserdataMetatable<Vector2>()
         .setConstructors<Vector2(),
         Vector2(const Vector2&),
@@ -54,18 +55,30 @@ void RegisterVector2(kaguya::State& lua)
             static_cast<Vector2(Vector2::*)(float) const>(&Vector2::operator/),
             static_cast<Vector2(Vector2::*)(const Vector2&) const>(&Vector2::operator/))
 
+        // [Method] void Normalize()
         .addFunction("Normalize", &Vector2::Normalize)
+        // [Method] float Length() const
         .addFunction("Length", &Vector2::Length)
+        // [Method] float lenSquared = LengthSquared()
         .addFunction("LengthSquared", &Vector2::LengthSquared)
+        // [Method] float DotProduct(const Vector2& rhs) const
         .addFunction("DotProduct", &Vector2::DotProduct)
+        // [Method] float AbsDotProduct(const Vector2& rhs) const
         .addFunction("AbsDotProduct", &Vector2::AbsDotProduct)
+        // [Method] float Angle(const Vector2& rhs) const
         .addFunction("Angle", &Vector2::Angle)
+        // [Method] Vector2 Abs() const
         .addFunction("Abs", &Vector2::Abs)
+        // [Method] Vector2 Lerp(const Vector2& rhs, float t) const
         .addFunction("Lerp", &Vector2::Lerp)
+        // [Method] bool Equals(const Vector2& rhs) const
         .addFunction("Equals", &Vector2::Equals)
+        // [Method] bool IsNaN() const
         .addFunction("IsNaN", &Vector2::IsNaN)
         
+        // [Method] Vector2 Normalized() const
         .addFunction("Normalized", &Vector2::Normalized)
+        // [Method] String ToString() const
         .addFunction("ToString", &Vector2::ToString)
 
         .addProperty("x", &Vector2::x_)
@@ -79,6 +92,7 @@ void RegisterVector2(kaguya::State& lua)
         .addStaticField("ONE", &Vector2::ONE)
         );
 
+    // [Class] IntVector2
     lua["IntVector2"].setClass(UserdataMetatable<IntVector2>()
         .setConstructors<IntVector2(),
         IntVector2(int, int),
@@ -94,6 +108,7 @@ void RegisterVector2(kaguya::State& lua)
         .addFunction("__mul", &IntVector2::operator*)
         .addFunction("__div", &IntVector2::operator/)
 
+        // [Method] String ToString() const
         .addFunction("ToString", &IntVector2::ToString)
 
         .addProperty("x", &IntVector2::x_)

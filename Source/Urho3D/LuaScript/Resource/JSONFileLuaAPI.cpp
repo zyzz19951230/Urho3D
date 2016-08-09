@@ -43,12 +43,15 @@ void RegisterJSONFile(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] JSONFile : Resource
     lua["JSONFile"].setClass(UserdataMetatable<JSONFile, Resource>()
         .addStaticFunction("new", &CreateObject<JSONFile>)
 
         .addStaticFunction("Save", &JSONFileSave)
+        // [Method] bool FromString(const String& source)
         .addFunction("FromString", &JSONFile::FromString)
         .addFunction("CreateRoot", static_cast<JSONValue&(JSONFile::*)()>(&JSONFile::GetRoot))
+        // [Method] JSONValue& GetRoot()
         .addFunction("GetRoot", static_cast<const JSONValue&(JSONFile::*)() const>(&JSONFile::GetRoot))
         .addProperty("root", static_cast<const JSONValue&(JSONFile::*)() const>(&JSONFile::GetRoot))
     );

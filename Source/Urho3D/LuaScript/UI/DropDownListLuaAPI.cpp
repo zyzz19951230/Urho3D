@@ -50,43 +50,61 @@ void RegisterDropDownList(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] DropDownList : Menu
     lua["DropDownList"].setClass(UserdataMetatable<DropDownList, Menu>()
         .addStaticFunction("new", &CreateObject<DropDownList>)
 
+        // [Method] void AddItem(UIElement* item)
         .addFunction("AddItem", &DropDownList::AddItem)
+        // [Method] void InsertItem(unsigned index, UIElement* item)
         .addFunction("InsertItem", &DropDownList::InsertItem)
 
         .addOverloadedFunctions("RemoveItem",
             static_cast<void(DropDownList::*)(UIElement*)>(&DropDownList::RemoveItem),
             static_cast<void(DropDownList::*)(unsigned)>(&DropDownList::RemoveItem))
 
+        // [Method] void RemoveAllItems()
         .addFunction("RemoveAllItems", &DropDownList::RemoveAllItems)
+        // [Method] void SetSelection(unsigned index)
         .addFunction("SetSelection", &DropDownList::SetSelection)
+        // [Method] void SetPlaceholderText(const String& text)
         .addFunction("SetPlaceholderText", &DropDownList::SetPlaceholderText)
+        // [Method] void SetResizePopup(bool enable)
         .addFunction("SetResizePopup", &DropDownList::SetResizePopup)
 
+        // [Method] unsigned GetNumItems() const
         .addFunction("GetNumItems", &DropDownList::GetNumItems)
 
         .addStaticFunction("GetItem", &DropDownListGetItem)
 
+        // [Method] PODVector<UIElement*> GetItems() const
         .addFunction("GetItems", &DropDownList::GetItems)
+        // [Method] unsigned GetSelection() const
         .addFunction("GetSelection", &DropDownList::GetSelection)
 
         .addStaticFunction("GetSelectedItem", &DropDownListGetSelectedItem)
 
+        // [Method] ListView* GetListView() const
         .addFunction("GetListView", &DropDownList::GetListView)
 
         .addStaticFunction("GetPlaceholder", &DropDownListGetPlaceholder)
 
+        // [Method] const String& GetPlaceholderText() const
         .addFunction("GetPlaceholderText", &DropDownList::GetPlaceholderText)
+        // [Method] bool GetResizePopup() const
         .addFunction("GetResizePopup", &DropDownList::GetResizePopup)
 
+        // [Property(ReadOnly)] unsigned numItems
         .addProperty("numItems", &DropDownList::GetNumItems)
+        // [Property] unsigned selection
         .addProperty("selection", &DropDownList::GetSelection, &DropDownList::SetSelection)
         .addProperty("selectedItem", &DropDownListGetSelectedItem)
+        // [Property(ReadOnly)] ListView* listView
         .addProperty("listView", &DropDownList::GetListView)
         .addProperty("placeholder", &DropDownListGetPlaceholder)
+        // [Property] const String& placeholderText
         .addProperty("placeholderText", &DropDownList::GetPlaceholderText, &DropDownList::SetPlaceholderText)
+        // [Property] bool resizePopup
         .addProperty("resizePopup", &DropDownList::GetResizePopup, &DropDownList::SetResizePopup)
         );
 }

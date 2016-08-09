@@ -49,33 +49,46 @@ void RegisterStaticModel(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] StaticModel : Drawable
     lua["StaticModel"].setClass(UserdataMetatable<StaticModel, Drawable>()
         .addStaticFunction("new", &CreateObject<StaticModel>)
 
+        // [Method] void SetModel(Model* model)
         .addFunction("SetModel", &StaticModel::SetModel)
 
         .addOverloadedFunctions("SetMaterial",
             static_cast<void(StaticModel::*)(Material*)>(&StaticModel::SetMaterial),
             static_cast<bool(StaticModel::*)(unsigned, Material*)>(&StaticModel::SetMaterial))
 
+        // [Method] void SetOcclusionLodLevel(unsigned level)
         .addFunction("SetOcclusionLodLevel", &StaticModel::SetOcclusionLodLevel)
         
+        // [Method] void ApplyMaterialList(const String& fileName = String::EMPTY)
         .addFunction("ApplyMaterialList", StaticModelApplyMaterialList())
 
+        // [Method] Model* GetModel() const
         .addFunction("GetModel", &StaticModel::GetModel)
+        // [Method] unsigned GetNumGeometries() const
         .addFunction("GetNumGeometries", &StaticModel::GetNumGeometries)
 
+        // [Method] Material* GetMaterial(unsigned index = 0) const
         .addFunction("GetMaterial", StaticModelGetMaterial())
         
+        // [Method] unsigned GetOcclusionLodLevel() const
         .addFunction("GetOcclusionLodLevel", &StaticModel::GetOcclusionLodLevel)
+        // [Method] bool IsInside(const Vector3& point) const
         .addFunction("IsInside", &StaticModel::IsInside)
+        // [Method] bool IsInsideLocal(const Vector3& point) const
         .addFunction("IsInsideLocal", &StaticModel::IsInsideLocal)
 
+        // [Property] Model* model
         .addProperty("model", &StaticModel::GetModel, &StaticModel::SetModel)
 
         .addProperty("material", &StaticModelMaterialGetter, &StaticModelMaterialSetter)
 
+        // [Property(ReadOnly)] unsigned numGeometries
         .addProperty("numGeometries", &StaticModel::GetNumGeometries)
+        // [Property] unsigned occlusionLodLevel
         .addProperty("occlusionLodLevel", &StaticModel::GetOcclusionLodLevel, &StaticModel::SetOcclusionLodLevel)
         );
 }

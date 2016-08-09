@@ -37,6 +37,7 @@ void RegisterBoundingBox(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] BoundingBox
     lua["BoundingBox"].setClass(UserdataMetatable<BoundingBox>()
         .setConstructors<BoundingBox(),
         BoundingBox(const BoundingBox&),
@@ -66,22 +67,29 @@ void RegisterBoundingBox(kaguya::State& lua)
             static_cast<void(BoundingBox::*)(const Polyhedron&)>(&BoundingBox::Merge),
             static_cast<void(BoundingBox::*)(const Sphere&)>(&BoundingBox::Merge))
 
+        // [Method] void Clip(const BoundingBox& box)
         .addFunction("Clip", &BoundingBox::Clip)
 
         .addOverloadedFunctions("Transform",
             static_cast<void(BoundingBox::*)(const Matrix3&)>(&BoundingBox::Transform),
             static_cast<void(BoundingBox::*)(const Matrix3x4&)>(&BoundingBox::Transform))
 
+        // [Method] void Clear()
         .addFunction("Clear", &BoundingBox::Clear)
+        // [Method] bool Defined() const
         .addFunction("Defined", &BoundingBox::Defined)
+        // [Method] Vector3 Center() const
         .addFunction("Center", &BoundingBox::Center)
+        // [Method] Vector3 Size() const
         .addFunction("Size", &BoundingBox::Size)
+        // [Method] Vector3 HalfSize() const
         .addFunction("HalfSize", &BoundingBox::HalfSize)
 
         .addOverloadedFunctions("Transformed",
             static_cast<BoundingBox(BoundingBox::*)(const Matrix3&) const>(&BoundingBox::Transformed),
             static_cast<BoundingBox(BoundingBox::*)(const Matrix3x4&) const>(&BoundingBox::Transformed))
 
+        // [Method] Rect Projected(const Matrix4& projection) const
         .addFunction("Projected", &BoundingBox::Projected)
 
         .addOverloadedFunctions("IsInside",
@@ -94,13 +102,17 @@ void RegisterBoundingBox(kaguya::State& lua)
             static_cast<Intersection(BoundingBox::*)(const BoundingBox&) const>(&BoundingBox::IsInsideFast),
             static_cast<Intersection(BoundingBox::*)(const Sphere&) const>(&BoundingBox::IsInsideFast))
 
+        // [Method] String ToString() const
         .addFunction("ToString", &BoundingBox::ToString)
 
         .addProperty("min", &BoundingBox::min_)
         .addProperty("max", &BoundingBox::max_)
 
+        // [Property(ReadOnly)] Vector3 center
         .addProperty("center", &BoundingBox::Center)
+        // [Property(ReadOnly)] Vector3 size
         .addProperty("size", &BoundingBox::Size)
+        // [Property(ReadOnly)] Vector3 halfSize
         .addProperty("halfSize", &BoundingBox::HalfSize)
         );
 }

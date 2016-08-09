@@ -34,21 +34,35 @@ void RegisterCursor(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum CursorShape;
+    // [Enum] CursorShape
+    // [Variable] CS_NORMAL
     lua["CS_NORMAL"] = CS_NORMAL;
+    // [Variable] CS_IBEAM,
     lua["CS_IBEAM"] = CS_IBEAM;
+    // [Variable] CS_CROSS,
     lua["CS_CROSS"] = CS_CROSS;
+    // [Variable] CS_RESIZEVERTICAL,
     lua["CS_RESIZEVERTICAL"] = CS_RESIZEVERTICAL;
+    // [Variable] CS_RESIZEDIAGONAL_TOPRIGHT,
     lua["CS_RESIZEDIAGONAL_TOPRIGHT"] = CS_RESIZEDIAGONAL_TOPRIGHT;
+    // [Variable] CS_RESIZEHORIZONTAL,
     lua["CS_RESIZEHORIZONTAL"] = CS_RESIZEHORIZONTAL;
+    // [Variable] CS_RESIZEDIAGONAL_TOPLEFT,
     lua["CS_RESIZEDIAGONAL_TOPLEFT"] = CS_RESIZEDIAGONAL_TOPLEFT;
+    // [Variable] CS_RESIZE_ALL,
     lua["CS_RESIZE_ALL"] = CS_RESIZE_ALL;
+    // [Variable] CS_ACCEPTDROP,
     lua["CS_ACCEPTDROP"] = CS_ACCEPTDROP;
+    // [Variable] CS_REJECTDROP,
     lua["CS_REJECTDROP"] = CS_REJECTDROP;
+    // [Variable] CS_BUSY,
     lua["CS_BUSY"] = CS_BUSY;
+    // [Variable] CS_BUSY_ARROW,
     lua["CS_BUSY_ARROW"] = CS_BUSY_ARROW;
+    // [Variable] CS_MAX_SHAPES
     lua["CS_MAX_SHAPES"] = CS_MAX_SHAPES;
 
+    // [Class] Cursor : BorderImage
     lua["Cursor"].setClass(UserdataMetatable<Cursor, BorderImage>()
         .addStaticFunction("new", &CreateObject<Cursor>)
 
@@ -60,12 +74,17 @@ void RegisterCursor(kaguya::State& lua)
             static_cast<void(Cursor::*)(const String&)>(&Cursor::SetShape),
             static_cast<void(Cursor::*)(CursorShape)>(&Cursor::SetShape))
 
+        // [Method] void SetUseSystemShapes(bool enable)
         .addFunction("SetUseSystemShapes", &Cursor::SetUseSystemShapes)
 
+        // [Method] const String& GetShape() const
         .addFunction("GetShape", &Cursor::GetShape)
+        // [Method] bool GetUseSystemShapes() const
         .addFunction("GetUseSystemShapes", &Cursor::GetUseSystemShapes)
 
+        // [Property] const String& shape
         .addProperty("shape", &Cursor::GetShape, static_cast<void(Cursor::*)(const String&)>(&Cursor::SetShape))
+        // [Property] bool useSystemShapes
         .addProperty("useSystemShapes", &Cursor::GetUseSystemShapes, &Cursor::SetUseSystemShapes)
         );
 }

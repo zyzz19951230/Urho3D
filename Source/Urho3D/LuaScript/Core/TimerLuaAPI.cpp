@@ -34,11 +34,16 @@ void RegisterTimer(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Time : Object
     lua["Time"].setClass(UserdataMetatable<Time, Object>()
 
+        // [Method] unsigned GetFrameNumber() const
         .addFunction("GetFrameNumber", &Time::GetFrameNumber)
+        // [Method] float GetTimeStep() const
         .addFunction("GetTimeStep", &Time::GetTimeStep)
+        // [Method] unsigned GetTimerPeriod() const
         .addFunction("GetTimerPeriod", &Time::GetTimerPeriod)
+        // [Method] float GetElapsedTime()
         .addFunction("GetElapsedTime", &Time::GetElapsedTime)
 
         .addStaticFunction("GetSystemTime", &Time::GetSystemTime)
@@ -46,9 +51,13 @@ void RegisterTimer(kaguya::State& lua)
         .addStaticFunction("GetTimeStamp", &Time::GetTimeStamp)
         .addStaticFunction("Sleep", &Time::GetTimeStamp)
 
+        // [Property(ReadOnly)] unsigned frameNumber
         .addProperty("frameNumber", &Time::GetFrameNumber)
+        // [Property(ReadOnly)] float timeStep
         .addProperty("timeStep", &Time::GetTimeStep)
+        // [Property(ReadOnly)] unsigned timerPeriod
         .addProperty("timerPeriod", &Time::GetTimerPeriod)
+        // [Property(ReadOnly)] float elapsedTime
         .addProperty("elapsedTime", &Time::GetElapsedTime)
     );
 }

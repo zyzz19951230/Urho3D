@@ -51,60 +51,103 @@ void RegisterCollisionShape(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum ShapeType;
+    // [Enum] ShapeType
+    // [Variable] SHAPE_BOX
     lua["SHAPE_BOX"] = SHAPE_BOX;
+    // [Variable] SHAPE_SPHERE,
     lua["SHAPE_SPHERE"] = SHAPE_SPHERE;
+    // [Variable] SHAPE_STATICPLANE,
     lua["SHAPE_STATICPLANE"] = SHAPE_STATICPLANE;
+    // [Variable] SHAPE_CYLINDER,
     lua["SHAPE_CYLINDER"] = SHAPE_CYLINDER;
+    // [Variable] SHAPE_CAPSULE,
     lua["SHAPE_CAPSULE"] = SHAPE_CAPSULE;
+    // [Variable] SHAPE_CONE,
     lua["SHAPE_CONE"] = SHAPE_CONE;
+    // [Variable] SHAPE_TRIANGLEMESH,
     lua["SHAPE_TRIANGLEMESH"] = SHAPE_TRIANGLEMESH;
+    // [Variable] SHAPE_CONVEXHULL,
     lua["SHAPE_CONVEXHULL"] = SHAPE_CONVEXHULL;
+    // [Variable] SHAPE_TERRAIN
     lua["SHAPE_TERRAIN"] = SHAPE_TERRAIN;
     
+    // [Class] CollisionShape : Component
     lua["CollisionShape"].setClass(UserdataMetatable<CollisionShape, Component>()
         .addStaticFunction("new", &CreateObject<CollisionShape>)
 
+        // [Method] void SetBox(const Vector3& size, const Vector3& position = Vector3::ZERO, const Quaternion& rotation = Quaternion::IDENTITY)
         .addFunction("SetBox", CollisionShapeSetBox())
+        // [Method] void SetSphere(float diameter, const Vector3& position = Vector3::ZERO, const Quaternion& rotation = Quaternion::IDENTITY)
         .addFunction("SetSphere", CollisionShapeSetSphere())
+        // [Method] void SetStaticPlane(const Vector3& position = Vector3::ZERO, const Quaternion& rotation = Quaternion::IDENTITY)
         .addFunction("SetStaticPlane", CollisionShapeSetStaticPlane())
         .addFunction("SetCylinder", CollisionShapeSetCylinder())
         .addFunction("SetCapsule", CollisionShapeSetCapsule())
         .addFunction("SetCone", CollisionShapeSetCone())
         .addFunction("SetTriangleMesh", CollisionShapeSetTriangleMesh())
+        // [Method] void SetCustomTriangleMesh(CustomGeometry* custom, const Vector3& scale = Vector3::ONE, const Vector3& position = Vector3::ZERO,
         .addFunction("SetCustomTriangleMesh", CollisionShapeSetCustomTriangleMesh())
         .addFunction("SetConvexHull", CollisionShapeSetConvexHull())
+        // [Method] void SetCustomConvexHull(CustomGeometry* custom, const Vector3& scale = Vector3::ONE, const Vector3& position = Vector3::ZERO,
         .addFunction("SetCustomConvexHull", CollisionShapeSetCustomConvexHull())
+        // [Method] void SetTerrain(unsigned lodLevel = 0)
         .addFunction("SetTerrain", CollisionShapeSetTerrain())
 
+        // [Method] void SetShapeType(ShapeType type)
         .addFunction("SetShapeType", &CollisionShape::SetShapeType)
+        // [Method] void SetSize(const Vector3& size)
         .addFunction("SetSize", &CollisionShape::SetSize)
+        // [Method] void SetPosition(const Vector3& position)
         .addFunction("SetPosition", &CollisionShape::SetPosition)
+        // [Method] void SetRotation(const Quaternion& rotation)
         .addFunction("SetRotation", &CollisionShape::SetRotation)
+        // [Method] void SetTransform(const Vector3& position, const Quaternion& rotation)
         .addFunction("SetTransform", &CollisionShape::SetTransform)
+        // [Method] void SetMargin(float margin)
         .addFunction("SetMargin", &CollisionShape::SetMargin)
+        // [Method] void SetModel(Model* model)
         .addFunction("SetModel", &CollisionShape::SetModel)
+        // [Method] void SetLodLevel(unsigned lodLevel)
         .addFunction("SetLodLevel", &CollisionShape::SetLodLevel)
 
+        // [Method] PhysicsWorld* GetPhysicsWorld() const
         .addFunction("GetPhysicsWorld", &CollisionShape::GetPhysicsWorld)
+        // [Method] ShapeType GetShapeType() const
         .addFunction("GetShapeType", &CollisionShape::GetShapeType)
+        // [Method] const Vector3& GetSize() const
         .addFunction("GetSize", &CollisionShape::GetSize)
+        // [Method] const Vector3& GetPosition() const
         .addFunction("GetPosition", &CollisionShape::GetPosition)
+        // [Method] const Quaternion& GetRotation() const
         .addFunction("GetRotation", &CollisionShape::GetRotation)
+        // [Method] float GetMargin() const
         .addFunction("GetMargin", &CollisionShape::GetMargin)
+        // [Method] Model* GetModel() const
         .addFunction("GetModel", &CollisionShape::GetModel)
+        // [Method] unsigned GetLodLevel() const
         .addFunction("GetLodLevel", &CollisionShape::GetLodLevel)
+        // [Method] BoundingBox GetWorldBoundingBox() const
         .addFunction("GetWorldBoundingBox", &CollisionShape::GetWorldBoundingBox)
 
+        // [Property(ReadOnly)] PhysicsWorld* physicsWorld
         .addProperty("physicsWorld", &CollisionShape::GetPhysicsWorld)
+        // [Property] ShapeType shapeType
         .addProperty("shapeType", &CollisionShape::GetShapeType, &CollisionShape::SetShapeType)
+        // [Property] const Vector3& size
         .addProperty("size", &CollisionShape::GetSize, &CollisionShape::SetSize)
+        // [Property] const Vector3& position
         .addProperty("position", &CollisionShape::GetPosition, &CollisionShape::SetPosition)
+        // [Property] const Quaternion& rotation
         .addProperty("rotation", &CollisionShape::GetRotation, &CollisionShape::SetRotation)
+        // [Property] float margin
         .addProperty("margin", &CollisionShape::GetMargin, &CollisionShape::SetMargin)
+        // [Property] Model* model
         .addProperty("model", &CollisionShape::GetModel, &CollisionShape::SetModel)
+        // [Property] unsigned lodLevel
         .addProperty("lodLevel", &CollisionShape::GetLodLevel, &CollisionShape::SetLodLevel)
+        // [Property(ReadOnly)] BoundingBox worldBoundingBox
         .addProperty("worldBoundingBox", &CollisionShape::GetWorldBoundingBox)
+        // [Property(WriteOnly)] void terrain
         .addProperty("terrain", &CollisionShape::SetTerrain)
         );
 }

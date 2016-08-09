@@ -40,16 +40,22 @@ void RegisterSpriteSheet2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] SpriteSheet2D : Resource
     lua["SpriteSheet2D"].setClass(UserdataMetatable<SpriteSheet2D, Resource>()
         .addStaticFunction("new", &CreateObject<SpriteSheet2D>)
 
+        // [Method] void SetTexture(Texture2D* texture)
         .addFunction("SetTexture", &SpriteSheet2D::SetTexture)
 
+        // [Method] void DefineSprite(const String& name, const IntRect& rectangle, const Vector2& hotSpot = Vector2(0.5f, 0.5f),
         .addFunction("DefineSprite", SpriteSheet2DDefineSprite())
 
+        // [Method] Texture2D* GetTexture() const
         .addFunction("GetTexture", &SpriteSheet2D::GetTexture)
+        // [Method] Sprite2D* GetSprite(const String& name) const
         .addFunction("GetSprite", &SpriteSheet2D::GetSprite)
 
+        // [Property] Texture2D* texture
         .addProperty("texture", &SpriteSheet2D::GetTexture, &SpriteSheet2D::SetTexture)
     );
 }

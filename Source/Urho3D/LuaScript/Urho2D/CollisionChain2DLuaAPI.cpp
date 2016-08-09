@@ -36,20 +36,31 @@ void RegisterCollisionChain2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] CollisionChain2D : CollisionShape2D
     lua["CollisionChain2D"].setClass(UserdataMetatable<CollisionChain2D, CollisionShape2D>()
         .addStaticFunction("new", &CreateObject<CollisionChain2D>)
 
+        // [Method] void SetLoop(bool loop)
         .addFunction("SetLoop", &CollisionChain2D::SetLoop)
+        // [Method] void SetVertexCount(unsigned count)
         .addFunction("SetVertexCount", &CollisionChain2D::SetVertexCount)
+        // [Method] void SetVertex(unsigned index, const Vector2& vertex)
         .addFunction("SetVertex", &CollisionChain2D::SetVertex)
+        // [Method] void SetVertices(const PODVector<Vector2>& vertices)
         .addFunction("SetVertices", &CollisionChain2D::SetVertices)
 
+        // [Method] bool GetLoop() const
         .addFunction("GetLoop", &CollisionChain2D::GetLoop)
+        // [Method] unsigned GetVertexCount() const
         .addFunction("GetVertexCount", &CollisionChain2D::GetVertexCount)
+        // [Method] const Vector2& GetVertex(unsigned index) const
         .addFunction("GetVertex", &CollisionChain2D::GetVertex)
+        // [Method] const PODVector<Vector2>& GetVertices() const
         .addFunction("GetVertices", &CollisionChain2D::GetVertices)
 
+        // [Property] bool loop
         .addProperty("loop", &CollisionChain2D::GetLoop, &CollisionChain2D::SetLoop)
+        // [Property] unsigned vertexCount
         .addProperty("vertexCount", &CollisionChain2D::GetVertexCount, &CollisionChain2D::SetVertexCount)
     );
 }

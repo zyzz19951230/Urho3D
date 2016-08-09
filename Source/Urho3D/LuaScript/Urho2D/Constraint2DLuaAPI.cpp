@@ -37,18 +37,27 @@ void RegisterConstraint2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Constraint2D : Component
     lua["Constraint2D"].setClass(UserdataMetatable<Constraint2D, Component>()
         .addStaticFunction("new", &CreateObject<Constraint2D>)
 
+        // [Method] void SetOtherBody(RigidBody2D* body)
         .addFunction("SetOtherBody", &Constraint2D::SetOtherBody)
+        // [Method] void SetCollideConnected(bool collideConnected)
         .addFunction("SetCollideConnected", &Constraint2D::SetCollideConnected)
         
+        // [Method] RigidBody2D* GetOwnerBody() const
         .addFunction("GetOwnerBody", &Constraint2D::GetOwnerBody)
+        // [Method] RigidBody2D* GetOtherBody() const
         .addFunction("GetOtherBody", &Constraint2D::GetOtherBody)
+        // [Method] bool GetCollideConnected() const
         .addFunction("GetCollideConnected", &Constraint2D::GetCollideConnected)
         
+        // [Property(ReadOnly)] RigidBody2D* ownerBody
         .addProperty("ownerBody", &Constraint2D::GetOwnerBody)
+        // [Property] RigidBody2D* otherBody
         .addProperty("otherBody", &Constraint2D::GetOtherBody, &Constraint2D::SetOtherBody)
+        // [Property] bool collideConnected
         .addProperty("collideConnected", &Constraint2D::GetCollideConnected, &Constraint2D::SetCollideConnected)
     );
 }

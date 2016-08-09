@@ -109,6 +109,7 @@ void RegisterPhysicsWorld(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] PhysicsRaycastResult
     lua["PhysicsRaycastResult"].setClass(UserdataMetatable<PhysicsRaycastResult>()
         .setConstructors<PhysicsRaycastResult()>()
 
@@ -119,21 +120,33 @@ void RegisterPhysicsWorld(kaguya::State& lua)
         .addProperty("body", &PhysicsRaycastResult::body_)
         );
 
+    // [Constant] float DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY
     lua["DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY"] = DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY;
 
+    // [Class] PhysicsWorld : Component
     lua["PhysicsWorld"].setClass(UserdataMetatable<PhysicsWorld, Component>()
         .addStaticFunction("new", &CreateObject<PhysicsWorld>)
 
+        // [Method] void DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
         .addFunction("DrawDebugGeometry", static_cast<void(PhysicsWorld::*)(bool)>(&PhysicsWorld::DrawDebugGeometry))
 
+        // [Method] void SetFps(int fps)
         .addFunction("SetFps", &PhysicsWorld::SetFps)
+        // [Method] void SetGravity(const Vector3& gravity)
         .addFunction("SetGravity", &PhysicsWorld::SetGravity)
+        // [Method] void SetMaxSubSteps(int num)
         .addFunction("SetMaxSubSteps", &PhysicsWorld::SetMaxSubSteps)
+        // [Method] void SetNumIterations(int num)
         .addFunction("SetNumIterations", &PhysicsWorld::SetNumIterations)
+        // [Method] void SetUpdateEnabled(bool enable)
         .addFunction("SetUpdateEnabled", &PhysicsWorld::SetUpdateEnabled)
+        // [Method] void SetInterpolation(bool enable)
         .addFunction("SetInterpolation", &PhysicsWorld::SetInterpolation)
+        // [Method] void SetInternalEdge(bool enable)
         .addFunction("SetInternalEdge", &PhysicsWorld::SetInternalEdge)
+        // [Method] void SetSplitImpulse(bool enable)
         .addFunction("SetSplitImpulse", &PhysicsWorld::SetSplitImpulse)
+        // [Method] void SetMaxNetworkAngularVelocity(float velocity)
         .addFunction("SetMaxNetworkAngularVelocity", &PhysicsWorld::SetMaxNetworkAngularVelocity)
 
         .addStaticFunction("Raycast", PhysicsWorldRaycastOverloads())
@@ -142,33 +155,53 @@ void RegisterPhysicsWorld(kaguya::State& lua)
         .addStaticFunction("SphereCast", PhysicsWorldSphereCastOverloads())
         .addStaticFunction("ConvexCast", PhysicsWorldConvexCastOverloads())
 
+        // [Method] void RemoveCachedGeometry(Model* model)
         .addFunction("RemoveCachedGeometry", &PhysicsWorld::RemoveCachedGeometry)
 
         .addOverloadedFunctions("GetRigidBodies", PhysicsWorldGetRigidBodiesOverloads0(), PhysicsWorldGetRigidBodiesOverloads1())
 
         .addStaticFunction("GetCollidingBodies", &PhysicsWorldGetCollidingBodies)
 
+        // [Method] Vector3 GetGravity() const
         .addFunction("GetGravity", &PhysicsWorld::GetGravity)
+        // [Method] int GetMaxSubSteps() const
         .addFunction("GetMaxSubSteps", &PhysicsWorld::GetMaxSubSteps)
+        // [Method] int GetNumIterations() const
         .addFunction("GetNumIterations", &PhysicsWorld::GetNumIterations)
+        // [Method] bool IsUpdateEnabled() const
         .addFunction("IsUpdateEnabled", &PhysicsWorld::IsUpdateEnabled)
+        // [Method] bool GetInterpolation() const
         .addFunction("GetInterpolation", &PhysicsWorld::GetInterpolation)
+        // [Method] bool GetInternalEdge() const
         .addFunction("GetInternalEdge", &PhysicsWorld::GetInternalEdge)
+        // [Method] bool GetSplitImpulse() const
         .addFunction("GetSplitImpulse", &PhysicsWorld::GetSplitImpulse)
+        // [Method] int GetFps() const
         .addFunction("GetFps", &PhysicsWorld::GetFps)
+        // [Method] float GetMaxNetworkAngularVelocity() const
         .addFunction("GetMaxNetworkAngularVelocity", &PhysicsWorld::GetMaxNetworkAngularVelocity)
         
+        // [Property] Vector3 gravity
         .addProperty("gravity", &PhysicsWorld::GetGravity, &PhysicsWorld::SetGravity)
+        // [Property] int maxSubSteps
         .addProperty("maxSubSteps", &PhysicsWorld::GetMaxSubSteps, &PhysicsWorld::SetMaxSubSteps)
+        // [Property] int numIterations
         .addProperty("numIterations", &PhysicsWorld::GetNumIterations, &PhysicsWorld::SetNumIterations)
+        // [Property] bool updateEnabled
         .addProperty("updateEnabled", &PhysicsWorld::IsUpdateEnabled, &PhysicsWorld::SetUpdateEnabled)
+        // [Property] bool interpolation
         .addProperty("interpolation", &PhysicsWorld::GetInterpolation, &PhysicsWorld::SetInterpolation)
+        // [Property] bool internalEdge
         .addProperty("internalEdge", &PhysicsWorld::GetInternalEdge, &PhysicsWorld::SetInternalEdge)
+        // [Property] bool splitImpulse
         .addProperty("splitImpulse", &PhysicsWorld::GetSplitImpulse, &PhysicsWorld::SetSplitImpulse)
+        // [Property] int fps
         .addProperty("fps", &PhysicsWorld::GetFps, &PhysicsWorld::SetFps)
+        // [Property] float maxNetworkAngularVelocity
         .addProperty("maxNetworkAngularVelocity", &PhysicsWorld::GetMaxNetworkAngularVelocity, &PhysicsWorld::SetMaxNetworkAngularVelocity)
         );
 
+    // [Function] void URHO3D_API RegisterPhysicsLibrary(Context* context)
     lua["RegisterPhysicsLibrary"] = function(&RegisterPhysicsLibrary);
 }
 }

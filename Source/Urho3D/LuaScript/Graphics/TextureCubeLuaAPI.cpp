@@ -38,14 +38,19 @@ void RegisterTextureCube(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] TextureCube : Texture
     lua["TextureCube"].setClass(UserdataMetatable<TextureCube, Texture>()
         .addStaticFunction("new", &CreateObject<TextureCube>)
         
+        // [Method] bool SetSize(int size, unsigned format, TextureUsage usage = TEXTURE_STATIC)
         .addFunction("SetSize", TextureCubeSetSize())
+        // [Method] bool SetData(CubeMapFace face, unsigned level, int x, int y, int width, int height, const void* data)
         .addFunction("SetData", TextureCubeSetData())
 
+        // [Method] RenderSurface* GetRenderSurface(CubeMapFace face) const
         .addFunction("GetRenderSurface", &TextureCube::GetRenderSurface)
 
+        // [Property(ReadOnly)] RenderSurface* renderSurface
         .addProperty("renderSurface", &TextureCube::GetRenderSurface)
     );
 }

@@ -34,6 +34,7 @@ void RegisterPlane(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Plane
     lua["Plane"].setClass(UserdataMetatable<Plane>()
         .setConstructors<Plane(),
         Plane(const Plane&),
@@ -51,9 +52,13 @@ void RegisterPlane(kaguya::State& lua)
             static_cast<void(Plane::*)(const Matrix3x4&)>(&Plane::Transform),
             static_cast<void(Plane::*)(const Matrix4&)>(&Plane::Transform))
 
+        // [Method] Vector3 Project(const Vector3& point) const
         .addFunction("Project", &Plane::Project)
+        // [Method] float Distance(const Vector3& point) const
         .addFunction("Distance", &Plane::Distance)
+        // [Method] Vector3 Reflect(const Vector3& direction) const
         .addFunction("Reflect", &Plane::Reflect)
+        // [Method] Matrix3x4 ReflectionMatrix() const
         .addFunction("ReflectionMatrix", &Plane::ReflectionMatrix)
 
         .addOverloadedFunctions("Transformed",
@@ -61,6 +66,7 @@ void RegisterPlane(kaguya::State& lua)
             static_cast<Plane(Plane::*)(const Matrix3x4&) const>(&Plane::Transformed),
             static_cast<Plane(Plane::*)(const Matrix4&) const>(&Plane::Transformed))
 
+        // [Method] Vector4 ToVector4() const
         .addFunction("ToVector4", &Plane::ToVector4)
 
         .addProperty("normal", &Plane::normal_)

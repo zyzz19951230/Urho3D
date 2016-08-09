@@ -34,6 +34,7 @@ void RegisterMatrix2(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Matrix2
     lua["Matrix2"].setClass(UserdataMetatable<Matrix2>()
         .setConstructors<Matrix2(),
         Matrix2(const Matrix2&),
@@ -53,12 +54,18 @@ void RegisterMatrix2(kaguya::State& lua)
             static_cast<void(Matrix2::*)(const Vector2&)>(&Matrix2::SetScale),
             static_cast<void(Matrix2::*)(float)>(&Matrix2::SetScale))
 
+        // [Method] Vector2 Scale() const
         .addFunction("Scale", &Matrix2::Scale)
+        // [Method] Matrix2 Transpose() const
         .addFunction("Transpose", &Matrix2::Transpose)
+        // [Method] Matrix2 Scaled(const Vector2& scale) const
         .addFunction("Scaled", &Matrix2::Scaled)
+        // [Method] bool Equals(const Matrix2& rhs) const
         .addFunction("Equals", &Matrix2::Equals)
+        // [Method] Matrix2 Inverse() const
         .addFunction("Inverse", &Matrix2::Inverse)
 
+        // [Method] String ToString() const
         .addFunction("ToString", &Matrix2::ToString)
 
         .addProperty("m00", &Matrix2::m00_)

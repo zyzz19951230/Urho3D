@@ -46,13 +46,19 @@ void RegisterContext(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Context : RefCounted
     lua["Context"].setClass(UserdataMetatable<Context, RefCounted>()
 
+        // [Method] Object* GetEventSender() const
         .addFunction("GetEventSender", &Context::GetEventSender)
+        // [Method] EventHandler* GetEventHandler() const
         .addFunction("GetEventHandler", &Context::GetEventHandler)
+        // [Method] const String& GetTypeName(StringHash objectType) const
         .addFunction("GetTypeName", &Context::GetTypeName)
 
+        // [Property(ReadOnly)] Object* eventSender
         .addProperty("eventSender", &Context::GetEventSender)
+        // [Property(ReadOnly)] EventHandler* eventHandler
         .addProperty("eventHandler", &Context::GetEventHandler)
     );
 

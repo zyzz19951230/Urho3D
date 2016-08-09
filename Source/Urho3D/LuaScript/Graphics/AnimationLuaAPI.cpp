@@ -36,10 +36,14 @@ void RegisterAnimation(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Constant] unsigned char CHANNEL_POSITION
     lua["CHANNEL_POSITION"] = CHANNEL_POSITION;
+    // [Constant] unsigned char CHANNEL_ROTATION
     lua["CHANNEL_ROTATION"] = CHANNEL_ROTATION;
+    // [Constant] unsigned char CHANNEL_SCALE
     lua["CHANNEL_SCALE"] = CHANNEL_SCALE;
 
+    // [Class] AnimationKeyFrame
     lua["AnimationKeyFrame"].setClass(UserdataMetatable<AnimationKeyFrame>()
     	
         .addProperty("time", &AnimationKeyFrame::time_)
@@ -48,23 +52,33 @@ void RegisterAnimation(kaguya::State& lua)
     	.addProperty("scale", &AnimationKeyFrame::scale_)
     	);
 
+    // [Class] AnimationTrack
 	lua["AnimationTrack"].setClass(UserdataMetatable<AnimationTrack>()
     	
+        // [Method] void SetKeyFrame(unsigned index, const AnimationKeyFrame& command)
         .addFunction("SetKeyFrame", &AnimationTrack::SetKeyFrame)
+        // [Method] void AddKeyFrame(const AnimationKeyFrame& keyFrame)
     	.addFunction("AddKeyFrame", &AnimationTrack::AddKeyFrame)
+        // [Method] void InsertKeyFrame(unsigned index, const AnimationKeyFrame& keyFrame)
     	.addFunction("InsertKeyFrame", &AnimationTrack::InsertKeyFrame)
+        // [Method] void RemoveKeyFrame(unsigned index)
     	.addFunction("RemoveKeyFrame", &AnimationTrack::RemoveKeyFrame)
+        // [Method] void RemoveAllKeyFrames()
     	.addFunction("RemoveAllKeyFrames", &AnimationTrack::RemoveAllKeyFrames)
+        // [Method] AnimationKeyFrame* GetKeyFrame(unsigned index)
     	.addFunction("GetKeyFrame", &AnimationTrack::GetKeyFrame)
+        // [Method] unsigned GetNumKeyFrames() const
     	.addFunction("GetNumKeyFrames", &AnimationTrack::GetNumKeyFrames)
 
     	.addProperty("name", &AnimationTrack::name_)
     	.addProperty("nameHash", &AnimationTrack::nameHash_)
     	.addProperty("channelMask", &AnimationTrack::channelMask_)
     	.addProperty("keyFrames", &AnimationTrack::keyFrames_)
+        // [Property(ReadOnly)] unsigned numKeyFrames
     	.addProperty("numKeyFrames", &AnimationTrack::GetNumKeyFrames)
     	);
 
+    // [Class] AnimationTriggerPoint
 	lua["AnimationTriggerPoint"].setClass(UserdataMetatable<AnimationTriggerPoint>()
 		.setConstructors<AnimationTriggerPoint()>()
 
@@ -72,42 +86,64 @@ void RegisterAnimation(kaguya::State& lua)
     	.addProperty("data", &AnimationTriggerPoint::data_)
     	);
 
+    // [Class] Animation : Resource
     lua["Animation"].setClass(UserdataMetatable<Animation, Resource>()
         .addStaticFunction("new", &CreateObject<Animation>)
 
+        // [Method] void SetAnimationName(const String& name)
         .addFunction("SetAnimationName", &Animation::SetAnimationName)
+        // [Method] void SetLength(float length)
         .addFunction("SetLength", &Animation::SetLength)
 
+        // [Method] AnimationTrack* CreateTrack(const String& name)
         .addFunction("CreateTrack", &Animation::CreateTrack)
+        // [Method] bool RemoveTrack(const String& name)
         .addFunction("RemoveTrack", &Animation::RemoveTrack)
+        // [Method] void RemoveAllTracks()
         .addFunction("RemoveAllTracks", &Animation::RemoveAllTracks)
 
+        // [Method] void SetTrigger(unsigned index, const AnimationTriggerPoint& trigger)
 		.addFunction("SetTrigger", &Animation::SetTrigger)
 
         .addOverloadedFunctions("AddTrigger", 
         	static_cast<void(Animation::*)(const AnimationTriggerPoint&)>(&Animation::AddTrigger),
         	static_cast<void(Animation::*)(float, bool, const Variant&)>(&Animation::AddTrigger))
         
+        // [Method] void RemoveTrigger(unsigned index)
         .addFunction("RemoveTrigger", &Animation::RemoveTrigger)
+        // [Method] void RemoveAllTriggers()
         .addFunction("RemoveAllTriggers", &Animation::RemoveAllTriggers)
         
+        // [Method] SharedPtr<Animation> Clone(const String& cloneName = String::EMPTY) const
         .addFunction("Clone", AnimationClone())
 
+        // [Method] const String& GetAnimationName() const
         .addFunction("GetAnimationName", &Animation::GetAnimationName)
+        // [Method] StringHash GetAnimationNameHash() const
         .addFunction("GetAnimationNameHash", &Animation::GetAnimationNameHash)
+        // [Method] float GetLength() const
         .addFunction("GetLength", &Animation::GetLength)
+        // [Method] unsigned GetNumTracks() const
         .addFunction("GetNumTracks", &Animation::GetNumTracks)
         
+        // [Method] AnimationTrack* GetTrack(const String& name)
         .addFunction("GetTrack", static_cast<AnimationTrack*(Animation::*)(const String&)>(&Animation::GetTrack))
 
+        // [Method] unsigned GetNumTriggers() const
         .addFunction("GetNumTriggers", &Animation::GetNumTriggers)
 
+        // [Method] AnimationTriggerPoint* GetTrigger(unsigned index)
         .addFunction("GetTrigger", &Animation::GetTrigger)
         
+        // [Property] const String& animationName
         .addProperty("animationName", &Animation::GetAnimationName, &Animation::SetAnimationName)
+        // [Property(ReadOnly)] StringHash animationNameHash
         .addProperty("animationNameHash", &Animation::GetAnimationNameHash)
+        // [Property] float length
         .addProperty("length", &Animation::GetLength, &Animation::SetLength)
+        // [Property(ReadOnly)] unsigned numTracks
         .addProperty("numTracks", &Animation::GetNumTracks)
+        // [Property] unsigned numTriggers
         .addProperty("numTriggers", &Animation::GetNumTriggers, &Animation::SetNumTriggers)
         );
 }

@@ -36,22 +36,35 @@ void RegisterConstraintDistance2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] ConstraintDistance2D : Constraint2D
     lua["ConstraintDistance2D"].setClass(UserdataMetatable<ConstraintDistance2D, Constraint2D>()
         .addStaticFunction("new", &CreateObject<ConstraintDistance2D>)
 
+        // [Method] void SetOwnerBodyAnchor(const Vector2& anchor)
         .addFunction("SetOwnerBodyAnchor", &ConstraintDistance2D::SetOwnerBodyAnchor)
+        // [Method] void SetOtherBodyAnchor(const Vector2& anchor)
         .addFunction("SetOtherBodyAnchor", &ConstraintDistance2D::SetOtherBodyAnchor)
+        // [Method] void SetFrequencyHz(float frequencyHz)
         .addFunction("SetFrequencyHz", &ConstraintDistance2D::SetFrequencyHz)
+        // [Method] void SetDampingRatio(float dampingRatio)
         .addFunction("SetDampingRatio", &ConstraintDistance2D::SetDampingRatio)
 
+        // [Method] const Vector2& GetOwnerBodyAnchor() const
         .addFunction("GetOwnerBodyAnchor", &ConstraintDistance2D::GetOwnerBodyAnchor)
+        // [Method] const Vector2& GetOtherBodyAnchor() const
         .addFunction("GetOtherBodyAnchor", &ConstraintDistance2D::GetOtherBodyAnchor)
+        // [Method] float GetFrequencyHz() const
         .addFunction("GetFrequencyHz", &ConstraintDistance2D::GetFrequencyHz)
+        // [Method] float GetDampingRatio() const
         .addFunction("GetDampingRatio", &ConstraintDistance2D::GetDampingRatio)
 
+        // [Property] const Vector2& ownerBodyAnchor
         .addProperty("ownerBodyAnchor", &ConstraintDistance2D::GetOwnerBodyAnchor, &ConstraintDistance2D::SetOwnerBodyAnchor)
+        // [Property] const Vector2& otherBodyAnchor
         .addProperty("otherBodyAnchor", &ConstraintDistance2D::GetOtherBodyAnchor, &ConstraintDistance2D::SetOtherBodyAnchor)
+        // [Property] float frequencyHz
         .addProperty("frequencyHz", &ConstraintDistance2D::GetFrequencyHz, &ConstraintDistance2D::SetFrequencyHz)
+        // [Property] float dampingRatio
         .addProperty("dampingRatio", &ConstraintDistance2D::GetDampingRatio, &ConstraintDistance2D::SetDampingRatio)
     );
 }

@@ -34,9 +34,12 @@ void RegisterAnimationDefs(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum WrapMode;
+    // [Enum] WrapMode
+    // [Variable] WM_LOOP
     lua["WM_LOOP"] = WM_LOOP;
+    // [Variable] WM_ONCE,
     lua["WM_ONCE"] = WM_ONCE;
+    // [Variable] WM_CLAMP,
     lua["WM_CLAMP"] = WM_CLAMP;
 }
 }

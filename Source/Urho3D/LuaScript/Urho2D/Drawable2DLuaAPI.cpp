@@ -36,17 +36,25 @@ void RegisterDrawable2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Constant] extern URHO3D_API float PIXEL_SIZE
     lua["PIXEL_SIZE"] = PIXEL_SIZE;
 
+    // [Class] Drawable2D : Drawable
     lua["Drawable2D"].setClass(UserdataMetatable<Drawable2D, Drawable>()
 
+        // [Method] void SetLayer(int layer)
         .addFunction("SetLayer", &Drawable2D::SetLayer)
+        // [Method] void SetOrderInLayer(int orderInLayer)
         .addFunction("SetOrderInLayer", &Drawable2D::SetOrderInLayer)
 
+        // [Method] int GetLayer() const
         .addFunction("GetLayer", &Drawable2D::GetLayer)
+        // [Method] int GetOrderInLayer() const
         .addFunction("GetOrderInLayer", &Drawable2D::GetOrderInLayer)
 
+        // [Property] int layer
         .addProperty("layer", &Drawable2D::GetLayer, &Drawable2D::SetLayer)
+        // [Property] int orderInLayer
         .addProperty("orderInLayer", &Drawable2D::GetOrderInLayer, &Drawable2D::SetOrderInLayer)
     );
 }

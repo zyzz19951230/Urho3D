@@ -36,19 +36,29 @@ void RegisterConstraintWeld2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] ConstraintWeld2D : Constraint2D
     lua["ConstraintWeld2D"].setClass(UserdataMetatable<ConstraintWeld2D, Constraint2D>()
         .addStaticFunction("new", &CreateObject<ConstraintWeld2D>)
 
+        // [Method] void SetAnchor(const Vector2& anchor)
         .addFunction("SetAnchor", &ConstraintWeld2D::SetAnchor)
+        // [Method] void SetFrequencyHz(float frequencyHz)
         .addFunction("SetFrequencyHz", &ConstraintWeld2D::SetFrequencyHz)
+        // [Method] void SetDampingRatio(float dampingRatio)
         .addFunction("SetDampingRatio", &ConstraintWeld2D::SetDampingRatio)
 
+        // [Method] const Vector2& GetAnchor() const
         .addFunction("GetAnchor", &ConstraintWeld2D::GetAnchor)
+        // [Method] float GetFrequencyHz() const
         .addFunction("GetFrequencyHz", &ConstraintWeld2D::GetFrequencyHz)
+        // [Method] float GetDampingRatio() const
         .addFunction("GetDampingRatio", &ConstraintWeld2D::GetDampingRatio)
 
+        // [Property] const Vector2& anchor
         .addProperty("anchor", &ConstraintWeld2D::GetAnchor, &ConstraintWeld2D::SetAnchor)
+        // [Property] float frequencyHz
         .addProperty("frequencyHz", &ConstraintWeld2D::GetFrequencyHz, &ConstraintWeld2D::SetFrequencyHz)
+        // [Property] float dampingRatio
         .addProperty("dampingRatio", &ConstraintWeld2D::GetDampingRatio, &ConstraintWeld2D::SetDampingRatio)
     );
 }

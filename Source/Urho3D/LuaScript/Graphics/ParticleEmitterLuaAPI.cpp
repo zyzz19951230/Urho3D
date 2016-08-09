@@ -35,26 +35,43 @@ void RegisterParticleEmitter(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] ParticleEmitter : BillboardSet
     lua["ParticleEmitter"].setClass(UserdataMetatable<ParticleEmitter, BillboardSet>()
         .addStaticFunction("new", &CreateObject<ParticleEmitter>)
 
+        // [Method] void SetEffect(ParticleEffect* effect)
         .addFunction("SetEffect", &ParticleEmitter::SetEffect)
+        // [Method] void SetNumParticles(unsigned num)
         .addFunction("SetNumParticles", &ParticleEmitter::SetNumParticles)
+        // [Method] void SetEmitting(bool enable)
         .addFunction("SetEmitting", &ParticleEmitter::SetEmitting)
+        // [Method] void SetSerializeParticles(bool enable)
         .addFunction("SetSerializeParticles", &ParticleEmitter::SetSerializeParticles)
+        // [Method] void ResetEmissionTimer()
         .addFunction("ResetEmissionTimer", &ParticleEmitter::ResetEmissionTimer)
+        // [Method] void RemoveAllParticles()
         .addFunction("RemoveAllParticles", &ParticleEmitter::RemoveAllParticles)
+        // [Method] void Reset()
         .addFunction("Reset", &ParticleEmitter::Reset)
+        // [Method] void ApplyEffect()
         .addFunction("ApplyEffect", &ParticleEmitter::ApplyEffect)
         
+        // [Method] ParticleEffect* GetEffect() const
         .addFunction("GetEffect", &ParticleEmitter::GetEffect)
+        // [Method] unsigned GetNumParticles() const
         .addFunction("GetNumParticles", &ParticleEmitter::GetNumParticles)
+        // [Method] bool IsEmitting() const
         .addFunction("IsEmitting", &ParticleEmitter::IsEmitting)
+        // [Method] bool GetSerializeParticles() const
         .addFunction("GetSerializeParticles", &ParticleEmitter::GetSerializeParticles)
 
+        // [Property] ParticleEffect* effect
         .addProperty("effect", &ParticleEmitter::GetEffect, &ParticleEmitter::SetEffect)
+        // [Property] unsigned numParticles
         .addProperty("numParticles", &ParticleEmitter::GetNumParticles, &ParticleEmitter::SetNumParticles)
+        // [Property] bool emitting
         .addProperty("emitting", &ParticleEmitter::IsEmitting, &ParticleEmitter::SetEmitting)
+        // [Property] bool serializeParticles
         .addProperty("serializeParticles", &ParticleEmitter::GetSerializeParticles, &ParticleEmitter::SetSerializeParticles)
         );
 }

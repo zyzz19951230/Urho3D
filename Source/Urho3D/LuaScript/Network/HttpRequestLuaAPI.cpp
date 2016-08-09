@@ -46,29 +46,46 @@ void RegisterHttpRequest(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum HttpRequestState;
+    // [Enum] HttpRequestState
+    // [Variable] HTTP_INITIALIZING
     lua["HTTP_INITIALIZING"] = HTTP_INITIALIZING;
+    // [Variable] HTTP_ERROR,
     lua["HTTP_ERROR"] = HTTP_ERROR;
+    // [Variable] HTTP_OPEN,
     lua["HTTP_OPEN"] = HTTP_OPEN;
+    // [Variable] HTTP_CLOSED
     lua["HTTP_CLOSED"] = HTTP_CLOSED;
 
+    // [Class] HttpRequest : RefCounted
     lua["HttpRequest"].setClass(UserdataMetatable<HttpRequest, RefCounted>()
         .setConstructors<HttpRequest(const String&, const String&, const Vector<String>&, const String&)>()
 
+        // [Method] const String& GetURL() const
         .addFunction("GetURL", &HttpRequest::GetURL)
+        // [Method] const String& GetVerb() const
         .addFunction("GetVerb", &HttpRequest::GetVerb)
+        // [Method] String GetError() const
         .addFunction("GetError", &HttpRequest::GetError)
+        // [Method] HttpRequestState GetState() const
         .addFunction("GetState", &HttpRequest::GetState)
+        // [Method] unsigned GetAvailableSize() const
         .addFunction("GetAvailableSize", &HttpRequest::GetAvailableSize)
+        // [Method] bool IsOpen() const
         .addFunction("IsOpen", &HttpRequest::IsOpen)
 
         .addStaticFunction("Read", &HttpRequestRead)
 
+        // [Property(ReadOnly)] const String& URL
         .addProperty("URL", &HttpRequest::GetURL)
+        // [Property(ReadOnly)] const String& verb
         .addProperty("verb", &HttpRequest::GetVerb)
+        // [Property(ReadOnly)] String error
         .addProperty("error", &HttpRequest::GetError)
+        // [Property(ReadOnly)] HttpRequestState state
         .addProperty("state", &HttpRequest::GetState)
+        // [Property(ReadOnly)] unsigned availableSize
         .addProperty("availableSize", &HttpRequest::GetAvailableSize)
+        // [Property(ReadOnly)] bool open
         .addProperty("open", &HttpRequest::IsOpen)
         );
 }

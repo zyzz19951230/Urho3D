@@ -39,28 +39,43 @@ void RegisterRenderPath(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum RenderCommandType;
+    // [Enum] RenderCommandType
+    // [Variable] CMD_NONE
     lua["CMD_NONE"] = CMD_NONE;
+    // [Variable] CMD_CLEAR,
     lua["CMD_CLEAR"] = CMD_CLEAR;
+    // [Variable] CMD_SCENEPASS,
     lua["CMD_SCENEPASS"] = CMD_SCENEPASS;
+    // [Variable] CMD_QUAD,
     lua["CMD_QUAD"] = CMD_QUAD;
+    // [Variable] CMD_FORWARDLIGHTS,
     lua["CMD_FORWARDLIGHTS"] = CMD_FORWARDLIGHTS;
+    // [Variable] CMD_LIGHTVOLUMES,
     lua["CMD_LIGHTVOLUMES"] = CMD_LIGHTVOLUMES;
+    // [Variable] CMD_RENDERUI,
     lua["CMD_RENDERUI"] = CMD_RENDERUI;
+    // [Variable] CMD_SENDEVENT
     lua["CMD_SENDEVENT"] = CMD_SENDEVENT;
 
-    // enum RenderCommandSortMode;
+    // [Enum] RenderCommandSortMode
+    // [Variable] SORT_FRONTTOBACK
     lua["SORT_FRONTTOBACK"] = SORT_FRONTTOBACK;
+    // [Variable] SORT_BACKTOFRONT
     lua["SORT_BACKTOFRONT"] = SORT_BACKTOFRONT;
 
-    // enum RenderTargetSizeMode;
+    // [Enum] RenderTargetSizeMode
+    // [Variable] SIZE_ABSOLUTE
     lua["SIZE_ABSOLUTE"] = SIZE_ABSOLUTE;
+    // [Variable] SIZE_VIEWPORTDIVISOR,
     lua["SIZE_VIEWPORTDIVISOR"] = SIZE_VIEWPORTDIVISOR;
+    // [Variable] SIZE_VIEWPORTMULTIPLIER
     lua["SIZE_VIEWPORTMULTIPLIER"] = SIZE_VIEWPORTMULTIPLIER;
 
+    // [Class] RenderTargetInfo
     lua["RenderTargetInfo"].setClass(UserdataMetatable<RenderTargetInfo>()
         .setConstructors<RenderTargetInfo()>()
 
+        // [Method] void Load(const XMLElement& element)
         .addFunction("Load", &RenderTargetInfo::Load)
         
         .addProperty("name", &RenderTargetInfo::name_)
@@ -75,26 +90,42 @@ void RegisterRenderPath(kaguya::State& lua)
         .addProperty("persistent", &RenderTargetInfo::persistent_)
     );
 
+    // [Class] RenderPathCommand
     lua["RenderPathCommand"].setClass(UserdataMetatable<RenderPathCommand>()
         .setConstructors<RenderPathCommand()>()
 
+        // [Method] void Load(const XMLElement& element)
         .addFunction("Load", &RenderPathCommand::Load)
 
+        // [Method] void SetTextureName(TextureUnit unit, const String& name)
         .addFunction("SetTextureName", &RenderPathCommand::SetTextureName)
+        // [Method] void SetShaderParameter(const String& name, const Variant& value)
         .addFunction("SetShaderParameter", &RenderPathCommand::SetShaderParameter)
+        // [Method] void RemoveShaderParameter(const String& name)
         .addFunction("RemoveShaderParameter", &RenderPathCommand::RemoveShaderParameter)
+        // [Method] void SetNumOutputs(unsigned num)
         .addFunction("SetNumOutputs", &RenderPathCommand::SetNumOutputs)
         
+        // [Method] void SetOutput(unsigned index, const String& name, CubeMapFace face = FACE_POSITIVE_X)
         .addFunction("SetOutput", RenderPathCommandSetOutput())
 
+        // [Method] void SetOutputName(unsigned index, const String& name)
         .addFunction("SetOutputName", &RenderPathCommand::SetOutputName)
+        // [Method] void SetOutputFace(unsigned index, CubeMapFace face)
         .addFunction("SetOutputFace", &RenderPathCommand::SetOutputFace)
+        // [Method] void SetDepthStencilName(const String& name)
         .addFunction("SetDepthStencilName", &RenderPathCommand::SetDepthStencilName)
+        // [Method] const String& GetTextureName(TextureUnit unit) const
         .addFunction("GetTextureName", &RenderPathCommand::GetTextureName)
+        // [Method] const Variant& GetShaderParameter(const String& name) const
         .addFunction("GetShaderParameter", &RenderPathCommand::GetShaderParameter)
+        // [Method] unsigned GetNumOutputs() const
         .addFunction("GetNumOutputs", &RenderPathCommand::GetNumOutputs)
+        // [Method] const String& GetOutputName(unsigned index) const
         .addFunction("GetOutputName", &RenderPathCommand::GetOutputName)
+        // [Method] CubeMapFace GetOutputFace(unsigned index) const
         .addFunction("GetOutputFace", &RenderPathCommand::GetOutputFace)
+        // [Method] const String& GetDepthStencilName() const
         .addFunction("GetDepthStencilName", &RenderPathCommand::GetDepthStencilName)
         
         .addProperty("tag", &RenderPathCommand::tag_)
@@ -120,36 +151,55 @@ void RegisterRenderPath(kaguya::State& lua)
         .addProperty("eventName", &RenderPathCommand::eventName_)
     );
 
+    // [Class] RenderPath : RefCounted
     lua["RenderPath"].setClass(UserdataMetatable<RenderPath, RefCounted>()
         .setConstructors<RenderPath()>()
 
+        // [Method] SharedPtr<RenderPath> Clone()
         .addFunction("Clone", &RenderPath::Clone)
 
+        // [Method] void Load(const XMLElement& element)
 		.addFunction("Load", &RenderPath::Load)
+        // [Method] bool Append(XMLFile* file)
         .addFunction("Append", &RenderPath::Append)
         
+        // [Method] void SetEnabled(const String& tag, bool active)
         .addFunction("SetEnabled", &RenderPath::SetEnabled)
+        // [Method] void ToggleEnabled(const String& tag)
         .addFunction("ToggleEnabled", &RenderPath::ToggleEnabled)
+        // [Method] void SetRenderTarget(unsigned index, const RenderTargetInfo& info)
         .addFunction("SetRenderTarget", &RenderPath::SetRenderTarget)
+        // [Method] void AddRenderTarget(const RenderTargetInfo& info)
         .addFunction("AddRenderTarget", &RenderPath::AddRenderTarget)
 
         .addOverloadedFunctions("RemoveRenderTarget",
             static_cast<void(RenderPath::*)(unsigned)>(&RenderPath::RemoveRenderTarget),
             static_cast<void(RenderPath::*)(const String&)>(&RenderPath::RemoveRenderTarget))
 
+        // [Method] void RemoveRenderTargets(const String& tag)
         .addFunction("RemoveRenderTargets", &RenderPath::RemoveRenderTargets)
 
+        // [Method] void SetCommand(unsigned index, const RenderPathCommand& command)
         .addFunction("SetCommand", &RenderPath::SetCommand)
+        // [Method] void AddCommand(const RenderPathCommand& command)
         .addFunction("AddCommand", &RenderPath::AddCommand)
+        // [Method] void InsertCommand(unsigned index, const RenderPathCommand& command)
         .addFunction("InsertCommand", &RenderPath::InsertCommand)
+        // [Method] void RemoveCommand(unsigned index)
         .addFunction("RemoveCommand", &RenderPath::RemoveCommand)
+        // [Method] void RemoveCommands(const String& tag)
         .addFunction("RemoveCommands", &RenderPath::RemoveCommands)
 
+        // [Method] void SetShaderParameter(const String& name, const Variant& value)
         .addFunction("SetShaderParameter", &RenderPath::SetShaderParameter)
         
+        // [Method] unsigned GetNumRenderTargets() const
         .addFunction("GetNumRenderTargets", &RenderPath::GetNumRenderTargets)
+        // [Method] unsigned GetNumCommands() const
         .addFunction("GetNumCommands", &RenderPath::GetNumCommands)
+        // [Method] RenderPathCommand* GetCommand(unsigned index)
         .addFunction("GetCommand", &RenderPath::GetCommand)
+        // [Method] const Variant& GetShaderParameter(const String& name) const
         .addFunction("GetShaderParameter", &RenderPath::GetShaderParameter)
     );
 }

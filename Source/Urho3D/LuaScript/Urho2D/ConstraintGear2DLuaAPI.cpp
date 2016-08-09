@@ -36,19 +36,29 @@ void RegisterConstraintGear2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] ConstraintGear2D : Constraint2D
     lua["ConstraintGear2D"].setClass(UserdataMetatable<ConstraintGear2D, Constraint2D>()
         .addStaticFunction("new", &CreateObject<ConstraintGear2D>)
 
+        // [Method] void SetOwnerConstraint(Constraint2D* constraint)
         .addFunction("SetOwnerConstraint", &ConstraintGear2D::SetOwnerConstraint)
+        // [Method] void SetOtherConstraint(Constraint2D* constraint)
         .addFunction("SetOtherConstraint", &ConstraintGear2D::SetOtherConstraint)
+        // [Method] void SetRatio(float ratio)
         .addFunction("SetRatio", &ConstraintGear2D::SetRatio)
 
+        // [Method] Constraint2D* GetOwnerConstraint() const
         .addFunction("GetOwnerConstraint", &ConstraintGear2D::GetOwnerConstraint)
+        // [Method] Constraint2D* GetOtherConstraint() const
         .addFunction("GetOtherConstraint", &ConstraintGear2D::GetOtherConstraint)
+        // [Method] float GetRatio() const
         .addFunction("GetRatio", &ConstraintGear2D::GetRatio)
 
+        // [Property] Constraint2D* ownerConstraint
         .addProperty("ownerConstraint", &ConstraintGear2D::GetOwnerConstraint, &ConstraintGear2D::SetOwnerConstraint)
+        // [Property] Constraint2D* otherConstraint
         .addProperty("otherConstraint", &ConstraintGear2D::GetOtherConstraint, &ConstraintGear2D::SetOtherConstraint)
+        // [Property] float ratio
         .addProperty("ratio", &ConstraintGear2D::GetRatio, &ConstraintGear2D::SetRatio)
     );
 }

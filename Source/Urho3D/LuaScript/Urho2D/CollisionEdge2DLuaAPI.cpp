@@ -36,17 +36,25 @@ void RegisterCollisionEdge2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] CollisionEdge2D : CollisionShape2D
     lua["CollisionEdge2D"].setClass(UserdataMetatable<CollisionEdge2D, CollisionShape2D>()
         .addStaticFunction("new", &CreateObject<CollisionEdge2D>)
 
+        // [Method] void SetVertex1(const Vector2& vertex)
         .addFunction("SetVertex1", &CollisionEdge2D::SetVertex1)
+        // [Method] void SetVertex2(const Vector2& vertex)
         .addFunction("SetVertex2", &CollisionEdge2D::SetVertex2)
+        // [Method] void SetVertices(const Vector2& vertex1, const Vector2& vertex2)
         .addFunction("SetVertices", &CollisionEdge2D::SetVertices)
 
+        // [Method] const Vector2& GetVertex1() const
         .addFunction("GetVertex1", &CollisionEdge2D::GetVertex1)
+        // [Method] const Vector2& GetVertex2() const
         .addFunction("GetVertex2", &CollisionEdge2D::GetVertex2)
 
+        // [Property] const Vector2& vertex1
         .addProperty("vertex1", &CollisionEdge2D::GetVertex1, &CollisionEdge2D::SetVertex1)
+        // [Property] const Vector2& vertex2
         .addProperty("vertex2", &CollisionEdge2D::GetVertex2, &CollisionEdge2D::SetVertex2)
     );
 }

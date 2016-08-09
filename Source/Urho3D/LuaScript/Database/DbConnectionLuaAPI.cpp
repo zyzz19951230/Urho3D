@@ -38,6 +38,7 @@ void RegisterDbConnection(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] DbConnection : Object
     lua["DbConnection"].setClass(UserdataMetatable<DbConnection, Object>()
         
         .addFunction("Finalize", &DbConnection::Finalize)

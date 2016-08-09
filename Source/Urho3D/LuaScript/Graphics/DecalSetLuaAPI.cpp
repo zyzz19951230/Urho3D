@@ -57,31 +57,49 @@ void RegisterDecalSet(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] DecalSet : Drawable
     lua["DecalSet"].setClass(UserdataMetatable<DecalSet, Drawable>()
         .addStaticFunction("new", &CreateObject<DecalSet>)
 
+        // [Method] void SetMaterial(Material* material)
         .addFunction("SetMaterial", &DecalSet::SetMaterial)
+        // [Method] void SetMaxVertices(unsigned num)
         .addFunction("SetMaxVertices", &DecalSet::SetMaxVertices)
+        // [Method] void SetMaxIndices(unsigned num)
         .addFunction("SetMaxIndices", &DecalSet::SetMaxIndices)
         
         ADD_OVERLOADED_FUNCTIONS_4(DecalSet, AddDecal)
         // .addFunction("AddDecal", DecalSetAddDecal())
 
+        // [Method] void RemoveDecals(unsigned num)
         .addFunction("RemoveDecals", &DecalSet::RemoveDecals)
+        // [Method] void RemoveAllDecals()
         .addFunction("RemoveAllDecals", &DecalSet::RemoveAllDecals)
 
+        // [Method] Material* GetMaterial() const
         .addFunction("GetMaterial", &DecalSet::GetMaterial)
+        // [Method] unsigned GetNumDecals() const
         .addFunction("GetNumDecals", &DecalSet::GetNumDecals)
+        // [Method] unsigned GetNumVertices() const
         .addFunction("GetNumVertices", &DecalSet::GetNumVertices)
+        // [Method] unsigned GetNumIndices() const
         .addFunction("GetNumIndices", &DecalSet::GetNumIndices)
+        // [Method] unsigned GetMaxVertices() const
         .addFunction("GetMaxVertices", &DecalSet::GetMaxVertices)
+        // [Method] unsigned GetMaxIndices() const
         .addFunction("GetMaxIndices", &DecalSet::GetMaxIndices)
 
+        // [Property] Material* material
         .addProperty("material", &DecalSet::GetMaterial, &DecalSet::SetMaterial)
+        // [Property(WriteOnly)] unsigned numDecals
         .addProperty("numDecals", &DecalSet::GetNumDecals)
+        // [Property(WriteOnly)] unsigned numVertices
         .addProperty("numVertices", &DecalSet::GetNumVertices)
+        // [Property(WriteOnly)] unsigned numIndices
         .addProperty("numIndices", &DecalSet::GetNumIndices)
+        // [Property] unsigned maxVertices
         .addProperty("maxVertices", &DecalSet::GetMaxVertices, &DecalSet::SetMaxVertices)
+        // [Property] unsigned maxIndices
         .addProperty("maxIndices", &DecalSet::GetMaxIndices, &DecalSet::SetMaxIndices)
         );
 }

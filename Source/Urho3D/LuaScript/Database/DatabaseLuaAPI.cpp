@@ -37,21 +37,31 @@ void RegisterDatabase(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum DBAPI;
+    // [Enum] DBAPI
+    // [Variable] DBAPI_SQLITE
     lua["DBAPI_SQLITE"] = DBAPI_SQLITE;
+    // [Variable] DBAPI_ODBC
     lua["DBAPI_ODBC"] = DBAPI_ODBC;
 
+    // [Class] Database : Object
     lua["Database"].setClass(UserdataMetatable<Database, Object>()
 
         .addStaticFunction("GetAPI", &Database::GetAPI)
 
+        // [Method] DbConnection* Connect(const String& connectionString)
         .addFunction("Connect", &Database::Connect)
+        // [Method] void Disconnect(DbConnection* connection)
         .addFunction("Disconnect", &Database::Disconnect)
+        // [Method] bool IsPooling() const
         .addFunction("IsPooling", &Database::IsPooling)
+        // [Method] unsigned GetPoolSize() const
         .addFunction("GetPoolSize", &Database::GetPoolSize)
+        // [Method] void SetPoolSize(unsigned poolSize)
         .addFunction("SetPoolSize", &Database::SetPoolSize)
 
+        // [Property(ReadOnly)] bool pooling
         .addProperty("pooling", &Database::IsPooling)
+        // [Property] unsigned poolSize
         .addProperty("poolSize", &Database::GetPoolSize, &Database::SetPoolSize)
     );
 

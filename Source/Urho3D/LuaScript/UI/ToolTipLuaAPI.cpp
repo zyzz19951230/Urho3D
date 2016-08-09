@@ -34,12 +34,16 @@ void RegisterToolTip(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] ToolTip : UIElement
     lua["ToolTip"].setClass(UserdataMetatable<ToolTip, UIElement>()
         .addStaticFunction("new", &CreateObject<ToolTip>)
 
+        // [Method] void SetDelay(float delay)
         .addFunction("SetDelay", &ToolTip::SetDelay)
+        // [Method] float GetDelay() const
         .addFunction("GetDelay", &ToolTip::GetDelay)
 
+        // [Property] float delay
         .addProperty("delay", &ToolTip::GetDelay, &ToolTip::SetDelay)
         );
 }

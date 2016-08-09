@@ -34,25 +34,41 @@ void RegisterSlider(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Slider : BorderImage
     lua["Slider"].setClass(UserdataMetatable<Slider, BorderImage>()
         .addStaticFunction("new", &CreateObject<Slider>)
 
+        // [Method] void SetOrientation(Orientation orientation)
         .addFunction("SetOrientation", &Slider::SetOrientation)
+        // [Method] void SetRange(float range)
         .addFunction("SetRange", &Slider::SetRange)
+        // [Method] void SetValue(float value)
         .addFunction("SetValue", &Slider::SetValue)
+        // [Method] void ChangeValue(float delta)
         .addFunction("ChangeValue", &Slider::ChangeValue)
+        // [Method] void SetRepeatRate(float rate)
         .addFunction("SetRepeatRate", &Slider::SetRepeatRate)
 
+        // [Method] Orientation GetOrientation() const
         .addFunction("GetOrientation", &Slider::GetOrientation)
+        // [Method] float GetRange() const
         .addFunction("GetRange", &Slider::GetRange)
+        // [Method] float GetValue() const
         .addFunction("GetValue", &Slider::GetValue)
+        // [Method] BorderImage* GetKnob() const
         .addFunction("GetKnob", &Slider::GetKnob)
+        // [Method] float GetRepeatRate() const
         .addFunction("GetRepeatRate", &Slider::GetRepeatRate)
 
+        // [Property] Orientation orientation
         .addProperty("orientation", &Slider::GetOrientation, &Slider::SetOrientation)
+        // [Property] float range
         .addProperty("range", &Slider::GetRange, &Slider::SetRange)
+        // [Property] float value
         .addProperty("value", &Slider::GetValue, &Slider::SetValue)
+        // [Property(ReadOnly)] BorderImage* knob
         .addProperty("knob", &Slider::GetKnob)
+        // [Property] float repeatRate
         .addProperty("repeatRate", &Slider::GetRepeatRate, &Slider::SetRepeatRate)
         );
 }

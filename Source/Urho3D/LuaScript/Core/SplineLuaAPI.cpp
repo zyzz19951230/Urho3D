@@ -34,19 +34,26 @@ void RegisterSpline(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum InterpolationMode;
+    // [Enum] InterpolationMode
+    // [Constant] Spline(Vector<Variant>& knots, InterpolationMode mode
     lua["BEZIER_CURVE"] = BEZIER_CURVE;
+    // [Variable] CATMULL_ROM_CURVE,
     lua["CATMULL_ROM_CURVE"] = CATMULL_ROM_CURVE;
+    // [Variable] LINEAR_CURVE,
     lua["LINEAR_CURVE"] = LINEAR_CURVE;
+    // [Variable] CATMULL_ROM_FULL_CURVE
     lua["CATMULL_ROM_FULL_CURVE"] = CATMULL_ROM_FULL_CURVE;
 
+    // [Class] Spline
     lua["Spline"].setClass(UserdataMetatable<Spline>()
         .setConstructors<Spline(),
         Spline(InterpolationMode)>()
 
         .addFunction("__eq", &Spline::operator==)
 
+        // [Method] void SetInterpolationMode(InterpolationMode interpolationMode)
         .addFunction("SetInterpolationMode", &Spline::SetInterpolationMode)
+        // [Method] void SetKnot(const Variant& knot, unsigned index)
         .addFunction("SetKnot", &Spline::SetKnot)
         
         .addOverloadedFunctions("AddKnot",
@@ -56,12 +63,17 @@ void RegisterSpline(kaguya::State& lua)
         .addOverloadedFunctions("RemoveKnot",
             static_cast<void(Spline::*)()>(&Spline::RemoveKnot),
             static_cast<void(Spline::*)(unsigned)>(&Spline::RemoveKnot))
+        // [Method] void Clear()
         .addFunction("Clear", &Spline::Clear)
 
+        // [Method] InterpolationMode GetInterpolationMode() const
         .addFunction("GetInterpolationMode", &Spline::GetInterpolationMode)
+        // [Method] Variant GetKnot(unsigned index) const
         .addFunction("GetKnot", &Spline::GetKnot)        
+        // [Method] Variant GetPoint(float f) const
         .addFunction("GetPoint", &Spline::GetPoint)
 
+        // [Property] InterpolationMode interpolationMode
         .addProperty("interpolationMode", &Spline::GetInterpolationMode, &Spline::SetInterpolationMode)
     );
 }

@@ -59,6 +59,7 @@ void RegisterSound(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Sound : Resource
     lua["Sound"].setClass(UserdataMetatable<Sound, Resource>()
         .addStaticFunction("new", &CreateObject<Sound>)
 
@@ -74,31 +75,55 @@ void RegisterSound(kaguya::State& lua)
             &Sound::LoadOggVorbis,
             &SoundLoadOggVorbis)
 
+        // [Method] void SetSize(unsigned dataSize)
         .addFunction("SetSize", &Sound::SetSize)
+        // [Method] void SetData(const void* data, unsigned dataSize)
         .addFunction("SetData", &Sound::SetData)
+        // [Method] void SetFormat(unsigned frequency, bool sixteenBit, bool stereo)
         .addFunction("SetFormat", &Sound::SetFormat)
+        // [Method] void SetLooped(bool enable)
         .addFunction("SetLooped", &Sound::SetLooped)
+        // [Method] void SetLoop(unsigned repeatOffset, unsigned endOffset)
         .addFunction("SetLoop", &Sound::SetLoop)
 
+        // [Method] float GetLength() const
         .addFunction("GetLength", &Sound::GetLength)
+        // [Method] unsigned GetDataSize() const
         .addFunction("GetDataSize", &Sound::GetDataSize)
+        // [Method] unsigned GetSampleSize() const
         .addFunction("GetSampleSize", &Sound::GetSampleSize)
+        // [Method] float GetFrequency() const
         .addFunction("GetFrequency", &Sound::GetFrequency)
+        // [Method] unsigned GetIntFrequency() const
         .addFunction("GetIntFrequency", &Sound::GetIntFrequency)
+        // [Method] bool IsLooped() const
         .addFunction("IsLooped", &Sound::IsLooped)
+        // [Method] bool IsSixteenBit() const
         .addFunction("IsSixteenBit", &Sound::IsSixteenBit)
+        // [Method] bool IsStereo() const
         .addFunction("IsStereo", &Sound::IsStereo)
+        // [Method] bool IsCompressed() const
         .addFunction("IsCompressed", &Sound::IsCompressed)
+        // [Method] void FixInterpolation()
         .addFunction("FixInterpolation", &Sound::FixInterpolation)
 
+        // [Property(ReadOnly)] float length
         .addProperty("length", &Sound::GetLength)
+        // [Property(ReadOnly)] unsigned dataSize
         .addProperty("dataSize", &Sound::GetDataSize)
+        // [Property(ReadOnly)] unsigned sampleSize
         .addProperty("sampleSize", &Sound::GetSampleSize)
+        // [Property(ReadOnly)] float frequency
         .addProperty("frequency", &Sound::GetFrequency)
+        // [Property(ReadOnly)] unsigned intFrequency
         .addProperty("intFrequency", &Sound::GetIntFrequency)
+        // [Property] bool looped
         .addProperty("looped", &Sound::IsLooped, &Sound::SetLooped)
+        // [Property(ReadOnly)] bool sixteenBit
         .addProperty("sixteenBit", &Sound::IsSixteenBit)
+        // [Property(ReadOnly)] bool stereo
         .addProperty("stereo", &Sound::IsStereo)
+        // [Property(ReadOnly)] bool compressed
         .addProperty("compressed", &Sound::IsCompressed)
         );
 }

@@ -55,37 +55,58 @@ void RegisterDebugRenderer(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] DebugRenderer : Component
     lua["DebugRenderer"].setClass(UserdataMetatable<DebugRenderer, Component>()
         .addStaticFunction("new", &CreateObject<DebugRenderer>)
         
+        // [Method] void SetView(Camera* camera)
         .addFunction("SetView", &DebugRenderer::SetView)
 
+        // [Method] void AddLine(const Vector3& start, const Vector3& end, const Color& color, bool depthTest = true)
         .addFunction("AddLine", DebugRendererAddLine())
+        // [Method] void AddTriangle(const Vector3& v1, const Vector3& v2, const Vector3& v3, const Color& color, bool depthTest = true)
         .addFunction("AddTriangle", DebugRendererAddTriangle())
+        // [Method] void AddNode(Node* node, float scale = 1.0f, bool depthTest = true)
         .addFunction("AddNode", DebugRendererAddNode())
         
         .addOverloadedFunctions("AddBoundingBox", 
             DebugRendererAddBoundingBox0(),
             DebugRendererAddBoundingBox1())
 
+        // [Method] void AddFrustum(const Frustum& frustum, const Color& color, bool depthTest = true)
         .addFunction("AddFrustum", DebugRendererAddFrustum())
+        // [Method] void AddPolyhedron(const Polyhedron& poly, const Color& color, bool depthTest = true)
         .addFunction("AddPolyhedron", DebugRendererAddPolyhedron())
+        // [Method] void AddSphere(const Sphere& sphere, const Color& color, bool depthTest = true)
         .addFunction("AddSphere", DebugRendererAddSphere())
+        // [Method] void AddCylinder(const Vector3& position, float radius, float height, const Color& color, bool depthTest = true)
         .addFunction("AddCylinder", DebugRendererAddCylinder())
+        // [Method] void AddSkeleton(const Skeleton& skeleton, const Color& color, bool depthTest = true)
         .addFunction("AddSkeleton", DebugRendererAddSkeleton())
         .addFunction("AddTriangleMesh", DebugRendererAddTriangleMesh())
+        // [Method] void AddCircle(const Vector3& center, const Vector3& normal, float radius, const Color& color, int steps = 64, bool depthTest = true)
         .addFunction("AddCircle", DebugRendererAddCircle())
+        // [Method] void AddCross(const Vector3& center, float size, const Color& color, bool depthTest = true)
         .addFunction("AddCross", DebugRendererAddCross())
+        // [Method] void AddQuad(const Vector3& center, float width, float height, const Color& color, bool depthTest = true)
         .addFunction("AddQuad", DebugRendererAddQuad())
 
+        // [Method] void Render()
         .addFunction("Render", &DebugRenderer::Render)
+        // [Method] const Matrix3x4& GetView() const
         .addFunction("GetView", &DebugRenderer::GetView)
+        // [Method] const Matrix4& GetProjection() const
         .addFunction("GetProjection", &DebugRenderer::GetProjection)
+        // [Method] const Frustum& GetFrustum() const
         .addFunction("GetFrustum", &DebugRenderer::GetFrustum)
+        // [Method] bool IsInside(const BoundingBox& box) const
         .addFunction("IsInside", &DebugRenderer::IsInside)
 
+        // [Property(ReadOnly)] const Matrix3x4& view
         .addProperty("view", &DebugRenderer::GetView)
+        // [Property(ReadOnly)] const Matrix4& projection
         .addProperty("projection", &DebugRenderer::GetProjection)
+        // [Property(ReadOnly)] const Frustum& frustum
         .addProperty("frustum", &DebugRenderer::GetFrustum)
     );
 }

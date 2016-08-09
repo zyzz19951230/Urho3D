@@ -47,6 +47,7 @@ void RegisterCustomGeometry(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] CustomGeometryVertex
     lua["CustomGeometryVertex"].setClass(UserdataMetatable<CustomGeometryVertex>()
     
     .addProperty("position", &CustomGeometryVertex::position_)
@@ -56,34 +57,52 @@ void RegisterCustomGeometry(kaguya::State& lua)
     .addProperty("tangent", &CustomGeometryVertex::tangent_)
     );
 
+    // [Class] CustomGeometry : Drawable
     lua["CustomGeometry"].setClass(UserdataMetatable<CustomGeometry, Drawable>()
         .addStaticFunction("new", &CreateObject<CustomGeometry>)
 
+        // [Method] void Clear()
         .addFunction("Clear", &CustomGeometry::Clear)
+        // [Method] void SetNumGeometries(unsigned num)
         .addFunction("SetNumGeometries", &CustomGeometry::SetNumGeometries)
+        // [Method] void SetDynamic(bool enable)
         .addFunction("SetDynamic", &CustomGeometry::SetDynamic)
+        // [Method] void BeginGeometry(unsigned index, PrimitiveType type)
         .addFunction("BeginGeometry", &CustomGeometry::BeginGeometry)
+        // [Method] void DefineVertex(const Vector3& position)
         .addFunction("DefineVertex", &CustomGeometry::DefineVertex)
+        // [Method] void DefineNormal(const Vector3& normal)
         .addFunction("DefineNormal", &CustomGeometry::DefineNormal)
+        // [Method] void DefineColor(const Color& color)
         .addFunction("DefineColor", &CustomGeometry::DefineColor)
+        // [Method] void DefineTexCoord(const Vector2& texCoord)
         .addFunction("DefineTexCoord", &CustomGeometry::DefineTexCoord)
+        // [Method] void DefineTangent(const Vector4& tangent)
         .addFunction("DefineTangent", &CustomGeometry::DefineTangent)
         .addFunction("DefineGeometry", &CustomGeometry::DefineGeometry)
+        // [Method] void Commit()
         .addFunction("Commit", &CustomGeometry::Commit)
 
         .addOverloadedFunctions("SetMaterial",
             static_cast<void(CustomGeometry::*)(Material*)>(&CustomGeometry::SetMaterial),
             static_cast<bool(CustomGeometry::*)(unsigned, Material*)>(&CustomGeometry::SetMaterial))
 
+        // [Method] unsigned GetNumGeometries() const
         .addFunction("GetNumGeometries", &CustomGeometry::GetNumGeometries)
+        // [Method] unsigned GetNumVertices(unsigned index) const
         .addFunction("GetNumVertices", &CustomGeometry::GetNumVertices)
+        // [Method] bool IsDynamic() const
         .addFunction("IsDynamic", &CustomGeometry::IsDynamic)
         
+        // [Method] Material* GetMaterial(unsigned index = 0) const
         .addFunction("GetMaterial", CustomGeometryGetMaterial())
 
+        // [Method] CustomGeometryVertex* GetVertex(unsigned geometryIndex, unsigned vertexNum)
         .addFunction("GetVertex", &CustomGeometry::GetVertex)
 
+        // [Property] unsigned numGeometries
         .addProperty("numGeometries", &CustomGeometry::GetNumGeometries, &CustomGeometry::SetNumGeometries)
+        // [Property] bool dynamic
         .addProperty("dynamic", &CustomGeometry::IsDynamic, &CustomGeometry::SetDynamic)
         .addProperty("material", &CustomGeometryMaterialGetter, &CustomGeometryMaterialSetter)
         );

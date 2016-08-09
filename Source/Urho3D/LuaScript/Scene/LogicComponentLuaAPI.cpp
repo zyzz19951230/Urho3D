@@ -34,19 +34,29 @@ void RegisterLogicComponent(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Constant] unsigned char USE_UPDATE
     lua["USE_UPDATE"] = USE_UPDATE;
+    // [Constant] unsigned char USE_POSTUPDATE
     lua["USE_POSTUPDATE"] = USE_POSTUPDATE;
+    // [Constant] unsigned char USE_FIXEDUPDATE
     lua["USE_FIXEDUPDATE"] = USE_FIXEDUPDATE;
+    // [Constant] unsigned char USE_FIXEDPOSTUPDATE
     lua["USE_FIXEDPOSTUPDATE"] = USE_FIXEDPOSTUPDATE;
 
+    // [Class] LogicComponent : Component
     lua["LogicComponent"].setClass(UserdataMetatable<LogicComponent, Component>()
         .addStaticFunction("new", &CreateObject<LogicComponent>)
 
+        // [Method] void SetUpdateEventMask(unsigned char mask)
         .addFunction("SetUpdateEventMask", &LogicComponent::SetUpdateEventMask)
+        // [Method] unsigned char GetUpdateEventMask() const
         .addFunction("GetUpdateEventMask", &LogicComponent::GetUpdateEventMask)
+        // [Method] bool IsDelayedStartCalled() const
         .addFunction("IsDelayedStartCalled", &LogicComponent::IsDelayedStartCalled)
 
+        // [Property] unsigned char updateEventMask
         .addProperty("updateEventMask", &LogicComponent::GetUpdateEventMask, &LogicComponent::SetUpdateEventMask)
+        // [Property(ReadOnly)] bool delayedStartCalled
         .addProperty("delayedStartCalled", &LogicComponent::IsDelayedStartCalled)
         );
 }

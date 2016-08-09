@@ -43,6 +43,7 @@ void RegisterMatrix4(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Matrix4
     lua["Matrix4"].setClass(UserdataMetatable<Matrix4>()
         .setConstructors<Matrix4(),
         Matrix4(const Matrix4&),
@@ -60,25 +61,36 @@ void RegisterMatrix4(kaguya::State& lua)
         .addFunction("__add", &Matrix4::operator+)
         .addFunction("__sub", &Matrix4::operator-)
 
+        // [Method] void SetTranslation(const Vector3& translation)
         .addFunction("SetTranslation", &Matrix4::SetTranslation)
+        // [Method] void SetRotation(const Matrix3& rotation)
         .addFunction("SetRotation", &Matrix4::SetRotation)
 
         .addOverloadedFunctions("SetScale",
             static_cast<void(Matrix4::*)(const Vector3&)>(&Matrix4::SetScale),
             static_cast<void(Matrix4::*)(float)>(&Matrix4::SetScale))
 
+        // [Method] Matrix3 ToMatrix3() const
         .addFunction("ToMatrix3", &Matrix4::ToMatrix3)
+        // [Method] Matrix3 RotationMatrix() const
         .addFunction("RotationMatrix", &Matrix4::RotationMatrix)
+        // [Method] Vector3 Translation() const
         .addFunction("Translation", &Matrix4::Translation)
+        // [Method] Quaternion Rotation() const
         .addFunction("Rotation", &Matrix4::Rotation)
+        // [Method] Vector3 Scale() const
         .addFunction("Scale", &Matrix4::Scale)
+        // [Method] Matrix4 Transpose() const
         .addFunction("Transpose", &Matrix4::Transpose)
+        // [Method] bool Equals(const Matrix4& rhs) const
         .addFunction("Equals", &Matrix4::Equals)
 
         .addStaticFunction("Decompose", &Matrix4Decompose)
 
+        // [Method] Matrix4 Inverse() const
         .addFunction("Inverse", &Matrix4::Inverse)
 
+        // [Method] String ToString() const
         .addFunction("ToString", &Matrix4::ToString)
 
         .addProperty("m00", &Matrix4::m00_)

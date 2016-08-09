@@ -35,6 +35,7 @@ void RegisterOctreeQuery(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] OctreeQueryResult
     lua["OctreeQueryResult"].setClass(UserdataMetatable<OctreeQueryResult>()
         .setConstructors<OctreeQueryResult()>()
 
@@ -42,12 +43,17 @@ void RegisterOctreeQuery(kaguya::State& lua)
         .addProperty("node", &OctreeQueryResult::node_)
         );
 
-    // enum RayQueryLevel;
+    // [Enum] RayQueryLevel
+    // [Variable] RAY_AABB
     lua["RAY_AABB"] = RAY_AABB;
+    // [Variable] RAY_OBB,
     lua["RAY_OBB"] = RAY_OBB;
+    // [Constant] RayOctreeQuery(PODVector<RayQueryResult>& result, Ray& ray, RayQueryLevel level
     lua["RAY_TRIANGLE"] = RAY_TRIANGLE;
+    // [Variable] RAY_TRIANGLE_UV
     lua["RAY_TRIANGLE_UV"] = RAY_TRIANGLE_UV;
 
+    // [Class] RayQueryResult
     lua["RayQueryResult"].setClass(UserdataMetatable<RayQueryResult>()
         .setConstructors<RayQueryResult()>()
 

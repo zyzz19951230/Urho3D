@@ -36,19 +36,29 @@ void RegisterDynamicNavigationMesh(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] DynamicNavigationMesh : NavigationMesh
     lua["DynamicNavigationMesh"].setClass(UserdataMetatable<DynamicNavigationMesh, NavigationMesh>()
         .addStaticFunction("new", &CreateObject<DynamicNavigationMesh>)
 
+        // [Method] void SetMaxObstacles(unsigned maxObstacles)
         .addFunction("SetMaxObstacles", &DynamicNavigationMesh::SetMaxObstacles)
+        // [Method] void SetMaxLayers(unsigned maxLayers)
         .addFunction("SetMaxLayers", &DynamicNavigationMesh::SetMaxLayers)
+        // [Method] void SetDrawObstacles(bool enable)
         .addFunction("SetDrawObstacles", &DynamicNavigationMesh::SetDrawObstacles)
 
+        // [Method] bool GetDrawObstacles() const
         .addFunction("GetDrawObstacles", &DynamicNavigationMesh::GetDrawObstacles)
+        // [Method] unsigned GetMaxLayers() const
         .addFunction("GetMaxLayers", &DynamicNavigationMesh::GetMaxLayers)
+        // [Method] unsigned GetMaxObstacles() const
         .addFunction("GetMaxObstacles", &DynamicNavigationMesh::GetMaxObstacles)
 
+        // [Property] unsigned maxObstacles
         .addProperty("maxObstacles", &DynamicNavigationMesh::GetMaxObstacles, &DynamicNavigationMesh::SetMaxObstacles)
+        // [Property] unsigned maxLayers
         .addProperty("maxLayers", &DynamicNavigationMesh::GetMaxLayers, &DynamicNavigationMesh::SetMaxLayers)
+        // [Property] bool drawObstacles
         .addProperty("drawObstacles", &DynamicNavigationMesh::GetDrawObstacles, &DynamicNavigationMesh::SetDrawObstacles)
         );
 }

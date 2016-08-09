@@ -72,6 +72,7 @@ void RegisterCrowdManager(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] CrowdObstacleAvoidanceParams
     lua["CrowdObstacleAvoidanceParams"].setClass(UserdataMetatable<CrowdObstacleAvoidanceParams>()
 
         .addProperty("velBias", &CrowdObstacleAvoidanceParams::velBias)
@@ -86,51 +87,81 @@ void RegisterCrowdManager(kaguya::State& lua)
         .addProperty("adaptiveDepth", &CrowdObstacleAvoidanceParams::adaptiveDepth)
         );
 
+    // [Class] CrowdManager : Component
     lua["CrowdManager"].setClass(UserdataMetatable<CrowdManager, Component>()
         .addStaticFunction("new", &CreateObject<CrowdManager>)
 
+        // [Method] void DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
         .addFunction("DrawDebugGeometry", static_cast<void(CrowdManager::*)(bool)>(&CrowdManager::DrawDebugGeometry))
 
+        // [Method] void SetCrowdTarget(const Vector3& position, Node* node = 0)
         .addFunction("SetCrowdTarget", CrowdManagerSetCrowdTarget())
+        // [Method] void SetCrowdVelocity(const Vector3& velocity, Node* node = 0)
         .addFunction("SetCrowdVelocity", CrowdManagerSetCrowdVelocity())
+        // [Method] void ResetCrowdTarget(Node* node = 0)
         .addFunction("ResetCrowdTarget", CrowdManagerResetCrowdTarget())
 
+        // [Method] void SetMaxAgents(unsigned maxAgents)
         .addFunction("SetMaxAgents", &CrowdManager::SetMaxAgents)
+        // [Method] void SetMaxAgentRadius(float maxAgentRadius)
         .addFunction("SetMaxAgentRadius", &CrowdManager::SetMaxAgentRadius)
+        // [Method] void SetNavigationMesh(NavigationMesh* navMesh)
         .addFunction("SetNavigationMesh", &CrowdManager::SetNavigationMesh)
+        // [Method] void SetIncludeFlags(unsigned queryFilterType, unsigned short flags)
         .addFunction("SetIncludeFlags", &CrowdManager::SetIncludeFlags)
+        // [Method] void SetExcludeFlags(unsigned queryFilterType, unsigned short flags)
         .addFunction("SetExcludeFlags", &CrowdManager::SetExcludeFlags)
+        // [Method] void SetAreaCost(unsigned queryFilterType, unsigned areaID, float cost)
         .addFunction("SetAreaCost", &CrowdManager::SetAreaCost)
 
+        // [Method] void SetObstacleAvoidanceParams(unsigned obstacleAvoidanceType, const CrowdObstacleAvoidanceParams& params)
         .addFunction("SetObstacleAvoidanceParams", &CrowdManager::SetObstacleAvoidanceParams)
 
+        // [Method] PODVector<CrowdAgent*> GetAgents(Node* node = 0, bool inCrowdFilter = true) const
         .addFunction("GetAgents", CrowdManagerGetAgents())
 
+        // [Method] Vector3 FindNearestPoint(const Vector3& point, int queryFilterType, dtPolyRef* nearestRef = 0)
         .addFunction("FindNearestPoint", CrowdManagerFindNearestPoint())
         
+        // [Method] Vector3 MoveAlongSurface(const Vector3& start, const Vector3& end, int queryFilterType, int maxVisited = 3)
         .addFunction("MoveAlongSurface", CrowdManagerMoveAlongSurface())
 
         .addStaticFunction("FindPath", &CrowdManagerFindPath)
         
+        // [Method] Vector3 GetRandomPoint(int queryFilterType, dtPolyRef* randomRef = 0)
         .addFunction("GetRandomPoint", CrowdManagerGetRandomPoint())
+        // [Method] Vector3 GetRandomPointInCircle(const Vector3& center, float radius, int queryFilterType, dtPolyRef* randomRef = 0)
         .addFunction("GetRandomPointInCircle", CrowdManagerGetRandomPointInCircle())
 
         .addStaticFunction("GetDistanceToWall", &CrowdManagerGetDistanceToWall)        
         .addStaticFunction("Raycast", &CrowdManagerRaycast)
 
+        // [Method] unsigned GetMaxAgents() const
         .addFunction("GetMaxAgents", &CrowdManager::GetMaxAgents)
+        // [Method] float GetMaxAgentRadius() const
         .addFunction("GetMaxAgentRadius", &CrowdManager::GetMaxAgentRadius)
+        // [Method] NavigationMesh* GetNavigationMesh() const
         .addFunction("GetNavigationMesh", &CrowdManager::GetNavigationMesh)
+        // [Method] unsigned GetNumQueryFilterTypes() const
         .addFunction("GetNumQueryFilterTypes", &CrowdManager::GetNumQueryFilterTypes)
+        // [Method] unsigned GetNumAreas(unsigned queryFilterType) const
         .addFunction("GetNumAreas", &CrowdManager::GetNumAreas)
+        // [Method] unsigned short GetIncludeFlags(unsigned queryFilterType) const
         .addFunction("GetIncludeFlags", &CrowdManager::GetIncludeFlags)
+        // [Method] unsigned short GetExcludeFlags(unsigned queryFilterType) const
         .addFunction("GetExcludeFlags", &CrowdManager::GetExcludeFlags)
+        // [Method] float GetAreaCost(unsigned queryFilterType, unsigned areaID) const
         .addFunction("GetAreaCost", &CrowdManager::GetAreaCost)
+        // [Method] unsigned GetNumObstacleAvoidanceTypes() const
         .addFunction("GetNumObstacleAvoidanceTypes", &CrowdManager::GetNumObstacleAvoidanceTypes)
+        // [Method] const CrowdObstacleAvoidanceParams& GetObstacleAvoidanceParams(unsigned obstacleAvoidanceType) const
         .addFunction("GetObstacleAvoidanceParams", &CrowdManager::GetObstacleAvoidanceParams)
         
+        // [Property] unsigned maxAgents
         .addProperty("maxAgents", &CrowdManager::GetMaxAgents, &CrowdManager::SetMaxAgents)
+        // [Property] float maxAgentRadius
         .addProperty("maxAgentRadius", &CrowdManager::GetMaxAgentRadius, &CrowdManager::SetMaxAgentRadius)
+        // [Property] NavigationMesh* navigationMesh
         .addProperty("navigationMesh", &CrowdManager::GetNavigationMesh, &CrowdManager::SetNavigationMesh)
         );
 }

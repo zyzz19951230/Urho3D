@@ -74,14 +74,21 @@ void RegisterInput(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum MouseMode;
+    // [Enum] MouseMode
+    // [Variable] MM_ABSOLUTE
     lua["MM_ABSOLUTE"] = MM_ABSOLUTE;
+    // [Variable] MM_RELATIVE,
     lua["MM_RELATIVE"] = MM_RELATIVE;
+    // [Variable] MM_WRAP,
     lua["MM_WRAP"] = MM_WRAP;
+    // [Variable] MM_FREE,
     lua["MM_FREE"] = MM_FREE;
+    // [Variable] MM_INVALID
     lua["MM_INVALID"] = MM_INVALID;
 
+    // [Class] TouchState
     lua["TouchState"].setClass(UserdataMetatable<TouchState>()
+        // [Method] UIElement* GetTouchedElement()
         .addFunction("GetTouchedElement", &TouchState::GetTouchedElement)
 
         .addProperty("touchID", &TouchState::touchID_)
@@ -89,113 +96,194 @@ void RegisterInput(kaguya::State& lua)
         .addProperty("lastPosition", &TouchState::lastPosition_)
         .addProperty("delta", &TouchState::delta_)
         .addProperty("pressure", &TouchState::pressure_)
+        // [Property(ReadOnly)] UIElement* touchedElement
         .addProperty("touchedElement", &TouchState::GetTouchedElement)
     );
 
+    // [Class] JoystickState
     lua["JoystickState"].setClass(UserdataMetatable<JoystickState>()
+        // [Method] bool IsController() const
         .addFunction("IsController", &JoystickState::IsController)
+        // [Method] unsigned GetNumButtons() const
         .addFunction("GetNumButtons", &JoystickState::GetNumButtons)
+        // [Method] unsigned GetNumAxes() const
         .addFunction("GetNumAxes", &JoystickState::GetNumAxes)
+        // [Method] unsigned GetNumHats() const
         .addFunction("GetNumHats", &JoystickState::GetNumHats)
+        // [Method] bool GetButtonDown(unsigned index) const
         .addFunction("GetButtonDown", &JoystickState::GetButtonDown)
+        // [Method] bool GetButtonPress(unsigned index) const
         .addFunction("GetButtonPress", &JoystickState::GetButtonPress)
+        // [Method] float GetAxisPosition(unsigned index) const
         .addFunction("GetAxisPosition", &JoystickState::GetAxisPosition)
+        // [Method] int GetHatPosition(unsigned index) const
         .addFunction("GetHatPosition", &JoystickState::GetHatPosition)
 
         .addProperty("name", &JoystickState::name_)
         .addProperty("joystickID", &JoystickState::joystickID_)
+        // [Property(ReadOnly)] bool controller
         .addProperty("controller", &JoystickState::IsController)
+        // [Property(ReadOnly)] unsigned numButtons
         .addProperty("numButtons", &JoystickState::GetNumButtons)
+        // [Property(ReadOnly)] unsigned numAxes
         .addProperty("numAxes", &JoystickState::GetNumAxes)
+        // [Property(ReadOnly)] unsigned numHats
         .addProperty("numHats", &JoystickState::GetNumHats)
         );    
 
+    // [Class] Input : Object
     lua["Input"].setClass(UserdataMetatable<Input, Object>()
 
+        // [Method] void SetToggleFullscreen(bool enable)
         .addFunction("SetToggleFullscreen", &Input::SetToggleFullscreen)
 
+        // [Method] void SetMouseVisible(bool enable, bool suppressEvent = false)
         .addFunction("SetMouseVisible", InputSetMouseVisible())
+        // [Method] void SetMouseGrabbed(bool grab, bool suppressEvent = false)
         .addFunction("SetMouseGrabbed", InputSetMouseGrabbed())
+        // [Method] *  SetMouseMode(MM_ABSOLUTE) will call SetMouseGrabbed(false).
         .addFunction("SetMouseMode", InputSetMouseMode())
 
+        // [Method] bool IsMouseLocked() const
         .addFunction("IsMouseLocked", &Input::IsMouseLocked)
 
+        // [Method] SDL_JoystickID AddScreenJoystick(XMLFile* layoutFile = 0, XMLFile* styleFile = 0)
         .addFunction("AddScreenJoystick", InputAddScreenJoystick())
 
+        // [Method] bool RemoveScreenJoystick(SDL_JoystickID id)
         .addFunction("RemoveScreenJoystick", &Input::RemoveScreenJoystick)
+        // [Method] void SetScreenJoystickVisible(SDL_JoystickID id, bool enable)
         .addFunction("SetScreenJoystickVisible", &Input::SetScreenJoystickVisible)
 
+        // [Method] void SetScreenKeyboardVisible(bool enable)
         .addFunction("SetScreenKeyboardVisible", &Input::SetScreenKeyboardVisible)
+        // [Method] void SetTouchEmulation(bool enable)
         .addFunction("SetTouchEmulation", &Input::SetTouchEmulation)        
+        // [Method] bool RecordGesture()
         .addFunction("RecordGesture", &Input::RecordGesture)
 
         .addStaticFunction("SaveGestures", &InputSaveGestures)
         .addStaticFunction("SaveGesture", &InputSaveGesture)
         .addStaticFunction("LoadGestures", &InputLoadGestures)
         
+        // [Method] bool RemoveGesture(unsigned gestureID)
         .addFunction("RemoveGesture", &Input::RemoveGesture)
+        // [Method] void RemoveAllGestures()
         .addFunction("RemoveAllGestures", &Input::RemoveAllGestures)
 
+        // [Method] int GetKeyFromName(const String& name) const
         .addFunction("GetKeyFromName", &Input::GetKeyFromName)
+        // [Method] int GetKeyFromScancode(int scancode) const
         .addFunction("GetKeyFromScancode", &Input::GetKeyFromScancode)
+        // [Method] String GetKeyName(int key) const
         .addFunction("GetKeyName", &Input::GetKeyName)
+        // [Method] int GetScancodeFromKey(int key) const
         .addFunction("GetScancodeFromKey", &Input::GetScancodeFromKey)
+        // [Method] int GetScancodeFromName(const String& name) const
         .addFunction("GetScancodeFromName", &Input::GetScancodeFromName)
+        // [Method] String GetScancodeName(int scancode) const
         .addFunction("GetScancodeName", &Input::GetScancodeName)
+        // [Method] bool GetKeyDown(int key) const
         .addFunction("GetKeyDown", &Input::GetKeyDown)
+        // [Method] bool GetKeyPress(int key) const
         .addFunction("GetKeyPress", &Input::GetKeyPress)
+        // [Method] bool GetScancodeDown(int scancode) const
         .addFunction("GetScancodeDown", &Input::GetScancodeDown)
+        // [Method] bool GetScancodePress(int scancode) const
         .addFunction("GetScancodePress", &Input::GetScancodePress)
+        // [Method] bool GetMouseButtonDown(int button) const
         .addFunction("GetMouseButtonDown", &Input::GetMouseButtonDown)
+        // [Method] bool GetMouseButtonPress(int button) const
         .addFunction("GetMouseButtonPress", &Input::GetMouseButtonPress)
+        // [Method] bool GetQualifierDown(int qualifier) const
         .addFunction("GetQualifierDown", &Input::GetQualifierDown)
+        // [Method] bool GetQualifierPress(int qualifier) const
         .addFunction("GetQualifierPress", &Input::GetQualifierPress)
+        // [Method] int GetQualifiers() const
         .addFunction("GetQualifiers", &Input::GetQualifiers)
+        // [Method] IntVector2 GetMousePosition() const
         .addFunction("GetMousePosition", &Input::GetMousePosition)
+        // [Method] const IntVector2& GetMouseMove() const
         .addFunction("GetMouseMove", &Input::GetMouseMove)
+        // [Method] int GetMouseMoveX() const
         .addFunction("GetMouseMoveX", &Input::GetMouseMoveX)
+        // [Method] int GetMouseMoveY() const
         .addFunction("GetMouseMoveY", &Input::GetMouseMoveY)
+        // [Method] int GetMouseMoveWheel() const
         .addFunction("GetMouseMoveWheel", &Input::GetMouseMoveWheel)
         
+        // [Method] unsigned GetNumTouches() const
         .addFunction("GetNumTouches", &Input::GetNumTouches)
+        // [Method] TouchState* GetTouch(unsigned index) const
         .addFunction("GetTouch", &Input::GetTouch)
 
+        // [Method] unsigned GetNumJoysticks() const
         .addFunction("GetNumJoysticks", &Input::GetNumJoysticks)
+        // [Method] JoystickState* GetJoystick(SDL_JoystickID id)
         .addFunction("GetJoystick", &Input::GetJoystick)
+        // [Method] JoystickState* GetJoystickByIndex(unsigned index)
         .addFunction("GetJoystickByIndex", &Input::GetJoystickByIndex)
+        // [Method] JoystickState* GetJoystickByName(const String& name)
         .addFunction("GetJoystickByName", &Input::GetJoystickByName)
 
+        // [Method] bool GetToggleFullscreen() const
         .addFunction("GetToggleFullscreen", &Input::GetToggleFullscreen)
+        // [Method] bool GetScreenKeyboardSupport() const
         .addFunction("GetScreenKeyboardSupport", &Input::GetScreenKeyboardSupport)
+        // [Method] bool IsScreenJoystickVisible(SDL_JoystickID id) const
         .addFunction("IsScreenJoystickVisible", &Input::IsScreenJoystickVisible)        
+        // [Method] bool IsScreenKeyboardVisible() const
         .addFunction("IsScreenKeyboardVisible", &Input::IsScreenKeyboardVisible)
+        // [Method] bool GetTouchEmulation() const
         .addFunction("GetTouchEmulation", &Input::GetTouchEmulation)
+        // [Method] bool IsMouseVisible() const
         .addFunction("IsMouseVisible", &Input::IsMouseVisible)
+        // [Method] bool IsMouseGrabbed() const
         .addFunction("IsMouseGrabbed", &Input::IsMouseGrabbed)
+        // [Method] MouseMode GetMouseMode() const
         .addFunction("GetMouseMode", &Input::GetMouseMode)
+        // [Method] bool HasFocus()
         .addFunction("HasFocus", &Input::HasFocus)
+        // [Method] bool IsMinimized() const
         .addFunction("IsMinimized", &Input::IsMinimized)
 
+        // [Property(ReadOnly)] int qualifiers
         .addProperty("qualifiers", &Input::GetQualifiers)
+        // [Property(ReadOnly)] IntVector2 mousePosition
         .addProperty("mousePosition", &Input::GetMousePosition)
+        // [Property(ReadOnly)] const IntVector2& mouseMove
         .addProperty("mouseMove", &Input::GetMouseMove)
+        // [Property(ReadOnly)] int mouseMoveX
         .addProperty("mouseMoveX", &Input::GetMouseMoveX)
+        // [Property(ReadOnly)] int mouseMoveY
         .addProperty("mouseMoveY", &Input::GetMouseMoveY)
+        // [Property(ReadOnly)] int mouseMoveWheel
         .addProperty("mouseMoveWheel", &Input::GetMouseMoveWheel)
 
+        // [Property(ReadOnly)] unsigned numTouches
         .addProperty("numTouches", &Input::GetNumTouches)
+        // [Property(ReadOnly)] unsigned numJoysticks
         .addProperty("numJoysticks", &Input::GetNumJoysticks)
+        // [Property] bool toggleFullscreen
         .addProperty("toggleFullscreen", &Input::GetToggleFullscreen, &Input::SetToggleFullscreen)
+        // [Property(ReadOnly)] bool screenKeyboardSupport
         .addProperty("screenKeyboardSupport", &Input::GetScreenKeyboardSupport)
+        // [Property] bool screenKeyboardVisible
         .addProperty("screenKeyboardVisible", &Input::IsScreenKeyboardVisible, &Input::SetScreenKeyboardVisible)
+        // [Property] bool touchEmulation
         .addProperty("touchEmulation", &Input::GetTouchEmulation, &Input::SetTouchEmulation)
         
         .addProperty("mouseVisible", &InputMouseVisibleGetter, &InputMouseVisibleSetter)
 
+        // [Property(ReadOnly)] bool mouseGrabbed
         .addProperty("mouseGrabbed", &Input::IsMouseGrabbed)
+        // [Property(ReadOnly)] bool mouseLocked
         .addProperty("mouseLocked", &Input::IsMouseLocked)
+        // [Property(ReadOnly)] MouseMode mouseMode
         .addProperty("mouseMode", &Input::GetMouseMode)
+        // [Method] bool focus()
         .addFunction("focus", &Input::HasFocus)
+        // [Property(ReadOnly)] bool minimized
         .addProperty("minimized", &Input::IsMinimized)
         );
 }

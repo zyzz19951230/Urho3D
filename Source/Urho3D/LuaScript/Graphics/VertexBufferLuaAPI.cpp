@@ -78,10 +78,12 @@ void RegisterVertexBuffer(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] VertexBuffer : GPUObject
     lua["VertexBuffer"].setClass(UserdataMetatable<VertexBuffer, GPUObject>()
         .addStaticFunction("new", 
             CreateVertexBufferOverloads())
 
+        // [Method] void SetShadowed(bool enable)
         .addFunction("SetShadowed", &VertexBuffer::SetShadowed)
 
         .addOverloadedFunctions("SetSize", 
@@ -91,11 +93,16 @@ void RegisterVertexBuffer(kaguya::State& lua)
         .addStaticFunction("SetData", &VertexBufferSetData)
         .addStaticFunction("GetData", &VertexBufferGetData)
 
+        // [Method] bool SetDataRange(const void* data, unsigned start, unsigned count, bool discard = false)
         .addFunction("SetDataRange", VertexBufferSetDataRange())
 
+        // [Method] bool IsShadowed() const
         .addFunction("IsShadowed", &VertexBuffer::IsShadowed)
+        // [Method] bool IsDynamic() const
         .addFunction("IsDynamic", &VertexBuffer::IsDynamic)
+        // [Method] unsigned GetVertexCount() const
         .addFunction("GetVertexCount", &VertexBuffer::GetVertexCount)
+        // [Method] unsigned GetVertexSize() const
         .addFunction("GetVertexSize", static_cast<unsigned(VertexBuffer::*)()const>(&VertexBuffer::GetVertexSize))
 
         .addOverloadedFunctions("GetElement",
@@ -106,12 +113,17 @@ void RegisterVertexBuffer(kaguya::State& lua)
             VertexBufferHasElement0(),
             VertexBufferHasElement1())
 
+        // [Method] unsigned GetElementMask() const
         .addFunction("GetElementMask", &VertexBuffer::GetElementMask)
 
+        // [Property] bool shadowed
         .addProperty("shadowed", &VertexBuffer::IsShadowed, &VertexBuffer::SetShadowed)
+        // [Property(ReadOnly)] bool dynamic
         .addProperty("dynamic", &VertexBuffer::IsDynamic)
+        // [Property(ReadOnly)] unsigned vertexCount
         .addProperty("vertexCount", &VertexBuffer::GetVertexCount)
         .addProperty("vertexSize", static_cast<unsigned(VertexBuffer::*)()const>(&VertexBuffer::GetVertexSize))
+        // [Property(ReadOnly)] unsigned elementMask
         .addProperty("elementMask", &VertexBuffer::GetElementMask)
     );
 }

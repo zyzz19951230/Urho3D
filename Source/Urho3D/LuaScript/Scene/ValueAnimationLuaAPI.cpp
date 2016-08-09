@@ -36,33 +36,54 @@ void RegisterValueAnimation(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum InterpMethod;
+    // [Enum] InterpMethod
+    // [Variable] IM_NONE
     lua["IM_NONE"] = IM_NONE;
+    // [Variable] IM_LINEAR,
     lua["IM_LINEAR"] = IM_LINEAR;
+    // [Variable] IM_SPLINE,
     lua["IM_SPLINE"] = IM_SPLINE;
 
+    // [Class] ValueAnimation : Resource
     lua["ValueAnimation"].setClass(UserdataMetatable<ValueAnimation, Resource>()
         .addStaticFunction("new", &CreateObject<ValueAnimation>)
 
+        // [Method] void SetInterpolationMethod(InterpMethod method)
         .addFunction("SetInterpolationMethod", &ValueAnimation::SetInterpolationMethod)
+        // [Method] void SetSplineTension(float tension)
         .addFunction("SetSplineTension", &ValueAnimation::SetSplineTension)
+        // [Method] void SetValueType(VariantType valueType)
         .addFunction("SetValueType", &ValueAnimation::SetValueType)
+        // [Method] bool SetKeyFrame(float time, const Variant& value)
         .addFunction("SetKeyFrame", &ValueAnimation::SetKeyFrame)
 
+        // [Method] void SetEventFrame(float time, const StringHash& eventType, const VariantMap& eventData = VariantMap())
         .addFunction("SetEventFrame", ValueAnimationSetEventFrame())
 
+        // [Method] bool IsValid() const
         .addFunction("IsValid", &ValueAnimation::IsValid)
+        // [Method] InterpMethod GetInterpolationMethod() const
         .addFunction("GetInterpolationMethod", &ValueAnimation::GetInterpolationMethod)
+        // [Method] float GetSplineTension() const
         .addFunction("GetSplineTension", &ValueAnimation::GetSplineTension)
+        // [Method] VariantType GetValueType() const
         .addFunction("GetValueType", &ValueAnimation::GetValueType)
+        // [Method] float GetBeginTime() const
         .addFunction("GetBeginTime", &ValueAnimation::GetBeginTime)
+        // [Method] float GetEndTime() const
         .addFunction("GetEndTime", &ValueAnimation::GetEndTime)
+        // [Method] Variant GetAnimationValue(float scaledTime)
         .addFunction("GetAnimationValue", &ValueAnimation::GetAnimationValue)
+        // [Method] bool HasEventFrames() const
         .addFunction("HasEventFrames", &ValueAnimation::HasEventFrames)
 
+        // [Property(ReadOnly)] bool valid
         .addProperty("valid", &ValueAnimation::IsValid)
+        // [Property] InterpMethod interpolationMethod
         .addProperty("interpolationMethod", &ValueAnimation::GetInterpolationMethod, &ValueAnimation::SetInterpolationMethod)
+        // [Property] float splineTension
         .addProperty("splineTension", &ValueAnimation::GetSplineTension, &ValueAnimation::SetSplineTension)
+        // [Property] VariantType valueType
         .addProperty("valueType", &ValueAnimation::GetValueType, &ValueAnimation::SetValueType)
         );
 }

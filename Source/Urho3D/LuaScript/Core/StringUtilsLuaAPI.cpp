@@ -59,11 +59,16 @@ void RegisterStringUtils(kaguya::State& lua)
     lua["ToMatrix3x4"] = static_cast<Matrix3x4(*)(const char*)>(&ToMatrix3x4);
     lua["ToMatrix4"] = static_cast<Matrix4(*)(const char*)>(&ToMatrix4);
 
+    // [Function] URHO3D_API String ToStringHex(unsigned value)
     lua["ToStringHex"] = function(&ToStringHex);
 
+    // [Function] URHO3D_API bool IsAlpha(unsigned ch)
     lua["IsAlpha"] = function(&IsAlpha);
+    // [Function] URHO3D_API bool IsDigit(unsigned ch)
     lua["IsDigit"] = function(&IsDigit);
+    // [Function] URHO3D_API unsigned ToUpper(unsigned ch)
     lua["ToUpper"] = function(&ToUpper);
+    // [Function] URHO3D_API unsigned ToLower(unsigned ch)
     lua["ToLower"] = function(&ToLower);
 }
 }

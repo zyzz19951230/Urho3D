@@ -68,25 +68,36 @@ void RegisterIndexBuffer(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] IndexBuffer : Object
     lua["IndexBuffer"].setClass(UserdataMetatable<IndexBuffer, Object>()
         .addStaticFunction("new", 
             CreateIndexBufferOverloads())
         
+        // [Method] void SetShadowed(bool enable)
         .addFunction("SetShadowed", &IndexBuffer::SetShadowed)
         
+        // [Method] bool SetSize(unsigned indexCount, bool largeIndices, bool dynamic = false)
         .addFunction("SetSize", IndexBufferSetSize())
         
         .addStaticFunction("SetData", &IndexBufferSetData)
         .addStaticFunction("GetData", &IndexBufferGetData)
 
+        // [Method] bool IsShadowed() const
         .addFunction("IsShadowed", &IndexBuffer::IsShadowed)
+        // [Method] bool IsDynamic() const
         .addFunction("IsDynamic", &IndexBuffer::IsDynamic)
+        // [Method] unsigned GetIndexCount() const
         .addFunction("GetIndexCount", &IndexBuffer::GetIndexCount)
+        // [Method] unsigned GetIndexSize() const
         .addFunction("GetIndexSize", &IndexBuffer::GetIndexSize)
                 
+        // [Property] bool shadowed
         .addProperty("shadowed", &IndexBuffer::IsShadowed, &IndexBuffer::SetShadowed)
+        // [Property(ReadOnly)] bool dynamic
         .addProperty("dynamic", &IndexBuffer::IsDynamic)
+        // [Property(ReadOnly)] unsigned indexCount
         .addProperty("indexCount", &IndexBuffer::GetIndexCount)
+        // [Property(ReadOnly)] unsigned indexSize
         .addProperty("indexSize", &IndexBuffer::GetIndexSize)
     );
 }

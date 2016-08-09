@@ -34,6 +34,7 @@ void RegisterSkybox(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Skybox : StaticModel
     lua["Skybox"].setClass(UserdataMetatable<Skybox, StaticModel>()
         .addStaticFunction("new", &CreateObject<Skybox>)
         );

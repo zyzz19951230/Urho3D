@@ -39,17 +39,26 @@ void RegisterFrustum(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum FrustumPlane;
+    // [Enum] FrustumPlane
+    // [Variable] PLANE_NEAR
     lua["PLANE_NEAR"] = PLANE_NEAR;
+    // [Variable] PLANE_LEFT,
     lua["PLANE_LEFT"] = PLANE_LEFT;
+    // [Variable] PLANE_RIGHT,
     lua["PLANE_RIGHT"] = PLANE_RIGHT;
+    // [Variable] PLANE_UP,
     lua["PLANE_UP"] = PLANE_UP;
+    // [Variable] PLANE_DOWN,
     lua["PLANE_DOWN"] = PLANE_DOWN;
+    // [Variable] PLANE_FAR,
     lua["PLANE_FAR"] = PLANE_FAR;
 
+    // [Constant] unsigned NUM_FRUSTUM_PLANES
     lua["NUM_FRUSTUM_PLANES"] = NUM_FRUSTUM_PLANES;
+    // [Constant] unsigned NUM_FRUSTUM_VERTICES
     lua["NUM_FRUSTUM_VERTICES"] = NUM_FRUSTUM_VERTICES;
 
+    // [Class] Frustum
     lua["Frustum"].setClass(UserdataMetatable<Frustum>()
         .setConstructors<Frustum(), 
         Frustum(const Frustum&)>()
@@ -74,13 +83,16 @@ void RegisterFrustum(kaguya::State& lua)
             static_cast<Intersection(Frustum::*)(const Sphere&) const>(&Frustum::IsInsideFast),
             static_cast<Intersection(Frustum::*)(const BoundingBox&) const>(&Frustum::IsInsideFast))
 
+        // [Method] float Distance(const Vector3& point) const
         .addFunction("Distance", &Frustum::Distance)
 
         .addOverloadedFunctions("Transformed",
             static_cast<Frustum(Frustum::*)(const Matrix3&) const>(&Frustum::Transformed),
             static_cast<Frustum(Frustum::*)(const Matrix3x4&) const>(&Frustum::Transformed))
 
+        // [Method] Rect Projected(const Matrix4& transform) const
         .addFunction("Projected", &Frustum::Projected)
+        // [Method] void UpdatePlanes()
         .addFunction("UpdatePlanes", &Frustum::UpdatePlanes)
         );
 }

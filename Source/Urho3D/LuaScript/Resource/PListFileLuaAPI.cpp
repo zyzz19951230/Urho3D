@@ -34,7 +34,7 @@ namespace Urho3D
 //{
 //    using namespace kaguya;
 
-//    // enum PListValueType;
+//    // [Enum] PListValueType
 //    lua["PLVT_NONE"] = PLVT_NONE;
 //    lua["PLVT_INT"] = PLVT_INT;
 //    lua["PLVT_BOOL"] = PLVT_BOOL;

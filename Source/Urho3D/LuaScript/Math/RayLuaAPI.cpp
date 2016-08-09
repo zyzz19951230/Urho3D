@@ -49,6 +49,7 @@ void RegisterRay(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Ray
     lua["Ray"].setClass(UserdataMetatable<Ray>()
         .setConstructors<Ray(),
         Ray(const Vector3&, const Vector3&),
@@ -56,9 +57,13 @@ void RegisterRay(kaguya::State& lua)
 
         .addFunction("__eq", &Ray::operator==)
 
+        // [Method] void Define(const Vector3& origin, const Vector3& direction)
         .addFunction("Define", &Ray::Define)
+        // [Method] Vector3 Project(const Vector3& point) const
         .addFunction("Project", &Ray::Project)
+        // [Method] float Distance(const Vector3& point) const
         .addFunction("Distance", &Ray::Distance)
+        // [Method] Vector3 ClosestPoint(const Ray& ray) const
         .addFunction("ClosestPoint", &Ray::ClosestPoint)
 
         .addOverloadedFunctions("HitDistance",
@@ -68,6 +73,7 @@ void RegisterRay(kaguya::State& lua)
             static_cast<float(Ray::*)(const Sphere&) const>(&Ray::HitDistance),
             &RayHitDistance1)
 
+        // [Method] Ray Transformed(const Matrix3x4& transform) const
         .addFunction("Transformed", &Ray::Transformed)
 
         .addProperty("origin", &Ray::origin_)

@@ -48,58 +48,93 @@ void RegisterFileSystem(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Constant] unsigned SCAN_FILES
     lua["SCAN_FILES"] = SCAN_FILES;
+    // [Constant] unsigned SCAN_DIRS
     lua["SCAN_DIRS"] = SCAN_DIRS;
+    // [Constant] unsigned SCAN_HIDDEN
     lua["SCAN_HIDDEN"] = SCAN_HIDDEN;
 
+    // [Class] FileSystem : Object
     lua["FileSystem"].setClass(UserdataMetatable<FileSystem, Object>()
 
+        // [Method] bool SetCurrentDir(const String& pathName)
         .addFunction("SetCurrentDir", &FileSystem::SetCurrentDir)
+        // [Method] bool CreateDir(const String& pathName)
         .addFunction("CreateDir", &FileSystem::CreateDir)
+        // [Method] void SetExecuteConsoleCommands(bool enable)
         .addFunction("SetExecuteConsoleCommands", &FileSystem::SetExecuteConsoleCommands)
 
+        // [Method] int SystemCommand(const String& commandLine, bool redirectStdOutToLog = false)
         .addFunction("SystemCommand", FileSystemSystemCommand())
 
+        // [Method] int SystemRun(const String& fileName, const Vector<String>& arguments)
         .addFunction("SystemRun", &FileSystem::SystemRun)
+        // [Method] unsigned SystemCommandAsync(const String& commandLine)
         .addFunction("SystemCommandAsync", &FileSystem::SystemCommandAsync)
+        // [Method] unsigned SystemRunAsync(const String& fileName, const Vector<String>& arguments)
         .addFunction("SystemRunAsync", &FileSystem::SystemRunAsync)
 
+        // [Method] bool SystemOpen(const String& fileName, const String& mode = String::EMPTY)
         .addFunction("SystemOpen", FileSystemSystemOpen())
 
+        // [Method] bool Copy(const String& srcFileName, const String& destFileName)
         .addFunction("Copy", &FileSystem::Copy)
+        // [Method] bool Rename(const String& srcFileName, const String& destFileName)
         .addFunction("Rename", &FileSystem::Rename)
+        // [Method] bool Delete(const String& fileName)
         .addFunction("Delete", &FileSystem::Delete)
         
+        // [Method] bool SetLastModifiedTime(const String& fileName, unsigned newTime)
         .addFunction("SetLastModifiedTime", &FileSystem::SetLastModifiedTime)
+        // [Method] String GetCurrentDir() const
         .addFunction("GetCurrentDir", &FileSystem::GetCurrentDir)
+        // [Method] bool GetExecuteConsoleCommands() const
         .addFunction("GetExecuteConsoleCommands", &FileSystem::GetExecuteConsoleCommands)
+        // [Method] bool HasRegisteredPaths() const
         .addFunction("HasRegisteredPaths", &FileSystem::HasRegisteredPaths)
+        // [Method] bool CheckAccess(const String& pathName) const
         .addFunction("CheckAccess", &FileSystem::CheckAccess)
+        // [Method] unsigned GetLastModifiedTime(const String& fileName) const
         .addFunction("GetLastModifiedTime", &FileSystem::GetLastModifiedTime)
         
+        // [Method] bool FileExists(const String& fileName) const
         .addFunction("FileExists", &FileSystem::FileExists)
+        // [Method] bool DirExists(const String& pathName) const
         .addFunction("DirExists", &FileSystem::DirExists)
         
         .addStaticFunction("ScanDir", &FileSystemScanDir)
 
+        // [Method] String GetProgramDir() const
         .addFunction("GetProgramDir", &FileSystem::GetProgramDir)
+        // [Method] String GetUserDocumentsDir() const
         .addFunction("GetUserDocumentsDir", &FileSystem::GetUserDocumentsDir)
+        // [Method] String GetAppPreferencesDir(const String& org, const String& app) const
         .addFunction("GetAppPreferencesDir", &FileSystem::GetAppPreferencesDir)
         );
 
+    // [Function] URHO3D_API String GetPath(const String& fullPath)
     lua["GetPath"] = function(&GetPath);
+    // [Function] URHO3D_API String GetFileName(const String& fullPath)
     lua["GetFileName"] = function(&GetFileName);
     
     lua["GetExtension"] = GetExtensionOverloads();
     lua["GetFileNameAndExtension"] = GetFileNameAndExtensionOverloads();
 
+    // [Function] URHO3D_API String ReplaceExtension(const String& fullPath, const String& newExtension)
     lua["ReplaceExtension"] = function(&ReplaceExtension);
+    // [Function] URHO3D_API String AddTrailingSlash(const String& pathName)
     lua["AddTrailingSlash"] = function(&AddTrailingSlash);
+    // [Function] URHO3D_API String RemoveTrailingSlash(const String& pathName)
     lua["RemoveTrailingSlash"] = function(&RemoveTrailingSlash);
+    // [Function] URHO3D_API String GetParentPath(const String& pathName)
     lua["GetParentPath"] = function(&GetParentPath);
+    // [Function] URHO3D_API String GetInternalPath(const String& pathName)
     lua["GetInternalPath"] = function(&GetInternalPath);
+    // [Function] URHO3D_API String GetNativePath(const String& pathName)
     lua["GetNativePath"] = function(&GetNativePath);
 
+    // [Function] URHO3D_API bool IsAbsolutePath(const String& pathName)
     lua["IsAbsolutePath"] = function(&IsAbsolutePath);
     lua["GetFileSizeString"] = function(&GetFileSizeString);
 }

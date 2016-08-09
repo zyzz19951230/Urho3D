@@ -34,10 +34,14 @@ void RegisterObject(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Object : RefCounted
 	lua["Object"].setClass(UserdataMetatable<Object, RefCounted>()
 
+        // [Method] StringHash GetType() const
 		.addFunction("GetType", &Object::GetType)
+        // [Method] const String& GetTypeName() const
 		.addFunction("GetTypeName", &Object::GetTypeName)
+        // [Method] const String& GetCategory() const
 		.addFunction("GetCategory", &Object::GetCategory)
 
 		.addOverloadedFunctions("SendEvent",
@@ -48,8 +52,11 @@ void RegisterObject(kaguya::State& lua)
 			static_cast<bool(Object::*)(StringHash)const>(&Object::HasSubscribedToEvent),
 			static_cast<bool(Object::*)(Object*, StringHash)const>(&Object::HasSubscribedToEvent))
 
+        // [Property(ReadOnly)] StringHash type
         .addProperty("type", &Object::GetType)
+        // [Property(ReadOnly)] const String& typeName
         .addProperty("typeName", &Object::GetTypeName)
+        // [Property(ReadOnly)] const String& category
         .addProperty("category", &Object::GetCategory)
     );
 }

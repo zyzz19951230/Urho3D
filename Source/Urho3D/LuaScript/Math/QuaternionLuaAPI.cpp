@@ -37,6 +37,7 @@ void RegisterQuaternion(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Quaternion
     lua["Quaternion"].setClass(UserdataMetatable<Quaternion>()
         .setConstructors<Quaternion(),
         Quaternion(const Quaternion&),
@@ -61,33 +62,55 @@ void RegisterQuaternion(kaguya::State& lua)
 
         .addFunction("__add", &Quaternion::operator+)
 
+        // [Method] void FromAngleAxis(float angle, const Vector3& axis)
         .addFunction("FromAngleAxis", &Quaternion::FromAngleAxis)
+        // [Method] void FromEulerAngles(float x, float y, float z)
         .addFunction("FromEulerAngles", &Quaternion::FromEulerAngles)
+        // [Method] void FromRotationTo(const Vector3& start, const Vector3& end)
         .addFunction("FromRotationTo", &Quaternion::FromRotationTo)
+        // [Method] void FromAxes(const Vector3& xAxis, const Vector3& yAxis, const Vector3& zAxis)
         .addFunction("FromAxes", &Quaternion::FromAxes)
+        // [Method] void FromRotationMatrix(const Matrix3& matrix)
         .addFunction("FromRotationMatrix", &Quaternion::FromRotationMatrix)
 
+        // [Method] bool FromLookRotation(const Vector3& direction, const Vector3& up = Vector3::UP)
         .addFunction("FromLookRotation", QuaternionFromLookRotation())
 
+        // [Method] void Normalize()
         .addFunction("Normalize", &Quaternion::Normalize)
 
+        // [Method] Quaternion Normalized() const
         .addFunction("Normalized", &Quaternion::Normalized)
+        // [Method] Quaternion Inverse() const
         .addFunction("Inverse", &Quaternion::Inverse)
+        // [Method] float lenSquared = LengthSquared()
         .addFunction("LengthSquared", &Quaternion::LengthSquared)
+        // [Method] float DotProduct(const Quaternion& rhs) const
         .addFunction("DotProduct", &Quaternion::DotProduct)
+        // [Method] bool Equals(const Quaternion& rhs) const
         .addFunction("Equals", &Quaternion::Equals)
+        // [Method] bool IsNaN() const
         .addFunction("IsNaN", &Quaternion::IsNaN)
 
+        // [Method] return Conjugate()
         .addFunction("Conjugate", &Quaternion::Conjugate)
+        // [Method] Vector3 EulerAngles() const
         .addFunction("EulerAngles", &Quaternion::EulerAngles)
+        // [Method] float YawAngle() const
         .addFunction("YawAngle", &Quaternion::YawAngle)
+        // [Method] float PitchAngle() const
         .addFunction("PitchAngle", &Quaternion::PitchAngle)
+        // [Method] float RollAngle() const
         .addFunction("RollAngle", &Quaternion::RollAngle)
+        // [Method] Matrix3 RotationMatrix() const
         .addFunction("RotationMatrix", &Quaternion::RotationMatrix)
+        // [Method] Quaternion Slerp(Quaternion rhs, float t) const
         .addFunction("Slerp", &Quaternion::Slerp)
 
+        // [Method] Quaternion Nlerp(Quaternion rhs, float t, bool shortestPath = false) const
         .addFunction("Nlerp", QuaternionNlerp())
 
+        // [Method] String ToString() const
         .addFunction("ToString", &Quaternion::ToString)
 
         .addProperty("w", &Quaternion::w_)

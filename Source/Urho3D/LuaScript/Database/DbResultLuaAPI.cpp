@@ -36,6 +36,7 @@ void RegisterDbResult(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] DbResult
     lua["DbResult"].setClass(UserdataMetatable<DbResult>()
         
         .addFunction("GetNumColumns", &DbResult::GetNumColumns)

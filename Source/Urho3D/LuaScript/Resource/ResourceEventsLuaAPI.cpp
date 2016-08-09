@@ -34,14 +34,23 @@ void RegisterResourceEvents(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Variable] URHO3D_EVENT(E_RELOADSTARTED, ReloadStarted)
     lua["E_RELOADSTARTED"] = E_RELOADSTARTED;
+    // [Variable] URHO3D_EVENT(E_RELOADFINISHED, ReloadFinished)
     lua["E_RELOADFINISHED"] = E_RELOADFINISHED;
+    // [Variable] URHO3D_EVENT(E_RELOADFAILED, ReloadFailed)
     lua["E_RELOADFAILED"] = E_RELOADFAILED;
+    // [Variable] URHO3D_EVENT(E_FILECHANGED, FileChanged)
     lua["E_FILECHANGED"] = E_FILECHANGED;
+    // [Variable] URHO3D_EVENT(E_LOADFAILED, LoadFailed)
     lua["E_LOADFAILED"] = E_LOADFAILED;
+    // [Variable] URHO3D_EVENT(E_RESOURCENOTFOUND, ResourceNotFound)
     lua["E_RESOURCENOTFOUND"] = E_RESOURCENOTFOUND;
+    // [Variable] URHO3D_EVENT(E_UNKNOWNRESOURCETYPE, UnknownResourceType)
     lua["E_UNKNOWNRESOURCETYPE"] = E_UNKNOWNRESOURCETYPE;
+    // [Variable] URHO3D_EVENT(E_RESOURCEBACKGROUNDLOADED, ResourceBackgroundLoaded)
     lua["E_RESOURCEBACKGROUNDLOADED"] = E_RESOURCEBACKGROUNDLOADED;
+    // [Variable] URHO3D_EVENT(E_CHANGELANGUAGE, ChangeLanguage)
     lua["E_CHANGELANGUAGE"] = E_CHANGELANGUAGE;
 }
 }

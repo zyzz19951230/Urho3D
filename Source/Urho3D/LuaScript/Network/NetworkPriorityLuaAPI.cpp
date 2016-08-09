@@ -36,24 +36,38 @@ void RegisterNetworkPriority(kaguya::State& lua)
 {
     using namespace kaguya;
     
+    // [Class] NetworkPriority : Component
     lua["NetworkPriority"].setClass(UserdataMetatable<NetworkPriority, Component>()
         .addStaticFunction("new", &CreateObject<NetworkPriority>)
 
+        // [Method] void SetBasePriority(float priority)
         .addFunction("SetBasePriority", &NetworkPriority::SetBasePriority)
+        // [Method] void SetDistanceFactor(float factor)
         .addFunction("SetDistanceFactor", &NetworkPriority::SetDistanceFactor)
+        // [Method] void SetMinPriority(float priority)
         .addFunction("SetMinPriority", &NetworkPriority::SetMinPriority)
+        // [Method] void SetAlwaysUpdateOwner(bool enable)
         .addFunction("SetAlwaysUpdateOwner", &NetworkPriority::SetAlwaysUpdateOwner)
         
+        // [Method] float GetBasePriority() const
         .addFunction("GetBasePriority", &NetworkPriority::GetBasePriority)
+        // [Method] float GetDistanceFactor() const
         .addFunction("GetDistanceFactor", &NetworkPriority::GetDistanceFactor)
+        // [Method] float GetMinPriority() const
         .addFunction("GetMinPriority", &NetworkPriority::GetMinPriority)
+        // [Method] bool GetAlwaysUpdateOwner() const
         .addFunction("GetAlwaysUpdateOwner", &NetworkPriority::GetAlwaysUpdateOwner)
         
+        // [Method] bool CheckUpdate(float distance, float& accumulator)
         .addFunction("CheckUpdate", &NetworkPriority::CheckUpdate)
 
+        // [Property] float basePriority
         .addProperty("basePriority", &NetworkPriority::GetBasePriority, &NetworkPriority::SetBasePriority)
+        // [Property] float distanceFactor
         .addProperty("distanceFactor", &NetworkPriority::GetDistanceFactor, &NetworkPriority::SetDistanceFactor)
+        // [Property] float minPriority
         .addProperty("minPriority", &NetworkPriority::GetMinPriority, &NetworkPriority::SetMinPriority)
+        // [Property] bool alwaysUpdateOwner
         .addProperty("alwaysUpdateOwner", &NetworkPriority::GetAlwaysUpdateOwner, &NetworkPriority::SetAlwaysUpdateOwner)
         );
 }

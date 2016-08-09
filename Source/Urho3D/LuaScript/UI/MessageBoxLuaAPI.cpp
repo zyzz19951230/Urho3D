@@ -47,18 +47,25 @@ void RegisterMessageBox(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] MessageBox : Object
     lua["MessageBox"].setClass(UserdataMetatable<MessageBox, Object>()
         .addStaticFunction("new", CreateMessageBoxOverloads())
 
+        // [Method] void SetTitle(const String& text)
         .addFunction("SetTitle", &MessageBox::SetTitle)
+        // [Method] void SetMessage(const String& text)
         .addFunction("SetMessage", &MessageBox::SetMessage)
 
+        // [Method] const String& GetTitle() const
         .addFunction("GetTitle", &MessageBox::GetTitle)
+        // [Method] const String& GetMessage() const
         .addFunction("GetMessage", &MessageBox::GetMessage)
 
         .addStaticFunction("GetWindow", &MessageBoxGetWindow)
 
+        // [Property] const String& title
         .addProperty("title", &MessageBox::GetTitle, &MessageBox::SetTitle)
+        // [Property] const String& message
         .addProperty("message", &MessageBox::GetMessage, &MessageBox::SetMessage)
         .addProperty("window", &MessageBoxGetWindow)
         );

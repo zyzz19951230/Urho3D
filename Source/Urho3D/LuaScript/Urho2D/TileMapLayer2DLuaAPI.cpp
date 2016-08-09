@@ -38,34 +38,59 @@ void RegisterTileMapLayer2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] TileMapLayer2D : Component
     lua["TileMapLayer2D"].setClass(UserdataMetatable<TileMapLayer2D, Component>()
         .addStaticFunction("new", &CreateObject<TileMapLayer2D>)
 
+        // [Method] void SetDrawOrder(int drawOrder)
         .addFunction("SetDrawOrder", &TileMapLayer2D::SetDrawOrder)
+        // [Method] void SetVisible(bool visible)
         .addFunction("SetVisible", &TileMapLayer2D::SetVisible)
 
+        // [Method] TileMap2D* GetTileMap() const
         .addFunction("GetTileMap", &TileMapLayer2D::GetTileMap)
+        // [Method] int GetDrawOrder() const
         .addFunction("GetDrawOrder", &TileMapLayer2D::GetDrawOrder)
+        // [Method] bool IsVisible() const
         .addFunction("IsVisible", &TileMapLayer2D::IsVisible)
+        // [Method] bool HasProperty(const String& name) const
         .addFunction("HasProperty", &TileMapLayer2D::HasProperty)
+        // [Method] const String& GetProperty(const String& name) const
         .addFunction("GetProperty", &TileMapLayer2D::GetProperty)
+        // [Method] TileMapLayerType2D GetLayerType() const
         .addFunction("GetLayerType", &TileMapLayer2D::GetLayerType)
+        // [Method] int GetWidth() const
         .addFunction("GetWidth", &TileMapLayer2D::GetWidth)
+        // [Method] int GetHeight() const
         .addFunction("GetHeight", &TileMapLayer2D::GetHeight)
+        // [Method] Node* GetTileNode(int x, int y) const
         .addFunction("GetTileNode", &TileMapLayer2D::GetTileNode)
+        // [Method] Tile2D* GetTile(int x, int y) const
         .addFunction("GetTile", &TileMapLayer2D::GetTile)
+        // [Method] unsigned GetNumObjects() const
         .addFunction("GetNumObjects", &TileMapLayer2D::GetNumObjects)
+        // [Method] TileMapObject2D* GetObject(unsigned index) const
         .addFunction("GetObject", &TileMapLayer2D::GetObject)
+        // [Method] Node* GetObjectNode(unsigned index) const
         .addFunction("GetObjectNode", &TileMapLayer2D::GetObjectNode)
+        // [Method] Node* GetImageNode() const
         .addFunction("GetImageNode", &TileMapLayer2D::GetImageNode)
 
+        // [Property(ReadOnly)] TileMap2D* tileMap
         .addProperty("tileMap", &TileMapLayer2D::GetTileMap)
+        // [Property] int drawOrder
         .addProperty("drawOrder", &TileMapLayer2D::GetDrawOrder, &TileMapLayer2D::SetDrawOrder)
+        // [Property] bool visible
         .addProperty("visible", &TileMapLayer2D::IsVisible, &TileMapLayer2D::SetVisible)
+        // [Property(ReadOnly)] TileMapLayerType2D layerType
         .addProperty("layerType", &TileMapLayer2D::GetLayerType)
+        // [Property(ReadOnly)] int width
         .addProperty("width", &TileMapLayer2D::GetWidth)
+        // [Property(ReadOnly)] int height
         .addProperty("height", &TileMapLayer2D::GetHeight)
+        // [Property(ReadOnly)] unsigned numObjects
         .addProperty("numObjects", &TileMapLayer2D::GetNumObjects)
+        // [Property(ReadOnly)] Node* imageNode
         .addProperty("imageNode", &TileMapLayer2D::GetImageNode)
     );
 }

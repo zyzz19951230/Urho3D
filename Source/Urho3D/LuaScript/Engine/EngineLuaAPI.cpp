@@ -61,45 +61,76 @@ void RegisterEngine(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Engine : Object
     lua["Engine"].setClass(UserdataMetatable<Engine, Object>()
 
+        // [Method] void RunFrame()
         .addFunction("RunFrame", &Engine::RunFrame)
 
         .addStaticFunction("CreateConsole", &EngineCreateConsole)
         .addStaticFunction("CreateDebugHud", &EngineCreateDebugHud)
 
+        // [Method] void SetMinFps(int fps)
         .addFunction("SetMinFps", &Engine::SetMinFps)
+        // [Method] void SetMaxFps(int fps)
         .addFunction("SetMaxFps", &Engine::SetMaxFps)
+        // [Method] void SetMaxInactiveFps(int fps)
         .addFunction("SetMaxInactiveFps", &Engine::SetMaxInactiveFps)
+        // [Method] void SetTimeStepSmoothing(int frames)
         .addFunction("SetTimeStepSmoothing", &Engine::SetTimeStepSmoothing)
+        // [Method] void SetPauseMinimized(bool enable)
         .addFunction("SetPauseMinimized", &Engine::SetPauseMinimized)
+        // [Method] void SetAutoExit(bool enable)
         .addFunction("SetAutoExit", &Engine::SetAutoExit)
+        // [Method] void SetNextTimeStep(float seconds)
         .addFunction("SetNextTimeStep", &Engine::SetNextTimeStep)
+        // [Method] void Exit()
         .addFunction("Exit", &Engine::Exit)
+        // [Method] void DumpProfiler()
         .addFunction("DumpProfiler", &Engine::DumpProfiler)
         
+        // [Method] void DumpResources(bool dumpFileName = false)
         .addFunction("DumpResources", EngineDumpResources())
 
+        // [Method] void DumpMemory()
         .addFunction("DumpMemory", &Engine::DumpMemory)
 
+        // [Method] int GetMinFps() const
         .addFunction("GetMinFps", &Engine::GetMinFps)
+        // [Method] int GetMaxFps() const
         .addFunction("GetMaxFps", &Engine::GetMaxFps)
+        // [Method] int GetMaxInactiveFps() const
         .addFunction("GetMaxInactiveFps", &Engine::GetMaxInactiveFps)
+        // [Method] int GetTimeStepSmoothing() const
         .addFunction("GetTimeStepSmoothing", &Engine::GetTimeStepSmoothing)
+        // [Method] bool GetPauseMinimized() const
         .addFunction("GetPauseMinimized", &Engine::GetPauseMinimized)
+        // [Method] bool GetAutoExit() const
         .addFunction("GetAutoExit", &Engine::GetAutoExit)
+        // [Method] bool IsInitialized() const
         .addFunction("IsInitialized", &Engine::IsInitialized)
+        // [Method] bool IsExiting() const
         .addFunction("IsExiting", &Engine::IsExiting)
+        // [Method] bool IsHeadless() const
         .addFunction("IsHeadless", &Engine::IsHeadless)
 
+        // [Property] int minFps
         .addProperty("minFps", &Engine::GetMinFps, &Engine::SetMinFps)
+        // [Property] int maxFps
         .addProperty("maxFps", &Engine::GetMaxFps, &Engine::SetMaxFps)
+        // [Property] int maxInactiveFps
         .addProperty("maxInactiveFps", &Engine::GetMaxInactiveFps, &Engine::SetMaxInactiveFps)
+        // [Property] int timeStepSmoothing
         .addProperty("timeStepSmoothing", &Engine::GetTimeStepSmoothing, &Engine::SetTimeStepSmoothing)
+        // [Property] bool pauseMinimized
         .addProperty("pauseMinimized", &Engine::GetPauseMinimized, &Engine::SetPauseMinimized)
+        // [Property] bool autoExit
         .addProperty("autoExit", &Engine::GetAutoExit, &Engine::SetAutoExit)
+        // [Property(ReadOnly)] bool initialized
         .addProperty("initialized", &Engine::IsInitialized)
+        // [Property(ReadOnly)] bool exiting
         .addProperty("exiting", &Engine::IsExiting)
+        // [Property(ReadOnly)] bool headless
         .addProperty("headless", &Engine::IsHeadless)
         );
 }

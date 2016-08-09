@@ -51,74 +51,119 @@ void RegisterListView(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum HighlightMode;
+    // [Enum] HighlightMode
+    // [Variable] HM_NEVER,
     lua["HM_NEVER"] = HM_NEVER;
+    // [Variable] HM_FOCUS,
     lua["HM_FOCUS"] = HM_FOCUS;
+    // [Variable] HM_ALWAYS
     lua["HM_ALWAYS"] = HM_ALWAYS;
 
+    // [Class] ListView : ScrollView
     lua["ListView"].setClass(UserdataMetatable<ListView, ScrollView>()
         .addStaticFunction("new", &CreateObject<ListView>)
 
+        // [Method] void AddItem(UIElement* item)
         .addFunction("AddItem", &ListView::AddItem)
 
+        // [Method] void InsertItem(unsigned index, UIElement* item, UIElement* parentItem = 0)
         .addFunction("InsertItem", ListViewInsertItem())
 
         .addOverloadedFunctions("RemoveItem",
             ListViewRemoveItem(),
             static_cast<void (ListView::*)(unsigned)>(&ListView::RemoveItem))
 
+        // [Method] void RemoveAllItems()
         .addFunction("RemoveAllItems", &ListView::RemoveAllItems)
+        // [Method] void SetSelection(unsigned index)
         .addFunction("SetSelection", &ListView::SetSelection)
+        // [Method] void SetSelections(const PODVector<unsigned>& indices)
         .addFunction("SetSelections", &ListView::SetSelections)
 
+        // [Method] void AddSelection(unsigned index)
         .addFunction("AddSelection", &ListView::AddSelection)
+        // [Method] void RemoveSelection(unsigned index)
         .addFunction("RemoveSelection", &ListView::RemoveSelection)
+        // [Method] void ToggleSelection(unsigned index)
         .addFunction("ToggleSelection", &ListView::ToggleSelection)
 
+        // [Method] void ChangeSelection(int delta, bool additive = false)
         .addFunction("ChangeSelection", ListViewChangeSelection())
 
+        // [Method] void ClearSelection()
         .addFunction("ClearSelection", &ListView::ClearSelection)
+        // [Method] void SetHighlightMode(HighlightMode mode)
         .addFunction("SetHighlightMode", &ListView::SetHighlightMode)
+        // [Method] void SetMultiselect(bool enable)
         .addFunction("SetMultiselect", &ListView::SetMultiselect)
+        // [Method] void SetHierarchyMode(bool enable)
         .addFunction("SetHierarchyMode", &ListView::SetHierarchyMode)
+        // [Method] void SetBaseIndent(int baseIndent)
         .addFunction("SetBaseIndent", &ListView::SetBaseIndent)
+        // [Method] void SetClearSelectionOnDefocus(bool enable)
         .addFunction("SetClearSelectionOnDefocus", &ListView::SetClearSelectionOnDefocus)
+        // [Method] void SetSelectOnClickEnd(bool enable)
         .addFunction("SetSelectOnClickEnd", &ListView::SetSelectOnClickEnd)
 
+        // [Method] void Expand(unsigned index, bool enable, bool recursive = false)
         .addFunction("Expand", ListViewExpand())
+        // [Method] void ToggleExpand(unsigned index, bool recursive = false)
         .addFunction("ToggleExpand", ListViewToggleExpand())
 
+        // [Method] unsigned GetNumItems() const
         .addFunction("GetNumItems", &ListView::GetNumItems)
         .addStaticFunction("GetItem", &ListViewGetItem)
 
+        // [Method] PODVector<UIElement*> GetItems() const
         .addFunction("GetItems", &ListView::GetItems)
 
+        // [Method] unsigned FindItem(UIElement* item) const
         .addFunction("FindItem", &ListView::FindItem)
+        // [Method] unsigned GetSelection() const
         .addFunction("GetSelection", &ListView::GetSelection)
+        // [Method] PODVector<UIElement*> GetSelections() const
         .addFunction("GetSelections", &ListView::GetSelectedItems)
+        // [Method] void CopySelectedItemsToClipboard() const
         .addFunction("CopySelectedItemsToClipboard", &ListView::CopySelectedItemsToClipboard)
 
         .addStaticFunction("GetSelectedItem", &ListViewGetSelectedItem)
 
+        // [Method] PODVector<UIElement*> GetSelectedItems() const
         .addFunction("GetSelectedItems", &ListView::GetSelectedItems)
 
+        // [Method] bool IsSelected(unsigned index) const
         .addFunction("IsSelected", &ListView::IsSelected)
+        // [Method] bool IsExpanded(unsigned index) const
         .addFunction("IsExpanded", &ListView::IsExpanded)
+        // [Method] HighlightMode GetHighlightMode() const
         .addFunction("GetHighlightMode", &ListView::GetHighlightMode)
+        // [Method] bool GetMultiselect() const
         .addFunction("GetMultiselect", &ListView::GetMultiselect)
+        // [Method] bool GetClearSelectionOnDefocus() const
         .addFunction("GetClearSelectionOnDefocus", &ListView::GetClearSelectionOnDefocus)
+        // [Method] bool GetSelectOnClickEnd() const
         .addFunction("GetSelectOnClickEnd", &ListView::GetSelectOnClickEnd)
+        // [Method] bool GetHierarchyMode() const
         .addFunction("GetHierarchyMode", &ListView::GetHierarchyMode)
+        // [Method] int GetBaseIndent() const
         .addFunction("GetBaseIndent", &ListView::GetBaseIndent)
 
+        // [Property(ReadOnly)] unsigned numItems
         .addProperty("numItems", &ListView::GetNumItems)
+        // [Property] unsigned selection
         .addProperty("selection", &ListView::GetSelection, &ListView::SetSelection)
         .addProperty("selectedItem", &ListViewGetSelectedItem)
+        // [Property] HighlightMode highlightMode
         .addProperty("highlightMode", &ListView::GetHighlightMode, &ListView::SetHighlightMode)
+        // [Property] bool multiselect
         .addProperty("multiselect", &ListView::GetMultiselect, &ListView::SetMultiselect)
+        // [Property] bool clearSelectionOnDefocus
         .addProperty("clearSelectionOnDefocus", &ListView::GetClearSelectionOnDefocus, &ListView::SetClearSelectionOnDefocus)
+        // [Property] bool selectOnClickEnd
         .addProperty("selectOnClickEnd", &ListView::GetSelectOnClickEnd, &ListView::SetSelectOnClickEnd)
+        // [Property] bool hierarchyMode
         .addProperty("hierarchyMode", &ListView::GetHierarchyMode, &ListView::SetHierarchyMode)
+        // [Property] int baseIndent
         .addProperty("baseIndent", &ListView::GetBaseIndent, &ListView::SetBaseIndent)
         );
 }

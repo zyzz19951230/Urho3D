@@ -34,26 +34,44 @@ void RegisterMathDefs(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Constant] float M_HALF_PI
     lua["M_PI"] = M_PI;
+    // [Constant] float M_HALF_PI
     lua["M_HALF_PI"] = M_HALF_PI;
+    // [Constant] int M_MIN_INT
     lua["M_MIN_INT"] = M_MIN_INT;
+    // [Constant] int M_MAX_INT
     lua["M_MAX_INT"] = M_MAX_INT;
+    // [Constant] unsigned M_MIN_UNSIGNED
     lua["M_MIN_UNSIGNED"] = M_MIN_UNSIGNED;
+    // [Constant] unsigned M_MAX_UNSIGNED
     lua["M_MAX_UNSIGNED"] = M_MAX_UNSIGNED;
 
+    // [Constant] float M_EPSILON
     lua["M_EPSILON"] = M_EPSILON;
+    // [Constant] float M_LARGE_EPSILON
     lua["M_LARGE_EPSILON"] = M_LARGE_EPSILON;
+    // [Constant] float M_MIN_NEARCLIP
     lua["M_MIN_NEARCLIP"] = M_MIN_NEARCLIP;
+    // [Constant] float M_MAX_FOV
     lua["M_MAX_FOV"] = M_MAX_FOV;
+    // [Constant] float M_LARGE_VALUE
     lua["M_LARGE_VALUE"] = M_LARGE_VALUE;
+    // [Constant] float M_INFINITY
     lua["M_INFINITY"] = M_INFINITY;
+    // [Constant] float M_DEGTORAD
     lua["M_DEGTORAD"] = M_DEGTORAD;
+    // [Constant] float M_DEGTORAD_2
     lua["M_DEGTORAD_2"] = M_DEGTORAD_2;
+    // [Constant] float M_RADTODEG
     lua["M_RADTODEG"] = M_RADTODEG;
 
-    // enum Intersection;
+    // [Enum] Intersection
+    // [Variable] OUTSIDE,
     lua["OUTSIDE"] = OUTSIDE;
+    // [Variable] INTERSECTS,
     lua["INTERSECTS"] = INTERSECTS;
+    // [Variable] INSIDE
     lua["INSIDE"] = INSIDE;
 
     lua["Equals"] = static_cast<bool(*)(float, float)>(&Equals);
@@ -63,6 +81,7 @@ void RegisterMathDefs(kaguya::State& lua)
     lua["Abs"] = static_cast<float(*)(float)>(&Abs);
     lua["Sign"] = static_cast<float(*)(float)>(&Sign);
 
+    // [Function] bool IsNaN(float value)
     lua["IsNaN"] = function(&IsNaN);
 
     lua["Clamp"] = static_cast<float(*)(float, float, float)>(&Clamp);
@@ -80,9 +99,13 @@ void RegisterMathDefs(kaguya::State& lua)
     lua["AbsInt"] = static_cast<int(*)(int)>(&Abs);
     lua["ClampInt"] = static_cast<int(*)(int, int, int)>(&Clamp);
 
+    // [Function] bool IsPowerOfTwo(unsigned value)
     lua["IsPowerOfTwo"] = function(&IsPowerOfTwo);
+    // [Function] unsigned NextPowerOfTwo(unsigned value)
     lua["NextPowerOfTwo"] = function(&NextPowerOfTwo);
+    // [Function] unsigned CountSetBits(unsigned value)
     lua["CountSetBits"] = function(&CountSetBits);
+    // [Function] unsigned SDBMHash(unsigned hash, unsigned char c)
     lua["SDBMHash"] = function(&SDBMHash);
 
     lua["Random"] = overload(static_cast<float(*)()>(&Random),
@@ -93,6 +116,7 @@ void RegisterMathDefs(kaguya::State& lua)
         static_cast<int(*)(int)>(&Random),
         static_cast<int(*)(int, int)>(&Random));
 
+    // [Function] float RandomNormal(float meanValue, float variance)
     lua["RandomNormal"] = function(&RandomNormal);
 }
 }

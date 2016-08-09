@@ -36,17 +36,25 @@ void RegisterCollisionPolygon2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] CollisionPolygon2D : CollisionShape2D
     lua["CollisionPolygon2D"].setClass(UserdataMetatable<CollisionPolygon2D, CollisionShape2D>()
         .addStaticFunction("new", &CreateObject<CollisionPolygon2D>)
 
+        // [Method] void SetVertexCount(unsigned count)
         .addFunction("SetVertexCount", &CollisionPolygon2D::SetVertexCount)
+        // [Method] void SetVertex(unsigned index, const Vector2& vertex)
         .addFunction("SetVertex", &CollisionPolygon2D::SetVertex)
+        // [Method] void SetVertices(const PODVector<Vector2>& vertices)
         .addFunction("SetVertices", &CollisionPolygon2D::SetVertices)
 
+        // [Method] unsigned GetVertexCount() const
         .addFunction("GetVertexCount", &CollisionPolygon2D::GetVertexCount)
+        // [Method] const Vector2& GetVertex(unsigned index) const
         .addFunction("GetVertex", &CollisionPolygon2D::GetVertex)
+        // [Method] const PODVector<Vector2>& GetVertices() const
         .addFunction("GetVertices", &CollisionPolygon2D::GetVertices)
 
+        // [Property] unsigned vertexCount
         .addProperty("vertexCount", &CollisionPolygon2D::GetVertexCount, &CollisionPolygon2D::SetVertexCount)
     );
 }

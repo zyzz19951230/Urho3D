@@ -34,52 +34,90 @@ void RegisterTexture(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Texture : Resource
     lua["Texture"].setClass(UserdataMetatable<Texture, Resource>()
         .addStaticFunction("new", &CreateObject<Texture>)
         
+        // [Method] void SetNumLevels(unsigned levels)
         .addFunction("SetNumLevels", &Texture::SetNumLevels)
+        // [Method] void SetFilterMode(TextureFilterMode filter)
         .addFunction("SetFilterMode", &Texture::SetFilterMode)
+        // [Method] void SetAddressMode(TextureCoordinate coord, TextureAddressMode address)
         .addFunction("SetAddressMode", &Texture::SetAddressMode)
+        // [Method] void SetBorderColor(const Color& color)
         .addFunction("SetBorderColor", &Texture::SetBorderColor)
+        // [Method] void SetSRGB(bool enable)
         .addFunction("SetSRGB", &Texture::SetSRGB)
+        // [Method] void SetBackupTexture(Texture* texture)
         .addFunction("SetBackupTexture", &Texture::SetBackupTexture)
+        // [Method] void SetMipsToSkip(int quality, int toSkip)
         .addFunction("SetMipsToSkip", &Texture::SetMipsToSkip)
 
+        // [Method] unsigned GetFormat() const
         .addFunction("GetFormat", &Texture::GetFormat)
+        // [Method] bool IsCompressed() const
         .addFunction("IsCompressed", &Texture::IsCompressed)
+        // [Method] unsigned GetLevels() const
         .addFunction("GetLevels", &Texture::GetLevels)
+        // [Method] int GetWidth() const
         .addFunction("GetWidth", &Texture::GetWidth)
+        // [Method] int GetHeight() const
         .addFunction("GetHeight", &Texture::GetHeight)
+        // [Method] int GetDepth() const
         .addFunction("GetDepth", &Texture::GetDepth)
+        // [Method] TextureFilterMode GetFilterMode() const
         .addFunction("GetFilterMode", &Texture::GetFilterMode)
+        // [Method] TextureAddressMode GetAddressMode(TextureCoordinate coord) const
         .addFunction("GetAddressMode", &Texture::GetAddressMode)
+        // [Method] const Color& GetBorderColor() const
         .addFunction("GetBorderColor", &Texture::GetBorderColor)
+        // [Method] bool GetSRGB() const
         .addFunction("GetSRGB", &Texture::GetSRGB)
+        // [Method] Texture* GetBackupTexture() const
         .addFunction("GetBackupTexture", &Texture::GetBackupTexture)
+        // [Method] int GetMipsToSkip(int quality) const
         .addFunction("GetMipsToSkip", &Texture::GetMipsToSkip)
+        // [Method] int GetLevelWidth(unsigned level) const
         .addFunction("GetLevelWidth", &Texture::GetLevelWidth)
+        // [Method] int GetLevelHeight(unsigned level) const
         .addFunction("GetLevelHeight", &Texture::GetLevelHeight)
+        // [Method] int GetLevelDepth(unsigned level) const
         .addFunction("GetLevelDepth", &Texture::GetLevelDepth)
+        // [Method] TextureUsage GetUsage() const
         .addFunction("GetUsage", &Texture::GetUsage)
 
         .addOverloadedFunctions("GetDataSize",
             static_cast<unsigned(Texture::*)(int, int) const>(&Texture::GetDataSize),
             static_cast<unsigned(Texture::*)(int, int, int) const>(&Texture::GetDataSize))
 
+        // [Method] unsigned GetRowDataSize(int width) const
         .addFunction("GetRowDataSize", &Texture::GetRowDataSize)
+        // [Method] unsigned GetComponents() const
         .addFunction("GetComponents", &Texture::GetComponents)
 
+        // [Property(ReadOnly)] unsigned format
         .addProperty("format", &Texture::GetFormat)
+        // [Property(ReadOnly)] bool compressed
         .addProperty("compressed", &Texture::IsCompressed)
+        // [Property(ReadOnly)] unsigned levels
         .addProperty("levels", &Texture::GetLevels)
+        // [Property(ReadOnly)] int width
         .addProperty("width", &Texture::GetWidth)
+        // [Property(ReadOnly)] int height
         .addProperty("height", &Texture::GetHeight)
+        // [Property(ReadOnly)] int depth
         .addProperty("depth", &Texture::GetDepth)
+        // [Property] TextureFilterMode filterMode
         .addProperty("filterMode", &Texture::GetFilterMode, &Texture::SetFilterMode)
+        // [Property] const Color& borderColor
         .addProperty("borderColor", &Texture::GetBorderColor, &Texture::SetBorderColor)
+        // [Property] bool sRGB
         .addProperty("sRGB", &Texture::GetSRGB, &Texture::SetSRGB)
+        // [Property] Texture* backupTexture
         .addProperty("backupTexture", &Texture::GetBackupTexture, &Texture::SetBackupTexture)
+        // [Property(ReadOnly)] TextureUsage usage
         .addProperty("usage", &Texture::GetUsage)
+        // [Property(ReadOnly)] unsigned components
         .addProperty("components", &Texture::GetComponents)
     );
 }

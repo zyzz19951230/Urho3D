@@ -38,29 +38,47 @@ void RegisterAnimatable(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Animatable : Serializable
     lua["Animatable"].setClass(UserdataMetatable<Animatable, Serializable>()
 
+        // [Method] void SetAnimationEnabled(bool enable)
         .addFunction("SetAnimationEnabled", &Animatable::SetAnimationEnabled)
+        // [Method] void SetAnimationTime(float time)
         .addFunction("SetAnimationTime", &Animatable::SetAnimationTime)
+        // [Method] void SetObjectAnimation(ObjectAnimation* objectAnimation)
         .addFunction("SetObjectAnimation", &Animatable::SetObjectAnimation)
 
         .addFunction("SetAttributeAnimation", AnimatableSetAttributeAnimation())
 
+        // [Method] void SetAttributeAnimationWrapMode(const String& name, WrapMode wrapMode)
         .addFunction("SetAttributeAnimationWrapMode", &Animatable::SetAttributeAnimationWrapMode)
+        // [Method] void SetAttributeAnimationSpeed(const String& name, float speed)
         .addFunction("SetAttributeAnimationSpeed", &Animatable::SetAttributeAnimationSpeed)
+        // [Method] void SetAttributeAnimationTime(const String& name, float time)
         .addFunction("SetAttributeAnimationTime", &Animatable::SetAttributeAnimationTime)
+        // [Method] void RemoveObjectAnimation()
         .addFunction("RemoveObjectAnimation", &Animatable::RemoveObjectAnimation)
+        // [Method] void RemoveAttributeAnimation(const String& name)
         .addFunction("RemoveAttributeAnimation", &Animatable::RemoveAttributeAnimation)
 
+        // [Method] bool GetAnimationEnabled() const
         .addFunction("GetAnimationEnabled", &Animatable::GetAnimationEnabled)
+        // [Method] ObjectAnimation* GetObjectAnimation() const
         .addFunction("GetObjectAnimation", &Animatable::GetObjectAnimation)
+        // [Method] ValueAnimation* GetAttributeAnimation(const String& name) const
         .addFunction("GetAttributeAnimation", &Animatable::GetAttributeAnimation)
+        // [Method] WrapMode GetAttributeAnimationWrapMode(const String& name) const
         .addFunction("GetAttributeAnimationWrapMode", &Animatable::GetAttributeAnimationWrapMode)
+        // [Method] float GetAttributeAnimationSpeed(const String& name) const
         .addFunction("GetAttributeAnimationSpeed", &Animatable::GetAttributeAnimationSpeed)
+        // [Method] float GetAttributeAnimationTime(const String& name) const
         .addFunction("GetAttributeAnimationTime", &Animatable::GetAttributeAnimationTime)
 
+        // [Property] bool animationEnabled
         .addProperty("animationEnabled", &Animatable::GetAnimationEnabled, &Animatable::SetAnimationEnabled)
+        // [Property] ObjectAnimation* objectAnimation
         .addProperty("objectAnimation", &Animatable::GetObjectAnimation, &Animatable::SetObjectAnimation)
+        // [Property(WriteOnly)] void animationTime
         .addProperty("animationTime", &Animatable::SetAnimationTime)
         );
 }

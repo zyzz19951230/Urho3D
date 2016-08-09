@@ -57,11 +57,15 @@ void RegisterFile(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum FileMode;
+    // [Enum] FileMode
+    // [Constant] File(Context* context, String& fileName, FileMode mode
     lua["FILE_READ"] = FILE_READ;
+    // [Variable] FILE_WRITE,
     lua["FILE_WRITE"] = FILE_WRITE;
+    // [Variable] FILE_READWRITE
     lua["FILE_READWRITE"] = FILE_READWRITE;
 
+    // [Class] File : MultipleBase<Object, Deserializer, Serializer> 
     lua["File"].setClass(UserdataMetatable<File, MultipleBase<Object, Deserializer, Serializer> >()
         .addOverloadedFunctions("new", 
             &CreateFile0, 
@@ -73,18 +77,29 @@ void RegisterFile(kaguya::State& lua)
             FileOpen(),
             static_cast<bool(File::*)(PackageFile*, const String&)>(&File::Open))
 
+        // [Method] void Close()
         .addFunction("Close", &File::Close)
+        // [Method] void Flush()
         .addFunction("Flush", &File::Flush)
+        // [Method] void SetName(const String& name)
         .addFunction("SetName", &File::SetName)
 
+        // [Method] FileMode GetMode() const
         .addFunction("GetMode", &File::GetMode)
+        // [Method] bool IsOpen() const
         .addFunction("IsOpen", &File::IsOpen)
+        // [Method] void* GetHandle() const
         .addFunction("GetHandle", &File::GetHandle)
+        // [Method] bool IsPackaged() const
         .addFunction("IsPackaged", &File::IsPackaged)
 
+        // [Property(ReadOnly)] FileMode mode
         .addProperty("mode", &File::GetMode)
+        // [Property(ReadOnly)] bool open
         .addProperty("open", &File::IsOpen)
+        // [Property(ReadOnly)] void* handle
         .addProperty("handle", &File::GetHandle)
+        // [Property(ReadOnly)] bool packaged
         .addProperty("packaged", &File::IsPackaged)
         );
 }

@@ -34,6 +34,7 @@ void RegisterButton(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Button : BorderImage
     lua["Button"].setClass(UserdataMetatable<Button, BorderImage>()
         .addStaticFunction("new", &CreateObject<Button>)
 
@@ -45,20 +46,33 @@ void RegisterButton(kaguya::State& lua)
             static_cast<void(Button::*)(const IntVector2&)>(&Button::SetPressedChildOffset),
             static_cast<void(Button::*)(int, int)>(&Button::SetPressedChildOffset))
 
+        // [Method] void SetRepeat(float delay, float rate)
         .addFunction("SetRepeat", &Button::SetRepeat)
+        // [Method] void SetRepeatDelay(float delay)
         .addFunction("SetRepeatDelay", &Button::SetRepeatDelay)
+        // [Method] void SetRepeatRate(float rate)
         .addFunction("SetRepeatRate", &Button::SetRepeatRate)
 
+        // [Method] const IntVector2& GetPressedOffset() const
         .addFunction("GetPressedOffset", &Button::GetPressedOffset)
+        // [Method] const IntVector2& GetPressedChildOffset() const
         .addFunction("GetPressedChildOffset", &Button::GetPressedChildOffset)
+        // [Method] float GetRepeatDelay() const
         .addFunction("GetRepeatDelay", &Button::GetRepeatDelay)
+        // [Method] float GetRepeatRate() const
         .addFunction("GetRepeatRate", &Button::GetRepeatRate)
+        // [Method] bool IsPressed() const
         .addFunction("IsPressed", &Button::IsPressed)
 
+        // [Property] const IntVector2& pressedOffset
         .addProperty("pressedOffset", &Button::GetPressedOffset, static_cast<void(Button::*)(const IntVector2&)>(&Button::SetPressedOffset))
+        // [Property] const IntVector2& pressedChildOffset
         .addProperty("pressedChildOffset", &Button::GetPressedChildOffset, static_cast<void(Button::*)(const IntVector2&)>(&Button::SetPressedChildOffset))
+        // [Property] float repeatDelay
         .addProperty("repeatDelay", &Button::GetRepeatDelay, &Button::SetRepeatDelay)
+        // [Property] float repeatRate
         .addProperty("repeatRate", &Button::GetRepeatRate, &Button::SetRepeatRate)
+        // [Property(ReadOnly)] bool pressed
         .addProperty("pressed", &Button::IsPressed)
         );
 }

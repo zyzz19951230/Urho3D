@@ -40,24 +40,38 @@ void RegisterView3D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] View3D : Window
     lua["View3D"].setClass(UserdataMetatable<View3D, Window>()
         .addStaticFunction("new", &CreateObject<View3D>)
 
+        // [Method] void SetView(Scene* scene, Camera* camera, bool ownScene = true)
         .addFunction("SetView", View3DSetView())
 
+        // [Method] void SetFormat(unsigned format)
         .addFunction("SetFormat", &View3D::SetFormat)
+        // [Method] void SetAutoUpdate(bool enable)
         .addFunction("SetAutoUpdate", &View3D::SetAutoUpdate)
+        // [Method] void QueueUpdate()
         .addFunction("QueueUpdate", &View3D::QueueUpdate)
 
+        // [Method] unsigned GetFormat() const
         .addFunction("GetFormat", &View3D::GetFormat)
+        // [Method] bool GetAutoUpdate() const
         .addFunction("GetAutoUpdate", &View3D::GetAutoUpdate)
+        // [Method] Scene* GetScene() const
         .addFunction("GetScene", &View3D::GetScene)
+        // [Method] Node* GetCameraNode() const
         .addFunction("GetCameraNode", &View3D::GetCameraNode)
+        // [Method] Texture2D* GetRenderTexture() const
         .addFunction("GetRenderTexture", &View3D::GetRenderTexture)
+        // [Method] Texture2D* GetDepthTexture() const
         .addFunction("GetDepthTexture", &View3D::GetDepthTexture)
+        // [Method] Viewport* GetViewport() const
         .addFunction("GetViewport", &View3D::GetViewport)
 
+        // [Property] unsigned format
         .addProperty("format", &View3D::GetFormat, &View3D::SetFormat)
+        // [Property] bool autoUpdate
         .addProperty("autoUpdate", &View3D::GetAutoUpdate, &View3D::SetAutoUpdate)
         );
 }

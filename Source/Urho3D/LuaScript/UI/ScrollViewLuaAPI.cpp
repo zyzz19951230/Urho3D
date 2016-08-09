@@ -46,50 +46,80 @@ void RegisterScrollView(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] ScrollView : UIElement
     lua["ScrollView"].setClass(UserdataMetatable<ScrollView, UIElement>()
         .addStaticFunction("new", &CreateObject<ScrollView>)
 
+        // [Method] void SetContentElement(UIElement* element)
         .addFunction("SetContentElement", &ScrollView::SetContentElement)
 
         .addOverloadedFunctions("SetViewPosition",
             static_cast<void(ScrollView::*)(const IntVector2&)>(&ScrollView::SetViewPosition),
             static_cast<void(ScrollView::*)(int, int)>(&ScrollView::SetViewPosition))
 
+        // [Method] void SetScrollBarsVisible(bool horizontal, bool vertical)
         .addFunction("SetScrollBarsVisible", &ScrollView::SetScrollBarsVisible)
+        // [Method] void SetScrollBarsAutoVisible(bool enable)
         .addFunction("SetScrollBarsAutoVisible", &ScrollView::SetScrollBarsAutoVisible)
+        // [Method] void SetScrollStep(float step)
         .addFunction("SetScrollStep", &ScrollView::SetScrollStep)
+        // [Method] void SetPageStep(float step)
         .addFunction("SetPageStep", &ScrollView::SetPageStep)
+        // [Method] void SetScrollDeceleration(float deceleration)
         .addFunction("SetScrollDeceleration", &ScrollView::SetScrollDeceleration)
+        // [Method] void SetScrollSnapEpsilon(float snap)
         .addFunction("SetScrollSnapEpsilon", &ScrollView::SetScrollSnapEpsilon)
+        // [Method] void SetAutoDisableChildren(bool disable)
         .addFunction("SetAutoDisableChildren", &ScrollView::SetAutoDisableChildren)
+        // [Method] void SetAutoDisableThreshold(float amount)
         .addFunction("SetAutoDisableThreshold", &ScrollView::SetAutoDisableThreshold)
 
+        // [Method] const IntVector2& GetViewPosition() const
         .addFunction("GetViewPosition", &ScrollView::GetViewPosition)
 
         .addStaticFunction("GetContentElement", &ScrollViewGetContentElement)
 
+        // [Method] ScrollBar* GetHorizontalScrollBar() const
         .addFunction("GetHorizontalScrollBar", &ScrollView::GetHorizontalScrollBar)
+        // [Method] ScrollBar* GetVerticalScrollBar() const
         .addFunction("GetVerticalScrollBar", &ScrollView::GetVerticalScrollBar)
+        // [Method] BorderImage* GetScrollPanel() const
         .addFunction("GetScrollPanel", &ScrollView::GetScrollPanel)
+        // [Method] bool GetScrollBarsAutoVisible() const
         .addFunction("GetScrollBarsAutoVisible", &ScrollView::GetScrollBarsAutoVisible)
+        // [Method] float GetScrollStep() const
         .addFunction("GetScrollStep", &ScrollView::GetScrollStep)
+        // [Method] float GetPageStep() const
         .addFunction("GetPageStep", &ScrollView::GetPageStep)
+        // [Method] float GetScrollDeceleration() const
         .addFunction("GetScrollDeceleration", &ScrollView::GetScrollDeceleration)
+        // [Method] float GetScrollSnapEpsilon() const
         .addFunction("GetScrollSnapEpsilon", &ScrollView::GetScrollSnapEpsilon)
+        // [Method] bool GetAutoDisableChildren() const
         .addFunction("GetAutoDisableChildren", &ScrollView::GetAutoDisableChildren)
+        // [Method] float GetAutoDisableThreshold() const
         .addFunction("GetAutoDisableThreshold", &ScrollView::GetAutoDisableThreshold)
 
+        // [Property] const IntVector2& viewPosition
         .addProperty("viewPosition", &ScrollView::GetViewPosition, static_cast<void(ScrollView::*)(const IntVector2&)>(&ScrollView::SetViewPosition))
 
         .addProperty("contentElement", &ScrollViewGetContentElement, &ScrollViewSetContentElement)
 
+        // [Property(ReadOnly)] ScrollBar* horizontalScrollBar
         .addProperty("horizontalScrollBar", &ScrollView::GetHorizontalScrollBar)
+        // [Property(ReadOnly)] ScrollBar* verticalScrollBar
         .addProperty("verticalScrollBar", &ScrollView::GetVerticalScrollBar)
+        // [Property(ReadOnly)] BorderImage* scrollPanel
         .addProperty("scrollPanel", &ScrollView::GetScrollPanel)
+        // [Property] bool scrollBarsAutoVisible
         .addProperty("scrollBarsAutoVisible", &ScrollView::GetScrollBarsAutoVisible, &ScrollView::SetScrollBarsAutoVisible)
+        // [Property] float scrollStep
         .addProperty("scrollStep", &ScrollView::GetScrollStep, &ScrollView::SetScrollStep)
+        // [Property] float pageStep
         .addProperty("pageStep", &ScrollView::GetPageStep, &ScrollView::SetPageStep)
+        // [Property] float scrollDeceleration
         .addProperty("scrollDeceleration", &ScrollView::GetScrollDeceleration, &ScrollView::SetScrollDeceleration)
+        // [Property] float scrollSnapEpsilon
         .addProperty("scrollSnapEpsilon", &ScrollView::GetScrollSnapEpsilon, &ScrollView::SetScrollSnapEpsilon)
         );
 }

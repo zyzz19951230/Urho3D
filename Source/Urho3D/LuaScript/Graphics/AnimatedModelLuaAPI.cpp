@@ -48,11 +48,14 @@ void RegisterAnimatedModel(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] AnimatedModel : StaticModel
     lua["AnimatedModel"].setClass(UserdataMetatable<AnimatedModel, StaticModel>()
         .addStaticFunction("new", &CreateObject<AnimatedModel>)
 
+        // [Method] void SetModel(Model* model, bool createBones = true)
         .addFunction("SetModel", AnimatedModelSetModel())
 
+        // [Method] AnimationState* AddAnimationState(Animation* animation)
         .addFunction("AddAnimationState", &AnimatedModel::AddAnimationState)
 
         .addOverloadedFunctions("RemoveAnimationState",
@@ -62,8 +65,11 @@ void RegisterAnimatedModel(kaguya::State& lua)
             static_cast<void(AnimatedModel::*)(AnimationState*)>(&AnimatedModel::RemoveAnimationState),
             static_cast<void(AnimatedModel::*)(unsigned)>(&AnimatedModel::RemoveAnimationState))
 
+        // [Method] void RemoveAllAnimationStates()
         .addFunction("RemoveAllAnimationStates", &AnimatedModel::RemoveAllAnimationStates)
+        // [Method] void SetAnimationLodBias(float bias)
         .addFunction("SetAnimationLodBias", &AnimatedModel::SetAnimationLodBias)
+        // [Method] void SetUpdateInvisible(bool enable)
         .addFunction("SetUpdateInvisible", &AnimatedModel::SetUpdateInvisible)
 
         .addOverloadedFunctions("SetMorphWeight",
@@ -71,10 +77,13 @@ void RegisterAnimatedModel(kaguya::State& lua)
             static_cast<void(AnimatedModel::*)(const String&, float)>(&AnimatedModel::SetMorphWeight),
             static_cast<void(AnimatedModel::*)(StringHash, float)>(&AnimatedModel::SetMorphWeight))
 
+        // [Method] void ResetMorphWeights()
         .addFunction("ResetMorphWeights", &AnimatedModel::ResetMorphWeights)
 
+        // [Method] Skeleton& GetSkeleton()
         .addFunction("GetSkeleton", &AnimatedModel::GetSkeleton)
         
+        // [Method] unsigned GetNumAnimationStates() const
         .addFunction("GetNumAnimationStates", &AnimatedModel::GetNumAnimationStates)
 
         .addOverloadedFunctions("GetAnimationState",
@@ -83,9 +92,13 @@ void RegisterAnimatedModel(kaguya::State& lua)
             static_cast<AnimationState*(AnimatedModel::*)(const StringHash) const>(&AnimatedModel::GetAnimationState),
             static_cast<AnimationState*(AnimatedModel::*)(unsigned) const>(&AnimatedModel::GetAnimationState))
 
+        // [Method] float GetAnimationLodBias() const
         .addFunction("GetAnimationLodBias", &AnimatedModel::GetAnimationLodBias)
+        // [Method] bool GetUpdateInvisible() const
         .addFunction("GetUpdateInvisible", &AnimatedModel::GetUpdateInvisible)
+        // [Method] const Vector<ModelMorph>& GetMorphs() const
         .addFunction("GetMorphs", &AnimatedModel::GetMorphs)
+        // [Method] unsigned GetNumMorphs() const
         .addFunction("GetNumMorphs", &AnimatedModel::GetNumMorphs)
 
         .addOverloadedFunctions("GetMorphWeight",
@@ -93,18 +106,27 @@ void RegisterAnimatedModel(kaguya::State& lua)
             static_cast<float(AnimatedModel::*)(const String&) const>(&AnimatedModel::GetMorphWeight),
             static_cast<float(AnimatedModel::*)(StringHash) const>(&AnimatedModel::GetMorphWeight))
 
+        // [Method] bool IsMaster() const
         .addFunction("IsMaster", &AnimatedModel::IsMaster)
         
+        // [Method] void UpdateBoneBoundingBox()
         .addFunction("UpdateBoneBoundingBox", &AnimatedModel::UpdateBoneBoundingBox)
 
         .addProperty("model", &AnimatedModelModelGetter, &AnimatedModelModelSetter)
 
+        // [Property(ReadOnly)] UpdateGeometryType updateGeometryType
         .addProperty("updateGeometryType", &AnimatedModel::GetUpdateGeometryType)
+        // [Property(ReadOnly)] Skeleton& skeleton
         .addProperty("skeleton", &AnimatedModel::GetSkeleton)
+        // [Property(ReadOnly)] unsigned numAnimationStates
         .addProperty("numAnimationStates", &AnimatedModel::GetNumAnimationStates)
+        // [Property] float animationLodBias
         .addProperty("animationLodBias", &AnimatedModel::GetAnimationLodBias, &AnimatedModel::SetAnimationLodBias)
+        // [Property] bool updateInvisible
         .addProperty("updateInvisible", &AnimatedModel::GetUpdateInvisible, &AnimatedModel::SetUpdateInvisible)
+        // [Property(ReadOnly)] unsigned numMorphs
         .addProperty("numMorphs", &AnimatedModel::GetNumMorphs)
+        // [Property(ReadOnly)] bool master
         .addProperty("master", &AnimatedModel::IsMaster)
         );
 }

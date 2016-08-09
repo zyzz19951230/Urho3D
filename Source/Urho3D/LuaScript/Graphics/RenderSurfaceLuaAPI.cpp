@@ -35,34 +35,59 @@ void RegisterRenderSurface(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] RenderSurface : RefCounted
     lua["RenderSurface"].setClass(UserdataMetatable<RenderSurface, RefCounted>()
         .setConstructors<RenderSurface(Texture*)>()
         
+        // [Method] void SetNumViewports(unsigned num)
         .addFunction("SetNumViewports", &RenderSurface::SetNumViewports)
+        // [Method] void SetViewport(unsigned index, Viewport* viewport)
         .addFunction("SetViewport", &RenderSurface::SetViewport)
+        // [Method] void SetUpdateMode(RenderSurfaceUpdateMode mode)
         .addFunction("SetUpdateMode", &RenderSurface::SetUpdateMode)
+        // [Method] void SetLinkedRenderTarget(RenderSurface* renderTarget)
         .addFunction("SetLinkedRenderTarget", &RenderSurface::SetLinkedRenderTarget)
+        // [Method] void SetLinkedDepthStencil(RenderSurface* depthStencil)
         .addFunction("SetLinkedDepthStencil", &RenderSurface::SetLinkedDepthStencil)
+        // [Method] void QueueUpdate()
         .addFunction("QueueUpdate", &RenderSurface::QueueUpdate)
+        // [Method] void Release()
         .addFunction("Release", &RenderSurface::Release)
         
+        // [Method] Texture* GetParentTexture() const
         .addFunction("GetParentTexture", &RenderSurface::GetParentTexture)
+        // [Method] int GetWidth() const
         .addFunction("GetWidth", &RenderSurface::GetWidth)
+        // [Method] int GetHeight() const
         .addFunction("GetHeight", &RenderSurface::GetHeight)
+        // [Method] TextureUsage GetUsage() const
         .addFunction("GetUsage", &RenderSurface::GetUsage)
+        // [Method] unsigned GetNumViewports() const
         .addFunction("GetNumViewports", &RenderSurface::GetNumViewports)
+        // [Method] Viewport* GetViewport(unsigned index) const
         .addFunction("GetViewport", &RenderSurface::GetViewport)
+        // [Method] RenderSurfaceUpdateMode GetUpdateMode() const
         .addFunction("GetUpdateMode", &RenderSurface::GetUpdateMode)
+        // [Method] RenderSurface* GetLinkedRenderTarget() const
         .addFunction("GetLinkedRenderTarget", &RenderSurface::GetLinkedRenderTarget)
+        // [Method] RenderSurface* GetLinkedDepthStencil() const
         .addFunction("GetLinkedDepthStencil", &RenderSurface::GetLinkedDepthStencil)
         
+        // [Property(ReadOnly)] Texture* parentTexture
         .addProperty("parentTexture", &RenderSurface::GetParentTexture)
+        // [Property(ReadOnly)] int width
         .addProperty("width", &RenderSurface::GetWidth)
+        // [Property(ReadOnly)] int height
         .addProperty("height", &RenderSurface::GetHeight)
+        // [Property(ReadOnly)] TextureUsage usage
         .addProperty("usage", &RenderSurface::GetUsage)
+        // [Property] unsigned numViewports
         .addProperty("numViewports", &RenderSurface::GetNumViewports, &RenderSurface::SetNumViewports)
+        // [Property] RenderSurfaceUpdateMode updateMode
         .addProperty("updateMode", &RenderSurface::GetUpdateMode, &RenderSurface::SetUpdateMode)
+        // [Property] RenderSurface* linkedRenderTarget
         .addProperty("linkedRenderTarget", &RenderSurface::GetLinkedRenderTarget, &RenderSurface::SetLinkedRenderTarget)
+        // [Property] RenderSurface* linkedDepthStencil
         .addProperty("linkedDepthStencil", &RenderSurface::GetLinkedDepthStencil, &RenderSurface::SetLinkedDepthStencil)
     );
 }

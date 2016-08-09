@@ -51,13 +51,19 @@ void RegisterResource(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum AsyncLoadState;
+    // [Enum] AsyncLoadState
+    // [Variable] ASYNC_DONE
     lua["ASYNC_DONE"] = ASYNC_DONE;
+    // [Variable] ASYNC_QUEUED
     lua["ASYNC_QUEUED"] = ASYNC_QUEUED;
+    // [Variable] ASYNC_LOADING
     lua["ASYNC_LOADING"] = ASYNC_LOADING;
+    // [Variable] ASYNC_SUCCESS
     lua["ASYNC_SUCCESS"] = ASYNC_SUCCESS;
+    // [Variable] ASYNC_FAIL
     lua["ASYNC_FAIL"] = ASYNC_FAIL;
 
+    // [Class] Resource : Object
     lua["Resource"].setClass(UserdataMetatable<Resource, Object>()
         .addStaticFunction("new", &CreateObject<Resource>)
 
@@ -69,21 +75,35 @@ void RegisterResource(kaguya::State& lua)
             &ResourceSave, 
             &Resource::Save)
 
+        // [Method] void SetName(const String& name)
         .addFunction("SetName", &Resource::SetName)
+        // [Method] void SetMemoryUse(unsigned size)
         .addFunction("SetMemoryUse", &Resource::SetMemoryUse)
+        // [Method] void ResetUseTimer()
         .addFunction("ResetUseTimer", &Resource::ResetUseTimer)
+        // [Method] void SetAsyncLoadState(AsyncLoadState newState)
         .addFunction("SetAsyncLoadState", &Resource::SetAsyncLoadState)
 
+        // [Method] const String& GetName() const
         .addFunction("GetName", &Resource::GetName)
+        // [Method] StringHash GetNameHash() const
         .addFunction("GetNameHash", &Resource::GetNameHash)
+        // [Method] unsigned GetMemoryUse() const
         .addFunction("GetMemoryUse", &Resource::GetMemoryUse)
+        // [Method] unsigned GetUseTimer()
         .addFunction("GetUseTimer", &Resource::GetUseTimer)
+        // [Method] AsyncLoadState GetAsyncLoadState() const
         .addFunction("GetAsyncLoadState", &Resource::GetAsyncLoadState)
 
+        // [Property] const String& name
         .addProperty("name", &Resource::GetName, &Resource::SetName)
+        // [Property(ReadOnly)] StringHash nameHash
         .addProperty("nameHash", &Resource::GetNameHash)
+        // [Property] unsigned memoryUse
         .addProperty("memoryUse", &Resource::GetMemoryUse, &Resource::SetMemoryUse)
+        // [Property(ReadOnly)] unsigned useTimer
         .addProperty("useTimer", &Resource::GetUseTimer)
+        // [Property] AsyncLoadState asyncLoadState
         .addProperty("asyncLoadState", &Resource::GetAsyncLoadState, &Resource::SetAsyncLoadState)
     );
 }

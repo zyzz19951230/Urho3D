@@ -38,22 +38,35 @@ void RegisterParticleEmitter2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] ParticleEmitter2D : Drawable2D
     lua["ParticleEmitter2D"].setClass(UserdataMetatable<ParticleEmitter2D, Drawable2D>()
         .addStaticFunction("new", &CreateObject<ParticleEmitter2D>)
 
+        // [Method] void SetEffect(ParticleEffect2D* effect)
         .addFunction("SetEffect", &ParticleEmitter2D::SetEffect)
+        // [Method] void SetSprite(Sprite2D* sprite)
         .addFunction("SetSprite", &ParticleEmitter2D::SetSprite)
+        // [Method] void SetBlendMode(BlendMode blendMode)
         .addFunction("SetBlendMode", &ParticleEmitter2D::SetBlendMode)
+        // [Method] void SetMaxParticles(unsigned maxParticles)
         .addFunction("SetMaxParticles", &ParticleEmitter2D::SetMaxParticles)
 
+        // [Method] ParticleEffect2D* GetEffect() const
         .addFunction("GetEffect", &ParticleEmitter2D::GetEffect)
+        // [Method] Sprite2D* GetSprite() const
         .addFunction("GetSprite", &ParticleEmitter2D::GetSprite)
+        // [Method] BlendMode GetBlendMode() const
         .addFunction("GetBlendMode", &ParticleEmitter2D::GetBlendMode)
+        // [Method] unsigned GetMaxParticles() const
         .addFunction("GetMaxParticles", &ParticleEmitter2D::GetMaxParticles)
 
+        // [Property] ParticleEffect2D* effect
         .addProperty("effect", &ParticleEmitter2D::GetEffect, &ParticleEmitter2D::SetEffect)
+        // [Property] Sprite2D* sprite
         .addProperty("sprite", &ParticleEmitter2D::GetSprite, &ParticleEmitter2D::SetSprite)
+        // [Property] BlendMode blendMode
         .addProperty("blendMode", &ParticleEmitter2D::GetBlendMode, &ParticleEmitter2D::SetBlendMode)
+        // [Property] unsigned maxParticles
         .addProperty("maxParticles", &ParticleEmitter2D::GetMaxParticles, &ParticleEmitter2D::SetMaxParticles)
     );
 }

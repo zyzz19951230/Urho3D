@@ -34,6 +34,7 @@ void RegisterVector4(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Vector4
     lua["Vector4"].setClass(UserdataMetatable<Vector4>()
         .setConstructors<Vector4(),
         Vector4(const Vector4&),
@@ -55,13 +56,20 @@ void RegisterVector4(kaguya::State& lua)
             static_cast<Vector4(Vector4::*)(float) const>(&Vector4::operator/),
             static_cast<Vector4(Vector4::*)(const Vector4&) const>(&Vector4::operator/))
 
+        // [Method] float DotProduct(const Vector4& rhs) const
         .addFunction("DotProduct", &Vector4::DotProduct)
+        // [Method] float AbsDotProduct(const Vector4& rhs) const
         .addFunction("AbsDotProduct", &Vector4::AbsDotProduct)
+        // [Method] Vector4 Abs() const
         .addFunction("Abs", &Vector4::Abs)
+        // [Method] Vector4 Lerp(const Vector4& rhs, float t) const
         .addFunction("Lerp", &Vector4::Lerp)
+        // [Method] bool Equals(const Vector4& rhs) const
         .addFunction("Equals", &Vector4::Equals)
+        // [Method] bool IsNaN() const
         .addFunction("IsNaN", &Vector4::IsNaN)
 
+        // [Method] String ToString() const
         .addFunction("ToString", &Vector4::ToString)
 
         .addProperty("x", &Vector4::x_)

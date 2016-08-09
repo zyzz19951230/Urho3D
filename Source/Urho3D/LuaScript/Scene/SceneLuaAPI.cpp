@@ -135,16 +135,24 @@ void RegisterScene(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Constant] unsigned FIRST_REPLICATED_ID
     lua["FIRST_REPLICATED_ID"] = FIRST_REPLICATED_ID;
+    // [Constant] unsigned LAST_REPLICATED_ID
     lua["LAST_REPLICATED_ID"] = LAST_REPLICATED_ID;
+    // [Constant] unsigned FIRST_LOCAL_ID
     lua["FIRST_LOCAL_ID"] = FIRST_LOCAL_ID;
+    // [Constant] unsigned LAST_LOCAL_ID
     lua["LAST_LOCAL_ID"] = LAST_LOCAL_ID;
 
-    // enum LoadMode;
+    // [Enum] LoadMode
+    // [Variable] LOAD_RESOURCES_ONLY
     lua["LOAD_RESOURCES_ONLY"] = LOAD_RESOURCES_ONLY;
+    // [Variable] bool LoadAsync(File* file, LoadMode mode
     lua["LOAD_SCENE"] = LOAD_SCENE;
+    // [Variable] bool LoadAsync(File* file, LoadMode mode
     lua["LOAD_SCENE_AND_RESOURCES"] = LOAD_SCENE_AND_RESOURCES;
 
+    // [Class] Scene : Node
     lua["Scene"].setClass(UserdataMetatable<Scene, Node>()
         .addStaticFunction("new", &CreateObject<Scene>)
 
@@ -161,56 +169,94 @@ void RegisterScene(kaguya::State& lua)
         .addStaticFunction("LoadAsyncXML", SceneLoadAsyncXMLOverloads())
         .addStaticFunction("LoadAsyncJSON", SceneLoadAsyncJSONOverloads())
 
+        // [Method] void StopAsyncLoading()
         .addFunction("StopAsyncLoading", &Scene::StopAsyncLoading)
 
         .addStaticFunction("Instantiate", SceneInstantiateOverloads())
         .addStaticFunction("InstantiateXML", SceneInstantiateXMLOverloads())
         .addStaticFunction("InstantiateJSON", SceneInstantiateJSONOverloads())
 
+        // [Method] void Clear(bool clearReplicated = true, bool clearLocal = true)
         .addFunction("Clear", SceneClear())
 
+        // [Method] void SetUpdateEnabled(bool enable)
         .addFunction("SetUpdateEnabled", &Scene::SetUpdateEnabled)
+        // [Method] void SetTimeScale(float scale)
         .addFunction("SetTimeScale", &Scene::SetTimeScale)
+        // [Method] void SetElapsedTime(float time)
         .addFunction("SetElapsedTime", &Scene::SetElapsedTime)
+        // [Method] void SetSmoothingConstant(float constant)
         .addFunction("SetSmoothingConstant", &Scene::SetSmoothingConstant)
+        // [Method] void SetSnapThreshold(float threshold)
         .addFunction("SetSnapThreshold", &Scene::SetSnapThreshold)
+        // [Method] void SetAsyncLoadingMs(int ms)
         .addFunction("SetAsyncLoadingMs", &Scene::SetAsyncLoadingMs)
 
+        // [Method] void AddRequiredPackageFile(PackageFile* package)
         .addFunction("AddRequiredPackageFile", &Scene::AddRequiredPackageFile)
+        // [Method] void ClearRequiredPackageFiles()
         .addFunction("ClearRequiredPackageFiles", &Scene::ClearRequiredPackageFiles)
 
+        // [Method] void RegisterVar(const String& name)
         .addFunction("RegisterVar", &Scene::RegisterVar)
+        // [Method] void UnregisterVar(const String& name)
         .addFunction("UnregisterVar", &Scene::UnregisterVar)
+        // [Method] void UnregisterAllVars()
         .addFunction("UnregisterAllVars", &Scene::UnregisterAllVars)
 
+        // [Method] Node* GetNode(unsigned id) const
         .addFunction("GetNode", &Scene::GetNode)
         .addFunction("GetComponentByID", static_cast<Component* (Scene::*)(unsigned) const>(&Scene::GetComponent))
+        // [Method] bool GetNodesWithTag(PODVector<Node*>& dest, const String& tag)  const
         .addFunction("GetNodesWithTag", &Scene::GetNodesWithTag)
 
+        // [Method] bool IsUpdateEnabled() const
         .addFunction("IsUpdateEnabled", &Scene::IsUpdateEnabled)
+        // [Method] bool IsAsyncLoading() const
         .addFunction("IsAsyncLoading", &Scene::IsAsyncLoading)
+        // [Method] float GetAsyncProgress() const
         .addFunction("GetAsyncProgress", &Scene::GetAsyncProgress)
+        // [Method] LoadMode GetAsyncLoadMode() const
         .addFunction("GetAsyncLoadMode", &Scene::GetAsyncLoadMode)
+        // [Method] const String& GetFileName() const
         .addFunction("GetFileName", &Scene::GetFileName)
+        // [Method] unsigned GetChecksum() const
         .addFunction("GetChecksum", &Scene::GetChecksum)
+        // [Method] float GetTimeScale() const
         .addFunction("GetTimeScale", &Scene::GetTimeScale)
+        // [Method] float GetElapsedTime() const
         .addFunction("GetElapsedTime", &Scene::GetElapsedTime)
+        // [Method] float GetSmoothingConstant() const
         .addFunction("GetSmoothingConstant", &Scene::GetSmoothingConstant)
+        // [Method] float GetSnapThreshold() const
         .addFunction("GetSnapThreshold", &Scene::GetSnapThreshold)
+        // [Method] int GetAsyncLoadingMs() const
         .addFunction("GetAsyncLoadingMs", &Scene::GetAsyncLoadingMs)
 
+        // [Method] const Vector<SharedPtr<PackageFile> >& GetRequiredPackageFiles() const
         .addFunction("GetRequiredPackageFiles", &Scene::GetRequiredPackageFiles)
 
+        // [Property] bool updateEnabled
         .addProperty("updateEnabled", &Scene::IsUpdateEnabled, &Scene::SetUpdateEnabled)
+        // [Property(ReadOnly)] bool asyncLoading
         .addProperty("asyncLoading", &Scene::IsAsyncLoading)
+        // [Property(ReadOnly)] float asyncProgress
         .addProperty("asyncProgress", &Scene::GetAsyncProgress)
+        // [Property(ReadOnly)] LoadMode asyncLoadMode
         .addProperty("asyncLoadMode", &Scene::GetAsyncLoadMode)
+        // [Property(ReadOnly)] const String& fileName
         .addProperty("fileName", &Scene::GetFileName)
+        // [Property(ReadOnly)] unsigned checksum
         .addProperty("checksum", &Scene::GetChecksum)
+        // [Property] float timeScale
         .addProperty("timeScale", &Scene::GetTimeScale, &Scene::SetTimeScale)
+        // [Property] float elapsedTime
         .addProperty("elapsedTime", &Scene::GetElapsedTime, &Scene::SetElapsedTime)
+        // [Property] float smoothingConstant
         .addProperty("smoothingConstant", &Scene::GetSmoothingConstant, &Scene::SetSmoothingConstant)
+        // [Property] float snapThreshold
         .addProperty("snapThreshold", &Scene::GetSnapThreshold, &Scene::SetSnapThreshold)
+        // [Property] int asyncLoadingMs
         .addProperty("asyncLoadingMs", &Scene::GetAsyncLoadingMs, &Scene::SetAsyncLoadingMs)
         );
 }

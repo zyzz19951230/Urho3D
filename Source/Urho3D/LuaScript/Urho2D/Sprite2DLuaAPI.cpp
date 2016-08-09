@@ -38,28 +38,47 @@ void RegisterSprite2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Sprite2D : Resource
     lua["Sprite2D"].setClass(UserdataMetatable<Sprite2D, Resource>()
         .addStaticFunction("new", &CreateObject<Sprite2D>)
 
+        // [Method] void SetTexture(Texture2D* texture)
         .addFunction("SetTexture", &Sprite2D::SetTexture)
+        // [Method] void SetRectangle(const IntRect& rectangle)
         .addFunction("SetRectangle", &Sprite2D::SetRectangle)
+        // [Method] void SetHotSpot(const Vector2& hotSpot)
         .addFunction("SetHotSpot", &Sprite2D::SetHotSpot)
+        // [Method] void SetOffset(const IntVector2& offset)
         .addFunction("SetOffset", &Sprite2D::SetOffset)
+        // [Method] void SetTextureEdgeOffset(float offset)
         .addFunction("SetTextureEdgeOffset", &Sprite2D::SetTextureEdgeOffset)
+        // [Method] void SetSpriteSheet(SpriteSheet2D* spriteSheet)
         .addFunction("SetSpriteSheet", &Sprite2D::SetSpriteSheet)
 
+        // [Method] Texture2D* GetTexture() const
         .addFunction("GetTexture", &Sprite2D::GetTexture)
+        // [Method] const IntRect& GetRectangle() const
         .addFunction("GetRectangle", &Sprite2D::GetRectangle)
+        // [Method] const Vector2& GetHotSpot() const
         .addFunction("GetHotSpot", &Sprite2D::GetHotSpot)
+        // [Method] const IntVector2& GetOffset() const
         .addFunction("GetOffset", &Sprite2D::GetOffset)
+        // [Method] float GetTextureEdgeOffset() const
         .addFunction("GetTextureEdgeOffset", &Sprite2D::GetTextureEdgeOffset)
+        // [Method] SpriteSheet2D* GetSpriteSheet() const
         .addFunction("GetSpriteSheet", &Sprite2D::GetSpriteSheet)
 
+        // [Property] Texture2D* texture
         .addProperty("texture", &Sprite2D::GetTexture, &Sprite2D::SetTexture)
+        // [Property] const IntRect& rectangle
         .addProperty("rectangle", &Sprite2D::GetRectangle, &Sprite2D::SetRectangle)
+        // [Property] const Vector2& hotSpot
         .addProperty("hotSpot", &Sprite2D::GetHotSpot, &Sprite2D::SetHotSpot)
+        // [Property] const IntVector2& offset
         .addProperty("offset", &Sprite2D::GetOffset, &Sprite2D::SetOffset)
+        // [Property] float textureEdgeOffset
         .addProperty("textureEdgeOffset", &Sprite2D::GetTextureEdgeOffset, &Sprite2D::SetTextureEdgeOffset)
+        // [Property] SpriteSheet2D* spriteSheet
         .addProperty("spriteSheet", &Sprite2D::GetSpriteSheet, &Sprite2D::SetSpriteSheet)
     );
 }

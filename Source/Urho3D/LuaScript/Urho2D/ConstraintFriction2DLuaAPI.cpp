@@ -36,19 +36,29 @@ void RegisterConstraintFriction2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] ConstraintFriction2D : Constraint2D
     lua["ConstraintFriction2D"].setClass(UserdataMetatable<ConstraintFriction2D, Constraint2D>()
         .addStaticFunction("new", &CreateObject<ConstraintFriction2D>)
 
+        // [Method] void SetAnchor(const Vector2& anchor)
         .addFunction("SetAnchor", &ConstraintFriction2D::SetAnchor)
+        // [Method] void SetMaxForce(float maxForce)
         .addFunction("SetMaxForce", &ConstraintFriction2D::SetMaxForce)
+        // [Method] void SetMaxTorque(float maxTorque)
         .addFunction("SetMaxTorque", &ConstraintFriction2D::SetMaxTorque)
 
+        // [Method] const Vector2& GetAnchor() const
         .addFunction("GetAnchor", &ConstraintFriction2D::GetAnchor)
+        // [Method] float GetMaxForce() const
         .addFunction("GetMaxForce", &ConstraintFriction2D::GetMaxForce)
+        // [Method] float GetMaxTorque() const
         .addFunction("GetMaxTorque", &ConstraintFriction2D::GetMaxTorque)
 
+        // [Property] const Vector2& anchor
         .addProperty("anchor", &ConstraintFriction2D::GetAnchor, &ConstraintFriction2D::SetAnchor)
+        // [Property] float maxForce
         .addProperty("maxForce", &ConstraintFriction2D::GetMaxForce, &ConstraintFriction2D::SetMaxForce)
+        // [Property] float maxTorque
         .addProperty("maxTorque", &ConstraintFriction2D::GetMaxTorque, &ConstraintFriction2D::SetMaxTorque)
     );
 }

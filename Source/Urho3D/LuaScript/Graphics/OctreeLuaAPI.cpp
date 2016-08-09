@@ -97,6 +97,7 @@ void RegisterOctree(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Octree : Component
     lua["Octree"].setClass(UserdataMetatable<Octree, Component>()
         .addStaticFunction("new", &CreateObject<Octree>)
 
@@ -104,9 +105,13 @@ void RegisterOctree(kaguya::State& lua)
             static_cast<void(Octree::*)(DebugRenderer*, bool)>(&Octree::DrawDebugGeometry),
             static_cast<void(Octree::*)(bool)>(&Octree::DrawDebugGeometry))
 
+        // [Method] void SetSize(const BoundingBox& box, unsigned numLevels)
         .addFunction("SetSize", &Octree::SetSize)
+        // [Method] void Update(const FrameInfo& frame)
         .addFunction("Update", &Octree::Update)
+        // [Method] void AddManualDrawable(Drawable* drawable)
         .addFunction("AddManualDrawable", &Octree::AddManualDrawable)
+        // [Method] void RemoveManualDrawable(Drawable* drawable)
         .addFunction("RemoveManualDrawable", &Octree::RemoveManualDrawable)
 
         // .addStaticFunction("GetDrawables", &Octree::GetDrawables)
@@ -115,9 +120,12 @@ void RegisterOctree(kaguya::State& lua)
         
         ADD_OVERLOADED_FUNCTIONS_5(Octree, RaycastSingle)
 
+        // [Method] unsigned GetNumLevels() const
         .addFunction("GetNumLevels", &Octree::GetNumLevels)
+        // [Method] void QueueUpdate(Drawable* drawable)
         .addFunction("QueueUpdate", &Octree::QueueUpdate)
         
+        // [Property(ReadOnly)] unsigned numLevels
         .addProperty("numLevels", &Octree::GetNumLevels)
         );
 }

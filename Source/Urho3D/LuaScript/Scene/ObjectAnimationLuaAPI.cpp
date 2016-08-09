@@ -37,6 +37,7 @@ void RegisterObjectAnimation(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] ObjectAnimation : Resource
     lua["ObjectAnimation"].setClass(UserdataMetatable<ObjectAnimation, Resource>()
         .addStaticFunction("new", &CreateObject<ObjectAnimation>)
 
@@ -46,8 +47,11 @@ void RegisterObjectAnimation(kaguya::State& lua)
             static_cast<void(ObjectAnimation::*)(const String&)>(&ObjectAnimation::RemoveAttributeAnimation),
             static_cast<void(ObjectAnimation::*)(ValueAnimation*)>(&ObjectAnimation::RemoveAttributeAnimation))
 
+        // [Method] ValueAnimation* GetAttributeAnimation(const String& name) const
         .addFunction("GetAttributeAnimation", &ObjectAnimation::GetAttributeAnimation)
+        // [Method] WrapMode GetAttributeAnimationWrapMode(const String& name) const
         .addFunction("GetAttributeAnimationWrapMode", &ObjectAnimation::GetAttributeAnimationWrapMode)
+        // [Method] float GetAttributeAnimationSpeed(const String& name) const
         .addFunction("GetAttributeAnimationSpeed", &ObjectAnimation::GetAttributeAnimationSpeed)
         );
 }

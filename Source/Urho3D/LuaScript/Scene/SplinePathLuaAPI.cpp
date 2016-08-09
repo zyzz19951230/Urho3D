@@ -44,34 +44,56 @@ void RegisterSplinePath(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] SplinePath : Component
     lua["SplinePath"].setClass(UserdataMetatable<SplinePath, Component>()
         .addStaticFunction("new", &CreateObject<SplinePath>)
 
         ADD_OVERLOADED_FUNCTIONS_2(SplinePath, AddControlPoint)
 
+        // [Method] void RemoveControlPoint(Node* point)
         .addFunction("RemoveControlPoint", &SplinePath::RemoveControlPoint)
+        // [Method] void ClearControlPoints()
         .addFunction("ClearControlPoints", &SplinePath::ClearControlPoints)
 
+        // [Method] void SetInterpolationMode(InterpolationMode interpolationMode)
         .addFunction("SetInterpolationMode", &SplinePath::SetInterpolationMode)
+        // [Method] void SetSpeed(float speed)
         .addFunction("SetSpeed", &SplinePath::SetSpeed)
+        // [Method] void SetPosition(float factor)
         .addFunction("SetPosition", &SplinePath::SetPosition)
+        // [Method] void SetControlledNode(Node* controlled)
         .addFunction("SetControlledNode", &SplinePath::SetControlledNode)
 
+        // [Method] InterpolationMode GetInterpolationMode() const
         .addFunction("GetInterpolationMode", &SplinePath::GetInterpolationMode)
+        // [Method] float GetSpeed() const
         .addFunction("GetSpeed", &SplinePath::GetSpeed)
+        // [Method] float GetLength() const
         .addFunction("GetLength", &SplinePath::GetLength)
+        // [Method] Vector3 GetPosition() const
         .addFunction("GetPosition", &SplinePath::GetPosition)
+        // [Method] Node* GetControlledNode() const
         .addFunction("GetControlledNode", &SplinePath::GetControlledNode)
+        // [Method] Vector3 GetPosition() const
         .addFunction("GetPoint", &SplinePath::GetPoint)
+        // [Method] void Move(float timeStep)
         .addFunction("Move", &SplinePath::Move)
+        // [Method] void Reset()
         .addFunction("Reset", &SplinePath::Reset)
+        // [Method] bool IsFinished() const
         .addFunction("IsFinished", &SplinePath::IsFinished)
 
+        // [Property] InterpolationMode interpolationMode
         .addProperty("interpolationMode", &SplinePath::GetInterpolationMode, &SplinePath::SetInterpolationMode)
+        // [Property] float speed
         .addProperty("speed", &SplinePath::GetSpeed, &SplinePath::SetSpeed)
+        // [Property(ReadOnly)] float length
         .addProperty("length", &SplinePath::GetLength)
+        // [Property] Vector3 position
         .addProperty("position", &SplinePath::GetPosition, &SplinePath::SetPosition)
+        // [Property] Node* controlledNode
         .addProperty("controlledNode", &SplinePath::GetControlledNode, &SplinePath::SetControlledNode)
+        // [Property(ReadOnly)] bool finished
         .addProperty("finished", &SplinePath::IsFinished)
         );
 }

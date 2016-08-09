@@ -48,67 +48,119 @@ void RegisterTerrain(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Terrain : Component
     lua["Terrain"].setClass(UserdataMetatable<Terrain, Component>()
         .addStaticFunction("new", &CreateObject<Terrain>)
 
+        // [Method] void SetPatchSize(int size)
         .addFunction("SetPatchSize", &Terrain::SetPatchSize)
+        // [Method] void SetSpacing(const Vector3& spacing)
         .addFunction("SetSpacing", &Terrain::SetSpacing)
+        // [Method] void SetMaxLodLevels(unsigned levels)
         .addFunction("SetMaxLodLevels", &Terrain::SetMaxLodLevels)
+        // [Method] void SetOcclusionLodLevel(unsigned level)
         .addFunction("SetOcclusionLodLevel", &Terrain::SetOcclusionLodLevel)
+        // [Method] void SetSmoothing(bool enable)
         .addFunction("SetSmoothing", &Terrain::SetSmoothing)
+        // [Method] bool SetHeightMap(Image* image)
         .addFunction("SetHeightMap", &Terrain::SetHeightMap)
+        // [Method] void SetMaterial(Material* material)
         .addFunction("SetMaterial", &Terrain::SetMaterial)
+        // [Method] void SetDrawDistance(float distance)
         .addFunction("SetDrawDistance", &Terrain::SetDrawDistance)
+        // [Method] void SetShadowDistance(float distance)
         .addFunction("SetShadowDistance", &Terrain::SetShadowDistance)
+        // [Method] void SetLodBias(float bias)
         .addFunction("SetLodBias", &Terrain::SetLodBias)
+        // [Method] void SetViewMask(unsigned mask)
         .addFunction("SetViewMask", &Terrain::SetViewMask)
+        // [Method] void SetLightMask(unsigned mask)
         .addFunction("SetLightMask", &Terrain::SetLightMask)
+        // [Method] void SetShadowMask(unsigned mask)
         .addFunction("SetShadowMask", &Terrain::SetShadowMask)
+        // [Method] void SetZoneMask(unsigned mask)
         .addFunction("SetZoneMask", &Terrain::SetZoneMask)
+        // [Method] void SetMaxLights(unsigned num)
         .addFunction("SetMaxLights", &Terrain::SetMaxLights)
+        // [Method] void SetCastShadows(bool enable)
         .addFunction("SetCastShadows", &Terrain::SetCastShadows)
+        // [Method] void SetOccluder(bool enable)
         .addFunction("SetOccluder", &Terrain::SetOccluder)
+        // [Method] void SetOccludee(bool enable)
         .addFunction("SetOccludee", &Terrain::SetOccludee)
+        // [Method] void ApplyHeightMap()
         .addFunction("ApplyHeightMap", &Terrain::ApplyHeightMap)
 
+        // [Method] int GetPatchSize() const
         .addFunction("GetPatchSize", &Terrain::GetPatchSize)
+        // [Method] const Vector3& GetSpacing() const
         .addFunction("GetSpacing", &Terrain::GetSpacing)
+        // [Method] const IntVector2& GetNumVertices() const
         .addFunction("GetNumVertices", &Terrain::GetNumVertices)
+        // [Method] const IntVector2& GetNumPatches() const
         .addFunction("GetNumPatches", &Terrain::GetNumPatches)
+        // [Method] unsigned GetMaxLodLevels() const
         .addFunction("GetMaxLodLevels", &Terrain::GetMaxLodLevels)
+        // [Method] unsigned GetOcclusionLodLevel() const
         .addFunction("GetOcclusionLodLevel", &Terrain::GetOcclusionLodLevel)
+        // [Method] bool GetSmoothing() const
         .addFunction("GetSmoothing", &Terrain::GetSmoothing)
+        // [Method] Image* GetHeightMap() const
         .addFunction("GetHeightMap", &Terrain::GetHeightMap)
+        // [Method] Material* GetMaterial() const
         .addFunction("GetMaterial", &Terrain::GetMaterial)
 
         .addOverloadedFunctions("GetPatch",
             static_cast<TerrainPatch*(Terrain::*)(unsigned) const>(&Terrain::GetPatch),
             static_cast<TerrainPatch*(Terrain::*)(int, int) const>(&Terrain::GetPatch))
 
+        // [Method] float GetHeight(const Vector3& worldPosition) const
         .addFunction("GetHeight", &Terrain::GetHeight)
+        // [Method] Vector3 GetNormal(const Vector3& worldPosition) const
         .addFunction("GetNormal", &Terrain::GetNormal)
+        // [Method] IntVector2 WorldToHeightMap(const Vector3& worldPosition) const
         .addFunction("WorldToHeightMap", &Terrain::WorldToHeightMap)
+        // [Method] void UpdatePatchLod(TerrainPatch* patch)
         .addFunction("UpdatePatchLod", &Terrain::UpdatePatchLod)
 
+        // [Property] int patchSize
         .addProperty("patchSize", &Terrain::GetPatchSize, &Terrain::SetPatchSize)
+        // [Property] const Vector3& spacing
         .addProperty("spacing", &Terrain::GetSpacing, &Terrain::SetSpacing)
+        // [Property(ReadOnly)] const IntVector2& numVertices
         .addProperty("numVertices", &Terrain::GetNumVertices)
+        // [Property(ReadOnly)] const IntVector2& numPatches
         .addProperty("numPatches", &Terrain::GetNumPatches)
+        // [Property] unsigned maxLodLevels
         .addProperty("maxLodLevels", &Terrain::GetMaxLodLevels, &Terrain::SetMaxLodLevels)
+        // [Property] unsigned occlusionLodLevel
         .addProperty("occlusionLodLevel", &Terrain::GetOcclusionLodLevel, &Terrain::SetOcclusionLodLevel)
+        // [Property] bool smoothing
         .addProperty("smoothing", &Terrain::GetSmoothing, &Terrain::SetSmoothing)
         .addProperty("heightMap", &TerrainGetHeightMap, &TerrainSetHeightMap)
+        // [Property] Material* material
         .addProperty("material", &Terrain::GetMaterial, &Terrain::SetMaterial)
+        // [Property(WriteOnly)] void drawDistance
         .addProperty("drawDistance", &Terrain::SetDrawDistance)
+        // [Property(WriteOnly)] void shadowDistance
         .addProperty("shadowDistance", &Terrain::SetShadowDistance)
+        // [Property(WriteOnly)] void lodBias
         .addProperty("lodBias", &Terrain::SetLodBias)
+        // [Property(WriteOnly)] void viewMask
         .addProperty("viewMask", &Terrain::SetViewMask)
+        // [Property(WriteOnly)] void lightMask
         .addProperty("lightMask", &Terrain::SetLightMask)
+        // [Property(WriteOnly)] void shadowMask
         .addProperty("shadowMask", &Terrain::SetShadowMask)
+        // [Property(WriteOnly)] void zoneMask
         .addProperty("zoneMask", &Terrain::SetZoneMask)
+        // [Property(WriteOnly)] void maxLights
         .addProperty("maxLights", &Terrain::SetMaxLights)
+        // [Property(WriteOnly)] void castShadows
         .addProperty("castShadows", &Terrain::SetCastShadows)
+        // [Property(WriteOnly)] void occluder
         .addProperty("occluder", &Terrain::SetOccluder)
+        // [Property(WriteOnly)] void occludee
         .addProperty("occludee", &Terrain::SetOccludee)
         );
 }

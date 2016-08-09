@@ -34,14 +34,20 @@ void RegisterVectorBuffer(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] VectorBuffer : MultipleBase<Deserializer, Serializer> 
     lua["VectorBuffer"].setClass(UserdataMetatable<VectorBuffer, MultipleBase<Deserializer, Serializer> >()
         .setConstructors<VectorBuffer()>()
 
+        // [Method] void SetData(const PODVector<unsigned char>& data)
         .addFunction("SetData", static_cast<void(VectorBuffer::*)(Deserializer&, unsigned)>(&VectorBuffer::SetData))
+        // [Method] void Clear()
         .addFunction("Clear", &VectorBuffer::Clear)
+        // [Method] void Resize(unsigned size)
         .addFunction("Resize", &VectorBuffer::Resize)
         
+        // [Method] const unsigned char* GetData() const
         .addFunction("GetData", &VectorBuffer::GetData)
+        // [Method] unsigned char* GetModifiableData()
         .addFunction("GetModifiableData", &VectorBuffer::GetModifiableData)
         );
 }

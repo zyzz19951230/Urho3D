@@ -62,10 +62,13 @@ void RegisterNavigationMesh(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum NavmeshPartitionType;
+    // [Enum] NavmeshPartitionType
+    // [Variable] NAVMESH_PARTITION_WATERSHED
     lua["NAVMESH_PARTITION_WATERSHED"] = NAVMESH_PARTITION_WATERSHED;
+    // [Variable] NAVMESH_PARTITION_MONOTONE
     lua["NAVMESH_PARTITION_MONOTONE"] = NAVMESH_PARTITION_MONOTONE;
 
+    // [Class] NavigationGeometryInfo
     lua["NavigationGeometryInfo"].setClass(UserdataMetatable<NavigationGeometryInfo>()
         .addProperty("component",&NavigationGeometryInfo::component_)
         .addProperty("lodLevel", &NavigationGeometryInfo::lodLevel_)
@@ -73,89 +76,154 @@ void RegisterNavigationMesh(kaguya::State& lua)
         .addProperty("boundingBox", &NavigationGeometryInfo::boundingBox_)
         );
 
+    // [Class] NavigationMesh : Component
     lua["NavigationMesh"].setClass(UserdataMetatable<NavigationMesh, Component>()
         .addStaticFunction("new", &CreateObject<NavigationMesh>)
 
+        // [Method] void SetTileSize(int size)
         .addFunction("SetTileSize", &NavigationMesh::SetTileSize)
+        // [Method] void SetCellSize(float size)
         .addFunction("SetCellSize", &NavigationMesh::SetCellSize)
+        // [Method] void SetCellHeight(float height)
         .addFunction("SetCellHeight", &NavigationMesh::SetCellHeight)
+        // [Method] void SetAgentHeight(float height)
         .addFunction("SetAgentHeight", &NavigationMesh::SetAgentHeight)
+        // [Method] void SetAgentRadius(float radius)
         .addFunction("SetAgentRadius", &NavigationMesh::SetAgentRadius)
+        // [Method] void SetAgentMaxClimb(float maxClimb)
         .addFunction("SetAgentMaxClimb", &NavigationMesh::SetAgentMaxClimb)
+        // [Method] void SetAgentMaxSlope(float maxSlope)
         .addFunction("SetAgentMaxSlope", &NavigationMesh::SetAgentMaxSlope)
+        // [Method] void SetRegionMinSize(float size)
         .addFunction("SetRegionMinSize", &NavigationMesh::SetRegionMinSize)
+        // [Method] void SetRegionMergeSize(float size)
         .addFunction("SetRegionMergeSize", &NavigationMesh::SetRegionMergeSize)
+        // [Method] void SetEdgeMaxLength(float length)
         .addFunction("SetEdgeMaxLength", &NavigationMesh::SetEdgeMaxLength)
+        // [Method] void SetEdgeMaxError(float error)
         .addFunction("SetEdgeMaxError", &NavigationMesh::SetEdgeMaxError)
+        // [Method] void SetDetailSampleDistance(float distance)
         .addFunction("SetDetailSampleDistance", &NavigationMesh::SetDetailSampleDistance)
+        // [Method] void SetDetailSampleMaxError(float error)
         .addFunction("SetDetailSampleMaxError", &NavigationMesh::SetDetailSampleMaxError)
+        // [Method] void SetPadding(const Vector3& padding)
         .addFunction("SetPadding", &NavigationMesh::SetPadding)
+        // [Method] void SetAreaCost(unsigned areaID, float cost)
         .addFunction("SetAreaCost", &NavigationMesh::SetAreaCost)
 
         .addOverloadedFunctions("Build",
             static_cast<bool(NavigationMesh::*)()>(&NavigationMesh::Build),
             static_cast<bool(NavigationMesh::*)(const BoundingBox&)>(&NavigationMesh::Build))
 
+        // [Method] void SetPartitionType(NavmeshPartitionType aType)
         .addFunction("SetPartitionType", &NavigationMesh::SetPartitionType)
+        // [Method] void SetDrawOffMeshConnections(bool enable)
         .addFunction("SetDrawOffMeshConnections", &NavigationMesh::SetDrawOffMeshConnections)
+        // [Method] void SetDrawNavAreas(bool enable)
         .addFunction("SetDrawNavAreas", &NavigationMesh::SetDrawNavAreas)
 
         .addFunction("FindNearestPoint", NavigationMeshFindNearestPoint())
+        // [Method] Vector3 MoveAlongSurface(const Vector3& start, const Vector3& end, const Vector3& extents = Vector3::ONE, int maxVisited = 3,
         .addFunction("MoveAlongSurface", NavigationMeshMoveAlongSurface())
         
         .addStaticFunction("FindPath", NavigationMeshFindPathOverloads())
 
+        // [Method] Vector3 GetRandomPoint(const dtQueryFilter* filter = 0, dtPolyRef* randomRef = 0)
         .addFunction("GetRandomPoint", NavigationMeshGetRandomPoint())
         .addFunction("GetRandomPointInCircle", NavigationMeshGetRandomPointInCircle())
         .addFunction("GetDistanceToWall", NavigationMeshGetDistanceToWall())
         
         .addStaticFunction("Raycast", NavigationMeshRaycastOverloads())
 
+        // [Method] void DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
         .addFunction("DrawDebugGeometry", static_cast<void (NavigationMesh::*)(bool)>(&NavigationMesh::DrawDebugGeometry))
 
+        // [Method] int GetTileSize() const
         .addFunction("GetTileSize", &NavigationMesh::GetTileSize)
+        // [Method] float GetCellSize() const
         .addFunction("GetCellSize", &NavigationMesh::GetCellSize)
+        // [Method] float GetCellHeight() const
         .addFunction("GetCellHeight", &NavigationMesh::GetCellHeight)
+        // [Method] float GetAgentHeight() const
         .addFunction("GetAgentHeight", &NavigationMesh::GetAgentHeight)
+        // [Method] float GetAgentRadius() const
         .addFunction("GetAgentRadius", &NavigationMesh::GetAgentRadius)
+        // [Method] float GetAgentMaxClimb() const
         .addFunction("GetAgentMaxClimb", &NavigationMesh::GetAgentMaxClimb)
+        // [Method] float GetAgentMaxSlope() const
         .addFunction("GetAgentMaxSlope", &NavigationMesh::GetAgentMaxSlope)
+        // [Method] float GetRegionMinSize() const
         .addFunction("GetRegionMinSize", &NavigationMesh::GetRegionMinSize)
+        // [Method] float GetRegionMergeSize() const
         .addFunction("GetRegionMergeSize", &NavigationMesh::GetRegionMergeSize)
+        // [Method] float GetEdgeMaxLength() const
         .addFunction("GetEdgeMaxLength", &NavigationMesh::GetEdgeMaxLength)
+        // [Method] float GetEdgeMaxError() const
         .addFunction("GetEdgeMaxError", &NavigationMesh::GetEdgeMaxError)
+        // [Method] float GetDetailSampleDistance() const
         .addFunction("GetDetailSampleDistance", &NavigationMesh::GetDetailSampleDistance)
+        // [Method] float GetDetailSampleMaxError() const
         .addFunction("GetDetailSampleMaxError", &NavigationMesh::GetDetailSampleMaxError)
+        // [Method] const Vector3& GetPadding() const
         .addFunction("GetPadding", &NavigationMesh::GetPadding)
+        // [Method] float GetAreaCost(unsigned areaID) const
         .addFunction("GetAreaCost", &NavigationMesh::GetAreaCost)
+        // [Method] bool IsInitialized() const
         .addFunction("IsInitialized", &NavigationMesh::IsInitialized)
+        // [Method] const BoundingBox& GetBoundingBox() const
         .addFunction("GetBoundingBox", &NavigationMesh::GetBoundingBox)
+        // [Method] BoundingBox GetWorldBoundingBox() const
         .addFunction("GetWorldBoundingBox", &NavigationMesh::GetWorldBoundingBox)
+        // [Method] IntVector2 GetNumTiles() const
         .addFunction("GetNumTiles", &NavigationMesh::GetNumTiles)
+        // [Method] NavmeshPartitionType GetPartitionType() const
         .addFunction("GetPartitionType", &NavigationMesh::GetPartitionType)
+        // [Method] bool GetDrawOffMeshConnections() const
         .addFunction("GetDrawOffMeshConnections", &NavigationMesh::GetDrawOffMeshConnections)
+        // [Method] bool GetDrawNavAreas() const
         .addFunction("GetDrawNavAreas", &NavigationMesh::GetDrawNavAreas)
 
+        // [Property] int tileSize
         .addProperty("tileSize", &NavigationMesh::GetTileSize, &NavigationMesh::SetTileSize)
+        // [Property] float cellSize
         .addProperty("cellSize", &NavigationMesh::GetCellSize, &NavigationMesh::SetCellSize)
+        // [Property] float cellHeight
         .addProperty("cellHeight", &NavigationMesh::GetCellHeight, &NavigationMesh::SetCellHeight)
+        // [Property] float agentHeight
         .addProperty("agentHeight", &NavigationMesh::GetAgentHeight, &NavigationMesh::SetAgentHeight)
+        // [Property] float agentRadius
         .addProperty("agentRadius", &NavigationMesh::GetAgentRadius, &NavigationMesh::SetAgentRadius)
+        // [Property] float agentMaxClimb
         .addProperty("agentMaxClimb", &NavigationMesh::GetAgentMaxClimb, &NavigationMesh::SetAgentMaxClimb)
+        // [Property] float agentMaxSlope
         .addProperty("agentMaxSlope", &NavigationMesh::GetAgentMaxSlope, &NavigationMesh::SetAgentMaxSlope)
+        // [Property] float regionMinSize
         .addProperty("regionMinSize", &NavigationMesh::GetRegionMinSize, &NavigationMesh::SetRegionMinSize)
+        // [Property] float regionMergeSize
         .addProperty("regionMergeSize", &NavigationMesh::GetRegionMergeSize, &NavigationMesh::SetRegionMergeSize)
+        // [Property] float edgeMaxLength
         .addProperty("edgeMaxLength", &NavigationMesh::GetEdgeMaxLength, &NavigationMesh::SetEdgeMaxLength)
+        // [Property] float edgeMaxError
         .addProperty("edgeMaxError", &NavigationMesh::GetEdgeMaxError, &NavigationMesh::SetEdgeMaxError)
+        // [Property] float detailSampleDistance
         .addProperty("detailSampleDistance", &NavigationMesh::GetDetailSampleDistance, &NavigationMesh::SetDetailSampleDistance)
+        // [Property] float detailSampleMaxError
         .addProperty("detailSampleMaxError", &NavigationMesh::GetDetailSampleMaxError, &NavigationMesh::SetDetailSampleMaxError)
+        // [Property] const Vector3& padding
         .addProperty("padding", &NavigationMesh::GetPadding, &NavigationMesh::SetPadding)
+        // [Property(ReadOnly)] bool initialized
         .addProperty("initialized", &NavigationMesh::IsInitialized)
+        // [Property(ReadOnly)] const BoundingBox& boundingBox
         .addProperty("boundingBox", &NavigationMesh::GetBoundingBox)
+        // [Property(ReadOnly)] BoundingBox worldBoundingBox
         .addProperty("worldBoundingBox", &NavigationMesh::GetWorldBoundingBox)
+        // [Property(ReadOnly)] IntVector2 numTiles
         .addProperty("numTiles", &NavigationMesh::GetNumTiles)
+        // [Property] NavmeshPartitionType partitionType
         .addProperty("partitionType", &NavigationMesh::GetPartitionType, &NavigationMesh::SetPartitionType)
+        // [Property] bool drawOffMeshConnections
         .addProperty("drawOffMeshConnections", &NavigationMesh::GetDrawOffMeshConnections, &NavigationMesh::SetDrawOffMeshConnections)
+        // [Property] bool drawNavAreas
         .addProperty("drawNavAreas", &NavigationMesh::GetDrawNavAreas, &NavigationMesh::SetDrawNavAreas)
         );
 }

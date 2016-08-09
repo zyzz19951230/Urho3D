@@ -38,10 +38,13 @@ void RegisterTexture3D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Texture3D : Texture
     lua["Texture3D"].setClass(UserdataMetatable<Texture3D, Texture>()
         .addStaticFunction("new", &CreateObject<Texture3D>)
         
+        // [Method] bool SetSize(int width, int height, int depth, unsigned format, TextureUsage usage = TEXTURE_STATIC)
         .addFunction("SetSize", Texture3DSetSize())
+        // [Method] bool SetData(unsigned level, int x, int y, int z, int width, int height, int depth, const void* data)
         .addFunction("SetData", Texture3DSetData())
     );
 }

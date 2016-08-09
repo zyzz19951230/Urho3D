@@ -35,36 +35,58 @@ void RegisterBorderImage(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] BorderImage : UIElement
     lua["BorderImage"].setClass(UserdataMetatable<BorderImage, UIElement>()
         .addStaticFunction("new", &CreateObject<BorderImage>)
 
+        // [Method] void SetTexture(Texture* texture)
         .addFunction("SetTexture", &BorderImage::SetTexture)
+        // [Method] void SetImageRect(const IntRect& rect)
         .addFunction("SetImageRect", &BorderImage::SetImageRect)
+        // [Method] void SetFullImageRect()
         .addFunction("SetFullImageRect", &BorderImage::SetFullImageRect)
+        // [Method] void SetBorder(const IntRect& rect)
         .addFunction("SetBorder", &BorderImage::SetBorder)
+        // [Method] void SetImageBorder(const IntRect& rect)
         .addFunction("SetImageBorder", &BorderImage::SetImageBorder)
 
         .addOverloadedFunctions("SetHoverOffset",
             static_cast<void(BorderImage::*)(const IntVector2&)>(&BorderImage::SetHoverOffset),
             static_cast<void(BorderImage::*)(int, int)>(&BorderImage::SetHoverOffset))
 
+        // [Method] void SetBlendMode(BlendMode mode)
         .addFunction("SetBlendMode", &BorderImage::SetBlendMode)
+        // [Method] void SetTiled(bool enable)
         .addFunction("SetTiled", &BorderImage::SetTiled)
 
+        // [Method] Texture* GetTexture() const
         .addFunction("GetTexture", &BorderImage::GetTexture)
+        // [Method] const IntRect& GetImageRect() const
         .addFunction("GetImageRect", &BorderImage::GetImageRect)
+        // [Method] const IntRect& GetBorder() const
         .addFunction("GetBorder", &BorderImage::GetBorder)
+        // [Method] const IntRect& GetImageBorder() const
         .addFunction("GetImageBorder", &BorderImage::GetImageBorder)
+        // [Method] const IntVector2& GetHoverOffset() const
         .addFunction("GetHoverOffset", &BorderImage::GetHoverOffset)
+        // [Method] BlendMode GetBlendMode() const
         .addFunction("GetBlendMode", &BorderImage::GetBlendMode)
+        // [Method] bool IsTiled() const
         .addFunction("IsTiled", &BorderImage::IsTiled)
 
+        // [Property] Texture* texture
         .addProperty("texture", &BorderImage::GetTexture, &BorderImage::SetTexture)
+        // [Property] const IntRect& imageRect
         .addProperty("imageRect", &BorderImage::GetImageRect, &BorderImage::SetImageRect)
+        // [Property] const IntRect& border
         .addProperty("border", &BorderImage::GetBorder, &BorderImage::SetBorder)
+        // [Property] const IntRect& imageBorder
         .addProperty("imageBorder", &BorderImage::GetImageBorder, &BorderImage::SetImageBorder)
+        // [Property] const IntVector2& hoverOffset
         .addProperty("hoverOffset", &BorderImage::GetHoverOffset, static_cast<void(BorderImage::*)(const IntVector2&)>(&BorderImage::SetHoverOffset))
+        // [Property] BlendMode blendMode
         .addProperty("blendMode", &BorderImage::GetBlendMode, &BorderImage::SetBlendMode)
+        // [Property] bool tiled
         .addProperty("tiled", &BorderImage::IsTiled, &BorderImage::SetTiled)
         );
 }

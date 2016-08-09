@@ -37,27 +37,44 @@ void RegisterModel(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Model : Resource
     lua["Model"].setClass(UserdataMetatable<Model, Resource>()
         .addStaticFunction("new", &CreateObject<Model>)
 
+        // [Method] void SetBoundingBox(const BoundingBox& box)
         .addFunction("SetBoundingBox", &Model::SetBoundingBox)
         
+        // [Method] void SetNumGeometries(unsigned num)
         .addFunction("SetNumGeometries", &Model::SetNumGeometries)
+        // [Method] bool SetNumGeometryLodLevels(unsigned index, unsigned num)
         .addFunction("SetNumGeometryLodLevels", &Model::SetNumGeometryLodLevels)
+        // [Method] bool SetGeometry(unsigned index, unsigned lodLevel, Geometry* geometry)
         .addFunction("SetGeometry", &Model::SetGeometry)
+        // [Method] bool SetGeometryCenter(unsigned index, const Vector3& center)
         .addFunction("SetGeometryCenter", &Model::SetGeometryCenter)
+        // [Method] void SetSkeleton(const Skeleton& skeleton)
         .addFunction("SetSkeleton", &Model::SetSkeleton)
         
+        // [Method] SharedPtr<Model> Clone(const String& cloneName = String::EMPTY) const
         .addFunction("Clone", ModelClone())
 
+        // [Method] const BoundingBox& GetBoundingBox() const
         .addFunction("GetBoundingBox", &Model::GetBoundingBox)
+        // [Method] Skeleton& GetSkeleton()
         .addFunction("GetSkeleton", &Model::GetSkeleton)
+        // [Method] unsigned GetNumGeometries() const
         .addFunction("GetNumGeometries", &Model::GetNumGeometries)
+        // [Method] unsigned GetNumGeometryLodLevels(unsigned index) const
         .addFunction("GetNumGeometryLodLevels", &Model::GetNumGeometryLodLevels)
+        // [Method] const Vector<Vector<SharedPtr<Geometry> > >& GetGeometries() const
         .addFunction("GetGeometries", &Model::GetGeometries)
+        // [Method] const PODVector<Vector3>& GetGeometryCenters() const
         .addFunction("GetGeometryCenters", &Model::GetGeometryCenters)
+        // [Method] Geometry* GetGeometry(unsigned index, unsigned lodLevel) const
         .addFunction("GetGeometry", &Model::GetGeometry)
+        // [Method] const Vector3& GetGeometryCenter(unsigned index) const
         .addFunction("GetGeometryCenter", &Model::GetGeometryCenter)
+        // [Method] unsigned GetNumMorphs() const
         .addFunction("GetNumMorphs", &Model::GetNumMorphs)
 
         .addOverloadedFunctions("GetMorph",
@@ -65,13 +82,19 @@ void RegisterModel(kaguya::State& lua)
             static_cast<const ModelMorph*(Model::*)(const String&) const>(&Model::GetMorph),
             static_cast<const ModelMorph*(Model::*)(StringHash) const>(&Model::GetMorph))
 
+        // [Method] unsigned GetMorphRangeStart(unsigned bufferIndex) const
         .addFunction("GetMorphRangeStart", &Model::GetMorphRangeStart)
+        // [Method] unsigned GetMorphRangeCount(unsigned bufferIndex) const
         .addFunction("GetMorphRangeCount", &Model::GetMorphRangeCount)
 
 
+        // [Property] const BoundingBox& boundingBox
         .addProperty("boundingBox", &Model::GetBoundingBox, &Model::SetBoundingBox)
+        // [Property(ReadOnly)] Skeleton& skeleton
         .addProperty("skeleton", &Model::GetSkeleton)
+        // [Property] unsigned numGeometries
         .addProperty("numGeometries", &Model::GetNumGeometries, &Model::SetNumGeometries)
+        // [Property(ReadOnly)] unsigned numMorphs
         .addProperty("numMorphs", &Model::GetNumMorphs)
         );
 }

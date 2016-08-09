@@ -34,10 +34,14 @@ void RegisterSkeleton(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Constant] unsigned BONECOLLISION_NONE
     lua["BONECOLLISION_NONE"] = BONECOLLISION_NONE;
+    // [Constant] unsigned BONECOLLISION_SPHERE
     lua["BONECOLLISION_SPHERE"] = BONECOLLISION_SPHERE;
+    // [Constant] unsigned BONECOLLISION_BOX
     lua["BONECOLLISION_BOX"] = BONECOLLISION_BOX;
 
+    // [Class] Bone
 	lua["Bone"].setClass(UserdataMetatable<Bone>()
 		.setConstructors<Bone()>()
 
@@ -55,10 +59,13 @@ void RegisterSkeleton(kaguya::State& lua)
     	.addProperty("node", &Bone::node_)
 		);
 
+    // [Class] Skeleton
     lua["Skeleton"].setClass(UserdataMetatable<Skeleton>()
         .setConstructors<Skeleton()>()
 
+        // [Method] unsigned GetNumBones() const
         .addFunction("GetNumBones", &Skeleton::GetNumBones)
+        // [Method] Bone* GetRootBone()
         .addFunction("GetRootBone", &Skeleton::GetRootBone)
 
         .addOverloadedFunctions("GetBone",
@@ -66,7 +73,9 @@ void RegisterSkeleton(kaguya::State& lua)
             static_cast<Bone*(Skeleton::*)(const char*)>(&Skeleton::GetBone),
             static_cast<Bone*(Skeleton::*)(StringHash)>(&Skeleton::GetBone))
 
+        // [Property(ReadOnly)] unsigned numBones
         .addProperty("numBones", &Skeleton::GetNumBones)
+        // [Property(ReadOnly)] Bone* rootBone
         .addProperty("rootBone", &Skeleton::GetRootBone)
         );
 }

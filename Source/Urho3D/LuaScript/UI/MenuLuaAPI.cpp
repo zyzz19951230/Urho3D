@@ -39,29 +39,41 @@ void RegisterMenu(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] Menu : Button
     lua["Menu"].setClass(UserdataMetatable<Menu, Button>()
         .addStaticFunction("new", &CreateObject<Menu>)
 
+        // [Method] void SetPopup(UIElement* element)
         .addFunction("SetPopup", &Menu::SetPopup)
 
         .addOverloadedFunctions("SetPopupOffset",
             static_cast<void(Menu::*)(const IntVector2&)>(&Menu::SetPopupOffset),
             static_cast<void(Menu::*)(int, int)>(&Menu::SetPopupOffset))
 
+        // [Method] void ShowPopup(bool enable)
         .addFunction("ShowPopup", &Menu::ShowPopup)
+        // [Method] void SetAccelerator(int key, int qualifiers)
         .addFunction("SetAccelerator", &Menu::SetAccelerator)
 
         .addStaticFunction("GetPopup", &MenuGetPopup)
 
+        // [Method] const IntVector2& GetPopupOffset() const
         .addFunction("GetPopupOffset", &Menu::GetPopupOffset)
+        // [Method] bool GetShowPopup() const
         .addFunction("GetShowPopup", &Menu::GetShowPopup)
+        // [Method] int GetAcceleratorKey() const
         .addFunction("GetAcceleratorKey", &Menu::GetAcceleratorKey)
+        // [Method] int GetAcceleratorQualifiers() const
         .addFunction("GetAcceleratorQualifiers", &Menu::GetAcceleratorQualifiers)
 
         .addProperty("popup", &MenuGetPopup)
+        // [Property] const IntVector2& popupOffset
         .addProperty("popupOffset", &Menu::GetPopupOffset, static_cast<void(Menu::*)(const IntVector2&)>(&Menu::SetPopupOffset))
+        // [Property(ReadOnly)] bool showPopup
         .addProperty("showPopup", &Menu::GetShowPopup)
+        // [Property(ReadOnly)] int acceleratorKey
         .addProperty("acceleratorKey", &Menu::GetAcceleratorKey)
+        // [Property(ReadOnly)] int acceleratorQualifiers
         .addProperty("acceleratorQualifiers", &Menu::GetAcceleratorQualifiers)
         );
 }

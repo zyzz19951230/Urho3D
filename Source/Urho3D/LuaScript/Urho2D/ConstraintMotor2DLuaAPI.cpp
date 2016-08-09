@@ -36,25 +36,41 @@ void RegisterConstraintMotor2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] ConstraintMotor2D : Constraint2D
     lua["ConstraintMotor2D"].setClass(UserdataMetatable<ConstraintMotor2D, Constraint2D>()
         .addStaticFunction("new", &CreateObject<ConstraintMotor2D>)
 
+        // [Method] void SetLinearOffset(const Vector2& linearOffset)
         .addFunction("SetLinearOffset", &ConstraintMotor2D::SetLinearOffset)
+        // [Method] void SetAngularOffset(float angularOffset)
         .addFunction("SetAngularOffset", &ConstraintMotor2D::SetAngularOffset)
+        // [Method] void SetMaxForce(float maxForce)
         .addFunction("SetMaxForce", &ConstraintMotor2D::SetMaxForce)
+        // [Method] void SetMaxTorque(float maxTorque)
         .addFunction("SetMaxTorque", &ConstraintMotor2D::SetMaxTorque)
+        // [Method] void SetCorrectionFactor(float correctionFactor)
         .addFunction("SetCorrectionFactor", &ConstraintMotor2D::SetCorrectionFactor)
 
+        // [Method] const Vector2& GetLinearOffset() const
         .addFunction("GetLinearOffset", &ConstraintMotor2D::GetLinearOffset)
+        // [Method] float GetAngularOffset() const
         .addFunction("GetAngularOffset", &ConstraintMotor2D::GetAngularOffset)
+        // [Method] float GetMaxForce() const
         .addFunction("GetMaxForce", &ConstraintMotor2D::GetMaxForce)
+        // [Method] float GetMaxTorque() const
         .addFunction("GetMaxTorque", &ConstraintMotor2D::GetMaxTorque)
+        // [Method] float GetCorrectionFactor() const
         .addFunction("GetCorrectionFactor", &ConstraintMotor2D::GetCorrectionFactor)
 
+        // [Property] const Vector2& linearOffset
         .addProperty("linearOffset", &ConstraintMotor2D::GetLinearOffset, &ConstraintMotor2D::SetLinearOffset)
+        // [Property] float angularOffset
         .addProperty("angularOffset", &ConstraintMotor2D::GetAngularOffset, &ConstraintMotor2D::SetAngularOffset)
+        // [Property] float maxForce
         .addProperty("maxForce", &ConstraintMotor2D::GetMaxForce, &ConstraintMotor2D::SetMaxForce)
+        // [Property] float maxTorque
         .addProperty("maxTorque", &ConstraintMotor2D::GetMaxTorque, &ConstraintMotor2D::SetMaxTorque)
+        // [Property] float correctionFactor
         .addProperty("correctionFactor", &ConstraintMotor2D::GetCorrectionFactor, &ConstraintMotor2D::SetCorrectionFactor)
     );
 }

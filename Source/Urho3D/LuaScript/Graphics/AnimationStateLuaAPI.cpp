@@ -39,29 +39,44 @@ void RegisterAnimationState(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // enum AnimationBlendMode;
+    // [Enum] AnimationBlendMode
+    // [Variable] ABM_LERP
     lua["ABM_LERP"] = ABM_LERP;
+    // [Variable] ABM_ADDITIVE
     lua["ABM_ADDITIVE"] = ABM_ADDITIVE;
 
+    // [Class] AnimationState : RefCounted
     lua["AnimationState"].setClass(UserdataMetatable<AnimationState, RefCounted>()
         .setConstructors<AnimationState(AnimatedModel*, Animation*)>()
 
+        // [Method] void SetStartBone(Bone* bone)
         .addFunction("SetStartBone", &AnimationState::SetStartBone)
+        // [Method] void SetLooped(bool looped)
         .addFunction("SetLooped", &AnimationState::SetLooped)
+        // [Method] void SetWeight(float weight)
         .addFunction("SetWeight", &AnimationState::SetWeight)
+        // [Method] void SetBlendMode(AnimationBlendMode mode)
         .addFunction("SetBlendMode", &AnimationState::SetBlendMode)
+        // [Method] void SetTime(float time)
         .addFunction("SetTime", &AnimationState::SetTime)
 
         .addOverloadedFunctions("SetBoneWeight",
             AnimationStateSetBoneWeight0(),
             AnimationStateSetBoneWeight1())
 
+        // [Method] void AddWeight(float delta)
         .addFunction("AddWeight", &AnimationState::AddWeight)
+        // [Method] void AddTime(float delta)
         .addFunction("AddTime", &AnimationState::AddTime)
+        // [Method] void SetLayer(unsigned char layer)
         .addFunction("SetLayer", &AnimationState::SetLayer)
+        // [Method] Animation* GetAnimation() const
         .addFunction("GetAnimation", &AnimationState::GetAnimation)
+        // [Method] AnimatedModel* GetModel() const
         .addFunction("GetModel", &AnimationState::GetModel)
+        // [Method] Node* GetNode() const
         .addFunction("GetNode", &AnimationState::GetNode)
+        // [Method] Bone* GetStartBone() const
         .addFunction("GetStartBone", &AnimationState::GetStartBone)
 
         .addOverloadedFunctions("GetBoneWeight",
@@ -71,25 +86,44 @@ void RegisterAnimationState(kaguya::State& lua)
         .addFunction("GetTrackIndex",
             static_cast<unsigned(AnimationState::*)(const String&) const>(&AnimationState::GetTrackIndex))
 
+        // [Method] bool IsEnabled() const
         .addFunction("IsEnabled", &AnimationState::IsEnabled)
+        // [Method] bool IsLooped() const
         .addFunction("IsLooped", &AnimationState::IsLooped)
+        // [Method] float GetWeight() const
         .addFunction("GetWeight", &AnimationState::GetWeight)
+        // [Method] AnimationBlendMode GetBlendMode() const
         .addFunction("GetBlendMode", &AnimationState::GetBlendMode)
+        // [Method] float GetTime() const
         .addFunction("GetTime", &AnimationState::GetTime)
+        // [Method] float GetLength() const
         .addFunction("GetLength", &AnimationState::GetLength)
+        // [Method] unsigned char GetLayer() const
         .addFunction("GetLayer", &AnimationState::GetLayer)
+        // [Method] void Apply()
         .addFunction("Apply", &AnimationState::Apply)
 
+        // [Property(ReadOnly)] Animation* animation
         .addProperty("animation", &AnimationState::GetAnimation)
+        // [Property(ReadOnly)] AnimatedModel* model
         .addProperty("model", &AnimationState::GetModel)
+        // [Property(ReadOnly)] Node* node
         .addProperty("node", &AnimationState::GetNode)
+        // [Property] Bone* startBone
         .addProperty("startBone", &AnimationState::GetStartBone, &AnimationState::SetStartBone)
+        // [Property(ReadOnly)] bool enabled
         .addProperty("enabled", &AnimationState::IsEnabled)
+        // [Property] bool looped
         .addProperty("looped", &AnimationState::IsLooped, &AnimationState::SetLooped)
+        // [Property] float weight
         .addProperty("weight", &AnimationState::GetWeight, &AnimationState::SetWeight)
+        // [Property] AnimationBlendMode blendMode
         .addProperty("blendMode", &AnimationState::GetBlendMode, &AnimationState::SetBlendMode)
+        // [Property] float time
         .addProperty("time", &AnimationState::GetTime, &AnimationState::SetTime)
+        // [Property(ReadOnly)] float length
         .addProperty("length", &AnimationState::GetLength)
+        // [Property] unsigned char layer
         .addProperty("layer", &AnimationState::GetLayer, &AnimationState::SetLayer)
         );
 }
