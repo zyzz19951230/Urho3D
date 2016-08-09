@@ -51,13 +51,16 @@ void RegisterStaticModel(kaguya::State& lua)
 
     // [Class] StaticModel : Drawable
     lua["StaticModel"].setClass(UserdataMetatable<StaticModel, Drawable>()
+        // [Constructor] StaticModel()
         .addStaticFunction("new", &CreateObject<StaticModel>)
 
         // [Method] void SetModel(Model* model)
         .addFunction("SetModel", &StaticModel::SetModel)
 
         .addOverloadedFunctions("SetMaterial",
+            // [Method] void SetMaterial(Material* material)
             static_cast<void(StaticModel::*)(Material*)>(&StaticModel::SetMaterial),
+            // [Method] bool SetMaterial(unsigned index, Material* material)
             static_cast<bool(StaticModel::*)(unsigned, Material*)>(&StaticModel::SetMaterial))
 
         // [Method] void SetOcclusionLodLevel(unsigned level)
@@ -84,6 +87,7 @@ void RegisterStaticModel(kaguya::State& lua)
         // [Property] Model* model
         .addProperty("model", &StaticModel::GetModel, &StaticModel::SetModel)
 
+        // [Property] Material* material
         .addProperty("material", &StaticModelMaterialGetter, &StaticModelMaterialSetter)
 
         // [Property(ReadOnly)] unsigned numGeometries

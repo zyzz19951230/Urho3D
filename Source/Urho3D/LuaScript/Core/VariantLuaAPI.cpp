@@ -56,116 +56,126 @@ void RegisterVariant(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] VariantType
-    // [Variable] VAR_NONE
     lua["VAR_NONE"] = VAR_NONE;
-    // [Variable] VAR_INT,
     lua["VAR_INT"] = VAR_INT;
-    // [Variable] VAR_BOOL,
     lua["VAR_BOOL"] = VAR_BOOL;
-    // [Variable] VAR_FLOAT,
     lua["VAR_FLOAT"] = VAR_FLOAT;
-    // [Variable] VAR_VECTOR2,
     lua["VAR_VECTOR2"] = VAR_VECTOR2;
-    // [Variable] VAR_VECTOR3,
     lua["VAR_VECTOR3"] = VAR_VECTOR3;
-    // [Variable] VAR_VECTOR4,
     lua["VAR_VECTOR4"] = VAR_VECTOR4;
-    // [Variable] VAR_QUATERNION,
     lua["VAR_QUATERNION"] = VAR_QUATERNION;
-    // [Variable] VAR_COLOR,
     lua["VAR_COLOR"] = VAR_COLOR;
-    // [Variable] VAR_STRING,
     lua["VAR_STRING"] = VAR_STRING;
-    // [Variable] VAR_BUFFER,
     lua["VAR_BUFFER"] = VAR_BUFFER;
-    // [Variable] VAR_VOIDPTR,
     lua["VAR_VOIDPTR"] = VAR_VOIDPTR;
-    // [Variable] VAR_RESOURCEREF,
     lua["VAR_RESOURCEREF"] = VAR_RESOURCEREF;
-    // [Variable] VAR_RESOURCEREFLIST,
     lua["VAR_RESOURCEREFLIST"] = VAR_RESOURCEREFLIST;
-    // [Variable] VAR_VARIANTVECTOR,
     lua["VAR_VARIANTVECTOR"] = VAR_VARIANTVECTOR;
-    // [Variable] VAR_VARIANTMAP,
     lua["VAR_VARIANTMAP"] = VAR_VARIANTMAP;
-    // [Variable] VAR_INTRECT,
     lua["VAR_INTRECT"] = VAR_INTRECT;
-    // [Variable] VAR_INTVECTOR2,
     lua["VAR_INTVECTOR2"] = VAR_INTVECTOR2;
-    // [Variable] VAR_PTR,
     lua["VAR_PTR"] = VAR_PTR;
-    // [Variable] VAR_MATRIX3,
     lua["VAR_MATRIX3"] = VAR_MATRIX3;
-    // [Variable] VAR_MATRIX3X4,
     lua["VAR_MATRIX3X4"] = VAR_MATRIX3X4;
-    // [Variable] VAR_MATRIX4,
     lua["VAR_MATRIX4"] = VAR_MATRIX4;
-    // [Variable] VAR_DOUBLE,
     lua["VAR_DOUBLE"] = VAR_DOUBLE;
-    // [Variable] VAR_STRINGVECTOR,
     lua["VAR_STRINGVECTOR"] = VAR_STRINGVECTOR;
-    // [Variable] MAX_VAR_TYPES
     lua["MAX_VAR_TYPES"] = MAX_VAR_TYPES;
 
     // [Class] ResourceRef
     lua["ResourceRef"].setClass(UserdataMetatable<ResourceRef>()
+        // [Constructor] ResourceRef()
         .setConstructors<ResourceRef(),
+        // [Constructor] ResourceRef(StringHash type)
         ResourceRef(StringHash),
+        // [Constructor] ResourceRef(StringHash type, const String& name)
         ResourceRef(StringHash, const String&),
+        // [Constructor] ResourceRef(const char* type, const char* name)
         ResourceRef(const char*, const char*)>()
 
+        // [Method] bool ==(const ResourceRef& rhs) const
         .addFunction("__eq", &ResourceRef::operator==)
 
+        // [Field] StringHash type
         .addProperty("type", &ResourceRef::type_)
+        // [Field] String name
         .addProperty("name", &ResourceRef::name_)
     );
 
     // [Class] ResourceRefList
     lua["ResourceRefList"].setClass(UserdataMetatable<ResourceRefList>()
+        // [Constructor] ResourceRefList()
         .setConstructors<ResourceRefList(),
+        // [Constructor] ResourceRefList(StringHash type)
         ResourceRefList(StringHash)>()
 
+        // [Method] bool ==(const ResourceRefList& rhs) const
         .addFunction("__eq", &ResourceRefList::operator==)
 
+        // [Field] StringHash type
         .addProperty("type", &ResourceRefList::type_)
     );
 
-    // todo from here:
     // [Class] Variant
     lua["Variant"].setClass(UserdataMetatable<Variant>()
         .setConstructors<
         // Variant(),
         // Variant(int), 
         // Variant(unsigned),
+        // [Constructor] Variant(const StringHash& value)
         Variant(const StringHash&),
+        // [Constructor] Variant(bool value)
         Variant(bool),
+        // [Constructor] Variant(float value)
         Variant(float),
+        // [Constructor] Variant(double value)
         Variant(double),
+        // [Constructor] Variant(const Vector2& value)
         Variant(const Vector2&),
+        // [Constructor] Variant(const Vector3& value)
         Variant(const Vector3&),
+        // [Constructor] Variant(const Vector4& value)
         Variant(const Vector4&),
+        // [Constructor] Variant(const Quaternion& value)
         Variant(const Quaternion&),
+        // [Constructor] Variant(const Color& value)
         Variant(const Color&),
-        Variant(const char*),
+        // [Constructor] Variant(const String& value)
+        Variant(const String&),
+        // [Constructor] Variant(const ResourceRef& value)
         Variant(const ResourceRef&),
+        // [Constructor] Variant(const ResourceRefList& value)
         Variant(const ResourceRefList&),
+        // [Constructor] Variant(const VariantVector& value)
         Variant(const VariantVector&),
+        // [Constructor] Variant(const VariantMap& value)
         Variant(const VariantMap&),
+        // [Constructor] Variant(const StringVector& value)
         Variant(const StringVector&),
+        // [Constructor] Variant(const IntRect& value)
         Variant(const IntRect&),
+        // [Constructor] Variant(const IntVector2& value)
         Variant(const IntVector2&),
+        // [Constructor] Variant(RefCounted* value)
         Variant(RefCounted*),
+        // [Constructor] Variant(const Matrix3& value)
         Variant(const Matrix3&),
+        // [Constructor] Variant(const Matrix3x4& value)
         Variant(const Matrix3x4&),
+        // [Constructor] Variant(const Matrix4& value)
         Variant(const Matrix4&)> ()
 
+        // [StaticMethod] Variant FromInt(int value)
         .addStaticFunction("FromInt", &VariantFromInt)
+        // [StaticMethod] Variant FromFloat(float value)
         .addStaticFunction("FromFloat", &VariantFromFloat)
+        // [StaticMethod] Variant FromDouble(double value)
         .addStaticFunction("FromDouble", &VariantFromDouble)
 
         // [Method] void Clear()
         .addFunction("Clear", &Variant::Clear)
 
+        // [Method] bool ==(const Variant& rhs) const
         .addFunction("__eq", static_cast<bool(Variant::*)(const Variant&) const>(&Variant::operator==))
 
         // [Method] int GetInt() const
@@ -216,6 +226,7 @@ void RegisterVariant(kaguya::State& lua)
         // [Method] const IntVector2& GetIntVector2() const
         .addFunction("GetIntVector2", &Variant::GetIntVector2)
         
+        // [Method] SharedPtr<RefCounted> GetPtr() const
         .addStaticFunction("GetPtr", &VariantGetPtr)
 
         // [Method] const Matrix3& GetMatrix3() const
@@ -238,6 +249,7 @@ void RegisterVariant(kaguya::State& lua)
 
         // [Property(ReadOnly)] VariantType type
         .addProperty("type", &Variant::GetType)
+        // [Property(ReadOnly)] String typeName
         .addProperty("typeName", static_cast<String(Variant::*)() const>(&Variant::GetTypeName))
         // [Property(ReadOnly)] bool zero
         .addProperty("zero", &Variant::IsZero)

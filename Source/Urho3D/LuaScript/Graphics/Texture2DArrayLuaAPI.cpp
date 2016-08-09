@@ -41,6 +41,7 @@ void RegisterTexture2DArray(kaguya::State& lua)
 
     // [Class] Texture2DArray : Texture
     lua["Texture2DArray"].setClass(UserdataMetatable<Texture2DArray, Texture>()
+        // [Constructor] Texture2DArray()
         .addStaticFunction("new", &CreateObject<Texture2DArray>)
         
         // [Method] void SetLayers(unsigned layers)

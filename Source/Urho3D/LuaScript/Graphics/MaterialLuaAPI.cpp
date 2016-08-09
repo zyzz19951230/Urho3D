@@ -46,6 +46,7 @@ void RegisterMaterial(kaguya::State& lua)
 
     // [Class] Material : Resource
     lua["Material"].setClass(UserdataMetatable<Material, Resource>()
+        // [Constructor] Material()
         .addStaticFunction("new", &CreateObject<Material>)
         
         // [Method] void SetNumTechniques(unsigned num)
@@ -53,7 +54,8 @@ void RegisterMaterial(kaguya::State& lua)
         // [Method] void SetTechnique(unsigned index, Technique* tech, unsigned qualityLevel = 0, float lodDistance = 0.0f)
         .addFunction("SetTechnique", MaterialSetTechnique())        
         // [Method] void SetShaderParameter(const String& name, const Variant& value)
-        .addFunction("SetShaderParameter", &Material::SetShaderParameter)        
+        .addFunction("SetShaderParameter", &Material::SetShaderParameter)
+        // [Method] void SetShaderParameterAnimation(const String& name, ValueAnimation* animation, WrapMode wrapMode = WM_LOOP, float speed = 1.0f)
         .addFunction("SetShaderParameterAnimation", MaterialSetShaderParameterAnimation())
 
         // [Method] void SetShaderParameterAnimationWrapMode(const String& name, WrapMode wrapMode)
@@ -64,7 +66,9 @@ void RegisterMaterial(kaguya::State& lua)
         .addFunction("SetTexture", &Material::SetTexture)
 
         .addOverloadedFunctions("SetUVTransform",
+            // [Method] void SetUVTransform(const Vector2& offset, float rotation, const Vector2& repeat)
             static_cast<void(Material::*)(const Vector2&, float, const Vector2&)>(&Material::SetUVTransform),
+            // [Method] void SetUVTransform(const Vector2& offset, float rotation, float repeat)
             static_cast<void(Material::*)(const Vector2&, float, float)>(&Material::SetUVTransform))
 
         // [Method] void SetCullMode(CullMode mode)

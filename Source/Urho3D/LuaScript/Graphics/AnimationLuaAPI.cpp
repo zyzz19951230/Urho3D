@@ -46,9 +46,13 @@ void RegisterAnimation(kaguya::State& lua)
     // [Class] AnimationKeyFrame
     lua["AnimationKeyFrame"].setClass(UserdataMetatable<AnimationKeyFrame>()
     	
+        // [Field] float time
         .addProperty("time", &AnimationKeyFrame::time_)
+        // [Field] Vector3 position
     	.addProperty("position", &AnimationKeyFrame::position_)
+        // [Field] Quaternion rotation
     	.addProperty("rotation", &AnimationKeyFrame::rotation_)
+        // [Field] Vector3 scale
     	.addProperty("scale", &AnimationKeyFrame::scale_)
     	);
 
@@ -70,9 +74,13 @@ void RegisterAnimation(kaguya::State& lua)
         // [Method] unsigned GetNumKeyFrames() const
     	.addFunction("GetNumKeyFrames", &AnimationTrack::GetNumKeyFrames)
 
+        // [Field] String name
     	.addProperty("name", &AnimationTrack::name_)
+        // [Field] StringHash nameHash
     	.addProperty("nameHash", &AnimationTrack::nameHash_)
+        // [Field] unsigned char channelMask
     	.addProperty("channelMask", &AnimationTrack::channelMask_)
+        // [Field] Vector<AnimationKeyFrame> keyFrames
     	.addProperty("keyFrames", &AnimationTrack::keyFrames_)
         // [Property(ReadOnly)] unsigned numKeyFrames
     	.addProperty("numKeyFrames", &AnimationTrack::GetNumKeyFrames)
@@ -80,14 +88,18 @@ void RegisterAnimation(kaguya::State& lua)
 
     // [Class] AnimationTriggerPoint
 	lua["AnimationTriggerPoint"].setClass(UserdataMetatable<AnimationTriggerPoint>()
+        // [Constructor] AnimationTriggerPoint()
 		.setConstructors<AnimationTriggerPoint()>()
 
+        // [Field] float time
 		.addProperty("time", &AnimationTriggerPoint::time_)
+        // [Field] Variant data
     	.addProperty("data", &AnimationTriggerPoint::data_)
     	);
 
     // [Class] Animation : Resource
     lua["Animation"].setClass(UserdataMetatable<Animation, Resource>()
+        // [Constructor] Animation()
         .addStaticFunction("new", &CreateObject<Animation>)
 
         // [Method] void SetAnimationName(const String& name)
@@ -106,7 +118,9 @@ void RegisterAnimation(kaguya::State& lua)
 		.addFunction("SetTrigger", &Animation::SetTrigger)
 
         .addOverloadedFunctions("AddTrigger", 
+            // [Method] void AddTrigger(const AnimationTriggerPoint& trigger)
         	static_cast<void(Animation::*)(const AnimationTriggerPoint&)>(&Animation::AddTrigger),
+            // [Method] void void AddTrigger(float time, bool timeIsNormalized, const Variant& data)
         	static_cast<void(Animation::*)(float, bool, const Variant&)>(&Animation::AddTrigger))
         
         // [Method] void RemoveTrigger(unsigned index)

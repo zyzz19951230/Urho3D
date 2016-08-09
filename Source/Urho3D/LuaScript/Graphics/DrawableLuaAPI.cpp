@@ -120,7 +120,9 @@ void RegisterDrawable(kaguya::State& lua)
         .addFunction("IsOccludee", &Drawable::IsOccludee)
 
         .addOverloadedFunctions("IsInView",
+            // [Method] bool IsInView() const
             static_cast<bool(Drawable::*)() const>(&Drawable::IsInView),
+            // [Method] bool IsInView(Camera* camera) const
             static_cast<bool(Drawable::*)(Camera*) const>(&Drawable::IsInView))
 
         // [Property(ReadOnly)] const BoundingBox& boundingBox
@@ -150,6 +152,7 @@ void RegisterDrawable(kaguya::State& lua)
         // [Property] bool occludee
         .addProperty("occludee", &Drawable::IsOccludee, &Drawable::SetOccludee)
 
+        // [Property] bool inView
         .addProperty("inView", static_cast<bool(Drawable::*)() const>(&Drawable::IsInView))
         // [Property(ReadOnly)] Zone* zone
         .addProperty("zone", &Drawable::GetZone)

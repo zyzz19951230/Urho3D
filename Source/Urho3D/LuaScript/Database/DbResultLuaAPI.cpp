@@ -39,12 +39,18 @@ void RegisterDbResult(kaguya::State& lua)
     // [Class] DbResult
     lua["DbResult"].setClass(UserdataMetatable<DbResult>()
         
+        // [Method] unsigned GetNumColumns() const
         .addFunction("GetNumColumns", &DbResult::GetNumColumns)
+        // [Method] unsigned GetNumRows() const
         .addFunction("GetNumRows", &DbResult::GetNumRows)
+        // [Method] long GetNumAffectedRows() const
         .addFunction("GetNumAffectedRows", &DbResult::GetNumAffectedRows)
-        
+
+        // [Property(ReadOnly)] unsigned numColumns
         .addProperty("numColumns", &DbResult::GetNumColumns)
+        // [Property(ReadOnly)] unsigned numRows
         .addProperty("numRows", &DbResult::GetNumRows)
+        // [Property(ReadOnly)] long numAffectedRows
         .addProperty("numAffectedRows", &DbResult::GetNumAffectedRows)
     );
 }

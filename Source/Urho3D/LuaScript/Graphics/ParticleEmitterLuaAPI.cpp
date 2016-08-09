@@ -37,6 +37,7 @@ void RegisterParticleEmitter(kaguya::State& lua)
 
     // [Class] ParticleEmitter : BillboardSet
     lua["ParticleEmitter"].setClass(UserdataMetatable<ParticleEmitter, BillboardSet>()
+        // [Constructor] ParticleEmitter()
         .addStaticFunction("new", &CreateObject<ParticleEmitter>)
 
         // [Method] void SetEffect(ParticleEffect* effect)

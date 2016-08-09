@@ -37,6 +37,7 @@ void RegisterStaticModelGroup(kaguya::State& lua)
 
     // [Class] StaticModelGroup : StaticModel
     lua["StaticModelGroup"].setClass(UserdataMetatable<StaticModelGroup, StaticModel>()
+        // [Constructor] StaticModelGroup()
         .addStaticFunction("new", &CreateObject<StaticModelGroup>)
 
         // [Method] void AddInstanceNode(Node* node)

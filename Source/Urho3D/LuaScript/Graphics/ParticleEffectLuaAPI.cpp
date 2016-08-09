@@ -38,34 +38,42 @@ void RegisterParticleEffect(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] EmitterType
-    // [Variable] EMITTER_SPHERE
     lua["EMITTER_SPHERE"] = EMITTER_SPHERE;
-    // [Variable] EMITTER_BOX
     lua["EMITTER_BOX"] = EMITTER_BOX;
 
 
     // [Class] ColorFrame
     lua["ColorFrame"].setClass(UserdataMetatable<ColorFrame>()
+        // [Constructor] ColorFrame()
     	.setConstructors<ColorFrame(),
+            // [Constructor] ColorFrame(const Color& color)
     		ColorFrame(const Color&),
+            // [Constructor] ColorFrame(const Color& color, float time)
     		ColorFrame(const Color&, float)>()
 
         // [Method] Color Interpolate(const ColorFrame& next, float time) const
 		.addFunction("Interpolate", &ColorFrame::Interpolate)
+
+        // [Field] Color color
     	.addProperty("color", &ColorFrame::color_)
+        // [Field] float time
     	.addProperty("time", &ColorFrame::time_)
     	);
 
     // [Class] TextureFrame
 	lua["TextureFrame"].setClass(UserdataMetatable<TextureFrame>()
-		.setConstructors<TextureFrame()>()
+        // [Constructor] TextureFrame()
+        .setConstructors<TextureFrame()>()
 
+        // [Field] Vector2 uv
 		.addProperty("uv", &TextureFrame::uv_)
+        // [Field] float time
 		.addProperty("time", &TextureFrame::time_)
 		);
 
     // [Class] ParticleEffect : Resource
     lua["ParticleEffect"].setClass(UserdataMetatable<ParticleEffect, Resource>()
+        // [Constructor] ParticleEffect()
         .addStaticFunction("new", &CreateObject<ParticleEffect>)
 
         // [Method] void SetMaterial(Material* material)

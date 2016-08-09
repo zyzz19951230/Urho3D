@@ -62,11 +62,13 @@ void RegisterContext(kaguya::State& lua)
         .addProperty("eventHandler", &Context::GetEventHandler)
     );
 
+    // [Variable] Context* context
     lua["context"] = globalContext;
+    // [Function] Context* GetContext()
     lua["GetContext"] = GlobalGetContext();
 
+    // [Function] SharedPtr<Object> GetEventSender()
     lua["GetEventSender"] = function(GlobalGetEventSender);
-    // lua["GetEventHandler"] = function(GlobalGetEventHandler);
 }
 }
 

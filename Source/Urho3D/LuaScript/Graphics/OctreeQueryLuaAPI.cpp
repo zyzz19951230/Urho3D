@@ -37,32 +37,39 @@ void RegisterOctreeQuery(kaguya::State& lua)
 
     // [Class] OctreeQueryResult
     lua["OctreeQueryResult"].setClass(UserdataMetatable<OctreeQueryResult>()
+        // [Constructor] OctreeQueryResult()
         .setConstructors<OctreeQueryResult()>()
 
+        // [Field] Drawable* drawable
         .addProperty("drawable", &OctreeQueryResult::drawable_)
+        // [Field] Node* node
         .addProperty("node", &OctreeQueryResult::node_)
         );
 
     // [Enum] RayQueryLevel
-    // [Variable] RAY_AABB
     lua["RAY_AABB"] = RAY_AABB;
-    // [Variable] RAY_OBB,
     lua["RAY_OBB"] = RAY_OBB;
-    // [Constant] RayOctreeQuery(PODVector<RayQueryResult>& result, Ray& ray, RayQueryLevel level
     lua["RAY_TRIANGLE"] = RAY_TRIANGLE;
-    // [Variable] RAY_TRIANGLE_UV
     lua["RAY_TRIANGLE_UV"] = RAY_TRIANGLE_UV;
 
     // [Class] RayQueryResult
     lua["RayQueryResult"].setClass(UserdataMetatable<RayQueryResult>()
+        // [Constructor] RayQueryResult()
         .setConstructors<RayQueryResult()>()
 
+        // [Field] Vector3 position;
         .addProperty("position", &RayQueryResult::position_)
+        // [Field] Vector3 normal;
         .addProperty("normal", &RayQueryResult::normal_)
+        // [Field] Vector2 textureUV;
         .addProperty("textureUV", &RayQueryResult::textureUV_)
+        // [Field] float distance;
         .addProperty("distance", &RayQueryResult::distance_)
+        // [Field] Drawable* drawable;
         .addProperty("drawable", &RayQueryResult::drawable_)
+        // [Field] Node* node;
         .addProperty("node", &RayQueryResult::node_)
+        // [Field] unsigned subObject;
         .addProperty("subObject", &RayQueryResult::subObject_)
         );
 }

@@ -201,8 +201,6 @@ void RegisterPhysicsWorld(kaguya::State& lua)
         .addProperty("maxNetworkAngularVelocity", &PhysicsWorld::GetMaxNetworkAngularVelocity, &PhysicsWorld::SetMaxNetworkAngularVelocity)
         );
 
-    // [Function] void URHO3D_API RegisterPhysicsLibrary(Context* context)
-    lua["RegisterPhysicsLibrary"] = function(&RegisterPhysicsLibrary);
 }
 }
 

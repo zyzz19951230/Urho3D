@@ -40,13 +40,12 @@ void RegisterAnimationState(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] AnimationBlendMode
-    // [Variable] ABM_LERP
     lua["ABM_LERP"] = ABM_LERP;
-    // [Variable] ABM_ADDITIVE
     lua["ABM_ADDITIVE"] = ABM_ADDITIVE;
 
     // [Class] AnimationState : RefCounted
     lua["AnimationState"].setClass(UserdataMetatable<AnimationState, RefCounted>()
+        // [Constructor] AnimationState(AnimatedModel* model, Animation* animation)
         .setConstructors<AnimationState(AnimatedModel*, Animation*)>()
 
         // [Method] void SetStartBone(Bone* bone)
@@ -61,7 +60,9 @@ void RegisterAnimationState(kaguya::State& lua)
         .addFunction("SetTime", &AnimationState::SetTime)
 
         .addOverloadedFunctions("SetBoneWeight",
+            // [Method] void SetBoneWeight(unsigned index, float weight, bool recursive = false)
             AnimationStateSetBoneWeight0(),
+            // [Method] void SetBoneWeight(const String& name, float weight, bool recursive = false)
             AnimationStateSetBoneWeight1())
 
         // [Method] void AddWeight(float delta)
@@ -80,11 +81,13 @@ void RegisterAnimationState(kaguya::State& lua)
         .addFunction("GetStartBone", &AnimationState::GetStartBone)
 
         .addOverloadedFunctions("GetBoneWeight",
+            // [Method] float AnimationState::GetBoneWeight(unsigned index) const
             static_cast<float(AnimationState::*)(unsigned) const>(&AnimationState::GetBoneWeight),
+            // [Method] float AnimationState::GetBoneWeight(const String& name) const
             static_cast<float(AnimationState::*)(const String&) const>(&AnimationState::GetBoneWeight))
 
-        .addFunction("GetTrackIndex",
-            static_cast<unsigned(AnimationState::*)(const String&) const>(&AnimationState::GetTrackIndex))
+        // [Method] unsigned GetTrackIndex(const String& name) const
+        .addFunction("GetTrackIndex", static_cast<unsigned(AnimationState::*)(const String&) const>(&AnimationState::GetTrackIndex))
 
         // [Method] bool IsEnabled() const
         .addFunction("IsEnabled", &AnimationState::IsEnabled)

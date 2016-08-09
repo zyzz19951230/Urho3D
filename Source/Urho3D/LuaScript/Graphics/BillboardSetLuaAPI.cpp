@@ -38,17 +38,25 @@ void RegisterBillboardSet(kaguya::State& lua)
     // [Class] Billboard
     lua["Billboard"].setClass(UserdataMetatable<Billboard>()
 
+        // [Field] Vector3 position;
         .addProperty("position", &Billboard::position_)
+        // [Field] Vector2 size;
         .addProperty("size", &Billboard::size_)
+        // [Field] Rect uv;
         .addProperty("uv", &Billboard::uv_)
+        // [Field] Color color;
         .addProperty("color", &Billboard::color_)
+        // [Field] float rotation;
         .addProperty("rotation", &Billboard::rotation_)
+        // [Field] Vector3 direction;
         .addProperty("direction", &Billboard::direction_)
+        // [Field] bool enabled;
         .addProperty("enabled", &Billboard::enabled_)
         );
 
     // [Class] BillboardSet : Drawable
     lua["BillboardSet"].setClass(UserdataMetatable<BillboardSet, Drawable>()
+        // [Constructor] BillboardSet()
         .addStaticFunction("new", &CreateObject<BillboardSet>)
 
         // [Method] void SetMaterial(Material* material)

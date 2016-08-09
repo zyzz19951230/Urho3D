@@ -37,31 +37,31 @@ void RegisterProcessUtils(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // [Function] URHO3D_API void ErrorDialog(const String& title, const String& message)
+    // [Function] void ErrorDialog(const String& title, const String& message)
     lua["ErrorDialog"] = function(&ErrorDialog);
 
     
     lua["ErrorExit"] = ErrorExitOverloads();
-    // [Function] URHO3D_API void OpenConsoleWindow()
+    // [Function] void OpenConsoleWindow()
     lua["OpenConsoleWindow"] = function(&OpenConsoleWindow);
     lua["PrintLine"] = PrintLineOverloads();
 
-    // [Function] URHO3D_API const Vector<String>& GetArguments()
+    // [Function] const Vector<String>& GetArguments()
     lua["GetArguments"] = function(&GetArguments);
 
-    // [Function] URHO3D_API String GetConsoleInput()
+    // [Function] String GetConsoleInput()
     lua["GetConsoleInput"] = function(&GetConsoleInput);
-    // [Function] URHO3D_API String GetPlatform()
+    // [Function] String GetPlatform()
     lua["GetPlatform"] = function(&GetPlatform);
 
-    // [Function] URHO3D_API unsigned GetNumPhysicalCPUs()
+    // [Function] unsigned GetNumPhysicalCPUs()
     lua["GetNumPhysicalCPUs"] = function(&GetNumPhysicalCPUs);
-    // [Function] URHO3D_API unsigned GetNumLogicalCPUs()
+    // [Function] unsigned GetNumLogicalCPUs()
     lua["GetNumLogicalCPUs"] = function(&GetNumLogicalCPUs);
 
-    // [Function] URHO3D_API void SetMiniDumpDir(const String& pathName)
+    // [Function] void SetMiniDumpDir(const String& pathName)
     lua["SetMiniDumpDir"] = function(&SetMiniDumpDir);
-    // [Function] URHO3D_API String GetMiniDumpDir()
+    // [Function] String GetMiniDumpDir()
     lua["GetMiniDumpDir"] = function(&GetMiniDumpDir);
 }
 }

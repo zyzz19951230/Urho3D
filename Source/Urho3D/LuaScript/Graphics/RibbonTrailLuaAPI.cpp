@@ -36,13 +36,12 @@ void RegisterRibbonTrail(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] TrailType
-    // [Variable] TT_FACE_CAMERA
     lua["TT_FACE_CAMERA"] = TT_FACE_CAMERA;
-    // [Variable] TT_BONE
     lua["TT_BONE"] = TT_BONE;
 
     // [Class] RibbonTrail : Drawable
     lua["RibbonTrail"].setClass(UserdataMetatable<RibbonTrail, Drawable>()
+        // [Constructor] RibbonTrail()
         .addStaticFunction("new", &CreateObject<RibbonTrail>)
 
         // [Method] void SetMaterial(Material* material)

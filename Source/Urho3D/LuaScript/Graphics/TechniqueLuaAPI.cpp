@@ -37,15 +37,13 @@ void RegisterTechnique(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] PassLightingMode
-    // [Variable] LIGHTING_UNLIT,
     lua["LIGHTING_UNLIT"] = LIGHTING_UNLIT;
-    // [Variable] LIGHTING_PERVERTEX,
     lua["LIGHTING_PERVERTEX"] = LIGHTING_PERVERTEX;
-    // [Variable] LIGHTING_PERPIXEL
     lua["LIGHTING_PERPIXEL"] = LIGHTING_PERPIXEL;
 
     // [Class] Pass : RefCounted
     lua["Pass"].setClass(UserdataMetatable<Pass, RefCounted>()
+        // [Constructor] Pass(const String& passName)
         .setConstructors<Pass(const String&)>()
         
         // [Method] void SetBlendMode(BlendMode mode)
@@ -71,8 +69,7 @@ void RegisterTechnique(kaguya::State& lua)
         // [Method] void SetPixelShaderDefines(const String& defines)
         .addFunction("SetPixelShaderDefines", &Pass::SetPixelShaderDefines)
         // [Method] void ReleaseShaders()
-        .addFunction("ReleaseShaders", &Pass::ReleaseShaders)
-        
+        .addFunction("ReleaseShaders", &Pass::ReleaseShaders)        
 
         // [Method] const String& GetName() const
         .addFunction("GetName", &Pass::GetName)
@@ -135,6 +132,7 @@ void RegisterTechnique(kaguya::State& lua)
 
     // [Class] Technique : Resource
     lua["Technique"].setClass(UserdataMetatable<Technique, Resource>()
+        // [Constructor] Technique()
         .addStaticFunction("new", &CreateObject<Technique>)
         
         // [Method] void SetIsDesktop(bool enable)
@@ -155,16 +153,22 @@ void RegisterTechnique(kaguya::State& lua)
         .addFunction("IsSupported", &Technique::IsSupported)
 
         .addOverloadedFunctions("HasPass",
+            // [Method] bool HasPass(unsigned passIndex) const
             static_cast<bool(Technique::*)(unsigned) const>(&Technique::HasPass),
+            // [Method] bool HasPass(const String& name) const
             static_cast<bool(Technique::*)(const String&) const>(&Technique::HasPass))
 
 
         .addOverloadedFunctions("GetPass",
+            // [Method] Pass* GetPass(unsigned passIndex) const
             static_cast<Pass*(Technique::*)(unsigned) const>(&Technique::GetPass),
+            // [Method] Pass* GetPass(const String& passName) const
             static_cast<Pass*(Technique::*)(const String&) const>(&Technique::GetPass))
 
         .addOverloadedFunctions("GetSupportedPass",
+            // [Method] Pass* GetSupportedPass(unsigned passIndex) const
             static_cast<Pass*(Technique::*)(unsigned) const>(&Technique::GetSupportedPass),
+            // [Method] Pass* GetSupportedPass(const String& passName) const
             static_cast<Pass*(Technique::*)(const String&) const>(&Technique::GetSupportedPass))
 
         // [Method] unsigned GetNumPasses() const

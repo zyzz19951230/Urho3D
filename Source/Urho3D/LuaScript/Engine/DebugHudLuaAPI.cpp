@@ -54,8 +54,6 @@ void RegisterDebugHud(kaguya::State& lua)
     // [Class] DebugHud : Object
     lua["DebugHud"].setClass(UserdataMetatable<DebugHud, Object>()
 
-        // .addFunction("Update", &DebugHud::Update)
-
         // [Method] void SetDefaultStyle(XMLFile* style)
         .addFunction("SetDefaultStyle", &DebugHud::SetDefaultStyle)
         // [Method] void SetMode(unsigned mode)
@@ -91,7 +89,9 @@ void RegisterDebugHud(kaguya::State& lua)
         .addFunction("GetUseRendererStats", &DebugHud::GetUseRendererStats)
 
         .addOverloadedFunctions("SetAppStats",
+            // [Method] void SetAppStats(const String& label, const Variant& stats)
             static_cast<void(DebugHud::*)(const String&, const Variant&)>(&DebugHud::SetAppStats),
+            // [Method] void SetAppStats(const String& label, const String& stats)
             static_cast<void(DebugHud::*)(const String&, const String&)>(&DebugHud::SetAppStats))
 
         // [Method] bool ResetAppStats(const String& label)

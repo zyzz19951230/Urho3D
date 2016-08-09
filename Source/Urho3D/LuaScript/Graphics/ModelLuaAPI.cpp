@@ -39,6 +39,7 @@ void RegisterModel(kaguya::State& lua)
 
     // [Class] Model : Resource
     lua["Model"].setClass(UserdataMetatable<Model, Resource>()
+        // [Constructor] Model()
         .addStaticFunction("new", &CreateObject<Model>)
 
         // [Method] void SetBoundingBox(const BoundingBox& box)
@@ -78,8 +79,11 @@ void RegisterModel(kaguya::State& lua)
         .addFunction("GetNumMorphs", &Model::GetNumMorphs)
 
         .addOverloadedFunctions("GetMorph",
+            // [Method] const ModelMorph* GetMorph(unsigned index) const
             static_cast<const ModelMorph*(Model::*)(unsigned) const>(&Model::GetMorph),
+            // [Method] const ModelMorph* GetMorph(const String& name) const
             static_cast<const ModelMorph*(Model::*)(const String&) const>(&Model::GetMorph),
+            // [Method] const ModelMorph* GetMorph(StringHash nameHash) const
             static_cast<const ModelMorph*(Model::*)(StringHash) const>(&Model::GetMorph))
 
         // [Method] unsigned GetMorphRangeStart(unsigned bufferIndex) const

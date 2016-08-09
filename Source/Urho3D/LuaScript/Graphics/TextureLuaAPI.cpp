@@ -36,6 +36,7 @@ void RegisterTexture(kaguya::State& lua)
 
     // [Class] Texture : Resource
     lua["Texture"].setClass(UserdataMetatable<Texture, Resource>()
+        // [Constructor] Texture()
         .addStaticFunction("new", &CreateObject<Texture>)
         
         // [Method] void SetNumLevels(unsigned levels)
@@ -87,7 +88,9 @@ void RegisterTexture(kaguya::State& lua)
         .addFunction("GetUsage", &Texture::GetUsage)
 
         .addOverloadedFunctions("GetDataSize",
+            // [Method] unsigned GetDataSize(int width, int height) const
             static_cast<unsigned(Texture::*)(int, int) const>(&Texture::GetDataSize),
+            // [Method] unsigned GetDataSize(int width, int height, int depth) const
             static_cast<unsigned(Texture::*)(int, int, int) const>(&Texture::GetDataSize))
 
         // [Method] unsigned GetRowDataSize(int width) const

@@ -39,36 +39,51 @@ void RegisterStringUtils(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Function] bool ToBool(const char* source)
     lua["ToBool"] = static_cast<bool(*)(const char*)>(&ToBool);
+    // [Function] float ToFloat(const char* source)
     lua["ToFloat"] = static_cast<float(*)(const char*)>(&ToFloat);
+    // [Function] double ToDouble(const char* source)
     lua["ToDouble"] = static_cast<double(*)(const char*)>(&ToDouble);
+    // [Function] int ToInt(const char* source, int base = 10)
     lua["ToInt"] = ToIntOverloads();
+    // [Function] int ToUInt(const char* source, int base = 10)
     lua["ToUInt"] = ToUIntOverloads();
-    
-    lua["ToColor"] = static_cast<Color(*)(const char*)>(&ToColor);
-    lua["ToIntRect"] = static_cast<IntRect(*)(const char*)>(&ToIntRect);
-    lua["ToIntVector2"] = static_cast<IntVector2(*)(const char*)>(&ToIntVector2);
-    lua["ToQuaternion"] = static_cast<Quaternion(*)(const char*)>(&ToQuaternion);
-    lua["ToRect"] = static_cast<Rect(*)(const char*)>(&ToRect);
-    lua["ToVector2"] = static_cast<Vector2(*)(const char*)>(&ToVector2);
-    lua["ToVector3"] = static_cast<Vector3(*)(const char*)>(&ToVector3);    
-    
-    lua["ToVector4"] = ToVector4Overloads();
 
+    // [Function] Color ToColor(const char* source)
+    lua["ToColor"] = static_cast<Color(*)(const char*)>(&ToColor);
+    // [Function] IntRect ToIntRect(const char* source)
+    lua["ToIntRect"] = static_cast<IntRect(*)(const char*)>(&ToIntRect);
+    // [Function] IntVector2 ToIntVector2(const char* source)
+    lua["ToIntVector2"] = static_cast<IntVector2(*)(const char*)>(&ToIntVector2);
+    // [Function] Quaternion ToQuaternion(const char* source)
+    lua["ToQuaternion"] = static_cast<Quaternion(*)(const char*)>(&ToQuaternion);
+    // [Function] Rect ToRect(const char* source)
+    lua["ToRect"] = static_cast<Rect(*)(const char*)>(&ToRect);
+    
+    // [Function] Vector2 ToVector2(const char* source)
+    lua["ToVector2"] = static_cast<Vector2(*)(const char*)>(&ToVector2);
+    // [Function] Vector3 ToVector3(const char* source)
+    lua["ToVector3"] = static_cast<Vector3(*)(const char*)>(&ToVector3);        
+    // [Function] Vector4 ToVector4(const char* source, bool allowMissingCoords)
+    lua["ToVector4"] = ToVector4Overloads();
+    // [Function] Matrix3 ToMatrix3(const char* source)
     lua["ToMatrix3"] = static_cast<Matrix3(*)(const char*)>(&ToMatrix3);
+    // [Function] Matrix3x4 ToMatrix3x4(const char* source)
     lua["ToMatrix3x4"] = static_cast<Matrix3x4(*)(const char*)>(&ToMatrix3x4);
+    // [Function] Matrix4 ToMatrix4(const char* source)
     lua["ToMatrix4"] = static_cast<Matrix4(*)(const char*)>(&ToMatrix4);
 
-    // [Function] URHO3D_API String ToStringHex(unsigned value)
+    // [Function] String ToStringHex(unsigned value)
     lua["ToStringHex"] = function(&ToStringHex);
 
-    // [Function] URHO3D_API bool IsAlpha(unsigned ch)
+    // [Function] bool IsAlpha(unsigned ch)
     lua["IsAlpha"] = function(&IsAlpha);
-    // [Function] URHO3D_API bool IsDigit(unsigned ch)
+    // [Function] bool IsDigit(unsigned ch)
     lua["IsDigit"] = function(&IsDigit);
-    // [Function] URHO3D_API unsigned ToUpper(unsigned ch)
+    // [Function] unsigned ToUpper(unsigned ch)
     lua["ToUpper"] = function(&ToUpper);
-    // [Function] URHO3D_API unsigned ToLower(unsigned ch)
+    // [Function] unsigned ToLower(unsigned ch)
     lua["ToLower"] = function(&ToLower);
 }
 }

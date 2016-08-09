@@ -50,6 +50,7 @@ void RegisterTerrain(kaguya::State& lua)
 
     // [Class] Terrain : Component
     lua["Terrain"].setClass(UserdataMetatable<Terrain, Component>()
+        // [Constructor] Terrain()
         .addStaticFunction("new", &CreateObject<Terrain>)
 
         // [Method] void SetPatchSize(int size)
@@ -111,7 +112,9 @@ void RegisterTerrain(kaguya::State& lua)
         .addFunction("GetMaterial", &Terrain::GetMaterial)
 
         .addOverloadedFunctions("GetPatch",
+            // [Method] TerrainPatch* GetPatch(unsigned index) const
             static_cast<TerrainPatch*(Terrain::*)(unsigned) const>(&Terrain::GetPatch),
+            // [Method] TerrainPatch* GetPatch(int x, int z) const
             static_cast<TerrainPatch*(Terrain::*)(int, int) const>(&Terrain::GetPatch))
 
         // [Method] float GetHeight(const Vector3& worldPosition) const

@@ -41,6 +41,7 @@ void RegisterTerrainPatch(kaguya::State& lua)
 
     // [Class] TerrainPatch : Drawable
     lua["TerrainPatch"].setClass(UserdataMetatable<TerrainPatch, Drawable>()
+        // [Constructor] TerrainPatch()
         .addStaticFunction("new", &CreateObject<TerrainPatch>)
 
         // [Method] void SetOwner(Terrain* terrain)

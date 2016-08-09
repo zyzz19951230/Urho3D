@@ -57,6 +57,7 @@ void RegisterDebugRenderer(kaguya::State& lua)
 
     // [Class] DebugRenderer : Component
     lua["DebugRenderer"].setClass(UserdataMetatable<DebugRenderer, Component>()
+        // [Constructor] DebugRenderer()
         .addStaticFunction("new", &CreateObject<DebugRenderer>)
         
         // [Method] void SetView(Camera* camera)
@@ -70,7 +71,9 @@ void RegisterDebugRenderer(kaguya::State& lua)
         .addFunction("AddNode", DebugRendererAddNode())
         
         .addOverloadedFunctions("AddBoundingBox", 
+            // [Method] void AddBoundingBox(const BoundingBox& box, const Color& color, bool depthTest = true)
             DebugRendererAddBoundingBox0(),
+            // [Method] void AddBoundingBox(const BoundingBox& box, const Matrix3x4& transform, const Color& color, bool depthTest = true)
             DebugRendererAddBoundingBox1())
 
         // [Method] void AddFrustum(const Frustum& frustum, const Color& color, bool depthTest = true)

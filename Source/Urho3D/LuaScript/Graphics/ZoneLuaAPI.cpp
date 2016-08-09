@@ -36,6 +36,7 @@ void RegisterZone(kaguya::State& lua)
 
     // [Class] Zone : Drawable
     lua["Zone"].setClass(UserdataMetatable<Zone, Drawable>()
+        // [Constructor] Zone()
         .addStaticFunction("new", &CreateObject<Zone>)
 
         // [Method] void SetBoundingBox(const BoundingBox& box)

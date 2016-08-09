@@ -49,16 +49,22 @@ void RegisterCustomGeometry(kaguya::State& lua)
 
     // [Class] CustomGeometryVertex
     lua["CustomGeometryVertex"].setClass(UserdataMetatable<CustomGeometryVertex>()
-    
-    .addProperty("position", &CustomGeometryVertex::position_)
-    .addProperty("normal", &CustomGeometryVertex::normal_)
-    .addProperty("color", &CustomGeometryVertex::color_)
-    .addProperty("texCoord", &CustomGeometryVertex::texCoord_)
-    .addProperty("tangent", &CustomGeometryVertex::tangent_)
-    );
+
+        // [Field] Vector3 position
+        .addProperty("position", &CustomGeometryVertex::position_)
+        // [Field] Vector3 normal
+        .addProperty("normal", &CustomGeometryVertex::normal_)
+        // [Field] Color color
+        .addProperty("color", &CustomGeometryVertex::color_)
+        // [Field] Vector2 texCoord
+        .addProperty("texCoord", &CustomGeometryVertex::texCoord_)
+        // [Field] Vector4 tangent
+        .addProperty("tangent", &CustomGeometryVertex::tangent_)
+        );
 
     // [Class] CustomGeometry : Drawable
     lua["CustomGeometry"].setClass(UserdataMetatable<CustomGeometry, Drawable>()
+        // [Constructor] CustomGeometry()
         .addStaticFunction("new", &CreateObject<CustomGeometry>)
 
         // [Method] void Clear()
@@ -84,7 +90,9 @@ void RegisterCustomGeometry(kaguya::State& lua)
         .addFunction("Commit", &CustomGeometry::Commit)
 
         .addOverloadedFunctions("SetMaterial",
+            // [Method] void SetMaterial(Material* material)
             static_cast<void(CustomGeometry::*)(Material*)>(&CustomGeometry::SetMaterial),
+            // [Method] bool SetMaterial(unsigned index, Material* material)
             static_cast<bool(CustomGeometry::*)(unsigned, Material*)>(&CustomGeometry::SetMaterial))
 
         // [Method] unsigned GetNumGeometries() const
@@ -93,7 +101,7 @@ void RegisterCustomGeometry(kaguya::State& lua)
         .addFunction("GetNumVertices", &CustomGeometry::GetNumVertices)
         // [Method] bool IsDynamic() const
         .addFunction("IsDynamic", &CustomGeometry::IsDynamic)
-        
+
         // [Method] Material* GetMaterial(unsigned index = 0) const
         .addFunction("GetMaterial", CustomGeometryGetMaterial())
 
@@ -104,6 +112,7 @@ void RegisterCustomGeometry(kaguya::State& lua)
         .addProperty("numGeometries", &CustomGeometry::GetNumGeometries, &CustomGeometry::SetNumGeometries)
         // [Property] bool dynamic
         .addProperty("dynamic", &CustomGeometry::IsDynamic, &CustomGeometry::SetDynamic)
+        // [Property] Material* material
         .addProperty("material", &CustomGeometryMaterialGetter, &CustomGeometryMaterialSetter)
         );
 }

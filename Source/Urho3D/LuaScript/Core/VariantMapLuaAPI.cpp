@@ -48,10 +48,14 @@ void RegisterVariantMap(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Class] VariantMap
     lua["VariantMap"].setClass(UserdataMetatable<VariantMap>()
+        // [Constructor] VariantMap()
         .setConstructors<VariantMap()>()
 
+        // [Method] const Variant& __index(StringHash key)
         .addStaticFunction("__index", &VariantMapGetVariant)
+        // [Method] void __newindex(StringHash key, const Variant& value)
         .addStaticFunction("__newindex", &VariantMapSetVariant)
         );
 }

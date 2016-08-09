@@ -55,7 +55,9 @@ void RegisterRenderer(kaguya::State& lua)
         .addFunction("SetViewport", &Renderer::SetViewport)
 
         .addOverloadedFunctions("SetDefaultRenderPath",
+            // [Method] void SetDefaultRenderPath(RenderPath* renderPath)
             static_cast<void(Renderer::*)(RenderPath*)>(&Renderer::SetDefaultRenderPath),
+            // [Method] void SetDefaultRenderPath(XMLFile* xmlFile)
             static_cast<void(Renderer::*)(XMLFile*)>(&Renderer::SetDefaultRenderPath))
 
         // [Method] void SetDefaultTechnique(Technique* tech)
@@ -182,9 +184,6 @@ void RegisterRenderer(kaguya::State& lua)
         // [Method] unsigned GetNumOccluders(bool allViews = false) const
         .addFunction("GetNumOccluders", RendererGetNumOccluders())
 
-        // .addFunction("GetScreenBuffer", RendererGetScreenBuffer())
-        // .addFunction("SetBatchShaders", RendererSetBatchShaders())
-        
         // [Method] Zone* GetDefaultZone() const
         .addFunction("GetDefaultZone", &Renderer::GetDefaultZone)
         // [Method] Material* GetDefaultMaterial() const

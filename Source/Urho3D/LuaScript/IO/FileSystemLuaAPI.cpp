@@ -113,28 +113,28 @@ void RegisterFileSystem(kaguya::State& lua)
         .addFunction("GetAppPreferencesDir", &FileSystem::GetAppPreferencesDir)
         );
 
-    // [Function] URHO3D_API String GetPath(const String& fullPath)
+    // [Function] String GetPath(const String& fullPath)
     lua["GetPath"] = function(&GetPath);
-    // [Function] URHO3D_API String GetFileName(const String& fullPath)
+    // [Function] String GetFileName(const String& fullPath)
     lua["GetFileName"] = function(&GetFileName);
     
     lua["GetExtension"] = GetExtensionOverloads();
     lua["GetFileNameAndExtension"] = GetFileNameAndExtensionOverloads();
 
-    // [Function] URHO3D_API String ReplaceExtension(const String& fullPath, const String& newExtension)
+    // [Function] String ReplaceExtension(const String& fullPath, const String& newExtension)
     lua["ReplaceExtension"] = function(&ReplaceExtension);
-    // [Function] URHO3D_API String AddTrailingSlash(const String& pathName)
+    // [Function] String AddTrailingSlash(const String& pathName)
     lua["AddTrailingSlash"] = function(&AddTrailingSlash);
-    // [Function] URHO3D_API String RemoveTrailingSlash(const String& pathName)
+    // [Function] String RemoveTrailingSlash(const String& pathName)
     lua["RemoveTrailingSlash"] = function(&RemoveTrailingSlash);
-    // [Function] URHO3D_API String GetParentPath(const String& pathName)
+    // [Function] String GetParentPath(const String& pathName)
     lua["GetParentPath"] = function(&GetParentPath);
-    // [Function] URHO3D_API String GetInternalPath(const String& pathName)
+    // [Function] String GetInternalPath(const String& pathName)
     lua["GetInternalPath"] = function(&GetInternalPath);
-    // [Function] URHO3D_API String GetNativePath(const String& pathName)
+    // [Function] String GetNativePath(const String& pathName)
     lua["GetNativePath"] = function(&GetNativePath);
 
-    // [Function] URHO3D_API bool IsAbsolutePath(const String& pathName)
+    // [Function] bool IsAbsolutePath(const String& pathName)
     lua["IsAbsolutePath"] = function(&IsAbsolutePath);
     lua["GetFileSizeString"] = function(&GetFileSizeString);
 }

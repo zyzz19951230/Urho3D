@@ -43,6 +43,7 @@ void RegisterAnimationController(kaguya::State& lua)
 
     // [Class] AnimationController : Component
     lua["AnimationController"].setClass(UserdataMetatable<AnimationController, Component>()
+        // [Constructor] AnimationController()
         .addStaticFunction("new", &CreateObject<AnimationController>)
 
         // [Method] bool Play(const String& name, unsigned char layer, bool looped, float fadeInTime = 0.0f)

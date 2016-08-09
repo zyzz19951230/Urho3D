@@ -36,6 +36,7 @@ void RegisterSoundSource3D(kaguya::State& lua)
 
     // [Class] SoundSource3D : SoundSource
     lua["SoundSource3D"].setClass(UserdataMetatable<SoundSource3D, SoundSource>()
+        // [Constructor] SoundSource3D()
         .addStaticFunction("new", &CreateObject<SoundSource3D>)
 
         // [Method] void SetDistanceAttenuation(float nearDistance, float farDistance, float rolloffFactor)

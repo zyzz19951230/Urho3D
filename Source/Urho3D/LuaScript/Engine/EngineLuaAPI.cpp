@@ -67,7 +67,9 @@ void RegisterEngine(kaguya::State& lua)
         // [Method] void RunFrame()
         .addFunction("RunFrame", &Engine::RunFrame)
 
+        // [Method] Console* CreateConsole()
         .addStaticFunction("CreateConsole", &EngineCreateConsole)
+        // [Method] DebugHud* CreateDebugHud()
         .addStaticFunction("CreateDebugHud", &EngineCreateDebugHud)
 
         // [Method] void SetMinFps(int fps)

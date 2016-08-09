@@ -31,7 +31,12 @@
 namespace Urho3D
 {
 
-static PODVector<RayQueryResult> OctreeRaycast(const Octree* self, const Ray& ray, RayQueryLevel level, float maxDistance, unsigned char drawableFlags, unsigned viewMask = DEFAULT_VIEWMASK)
+static PODVector<RayQueryResult> OctreeRaycast(const Octree* self, 
+    const Ray& ray,
+    RayQueryLevel level = RAY_TRIANGLE,
+    float maxDistance = M_INFINITY,
+    unsigned char drawableFlags = DRAWABLE_ANY,
+    unsigned viewMask = DEFAULT_VIEWMASK)
 {
     PODVector<RayQueryResult> result;
     RayOctreeQuery query(result, ray, level, maxDistance, drawableFlags, viewMask);
@@ -39,50 +44,14 @@ static PODVector<RayQueryResult> OctreeRaycast(const Octree* self, const Ray& ra
     return result;
 }
 
-static RayQueryResult OctreeRaycastSingle0(const Octree* self, const Ray& ray)
-{
-    PODVector<RayQueryResult> result;
-    RayOctreeQuery query(result, ray);
-    self->RaycastSingle(query);
-    if (result.Size() == 0)
-        return RayQueryResult();
+KAGUYA_FUNCTION_OVERLOADS(OctreeRaycastOverloads, OctreeRaycast, 2, 6)
 
-    return result[0];
-}
-
-static RayQueryResult OctreeRaycastSingle1(const Octree* self, const Ray& ray, RayQueryLevel level)
-{
-    PODVector<RayQueryResult> result;
-    RayOctreeQuery query(result, ray, level);
-    self->RaycastSingle(query);
-    if (result.Size() == 0)
-        return RayQueryResult();
-
-    return result[0];
-}
-
-static RayQueryResult OctreeRaycastSingle2(const Octree* self, const Ray& ray, RayQueryLevel level, float maxDistance)
-{
-    PODVector<RayQueryResult> result;
-    RayOctreeQuery query(result, ray, level, maxDistance);
-    self->RaycastSingle(query);
-    if (result.Size() == 0)
-        return RayQueryResult();
-
-    return result[0];
-}
-
-static RayQueryResult OctreeRaycastSingle3(const Octree* self, const Ray& ray, RayQueryLevel level, float maxDistance, unsigned char drawableFlags)
-{
-    PODVector<RayQueryResult> result;
-    RayOctreeQuery query(result, ray, level, maxDistance, drawableFlags);
-    self->RaycastSingle(query);
-    if (result.Size() == 0)
-        return RayQueryResult();
-    return result[0];
-}
-
-static RayQueryResult OctreeRaycastSingle4(const Octree* self, const Ray& ray, RayQueryLevel level, float maxDistance, unsigned char drawableFlags, unsigned viewMask)
+static RayQueryResult OctreeRaycastSingle(const Octree* self, 
+    const Ray& ray, 
+    RayQueryLevel level = RAY_TRIANGLE,
+    float maxDistance = M_INFINITY, 
+    unsigned char drawableFlags = DRAWABLE_ANY, 
+    unsigned viewMask = DEFAULT_VIEWMASK)
 {
     PODVector<RayQueryResult> result;
     RayOctreeQuery query(result, ray, level, maxDistance, drawableFlags, viewMask);
@@ -93,16 +62,21 @@ static RayQueryResult OctreeRaycastSingle4(const Octree* self, const Ray& ray, R
     return result[0];
 }
 
+KAGUYA_FUNCTION_OVERLOADS(OctreeRaycastSingleOverloads, OctreeRaycastSingle, 2, 6)
+
 void RegisterOctree(kaguya::State& lua)
 {
     using namespace kaguya;
 
     // [Class] Octree : Component
     lua["Octree"].setClass(UserdataMetatable<Octree, Component>()
+        // [Constructor] Octree()
         .addStaticFunction("new", &CreateObject<Octree>)
 
         .addOverloadedFunctions("DrawDebugGeometry",
+            // [Method] void DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
             static_cast<void(Octree::*)(DebugRenderer*, bool)>(&Octree::DrawDebugGeometry),
+            // [Method] void DrawDebugGeometry(bool depthTest)
             static_cast<void(Octree::*)(bool)>(&Octree::DrawDebugGeometry))
 
         // [Method] void SetSize(const BoundingBox& box, unsigned numLevels)
@@ -114,11 +88,11 @@ void RegisterOctree(kaguya::State& lua)
         // [Method] void RemoveManualDrawable(Drawable* drawable)
         .addFunction("RemoveManualDrawable", &Octree::RemoveManualDrawable)
 
-        // .addStaticFunction("GetDrawables", &Octree::GetDrawables)
-
-        .addStaticFunction("Raycast", &OctreeRaycast)
+        // [Method] PODVector<RayQueryResult> Raycast(const Octree* self, const Ray& ray, RayQueryLevel level = RAY_TRIANGLE, float maxDistance = M_INFINITY, unsigned char drawableFlags = DRAWABLE_ANY, unsigned viewMask = DEFAULT_VIEWMASK)
+        .addStaticFunction("Raycast", OctreeRaycastOverloads())
         
-        ADD_OVERLOADED_FUNCTIONS_5(Octree, RaycastSingle)
+        // [Method] RayQueryResult RaycastSingle(const Octree* self, const Ray& ray, RayQueryLevel level = RAY_TRIANGLE, float maxDistance = M_INFINITY, unsigned char drawableFlags = DRAWABLE_ANY, unsigned viewMask = DEFAULT_VIEWMASK)
+        .addStaticFunction("RaycastSingle", OctreeRaycastSingleOverloads())
 
         // [Method] unsigned GetNumLevels() const
         .addFunction("GetNumLevels", &Octree::GetNumLevels)

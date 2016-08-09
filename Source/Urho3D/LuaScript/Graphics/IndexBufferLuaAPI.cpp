@@ -70,6 +70,7 @@ void RegisterIndexBuffer(kaguya::State& lua)
 
     // [Class] IndexBuffer : Object
     lua["IndexBuffer"].setClass(UserdataMetatable<IndexBuffer, Object>()
+        // [Constructor] IndexBuffer(bool forceHeadless = false)
         .addStaticFunction("new", 
             CreateIndexBufferOverloads())
         
@@ -79,7 +80,9 @@ void RegisterIndexBuffer(kaguya::State& lua)
         // [Method] bool SetSize(unsigned indexCount, bool largeIndices, bool dynamic = false)
         .addFunction("SetSize", IndexBufferSetSize())
         
+        // [Method] bool SetData(VectorBuffer& src)
         .addStaticFunction("SetData", &IndexBufferSetData)
+        // [Method] VectorBuffer GetData() const
         .addStaticFunction("GetData", &IndexBufferGetData)
 
         // [Method] bool IsShadowed() const

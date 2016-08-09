@@ -45,11 +45,15 @@ void RegisterObject(kaguya::State& lua)
 		.addFunction("GetCategory", &Object::GetCategory)
 
 		.addOverloadedFunctions("SendEvent",
+            // [Method] void SendEvent(StringHash eventType)
 			static_cast<void(Object::*)(StringHash)>(&Object::SendEvent),
+            // [Method] void SendEvent(StringHash eventType, VariantMap& eventData)
 			static_cast<void(Object::*)(StringHash, VariantMap&)>(&Object::SendEvent))
 
 		.addOverloadedFunctions("HasSubscribedToEvent",
+            // [Method] bool HasSubscribedToEvent(StringHash eventType) const
 			static_cast<bool(Object::*)(StringHash)const>(&Object::HasSubscribedToEvent),
+            // [Method] bool HasSubscribedToEvent(Object* sender, StringHash eventType) const
 			static_cast<bool(Object::*)(Object*, StringHash)const>(&Object::HasSubscribedToEvent))
 
         // [Property(ReadOnly)] StringHash type

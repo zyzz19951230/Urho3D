@@ -40,6 +40,7 @@ void RegisterTextureCube(kaguya::State& lua)
 
     // [Class] TextureCube : Texture
     lua["TextureCube"].setClass(UserdataMetatable<TextureCube, Texture>()
+        // [Constructor] TextureCube()
         .addStaticFunction("new", &CreateObject<TextureCube>)
         
         // [Method] bool SetSize(int size, unsigned format, TextureUsage usage = TEXTURE_STATIC)

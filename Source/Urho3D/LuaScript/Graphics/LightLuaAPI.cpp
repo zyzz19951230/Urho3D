@@ -35,11 +35,8 @@ void RegisterLight(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] LightType
-    // [Variable] LIGHT_DIRECTIONAL
     lua["LIGHT_DIRECTIONAL"] = LIGHT_DIRECTIONAL;
-    // [Variable] LIGHT_SPOT,
     lua["LIGHT_SPOT"] = LIGHT_SPOT;
-    // [Variable] LIGHT_POINT
     lua["LIGHT_POINT"] = LIGHT_POINT;
 
     // [Constant] float SHADOW_MIN_QUANTIZE
@@ -53,42 +50,59 @@ void RegisterLight(kaguya::State& lua)
 
     // [Class] BiasParameters
     lua["BiasParameters"].setClass(UserdataMetatable<BiasParameters>()
+        // [Constructor] BiasParameters()
         .setConstructors<BiasParameters(),
-        BiasParameters(float, float),
+        // [Constructor] BiasParameters(float constantBias, float slopeScaledBias, float normalOffset = 0.0f)
+        BiasParameters(float, float),        
         BiasParameters(float, float, float)>()
 
+        // [Field] float constantBias
         .addProperty("constantBias", &BiasParameters::constantBias_)
+        // [Field] float slopeScaledBias
         .addProperty("slopeScaledBias", &BiasParameters::slopeScaledBias_)
+        // [Field] float normalOffset
         .addProperty("normalOffset", &BiasParameters::normalOffset_)
         );
 
     // [Class] CascadeParameters
     lua["CascadeParameters"].setClass(UserdataMetatable<CascadeParameters>()
+        // [Constructor] CascadeParameters()
         .setConstructors<CascadeParameters(),
-        CascadeParameters(float, float, float, float, float), 
+        // [Constructor] CascadeParameters(float split1, float split2, float split3, float split4, float fadeStart, float biasAutoAdjust = 1.0f)
+        CascadeParameters(float, float, float, float, float),         
         CascadeParameters(float, float, float, float, float, float)>()
 
+        // [Field] float fadeStart
         .addProperty("fadeStart", &CascadeParameters::fadeStart_)
+        // [Field] float biasAutoAdjust
         .addProperty("biasAutoAdjust", &CascadeParameters::biasAutoAdjust_)
         );
 
     // [Class] FocusParameters
     lua["FocusParameters"].setClass(UserdataMetatable<FocusParameters>()
+        // [Constructor] FocusParameters()
         .setConstructors<FocusParameters(),
+        // [Constructor] FocusParameters(bool focus, bool nonUniform, bool autoSize, float quantize, float minView)
         FocusParameters(bool, bool, bool, float, float)>()
 
         // [Method] void Validate()
         .addFunction("Validate", &FocusParameters::Validate)
 
+        // [Field] bool focus
         .addProperty("focus", &FocusParameters::focus_)
+        // [Field] bool nonUniform
         .addProperty("nonUniform", &FocusParameters::nonUniform_)
+        // [Field] bool autoSize
         .addProperty("autoSize", &FocusParameters::autoSize_)
+        // [Field] float quantize
         .addProperty("quantize", &FocusParameters::quantize_)
+        // [Field] float minView
         .addProperty("minView", &FocusParameters::minView_)
         );
 
     // [Class] Light : Drawable
     lua["Light"].setClass(UserdataMetatable<Light, Drawable>()
+        // [Constructor] Light()
         .addStaticFunction("new", &CreateObject<Light>)
 
         // [Method] void SetLightType(LightType type)

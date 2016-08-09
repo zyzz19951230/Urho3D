@@ -80,17 +80,21 @@ void RegisterVertexBuffer(kaguya::State& lua)
 
     // [Class] VertexBuffer : GPUObject
     lua["VertexBuffer"].setClass(UserdataMetatable<VertexBuffer, GPUObject>()
-        .addStaticFunction("new", 
-            CreateVertexBufferOverloads())
+        // [Constructor] VertexBuffer(bool forceHeadless = false)
+        .addStaticFunction("new", CreateVertexBufferOverloads())
 
         // [Method] void SetShadowed(bool enable)
         .addFunction("SetShadowed", &VertexBuffer::SetShadowed)
 
         .addOverloadedFunctions("SetSize", 
+            // [Method] bool SetSize(unsigned vertexCount, const PODVector<VertexElement>& elements, bool dynamic = false)
             VertexBufferSetSize0(), 
+            // [Method] bool SetSize(unsigned vertexCount, unsigned elementMask, bool dynamic = false)
             VertexBufferSetSize1())
 
+        // [Method] bool SetData(VectorBuffer& src)
         .addStaticFunction("SetData", &VertexBufferSetData)
+        // [Method] VectorBuffer GetData()
         .addStaticFunction("GetData", &VertexBufferGetData)
 
         // [Method] bool SetDataRange(const void* data, unsigned start, unsigned count, bool discard = false)
@@ -106,11 +110,15 @@ void RegisterVertexBuffer(kaguya::State& lua)
         .addFunction("GetVertexSize", static_cast<unsigned(VertexBuffer::*)()const>(&VertexBuffer::GetVertexSize))
 
         .addOverloadedFunctions("GetElement",
+            // [Method] const VertexElement* GetElement(VertexElementSemantic semantic, unsigned char index = 0) const
             VertexBufferGetElement0(),
+            // [Method] const VertexElement* GetElement(VertexElementType type, VertexElementSemantic semantic, unsigned char index = 0) const
             VertexBufferGetElement1())
 
         .addOverloadedFunctions("HasElement",
+            // [Method] bool HasElement(VertexElementSemantic semantic, unsigned char index = 0) const
             VertexBufferHasElement0(),
+            // [Method] bool HasElement(VertexElementType type, VertexElementSemantic semantic, unsigned char index = 0) const
             VertexBufferHasElement1())
 
         // [Method] unsigned GetElementMask() const
@@ -122,6 +130,7 @@ void RegisterVertexBuffer(kaguya::State& lua)
         .addProperty("dynamic", &VertexBuffer::IsDynamic)
         // [Property(ReadOnly)] unsigned vertexCount
         .addProperty("vertexCount", &VertexBuffer::GetVertexCount)
+        // [Property(ReadOnly)] unsigned vertexSize
         .addProperty("vertexSize", static_cast<unsigned(VertexBuffer::*)()const>(&VertexBuffer::GetVertexSize))
         // [Property(ReadOnly)] unsigned elementMask
         .addProperty("elementMask", &VertexBuffer::GetElementMask)

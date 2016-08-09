@@ -31,27 +31,27 @@
 namespace Urho3D
 {
 
-static bool DecalSetAddDecal0(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV)
-{
-    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV);
-}
+//static bool DecalSetAddDecal0(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV)
+//{
+//    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV);
+//}
+//
+//static bool DecalSetAddDecal1(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive)
+//{
+//    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive);
+//}
+//
+//static bool DecalSetAddDecal2(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive, float normalCutoff)
+//{
+//    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive, normalCutoff);
+//}
+//
+//static bool DecalSetAddDecal3(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive, float normalCutoff, unsigned int subGeometry)
+//{
+//    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive, normalCutoff, subGeometry);
+//}
 
-static bool DecalSetAddDecal1(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive)
-{
-    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive);
-}
-
-static bool DecalSetAddDecal2(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive, float normalCutoff)
-{
-    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive, normalCutoff);
-}
-
-static bool DecalSetAddDecal3(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive, float normalCutoff, unsigned int subGeometry)
-{
-    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive, normalCutoff, subGeometry);
-}
-
-// KAGUYA_MEMBER_FUNCTION_OVERLOADS(DecalSetAddDecal, DecalSet, AddDecal, 8, 11);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(DecalSetAddDecal, DecalSet, AddDecal, 8, 11);
 
 void RegisterDecalSet(kaguya::State& lua)
 {
@@ -59,6 +59,7 @@ void RegisterDecalSet(kaguya::State& lua)
 
     // [Class] DecalSet : Drawable
     lua["DecalSet"].setClass(UserdataMetatable<DecalSet, Drawable>()
+        // [Constructor] DecalSet()
         .addStaticFunction("new", &CreateObject<DecalSet>)
 
         // [Method] void SetMaterial(Material* material)
@@ -68,7 +69,7 @@ void RegisterDecalSet(kaguya::State& lua)
         // [Method] void SetMaxIndices(unsigned num)
         .addFunction("SetMaxIndices", &DecalSet::SetMaxIndices)
         
-        ADD_OVERLOADED_FUNCTIONS_4(DecalSet, AddDecal)
+        // [Method]  bool AddDecal(Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive = 0.0f, float normalCutoff = 0.1f, unsigned subGeometry = M_MAX_UNSIGNED)
         // .addFunction("AddDecal", DecalSetAddDecal())
 
         // [Method] void RemoveDecals(unsigned num)

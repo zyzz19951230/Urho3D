@@ -50,6 +50,7 @@ void RegisterAnimatedModel(kaguya::State& lua)
 
     // [Class] AnimatedModel : StaticModel
     lua["AnimatedModel"].setClass(UserdataMetatable<AnimatedModel, StaticModel>()
+        // [Constructor] AnimatedModel()
         .addStaticFunction("new", &CreateObject<AnimatedModel>)
 
         // [Method] void SetModel(Model* model, bool createBones = true)
@@ -59,10 +60,15 @@ void RegisterAnimatedModel(kaguya::State& lua)
         .addFunction("AddAnimationState", &AnimatedModel::AddAnimationState)
 
         .addOverloadedFunctions("RemoveAnimationState",
+            // [Method] void AnimatedModel::RemoveAnimationState(Animation* animation)
             static_cast<void(AnimatedModel::*)(Animation*)>(&AnimatedModel::RemoveAnimationState),
+            // [Method] void AnimatedModel::RemoveAnimationState(const String& animationName)
             static_cast<void(AnimatedModel::*)(const String&)>(&AnimatedModel::RemoveAnimationState),
+            // [Method] void AnimatedModel::RemoveAnimationState(StringHash animationNameHash)
             static_cast<void(AnimatedModel::*)(StringHash)>(&AnimatedModel::RemoveAnimationState),
+            // [Method] void AnimatedModel::RemoveAnimationState(AnimationState* state)
             static_cast<void(AnimatedModel::*)(AnimationState*)>(&AnimatedModel::RemoveAnimationState),
+            // [Method] void AnimatedModel::RemoveAnimationState(unsigned index)
             static_cast<void(AnimatedModel::*)(unsigned)>(&AnimatedModel::RemoveAnimationState))
 
         // [Method] void RemoveAllAnimationStates()
@@ -73,8 +79,11 @@ void RegisterAnimatedModel(kaguya::State& lua)
         .addFunction("SetUpdateInvisible", &AnimatedModel::SetUpdateInvisible)
 
         .addOverloadedFunctions("SetMorphWeight",
+            // [Method] void SetMorphWeight(unsigned index, float weight)
             static_cast<void(AnimatedModel::*)(unsigned, float)>(&AnimatedModel::SetMorphWeight),
+            // [Method] void SetMorphWeight(const String& name, float weight)
             static_cast<void(AnimatedModel::*)(const String&, float)>(&AnimatedModel::SetMorphWeight),
+            // [Method] void SetMorphWeight(StringHash nameHash, float weight)
             static_cast<void(AnimatedModel::*)(StringHash, float)>(&AnimatedModel::SetMorphWeight))
 
         // [Method] void ResetMorphWeights()
@@ -87,9 +96,13 @@ void RegisterAnimatedModel(kaguya::State& lua)
         .addFunction("GetNumAnimationStates", &AnimatedModel::GetNumAnimationStates)
 
         .addOverloadedFunctions("GetAnimationState",
+            // [Method] AnimationState* GetAnimationState(Animation* animation) const
             static_cast<AnimationState*(AnimatedModel::*)(Animation*) const>(&AnimatedModel::GetAnimationState),
+            // [Method] AnimationState* GetAnimationState(const String& animationName) const
             static_cast<AnimationState*(AnimatedModel::*)(const String&) const>(&AnimatedModel::GetAnimationState),
+            // [Method] AnimationState* GetAnimationState(StringHash animationNameHash) const
             static_cast<AnimationState*(AnimatedModel::*)(const StringHash) const>(&AnimatedModel::GetAnimationState),
+            // [Method] AnimationState* GetAnimationState(unsigned index) const
             static_cast<AnimationState*(AnimatedModel::*)(unsigned) const>(&AnimatedModel::GetAnimationState))
 
         // [Method] float GetAnimationLodBias() const
@@ -102,8 +115,11 @@ void RegisterAnimatedModel(kaguya::State& lua)
         .addFunction("GetNumMorphs", &AnimatedModel::GetNumMorphs)
 
         .addOverloadedFunctions("GetMorphWeight",
+            // [Method] float GetMorphWeight(unsigned index) const
             static_cast<float(AnimatedModel::*)(unsigned) const>(&AnimatedModel::GetMorphWeight),
+            // [Method] float GetMorphWeight(const String& name) const
             static_cast<float(AnimatedModel::*)(const String&) const>(&AnimatedModel::GetMorphWeight),
+            // [Method] float GetMorphWeight(StringHash nameHash) const
             static_cast<float(AnimatedModel::*)(StringHash) const>(&AnimatedModel::GetMorphWeight))
 
         // [Method] bool IsMaster() const
@@ -112,6 +128,7 @@ void RegisterAnimatedModel(kaguya::State& lua)
         // [Method] void UpdateBoneBoundingBox()
         .addFunction("UpdateBoneBoundingBox", &AnimatedModel::UpdateBoneBoundingBox)
 
+        // [Property] Model* model
         .addProperty("model", &AnimatedModelModelGetter, &AnimatedModelModelSetter)
 
         // [Property(ReadOnly)] UpdateGeometryType updateGeometryType

@@ -40,15 +40,18 @@ void RegisterDbConnection(kaguya::State& lua)
 
     // [Class] DbConnection : Object
     lua["DbConnection"].setClass(UserdataMetatable<DbConnection, Object>()
-        
+        // [Method] void Finalize()
         .addFunction("Finalize", &DbConnection::Finalize)
-        
+        // [Method] DbResult Execute(const String& sql, bool useCursorEvent = false)
         .addFunction("Execute", DbConnectionExecute())
-
+        // [Method] const String& GetConnectionString() const
         .addFunction("GetConnectionString", &DbConnection::GetConnectionString)
+        // [Method] bool IsConnected() const
         .addFunction("IsConnected", &DbConnection::IsConnected)
 
+        // [Property] const String& connectionString
         .addProperty("connectionString", &DbConnection::GetConnectionString)
+        // [Property] bool connected
         .addProperty("connected", &DbConnection::IsConnected)
     );
 }

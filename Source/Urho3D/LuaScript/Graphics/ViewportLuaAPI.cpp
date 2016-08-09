@@ -65,6 +65,9 @@ void RegisterViewport(kaguya::State& lua)
 
     // [Class] Viewport : Object
     lua["Viewport"].setClass(UserdataMetatable<Viewport, Object>()
+        // [Constructor] Viewport()
+        // [Constructor] Viewport(Scene* scene, Camera* camera, RenderPath* renderPath = 0)
+        // [Constructor] Viewport(Scene* scene, Camera* camera, const IntRect& rect, RenderPath* renderPath = 0)
         .addOverloadedFunctions("new", &CreateViewport0, &CreateViewport1, &CreateViewport2, &CreateViewport3, &CreateViewport4)
 
         // [Method] void SetScene(Scene* scene)
@@ -75,7 +78,9 @@ void RegisterViewport(kaguya::State& lua)
         .addFunction("SetRect", &Viewport::SetRect)
 
         .addOverloadedFunctions("SetRenderPath",
+            // [Method] void SetRenderPath(RenderPath* renderPath)
             static_cast<void(Viewport::*)(RenderPath*)>(&Viewport::SetRenderPath),
+            // [Method] void SetRenderPath(XMLFile* file)
             static_cast<void(Viewport::*)(XMLFile*)>(&Viewport::SetRenderPath))
 
         // [Method] void SetDrawDebug(bool enable)

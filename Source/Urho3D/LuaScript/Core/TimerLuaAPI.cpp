@@ -46,10 +46,14 @@ void RegisterTimer(kaguya::State& lua)
         // [Method] float GetElapsedTime()
         .addFunction("GetElapsedTime", &Time::GetElapsedTime)
 
+        // [StaticMethod] unsigned GetSystemTime()
         .addStaticFunction("GetSystemTime", &Time::GetSystemTime)
+        // [StaticMethod] unsigned GetTimeSinceEpoch()
         .addStaticFunction("GetTimeSinceEpoch", &Time::GetTimeSinceEpoch)
+        // [StaticMethod] String GetTimeStamp()
         .addStaticFunction("GetTimeStamp", &Time::GetTimeStamp)
-        .addStaticFunction("Sleep", &Time::GetTimeStamp)
+        // [StaticMethod] void Sleep(unsigned mSec)
+        .addStaticFunction("Sleep", &Time::Sleep)
 
         // [Property(ReadOnly)] unsigned frameNumber
         .addProperty("frameNumber", &Time::GetFrameNumber)

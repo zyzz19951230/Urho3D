@@ -40,6 +40,7 @@ void RegisterTexture3D(kaguya::State& lua)
 
     // [Class] Texture3D : Texture
     lua["Texture3D"].setClass(UserdataMetatable<Texture3D, Texture>()
+        // [Constructor] Texture3D()
         .addStaticFunction("new", &CreateObject<Texture3D>)
         
         // [Method] bool SetSize(int width, int height, int depth, unsigned format, TextureUsage usage = TEXTURE_STATIC)

@@ -56,6 +56,7 @@ void RegisterCamera(kaguya::State& lua)
 
     // [Class] Camera : Component
     lua["Camera"].setClass(UserdataMetatable<Camera, Component>()
+        // [Constructor] Camera()
         .addStaticFunction("new", &CreateObject<Camera>)
         
         // [Method] void SetNearClip(float nearClip)
@@ -66,7 +67,9 @@ void RegisterCamera(kaguya::State& lua)
         .addFunction("SetFov", &Camera::SetFov)
 
         .addOverloadedFunctions("SetOrthoSize",
+            // [Method] void SetOrthoSize(float orthoSize)
             static_cast<void(Camera::*)(float)>(&Camera::SetOrthoSize),
+            // [Method] void SetOrthoSize(const Vector2& orthoSize)
             static_cast<void(Camera::*)(const Vector2&)>(&Camera::SetOrthoSize))
 
         // [Method] void SetAspectRatio(float aspectRatio)
@@ -126,7 +129,9 @@ void RegisterCamera(kaguya::State& lua)
         .addFunction("GetFrustum", &Camera::GetFrustum)
 
         .addOverloadedFunctions("GetProjection",
+            // [Method] const Matrix4& GetProjection() const
             static_cast<const Matrix4&(Camera::*)() const>(&Camera::GetProjection),
+            // [Method] Matrix4 GetProjection(bool apiSpecific) const
             static_cast<Matrix4(Camera::*)(bool) const>(&Camera::GetProjection))
 
         // [Method] const Matrix3x4& GetView() const

@@ -31,25 +31,25 @@
 namespace Urho3D
 {
 
-static bool SoundLoadRaw(Sound* sound, const char* filepath)
+static bool SoundLoadRaw(Sound* sound, const String& fileName)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return false;
     return sound->LoadRaw(*file);
 }
 
-static bool SoundLoadWav(Sound* sound, const char* filepath)
+static bool SoundLoadWav(Sound* sound, const String& fileName)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return false;
     return sound->LoadWav(*file);
 }
 
-static bool SoundLoadOggVorbis(Sound* sound, const char* filepath)
+static bool SoundLoadOggVorbis(Sound* sound, const String& fileName)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return false;
     return sound->LoadOggVorbis(*file);
@@ -61,18 +61,25 @@ void RegisterSound(kaguya::State& lua)
 
     // [Class] Sound : Resource
     lua["Sound"].setClass(UserdataMetatable<Sound, Resource>()
+        // [Constructor] Sound()
         .addStaticFunction("new", &CreateObject<Sound>)
 
         .addOverloadedFunctions("LoadRaw", 
+            // [Method] bool LoadRaw(Deserializer& source)
             &Sound::LoadRaw,
+            // [Method] bool LoadRaw(Deserializer& source)
             &SoundLoadRaw)
 
         .addOverloadedFunctions("LoadWav", 
-            &Sound::LoadWav,
+            // [Method] bool LoadWav(Deserializer& source)
+            &Sound::LoadWav,            
+            // [Method] bool LoadWav(const String& fileName)
             &SoundLoadWav)
 
         .addOverloadedFunctions("LoadOggVorbis", 
+            // [Method] bool LoadOggVorbis(Deserializer& source)
             &Sound::LoadOggVorbis,
+            // [Method] bool LoadOggVorbis(const String& fileName)
             &SoundLoadOggVorbis)
 
         // [Method] void SetSize(unsigned dataSize)

@@ -37,6 +37,7 @@ void RegisterRenderSurface(kaguya::State& lua)
 
     // [Class] RenderSurface : RefCounted
     lua["RenderSurface"].setClass(UserdataMetatable<RenderSurface, RefCounted>()
+        // [Constructor] RenderSurface(Texture* texture)
         .setConstructors<RenderSurface(Texture*)>()
         
         // [Method] void SetNumViewports(unsigned num)

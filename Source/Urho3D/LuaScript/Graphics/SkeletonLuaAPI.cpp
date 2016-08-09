@@ -43,20 +43,33 @@ void RegisterSkeleton(kaguya::State& lua)
 
     // [Class] Bone
 	lua["Bone"].setClass(UserdataMetatable<Bone>()
+        // [Constructor] Bone()
 		.setConstructors<Bone()>()
-
-		.addProperty("name", &Bone::name_)
-    	.addProperty("nameHash", &Bone::nameHash_)
-    	.addProperty("parentIndex", &Bone::parentIndex_)
-    	.addProperty("initialPosition", &Bone::initialPosition_)
-    	.addProperty("initialRotation", &Bone::initialRotation_)
-    	.addProperty("initialScale", &Bone::initialScale_)
-    	.addProperty("offsetMatrix", &Bone::offsetMatrix_)
-    	.addProperty("animated", &Bone::animated_)
-    	.addProperty("collisionMask", &Bone::collisionMask_)
-    	.addProperty("radius", &Bone::radius_)
-    	.addProperty("boundingBox", &Bone::boundingBox_)
-    	.addProperty("node", &Bone::node_)
+        
+        // [Field] String name
+        .addProperty("name", &Bone::name_)
+        // [Field] StringHash nameHash
+        .addProperty("nameHash", &Bone::nameHash_)
+        // [Field] unsigned parentIndex
+        .addProperty("parentIndex", &Bone::parentIndex_)
+        // [Field] Vector3 initialPosition
+        .addProperty("initialPosition", &Bone::initialPosition_)
+        // [Field] Quaternion initialRotation
+        .addProperty("initialRotation", &Bone::initialRotation_)
+        // [Field] Vector3 initialScale
+        .addProperty("initialScale", &Bone::initialScale_)
+        // [Field] Matrix3x4 offsetMatrix
+        .addProperty("offsetMatrix", &Bone::offsetMatrix_)
+        // [Field] bool animated
+        .addProperty("animated", &Bone::animated_)
+        // [Field] unsigned char collisionMask
+        .addProperty("collisionMask", &Bone::collisionMask_)
+        // [Field] float radius
+        .addProperty("radius", &Bone::radius_)
+        // [Field] BoundingBox boundingBox
+        .addProperty("boundingBox", &Bone::boundingBox_)
+        // [Field] WeakPtr<Node> node
+        .addProperty("node", &Bone::node_)
 		);
 
     // [Class] Skeleton
@@ -69,8 +82,11 @@ void RegisterSkeleton(kaguya::State& lua)
         .addFunction("GetRootBone", &Skeleton::GetRootBone)
 
         .addOverloadedFunctions("GetBone",
+            // [Method] Bone* GetBone(unsigned index)
             static_cast<Bone*(Skeleton::*)(unsigned)>(&Skeleton::GetBone),
+            // [Method] Bone* GetBone(const char* name)
             static_cast<Bone*(Skeleton::*)(const char*)>(&Skeleton::GetBone),
+            // [Method] Bone* GetBone(StringHash nameHash)
             static_cast<Bone*(Skeleton::*)(StringHash)>(&Skeleton::GetBone))
 
         // [Property(ReadOnly)] unsigned numBones

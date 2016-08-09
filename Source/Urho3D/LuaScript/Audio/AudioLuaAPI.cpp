@@ -90,8 +90,6 @@ void RegisterAudio(kaguya::State& lua)
         // [Method] void RemoveSoundSource(SoundSource* soundSource)
         .addFunction("RemoveSoundSource", &Audio::RemoveSoundSource)        
         
-        // .addFunction("MixOutput", &Audio::MixOutput)
-
         // [Property(ReadOnly)] unsigned sampleSize
         .addProperty("sampleSize", &Audio::GetSampleSize)
         // [Property(ReadOnly)] int mixRate

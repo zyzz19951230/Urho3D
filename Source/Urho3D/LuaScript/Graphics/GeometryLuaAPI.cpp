@@ -41,6 +41,7 @@ void RegisterGeometry(kaguya::State& lua)
 
     // [Class] Geometry : Object
     lua["Geometry"].setClass(UserdataMetatable<Geometry, Object>()
+        // [Constructor] Geometry()
         .addStaticFunction("new", &CreateObject<Geometry>)
         
         // [Method] bool SetNumVertexBuffers(unsigned num)
@@ -51,7 +52,9 @@ void RegisterGeometry(kaguya::State& lua)
         .addFunction("SetIndexBuffer", &Geometry::SetIndexBuffer)
 
         .addOverloadedFunctions("SetDrawRange", 
+            // [Method] bool SetDrawRange(PrimitiveType type, unsigned indexStart, unsigned indexCount, bool getUsedVertexRange = true)
             GeometrySetDrawRange0(),
+            // [Method] bool SetDrawRange(PrimitiveType type, unsigned indexStart, unsigned indexCount, unsigned vertexStart, unsigned vertexCount, bool checkIllegal = true)
             GeometrySetDrawRange1())
 
         // [Method] void SetLodDistance(float distance)

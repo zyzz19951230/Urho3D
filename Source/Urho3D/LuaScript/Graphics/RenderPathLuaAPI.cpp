@@ -40,58 +40,57 @@ void RegisterRenderPath(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] RenderCommandType
-    // [Variable] CMD_NONE
     lua["CMD_NONE"] = CMD_NONE;
-    // [Variable] CMD_CLEAR,
     lua["CMD_CLEAR"] = CMD_CLEAR;
-    // [Variable] CMD_SCENEPASS,
     lua["CMD_SCENEPASS"] = CMD_SCENEPASS;
-    // [Variable] CMD_QUAD,
     lua["CMD_QUAD"] = CMD_QUAD;
-    // [Variable] CMD_FORWARDLIGHTS,
     lua["CMD_FORWARDLIGHTS"] = CMD_FORWARDLIGHTS;
-    // [Variable] CMD_LIGHTVOLUMES,
     lua["CMD_LIGHTVOLUMES"] = CMD_LIGHTVOLUMES;
-    // [Variable] CMD_RENDERUI,
     lua["CMD_RENDERUI"] = CMD_RENDERUI;
-    // [Variable] CMD_SENDEVENT
     lua["CMD_SENDEVENT"] = CMD_SENDEVENT;
 
     // [Enum] RenderCommandSortMode
-    // [Variable] SORT_FRONTTOBACK
     lua["SORT_FRONTTOBACK"] = SORT_FRONTTOBACK;
-    // [Variable] SORT_BACKTOFRONT
     lua["SORT_BACKTOFRONT"] = SORT_BACKTOFRONT;
 
     // [Enum] RenderTargetSizeMode
-    // [Variable] SIZE_ABSOLUTE
     lua["SIZE_ABSOLUTE"] = SIZE_ABSOLUTE;
-    // [Variable] SIZE_VIEWPORTDIVISOR,
     lua["SIZE_VIEWPORTDIVISOR"] = SIZE_VIEWPORTDIVISOR;
-    // [Variable] SIZE_VIEWPORTMULTIPLIER
     lua["SIZE_VIEWPORTMULTIPLIER"] = SIZE_VIEWPORTMULTIPLIER;
 
     // [Class] RenderTargetInfo
     lua["RenderTargetInfo"].setClass(UserdataMetatable<RenderTargetInfo>()
+        // [Constructor] RenderTargetInfo()
         .setConstructors<RenderTargetInfo()>()
 
         // [Method] void Load(const XMLElement& element)
         .addFunction("Load", &RenderTargetInfo::Load)
         
+        // [Field] String name
         .addProperty("name", &RenderTargetInfo::name_)
+        // [Field] String tag
         .addProperty("tag", &RenderTargetInfo::tag_)
+        // [Field] unsigned format
         .addProperty("format", &RenderTargetInfo::format_)
+        // [Field] Vector2 size
         .addProperty("size", &RenderTargetInfo::size_)
+        // [Field] RenderTargetSizeMode sizeMode
         .addProperty("sizeMode", &RenderTargetInfo::sizeMode_)
+        // [Field] bool enabled
         .addProperty("enabled", &RenderTargetInfo::enabled_)
+        // [Field] bool cubemap
         .addProperty("cubemap", &RenderTargetInfo::cubemap_)
+        // [Field] bool filtered
         .addProperty("filtered", &RenderTargetInfo::filtered_)
+        // [Field] bool sRGB
         .addProperty("sRGB", &RenderTargetInfo::sRGB_)
+        // [Field] bool persistent
         .addProperty("persistent", &RenderTargetInfo::persistent_)
     );
 
     // [Class] RenderPathCommand
     lua["RenderPathCommand"].setClass(UserdataMetatable<RenderPathCommand>()
+        // [Constructor] RenderPathCommand()
         .setConstructors<RenderPathCommand()>()
 
         // [Method] void Load(const XMLElement& element)
@@ -128,26 +127,47 @@ void RegisterRenderPath(kaguya::State& lua)
         // [Method] const String& GetDepthStencilName() const
         .addFunction("GetDepthStencilName", &RenderPathCommand::GetDepthStencilName)
         
+        // [Field] String tag
         .addProperty("tag", &RenderPathCommand::tag_)
+        // [Field] RenderCommandType type
         .addProperty("type", &RenderPathCommand::type_)
+        // [Field] RenderCommandSortMode sortMode
         .addProperty("sortMode", &RenderPathCommand::sortMode_)
+        // [Field] String pass
         .addProperty("pass", &RenderPathCommand::pass_)
+        // [Field] unsigned passIndex
         .addProperty("passIndex", &RenderPathCommand::passIndex_)
+        // [Field] String metadata
         .addProperty("metadata", &RenderPathCommand::metadata_)
+        // [Field] String vertexShaderName
         .addProperty("vertexShaderName", &RenderPathCommand::vertexShaderName_)
+        // [Field] String pixelShaderName
         .addProperty("pixelShaderName", &RenderPathCommand::pixelShaderName_)
+        // [Field] String vertexShaderDefines
         .addProperty("vertexShaderDefines", &RenderPathCommand::vertexShaderDefines_)
+        // [Field] String pixelShaderDefines
         .addProperty("pixelShaderDefines", &RenderPathCommand::pixelShaderDefines_)
+        // [Field] unsigned clearFlags
         .addProperty("clearFlags", &RenderPathCommand::clearFlags_)
+        // [Field] Color clearColor
         .addProperty("clearColor", &RenderPathCommand::clearColor_)
+        // [Field] float clearDepth
         .addProperty("clearDepth", &RenderPathCommand::clearDepth_)
+        // [Field] unsigned clearStencil
         .addProperty("clearStencil", &RenderPathCommand::clearStencil_)
+        // [Field] BlendMode blendMode
         .addProperty("blendMode", &RenderPathCommand::blendMode_)
+        // [Field] bool enabled
         .addProperty("enabled", &RenderPathCommand::enabled_)
+        // [Field] bool useFogColor
         .addProperty("useFogColor", &RenderPathCommand::useFogColor_)
+        // [Field] bool markToStencil
         .addProperty("markToStencil", &RenderPathCommand::markToStencil_)
+        // [Field] bool useLitBase
         .addProperty("useLitBase", &RenderPathCommand::useLitBase_)
+        // [Field] bool vertexLights
         .addProperty("vertexLights", &RenderPathCommand::vertexLights_)
+        // [Field] String eventName
         .addProperty("eventName", &RenderPathCommand::eventName_)
     );
 
@@ -173,7 +193,9 @@ void RegisterRenderPath(kaguya::State& lua)
         .addFunction("AddRenderTarget", &RenderPath::AddRenderTarget)
 
         .addOverloadedFunctions("RemoveRenderTarget",
+            // [Method] void RemoveRenderTarget(unsigned index)
             static_cast<void(RenderPath::*)(unsigned)>(&RenderPath::RemoveRenderTarget),
+            // [Method] void RemoveRenderTarget(const String& name)
             static_cast<void(RenderPath::*)(const String&)>(&RenderPath::RemoveRenderTarget))
 
         // [Method] void RemoveRenderTargets(const String& tag)

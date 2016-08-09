@@ -46,6 +46,7 @@ void RegisterDatabase(kaguya::State& lua)
     // [Class] Database : Object
     lua["Database"].setClass(UserdataMetatable<Database, Object>()
 
+        // [StaticMethod] DBAPI GetAPI()
         .addStaticFunction("GetAPI", &Database::GetAPI)
 
         // [Method] DbConnection* Connect(const String& connectionString)
@@ -64,8 +65,6 @@ void RegisterDatabase(kaguya::State& lua)
         // [Property] unsigned poolSize
         .addProperty("poolSize", &Database::GetPoolSize, &Database::SetPoolSize)
     );
-
-    // lua["GetDBAPI"] = function(&Database::GetAPI)
 }
 }
 

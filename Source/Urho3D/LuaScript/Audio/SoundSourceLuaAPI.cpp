@@ -40,12 +40,17 @@ void RegisterSoundSource(kaguya::State& lua)
 
     // [Class] SoundSource : Component
     lua["SoundSource"].setClass(UserdataMetatable<SoundSource, Component>()
+        // [Constructor] SoundSource()
         .addStaticFunction("new", &CreateObject<SoundSource>)
 
         .addOverloadedFunctions("Play",
+            // [Method] void Play(Sound* sound)
             static_cast<void(SoundSource::*)(Sound*)>(&SoundSource::Play),
+            // [Method] void Play(Sound* sound, float frequency)
             static_cast<void(SoundSource::*)(Sound*, float)>(&SoundSource::Play),
+            // [Method] void Play(Sound* sound, float frequency, float gain)
             static_cast<void(SoundSource::*)(Sound*, float, float)>(&SoundSource::Play),
+            // [Method] void Play(Sound* sound, float frequency, float gain, float panning)
             static_cast<void(SoundSource::*)(Sound*, float, float, float)>(&SoundSource::Play))
 
         // [Method] void Stop()
@@ -60,8 +65,6 @@ void RegisterSoundSource(kaguya::State& lua)
         .addFunction("SetAttenuation", &SoundSource::SetAttenuation)
         // [Method] void SetPanning(float panning)
         .addFunction("SetPanning", &SoundSource::SetPanning)
-        // .addFunction("SetAutoRemove", &SoundSource::SetAutoRemove)
-        
         // [Method] Sound* GetSound() const
         .addFunction("GetSound", &SoundSource::GetSound)
         // [Method] String GetSoundType() const
@@ -76,7 +79,6 @@ void RegisterSoundSource(kaguya::State& lua)
         .addFunction("GetAttenuation", &SoundSource::GetAttenuation)
         // [Method] float GetPanning() const
         .addFunction("GetPanning", &SoundSource::GetPanning)
-        // .addFunction("GetAutoRemove", &SoundSource::GetAutoRemove)
         // [Method] bool IsPlaying() const
         .addFunction("IsPlaying", &SoundSource::IsPlaying)
         
@@ -94,7 +96,6 @@ void RegisterSoundSource(kaguya::State& lua)
         .addProperty("attenuation", &SoundSource::GetAttenuation, &SoundSource::SetAttenuation)
         // [Property] float panning
         .addProperty("panning", &SoundSource::GetPanning, &SoundSource::SetPanning)
-        // .addProperty("autoRemove", &SoundSource::GetAutoRemove, &SoundSource::SetAutoRemove)
         // [Property(ReadOnly)] bool playing
         .addProperty("playing", &SoundSource::IsPlaying)
         );

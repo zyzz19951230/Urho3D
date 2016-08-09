@@ -40,6 +40,7 @@ void RegisterTexture2D(kaguya::State& lua)
 
     // [Class] Texture2D : Texture
     lua["Texture2D"].setClass(UserdataMetatable<Texture2D, Texture>()
+        // [Constructor] Texture2D()
         .addStaticFunction("new", &CreateObject<Texture2D>)
         
         // [Method] bool SetSize(int width, int height, unsigned format, TextureUsage usage = TEXTURE_STATIC)
