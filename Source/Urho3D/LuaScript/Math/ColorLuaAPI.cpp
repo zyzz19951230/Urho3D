@@ -41,14 +41,22 @@ void RegisterColor(kaguya::State& lua)
 
     // [Class] Color
     lua["Color"].setClass(UserdataMetatable<Color>()
+        // [Constructor] Color()
         .setConstructors<Color(),
+        // [Constructor] Color(const Color& color)
         Color(const Color&),
+        // [Constructor] Color(const Color& color, float a)
         Color(const Color&, float),
+        // [Constructor] Color(float r, float g, float b)
         Color(float, float, float),
+        // [Constructor] Color(float r, float g, float b, float a)
         Color(float, float, float, float)>()
 
+        // [Method] bool operator ==(const Color& rhs)
         .addFunction("__eq", &Color::operator==)
+        // [Method] Color operator *(float rhs) const
         .addFunction("__mul", &Color::operator*)
+        // [Method] Color operator +(const Color& rhs)
         .addFunction("__add", &Color::operator+)
 
         // [Method] unsigned ToUInt() const
@@ -110,20 +118,34 @@ void RegisterColor(kaguya::State& lua)
         // [Method] String ToString() const
         .addFunction("ToString", &Color::ToString)
 
+        // [Field] float r
         .addProperty("r", &Color::r_)
+        // [Field] float g
         .addProperty("g", &Color::g_)
+        // [Field] float b
         .addProperty("b", &Color::b_)
+        // [Field] float a
         .addProperty("a", &Color::a_)
 
+        // [StaticConstant] Color WHITE
         .addStaticField("WHITE", &Color::WHITE)
+        // [StaticConstant] Color GRAY
         .addStaticField("GRAY", &Color::GRAY)
+        // [StaticConstant] Color BLACK
         .addStaticField("BLACK", &Color::BLACK)
+        // [StaticConstant] Color RED
         .addStaticField("RED", &Color::RED)
+        // [StaticConstant] Color GREEN
         .addStaticField("GREEN", &Color::GREEN)
+        // [StaticConstant] Color BLUE
         .addStaticField("BLUE", &Color::BLUE)
+        // [StaticConstant] Color CYAN
         .addStaticField("CYAN", &Color::CYAN)
+        // [StaticConstant] Color MAGENTA
         .addStaticField("MAGENTA", &Color::MAGENTA)
+        // [StaticConstant] Color YELLOW
         .addStaticField("YELLOW", &Color::YELLOW)
+        // [StaticConstant] Color TRANSPARENT
         .addStaticField("TRANSPARENT", &Color::TRANSPARENT)
         );
 }

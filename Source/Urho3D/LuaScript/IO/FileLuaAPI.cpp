@@ -58,23 +58,26 @@ void RegisterFile(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] FileMode
-    // [Constant] File(Context* context, String& fileName, FileMode mode
     lua["FILE_READ"] = FILE_READ;
-    // [Variable] FILE_WRITE,
     lua["FILE_WRITE"] = FILE_WRITE;
-    // [Variable] FILE_READWRITE
     lua["FILE_READWRITE"] = FILE_READWRITE;
 
-    // [Class] File : MultipleBase<Object, Deserializer, Serializer> 
+    // [Class] File : Object, Deserializer, Serializer 
     lua["File"].setClass(UserdataMetatable<File, MultipleBase<Object, Deserializer, Serializer> >()
         .addOverloadedFunctions("new", 
+            // [Constructor] File()
             &CreateFile0, 
+            // [Constructor] File(const String& fileName)
             &CreateFile1,
+            // [Constructor] File(const String& fileName, FileMode mode)
             &CreateFile2,
+            // [Constructor] File(PackageFile* package, const String& fileName)
             &CreateFile3)
 
         .addOverloadedFunctions("Open",
+            // [Method] bool Open(const String& fileName, FileMode mode = FILE_READ)
             FileOpen(),
+            // [Method] bool Open(PackageFile* package, const String& fileName)
             static_cast<bool(File::*)(PackageFile*, const String&)>(&File::Open))
 
         // [Method] void Close()

@@ -75,20 +75,31 @@ void RegisterCrowdManager(kaguya::State& lua)
     // [Class] CrowdObstacleAvoidanceParams
     lua["CrowdObstacleAvoidanceParams"].setClass(UserdataMetatable<CrowdObstacleAvoidanceParams>()
 
+        // [Field] float velBias
         .addProperty("velBias", &CrowdObstacleAvoidanceParams::velBias)
+        // [Field] float weightDesVel
         .addProperty("weightDesVel", &CrowdObstacleAvoidanceParams::weightDesVel)
+        // [Field] float weightCurVel
         .addProperty("weightCurVel", &CrowdObstacleAvoidanceParams::weightCurVel)
+        // [Field] float weightSide
         .addProperty("weightSide", &CrowdObstacleAvoidanceParams::weightSide)
+        // [Field] float weightToi
         .addProperty("weightToi", &CrowdObstacleAvoidanceParams::weightToi)
+        // [Field] float horizTime
         .addProperty("horizTime", &CrowdObstacleAvoidanceParams::horizTime)
+        // [Field] unsigned char gridSize;   
         .addProperty("gridSize", &CrowdObstacleAvoidanceParams::gridSize)
+        // [Field] unsigned char adaptiveDivs
         .addProperty("adaptiveDivs", &CrowdObstacleAvoidanceParams::adaptiveDivs)
+        // [Field] unsigned char adaptiveRings
         .addProperty("adaptiveRings", &CrowdObstacleAvoidanceParams::adaptiveRings)
+        // [Field] unsigned char adaptiveDepth
         .addProperty("adaptiveDepth", &CrowdObstacleAvoidanceParams::adaptiveDepth)
         );
 
     // [Class] CrowdManager : Component
     lua["CrowdManager"].setClass(UserdataMetatable<CrowdManager, Component>()
+        // [Constructor] CrowdManager()
         .addStaticFunction("new", &CreateObject<CrowdManager>)
 
         // [Method] void DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
@@ -126,6 +137,7 @@ void RegisterCrowdManager(kaguya::State& lua)
         // [Method] Vector3 MoveAlongSurface(const Vector3& start, const Vector3& end, int queryFilterType, int maxVisited = 3)
         .addFunction("MoveAlongSurface", CrowdManagerMoveAlongSurface())
 
+        // [Method] PODVector<Vector3> FindPath(Vector3& start, const Vector3& end, int queryFilterType)
         .addStaticFunction("FindPath", &CrowdManagerFindPath)
         
         // [Method] Vector3 GetRandomPoint(int queryFilterType, dtPolyRef* randomRef = 0)
@@ -133,7 +145,9 @@ void RegisterCrowdManager(kaguya::State& lua)
         // [Method] Vector3 GetRandomPointInCircle(const Vector3& center, float radius, int queryFilterType, dtPolyRef* randomRef = 0)
         .addFunction("GetRandomPointInCircle", CrowdManagerGetRandomPointInCircle())
 
+        // [Method] tuple<float, Vector3, Vector3> GetDistanceToWall(CrowdManager* self, const Vector3& point, float radius, int queryFilterType)
         .addStaticFunction("GetDistanceToWall", &CrowdManagerGetDistanceToWall)        
+        // [Method] tuple<Vector3, Vector3> Raycast(const Vector3& start, const Vector3& end, int queryFilterType)
         .addStaticFunction("Raycast", &CrowdManagerRaycast)
 
         // [Method] unsigned GetMaxAgents() const

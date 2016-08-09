@@ -103,6 +103,7 @@ void RegisterFileSystem(kaguya::State& lua)
         // [Method] bool DirExists(const String& pathName) const
         .addFunction("DirExists", &FileSystem::DirExists)
         
+        // [Method] Vector<String> ScanDir(const String& pathName, const String& filter, unsigned flags, bool recursive)
         .addStaticFunction("ScanDir", &FileSystemScanDir)
 
         // [Method] String GetProgramDir() const
@@ -118,7 +119,9 @@ void RegisterFileSystem(kaguya::State& lua)
     // [Function] String GetFileName(const String& fullPath)
     lua["GetFileName"] = function(&GetFileName);
     
+    // [Function] String GetExtension(const String& fullPath, bool lowercaseExtension = true)
     lua["GetExtension"] = GetExtensionOverloads();
+    // [Function] String GetFileNameAndExtension(const String& fullPath, bool lowercaseExtension = false)
     lua["GetFileNameAndExtension"] = GetFileNameAndExtensionOverloads();
 
     // [Function] String ReplaceExtension(const String& fullPath, const String& newExtension)
@@ -136,6 +139,7 @@ void RegisterFileSystem(kaguya::State& lua)
 
     // [Function] bool IsAbsolutePath(const String& pathName)
     lua["IsAbsolutePath"] = function(&IsAbsolutePath);
+    // [Function] String GetFileSizeString(unsigned long long memorySize)
     lua["GetFileSizeString"] = function(&GetFileSizeString);
 }
 }

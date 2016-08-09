@@ -38,6 +38,7 @@ void RegisterNavArea(kaguya::State& lua)
 
     // [Class] NavArea : Component
     lua["NavArea"].setClass(UserdataMetatable<NavArea, Component>()
+        // [Constructor] NavArea()
         .addStaticFunction("new", &CreateObject<NavArea>)
 
         // [Method] unsigned GetAreaID() const

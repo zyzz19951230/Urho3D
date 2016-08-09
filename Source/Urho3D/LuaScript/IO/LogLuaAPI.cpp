@@ -81,7 +81,9 @@ void RegisterLog(kaguya::State& lua)
         // [Method] bool IsQuiet() const
         .addFunction("IsQuiet", &Log::IsQuiet)
 
+        // [StaticMethod] void Write(int level, const String& message)
         .addStaticFunction("Write", &Log::Write)
+        // [StaticMethod] void WriteRaw(const String& message, bool error = false)
         ADD_OVERLOADED_FUNCTIONS_2(Log, WriteRaw)
 
         // [Property] int level

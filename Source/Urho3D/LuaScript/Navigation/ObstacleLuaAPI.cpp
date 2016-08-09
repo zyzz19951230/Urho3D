@@ -38,6 +38,7 @@ void RegisterObstacle(kaguya::State& lua)
 
     // [Class] Obstacle : Component
     lua["Obstacle"].setClass(UserdataMetatable<Obstacle, Component>()
+        // [Constructor] Obstacle()
         .addStaticFunction("new", &CreateObject<Obstacle>)
 
         // [Method] float GetHeight() const

@@ -47,15 +47,13 @@ void RegisterRigidBody(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] CollisionEventMode
-    // [Variable] COLLISION_NEVER
     lua["COLLISION_NEVER"] = COLLISION_NEVER;
-    // [Variable] COLLISION_ACTIVE,
     lua["COLLISION_ACTIVE"] = COLLISION_ACTIVE;
-    // [Variable] COLLISION_ALWAYS
     lua["COLLISION_ALWAYS"] = COLLISION_ALWAYS;
 
     // [Class] RigidBody : Component
     lua["RigidBody"].setClass(UserdataMetatable<RigidBody, Component>()
+        // [Constructor] RigidBody()
         .addStaticFunction("new", &CreateObject<RigidBody>)
 
         // [Method] void SetMass(float mass)
@@ -114,14 +112,18 @@ void RegisterRigidBody(kaguya::State& lua)
         .addFunction("SetCollisionEventMode", &RigidBody::SetCollisionEventMode)
 
         .addOverloadedFunctions("ApplyForce",
+            // [Method] void ApplyForce(const Vector3& force)
             static_cast<void(RigidBody::*)(const Vector3&)>(&RigidBody::ApplyForce),
+            // [Method] void ApplyForce(const Vector3& force, const Vector3& position)
             static_cast<void(RigidBody::*)(const Vector3&, const Vector3&)>(&RigidBody::ApplyForce))
 
         // [Method] void ApplyTorque(const Vector3& torque)
         .addFunction("ApplyTorque", &RigidBody::ApplyTorque)
 
         .addOverloadedFunctions("ApplyImpulse",
+            // [Method] void ApplyImpulse(const Vector3& impulse)
             static_cast<void(RigidBody::*)(const Vector3&)>(&RigidBody::ApplyImpulse),
+            // [Method] void ApplyImpulse(const Vector3& impulse, const Vector3& position)
             static_cast<void(RigidBody::*)(const Vector3&, const Vector3&)>(&RigidBody::ApplyImpulse))
 
         // [Method] void ApplyTorqueImpulse(const Vector3& torque)
@@ -200,6 +202,7 @@ void RegisterRigidBody(kaguya::State& lua)
         // [Method] CollisionEventMode GetCollisionEventMode() const
         .addFunction("GetCollisionEventMode", &RigidBody::GetCollisionEventMode)
         
+        // [Method] PODVector<RigidBody*> GetCollidingBodies()
         .addStaticFunction("GetCollidingBodies", &RigidBodyGetCollidingBodies)
         
         // [Property(ReadOnly)] PhysicsWorld* physicsWorld

@@ -47,17 +47,14 @@ void RegisterHttpRequest(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] HttpRequestState
-    // [Variable] HTTP_INITIALIZING
     lua["HTTP_INITIALIZING"] = HTTP_INITIALIZING;
-    // [Variable] HTTP_ERROR,
     lua["HTTP_ERROR"] = HTTP_ERROR;
-    // [Variable] HTTP_OPEN,
     lua["HTTP_OPEN"] = HTTP_OPEN;
-    // [Variable] HTTP_CLOSED
     lua["HTTP_CLOSED"] = HTTP_CLOSED;
 
     // [Class] HttpRequest : RefCounted
     lua["HttpRequest"].setClass(UserdataMetatable<HttpRequest, RefCounted>()
+        // [Constructor] HttpRequest(const String& url, const String& verb, const Vector<String>& headers, const String& postData)
         .setConstructors<HttpRequest(const String&, const String&, const Vector<String>&, const String&)>()
 
         // [Method] const String& GetURL() const
@@ -73,6 +70,7 @@ void RegisterHttpRequest(kaguya::State& lua)
         // [Method] bool IsOpen() const
         .addFunction("IsOpen", &HttpRequest::IsOpen)
 
+        // [Method] VectorBuffer Read(unsigned size)
         .addStaticFunction("Read", &HttpRequestRead)
 
         // [Property(ReadOnly)] const String& URL

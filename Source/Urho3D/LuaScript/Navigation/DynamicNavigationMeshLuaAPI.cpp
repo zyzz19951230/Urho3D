@@ -38,6 +38,7 @@ void RegisterDynamicNavigationMesh(kaguya::State& lua)
 
     // [Class] DynamicNavigationMesh : NavigationMesh
     lua["DynamicNavigationMesh"].setClass(UserdataMetatable<DynamicNavigationMesh, NavigationMesh>()
+    	// [Constructor] DynamicNavigationMesh()
         .addStaticFunction("new", &CreateObject<DynamicNavigationMesh>)
 
         // [Method] void SetMaxObstacles(unsigned maxObstacles)

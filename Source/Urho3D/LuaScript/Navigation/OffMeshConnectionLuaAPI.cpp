@@ -40,6 +40,7 @@ void RegisterOffMeshConnection(kaguya::State& lua)
 
     // [Class] OffMeshConnection : Component
     lua["OffMeshConnection"].setClass(UserdataMetatable<OffMeshConnection, Component>()
+        // [Constructor] OffMeshConnection()
         .addStaticFunction("new", &CreateObject<OffMeshConnection>)
 
         // [Method] void SetEndPoint(Node* node)

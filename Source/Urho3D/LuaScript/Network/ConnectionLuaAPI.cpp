@@ -48,9 +48,13 @@ void RegisterConnection(kaguya::State& lua)
 
     // [Class] RemoteEvent
     lua["RemoteEvent"].setClass(UserdataMetatable<RemoteEvent>()
+        // [Field] unsigned senderID
         .addProperty("senderID", &RemoteEvent::senderID_)
+        // [Field] StringHash eventType
         .addProperty("eventType", &RemoteEvent::eventType_)
+        // [Field] VariantMap eventData
         .addProperty("eventData", &RemoteEvent::eventData_)
+        // [Field] bool inOrder
         .addProperty("inOrder", &RemoteEvent::inOrder_)
         );
 
@@ -58,11 +62,15 @@ void RegisterConnection(kaguya::State& lua)
     lua["Connection"].setClass(UserdataMetatable<Connection, Object>()
 
         .addOverloadedFunctions("SendMessage", 
+            // [Method] void SendMessage(int msgID, bool reliable, bool inOrder, const VectorBuffer& msg, unsigned contentID = 0)
             ConnectionSendMessage0(),
+            // [Method] void SendMessage(int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned numBytes, unsigned contentID = 0)
             ConnectionSendMessage1())
 
         .addOverloadedFunctions("SendRemoteEvent", 
+            // [Method] void SendRemoteEvent(StringHash eventType, bool inOrder, const VariantMap& eventData = Variant::emptyVariantMap)
             ConnectionSendRemoteEvent0(), 
+            // [Method] void SendRemoteEvent(Node* node, StringHash eventType, bool inOrder, const VariantMap& eventData = Variant::emptyVariantMap)
             ConnectionSendRemoteEvent1())
 
         // [Method] void SetScene(Scene* newScene)

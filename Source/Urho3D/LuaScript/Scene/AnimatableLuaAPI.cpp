@@ -78,7 +78,7 @@ void RegisterAnimatable(kaguya::State& lua)
         .addProperty("animationEnabled", &Animatable::GetAnimationEnabled, &Animatable::SetAnimationEnabled)
         // [Property] ObjectAnimation* objectAnimation
         .addProperty("objectAnimation", &Animatable::GetObjectAnimation, &Animatable::SetObjectAnimation)
-        // [Property(WriteOnly)] void animationTime
+        // [Property(WriteOnly)] float animationTime
         .addProperty("animationTime", &Animatable::SetAnimationTime)
         );
 }

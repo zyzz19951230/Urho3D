@@ -75,7 +75,7 @@ void RegisterSoundSource3D(kaguya::State& lua)
         .addProperty("innerAngle", &SoundSource3D::GetInnerAngle, &SoundSource3D::SetInnerAngle)
         // [Property] float outerAngle
         .addProperty("outerAngle", &SoundSource3D::GetOuterAngle, &SoundSource3D::SetOuterAngle)
-        // [Property(WriteOnly)] void rolloffFactor
+        // [Property(WriteOnly)] float rolloffFactor
         .addProperty("rolloffFactor", &SoundSource3D::SetRolloffFactor)
         );
 }

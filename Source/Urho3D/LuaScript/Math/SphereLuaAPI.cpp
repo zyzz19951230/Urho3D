@@ -38,30 +38,44 @@ void RegisterSphere(kaguya::State& lua)
 
     // [Class] Sphere
     lua["Sphere"].setClass(UserdataMetatable<Sphere>()
+        // [Constructor] Sphere()
         .setConstructors<Sphere(),
+        // [Constructor] Sphere(const Sphere& sphere)
         Sphere(const Sphere&),
+        // [Constructor] Sphere(const Vector3& center, float radius)
         Sphere(const Vector3&, float),
-        Sphere(const Vector3*, unsigned),
+        // [Constructor] Sphere(const BoundingBox& box)
         Sphere(const BoundingBox&),
+        // [Constructor] Sphere(const Frustum& frustum)
         Sphere(const Frustum&),
+        // [Constructor] Sphere(const Polyhedron& poly)
         Sphere(const Polyhedron&)>()
 
+        // [Method] 
         .addFunction("__eq", &Sphere::operator==)
 
         .addOverloadedFunctions("Define",
+            // [Method] void Define(const Sphere& sphere)
             static_cast<void(Sphere::*)(const Sphere&)>(&Sphere::Define),
+            // [Method] void Define(const Vector3& center, float radius)
             static_cast<void(Sphere::*)(const Vector3&, float)>(&Sphere::Define),
-            static_cast<void(Sphere::*)(const Vector3*, unsigned)>(&Sphere::Define),
+            // [Method] void Define(const BoundingBox& box)
             static_cast<void(Sphere::*)(const BoundingBox&)>(&Sphere::Define),
+            // [Method] void Define(const Frustum& frustum)
             static_cast<void(Sphere::*)(const Frustum&)>(&Sphere::Define),
+            // [Method] void Define(const Polyhedron& poly)
             static_cast<void(Sphere::*)(const Polyhedron&)>(&Sphere::Define))
 
         .addOverloadedFunctions("Merge",
-            static_cast<void(Sphere::*)(const Vector3&)>(&Sphere::Merge),
-            static_cast<void(Sphere::*)(const Vector3*, unsigned)>(&Sphere::Merge),
+            // [Method] void Merge(const Vector3& point)
+            static_cast<void(Sphere::*)(const Vector3&)>(&Sphere::Merge),            
+            // [Method] void Merge(const BoundingBox& box)
             static_cast<void(Sphere::*)(const BoundingBox&)>(&Sphere::Merge),
+            // [Method] void Merge(const Frustum& frustum)
             static_cast<void(Sphere::*)(const Frustum&)>(&Sphere::Merge),
+            // [Method] void Merge(const Polyhedron& poly)
             static_cast<void(Sphere::*)(const Polyhedron&)>(&Sphere::Merge),
+            // [Method] void Merge(const Sphere& sphere)
             static_cast<void(Sphere::*)(const Sphere&)>(&Sphere::Merge))
 
         // [Method] void Clear()
@@ -71,15 +85,22 @@ void RegisterSphere(kaguya::State& lua)
         .addFunction("Defined", &Sphere::Defined)
 
         .addOverloadedFunctions("IsInside",
+            // [Method] Intersection IsInside(const Vector3& point) const
             static_cast<Intersection(Sphere::*)(const Vector3&) const>(&Sphere::IsInside),
+            // [Method] Intersection IsInside(const Sphere& sphere) const
             static_cast<Intersection(Sphere::*)(const Sphere&) const>(&Sphere::IsInside),
+            // [Method] Intersection IsInside(const BoundingBox& box) const
             static_cast<Intersection(Sphere::*)(const BoundingBox&) const>(&Sphere::IsInside))
 
         .addOverloadedFunctions("IsInsideFast",
+            // [Method] Intersection IsInsideFast(const Sphere& sphere) const
             static_cast<Intersection(Sphere::*)(const Sphere&) const>(&Sphere::IsInsideFast),
+            // [Method] Intersection IsInsideFast(const BoundingBox& box) const
             static_cast<Intersection(Sphere::*)(const BoundingBox&) const>(&Sphere::IsInsideFast))
 
+        // [Field] Vector3 center
         .addProperty("center", &Sphere::center_)
+        // [Field] float radius
         .addProperty("radius", &Sphere::radius_)
         );
 }

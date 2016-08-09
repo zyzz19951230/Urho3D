@@ -45,23 +45,37 @@ void RegisterMatrix3x4(kaguya::State& lua)
 
     // [Class] Matrix3x4
     lua["Matrix3x4"].setClass(UserdataMetatable<Matrix3x4>()
+        // [Constructor] Matrix3x4()
         .setConstructors<Matrix3x4(),
+        // [Constructor] Matrix3x4(const Matrix3x4& matrix)
         Matrix3x4(const Matrix3x4&),
+        // [Constructor] Matrix3x4(const Matrix3& matrix)
         Matrix3x4(const Matrix3&),
+        // [Constructor] Matrix3x4(const Matrix4& matrix)
         Matrix3x4(const Matrix4&),
+        // [Constructor] Matrix3x4(const Vector3& translation, const Quaternion& rotation, float scale)
         Matrix3x4(const Vector3&, const Quaternion&, float),
+        // [Constructor] Matrix3x4(const Vector3& translation, const Quaternion& rotation, const Vector3& scale)
         Matrix3x4(const Vector3&, const Quaternion&, const Vector3&)>()
 
+        // [Method] bool operator ==(const Matrix3x4& rhs) const
         .addFunction("__eq", &Matrix3x4::operator==)
 
         .addOverloadedFunctions("__mul",
+            // [Method] Vector3 operator *(const Vector3& rhs) const
             static_cast<Vector3(Matrix3x4::*)(const Vector3&) const>(&Matrix3x4::operator*),
+            // [Method] Vector3 operator *(const Vector4& rhs) const
             static_cast<Vector3(Matrix3x4::*)(const Vector4&) const>(&Matrix3x4::operator*),
+            // [Method] Matrix3x4 operator *(float rhs) const
             static_cast<Matrix3x4(Matrix3x4::*)(float) const>(&Matrix3x4::operator*),
+            // [Method] Matrix3x4 operator *(const Matrix3x4& rhs) const
             static_cast<Matrix3x4(Matrix3x4::*)(const Matrix3x4&) const>(&Matrix3x4::operator*),
+            // [Method] Matrix4 operator *(const Matrix4& rhs) const
             static_cast<Matrix4(Matrix3x4::*)(const Matrix4&) const>(&Matrix3x4::operator*))
 
+        // [Method] Matrix3x4 operator +(const Matrix3x4& rhs) const
         .addFunction("__add", &Matrix3x4::operator+)
+        // [Method] Matrix3x4 operator -(const Matrix3x4& rhs) const
         .addFunction("__sub", &Matrix3x4::operator-)
 
         // [Method] void SetTranslation(const Vector3& translation)
@@ -70,7 +84,9 @@ void RegisterMatrix3x4(kaguya::State& lua)
         .addFunction("SetRotation", &Matrix3x4::SetRotation)
 
         .addOverloadedFunctions("SetScale",
+            // [Method] void SetScale(const Vector3& scale)
             static_cast<void(Matrix3x4::*)(const Vector3&)>(&Matrix3x4::SetScale),
+            // [Method] void SetScale(float scale)
             static_cast<void(Matrix3x4::*)(float)>(&Matrix3x4::SetScale))
 
         // [Method] Matrix3 ToMatrix3() const
@@ -88,6 +104,7 @@ void RegisterMatrix3x4(kaguya::State& lua)
         // [Method] bool Equals(const Matrix3x4& rhs) const
         .addFunction("Equals", &Matrix3x4::Equals)
 
+        // [Method] tuple<Vector3, Quaternion, Vector3> Decompose() const
         .addStaticFunction("Decompose", &Matrix3x4Decompose)
 
         // [Method] Matrix3x4 Inverse() const
@@ -96,20 +113,34 @@ void RegisterMatrix3x4(kaguya::State& lua)
         // [Method] String ToString() const
         .addFunction("ToString", &Matrix3x4::ToString)
 
+        // [Field] float m00
         .addProperty("m00", &Matrix3x4::m00_)
+        // [Field] float m01
         .addProperty("m01", &Matrix3x4::m01_)
+        // [Field] float m02
         .addProperty("m02", &Matrix3x4::m02_)
+        // [Field] float m03
         .addProperty("m03", &Matrix3x4::m03_)
+        // [Field] float m10
         .addProperty("m10", &Matrix3x4::m10_)
+        // [Field] float m11
         .addProperty("m11", &Matrix3x4::m11_)
+        // [Field] float m12
         .addProperty("m12", &Matrix3x4::m12_)
+        // [Field] float m13
         .addProperty("m13", &Matrix3x4::m13_)
+        // [Field] float m20
         .addProperty("m20", &Matrix3x4::m20_)
+        // [Field] float m21
         .addProperty("m21", &Matrix3x4::m21_)
+        // [Field] float m22
         .addProperty("m22", &Matrix3x4::m22_)
+        // [Field] float m23
         .addProperty("m23", &Matrix3x4::m23_)
 
+        // [StaticConstant] Matrix3x4ZERO
         .addStaticField("ZERO", &Matrix3x4::ZERO)
+        // [StaticConstant] Matrix3x4IDENTITY
         .addStaticField("IDENTITY", &Matrix3x4::IDENTITY)
         );
 }

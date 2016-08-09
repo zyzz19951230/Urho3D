@@ -40,17 +40,11 @@ void RegisterFrustum(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] FrustumPlane
-    // [Variable] PLANE_NEAR
     lua["PLANE_NEAR"] = PLANE_NEAR;
-    // [Variable] PLANE_LEFT,
     lua["PLANE_LEFT"] = PLANE_LEFT;
-    // [Variable] PLANE_RIGHT,
     lua["PLANE_RIGHT"] = PLANE_RIGHT;
-    // [Variable] PLANE_UP,
     lua["PLANE_UP"] = PLANE_UP;
-    // [Variable] PLANE_DOWN,
     lua["PLANE_DOWN"] = PLANE_DOWN;
-    // [Variable] PLANE_FAR,
     lua["PLANE_FAR"] = PLANE_FAR;
 
     // [Constant] unsigned NUM_FRUSTUM_PLANES
@@ -60,34 +54,49 @@ void RegisterFrustum(kaguya::State& lua)
 
     // [Class] Frustum
     lua["Frustum"].setClass(UserdataMetatable<Frustum>()
+        // [Constructor] Frustum()
         .setConstructors<Frustum(), 
+        // [Constructor] Frustum(const Frustum& frustum)
         Frustum(const Frustum&)>()
 
         .addOverloadedFunctions("Define", 
+            // [Method] void Define(float fov, float aspectRatio, float zoom, float nearZ, float farZ, const Matrix3x4& transform = Matrix3x4::IDENTITY)
             FrustumDefine0(), 
+            // [Method] void Define(const Vector3& near, const Vector3& far, const Matrix3x4& transform = Matrix3x4::IDENTITY)
             FrustumDefine1(), 
+            // [Method] void Define(const BoundingBox& box, const Matrix3x4& transform = Matrix3x4::IDENTITY)
             FrustumDefine2())
 
+        // [Method] void DefineOrtho(float orthoSize, float aspectRatio, float zoom, float nearZ, float farZ, const Matrix3x4& transform = Matrix3x4::IDENTITY)
         .addFunction("DefineOrtho", FrustumDefineOrtho())
 
         .addOverloadedFunctions("Transform",
+            // [Method] void Transform(const Matrix3& transform)
             static_cast<void(Frustum::*)(const Matrix3&)>(&Frustum::Transform),
+            // [Method] void Transform(const Matrix3x4& transform)
             static_cast<void(Frustum::*)(const Matrix3x4&)>(&Frustum::Transform))
         
         .addOverloadedFunctions("IsInside",
+            // [Method] Intersection IsInside(const Vector3& point) const
             static_cast<Intersection(Frustum::*)(const Vector3&) const>(&Frustum::IsInside),
+            // [Method] Intersection IsInside(const Sphere& sphere) const
             static_cast<Intersection(Frustum::*)(const Sphere&) const>(&Frustum::IsInside),
+            // [Method] Intersection IsInside(const BoundingBox& box) const
             static_cast<Intersection(Frustum::*)(const BoundingBox&) const>(&Frustum::IsInside))
         
         .addOverloadedFunctions("IsInsideFast",
+            // [Method] Intersection IsInsideFast(const Sphere& sphere) const
             static_cast<Intersection(Frustum::*)(const Sphere&) const>(&Frustum::IsInsideFast),
+            // [Method] Intersection IsInsideFast(const BoundingBox& box) const
             static_cast<Intersection(Frustum::*)(const BoundingBox&) const>(&Frustum::IsInsideFast))
 
         // [Method] float Distance(const Vector3& point) const
         .addFunction("Distance", &Frustum::Distance)
 
         .addOverloadedFunctions("Transformed",
+            // [Method] Frustum Transformed(const Matrix3& transform) const
             static_cast<Frustum(Frustum::*)(const Matrix3&) const>(&Frustum::Transformed),
+            // [Method] Frustum Transformed(const Matrix3x4& transform) const
             static_cast<Frustum(Frustum::*)(const Matrix3x4&) const>(&Frustum::Transformed))
 
         // [Method] Rect Projected(const Matrix4& transform) const

@@ -52,27 +52,19 @@ void RegisterCollisionShape(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] ShapeType
-    // [Variable] SHAPE_BOX
     lua["SHAPE_BOX"] = SHAPE_BOX;
-    // [Variable] SHAPE_SPHERE,
     lua["SHAPE_SPHERE"] = SHAPE_SPHERE;
-    // [Variable] SHAPE_STATICPLANE,
     lua["SHAPE_STATICPLANE"] = SHAPE_STATICPLANE;
-    // [Variable] SHAPE_CYLINDER,
     lua["SHAPE_CYLINDER"] = SHAPE_CYLINDER;
-    // [Variable] SHAPE_CAPSULE,
     lua["SHAPE_CAPSULE"] = SHAPE_CAPSULE;
-    // [Variable] SHAPE_CONE,
     lua["SHAPE_CONE"] = SHAPE_CONE;
-    // [Variable] SHAPE_TRIANGLEMESH,
     lua["SHAPE_TRIANGLEMESH"] = SHAPE_TRIANGLEMESH;
-    // [Variable] SHAPE_CONVEXHULL,
     lua["SHAPE_CONVEXHULL"] = SHAPE_CONVEXHULL;
-    // [Variable] SHAPE_TERRAIN
     lua["SHAPE_TERRAIN"] = SHAPE_TERRAIN;
     
     // [Class] CollisionShape : Component
     lua["CollisionShape"].setClass(UserdataMetatable<CollisionShape, Component>()
+    	// [Constructor] CollisionShape()
         .addStaticFunction("new", &CreateObject<CollisionShape>)
 
         // [Method] void SetBox(const Vector3& size, const Vector3& position = Vector3::ZERO, const Quaternion& rotation = Quaternion::IDENTITY)
@@ -81,12 +73,17 @@ void RegisterCollisionShape(kaguya::State& lua)
         .addFunction("SetSphere", CollisionShapeSetSphere())
         // [Method] void SetStaticPlane(const Vector3& position = Vector3::ZERO, const Quaternion& rotation = Quaternion::IDENTITY)
         .addFunction("SetStaticPlane", CollisionShapeSetStaticPlane())
+        // [Method] void SetCylinder(float diameter, float height, const Vector3& position = Vector3::ZERO, const Quaternion& rotation = Quaternion::IDENTITY)
         .addFunction("SetCylinder", CollisionShapeSetCylinder())
+        // [Method] void SetCapsule(float diameter, float height, const Vector3& position = Vector3::ZERO, const Quaternion& rotation = Quaternion::IDENTITY)
         .addFunction("SetCapsule", CollisionShapeSetCapsule())
+        // [Method] void SetCone(float diameter, float height, const Vector3& position = Vector3::ZERO, const Quaternion& rotation = Quaternion::IDENTITY)
         .addFunction("SetCone", CollisionShapeSetCone())
+        // [Method] void SetTriangleMesh(Model* model, unsigned lodLevel = 0, const Vector3& scale = Vector3::ONE, const Vector3& position = Vector3::ZERO, const Quaternion& rotation = Quaternion::IDENTITY)
         .addFunction("SetTriangleMesh", CollisionShapeSetTriangleMesh())
         // [Method] void SetCustomTriangleMesh(CustomGeometry* custom, const Vector3& scale = Vector3::ONE, const Vector3& position = Vector3::ZERO,
         .addFunction("SetCustomTriangleMesh", CollisionShapeSetCustomTriangleMesh())
+        // [Method] void SetConvexHull(Model* model, unsigned lodLevel = 0, const Vector3& scale = Vector3::ONE, const Vector3& position = Vector3::ZERO, const Quaternion& rotation = Quaternion::IDENTITY)
         .addFunction("SetConvexHull", CollisionShapeSetConvexHull())
         // [Method] void SetCustomConvexHull(CustomGeometry* custom, const Vector3& scale = Vector3::ONE, const Vector3& position = Vector3::ZERO,
         .addFunction("SetCustomConvexHull", CollisionShapeSetCustomConvexHull())
@@ -147,7 +144,7 @@ void RegisterCollisionShape(kaguya::State& lua)
         .addProperty("lodLevel", &CollisionShape::GetLodLevel, &CollisionShape::SetLodLevel)
         // [Property(ReadOnly)] BoundingBox worldBoundingBox
         .addProperty("worldBoundingBox", &CollisionShape::GetWorldBoundingBox)
-        // [Property(WriteOnly)] void terrain
+        // [Property(WriteOnly)] unsigned terrain
         .addProperty("terrain", &CollisionShape::SetTerrain)
         );
 }

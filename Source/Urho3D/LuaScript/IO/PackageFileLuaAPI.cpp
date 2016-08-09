@@ -52,15 +52,20 @@ void RegisterPackageFile(kaguya::State& lua)
     using namespace kaguya;
     // [Class] PackageEntry
     lua["PackageEntry"].setClass(UserdataMetatable<PackageEntry>()
+        // [Field] unsigned offset
         .addProperty("offset", &PackageEntry::offset_)
+        // [Field] unsigned size
         .addProperty("size", &PackageEntry::size_)
+        // [Field] unsigned checksum
         .addProperty("checksum", &PackageEntry::checksum_)
         );
 
     // [Class] PackageFile : Object
     lua["PackageFile"].setClass(UserdataMetatable<PackageFile, Object>()
         .addOverloadedFunctions("new",
+            // [Constructor] PackageFile()
             &CreatePackageFile0,
+            // [Constructor] PackageFile(const String& fileName, unsigned startOffset = 0)
             &CreatePackageFile1,
             &CreatePackageFile2)
 

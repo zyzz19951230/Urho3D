@@ -74,24 +74,39 @@ void RegisterMathDefs(kaguya::State& lua)
     // [Variable] INSIDE
     lua["INSIDE"] = INSIDE;
 
+    // [Function] bool Equals(float lhs, float rhs)
     lua["Equals"] = static_cast<bool(*)(float, float)>(&Equals);
+    // [Function] float Lerp(float lhs, float rhs, float t)
     lua["Lerp"] = static_cast<float(*)(float, float, float)>(&Lerp);
+    // [Function] float Min(float lhs, float rhs)
     lua["Min"] = static_cast<float(*)(float, float)>(&Min);
+    // [Function] float Max(float lhs, float rhs)
     lua["Max"] = static_cast<float(*)(float, float)>(&Max);
+    // [Function] float Abs(float value)
     lua["Abs"] = static_cast<float(*)(float)>(&Abs);
+    // [Function] float Sign(float value)
     lua["Sign"] = static_cast<float(*)(float)>(&Sign);
 
     // [Function] bool IsNaN(float value)
     lua["IsNaN"] = function(&IsNaN);
 
+    // [Function] float Clamp(float value, float min, float max)
     lua["Clamp"] = static_cast<float(*)(float, float, float)>(&Clamp);
+    // [Function] float SmoothStep(float lhs, float rhs, float t)
     lua["SmoothStep"] = static_cast<float(*)(float, float, float)>(&SmoothStep);
+    // [Function] float Sin(float angle)
     lua["Sin"] = static_cast<float(*)(float)>(&Sin);
+    // [Function] float Cos(float angle)
     lua["Cos"] = static_cast<float(*)(float)>(&Cos);
+    // [Function] float Tan(float angle)
     lua["Tan"] = static_cast<float(*)(float)>(&Tan);
+    // [Function] float Asin(float x)
     lua["Asin"] = static_cast<float(*)(float)>(&Asin);
+    // [Function] float Acos(float x)
     lua["Acos"] = static_cast<float(*)(float)>(&Acos);
+    // [Function] float Atan(float x)
     lua["Atan"] = static_cast<float(*)(float)>(&Atan);
+    // [Function] float Atan2(float y, float x)
     lua["Atan2"] = static_cast<float(*)(float, float)>(&Atan2);
 
     lua["MinInt"] = static_cast<int(*)(int, int)>(&Min);
@@ -109,11 +124,15 @@ void RegisterMathDefs(kaguya::State& lua)
     lua["SDBMHash"] = function(&SDBMHash);
 
     lua["Random"] = overload(static_cast<float(*)()>(&Random),
+        // [Function] float Random(float range)
         static_cast<float(*)(float)>(&Random),
+        // [Function] float Random(float min, float max)
         static_cast<float(*)(float, float)>(&Random));
 
     lua["RandomInt"] = overload(&Rand,
+        // [Function] int RandomInt(int range)
         static_cast<int(*)(int)>(&Random),
+        // [Function] int RandomInt(int min, int max)
         static_cast<int(*)(int, int)>(&Random));
 
     // [Function] float RandomNormal(float meanValue, float variance)

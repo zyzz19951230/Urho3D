@@ -40,6 +40,7 @@ void RegisterControls(kaguya::State& lua)
 
     // [Class] Controls
     lua["Controls"].setClass(UserdataMetatable<Controls>()
+        // [Constructor] Controls()
         .setConstructors<Controls()>()
 
         // [Method] void Reset()
@@ -53,9 +54,13 @@ void RegisterControls(kaguya::State& lua)
         // [Method] bool IsPressed(unsigned button, const Controls& previousControls) const
         .addFunction("IsPressed", &Controls::IsPressed)
 
+        // [Field] unsigned buttons
         .addProperty("buttons", &Controls::buttons_)
+        // [Field] float yaw
         .addProperty("yaw", &Controls::yaw_)
+        // [Field] float pitch
         .addProperty("pitch", &Controls::pitch_)
+        // [Field] VariantMap extraData
         .addProperty("extraData", &Controls::extraData_)
         );
 }

@@ -51,10 +51,14 @@ void RegisterRay(kaguya::State& lua)
 
     // [Class] Ray
     lua["Ray"].setClass(UserdataMetatable<Ray>()
+        // [Constructor] Ray()
         .setConstructors<Ray(),
+        // [Constructor] Ray(const Vector3& origin, const Vector3& direction)
         Ray(const Vector3&, const Vector3&),
+        // [Constructor] Ray(const Ray& ray)
         Ray(const Ray&)>()
 
+        // [Method] bool operator ==(const Ray& rhs) const
         .addFunction("__eq", &Ray::operator==)
 
         // [Method] void Define(const Vector3& origin, const Vector3& direction)
@@ -67,16 +71,23 @@ void RegisterRay(kaguya::State& lua)
         .addFunction("ClosestPoint", &Ray::ClosestPoint)
 
         .addOverloadedFunctions("HitDistance",
+            // [Method] float HitDistance(const Plane& plane) const
             static_cast<float(Ray::*)(const Plane&) const>(&Ray::HitDistance),
+            // [Method] float HitDistance(const BoundingBox& box) const
             static_cast<float(Ray::*)(const BoundingBox&) const>(&Ray::HitDistance),
+            // [Method] float HitDistance(const Frustum& frustum, bool solidInside = true) const
             RayHitDistance0(),
+            // [Method] float HitDistance(const Sphere& sphere) const
             static_cast<float(Ray::*)(const Sphere&) const>(&Ray::HitDistance),
+            // [Method] tuple<float, Vector3, Vector3> HitDistance(const Vector3& v0, const Vector3& v1, const Vector3& v2) const
             &RayHitDistance1)
 
         // [Method] Ray Transformed(const Matrix3x4& transform) const
         .addFunction("Transformed", &Ray::Transformed)
 
+        // [Field] Vector3 origin
         .addProperty("origin", &Ray::origin_)
+        // [Field] Vector3 direction
         .addProperty("direction", &Ray::direction_)
         );
 }

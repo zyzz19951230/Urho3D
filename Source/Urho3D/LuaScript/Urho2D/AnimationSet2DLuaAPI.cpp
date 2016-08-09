@@ -47,7 +47,7 @@ void RegisterAnimationSet2D(kaguya::State& lua)
         // [Method] bool HasAnimation(const String& animation) const
         .addFunction("HasAnimation", &AnimationSet2D::HasAnimation)
 
-        // [Property(WriteOnly)] unsigned numAnimations
+        // [Property(ReadOnly)] unsigned numAnimations
         .addProperty("numAnimations", &AnimationSet2D::GetNumAnimations)
     );
 }

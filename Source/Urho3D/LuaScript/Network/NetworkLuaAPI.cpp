@@ -66,12 +66,17 @@ void RegisterNetwork(kaguya::State& lua)
         .addFunction("StopServer", &Network::StopServer)
 
         .addOverloadedFunctions("BroadcastMessage", 
+            // [Method] void BroadcastMessage(int msgID, bool reliable, bool inOrder, const VectorBuffer& msg, unsigned contentID = 0)
             NetworkBroadcastMessage0(),
+            // [Method] void BroadcastMessage(int msgID, bool reliable, bool inOrder, const unsigned char* data, unsigned numBytes, unsigned contentID = 0)
             NetworkBroadcastMessage1())
 
         .addOverloadedFunctions("BroadcastRemoteEvent", 
+            // [Method] void BroadcastRemoteEvent(StringHash eventType, bool inOrder, const VariantMap& eventData = Variant::emptyVariantMap)
             NetworkBroadcastRemoteEvent0(),
+            // [Method] void BroadcastRemoteEvent(Scene* scene, StringHash eventType, bool inOrder, const VariantMap& eventData = Variant::emptyVariantMap)
             NetworkBroadcastRemoteEvent1(),
+            // [Method] void BroadcastRemoteEvent(Node* node, StringHash eventType, bool inOrder, const VariantMap& eventData = Variant::emptyVariantMap)
             NetworkBroadcastRemoteEvent2())
 
         // [Method] void SetUpdateFps(int fps)

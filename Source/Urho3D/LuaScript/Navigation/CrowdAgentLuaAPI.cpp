@@ -37,51 +37,32 @@ void RegisterCrowdAgent(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] CrowdAgentRequestedTarget
-    // [Variable] CA_REQUESTEDTARGET_NONE
     lua["CA_REQUESTEDTARGET_NONE"] = CA_REQUESTEDTARGET_NONE;
-    // [Variable] CA_REQUESTEDTARGET_POSITION,
     lua["CA_REQUESTEDTARGET_POSITION"] = CA_REQUESTEDTARGET_POSITION;
-    // [Variable] CA_REQUESTEDTARGET_VELOCITY
     lua["CA_REQUESTEDTARGET_VELOCITY"] = CA_REQUESTEDTARGET_VELOCITY;
 
     // [Enum] CrowdAgentTargetState
-    // [Variable] CA_TARGET_NONE
     lua["CA_TARGET_NONE"] = CA_TARGET_NONE;
-    // [Variable] CA_TARGET_FAILED,
     lua["CA_TARGET_FAILED"] = CA_TARGET_FAILED;
-    // [Variable] CA_TARGET_VALID,
     lua["CA_TARGET_VALID"] = CA_TARGET_VALID;
-    // [Variable] CA_TARGET_REQUESTING,
     lua["CA_TARGET_REQUESTING"] = CA_TARGET_REQUESTING;
-    // [Variable] CA_TARGET_WAITINGFORQUEUE,
     lua["CA_TARGET_WAITINGFORQUEUE"] = CA_TARGET_WAITINGFORQUEUE;
-    // [Variable] CA_TARGET_WAITINGFORPATH,
     lua["CA_TARGET_WAITINGFORPATH"] = CA_TARGET_WAITINGFORPATH;
-    // [Variable] CA_TARGET_VELOCITY
     lua["CA_TARGET_VELOCITY"] = CA_TARGET_VELOCITY;
 
     // [Enum] CrowdAgentState
-    // [Variable] CA_STATE_INVALID
     lua["CA_STATE_INVALID"] = CA_STATE_INVALID;
-    // [Variable] CA_STATE_WALKING,       ///< The agent is traversing a normal navigation mesh polygon.
     lua["CA_STATE_WALKING"] = CA_STATE_WALKING;
-    // [Variable] CA_STATE_OFFMESH        ///< The agent is traversing an off-mesh connection.
     lua["CA_STATE_OFFMESH"] = CA_STATE_OFFMESH;
 
     // [Enum] NavigationQuality
-    // [Variable] NAVIGATIONQUALITY_LOW
     lua["NAVIGATIONQUALITY_LOW"] = NAVIGATIONQUALITY_LOW;
-    // [Variable] NAVIGATIONQUALITY_MEDIUM
     lua["NAVIGATIONQUALITY_MEDIUM"] = NAVIGATIONQUALITY_MEDIUM;
-    // [Variable] NAVIGATIONQUALITY_HIGH
     lua["NAVIGATIONQUALITY_HIGH"] = NAVIGATIONQUALITY_HIGH;
 
     // [Enum] NavigationPushiness
-    // [Variable] NAVIGATIONPUSHINESS_LOW
     lua["NAVIGATIONPUSHINESS_LOW"] = NAVIGATIONPUSHINESS_LOW;
-    // [Variable] NAVIGATIONPUSHINESS_MEDIUM,
     lua["NAVIGATIONPUSHINESS_MEDIUM"] = NAVIGATIONPUSHINESS_MEDIUM;
-    // [Variable] NAVIGATIONPUSHINESS_HIGH
     lua["NAVIGATIONPUSHINESS_HIGH"] = NAVIGATIONPUSHINESS_HIGH;
 
     // [Class] CrowdAgent : Component

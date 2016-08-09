@@ -51,9 +51,10 @@ void RegisterDeserializer(kaguya::State& lua)
 
     // [Class] Deserializer
     lua["Deserializer"].setClass(UserdataMetatable<Deserializer>()
+        // [Method] VectorBuffer Read(unsigned size)
         .addStaticFunction("Read", &DeserializerRead)
 
-        // [Method] unsigned Seek(unsigned position) = 0
+        // [Method] unsigned Seek(unsigned position)
         .addFunction("Seek", &Deserializer::Seek)
         // [Method] const String& GetName() const
         .addFunction("GetName", &Deserializer::GetName)
@@ -131,7 +132,9 @@ void RegisterDeserializer(kaguya::State& lua)
         .addFunction("ReadResourceRefList", &Deserializer::ReadResourceRefList)
 
         .addOverloadedFunctions("ReadVariant",
+            // [Method] Variant ReadVariant()
             static_cast<Variant(Deserializer::*)()>(&Deserializer::ReadVariant),
+            // [Method] Variant ReadVariant(VariantType variantType)
             static_cast<Variant(Deserializer::*)(VariantType)>(&Deserializer::ReadVariant))
 
         // [Method] VariantVector ReadVariantVector()

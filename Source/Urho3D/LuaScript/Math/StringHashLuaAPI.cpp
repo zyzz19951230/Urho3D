@@ -36,14 +36,21 @@ void RegisterStringHash(kaguya::State& lua)
 
     // [Class] StringHash
     lua["StringHash"].setClass(UserdataMetatable<StringHash>()
+        // [Constructor] StringHash()
         .setConstructors<StringHash(),
+        // [Constructor] StringHash(const StringHash& rhs)
         StringHash(const StringHash&),
+        // [Constructor] StringHash(unsigned value)
         StringHash(unsigned),
+        // [Constructor] StringHash(const char* str)
         StringHash(const char*)>()
 
+        // [Method] StringHash operator +(const StringHash& rhs) const
         .addFunction("__add", &StringHash::operator+)
+        // [Method] bool operator ==(const StringHash& rhs) const
         .addFunction("__eq", &StringHash::operator==)
 
+        // [Method] bool operator <(const StringHash& rhs) const
         .addFunction("__less", &StringHash::operator<)
 
         // [Method] unsigned Value() const
@@ -54,11 +61,13 @@ void RegisterStringHash(kaguya::State& lua)
         // [Method] unsigned ToHash() const
         .addFunction("ToHash", &StringHash::ToHash)
 
+        // [StaticMethod] static unsigned Calculate(const char* str)
         .addStaticFunction("Calculate", &StringHash::Calculate)
 
         // [Property(ReadOnly)] unsigned value
         .addProperty("value", &StringHash::Value)
 
+        // [StaticConstant] StringHash ZERO
         .addStaticField("ZERO", &StringHash::ZERO)
         );
 }

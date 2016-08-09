@@ -36,23 +36,34 @@ void RegisterVector2(kaguya::State& lua)
 
     // [Class] Vector2
     lua["Vector2"].setClass(UserdataMetatable<Vector2>()
+        // [Constructor] Vector2()
         .setConstructors<Vector2(),
+        // [Constructor] Vector2(const Vector2& vector)
         Vector2(const Vector2&),
+        // [Constructor] Vector2(float x, float y)
         Vector2(float, float)>()
 
+        // [Method] bool operator==(const Vector2& rhs) const
         .addFunction("__eq", &Vector2::operator==)
+        // [Method] Vector2 operator+(const Vector2& rhs) const
         .addFunction("__add", &Vector2::operator+)
 
         .addOverloadedFunctions("__sub",
+            // [Method] Vector2 operator-() const
             static_cast<Vector2(Vector2::*)() const>(&Vector2::operator-),
+            // [Method] Vector2 operator-(const Vector2& rhs) const
             static_cast<Vector2(Vector2::*)(const Vector2&) const>(&Vector2::operator-))
         
         .addOverloadedFunctions("__mul",
+            // [Method] Vector2 operator*(float rhs) const
             static_cast<Vector2(Vector2::*)(float) const>(&Vector2::operator*),
+            // [Method] Vector2 operator*(const Vector2& rhs) const
             static_cast<Vector2(Vector2::*)(const Vector2&) const>(&Vector2::operator*))
         
         .addOverloadedFunctions("__div",
+            // [Method] Vector2 operator/(float rhs) const
             static_cast<Vector2(Vector2::*)(float) const>(&Vector2::operator/),
+            // [Method] Vector2 operator/(const Vector2& rhs) const
             static_cast<Vector2(Vector2::*)(const Vector2&) const>(&Vector2::operator/))
 
         // [Method] void Normalize()
@@ -81,21 +92,32 @@ void RegisterVector2(kaguya::State& lua)
         // [Method] String ToString() const
         .addFunction("ToString", &Vector2::ToString)
 
+        // [Field] float x
         .addProperty("x", &Vector2::x_)
+        // [Field] float y
         .addProperty("y", &Vector2::y_)
 
+        // [StaticConstant] Vector2 ZERO
         .addStaticField("ZERO", &Vector2::ZERO)
+        // [StaticConstant] Vector2 LEFT
         .addStaticField("LEFT", &Vector2::LEFT)
+        // [StaticConstant] Vector2 RIGHT
         .addStaticField("RIGHT", &Vector2::RIGHT)
+        // [StaticConstant] Vector2 UP
         .addStaticField("UP", &Vector2::UP)
+        // [StaticConstant] Vector2 DOWN
         .addStaticField("DOWN", &Vector2::DOWN)
+        // [StaticConstant] Vector2 ONE
         .addStaticField("ONE", &Vector2::ONE)
         );
 
     // [Class] IntVector2
     lua["IntVector2"].setClass(UserdataMetatable<IntVector2>()
+        // [Constructor] IntVector2()
         .setConstructors<IntVector2(),
+        // [Constructor] Vector2(int x, int y)
         IntVector2(int, int),
+        // [Constructor] IntVector2(const IntVector2& vector)
         IntVector2(const IntVector2&)>()
 
         .addFunction("__eq", &IntVector2::operator==)
@@ -111,9 +133,12 @@ void RegisterVector2(kaguya::State& lua)
         // [Method] String ToString() const
         .addFunction("ToString", &IntVector2::ToString)
 
+        // [Field] int x
         .addProperty("x", &IntVector2::x_)
+        // [Field] int y
         .addProperty("y", &IntVector2::y_)
 
+        // [StaticConstant] IntVector2 ONE
         .addStaticField("ZERO", &IntVector2::ZERO)
         );
 }

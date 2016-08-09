@@ -140,30 +140,31 @@ void RegisterTerrain(kaguya::State& lua)
         .addProperty("occlusionLodLevel", &Terrain::GetOcclusionLodLevel, &Terrain::SetOcclusionLodLevel)
         // [Property] bool smoothing
         .addProperty("smoothing", &Terrain::GetSmoothing, &Terrain::SetSmoothing)
+		// [Property] Image* heightMap
         .addProperty("heightMap", &TerrainGetHeightMap, &TerrainSetHeightMap)
         // [Property] Material* material
         .addProperty("material", &Terrain::GetMaterial, &Terrain::SetMaterial)
-        // [Property(WriteOnly)] void drawDistance
+        // [Property(WriteOnly)] float drawDistance
         .addProperty("drawDistance", &Terrain::SetDrawDistance)
-        // [Property(WriteOnly)] void shadowDistance
+        // [Property(WriteOnly)] float shadowDistance
         .addProperty("shadowDistance", &Terrain::SetShadowDistance)
-        // [Property(WriteOnly)] void lodBias
+        // [Property(WriteOnly)] float lodBias
         .addProperty("lodBias", &Terrain::SetLodBias)
-        // [Property(WriteOnly)] void viewMask
+        // [Property(WriteOnly)] unsigned viewMask
         .addProperty("viewMask", &Terrain::SetViewMask)
-        // [Property(WriteOnly)] void lightMask
+        // [Property(WriteOnly)] unsigned lightMask
         .addProperty("lightMask", &Terrain::SetLightMask)
-        // [Property(WriteOnly)] void shadowMask
+        // [Property(WriteOnly)] unsigned shadowMask
         .addProperty("shadowMask", &Terrain::SetShadowMask)
-        // [Property(WriteOnly)] void zoneMask
+        // [Property(WriteOnly)] unsigned zoneMask
         .addProperty("zoneMask", &Terrain::SetZoneMask)
-        // [Property(WriteOnly)] void maxLights
+        // [Property(WriteOnly)] unsigned maxLights
         .addProperty("maxLights", &Terrain::SetMaxLights)
         // [Property(WriteOnly)] void castShadows
         .addProperty("castShadows", &Terrain::SetCastShadows)
-        // [Property(WriteOnly)] void occluder
+        // [Property(WriteOnly)] bool occluder
         .addProperty("occluder", &Terrain::SetOccluder)
-        // [Property(WriteOnly)] void occludee
+        // [Property(WriteOnly)] bool occludee
         .addProperty("occludee", &Terrain::SetOccludee)
         );
 }

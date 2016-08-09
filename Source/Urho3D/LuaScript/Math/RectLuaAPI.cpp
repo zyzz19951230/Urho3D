@@ -36,21 +36,32 @@ void RegisterRect(kaguya::State& lua)
 
     // [Class] Rect
     lua["Rect"].setClass(UserdataMetatable<Rect>()
+        // [Constructor] Rect()
         .setConstructors<Rect(),
+        // [Constructor] Rect(const Vector2& min, const Vector2& max)
         Rect(const Vector2&, const Vector2&),
+        // [Constructor] Rect(float left, float top, float right, float bottom)
         Rect(float, float, float, float),
+        // [Constructor] Rect(const Vector4& vector)
         Rect(const Vector4&),
+        // [Constructor] Rect(const Rect& rect)
         Rect(const Rect&)>()
 
+        // [Method] bool operator ==(const Rect& rhs) const
         .addFunction("__eq", &Rect::operator==)
 
         .addOverloadedFunctions("Define",
+            // [Method] void Define(const Rect& rect)
             static_cast<void(Rect::*)(const Rect&)>(&Rect::Define),
+            // [Method] void Define(const Vector2& min, const Vector2& max)
             static_cast<void(Rect::*)(const Vector2&, const Vector2&)>(&Rect::Define),
+            // [Method] void Define(const Vector2& point)
             static_cast<void(Rect::*)(const Vector2&)>(&Rect::Define))
 
         .addOverloadedFunctions("Merge",
+            // [Method] void Merge(const Vector2& point)
             static_cast<void(Rect::*)(const Vector2&)>(&Rect::Merge),
+            // [Method] void Merge(const Rect& rect)
             static_cast<void(Rect::*)(const Rect&)>(&Rect::Merge))
 
         // [Method] void Clear()
@@ -86,16 +97,22 @@ void RegisterRect(kaguya::State& lua)
         // [Property(ReadOnly)] Vector2 halfSize
         .addProperty("halfSize", &Rect::HalfSize)
 
-        .addStaticField("FULL", &Rect::FULL)
-        .addStaticField("POSITIVE", &Rect::POSITIVE)
-        .addStaticField("ZERO", &Rect::ZERO)
+        // [StaticConstant] Rect FULL
+         .addStaticField("FULL", &Rect::FULL)
+        // [StaticConstant] Rect POSITIVE
+         .addStaticField("POSITIVE", &Rect::POSITIVE)
+        // [StaticConstant] Rect ZERO
+         .addStaticField("ZERO", &Rect::ZERO)
         );
 
     // [Class] IntRect
     lua["IntRect"].setClass(UserdataMetatable<IntRect>()
+        // [Constructor] IntRect()
         .setConstructors<IntRect(),
+        // [Constructor] IntRect(int left, int top, int right, int bottom)
         IntRect(int, int, int, int)>()
 
+        // [Method] bool operator ==(const IntRect& rhs) const
         .addFunction("__eq", &IntRect::operator==)
 
         // [Method] Vector2 Size() const
@@ -110,9 +127,13 @@ void RegisterRect(kaguya::State& lua)
         // [Method] String ToString() const
         .addFunction("ToString", &IntRect::ToString)
 
+        // [Field] float left
         .addProperty("left", &IntRect::left_)
+        // [Field] float top
         .addProperty("top", &IntRect::top_)
+        // [Field] float right
         .addProperty("right", &IntRect::right_)
+        // [Field] float bottom
         .addProperty("bottom", &IntRect::bottom_)
 
         // [Property(ReadOnly)] Vector2 size
@@ -122,6 +143,7 @@ void RegisterRect(kaguya::State& lua)
         // [Property(ReadOnly)] IntVector2 Size() cons height
         .addProperty("height", &IntRect::Height)
 
+        // [StaticConstant] IntRect ZERO
         .addStaticField("ZERO", &IntRect::ZERO)
         );
 }

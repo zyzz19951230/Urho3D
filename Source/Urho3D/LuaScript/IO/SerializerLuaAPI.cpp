@@ -47,6 +47,7 @@ void RegisterSerializer(kaguya::State& lua)
 
     // [Class] Serializer
     lua["Serializer"].setClass(UserdataMetatable<Serializer>()
+        // [Method] unsigned Write(const VectorBuffer& buffer)
         .addStaticFunction("Write", &SerializerWrite)
 
         // [Method] bool WriteInt(int value)
@@ -106,6 +107,7 @@ void RegisterSerializer(kaguya::State& lua)
         // [Method] bool WriteStringHash(const StringHash& value)
         .addFunction("WriteStringHash", &Serializer::WriteStringHash)
         
+        // [Method] bool WriteBuffer(const VectorBuffer& buffer)
         .addStaticFunction("WriteBuffer", &SerializerWriteBuffer)
 
         // [Method] bool WriteResourceRef(const ResourceRef& value)

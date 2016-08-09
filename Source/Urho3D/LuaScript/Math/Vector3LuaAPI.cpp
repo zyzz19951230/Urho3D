@@ -36,26 +36,40 @@ void RegisterVector3(kaguya::State& lua)
 
     // [Class] Vector3
     lua["Vector3"].setClass(UserdataMetatable<Vector3>()
+        // [Constructor] Vector3()
         .setConstructors<Vector3(),
+        // [Constructor] Vector3(const Vector3& vector)
         Vector3(const Vector3&),
+        // [Constructor] Vector3(const Vector2& vector, float z)
         Vector3(const Vector2&, float),
+        // [Constructor] Vector3(const Vector2& vector)
         Vector3(const Vector2&),
+        // [Constructor] Vector3(float x, float y, float z)
         Vector3(float, float, float),
+        // [Constructor] Vector3(float x, float y)
         Vector3(float, float)>()
 
+        // [Method] bool operator==(const Vector3& rhs) const
         .addFunction("__eq", &Vector3::operator==)
+        // [Method] Vector3 operator+(const Vector3&) const
         .addFunction("__add", &Vector3::operator+)
 
         .addOverloadedFunctions("__sub",
+            // [Method] Vector3 operator-() const
             static_cast<Vector3(Vector3::*)() const>(&Vector3::operator-),
+            // [Method] Vector3 operator-(const Vector3&) const
             static_cast<Vector3(Vector3::*)(const Vector3&) const>(&Vector3::operator-))
 
         .addOverloadedFunctions("__mul",
+            // [Method] Vector3 operator*(float) const
             static_cast<Vector3(Vector3::*)(float) const>(&Vector3::operator*),
+            // [Method] Vector3 operator*(const Vector3&) const
             static_cast<Vector3(Vector3::*)(const Vector3&) const>(&Vector3::operator*))
 
         .addOverloadedFunctions("__div",
+            // [Method] Vector3 operator/(float) const
             static_cast<Vector3(Vector3::*)(float) const>(&Vector3::operator/),
+            // [Method] Vector3 operator/(const Vector3&) const
             static_cast<Vector3(Vector3::*)(const Vector3&) const>(&Vector3::operator/))
 
         // [Method] void Normalize()
@@ -86,17 +100,28 @@ void RegisterVector3(kaguya::State& lua)
         // [Method] String ToString() const
         .addFunction("ToString", &Vector3::ToString)
 
+        // [Field] float x
         .addProperty("x", &Vector3::x_)
+        // [Field] float y
         .addProperty("y", &Vector3::y_)
+        // [Field] float z
         .addProperty("z", &Vector3::z_)
         
+        // [StaticConstant] Vector3 ZERO
         .addStaticField("ZERO", &Vector3::ZERO)
+        // [StaticConstant] Vector3 LEFT
         .addStaticField("LEFT", &Vector3::LEFT)
+        // [StaticConstant] Vector3 RIGHT
         .addStaticField("RIGHT", &Vector3::RIGHT)
+        // [StaticConstant] Vector3 UP
         .addStaticField("UP", &Vector3::UP)
+        // [StaticConstant] Vector3 DOWN
         .addStaticField("DOWN", &Vector3::DOWN)
+        // [StaticConstant] Vector3 FORWARD
         .addStaticField("FORWARD", &Vector3::FORWARD)
+        // [StaticConstant] Vector3 BACK
         .addStaticField("BACK", &Vector3::BACK)
+        // [StaticConstant] Vector3 ONE
         .addStaticField("ONE", &Vector3::ONE)
         );
 }

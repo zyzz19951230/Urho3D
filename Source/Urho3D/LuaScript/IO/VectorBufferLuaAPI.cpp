@@ -36,6 +36,7 @@ void RegisterVectorBuffer(kaguya::State& lua)
 
     // [Class] VectorBuffer : MultipleBase<Deserializer, Serializer> 
     lua["VectorBuffer"].setClass(UserdataMetatable<VectorBuffer, MultipleBase<Deserializer, Serializer> >()
+        // [Constructor] VectorBuffer()
         .setConstructors<VectorBuffer()>()
 
         // [Method] void SetData(const PODVector<unsigned char>& data)

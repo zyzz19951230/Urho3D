@@ -36,22 +36,33 @@ void RegisterMatrix2(kaguya::State& lua)
 
     // [Class] Matrix2
     lua["Matrix2"].setClass(UserdataMetatable<Matrix2>()
+        // [Construct] Matrix2()
         .setConstructors<Matrix2(),
+        // [Construct] Matrix2(const Matrix2& matrix)
         Matrix2(const Matrix2&),
+        // [Construct] Matrix2(float v00, float v01, float v10, float v11)
         Matrix2(float, float, float, float)>()
 
+        // [Method] bool operator ==(const Matrix2& rhs) const
         .addFunction("__eq", &Matrix2::operator==)
 
         .addOverloadedFunctions("__mul",
+            // [Method] Vector2 operator *(const Vector2& rhs) const
             static_cast<Vector2(Matrix2::*)(const Vector2&) const>(&Matrix2::operator*),
+            // [Method] Matrix2 operator *(float rhs) const
             static_cast<Matrix2(Matrix2::*)(float) const>(&Matrix2::operator*),
+            // [Method] Matrix2 operator *(const Matrix2& rhs) const
             static_cast<Matrix2(Matrix2::*)(const Matrix2&) const>(&Matrix2::operator*))
 
+        // [Method] Matrix2 operator +(const Matrix2& rhs) const
         .addFunction("__add", &Matrix2::operator+)
+        // [Method] Matrix2 operator -(const Matrix2& rhs) const
         .addFunction("__sub", &Matrix2::operator-)
 
         .addOverloadedFunctions("SetScale",
+            // [Method] void SetScale(const Vector2& scale)
             static_cast<void(Matrix2::*)(const Vector2&)>(&Matrix2::SetScale),
+            // [Method] void SetScale(float scale)
             static_cast<void(Matrix2::*)(float)>(&Matrix2::SetScale))
 
         // [Method] Vector2 Scale() const
@@ -68,12 +79,18 @@ void RegisterMatrix2(kaguya::State& lua)
         // [Method] String ToString() const
         .addFunction("ToString", &Matrix2::ToString)
 
+        // [Field] float m00
         .addProperty("m00", &Matrix2::m00_)
+        // [Field] float m01
         .addProperty("m01", &Matrix2::m01_)
+        // [Field] float m10
         .addProperty("m10", &Matrix2::m10_)
+        // [Field] float m11
         .addProperty("m11", &Matrix2::m11_)
 
+        // [StaticConstant] Matrix2 ZERO
         .addStaticField("ZERO", &Matrix2::ZERO)
+        // [StaticConstant] Matrix2 IDENTITY
         .addStaticField("IDENTITY", &Matrix2::IDENTITY)
         );
 }

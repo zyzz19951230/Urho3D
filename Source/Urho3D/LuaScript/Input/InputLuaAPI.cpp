@@ -25,36 +25,42 @@
 #include "../../Input/Input.h"
 #include "../../IO/File.h"
 #include "../../LuaScript/LuaScriptUtils.h"
+#include "../../UI/UIElement.h"
 
 #include <kaguya.hpp>
 
 namespace Urho3D
 {
 
+static SharedPtr<UIElement> TouchStateGetTouchedElement(TouchState* self)
+{
+    return SharedPtr<UIElement>(self->GetTouchedElement());
+}
+
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(InputSetMouseVisible, Input, SetMouseVisible, 1, 2); 
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(InputSetMouseGrabbed, Input, SetMouseGrabbed, 1, 2);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(InputSetMouseMode, Input, SetMouseMode, 1, 2);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(InputAddScreenJoystick, Input, AddScreenJoystick, 0, 2);
 
-static bool InputSaveGestures(Input* self, const char* filepath)
+static bool InputSaveGestures(Input* self, const String& fileName)
 {
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    SharedPtr<File> file(new File(globalContext, fileName, FILE_WRITE));
     if (!file->IsOpen())
         return false;
     return self->SaveGestures(*file);
 }
 
-static bool InputSaveGesture(Input* self, const char* filepath, unsigned gestureID)
+static bool InputSaveGesture(Input* self, const String& fileName, unsigned gestureID)
 {
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    SharedPtr<File> file(new File(globalContext, fileName, FILE_WRITE));
     if (!file->IsOpen())
         return false;
     return self->SaveGesture(*file, gestureID);
 }
 
-static unsigned InputLoadGestures(Input* self, const char* filepath)
+static unsigned InputLoadGestures(Input* self, const String& fileName)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return false;
     return self->LoadGestures(*file);
@@ -75,26 +81,26 @@ void RegisterInput(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] MouseMode
-    // [Variable] MM_ABSOLUTE
     lua["MM_ABSOLUTE"] = MM_ABSOLUTE;
-    // [Variable] MM_RELATIVE,
     lua["MM_RELATIVE"] = MM_RELATIVE;
-    // [Variable] MM_WRAP,
     lua["MM_WRAP"] = MM_WRAP;
-    // [Variable] MM_FREE,
     lua["MM_FREE"] = MM_FREE;
-    // [Variable] MM_INVALID
     lua["MM_INVALID"] = MM_INVALID;
 
     // [Class] TouchState
     lua["TouchState"].setClass(UserdataMetatable<TouchState>()
-        // [Method] UIElement* GetTouchedElement()
-        .addFunction("GetTouchedElement", &TouchState::GetTouchedElement)
+        // [Method] SharedPtr<UIElement> GetTouchedElement()
+        .addStaticFunction("GetTouchedElement", &TouchStateGetTouchedElement)
 
+        // [Field] int touchID
         .addProperty("touchID", &TouchState::touchID_)
+        // [Field] IntVector2 position
         .addProperty("position", &TouchState::position_)
+        // [Field] IntVector2 lastPosition
         .addProperty("lastPosition", &TouchState::lastPosition_)
+        // [Field] IntVector2 delta
         .addProperty("delta", &TouchState::delta_)
+        // [Field] float pressure
         .addProperty("pressure", &TouchState::pressure_)
         // [Property(ReadOnly)] UIElement* touchedElement
         .addProperty("touchedElement", &TouchState::GetTouchedElement)
@@ -119,7 +125,9 @@ void RegisterInput(kaguya::State& lua)
         // [Method] int GetHatPosition(unsigned index) const
         .addFunction("GetHatPosition", &JoystickState::GetHatPosition)
 
+        // [Field] String name
         .addProperty("name", &JoystickState::name_)
+        // [Field] int joystickID
         .addProperty("joystickID", &JoystickState::joystickID_)
         // [Property(ReadOnly)] bool controller
         .addProperty("controller", &JoystickState::IsController)
@@ -141,18 +149,18 @@ void RegisterInput(kaguya::State& lua)
         .addFunction("SetMouseVisible", InputSetMouseVisible())
         // [Method] void SetMouseGrabbed(bool grab, bool suppressEvent = false)
         .addFunction("SetMouseGrabbed", InputSetMouseGrabbed())
-        // [Method] *  SetMouseMode(MM_ABSOLUTE) will call SetMouseGrabbed(false).
+        // [Method] void SetMouseMode(MouseMode mode, bool suppressEvent = false)
         .addFunction("SetMouseMode", InputSetMouseMode())
 
         // [Method] bool IsMouseLocked() const
         .addFunction("IsMouseLocked", &Input::IsMouseLocked)
 
-        // [Method] SDL_JoystickID AddScreenJoystick(XMLFile* layoutFile = 0, XMLFile* styleFile = 0)
+        // [Method] int AddScreenJoystick(XMLFile* layoutFile = 0, XMLFile* styleFile = 0)
         .addFunction("AddScreenJoystick", InputAddScreenJoystick())
 
-        // [Method] bool RemoveScreenJoystick(SDL_JoystickID id)
+        // [Method] bool RemoveScreenJoystick(int id)
         .addFunction("RemoveScreenJoystick", &Input::RemoveScreenJoystick)
-        // [Method] void SetScreenJoystickVisible(SDL_JoystickID id, bool enable)
+        // [Method] void SetScreenJoystickVisible(int id, bool enable)
         .addFunction("SetScreenJoystickVisible", &Input::SetScreenJoystickVisible)
 
         // [Method] void SetScreenKeyboardVisible(bool enable)
@@ -162,8 +170,11 @@ void RegisterInput(kaguya::State& lua)
         // [Method] bool RecordGesture()
         .addFunction("RecordGesture", &Input::RecordGesture)
 
+        // [Method] void SaveGestures(const String& fileName)
         .addStaticFunction("SaveGestures", &InputSaveGestures)
+        // [Method] void SaveGesture(const String& fileName, unsigned gestureID)
         .addStaticFunction("SaveGesture", &InputSaveGesture)
+        // [Method] void LoadGestures(const String& fileName)
         .addStaticFunction("LoadGestures", &InputLoadGestures)
         
         // [Method] bool RemoveGesture(unsigned gestureID)
@@ -219,7 +230,7 @@ void RegisterInput(kaguya::State& lua)
 
         // [Method] unsigned GetNumJoysticks() const
         .addFunction("GetNumJoysticks", &Input::GetNumJoysticks)
-        // [Method] JoystickState* GetJoystick(SDL_JoystickID id)
+        // [Method] JoystickState* GetJoystick(int id)
         .addFunction("GetJoystick", &Input::GetJoystick)
         // [Method] JoystickState* GetJoystickByIndex(unsigned index)
         .addFunction("GetJoystickByIndex", &Input::GetJoystickByIndex)
@@ -230,7 +241,7 @@ void RegisterInput(kaguya::State& lua)
         .addFunction("GetToggleFullscreen", &Input::GetToggleFullscreen)
         // [Method] bool GetScreenKeyboardSupport() const
         .addFunction("GetScreenKeyboardSupport", &Input::GetScreenKeyboardSupport)
-        // [Method] bool IsScreenJoystickVisible(SDL_JoystickID id) const
+        // [Method] bool IsScreenJoystickVisible(int id) const
         .addFunction("IsScreenJoystickVisible", &Input::IsScreenJoystickVisible)        
         // [Method] bool IsScreenKeyboardVisible() const
         .addFunction("IsScreenKeyboardVisible", &Input::IsScreenKeyboardVisible)
@@ -273,6 +284,7 @@ void RegisterInput(kaguya::State& lua)
         // [Property] bool touchEmulation
         .addProperty("touchEmulation", &Input::GetTouchEmulation, &Input::SetTouchEmulation)
         
+        // [Property] bool mouseVisible
         .addProperty("mouseVisible", &InputMouseVisibleGetter, &InputMouseVisibleSetter)
 
         // [Property(ReadOnly)] bool mouseGrabbed
@@ -281,7 +293,7 @@ void RegisterInput(kaguya::State& lua)
         .addProperty("mouseLocked", &Input::IsMouseLocked)
         // [Property(ReadOnly)] MouseMode mouseMode
         .addProperty("mouseMode", &Input::GetMouseMode)
-        // [Method] bool focus()
+        // [Property(ReadOnly)] bool focus
         .addFunction("focus", &Input::HasFocus)
         // [Property(ReadOnly)] bool minimized
         .addProperty("minimized", &Input::IsMinimized)

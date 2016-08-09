@@ -50,6 +50,7 @@ void RegisterConstraint(kaguya::State& lua)
 
     // [Class] Constraint : Component
     lua["Constraint"].setClass(UserdataMetatable<Constraint, Component>()
+        // [Constructor] Constraint()
         .addStaticFunction("new", &CreateObject<Constraint>)
 
         // [Method] void SetConstraintType(ConstraintType type)
@@ -123,18 +124,17 @@ void RegisterConstraint(kaguya::State& lua)
         // [Property] const Quaternion& rotation
         .addProperty("rotation", &Constraint::GetRotation, &Constraint::SetRotation)
 
-		// Write only property
-        // [Property(WriteOnly)] void axis
-		.addProperty("axis", &Constraint::SetAxis)
+        // [Property(WriteOnly)] const Vector3& axis
+        .addProperty("axis", &Constraint::SetAxis)
 
         // [Property] const Vector3& otherPosition
         .addProperty("otherPosition", &Constraint::GetOtherPosition, &Constraint::SetOtherPosition)
         // [Property] const Quaternion& otherRotation
         .addProperty("otherRotation", &Constraint::GetOtherRotation, &Constraint::SetOtherRotation)
 
-		// Write only property
-        // [Property(WriteOnly)] void otherAxis
-		.addProperty("otherAxis", &Constraint::SetOtherAxis)
+        // Write only property
+        // [Property(WriteOnly)] const Vector3& otherAxis
+        .addProperty("otherAxis", &Constraint::SetOtherAxis)
 
         // [Property] Vector3 worldPosition
         .addProperty("worldPosition", &Constraint::GetWorldPosition, &Constraint::SetWorldPosition)

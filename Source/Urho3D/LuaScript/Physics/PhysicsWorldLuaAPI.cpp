@@ -111,12 +111,18 @@ void RegisterPhysicsWorld(kaguya::State& lua)
 
     // [Class] PhysicsRaycastResult
     lua["PhysicsRaycastResult"].setClass(UserdataMetatable<PhysicsRaycastResult>()
+        // [Constructor] PhysicsRaycastResult()
         .setConstructors<PhysicsRaycastResult()>()
 
+        // [Field] Vector3 position_;
         .addProperty("position", &PhysicsRaycastResult::position_)
+        // [Field] Vector3 normal_;
         .addProperty("normal", &PhysicsRaycastResult::normal_)
+        // [Field] float distance_;
         .addProperty("distance", &PhysicsRaycastResult::distance_)
+        // [Field] float hitFraction_;
         .addProperty("hitFraction", &PhysicsRaycastResult::hitFraction_)
+        // [Field] RigidBody* body_;
         .addProperty("body", &PhysicsRaycastResult::body_)
         );
 
@@ -149,17 +155,29 @@ void RegisterPhysicsWorld(kaguya::State& lua)
         // [Method] void SetMaxNetworkAngularVelocity(float velocity)
         .addFunction("SetMaxNetworkAngularVelocity", &PhysicsWorld::SetMaxNetworkAngularVelocity)
 
+
+
+
+
+        // [Method] PODVector<PhysicsRaycastResult> Raycast(const Ray& ray, float maxDistance, unsigned int collisionMask = M_MAX_UNSIGNED)
         .addStaticFunction("Raycast", PhysicsWorldRaycastOverloads())
+        // [Method] PhysicsRaycastResult RaycastSingle(const Ray& ray, float maxDistance, unsigned int collisionMask = M_MAX_UNSIGNED)
         .addStaticFunction("RaycastSingle", PhysicsWorldRaycastSingleOverloads())
+        // [Method] PhysicsRaycastResult RaycastSingleSegmented(const Ray& ray, float maxDistance, float segmentDistance, unsigned int collisionMask = M_MAX_UNSIGNED)
         .addStaticFunction("RaycastSingleSegmented", PhysicsWorldRaycastSingleSegmentedOverloads())
+        // [Method] PhysicsRaycastResult SphereCast(const Ray& ray, float radius, float maxDistance, unsigned int collisionMask = M_MAX_UNSIGNED)
         .addStaticFunction("SphereCast", PhysicsWorldSphereCastOverloads())
+        // [Method] PhysicsRaycastResult ConvexCast(CollisionShape* shape, const Vector3& startPos, const Quaternion& startRot, const Vector3& endPos, const Quaternion& endRot, unsigned int collisionMask = M_MAX_UNSIGNED)
         .addStaticFunction("ConvexCast", PhysicsWorldConvexCastOverloads())
 
         // [Method] void RemoveCachedGeometry(Model* model)
         .addFunction("RemoveCachedGeometry", &PhysicsWorld::RemoveCachedGeometry)
 
+        // [Method] PODVector<RigidBody*> GetRigidBodies(const Sphere& sphere, unsigned int collisionMask = M_MAX_UNSIGNED)
+        // [Method] PODVector<RigidBody*> GetRigidBodies(const BoundingBox& box, unsigned int collisionMask = M_MAX_UNSIGNED)
         .addOverloadedFunctions("GetRigidBodies", PhysicsWorldGetRigidBodiesOverloads0(), PhysicsWorldGetRigidBodiesOverloads1())
 
+        // [Method] PODVector<RigidBody*> GetCollidingBodies(const RigidBody* body)
         .addStaticFunction("GetCollidingBodies", &PhysicsWorldGetCollidingBodies)
 
         // [Method] Vector3 GetGravity() const

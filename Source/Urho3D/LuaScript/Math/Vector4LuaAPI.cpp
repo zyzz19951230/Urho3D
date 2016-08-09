@@ -36,24 +36,36 @@ void RegisterVector4(kaguya::State& lua)
 
     // [Class] Vector4
     lua["Vector4"].setClass(UserdataMetatable<Vector4>()
+        // [Constructor] Vector4()
         .setConstructors<Vector4(),
+        // [Constructor] Vector4(const Vector4& vector)
         Vector4(const Vector4&),
+        // [Constructor] Vector4(const Vector3& vector, float w)
         Vector4(const Vector3&, float),
+        // [Constructor] Vector4(float x, float y, float z, float w)
         Vector4(float, float, float, float)>()
 
+        // [Method] bool operator==(const Vector4& rhs) const
         .addFunction("__eq", &Vector4::operator==)
+        // [Method] Vector4 operator+(const Vector4& rhs) const
         .addFunction("__add", &Vector4::operator+)
 
         .addOverloadedFunctions("__sub",
+            // [Method] Vector4 operator-() const
             static_cast<Vector4(Vector4::*)() const>(&Vector4::operator-),
+            // [Method] Vector4 operator-(const Vector4& rhs) const
             static_cast<Vector4(Vector4::*)(const Vector4&) const>(&Vector4::operator-))
 
         .addOverloadedFunctions("__mul",
+            // [Method] Vector4 operator*(float rhs) const
             static_cast<Vector4(Vector4::*)(float) const>(&Vector4::operator*),
+            // [Method] Vector4 operator*(const Vector4& rhs) const
             static_cast<Vector4(Vector4::*)(const Vector4&) const>(&Vector4::operator*))
 
         .addOverloadedFunctions("__div",
+            // [Method] Vector4 operator/(float rhs) const
             static_cast<Vector4(Vector4::*)(float) const>(&Vector4::operator/),
+            // [Method] Vector4 operator/(const Vector4& rhs) const
             static_cast<Vector4(Vector4::*)(const Vector4&) const>(&Vector4::operator/))
 
         // [Method] float DotProduct(const Vector4& rhs) const
@@ -72,12 +84,18 @@ void RegisterVector4(kaguya::State& lua)
         // [Method] String ToString() const
         .addFunction("ToString", &Vector4::ToString)
 
+        // [Field] float x
         .addProperty("x", &Vector4::x_)
+        // [Field] float y
         .addProperty("y", &Vector4::y_)
+        // [Field] float z
         .addProperty("z", &Vector4::z_)
+        // [Field] float w
         .addProperty("w", &Vector4::w_)
 
+        // [StaticConstant] Vector4 ZERO
         .addStaticField("ZERO", &Vector4::ZERO)
+        // [StaticConstant] Vector4 ONE
         .addStaticField("ONE", &Vector4::ONE)
         );
 }

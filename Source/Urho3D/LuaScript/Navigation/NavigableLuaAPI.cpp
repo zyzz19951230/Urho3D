@@ -38,6 +38,7 @@ void RegisterNavigable(kaguya::State& lua)
 
     // [Class] Navigable : Component
     lua["Navigable"].setClass(UserdataMetatable<Navigable, Component>()
+        // [Constructor] Navigable()
         .addStaticFunction("new", &CreateObject<Navigable>)
 
         // [Method] void SetRecursive(bool enable)

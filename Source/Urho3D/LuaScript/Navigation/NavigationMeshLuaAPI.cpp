@@ -63,21 +63,24 @@ void RegisterNavigationMesh(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] NavmeshPartitionType
-    // [Variable] NAVMESH_PARTITION_WATERSHED
     lua["NAVMESH_PARTITION_WATERSHED"] = NAVMESH_PARTITION_WATERSHED;
-    // [Variable] NAVMESH_PARTITION_MONOTONE
     lua["NAVMESH_PARTITION_MONOTONE"] = NAVMESH_PARTITION_MONOTONE;
 
     // [Class] NavigationGeometryInfo
     lua["NavigationGeometryInfo"].setClass(UserdataMetatable<NavigationGeometryInfo>()
-        .addProperty("component",&NavigationGeometryInfo::component_)
+        // [Field] Component* component
+        .addProperty("component", &NavigationGeometryInfo::component_)
+        // [Field] unsigned lodLevel
         .addProperty("lodLevel", &NavigationGeometryInfo::lodLevel_)
+        // [Field] Matrix3x4 transform
         .addProperty("transform", &NavigationGeometryInfo::transform_)
+        // [Field] BoundingBox boundingBox
         .addProperty("boundingBox", &NavigationGeometryInfo::boundingBox_)
         );
 
     // [Class] NavigationMesh : Component
     lua["NavigationMesh"].setClass(UserdataMetatable<NavigationMesh, Component>()
+        // [Constructor] NavigationMesh()
         .addStaticFunction("new", &CreateObject<NavigationMesh>)
 
         // [Method] void SetTileSize(int size)
@@ -112,7 +115,9 @@ void RegisterNavigationMesh(kaguya::State& lua)
         .addFunction("SetAreaCost", &NavigationMesh::SetAreaCost)
 
         .addOverloadedFunctions("Build",
+            // [Method] bool Build()
             static_cast<bool(NavigationMesh::*)()>(&NavigationMesh::Build),
+            // [Method] bool Build(const BoundingBox& boundingBox)
             static_cast<bool(NavigationMesh::*)(const BoundingBox&)>(&NavigationMesh::Build))
 
         // [Method] void SetPartitionType(NavmeshPartitionType aType)
@@ -126,13 +131,17 @@ void RegisterNavigationMesh(kaguya::State& lua)
         // [Method] Vector3 MoveAlongSurface(const Vector3& start, const Vector3& end, const Vector3& extents = Vector3::ONE, int maxVisited = 3,
         .addFunction("MoveAlongSurface", NavigationMeshMoveAlongSurface())
         
+        // [Method] PODVector<Vector3> FindPath(const Vector3& start, const Vector3& end, const Vector3& extents = Vector3::ONE, const dtQueryFilter* filter = 0)
         .addStaticFunction("FindPath", NavigationMeshFindPathOverloads())
 
         // [Method] Vector3 GetRandomPoint(const dtQueryFilter* filter = 0, dtPolyRef* randomRef = 0)
         .addFunction("GetRandomPoint", NavigationMeshGetRandomPoint())
+        // [Method] Vector3 GetRandomPointInCircle(const Vector3& center, float radius, const Vector3& extents = Vector3::ONE, const dtQueryFilter* filter = 0, dtPolyRef* randomRef = 0);
         .addFunction("GetRandomPointInCircle", NavigationMeshGetRandomPointInCircle())
+        // [Method] float GetDistanceToWall(const Vector3& point, float radius, const Vector3& extents = Vector3::ONE, const dtQueryFilter* filter = 0, Vector3* hitPos = 0, Vector3* hitNormal = 0)
         .addFunction("GetDistanceToWall", NavigationMeshGetDistanceToWall())
         
+        // [Method] tuple<Vector3, Vector3> Raycast(NavigationMesh* self, const Vector3& start, const Vector3& end, const Vector3& extents = Vector3::ONE)
         .addStaticFunction("Raycast", NavigationMeshRaycastOverloads())
 
         // [Method] void DrawDebugGeometry(DebugRenderer* debug, bool depthTest)

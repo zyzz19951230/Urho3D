@@ -34,9 +34,13 @@ void RegisterRandom(kaguya::State& lua)
 {
     using namespace kaguya;
 
+    // [Function] void SetRandomSeed(unsigned seed)
     lua["SetRandomSeed"] = function(SetRandomSeed);
+    // [Function] unsigned GetRandomSeed()
     lua["GetRandomSeed"] = function(GetRandomSeed);
+    // [Function] int Rand()
     lua["Rand"] = function(Rand);
+    // [Function] float RandStandardNormal()
     lua["RandStandardNormal"] = function(RandStandardNormal);
 }
 }

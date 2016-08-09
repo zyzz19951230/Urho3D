@@ -35,8 +35,10 @@ void RegisterCompression(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    lua["CompressVectorBuffer"] = &CompressVectorBuffer;
-    lua["DecompressVectorBuffer"] = &DecompressVectorBuffer;
+    // [Function] VectorBuffer CompressVectorBuffer(VectorBuffer& src)
+    lua["CompressVectorBuffer"] = function(CompressVectorBuffer);
+    // [Function] VectorBuffer DecompressVectorBuffer(VectorBuffer& src)
+    lua["DecompressVectorBuffer"] = function(DecompressVectorBuffer);
 }
 }
 

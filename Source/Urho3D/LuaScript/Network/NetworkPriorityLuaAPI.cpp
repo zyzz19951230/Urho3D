@@ -38,6 +38,7 @@ void RegisterNetworkPriority(kaguya::State& lua)
     
     // [Class] NetworkPriority : Component
     lua["NetworkPriority"].setClass(UserdataMetatable<NetworkPriority, Component>()
+        // [Constructor] NetworkPriority()
         .addStaticFunction("new", &CreateObject<NetworkPriority>)
 
         // [Method] void SetBasePriority(float priority)
