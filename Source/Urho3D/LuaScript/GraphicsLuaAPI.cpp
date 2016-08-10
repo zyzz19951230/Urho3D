@@ -119,9 +119,9 @@ void RegisterGraphicsLuaAPI(kaguya::State& lua)
     RegisterZone(lua);
 
     lua["graphics"] = GetSubsystem<Graphics>();
-    lua["GetGraphics"] = GetSubsystem<Graphics>();
+    lua["GetGraphics"] = static_cast<Graphics*(*)()>(&GetSubsystem<Graphics>);
 
     lua["renderer"] = GetSubsystem<Renderer>();
-    lua["GetRenderer"] = GetSubsystem<Renderer>;
+    lua["GetRenderer"] = static_cast<Renderer*(*)()>(&GetSubsystem<Renderer>);
 }
 }

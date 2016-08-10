@@ -50,9 +50,6 @@ void RegisterTextureCube(kaguya::State& lua)
 
         // [Method] RenderSurface* GetRenderSurface(CubeMapFace face) const
         .addFunction("GetRenderSurface", &TextureCube::GetRenderSurface)
-
-        // [Property(Readonly)] RenderSurface* renderSurface
-        .addProperty("renderSurface", &TextureCube::GetRenderSurface)
     );
 }
 }

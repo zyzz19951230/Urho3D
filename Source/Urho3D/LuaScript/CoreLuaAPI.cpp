@@ -51,6 +51,6 @@ void RegisterCoreLuaAPI(kaguya::State& lua)
     RegisterVariantMap(lua);
 
     lua["time"] = GetSubsystem<Time>();
-    lua["GetTime"] = GetSubsystem<Time>;
+    lua["GetTime"] = static_cast<Time*(*)()>(&GetSubsystem<Time>);
 }
 }

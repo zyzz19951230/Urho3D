@@ -46,7 +46,7 @@ void RegisterNetworkLuaAPI(kaguya::State& lua)
     RegisterNetworkPriority(lua);
 
     lua["network"] = GetSubsystem<Network>();
-    lua["GetNetwork"] = GetSubsystem<Network>;
+    lua["GetNetwork"] = static_cast<Network*(*)()>(&GetSubsystem<Network>);
 }
 }
 

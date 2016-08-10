@@ -43,7 +43,7 @@ void RegisterDatabaseLuaAPI(kaguya::State& lua)
     RegisterDatabase(lua);
 
     lua["database"] = GetSubsystem<Database>();
-    lua["GetDatabase"] = GetSubsystem<Database>;
+    lua["GetDatabase"] = static_cast<Database*(*)()>(&GetSubsystem<Database>);
 }
 }
 

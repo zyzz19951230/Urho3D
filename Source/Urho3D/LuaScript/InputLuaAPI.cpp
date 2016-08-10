@@ -41,6 +41,6 @@ void RegisterInputLuaAPI(kaguya::State& lua)
     RegisterInputEvents(lua);
 
     lua["input"] = GetSubsystem<Input>();
-    lua["GetInput"] = GetSubsystem<Input>;
+    lua["GetInput"] = static_cast<Input*(*)()>(&GetSubsystem<Input>);
 }
 }

@@ -87,6 +87,6 @@ void RegisterUILuaAPI(kaguya::State& lua)
     RegisterView3D(lua);
 
     lua["ui"] = GetSubsystem<UI>();
-    lua["GetUI"] = GetSubsystem<UI>;
+    lua["GetUI"] = static_cast<UI*(*)()>(&GetSubsystem<UI>);
 }
 }

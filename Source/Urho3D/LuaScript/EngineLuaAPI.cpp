@@ -43,18 +43,18 @@ void RegisterEngineLuaAPI(kaguya::State& lua)
     RegisterEngine(lua);
 
     lua["engine"] = GetSubsystem<Engine>();
-    lua["GetEngine"] = GetSubsystem<Engine>;
+    lua["GetEngine"] = static_cast<Engine*(*)()>(&GetSubsystem<Engine>);
 
     Console* console = GetSubsystem<Console>();
     if (console)
         lua["console"] = console;
     
-    lua["GetConsole"] = GetSubsystem<Console>;
+    lua["GetConsole"] = static_cast<Console*(*)()>(&GetSubsystem<Console>);
 
     DebugHud* debugHud = GetSubsystem<DebugHud>();
     if (debugHud)
         lua["debugHud"] = debugHud;
 
-    lua["GetDebugHud"] = GetSubsystem<DebugHud>;
+    lua["GetDebugHud"] = static_cast<DebugHud*(*)()>(&GetSubsystem<DebugHud>);
 }
 }

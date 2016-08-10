@@ -55,9 +55,9 @@ void RegisterResourceLuaAPI(kaguya::State& lua)
     RegisterXMLFile(lua);
 
     lua["cache"] = GetSubsystem<ResourceCache>();
-    lua["GetCache"] = GetSubsystem<ResourceCache>;
+    lua["GetCache"] = static_cast<ResourceCache*(*)()>(&GetSubsystem<ResourceCache>);
 
     lua["localization"] = GetSubsystem<Localization>();
-    lua["GetLocalization"] = GetSubsystem<Localization>;
+    lua["GetLocalization"] = static_cast<Localization*(*)()>(&GetSubsystem<Localization>);
 }
 }

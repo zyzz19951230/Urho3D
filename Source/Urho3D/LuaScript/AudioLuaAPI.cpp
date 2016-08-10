@@ -45,6 +45,6 @@ void RegisterAudioLuaAPI(kaguya::State& lua)
     RegisterSoundSource3D(lua);
 
     lua["audio"] = GetSubsystem<Audio>();
-    lua["GetAudio"] = GetSubsystem<Audio>;
+    lua["GetAudio"] = static_cast<Audio*(*)()>(&GetSubsystem<Audio>);
 }
 }

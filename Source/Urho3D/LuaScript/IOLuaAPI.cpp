@@ -54,10 +54,10 @@ void RegisterIOLuaAPI(kaguya::State& lua)
     RegisterVectorBuffer(lua);
 
     lua["fileSystem"] = GetSubsystem<FileSystem>();
-    lua["GetFileSystem"] = GetSubsystem<FileSystem>;
+    lua["GetFileSystem"] = static_cast<FileSystem*(*)()>(&GetSubsystem<FileSystem>);
 
     lua["log"] = GetSubsystem<Log>();
-    lua["GetLog"] = GetSubsystem<Log>;
+    lua["GetLog"] = static_cast<Log*(*)()>(&GetSubsystem<Log>);
 }
 
 }
