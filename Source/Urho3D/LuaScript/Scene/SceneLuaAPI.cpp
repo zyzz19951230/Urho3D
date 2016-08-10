@@ -145,35 +145,51 @@ void RegisterScene(kaguya::State& lua)
     lua["LAST_LOCAL_ID"] = LAST_LOCAL_ID;
 
     // [Enum] LoadMode
-    // [Variable] LOAD_RESOURCES_ONLY
     lua["LOAD_RESOURCES_ONLY"] = LOAD_RESOURCES_ONLY;
-    // [Variable] bool LoadAsync(File* file, LoadMode mode
     lua["LOAD_SCENE"] = LOAD_SCENE;
-    // [Variable] bool LoadAsync(File* file, LoadMode mode
     lua["LOAD_SCENE_AND_RESOURCES"] = LOAD_SCENE_AND_RESOURCES;
 
     // [Class] Scene : Node
     lua["Scene"].setClass(UserdataMetatable<Scene, Node>()
+        // [Constructor] Scene()
         .addStaticFunction("new", &CreateObject<Scene>)
 
-        .addOverloadedFunctions("LoadXML", &SceneLoadXML,
+        .addOverloadedFunctions("LoadXML", 
+            // [Method] bool LoadXML(const String& fileName)
+            &SceneLoadXML,
+            // [Method] bool LoadXML(Deserializer& source)
             static_cast<bool (Scene::*)(Deserializer&)>(&Scene::LoadXML))
-        .addOverloadedFunctions("LoadJSON", &SceneLoadJSON,
+        .addOverloadedFunctions("LoadJSON", 
+            // [Method] bool LoadJSON(const String& fileName)
+            &SceneLoadJSON,
+            // [Method] bool LoadJSON(Deserializer& source)
             static_cast<bool (Scene::*)(Deserializer&)>(&Scene::LoadJSON))
-        .addOverloadedFunctions("SaveXML", SceneSaveXMLOverloads(),
+        .addOverloadedFunctions("SaveXML", 
+            // [Method] bool SaveXML(const String& fileName, const String& indentation = "\t") const
+            SceneSaveXMLOverloads(),
+            // [Method] bool SaveXML(Serializer& dest, const String& indentation = "\t") const
             static_cast<bool (Scene::*)(Serializer&, const String&) const>(&Scene::SaveXML))
-        .addOverloadedFunctions("SaveJSON", SceneSaveJSONOverloads(),
+        .addOverloadedFunctions("SaveJSON", 
+            // [Method] bool SaveJSON(const String& fileName, const String& indentation = "\t") const
+            SceneSaveJSONOverloads(),
+            // [Method] bool SaveJSON(Serializer& dest, const String& indentation = "\t") const
             static_cast<bool (Scene::*)(Serializer&, const String&) const>(&Scene::SaveJSON))
 
+        // [Method] bool LoadAsync(const String& fileName, LoadMode mode = LOAD_SCENE_AND_RESOURCES)
         .addStaticFunction("LoadAsync", SceneLoadAsyncOverloads())
+        // [Method] bool LoadAsyncXML(const String& fileName, LoadMode mode = LOAD_SCENE_AND_RESOURCES)
         .addStaticFunction("LoadAsyncXML", SceneLoadAsyncXMLOverloads())
+        // [Method] bool LoadAsyncJSON(const String& fileName, LoadMode mode = LOAD_SCENE_AND_RESOURCES)
         .addStaticFunction("LoadAsyncJSON", SceneLoadAsyncJSONOverloads())
 
         // [Method] void StopAsyncLoading()
         .addFunction("StopAsyncLoading", &Scene::StopAsyncLoading)
 
+        // [Method] SharedPtr<Node> Instantiate(const String& fileName, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
         .addStaticFunction("Instantiate", SceneInstantiateOverloads())
+        // [Method] SharedPtr<Node> InstantiateXML(const String& fileName, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
         .addStaticFunction("InstantiateXML", SceneInstantiateXMLOverloads())
+        // [Method] SharedPtr<Node> InstantiateJSON(const String& fileName, const Vector3& position, const Quaternion& rotation, CreateMode mode = REPLICATED)
         .addStaticFunction("InstantiateJSON", SceneInstantiateJSONOverloads())
 
         // [Method] void Clear(bool clearReplicated = true, bool clearLocal = true)

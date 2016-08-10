@@ -52,6 +52,7 @@ void RegisterDropDownList(kaguya::State& lua)
 
     // [Class] DropDownList : Menu
     lua["DropDownList"].setClass(UserdataMetatable<DropDownList, Menu>()
+        // [Constructor] DropDownList()
         .addStaticFunction("new", &CreateObject<DropDownList>)
 
         // [Method] void AddItem(UIElement* item)
@@ -60,7 +61,9 @@ void RegisterDropDownList(kaguya::State& lua)
         .addFunction("InsertItem", &DropDownList::InsertItem)
 
         .addOverloadedFunctions("RemoveItem",
+            // [Method] void RemoveItem(UIElement* item)
             static_cast<void(DropDownList::*)(UIElement*)>(&DropDownList::RemoveItem),
+            // [Method] void RemoveItem(unsigned index)
             static_cast<void(DropDownList::*)(unsigned)>(&DropDownList::RemoveItem))
 
         // [Method] void RemoveAllItems()

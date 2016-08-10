@@ -38,14 +38,19 @@ void RegisterCollisionBox2D(kaguya::State& lua)
 
     // [Class] CollisionBox2D : CollisionShape2D
     lua["CollisionBox2D"].setClass(UserdataMetatable<CollisionBox2D, CollisionShape2D>()
+        // [Constructor] CollisionBox2D()
         .addStaticFunction("new", &CreateObject<CollisionBox2D>)
 
         .addOverloadedFunctions("SetSize",
+            // [Method] void SetSize(const Vector2& size)
             static_cast<void(CollisionBox2D::*)(const Vector2&)>(&CollisionBox2D::SetSize),
+            // [Method] void SetSize(float width, float height)
             static_cast<void(CollisionBox2D::*)(float, float)>(&CollisionBox2D::SetSize))
 
         .addOverloadedFunctions("SetCenter",
+            // [Method] void SetCenter(const Vector2& center)
             static_cast<void(CollisionBox2D::*)(const Vector2&)>(&CollisionBox2D::SetCenter),
+            // [Method] void SetCenter(float x, float y)
             static_cast<void(CollisionBox2D::*)(float, float)>(&CollisionBox2D::SetCenter))
 
         // [Method] void SetAngle(float angle)

@@ -41,13 +41,16 @@ void RegisterMenu(kaguya::State& lua)
 
     // [Class] Menu : Button
     lua["Menu"].setClass(UserdataMetatable<Menu, Button>()
+        // [Constructor] Menu()
         .addStaticFunction("new", &CreateObject<Menu>)
 
         // [Method] void SetPopup(UIElement* element)
         .addFunction("SetPopup", &Menu::SetPopup)
 
         .addOverloadedFunctions("SetPopupOffset",
+            // [Method] void SetPopupOffset(const IntVector2& offset)
             static_cast<void(Menu::*)(const IntVector2&)>(&Menu::SetPopupOffset),
+            // [Method] void SetPopupOffset(int x, int y)
             static_cast<void(Menu::*)(int, int)>(&Menu::SetPopupOffset))
 
         // [Method] void ShowPopup(bool enable)
@@ -55,6 +58,7 @@ void RegisterMenu(kaguya::State& lua)
         // [Method] void SetAccelerator(int key, int qualifiers)
         .addFunction("SetAccelerator", &Menu::SetAccelerator)
 
+        // [Method] SharedPtr<UIElement> GetPopup() const
         .addStaticFunction("GetPopup", &MenuGetPopup)
 
         // [Method] const IntVector2& GetPopupOffset() const

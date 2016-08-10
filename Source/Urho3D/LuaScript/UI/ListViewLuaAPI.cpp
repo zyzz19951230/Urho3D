@@ -52,15 +52,13 @@ void RegisterListView(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] HighlightMode
-    // [Variable] HM_NEVER,
     lua["HM_NEVER"] = HM_NEVER;
-    // [Variable] HM_FOCUS,
     lua["HM_FOCUS"] = HM_FOCUS;
-    // [Variable] HM_ALWAYS
     lua["HM_ALWAYS"] = HM_ALWAYS;
 
     // [Class] ListView : ScrollView
     lua["ListView"].setClass(UserdataMetatable<ListView, ScrollView>()
+        // [Constructor] ListView()
         .addStaticFunction("new", &CreateObject<ListView>)
 
         // [Method] void AddItem(UIElement* item)
@@ -70,7 +68,9 @@ void RegisterListView(kaguya::State& lua)
         .addFunction("InsertItem", ListViewInsertItem())
 
         .addOverloadedFunctions("RemoveItem",
+            // [Method] void RemoveItem(UIElement* item, unsigned index = 0)
             ListViewRemoveItem(),
+            // [Method] void RemoveItem(unsigned index)
             static_cast<void (ListView::*)(unsigned)>(&ListView::RemoveItem))
 
         // [Method] void RemoveAllItems()

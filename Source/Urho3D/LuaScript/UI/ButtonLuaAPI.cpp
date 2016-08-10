@@ -36,14 +36,19 @@ void RegisterButton(kaguya::State& lua)
 
     // [Class] Button : BorderImage
     lua["Button"].setClass(UserdataMetatable<Button, BorderImage>()
+        // [Constructor] Button()
         .addStaticFunction("new", &CreateObject<Button>)
 
         .addOverloadedFunctions("SetPressedOffset",
+            // [Method] void SetPressedOffset(const IntVector2& offset)
             static_cast<void(Button::*)(const IntVector2&)>(&Button::SetPressedOffset),
+            // [Method] void SetPressedOffset(int x, int y)
             static_cast<void(Button::*)(int, int)>(&Button::SetPressedOffset))
 
         .addOverloadedFunctions("SetPressedChildOffset",
+            // [Method] void SetPressedChildOffset(const IntVector2& offset)
             static_cast<void(Button::*)(const IntVector2&)>(&Button::SetPressedChildOffset),
+            // [Method] void SetPressedChildOffset(int x, int y)
             static_cast<void(Button::*)(int, int)>(&Button::SetPressedChildOffset))
 
         // [Method] void SetRepeat(float delay, float rate)

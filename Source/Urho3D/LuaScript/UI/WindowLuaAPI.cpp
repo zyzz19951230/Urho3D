@@ -35,29 +35,20 @@ void RegisterWindow(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] WindowDragMode
-    // [Variable] DRAG_NONE,
     lua["DRAG_NONE"] = DRAG_NONE;
-    // [Variable] DRAG_MOVE,
     lua["DRAG_MOVE"] = DRAG_MOVE;
-    // [Variable] DRAG_RESIZE_TOPLEFT,
     lua["DRAG_RESIZE_TOPLEFT"] = DRAG_RESIZE_TOPLEFT;
-    // [Variable] DRAG_RESIZE_TOPLEFT,
     lua["DRAG_RESIZE_TOP"] = DRAG_RESIZE_TOP;
-    // [Variable] DRAG_RESIZE_TOPRIGHT,
     lua["DRAG_RESIZE_TOPRIGHT"] = DRAG_RESIZE_TOPRIGHT;
-    // [Variable] DRAG_RESIZE_RIGHT,
     lua["DRAG_RESIZE_RIGHT"] = DRAG_RESIZE_RIGHT;
-    // [Variable] DRAG_RESIZE_BOTTOMRIGHT,
     lua["DRAG_RESIZE_BOTTOMRIGHT"] = DRAG_RESIZE_BOTTOMRIGHT;
-    // [Variable] DRAG_RESIZE_BOTTOMRIGHT,
     lua["DRAG_RESIZE_BOTTOM"] = DRAG_RESIZE_BOTTOM;
-    // [Variable] DRAG_RESIZE_BOTTOMLEFT,
     lua["DRAG_RESIZE_BOTTOMLEFT"] = DRAG_RESIZE_BOTTOMLEFT;
-    // [Variable] DRAG_RESIZE_LEFT
     lua["DRAG_RESIZE_LEFT"] = DRAG_RESIZE_LEFT;
 
     // [Class] Window : BorderImage
     lua["Window"].setClass(UserdataMetatable<Window, BorderImage>()
+        // [Constructor] Window()
         .addStaticFunction("new", &CreateObject<Window>)
 
         // [Method] void SetMovable(bool enable)

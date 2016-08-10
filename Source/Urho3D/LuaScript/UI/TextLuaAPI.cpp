@@ -43,17 +43,17 @@ void RegisterText(kaguya::State& lua)
     lua["DEFAULT_FONT_SIZE"] = DEFAULT_FONT_SIZE;
 
     // [Enum] TextEffect
-    // [Variable] TE_NONE
     lua["TE_NONE"] = TE_NONE;
-    // [Variable] TE_SHADOW,
     lua["TE_SHADOW"] = TE_SHADOW;
-    // [Variable] TE_STROKE
     lua["TE_STROKE"] = TE_STROKE;
 
     // [Class] Text : UIElement
     lua["Text"].setClass(UserdataMetatable<Text, UIElement>()
+        // [Constructor] Text()
         .addStaticFunction("new", &CreateObject<Text>)
 
+        // [Method] bool SetFont(const String& fontName, int size = DEFAULT_FONT_SIZE)
+        // [Method] bool SetFont(Font* font, int size = DEFAULT_FONT_SIZE)
         .addOverloadedFunctions("SetFont", TextSetFont0(), TextSetFont1())
 
         // [Method] bool SetFontSize(int size)

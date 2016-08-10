@@ -37,6 +37,7 @@ void RegisterBorderImage(kaguya::State& lua)
 
     // [Class] BorderImage : UIElement
     lua["BorderImage"].setClass(UserdataMetatable<BorderImage, UIElement>()
+        // [Constructor] BorderImage
         .addStaticFunction("new", &CreateObject<BorderImage>)
 
         // [Method] void SetTexture(Texture* texture)
@@ -51,7 +52,9 @@ void RegisterBorderImage(kaguya::State& lua)
         .addFunction("SetImageBorder", &BorderImage::SetImageBorder)
 
         .addOverloadedFunctions("SetHoverOffset",
+            // [Method] void SetHoverOffset(const IntVector2& offset)
             static_cast<void(BorderImage::*)(const IntVector2&)>(&BorderImage::SetHoverOffset),
+            // [Method] void SetHoverOffset(int x, int y)
             static_cast<void(BorderImage::*)(int, int)>(&BorderImage::SetHoverOffset))
 
         // [Method] void SetBlendMode(BlendMode mode)

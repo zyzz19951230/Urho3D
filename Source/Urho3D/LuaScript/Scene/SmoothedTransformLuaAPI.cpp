@@ -43,6 +43,7 @@ void RegisterSmoothedTransform(kaguya::State& lua)
 
     // [Class] SmoothedTransform : Component
     lua["SmoothedTransform"].setClass(UserdataMetatable<SmoothedTransform, Component>()
+        // [Constructor] SmoothedTransform()
         .addStaticFunction("new", &CreateObject<SmoothedTransform>)
 
         // [Method] void SetTargetPosition(const Vector3& position)

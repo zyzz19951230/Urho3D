@@ -36,13 +36,16 @@ void RegisterCheckBox(kaguya::State& lua)
 
     // [Class] CheckBox : BorderImage
     lua["CheckBox"].setClass(UserdataMetatable<CheckBox, BorderImage>()
+        // [Constructor] CheckBox()
         .addStaticFunction("new", &CreateObject<CheckBox>)
 
         // [Method] void SetChecked(bool enable)
         .addFunction("SetChecked", &CheckBox::SetChecked)
 
         .addOverloadedFunctions("SetCheckedOffset",
+            // [Method] void SetCheckedOffset(const IntVector2& rect)
             static_cast<void(CheckBox::*)(const IntVector2&)>(&CheckBox::SetCheckedOffset),
+            // [Method] void SetCheckedOffset(int x, int y)
             static_cast<void(CheckBox::*)(int, int)>(&CheckBox::SetCheckedOffset))
 
         // [Method] bool IsChecked() const

@@ -40,6 +40,7 @@ void RegisterParticleEmitter2D(kaguya::State& lua)
 
     // [Class] ParticleEmitter2D : Drawable2D
     lua["ParticleEmitter2D"].setClass(UserdataMetatable<ParticleEmitter2D, Drawable2D>()
+        // [Constructor] ParticleEmitter2D()
         .addStaticFunction("new", &CreateObject<ParticleEmitter2D>)
 
         // [Method] void SetEffect(ParticleEffect2D* effect)

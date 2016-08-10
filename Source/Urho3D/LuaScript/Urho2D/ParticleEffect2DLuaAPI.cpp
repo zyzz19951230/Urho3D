@@ -39,13 +39,12 @@ void RegisterParticleEffect2D(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] EmitterType2D
-    // [Variable] EMITTER_TYPE_GRAVITY
     lua["EMITTER_TYPE_GRAVITY"] = EMITTER_TYPE_GRAVITY;
-    // [Variable] EMITTER_TYPE_RADIAL
     lua["EMITTER_TYPE_RADIAL"] = EMITTER_TYPE_RADIAL;
 
     // [Class] ParticleEffect2D : Resource
     lua["ParticleEffect2D"].setClass(UserdataMetatable<ParticleEffect2D, Resource>()
+        // [Constructor] ParticleEffect2D()
         .addStaticFunction("new", &CreateObject<ParticleEffect2D>)
 
         // [Method] SharedPtr<ParticleEffect2D> Clone(const String& cloneName = String::EMPTY) const

@@ -31,12 +31,12 @@
 namespace Urho3D
 {
 
-static SharedPtr<MessageBox> CreateMessageBox(Context* context, const String& messageString, const String& titleString = "", XMLFile* layoutFile = 0, XMLFile* styleFile = 0)
+static SharedPtr<MessageBox> CreateMessageBox(const String& messageString, const String& titleString = "", XMLFile* layoutFile = 0, XMLFile* styleFile = 0)
 {
     return SharedPtr<MessageBox>(new MessageBox(globalContext, messageString, titleString, layoutFile, styleFile));
 }
 
-KAGUYA_FUNCTION_OVERLOADS(CreateMessageBoxOverloads, CreateMessageBox, 2, 5);
+KAGUYA_FUNCTION_OVERLOADS(CreateMessageBoxOverloads, CreateMessageBox, 1, 4);
 
 static SharedPtr<UIElement> MessageBoxGetWindow(const MessageBox* self)
 {
@@ -49,6 +49,7 @@ void RegisterMessageBox(kaguya::State& lua)
 
     // [Class] MessageBox : Object
     lua["MessageBox"].setClass(UserdataMetatable<MessageBox, Object>()
+        // [Constructor] MessageBox(const String& messageString, const String& titleString = "", XMLFile* layoutFile = 0, XMLFile* styleFile = 0)
         .addStaticFunction("new", CreateMessageBoxOverloads())
 
         // [Method] void SetTitle(const String& text)
@@ -61,6 +62,7 @@ void RegisterMessageBox(kaguya::State& lua)
         // [Method] const String& GetMessage() const
         .addFunction("GetMessage", &MessageBox::GetMessage)
 
+        // [Method] SharedPtr<UIElement> GetWindow() const
         .addStaticFunction("GetWindow", &MessageBoxGetWindow)
 
         // [Property] const String& title

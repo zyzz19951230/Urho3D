@@ -38,6 +38,7 @@ void RegisterConstraintDistance2D(kaguya::State& lua)
 
     // [Class] ConstraintDistance2D : Constraint2D
     lua["ConstraintDistance2D"].setClass(UserdataMetatable<ConstraintDistance2D, Constraint2D>()
+        // [Constructor] ConstraintDistance2D()
         .addStaticFunction("new", &CreateObject<ConstraintDistance2D>)
 
         // [Method] void SetOwnerBodyAnchor(const Vector2& anchor)

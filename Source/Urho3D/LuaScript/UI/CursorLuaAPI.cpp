@@ -35,43 +35,35 @@ void RegisterCursor(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] CursorShape
-    // [Variable] CS_NORMAL
     lua["CS_NORMAL"] = CS_NORMAL;
-    // [Variable] CS_IBEAM,
     lua["CS_IBEAM"] = CS_IBEAM;
-    // [Variable] CS_CROSS,
     lua["CS_CROSS"] = CS_CROSS;
-    // [Variable] CS_RESIZEVERTICAL,
     lua["CS_RESIZEVERTICAL"] = CS_RESIZEVERTICAL;
-    // [Variable] CS_RESIZEDIAGONAL_TOPRIGHT,
     lua["CS_RESIZEDIAGONAL_TOPRIGHT"] = CS_RESIZEDIAGONAL_TOPRIGHT;
-    // [Variable] CS_RESIZEHORIZONTAL,
     lua["CS_RESIZEHORIZONTAL"] = CS_RESIZEHORIZONTAL;
-    // [Variable] CS_RESIZEDIAGONAL_TOPLEFT,
     lua["CS_RESIZEDIAGONAL_TOPLEFT"] = CS_RESIZEDIAGONAL_TOPLEFT;
-    // [Variable] CS_RESIZE_ALL,
     lua["CS_RESIZE_ALL"] = CS_RESIZE_ALL;
-    // [Variable] CS_ACCEPTDROP,
     lua["CS_ACCEPTDROP"] = CS_ACCEPTDROP;
-    // [Variable] CS_REJECTDROP,
     lua["CS_REJECTDROP"] = CS_REJECTDROP;
-    // [Variable] CS_BUSY,
     lua["CS_BUSY"] = CS_BUSY;
-    // [Variable] CS_BUSY_ARROW,
     lua["CS_BUSY_ARROW"] = CS_BUSY_ARROW;
-    // [Variable] CS_MAX_SHAPES
     lua["CS_MAX_SHAPES"] = CS_MAX_SHAPES;
 
     // [Class] Cursor : BorderImage
     lua["Cursor"].setClass(UserdataMetatable<Cursor, BorderImage>()
+        // [Constructor] Cursor()
         .addStaticFunction("new", &CreateObject<Cursor>)
 
         .addOverloadedFunctions("DefineShape",
+            // [Method] void DefineShape(const String& shape, Image* image, const IntRect& imageRect, const IntVector2& hotSpot)
             static_cast<void(Cursor::*)(const String&, Image*, const IntRect&, const IntVector2&)>(&Cursor::DefineShape),
+            // [Method] void DefineShape(CursorShape shape, Image* image, const IntRect& imageRect, const IntVector2& hotSpot)
             static_cast<void(Cursor::*)(CursorShape, Image*, const IntRect&, const IntVector2&)>(&Cursor::DefineShape))
 
         .addOverloadedFunctions("SetShape",
+            // [Method] void SetShape(const String& shape)
             static_cast<void(Cursor::*)(const String&)>(&Cursor::SetShape),
+            // [Method] void SetShape(CursorShape shape)
             static_cast<void(Cursor::*)(CursorShape)>(&Cursor::SetShape))
 
         // [Method] void SetUseSystemShapes(bool enable)

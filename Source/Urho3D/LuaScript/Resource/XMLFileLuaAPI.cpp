@@ -39,6 +39,7 @@ void RegisterXMLFile(kaguya::State& lua)
 
     // [Class] XMLFile : Resource
     lua["XMLFile"].setClass(UserdataMetatable<XMLFile, Resource>()
+        // [Constructor] XMLFile()
         .addStaticFunction("new", &CreateObject<XMLFile>)
 
         // [Method] bool FromString(const String& source)
@@ -52,7 +53,9 @@ void RegisterXMLFile(kaguya::State& lua)
         .addFunction("ToString", XMLFileToString())
 
         .addOverloadedFunctions("Patch",
+            // [Method] void Patch(XMLFile* patchFile)
             static_cast<void(XMLFile::*)(XMLFile*)>(&XMLFile::Patch),
+            // [Method] void Patch(XMLElement patchElement)
             static_cast<void(XMLFile::*)(XMLElement)>(&XMLFile::Patch))
     );
 }

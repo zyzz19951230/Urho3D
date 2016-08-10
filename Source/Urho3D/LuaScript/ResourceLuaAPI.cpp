@@ -36,9 +36,8 @@ extern void RegisterImage(kaguya::State& lua);
 extern void RegisterJSONFile(kaguya::State& lua);
 extern void RegisterJSONValue(kaguya::State& lua);
 extern void RegisterLocalization(kaguya::State& lua);
-extern void RegisterPListFile(kaguya::State& lua);
+// extern void RegisterPListFile(kaguya::State& lua);
 extern void RegisterResourceCache(kaguya::State& lua);
-extern void RegisterResourceEvents(kaguya::State& lua);
 extern void RegisterXMLElement(kaguya::State& lua);
 extern void RegisterXMLFile(kaguya::State& lua);
 
@@ -52,7 +51,6 @@ void RegisterResourceLuaAPI(kaguya::State& lua)
     RegisterLocalization(lua);
     // RegisterPListFile(lua);
     RegisterResourceCache(lua);
-    RegisterResourceEvents(lua);
     RegisterXMLElement(lua);
     RegisterXMLFile(lua);
 

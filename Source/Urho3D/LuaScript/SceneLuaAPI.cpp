@@ -37,7 +37,6 @@ extern void RegisterLogicComponent(kaguya::State& lua);
 extern void RegisterNode(kaguya::State& lua);
 extern void RegisterObjectAnimation(kaguya::State& lua);
 extern void RegisterScene(kaguya::State& lua);
-extern void RegisterSceneEvents(kaguya::State& lua);
 extern void RegisterSmoothedTransform(kaguya::State& lua);
 extern void RegisterSplinePath(kaguya::State& lua);
 extern void RegisterValueAnimation(kaguya::State& lua);
@@ -53,7 +52,6 @@ void RegisterSceneLuaAPI(kaguya::State& lua)
     RegisterNode(lua);
     RegisterObjectAnimation(lua);
     RegisterScene(lua);
-    RegisterSceneEvents(lua);
     RegisterSmoothedTransform(lua);
     RegisterSplinePath(lua);
     RegisterValueAnimation(lua);

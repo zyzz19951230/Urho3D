@@ -38,6 +38,7 @@ void RegisterConstraintFriction2D(kaguya::State& lua)
 
     // [Class] ConstraintFriction2D : Constraint2D
     lua["ConstraintFriction2D"].setClass(UserdataMetatable<ConstraintFriction2D, Constraint2D>()
+        // [Constructor] ConstraintFriction2D()
         .addStaticFunction("new", &CreateObject<ConstraintFriction2D>)
 
         // [Method] void SetAnchor(const Vector2& anchor)

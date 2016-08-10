@@ -38,6 +38,7 @@ void RegisterConstraintWheel2D(kaguya::State& lua)
 
     // [Class] ConstraintWheel2D : Constraint2D
     lua["ConstraintWheel2D"].setClass(UserdataMetatable<ConstraintWheel2D, Constraint2D>()
+        // [Constructor] ConstraintWheel2D()
         .addStaticFunction("new", &CreateObject<ConstraintWheel2D>)
 
         // [Method] void SetAnchor(const Vector2& anchor)

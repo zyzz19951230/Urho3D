@@ -39,6 +39,7 @@ void RegisterConstraint2D(kaguya::State& lua)
 
     // [Class] Constraint2D : Component
     lua["Constraint2D"].setClass(UserdataMetatable<Constraint2D, Component>()
+        // [Constructor] Constraint2D()
         .addStaticFunction("new", &CreateObject<Constraint2D>)
 
         // [Method] void SetOtherBody(RigidBody2D* body)

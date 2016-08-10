@@ -41,15 +41,21 @@ void RegisterLocalization(kaguya::State& lua)
         .addFunction("GetNumLanguages", &Localization::GetNumLanguages)
 
         .addOverloadedFunctions("GetLanguageIndex",
+            // [Method] int GetLanguageIndex() const
             static_cast<int(Localization::*)() const>(&Localization::GetLanguageIndex),
+            // [Method] int GetLanguageIndex(const String& language)
             static_cast<int(Localization::*)(const String&)>(&Localization::GetLanguageIndex))
 
         .addOverloadedFunctions("GetLanguage",
+            // [Method] String GetLanguage()
             static_cast<String(Localization::*)()>(&Localization::GetLanguage),
+            // [Method] String GetLanguage(int index)
             static_cast<String(Localization::*)(int)>(&Localization::GetLanguage))
 
         .addOverloadedFunctions("SetLanguage",
+            // [Method] void SetLanguage(int index)
             static_cast<void(Localization::*)(int)>(&Localization::SetLanguage),
+            // [Method] void SetLanguage(const String& language)
             static_cast<void(Localization::*)(const String&)>(&Localization::SetLanguage))
 
         // [Method] String Get(const String& id)
@@ -63,7 +69,9 @@ void RegisterLocalization(kaguya::State& lua)
 
         // [Property(ReadOnly)] int numLanguages
         .addProperty("numLanguages", &Localization::GetNumLanguages)
+        // [Property(ReadOnly)] int languageIndex
 		.addProperty("languageIndex", static_cast<int(Localization::*)() const>(&Localization::GetLanguageIndex))
+        // [Property(ReadOnly)] String language
 		.addProperty("language", static_cast<String(Localization::*)()>(&Localization::GetLanguage))
     );
 }

@@ -38,6 +38,7 @@ void RegisterCollisionEdge2D(kaguya::State& lua)
 
     // [Class] CollisionEdge2D : CollisionShape2D
     lua["CollisionEdge2D"].setClass(UserdataMetatable<CollisionEdge2D, CollisionShape2D>()
+        // [Constructor] CollisionEdge2D()
         .addStaticFunction("new", &CreateObject<CollisionEdge2D>)
 
         // [Method] void SetVertex1(const Vector2& vertex)

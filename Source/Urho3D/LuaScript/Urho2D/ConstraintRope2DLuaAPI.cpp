@@ -38,6 +38,7 @@ void RegisterConstraintRope2D(kaguya::State& lua)
 
     // [Class] ConstraintRope2D : Constraint2D
     lua["ConstraintRope2D"].setClass(UserdataMetatable<ConstraintRope2D, Constraint2D>()
+        // [Constructor] ConstraintRope2D()
         .addStaticFunction("new", &CreateObject<ConstraintRope2D>)
 
         // [Method] void SetOwnerBodyAnchor(const Vector2& anchor)

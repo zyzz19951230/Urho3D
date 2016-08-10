@@ -37,13 +37,9 @@ void RegisterTileMapDefs2D(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] Orientation2D
-    // [Variable] O_ORTHOGONAL
     lua["O_ORTHOGONAL"] = O_ORTHOGONAL;
-    // [Variable] O_ISOMETRIC,
     lua["O_ISOMETRIC"] = O_ISOMETRIC;
-    // [Variable] O_STAGGERED,
     lua["O_STAGGERED"] = O_STAGGERED;
-    // [Variable] O_HEXAGONAL
     lua["O_HEXAGONAL"] = O_HEXAGONAL;
 
     // [Class] TileMapInfo2D
@@ -65,39 +61,35 @@ void RegisterTileMapDefs2D(kaguya::State& lua)
         // [Property(ReadOnly)] float mapHeight
         .addProperty("mapHeight", &TileMapInfo2D::GetMapHeight)
 
+        // [Field] Orientation2D orientation
         .addProperty("orientation", &TileMapInfo2D::orientation_)
+        // [Field] int width
         .addProperty("width", &TileMapInfo2D::width_)
+        // [Field] int height
         .addProperty("height", &TileMapInfo2D::height_)
+        // [Field] float tileWidth
         .addProperty("tileWidth", &TileMapInfo2D::tileWidth_)
+        // [Field] float tileHeight
         .addProperty("tileHeight", &TileMapInfo2D::tileHeight_)
     );
 
     // [Enum] TileMapLayerType2D
-    // [Variable] LT_TILE_LAYER
     lua["LT_TILE_LAYER"] = LT_TILE_LAYER;
-    // [Variable] LT_OBJECT_GROUP,
     lua["LT_OBJECT_GROUP"] = LT_OBJECT_GROUP;
-    // [Variable] LT_IMAGE_LAYER,
     lua["LT_IMAGE_LAYER"] = LT_IMAGE_LAYER;
-    // [Variable] LT_INVALID
     lua["LT_INVALID"] = LT_INVALID;
 
     // [Enum] TileMapObjectType2D
-    // [Variable] OT_RECTANGLE
     lua["OT_RECTANGLE"] = OT_RECTANGLE;
-    // [Variable] OT_ELLIPSE,
     lua["OT_ELLIPSE"] = OT_ELLIPSE;
-    // [Variable] OT_POLYGON,
     lua["OT_POLYGON"] = OT_POLYGON;
-    // [Variable] OT_POLYLINE,
     lua["OT_POLYLINE"] = OT_POLYLINE;
-    // [Variable] OT_TILE,
     lua["OT_TILE"] = OT_TILE;
-    // [Variable] OT_INVALID
     lua["OT_INVALID"] = OT_INVALID;
 
     // [Class] PropertySet2D : RefCounted
     lua["PropertySet2D"].setClass(UserdataMetatable<PropertySet2D, RefCounted>()
+        // [Constructor] PropertySet2D()
         .setConstructors<PropertySet2D()>()
         // [Method] bool HasProperty(const String& name) const
         .addFunction("HasProperty", &PropertySet2D::HasProperty)
@@ -107,6 +99,7 @@ void RegisterTileMapDefs2D(kaguya::State& lua)
 
     // [Class] Tile2D : RefCounted
     lua["Tile2D"].setClass(UserdataMetatable<Tile2D, RefCounted>()
+        // [Constructor] Tile2D()
         .setConstructors<Tile2D()>()
 
         // [Method] int GetGid() const
@@ -126,6 +119,7 @@ void RegisterTileMapDefs2D(kaguya::State& lua)
 
     // [Class] TileMapObject2D : RefCounted
     lua["TileMapObject2D"].setClass(UserdataMetatable<TileMapObject2D, RefCounted>()
+        // [Constructor] TileMapObject2D()
         .setConstructors<TileMapObject2D()>()
 
         // [Method] TileMapObjectType2D GetObjectType() const

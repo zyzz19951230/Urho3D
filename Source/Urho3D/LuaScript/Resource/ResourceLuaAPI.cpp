@@ -31,13 +31,13 @@
 namespace Urho3D
 {
 
-     static bool ResourceLoad(Resource* self, const String& fileName)
-     {
-         SharedPtr<File> file(new File(globalContext, fileName));
-         if (!file->IsOpen())
-             return false;
-         return self->Load(*file);
-     }
+static bool ResourceLoad(Resource* self, const String& fileName)
+{
+    SharedPtr<File> file(new File(globalContext, fileName));
+    if (!file->IsOpen())
+        return false;
+    return self->Load(*file);
+}
 
 static bool ResourceSave(const Resource* self, const String& fileName)
 {
@@ -52,27 +52,27 @@ void RegisterResource(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] AsyncLoadState
-    // [Variable] ASYNC_DONE
     lua["ASYNC_DONE"] = ASYNC_DONE;
-    // [Variable] ASYNC_QUEUED
     lua["ASYNC_QUEUED"] = ASYNC_QUEUED;
-    // [Variable] ASYNC_LOADING
     lua["ASYNC_LOADING"] = ASYNC_LOADING;
-    // [Variable] ASYNC_SUCCESS
     lua["ASYNC_SUCCESS"] = ASYNC_SUCCESS;
-    // [Variable] ASYNC_FAIL
     lua["ASYNC_FAIL"] = ASYNC_FAIL;
 
     // [Class] Resource : Object
     lua["Resource"].setClass(UserdataMetatable<Resource, Object>()
+        // [Constructor] Resource()
         .addStaticFunction("new", &CreateObject<Resource>)
 
         .addOverloadedFunctions("Load", 
+            // [Method] bool Load(const String& fileName)
             &ResourceLoad, 
+            // [Method] bool Load(Deserializer& source)
             &Resource::Load)
 
         .addOverloadedFunctions("Save", 
+            // [Method] bool Save(const String& fileName) const
             &ResourceSave, 
+            // [Method] bool Save(Serializer& dest) const
             &Resource::Save)
 
         // [Method] void SetName(const String& name)

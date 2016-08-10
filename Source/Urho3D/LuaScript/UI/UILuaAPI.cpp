@@ -33,9 +33,9 @@ namespace Urho3D
 
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(UISetFocusElement, UI, SetFocusElement, 1, 2);
 
-static SharedPtr<UIElement> UILoadLayout0(UI* self, const char* filepath, XMLFile* styleFile = 0)
+static SharedPtr<UIElement> UILoadLayout0(UI* self, const String& fileName, XMLFile* styleFile = 0)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return SharedPtr<UIElement>();
 
@@ -50,11 +50,11 @@ static SharedPtr<UIElement> UILoadLayout1(UI* self, XMLFile* file, XMLFile* styl
 KAGUYA_FUNCTION_OVERLOADS(UILoadLayoutOverloads0, UILoadLayout0, 2, 3);
 KAGUYA_FUNCTION_OVERLOADS(UILoadLayoutOverloads1, UILoadLayout1, 2, 3);
 
-static bool UISaveLayout(UI* self, const char* filepath, UIElement* element)
+static bool UISaveLayout(UI* self, const String& fileName, UIElement* element)
 {
     if (!element)
         return false;
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    SharedPtr<File> file(new File(globalContext, fileName, FILE_WRITE));
     if (!file->IsOpen())
         return false;
     return self->SaveLayout(*file, element);
@@ -119,8 +119,13 @@ void RegisterUI(kaguya::State& lua)
         // [Method] void DebugDraw(UIElement* element)
         .addFunction("DebugDraw", &UI::DebugDraw)
 
-        .addOverloadedFunctions("LoadLayout", UILoadLayoutOverloads0(), UILoadLayoutOverloads1())
+        .addOverloadedFunctions("LoadLayout", 
+            // [Method] SharedPtr<UIElement> LoadLayout(const String& fileName, XMLFile* styleFile = 0)
+            UILoadLayoutOverloads0(), 
+            // [Method] SharedPtr<UIElement> LoadLayout(XMLFile* file, XMLFile* styleFile = 0)
+            UILoadLayoutOverloads1())
 
+        // [Method] bool SaveLayout(const String& fileName, UIElement* element)
         .addStaticFunction("SaveLayout", &UISaveLayout)
 
         // [Method] void SetClipboardText(const String& text)
@@ -152,20 +157,29 @@ void RegisterUI(kaguya::State& lua)
         // [Method] void SetHeight(float size)
         .addFunction("SetHeight", &UI::SetHeight)
 
+        // [Method] SharedPtr<UIElement> GetRoot() const
         .addStaticFunction("GetRoot", &UIGetRoot)
+        // [Method] SharedPtr<UIElement> GetRootModalElement() const
         .addStaticFunction("GetRootModalElement", &UIGetRootModalElement)
         // [Method] Cursor* GetCursor() const
         .addFunction("GetCursor", &UI::GetCursor)
         // [Method] IntVector2 GetCursorPosition() const
         .addFunction("GetCursorPosition", &UI::GetCursorPosition)
 
-        .addOverloadedFunctions("GetElementAt", UIGetElementAtOverloads0(), UIGetElementAtOverloads1())
+        .addOverloadedFunctions("GetElementAt", 
+            // [Method] 
+            UIGetElementAtOverloads0(), 
+            // [Method] 
+            UIGetElementAtOverloads1())
 
+        // [Method] SharedPtr<UIElement> GetFocusElement() const
         .addStaticFunction("GetFocusElement", &UIGetFocusElement)
+        // [Method] SharedPtr<UIElement> GetFrontElement() const
         .addStaticFunction("GetFrontElement", &UIGetFrontElement)
 
         // [Method] unsigned GetNumDragElements() const
         .addFunction("GetNumDragElements", &UI::GetNumDragElements)
+        // [Method] SharedPtr<UIElement> GetDragElement(unsigned index)
         .addStaticFunction("GetDragElement", &UIGetDragElement)
 
         // [Method] const String& GetClipboardText() const
@@ -197,13 +211,17 @@ void RegisterUI(kaguya::State& lua)
         // [Method] float GetScale() const
         .addFunction("GetScale", &UI::GetScale)
 
+        // [Property(ReadOnly)] SharedPtr<UIElement> root
         .addProperty("root", &UIGetRoot)
+        // [Property(ReadOnly)] SharedPtr<UIElement> rootModalElement
         .addProperty("rootModalElement", &UIGetRootModalElement)
         // [Property] Cursor* cursor
         .addProperty("cursor", &UI::GetCursor, &UI::SetCursor)
         // [Property(ReadOnly)] IntVector2 cursorPosition
         .addProperty("cursorPosition", &UI::GetCursorPosition)
+        // [Property(ReadOnly)] SharedPtr<UIElement> focusElement
         .addProperty("focusElement", &UIGetFocusElement)
+        // [Property(ReadOnly)] SharedPtr<UIElement> frontElement
         .addProperty("frontElement", &UIGetFrontElement)
 
         // [Property(ReadOnly)] unsigned numDragElements

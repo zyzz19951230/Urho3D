@@ -37,6 +37,7 @@ void RegisterLineEdit(kaguya::State& lua)
 
     // [Class] LineEdit : BorderImage
     lua["LineEdit"].setClass(UserdataMetatable<LineEdit, BorderImage>()
+        // [Constructor] LineEdit()
         .addStaticFunction("new", &CreateObject<LineEdit>)
 
         // [Method] void SetText(const String& text)

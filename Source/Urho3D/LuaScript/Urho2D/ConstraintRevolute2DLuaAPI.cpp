@@ -38,6 +38,7 @@ void RegisterConstraintRevolute2D(kaguya::State& lua)
 
     // [Class] ConstraintRevolute2D : Constraint2D
     lua["ConstraintRevolute2D"].setClass(UserdataMetatable<ConstraintRevolute2D, Constraint2D>()
+        // [Constructor] ConstraintRevolute2D()
         .addStaticFunction("new", &CreateObject<ConstraintRevolute2D>)
 
         // [Method] void SetAnchor(const Vector2& anchor)

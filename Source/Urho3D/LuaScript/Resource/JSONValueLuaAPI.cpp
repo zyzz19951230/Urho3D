@@ -77,38 +77,36 @@ void RegisterJSONValue(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] JSONValueType
-    // [Variable] JSON_NULL
     lua["JSON_NULL"] = JSON_NULL;
-    // [Variable] JSON_BOOL,
     lua["JSON_BOOL"] = JSON_BOOL;
-    // [Variable] JSON_NUMBER,
     lua["JSON_NUMBER"] = JSON_NUMBER;
-    // [Variable] JSON_STRING,
     lua["JSON_STRING"] = JSON_STRING;
-    // [Variable] JSON_ARRAY,
     lua["JSON_ARRAY"] = JSON_ARRAY;
-    // [Variable] JSON_OBJECT,
     lua["JSON_OBJECT"] = JSON_OBJECT;
 
     // [Enum] JSONNumberType
-    // [Variable] void SetType(JSONValueType valueType, JSONNumberType numberType
     lua["JSONNT_NAN"] = JSONNT_NAN;
-    // [Variable] JSONNT_INT,
     lua["JSONNT_INT"] = JSONNT_INT;
-    // [Variable] JSONNT_UINT,
     lua["JSONNT_UINT"] = JSONNT_UINT;
-    // [Variable] JSONNT_FLOAT_DOUBLE,
     lua["JSONNT_FLOAT_DOUBLE"] = JSONNT_FLOAT_DOUBLE;
 
     // [Class] JSONValue
     lua["JSONValue"].setClass(UserdataMetatable<JSONValue>()
+        // [Constructor] JSONValue()
         .setConstructors<JSONValue(),
+        // [Constructor] JSONValue(bool value)
         JSONValue(bool),
+        // [Constructor] JSONValue(int value)
         JSONValue(int),
+        // [Constructor] JSONValue(unsigned value)
         JSONValue(unsigned),
+        // [Constructor] JSONValue(float value)
         JSONValue(float),
+        // [Constructor] JSONValue(double value)
         JSONValue(double),
+        // [Constructor] JSONValue(const char* value),
         JSONValue(const char*),
+        // [Constructor] JSONValue(const JSONValue& value)
         JSONValue(const JSONValue&)>()
 
         // [Method] JSONValueType GetValueType() const
@@ -129,13 +127,21 @@ void RegisterJSONValue(kaguya::State& lua)
         // [Method] bool IsObject() const
         .addFunction("IsObject", &JSONValue::IsObject)
 
+        // [Method] void SetBool(bool value)
         .addStaticFunction("SetBool", &JSONValueSetBool)
+        // [Method] void SetInt(int value)
         .addStaticFunction("SetInt", &JSONValueSetInt)
+        // [Method] void SetUInt(unsigned value)
         .addStaticFunction("SetUInt", &JSONValueSetUInt)
+        // [Method] void SetFloat(float value)
         .addStaticFunction("SetFloat", &JSONValueSetFloat)
+        // [Method] void SetDouble(double value)
         .addStaticFunction("SetDouble", &JSONValueSetDouble)
+        // [Method] void SetString(const char* value)
         .addStaticFunction("SetString", &JSONValueSetString)
+        // [Method] void SetArray(const JSONArray& value)
         .addStaticFunction("SetArray", &JSONValueSetArray)
+        // [Method] void SetObject(const JSONObject& value)
         .addStaticFunction("SetObject", &JSONValueSetObject)
 
         // [Method] bool GetBool() const
@@ -156,11 +162,15 @@ void RegisterJSONValue(kaguya::State& lua)
         .addFunction("GetObject", &JSONValue::GetObject)
 
         .addOverloadedFunctions("__index",
+            // [Method] const JSONValue& __index(unsigned index) const
             static_cast<const JSONValue&(JSONValue::*)(unsigned) const>(&JSONValue::operator[]),
+            // [Method] const JSONValue& __index(const String& key) const
             static_cast<const JSONValue&(JSONValue::*)(const String&) const>(&JSONValue::operator[]))
 
         .addOverloadedFunctions("__newindex",
+            // [Method] JSONValue& __newindex(unsigned index)
             static_cast<JSONValue&(JSONValue::*)(unsigned)>(&JSONValue::operator[]),
+            // [Method] JSONValue& __newindex(const String& key)
             static_cast<JSONValue&(JSONValue::*)(const String&)>(&JSONValue::operator[]))
 
         // [Method] void Push(const JSONValue& value)
@@ -171,7 +181,9 @@ void RegisterJSONValue(kaguya::State& lua)
         .addFunction("Insert", &JSONValue::Insert)
 
         .addOverloadedFunctions("Erase",
+            // [Method] void Erase(unsigned pos, unsigned length)
             static_cast<void(JSONValue::*)(unsigned, unsigned)>(&JSONValue::Erase),
+            // [Method] bool Erase(const String& key)
             static_cast<bool(JSONValue::*)(const String&)>(&JSONValue::Erase))
 
         // [Method] void Resize(unsigned newSize)
@@ -207,6 +219,7 @@ void RegisterJSONValue(kaguya::State& lua)
         // [Property(ReadOnly)] bool isObject
         .addProperty("isObject", &JSONValue::IsObject)
 
+        // [StaticConstant] JSONValue EMPTY
         .addStaticField("EMPTY", &JSONValue::EMPTY)
     );
 }

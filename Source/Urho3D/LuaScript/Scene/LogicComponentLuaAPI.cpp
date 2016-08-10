@@ -45,6 +45,7 @@ void RegisterLogicComponent(kaguya::State& lua)
 
     // [Class] LogicComponent : Component
     lua["LogicComponent"].setClass(UserdataMetatable<LogicComponent, Component>()
+        // [Constructor] LogicComponent()
         .addStaticFunction("new", &CreateObject<LogicComponent>)
 
         // [Method] void SetUpdateEventMask(unsigned char mask)

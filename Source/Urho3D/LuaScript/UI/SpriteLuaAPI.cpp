@@ -37,19 +37,27 @@ void RegisterSprite(kaguya::State& lua)
 
     // [Class] Sprite : UIElement
     lua["Sprite"].setClass(UserdataMetatable<Sprite, UIElement>()
+        // [Constructor] Sprite()
         .addStaticFunction("new", &CreateObject<Sprite>)
 
         .addOverloadedFunctions("SetPosition",
+            // [Method] void SetPosition(const Vector2& position)
             static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetPosition),
+            // [Method] void SetPosition(float x, float y)
             static_cast<void(Sprite::*)(float, float)>(&Sprite::SetPosition))
 
         .addOverloadedFunctions("SetHotSpot",
+            // [Method] void SetHotSpot(const IntVector2& hotSpot)
             static_cast<void(Sprite::*)(const IntVector2&)>(&Sprite::SetHotSpot),
+            // [Method] void SetHotSpot(int x, int y)
             static_cast<void(Sprite::*)(int, int)>(&Sprite::SetHotSpot))
 
         .addOverloadedFunctions("SetScale",
+            // [Method] void SetScale(const Vector2& scale)
             static_cast<void(Sprite::*)(const Vector2&)>(&Sprite::SetScale),
+            // [Method] void SetScale(float x, float y)
             static_cast<void(Sprite::*)(float, float)>(&Sprite::SetScale),
+            // [Method] void SetScale(float scale)
             static_cast<void(Sprite::*)(float)>(&Sprite::SetScale))
 
         // [Method] void SetRotation(float angle)

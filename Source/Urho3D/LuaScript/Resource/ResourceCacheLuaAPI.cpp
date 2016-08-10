@@ -82,9 +82,7 @@ void RegisterResourceCache(kaguya::State& lua)
     lua["PRIORITY_LAST"] = PRIORITY_LAST;
 
     // [Enum] ResourceRequest
-    // [Variable] RESOURCE_CHECKEXISTS
     lua["RESOURCE_CHECKEXISTS"] = RESOURCE_CHECKEXISTS;
-    // [Variable] RESOURCE_GETFILE
     lua["RESOURCE_GETFILE"] = RESOURCE_GETFILE;
 
     // [Class] ResourceCache : Object
@@ -94,7 +92,9 @@ void RegisterResourceCache(kaguya::State& lua)
         .addFunction("AddResourceDir", ResourceCacheAddResourceDir())
         
         .addOverloadedFunctions("AddPackageFile", 
+            // [Method] bool AddPackageFile(PackageFile* package, unsigned priority = PRIORITY_LAST)
             ResourceCacheAddPackageFile0(), 
+            // [Method] bool AddPackageFile(const String& fileName, unsigned priority = PRIORITY_LAST)
             ResourceCacheAddPackageFile1())
 
         // [Method] bool AddManualResource(Resource* resource)
@@ -103,15 +103,20 @@ void RegisterResourceCache(kaguya::State& lua)
         .addFunction("RemoveResourceDir", &ResourceCache::RemoveResourceDir)
 
         .addOverloadedFunctions("RemovePackageFile",
+            // [Method] void RemovePackageFile(PackageFile* package, bool releaseResources = true, bool forceRelease = false)
             ResourceCacheRemovePackageFile0(),
+            // [Method] void RemovePackageFile(const String& fileName, bool releaseResources = true, bool forceRelease = false)
             ResourceCacheRemovePackageFile1())
 
         // [Method] void ReleaseResource(StringHash type, const String& name, bool force = false)
         .addFunction("ReleaseResource", ResourceCacheReleaseResource())
         
         .addOverloadedFunctions("ReleaseResources",
+            // [Method] void ReleaseResources(StringHash type, bool force = false)
             ResourceCacheReleaseResources0(),
+            // [Method] void ReleaseResources(StringHash type, const String& partialName, bool force = false)
             ResourceCacheReleaseResources1(),
+            // [Method] void ReleaseResources(const String& partialName, bool force = false)
             ResourceCacheReleaseResources2())
 
         // [Method] void ReleaseAllResources(bool force = false)
@@ -135,10 +140,14 @@ void RegisterResourceCache(kaguya::State& lua)
         // [Method] SharedPtr<File> GetFile(const String& name, bool sendEventOnFailure = true)
         .addFunction("GetFile", ResourceCacheGetFile())
 
+        // [Method] SharedPtr<Resource> GetResource(StringHash type, const String& name, bool sendEventOnFailure = true)
         .addStaticFunction("GetResource", ResourceCacheGetResourceOverloads())
+        // [Method] SharedPtr<Resource> GetTempResource(StringHash type, const String& name, bool sendEventOnFailure = true)
         .addStaticFunction("GetTempResource", ResourceCacheGetTempResourceOverloads())
 
+        // [Method] PODVector<Resource*> GetResources(StringHash type)
         .addStaticFunction("GetResources", &ResourceCacheGetResources)
+        // [Method] SharedPtr<Resource> GetExistingResource(StringHash type, const String& name)
         .addStaticFunction("GetExistingResource", &ResourceCacheGetExistingResource)
 
         // [Method] const Vector<String>& GetResourceDirs() const

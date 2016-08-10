@@ -38,6 +38,7 @@ void RegisterAnimationSet2D(kaguya::State& lua)
 
     // [Class] AnimationSet2D : Resource
     lua["AnimationSet2D"].setClass(UserdataMetatable<AnimationSet2D, Resource>()
+        // [Constructor] AnimationSet2D()
         .addStaticFunction("new", &CreateObject<AnimationSet2D>)
 
         // [Method] unsigned GetNumAnimations() const

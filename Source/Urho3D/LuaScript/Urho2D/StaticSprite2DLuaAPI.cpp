@@ -40,6 +40,7 @@ void RegisterStaticSprite2D(kaguya::State& lua)
 
     // [Class] StaticSprite2D : Drawable2D
     lua["StaticSprite2D"].setClass(UserdataMetatable<StaticSprite2D, Drawable2D>()
+        // [Constructor] StaticSprite2D()
         .addStaticFunction("new", &CreateObject<StaticSprite2D>)
 
         // [Method] void SetSprite(Sprite2D* sprite)

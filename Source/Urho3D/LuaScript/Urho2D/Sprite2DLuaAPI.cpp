@@ -40,6 +40,7 @@ void RegisterSprite2D(kaguya::State& lua)
 
     // [Class] Sprite2D : Resource
     lua["Sprite2D"].setClass(UserdataMetatable<Sprite2D, Resource>()
+        // [Constructor] Sprite2D()
         .addStaticFunction("new", &CreateObject<Sprite2D>)
 
         // [Method] void SetTexture(Texture2D* texture)

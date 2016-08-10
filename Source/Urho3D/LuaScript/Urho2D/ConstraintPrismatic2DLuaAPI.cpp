@@ -38,6 +38,7 @@ void RegisterConstraintPrismatic2D(kaguya::State& lua)
 
     // [Class] ConstraintPrismatic2D : Constraint2D
     lua["ConstraintPrismatic2D"].setClass(UserdataMetatable<ConstraintPrismatic2D, Constraint2D>()
+        // [Constructor] ConstraintPrismatic2D()
         .addStaticFunction("new", &CreateObject<ConstraintPrismatic2D>)
 
         // [Method] void SetAnchor(const Vector2& anchor)

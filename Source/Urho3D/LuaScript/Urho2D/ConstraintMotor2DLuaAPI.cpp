@@ -38,6 +38,7 @@ void RegisterConstraintMotor2D(kaguya::State& lua)
 
     // [Class] ConstraintMotor2D : Constraint2D
     lua["ConstraintMotor2D"].setClass(UserdataMetatable<ConstraintMotor2D, Constraint2D>()
+        // [Constructor] ConstraintMotor2D()
         .addStaticFunction("new", &CreateObject<ConstraintMotor2D>)
 
         // [Method] void SetLinearOffset(const Vector2& linearOffset)

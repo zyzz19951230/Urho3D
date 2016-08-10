@@ -52,8 +52,11 @@ void RegisterText3D(kaguya::State& lua)
 
     // [Class] Text3D : Drawable
     lua["Text3D"].setClass(UserdataMetatable<Text3D, Drawable>()
+        // [Constructor] Text3D()
         .addStaticFunction("new", &CreateObject<Text3D>)
 
+        // [Method] bool SetFont(const String& fontName, int size = DEFAULT_FONT_SIZE)
+        // [Method] bool SetFont(Font* font, int size = DEFAULT_FONT_SIZE)
         .addOverloadedFunctions("SetFont", Text3DSetFont0(), Text3DSetFont1())
 
         // [Method] bool SetFontSize(int size)
@@ -91,7 +94,9 @@ void RegisterText3D(kaguya::State& lua)
         .addFunction("SetWidth", &Text3D::SetWidth)
 
         .addOverloadedFunctions("SetColor",
+            // [Method] void SetColor(const Color& color)
             static_cast<void(Text3D::*)(const Color&)>(&Text3D::SetColor),
+            // [Method] void SetColor(Corner corner, const Color& color)
             static_cast<void(Text3D::*)(Corner, const Color&)>(&Text3D::SetColor))
 
         // [Method] void SetOpacity(float opacity)

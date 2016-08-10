@@ -42,6 +42,7 @@ void RegisterView3D(kaguya::State& lua)
 
     // [Class] View3D : Window
     lua["View3D"].setClass(UserdataMetatable<View3D, Window>()
+        // [Constructor] View3D()
         .addStaticFunction("new", &CreateObject<View3D>)
 
         // [Method] void SetView(Scene* scene, Camera* camera, bool ownScene = true)

@@ -38,6 +38,7 @@ void RegisterConstraintPulley2D(kaguya::State& lua)
 
     // [Class] ConstraintPulley2D : Constraint2D
     lua["ConstraintPulley2D"].setClass(UserdataMetatable<ConstraintPulley2D, Constraint2D>()
+        // [Constructor] ConstraintPulley2D()
         .addStaticFunction("new", &CreateObject<ConstraintPulley2D>)
 
         // [Method] void SetOwnerBodyGroundAnchor(const Vector2& groundAnchor)

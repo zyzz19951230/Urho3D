@@ -36,6 +36,7 @@ void RegisterFont(kaguya::State& lua)
 
     // [Class] Font : Resource
     lua["Font"].setClass(UserdataMetatable<Font, Resource>()
+        // [Constructor] Font()
         .addStaticFunction("new", &CreateObject<Font>)
 
         // [Method] void SetAbsoluteGlyphOffset(const IntVector2& offset)

@@ -43,12 +43,15 @@ void RegisterFileSelector(kaguya::State& lua)
     // [Class] FileSelectorEntry
     lua["FileSelectorEntry"].setClass(UserdataMetatable<FileSelectorEntry>()
 
+        // [Field] String name
         .addProperty("name", &FileSelectorEntry::name_)
+        // [Field] String directory
         .addProperty("directory", &FileSelectorEntry::directory_)
         );
 
     // [Class] FileSelector : Object
     lua["FileSelector"].setClass(UserdataMetatable<FileSelector, Object>()
+        // [Constructor] FileSelector()
         .addStaticFunction("new", &CreateObject<FileSelector>)
 
         // [Method] void SetDefaultStyle(XMLFile* style)

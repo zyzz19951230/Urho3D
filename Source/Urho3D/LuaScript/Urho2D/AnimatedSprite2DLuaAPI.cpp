@@ -40,15 +40,13 @@ void RegisterAnimatedSprite2D(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] LoopMode2D
-    // [Constant] void SetAnimation(String& name, LoopMode2D loopMode
     lua["LM_DEFAULT"] = LM_DEFAULT;
-    // [Variable] LM_FORCE_LOOPED,
     lua["LM_FORCE_LOOPED"] = LM_FORCE_LOOPED;
-    // [Variable] LM_FORCE_CLAMPED
     lua["LM_FORCE_CLAMPED"] = LM_FORCE_CLAMPED;
 
     // [Class] AnimatedSprite2D : StaticSprite2D
     lua["AnimatedSprite2D"].setClass(UserdataMetatable<AnimatedSprite2D, StaticSprite2D>()
+        // [Constructor] AnimatedSprite2D()
         .addStaticFunction("new", &CreateObject<AnimatedSprite2D>)
 
         // [Method] void SetAnimationSet(AnimationSet2D* animationSet)

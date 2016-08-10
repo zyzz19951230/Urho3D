@@ -38,6 +38,7 @@ void RegisterConstraintGear2D(kaguya::State& lua)
 
     // [Class] ConstraintGear2D : Constraint2D
     lua["ConstraintGear2D"].setClass(UserdataMetatable<ConstraintGear2D, Constraint2D>()
+        // [Constructor] ConstraintGear2D()
         .addStaticFunction("new", &CreateObject<ConstraintGear2D>)
 
         // [Method] void SetOwnerConstraint(Constraint2D* constraint)

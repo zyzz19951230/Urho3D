@@ -22,6 +22,7 @@
 
 #include "../../Precompiled.h"
 
+#include "../../Scene/Node.h"
 #include "../../Scene/SplinePath.h"
 #include "../../LuaScript/LuaScriptUtils.h"
 
@@ -30,15 +31,7 @@
 namespace Urho3D
 {
 
-static void SplinePathAddControlPoint0(SplinePath* self, Node* point)
-{
-    self->AddControlPoint(point);
-}
-
-static void SplinePathAddControlPoint1(SplinePath* self, Node* point, unsigned index)
-{
-    self->AddControlPoint(point, index);
-}
+KAGUYA_MEMBER_FUNCTION_OVERLOADS(SplinePathAddControlPoint, SplinePath, AddControlPoint, 1, 2)
 
 void RegisterSplinePath(kaguya::State& lua)
 {
@@ -46,9 +39,11 @@ void RegisterSplinePath(kaguya::State& lua)
 
     // [Class] SplinePath : Component
     lua["SplinePath"].setClass(UserdataMetatable<SplinePath, Component>()
-        .addStaticFunction("new", &CreateObject<SplinePath>)
+        // [Constructor] SplinePath()
+    .addStaticFunction("new", &CreateObject<SplinePath>)
 
-        ADD_OVERLOADED_FUNCTIONS_2(SplinePath, AddControlPoint)
+        // [Method] void AddControlPoint(Node* point, unsigned index = M_MAX_UNSIGNED)
+        .addFunction("AddControlPoint", SplinePathAddControlPoint())
 
         // [Method] void RemoveControlPoint(Node* point)
         .addFunction("RemoveControlPoint", &SplinePath::RemoveControlPoint)

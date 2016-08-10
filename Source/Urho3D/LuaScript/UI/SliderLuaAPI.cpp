@@ -36,6 +36,7 @@ void RegisterSlider(kaguya::State& lua)
 
     // [Class] Slider : BorderImage
     lua["Slider"].setClass(UserdataMetatable<Slider, BorderImage>()
+        // [Constructor] Slider()
         .addStaticFunction("new", &CreateObject<Slider>)
 
         // [Method] void SetOrientation(Orientation orientation)

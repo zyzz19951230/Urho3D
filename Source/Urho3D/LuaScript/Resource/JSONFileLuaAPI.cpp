@@ -31,9 +31,9 @@
 namespace Urho3D
 {
 
-static bool JSONFileSave(const JSONFile* self, const char* filepath, const String& indentation)
+static bool JSONFileSave(const JSONFile* self, const String& fileName, const String& indentation)
 {
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    SharedPtr<File> file(new File(globalContext, fileName, FILE_WRITE));
     if (!file->IsOpen())
         return false;
     return self->Save(*file, indentation);
@@ -45,14 +45,19 @@ void RegisterJSONFile(kaguya::State& lua)
 
     // [Class] JSONFile : Resource
     lua["JSONFile"].setClass(UserdataMetatable<JSONFile, Resource>()
+        // [Method] JSONFile()
         .addStaticFunction("new", &CreateObject<JSONFile>)
 
+        // [Method] bool Save(const String& fileName, const String& indentation) const
         .addStaticFunction("Save", &JSONFileSave)
         // [Method] bool FromString(const String& source)
         .addFunction("FromString", &JSONFile::FromString)
+        // [Method] JSONValue& CreateRoot()
         .addFunction("CreateRoot", static_cast<JSONValue&(JSONFile::*)()>(&JSONFile::GetRoot))
-        // [Method] JSONValue& GetRoot()
+        // [Method] JSONValue& GetRoot() const
         .addFunction("GetRoot", static_cast<const JSONValue&(JSONFile::*)() const>(&JSONFile::GetRoot))
+
+        // [Property] JSONValue& root
         .addProperty("root", static_cast<const JSONValue&(JSONFile::*)() const>(&JSONFile::GetRoot))
     );
 }

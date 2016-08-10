@@ -40,6 +40,7 @@ void RegisterTileMapLayer2D(kaguya::State& lua)
 
     // [Class] TileMapLayer2D : Component
     lua["TileMapLayer2D"].setClass(UserdataMetatable<TileMapLayer2D, Component>()
+        // [Constructor] TileMapLayer2D()
         .addStaticFunction("new", &CreateObject<TileMapLayer2D>)
 
         // [Method] void SetDrawOrder(int drawOrder)

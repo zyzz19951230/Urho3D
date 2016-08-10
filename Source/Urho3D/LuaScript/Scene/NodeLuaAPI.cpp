@@ -175,7 +175,7 @@ static PODVector<Node*> NodeGetChildrenWithTag(const Node* self, const String& t
 
 KAGUYA_FUNCTION_OVERLOADS(NodeGetChildrenWithTagOverloads, NodeGetChildrenWithTag, 2, 3);
 
-KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(NodeGetChild, Node, GetChild, 1, 2, Node*(Node::*)(const char*, bool)const);
+KAGUYA_MEMBER_FUNCTION_OVERLOADS_WITH_SIGNATURE(NodeGetChild, Node, GetChild, 1, 2, Node*(Node::*)(const String&, bool)const);
 
 static PODVector<Component*> NodeGetComponents(const Node* self, StringHash type, bool recursive = false)
 {
@@ -220,9 +220,12 @@ void RegisterNode(kaguya::State& lua)
 
     // [Class] Node : Animatable
     lua["Node"].setClass(UserdataMetatable<Node, Animatable>()
+        // [Constructor] Node()
         .addStaticFunction("new", &CreateObject<Node>)
 
+        // [Method] bool SaveXML(const String& fileName, const String& indentation = "\t") const
         .addStaticFunction("SaveXML", NodeSaveXMLOverloads())
+        // [Method] bool SaveJSON(const String& fileName, const String& indentation = "\t") const
         .addStaticFunction("SaveJSON", NodeSaveJSONOverloads())
 
         // [Method] void SetID(unsigned id)
@@ -234,7 +237,9 @@ void RegisterNode(kaguya::State& lua)
         // [Method] void AddTag(const String& tag)
         .addFunction("AddTag", &Node::AddTag)
         .addOverloadedFunctions("AddTags",
+            // [Method] void AddTags(const String& tags, char separator = ';')
             NodeAddTags(),
+            // [Method] void AddTags(const StringVector& tags)
             static_cast<void(Node::*)(const StringVector&)>(&Node::AddTags))
         // [Method] bool RemoveTag(const String& tag)
         .addFunction("RemoveTag", &Node::RemoveTag)
@@ -244,7 +249,9 @@ void RegisterNode(kaguya::State& lua)
         // [Method] void SetPosition(const Vector3& position)
         .addFunction("SetPosition", &Node::SetPosition)
         .addOverloadedFunctions("SetPosition2D",
+            // [Method] 
             static_cast<void(Node::*)(const Vector2&)>(&Node::SetPosition2D),
+            // [Method] 
             static_cast<void(Node::*)(float, float)>(&Node::SetPosition2D))
         // [Method] void SetRotation(const Quaternion& rotation)
         .addFunction("SetRotation", &Node::SetRotation)
@@ -254,25 +261,39 @@ void RegisterNode(kaguya::State& lua)
         .addFunction("SetDirection", &Node::SetDirection)
 
         .addOverloadedFunctions("SetScale",
+            // [Method] void SetScale(float scale)
             static_cast<void(Node::*)(float)>(&Node::SetScale),
+            // [Method] void SetScale(const Vector3& scale)
             static_cast<void(Node::*)(const Vector3&)>(&Node::SetScale))
         .addOverloadedFunctions("SetScale2D",
+            // [Method] void SetScale2D(const Vector2& scale)
             static_cast<void(Node::*)(const Vector2&)>(&Node::SetScale2D),
+            // [Method] void SetScale2D(float x, float y)
             static_cast<void(Node::*)(float, float)>(&Node::SetScale2D))
 
         .addOverloadedFunctions("SetTransform",
+            // [Method] void SetTransform(const Vector3& position, const Quaternion& rotation)
             static_cast<void(Node::*)(const Vector3&, const Quaternion&)>(&Node::SetTransform),
+            // [Method] void SetTransform(const Vector3& position, const Quaternion& rotation, float scale)
             static_cast<void(Node::*)(const Vector3&, const Quaternion&, float)>(&Node::SetTransform),
+            // [Method] void SetTransform(const Vector3& position, const Quaternion& rotation, const Vector3& scale)
             static_cast<void(Node::*)(const Vector3&, const Quaternion&, const Vector3&)>(&Node::SetTransform))
+        
         .addOverloadedFunctions("SetTransform2D",
+            // [Method] void SetTransform2D(const Vector2& position, float rotation)
             static_cast<void(Node::*)(const Vector2&, float)>(&Node::SetTransform2D),
+            // [Method] void SetTransform2D(const Vector2& position, float rotation, float scale)
             static_cast<void(Node::*)(const Vector2&, float, float)>(&Node::SetTransform2D),
+            // [Method] void SetTransform2D(const Vector2& position, float rotation, const Vector2& scale)
             static_cast<void(Node::*)(const Vector2&, float, const Vector2&)>(&Node::SetTransform2D))
 
         // [Method] void SetWorldPosition(const Vector3& position)
         .addFunction("SetWorldPosition", &Node::SetWorldPosition)
+        
         .addOverloadedFunctions("SetWorldPosition2D",
+            // [Method] void SetWorldPosition2D(const Vector2& position)
             static_cast<void(Node::*)(const Vector2&)>(&Node::SetWorldPosition2D),
+            // [Method] void SetWorldPosition2D(float x, float y)
             static_cast<void(Node::*)(float, float)>(&Node::SetWorldPosition2D))
 
         // [Method] void SetWorldRotation(const Quaternion& rotation)
@@ -284,21 +305,31 @@ void RegisterNode(kaguya::State& lua)
         .addFunction("SetWorldDirection", &Node::SetWorldDirection)
 
         .addOverloadedFunctions("SetWorldScale",
+            // [Method] void SetWorldScale(float scale)
             static_cast<void(Node::*)(float)>(&Node::SetWorldScale),
+            // [Method] void SetWorldScale(const Vector3& scale)
             static_cast<void(Node::*)(const Vector3&)>(&Node::SetWorldScale))
 
         .addOverloadedFunctions("SetWorldScale2D",
+            // [Method] void SetWorldScale2D(const Vector2& scale)
             static_cast<void(Node::*)(const Vector2&)>(&Node::SetWorldScale2D),
+            // [Method] void SetWorldScale2D(float x, float y)
             static_cast<void(Node::*)(float, float)>(&Node::SetWorldScale2D))
 
         .addOverloadedFunctions("SetWorldTransform",
+            // [Method] void SetWorldTransform(const Vector3& position, const Quaternion& rotation)
             static_cast<void(Node::*)(const Vector3&, const Quaternion&)>(&Node::SetWorldTransform),
+            // [Method] void SetWorldTransform(const Vector3& position, const Quaternion& rotation, float scale)
             static_cast<void(Node::*)(const Vector3&, const Quaternion&, float)>(&Node::SetWorldTransform),
+            // [Method] void SetWorldTransform(const Vector3& position, const Quaternion& rotation, const Vector3& scale)
             static_cast<void(Node::*)(const Vector3&, const Quaternion&, const Vector3&)>(&Node::SetWorldTransform))
 
         .addOverloadedFunctions("SetWorldTransform2D",
+            // [Method] void SetWorldTransform2D(const Vector2& position, float rotation)
             static_cast<void(Node::*)(const Vector2&, float)>(&Node::SetWorldTransform2D),
+            // [Method] void SetWorldTransform2D(const Vector2& position, float rotation, float scale)
             static_cast<void(Node::*)(const Vector2&, float, float)>(&Node::SetWorldTransform2D),
+            // [Method] void SetWorldTransform2D(const Vector2& position, float rotation, const Vector2& scale)
             static_cast<void(Node::*)(const Vector2&, float, const Vector2&)>(&Node::SetWorldTransform2D))
 
         // [Method] void Translate(const Vector3& delta, TransformSpace space = TS_LOCAL)
@@ -326,7 +357,9 @@ void RegisterNode(kaguya::State& lua)
         .addFunction("LookAt", NodeLookAt())
 
         .addOverloadedFunctions("Scale",
+            // [Method] void Scale(float scale)
             static_cast<void(Node::*)(float)>(&Node::Scale),
+            // [Method] void Scale(const Vector3& scale)
             static_cast<void(Node::*)(const Vector3&)>(&Node::Scale))
 
         // [Method] void Scale2D(const Vector2& scale)
@@ -341,10 +374,10 @@ void RegisterNode(kaguya::State& lua)
         // [Method] void SetEnabledRecursive(bool enable)
         .addFunction("SetEnabledRecursive", &Node::SetEnabledRecursive)
 
-        // .addFunction("SetOwner", &Node::SetOwner)
         // [Method] void MarkDirty()
         .addFunction("MarkDirty", &Node::MarkDirty)
 
+        // [Method] SharedPtr<Node> CreateChild(const String& name = String::EMPTY, CreateMode mode = REPLICATED, unsigned id = 0)
         .addStaticFunction("CreateChild", NodeCreateChildOverloads())
 
         // [Method] void AddChild(Node* node, unsigned index = M_MAX_UNSIGNED)
@@ -357,30 +390,42 @@ void RegisterNode(kaguya::State& lua)
         // [Method] void RemoveChildren(bool removeReplicated, bool removeLocal, bool recursive)
         .addFunction("RemoveChildren", &Node::RemoveChildren)
 
+        // [Method] SharedPtr<Component> CreateComponent(StringHash type, CreateMode mode = REPLICATED, unsigned id = 0)
         .addStaticFunction("CreateComponent", NodeCreateComponentOverloads())
+        // [Method] SharedPtr<Component> GetOrCreateComponent(StringHash type, CreateMode mode = REPLICATED, unsigned id = 0)
         .addStaticFunction("GetOrCreateComponent", NodeGetOrCreateComponentOverloads())
 
+        // [Method] LuaTable CreateScriptObject(const char* scriptObjectType)
+        // [Method] LuaTable CreateScriptObject(const char* fileName, const char* scriptObjectType)
         .addOverloadedFunctions("CreateScriptObject", &NodeCreateScriptObject0, &NodeCreateScriptObject1)
 
+        // [Method] LuaTable GetScriptObject()
         .addStaticFunction("GetScriptObject", &NodeGetScriptObject)
 
         .addOverloadedFunctions("CloneComponent", 
+            // [Method] SharedPtr<Component> CloneComponent(Component* component, unsigned id = 0)
             NodeCloneComponentOverloads0(), 
+            // [Method] SharedPtr<Component> CloneComponent(Component* component, CreateMode mode, unsigned id = 0)
             NodeCloneComponentOverloads1())
 
         .addOverloadedFunctions("RemoveComponent",
+            // [Method] void RemoveComponent(Component* component)
             static_cast<void(Node::*)(Component*)>(&Node::RemoveComponent),
-			static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponent))
+			// [Method] void RemoveComponent(StringHash type)
+            static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponent))
 
         .addOverloadedFunctions("RemoveComponents",
+            // [Method] void RemoveComponents(bool removeReplicated, bool removeLocal)
             static_cast<void(Node::*)(bool, bool)>(&Node::RemoveComponents),
-			static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponents))
+			// [Method] void RemoveComponents(StringHash type)
+            static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponents))
 
         // [Method] void RemoveAllComponents()
         .addFunction("RemoveAllComponents", &Node::RemoveAllComponents)
         // [Method] void ReorderComponent(Component* component, unsigned index)
         .addFunction("ReorderComponent", &Node::ReorderComponent)
 
+        // [Method] SharedPtr<Node> Clone()
         .addStaticFunction("Clone", NodeCloneOverloads())
 
         // [Method] void Remove()
@@ -414,7 +459,6 @@ void RegisterNode(kaguya::State& lua)
         // [Method] bool IsEnabledSelf() const
         .addFunction("IsEnabledSelf", &Node::IsEnabledSelf)
 
-        // .addFunction("GetOwner", &Node::GetOwner)
         // [Method] const Vector3& GetPosition() const
         .addFunction("GetPosition", &Node::GetPosition)
         // [Method] Vector2 GetPosition2D() const
@@ -460,14 +504,18 @@ void RegisterNode(kaguya::State& lua)
         .addFunction("GetWorldTransform", &Node::GetWorldTransform)
 
         .addOverloadedFunctions("LocalToWorld",
+            // [Method] Vector3 LocalToWorld(const Vector3& position) const
             static_cast<Vector3(Node::*)(const Vector3&) const>(&Node::LocalToWorld),
+            // [Method] Vector3 LocalToWorld(const Vector4& vector) const
             static_cast<Vector3(Node::*)(const Vector4&) const>(&Node::LocalToWorld))
 
         // [Method] Vector2 LocalToWorld2D(const Vector2& vector) const
         .addFunction("LocalToWorld2D", &Node::LocalToWorld2D)
 
         .addOverloadedFunctions("WorldToLocal",
+            // [Method] Vector3 WorldToLocal(const Vector3& position) const
             static_cast<Vector3(Node::*)(const Vector3&) const>(&Node::WorldToLocal),
+            // [Method] Vector3 WorldToLocal(const Vector4& vector) const
             static_cast<Vector3(Node::*)(const Vector4&) const>(&Node::WorldToLocal))
 
         // [Method] Vector2 WorldToLocal2D(const Vector2& vector) const
@@ -479,12 +527,17 @@ void RegisterNode(kaguya::State& lua)
         // [Method] unsigned GetNumChildren(bool recursive = false) const
         .addFunction("GetNumChildren", NodeGetNumChildren())
 
+        // [Method] PODVector<Node*> GetChildren(bool recursive = false) const
         .addStaticFunction("GetChildren", NodeGetChildrenOverloads())
+        // [Method] PODVector<Node*> GetChildrenWithComponent(StringHash type, bool recursive = false) const
         .addStaticFunction("GetChildrenWithComponent", NodeGetChildrenWithComponentOverloads())
+        // [Method] PODVector<Node*> GetChildrenWithTag(const String& tag, bool recursive = false) const
         .addStaticFunction("GetChildrenWithTag", NodeGetChildrenWithTagOverloads())
 
         .addOverloadedFunctions("GetChild",
+            // [Method] Node* GetChild(unsigned index) const
             static_cast<Node*(Node::*)(unsigned) const>(&Node::GetChild),
+            // [Method] Node* GetChild(const String& name, bool recursive = false) const
             NodeGetChild())
 
         // [Method] unsigned GetNumComponents() const
@@ -493,16 +546,19 @@ void RegisterNode(kaguya::State& lua)
         .addFunction("GetNumNetworkComponents", &Node::GetNumNetworkComponents)
 
         .addOverloadedFunctions("GetComponents",
+            // [Method] const Vector<SharedPtr<Component> >& GetComponents() const
             static_cast<const Vector<SharedPtr<Component> >&(Node::*)() const>(&Node::GetComponents),
+            // [Method] PODVector<Component*> GetComponents(const Node* self, StringHash type, bool recursive = false)
             NodeGetComponentsOverloads())
 
+        // [Method] SharedPtr<Component> GetComponent(StringHash type, bool recursive = false)
         .addStaticFunction("GetComponent", NodeGetComponentOverloads())
+        // [Method] SharedPtr<Component> GetParentComponent(StringHash type, bool fullTraversal = false) const
         .addStaticFunction("GetParentComponent", NodeGetParentComponentOverloads())
 
         .addFunction("HasComponent", 
+            // [Method] bool HasComponent(StringHash type) const
 			static_cast<bool(Node::*)(StringHash)const>(&Node::HasComponent))
-
-        // .addFunction("GetListeners", &Node::GetListeners)
 
         // [Method] const Variant& GetVar(StringHash key) const
         .addFunction("GetVar", &Node::GetVar)
@@ -575,8 +631,6 @@ void RegisterNode(kaguya::State& lua)
         .addProperty("numComponents", &Node::GetNumComponents)
         // [Property(ReadOnly)] unsigned numNetworkComponents
         .addProperty("numNetworkComponents", &Node::GetNumNetworkComponents)
-        // .addProperty("listeners", &Node::GetListeners)
-        // .addProperty("vars", &Node::GetVars)
         );
 }
 }

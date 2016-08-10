@@ -31,17 +31,17 @@
 namespace Urho3D
 {
 
-static bool UIElementLoadXML(UIElement* uiElement, const char* filepath)
+static bool UIElementLoadXML(UIElement* uiElement, const String& fileName)
 {
-    SharedPtr<File> file(new File(globalContext, filepath));
+    SharedPtr<File> file(new File(globalContext, fileName));
     if (!file->IsOpen())
         return false;
     return uiElement->LoadXML(*file);
 }
 
-static bool UIElementSaveXML(const UIElement* self, const char* filepath, const String& indentation = "\t")
+static bool UIElementSaveXML(const UIElement* self, const String& fileName, const String& indentation = "\t")
 {
-    SharedPtr<File> file(new File(globalContext, filepath, FILE_WRITE));
+    SharedPtr<File> file(new File(globalContext, fileName, FILE_WRITE));
     if (!file->IsOpen())
         return  false;
     return self->SaveXML(*file, indentation);
@@ -93,7 +93,7 @@ static PODVector<UIElement*> UIElementGetChildren(const UIElement* self, bool re
 
 KAGUYA_FUNCTION_OVERLOADS(UIElementGetChildrenOverloads, UIElementGetChildren, 1, 2);
 
-static const PODVector<UIElement*> UIElementGetChildrenWithTag(const UIElement* self, const char* tag, bool recursive = false)
+static PODVector<UIElement*> UIElementGetChildrenWithTag(const UIElement* self, const char* tag, bool recursive = false)
 {
     PODVector<UIElement*> dest;
     self->GetChildrenWithTag(dest, tag, recursive);
@@ -127,61 +127,39 @@ void RegisterUIElement(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] HorizontalAlignment
-    // [Variable] HA_LEFT
     lua["HA_LEFT"] = HA_LEFT;
-    // [Variable] HA_CENTER,
     lua["HA_CENTER"] = HA_CENTER;
-    // [Variable] HA_RIGHT
     lua["HA_RIGHT"] = HA_RIGHT;
 
     // [Enum] VerticalAlignment
-    // [Variable] VA_TOP
     lua["VA_TOP"] = VA_TOP;
-    // [Variable] VA_CENTER,
     lua["VA_CENTER"] = VA_CENTER;
-    // [Variable] VA_BOTTOM
     lua["VA_BOTTOM"] = VA_BOTTOM;
 
     // [Enum] Corner
-    // [Variable] C_TOPLEFT
     lua["C_TOPLEFT"] = C_TOPLEFT;
-    // [Variable] C_TOPRIGHT,
     lua["C_TOPRIGHT"] = C_TOPRIGHT;
-    // [Variable] C_BOTTOMLEFT,
     lua["C_BOTTOMLEFT"] = C_BOTTOMLEFT;
-    // [Variable] C_BOTTOMRIGHT,
     lua["C_BOTTOMRIGHT"] = C_BOTTOMRIGHT;
-    // [Variable] MAX_UIELEMENT_CORNERS
     lua["MAX_UIELEMENT_CORNERS"] = MAX_UIELEMENT_CORNERS;
 
     // [Enum] Orientation
-    // [Variable] O_HORIZONTAL
     lua["O_HORIZONTAL"] = O_HORIZONTAL;
-    // [Variable] O_VERTICAL
     lua["O_VERTICAL"] = O_VERTICAL;
 
     // [Enum] FocusMode
-    // [Variable] FM_NOTFOCUSABLE
     lua["FM_NOTFOCUSABLE"] = FM_NOTFOCUSABLE;
-    // [Variable] FM_RESETFOCUS,
     lua["FM_RESETFOCUS"] = FM_RESETFOCUS;
-    // [Variable] FM_FOCUSABLE,
     lua["FM_FOCUSABLE"] = FM_FOCUSABLE;
-    // [Variable] FM_FOCUSABLE_DEFOCUSABLE
     lua["FM_FOCUSABLE_DEFOCUSABLE"] = FM_FOCUSABLE_DEFOCUSABLE;
 
     // [Enum] LayoutMode
-    // [Variable] LM_FREE
     lua["LM_FREE"] = LM_FREE;
-    // [Variable] LM_HORIZONTAL,
     lua["LM_HORIZONTAL"] = LM_HORIZONTAL;
-    // [Variable] LM_VERTICAL
     lua["LM_VERTICAL"] = LM_VERTICAL;
 
     // [Enum] TraversalMode
-    // [Variable] TM_BREADTH_FIRST
     lua["TM_BREADTH_FIRST"] = TM_BREADTH_FIRST;
-    // [Variable] TM_DEPTH_FIRST
     lua["TM_DEPTH_FIRST"] = TM_DEPTH_FIRST;
 
     // [Constant] unsigned DD_DISABLED
@@ -195,6 +173,7 @@ void RegisterUIElement(kaguya::State& lua)
 
     // [Class] UIElement : Animatable
     lua["UIElement"].setClass(UserdataMetatable<UIElement, Animatable>()
+        // [Constructor] UIElement()
         .addStaticFunction("new", &CreateObject<UIElement>)
 
         // [Method] IntVector2 ScreenToElement(const IntVector2& screenPosition)
@@ -202,18 +181,24 @@ void RegisterUIElement(kaguya::State& lua)
         // [Method] IntVector2 ElementToScreen(const IntVector2& position)
         .addFunction("ElementToScreen", &UIElement::ElementToScreen)
 
+        // [Method] bool LoadXML(const String& fileName)
         .addStaticFunction("LoadXML", UIElementLoadXML)
+        // [Method] bool SaveXML(const String& fileName, const String& indentation = "\t") const
         .addStaticFunction("SaveXML", UIElementSaveXMLOverloads())
 
         // [Method] void SetName(const String& name)
         .addFunction("SetName", &UIElement::SetName)
 
         .addOverloadedFunctions("SetPosition",
+            // [Method] void SetPosition(const IntVector2& position)
             static_cast<void(UIElement::*)(const IntVector2&)>(&UIElement::SetPosition),
+            // [Method] void SetPosition(int x, int y)
             static_cast<void(UIElement::*)(int, int)>(&UIElement::SetPosition))
 
         .addOverloadedFunctions("SetSize",
+            // [Method] void SetSize(const IntVector2& size)
             static_cast<void(UIElement::*)(const IntVector2&)>(&UIElement::SetSize),
+            // [Method] void SetSize(int width, int height)
             static_cast<void(UIElement::*)(int, int)>(&UIElement::SetSize))
 
         // [Method] void SetWidth(int width)
@@ -222,7 +207,9 @@ void RegisterUIElement(kaguya::State& lua)
         .addFunction("SetHeight", &UIElement::SetHeight)
 
         .addOverloadedFunctions("SetMinSize",
+            // [Method] void SetMinSize(const IntVector2& minSize)
             static_cast<void(UIElement::*)(const IntVector2&)>(&UIElement::SetMinSize),
+            // [Method] void SetMinSize(int width, int height)
             static_cast<void(UIElement::*)(int, int)>(&UIElement::SetMinSize))
 
         // [Method] void SetMinWidth(int width)
@@ -231,7 +218,9 @@ void RegisterUIElement(kaguya::State& lua)
         .addFunction("SetMinHeight", &UIElement::SetMinHeight)
 
         .addOverloadedFunctions("SetMaxSize",
+            // [Method] void SetMaxSize(const IntVector2& maxSize)
             static_cast<void(UIElement::*)(const IntVector2&)>(&UIElement::SetMaxSize),
+            // [Method] void SetMaxSize(int width, int height)
             static_cast<void(UIElement::*)(int, int)>(&UIElement::SetMaxSize))
 
         // [Method] void SetMaxWidth(int width)
@@ -240,7 +229,9 @@ void RegisterUIElement(kaguya::State& lua)
         .addFunction("SetMaxHeight", &UIElement::SetMaxHeight)
 
         .addOverloadedFunctions("SetFixedSize",
+            // [Method] void SetFixedSize(const IntVector2& size)
             static_cast<void(UIElement::*)(const IntVector2&)>(&UIElement::SetFixedSize),
+            // [Method] void SetFixedSize(int width, int height)
             static_cast<void(UIElement::*)(int, int)>(&UIElement::SetFixedSize))
 
         // [Method] void SetFixedWidth(int width)
@@ -257,7 +248,9 @@ void RegisterUIElement(kaguya::State& lua)
         .addFunction("SetClipBorder", &UIElement::SetClipBorder)
 
         .addOverloadedFunctions("SetColor",
+            // [Method] void SetColor(const Color& color)
             static_cast<void(UIElement::*)(const Color&)>(&UIElement::SetColor),
+            // [Method] void SetColor(Corner corner, const Color& color)
             static_cast<void(UIElement::*)(Corner, const Color&)>(&UIElement::SetColor))
 
         // [Method] void SetPriority(int priority)
@@ -296,7 +289,9 @@ void RegisterUIElement(kaguya::State& lua)
         .addFunction("SetDragDropMode", &UIElement::SetDragDropMode)
 
         .addOverloadedFunctions("SetStyle",
+            // [Method] bool SetStyle(const String& styleName, XMLFile* file = 0)
             UIElementSetStyle(),
+            // [Method] bool SetStyle(const XMLElement& element)
             static_cast<bool (UIElement::*)(const XMLElement&)>(&UIElement::SetStyle))
 
         // [Method] bool SetStyleAuto(XMLFile* file = 0)
@@ -329,6 +324,7 @@ void RegisterUIElement(kaguya::State& lua)
         // [Method] void BringToFront()
         .addFunction("BringToFront", &UIElement::BringToFront)
 
+        // [Method] SharedPtr<UIElement> CreateChild(StringHash type, const String& name = String::EMPTY, unsigned index = M_MAX_UNSIGNED)
         .addStaticFunction("CreateChild", UIElementCreateChildOverloads())
 
         // [Method] void AddChild(UIElement* element)
@@ -365,7 +361,9 @@ void RegisterUIElement(kaguya::State& lua)
         .addFunction("AddTag", &UIElement::AddTag)
 
         .addOverloadedFunctions("AddTags",
+            // [Method] void AddTags(const String& tags, char separator = ';')
             UIElementAddTags(),
+            // [Method] void AddTags(const StringVector& tags)
             static_cast<void(UIElement::*)(const StringVector&)>(&UIElement::AddTags))
 
         // [Method] bool RemoveTag(const String& tag)
@@ -410,7 +408,11 @@ void RegisterUIElement(kaguya::State& lua)
         // [Method] const IntRect& GetClipBorder() const
         .addFunction("GetClipBorder", &UIElement::GetClipBorder)
 
-        .addOverloadedFunctions("GetColor", &UIElementColorGetter, &UIElement::GetColor)
+        .addOverloadedFunctions("GetColor", 
+            // [Method] const Color& GetColor() const
+            &UIElementColorGetter, 
+            // [Method] const Color& GetColor(Corner corner) const
+            &UIElement::GetColor)
 
         // [Method] int GetPriority() const
         .addFunction("GetPriority", &UIElement::GetPriority)
@@ -471,10 +473,14 @@ void RegisterUIElement(kaguya::State& lua)
         .addFunction("GetNumChildren", UIElementGetNumChildren())
 
         .addOverloadedFunctions("GetChild", 
+            // [Method] UIElement* GetChild(unsigned index) const
             &UIElementGetChild0, 
+            // [Method] SharedPtr<UIElement> GetChild(const String& name, bool recursive = false) const
             UIElementGetChildOverloads1(), 
+            // [Method] SharedPtr<UIElement> GetChild(const StringHash& key, const Variant& value = Variant::EMPTY, bool recursive = false) const
             UIElementGetChildOverloads2())
 
+        // [Method] PODVector<UIElement*> GetChildren(const UIElement* self, bool recursive = false)
         .addStaticFunction("GetChildren", UIElementGetChildrenOverloads())
 
         // [Method] UIElement* GetParent() const
@@ -492,6 +498,7 @@ void RegisterUIElement(kaguya::State& lua)
         // [Method] const StringVector& GetTags() const
         .addFunction("GetTags", &UIElement::GetTags)
 
+        // [Method] PODVector<UIElement*> GetChildrenWithTag(const char* tag, bool recursive = false) const
         .addStaticFunction("GetChildrenWithTag", UIElementGetChildrenWithTagOverloads())
 
         // [Method] int GetDragButtonCombo() const
@@ -556,6 +563,7 @@ void RegisterUIElement(kaguya::State& lua)
         // [Property] int priority
         .addProperty("priority", &UIElement::GetPriority, &UIElement::SetPriority)
 
+        // [Property] Color color
         .addProperty("color", &UIElementColorGetter, &UIElementColorSetter)
 
         // [Property] float opacity
@@ -595,6 +603,7 @@ void RegisterUIElement(kaguya::State& lua)
         // [Property(ReadOnly)] const String& appliedStyle
         .addProperty("appliedStyle", &UIElement::GetAppliedStyle)
 
+        // [Property] XMLFile* defaultStyle
         .addProperty("defaultStyle", &UIElementDefaultStyleGetter, &UIElementDefaultStyleSetter)
 
         // [Property] LayoutMode layoutMode

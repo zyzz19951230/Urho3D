@@ -50,6 +50,7 @@ void RegisterComponent(kaguya::State& lua)
 
     // [Class] Component : Animatable
     lua["Component"].setClass(UserdataMetatable<Component, Animatable>()
+        // [Constructor] Component()
         .addStaticFunction("new", &CreateObject<Component>)
 
         // [Method] void SetEnabled(bool enable)
@@ -67,7 +68,9 @@ void RegisterComponent(kaguya::State& lua)
         // [Method] bool IsEnabledEffective() const
         .addFunction("IsEnabledEffective", &Component::IsEnabledEffective)
 
+        // [Method] SharedPtr<Component> GetComponent(StringHash type) const
         .addStaticFunction("GetComponent", &ComponentGetComponent)
+        // [Method] PODVector<Component*> GetComponents() const
         .addStaticFunction("GetComponents", &ComponentGetComponents)
 
         // [Method] void AddReplicationState(ComponentReplicationState* state)

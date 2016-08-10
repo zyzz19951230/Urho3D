@@ -40,41 +40,38 @@ void RegisterImage(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] CompressedFormat
-    // [Variable] CF_NONE
     lua["CF_NONE"] = CF_NONE;
-    // [Variable] CF_RGBA,
     lua["CF_RGBA"] = CF_RGBA;
-    // [Variable] CF_DXT1,
     lua["CF_DXT1"] = CF_DXT1;
-    // [Variable] CF_DXT3,
     lua["CF_DXT3"] = CF_DXT3;
-    // [Variable] CF_DXT5,
     lua["CF_DXT5"] = CF_DXT5;
-    // [Variable] CF_ETC1,
     lua["CF_ETC1"] = CF_ETC1;
-    // [Variable] CF_PVRTC_RGB_2BPP,
     lua["CF_PVRTC_RGB_2BPP"] = CF_PVRTC_RGB_2BPP;
-    // [Variable] CF_PVRTC_RGBA_2BPP,
     lua["CF_PVRTC_RGBA_2BPP"] = CF_PVRTC_RGBA_2BPP;
-    // [Variable] CF_PVRTC_RGB_4BPP,
     lua["CF_PVRTC_RGB_4BPP"] = CF_PVRTC_RGB_4BPP;
-    // [Variable] CF_PVRTC_RGBA_4BPP,
     lua["CF_PVRTC_RGBA_4BPP"] = CF_PVRTC_RGBA_4BPP;
 
     // [Class] Image : Resource
     lua["Image"].setClass(UserdataMetatable<Image, Resource>()
+        // [Constructor] Image()
         .addStaticFunction("new", &CreateObject<Image>)
 
         .addOverloadedFunctions("SetSize",
+            // [Method] bool SetSize(int width, int height, unsigned components)
             static_cast<bool(Image::*)(int, int, unsigned)>(&Image::SetSize),
+            // [Method] bool SetSize(int width, int height, int depth, unsigned components)
             static_cast<bool(Image::*)(int, int, int, unsigned)>(&Image::SetSize))
 
         .addOverloadedFunctions("SetPixel",
+            // [Method] void SetPixel(int x, int y, const Color& color)
             static_cast<void(Image::*)(int, int, const Color&)>(&Image::SetPixel),
+            // [Method] void SetPixel(int x, int y, int z, const Color& color)
             static_cast<void(Image::*)(int, int, int, const Color&)>(&Image::SetPixel))
 
         .addOverloadedFunctions("SetPixelInt",
+            // [Method] void SetPixelInt(int x, int y, unsigned uintColor)
             static_cast<void(Image::*)(int, int, unsigned)>(&Image::SetPixelInt),
+            // [Method] void SetPixelInt(int x, int y, int z, unsigned uintColor)
             static_cast<void(Image::*)(int, int, int, unsigned)>(&Image::SetPixelInt))
 
         // [Method] bool FlipHorizontal()
@@ -103,11 +100,15 @@ void RegisterImage(kaguya::State& lua)
         .addFunction("IsSRGB", &Image::IsSRGB)
 
         .addOverloadedFunctions("GetPixel",
+            // [Method] Color GetPixel(int x, int y) const
             static_cast<Color(Image::*)(int, int) const>(&Image::GetPixel),
+            // [Method] Color GetPixel(int x, int y, int z) const
             static_cast<Color(Image::*)(int, int, int) const>(&Image::GetPixel))
 
         .addOverloadedFunctions("GetPixelInt",
+            // [Method] unsigned GetPixelInt(int x, int y) const
             static_cast<unsigned(Image::*)(int, int) const>(&Image::GetPixelInt),
+            // [Method] unsigned GetPixelInt(int x, int y, int z) const
             static_cast<unsigned(Image::*)(int, int, int) const>(&Image::GetPixelInt))
 
         // [Method] Color GetPixelBilinear(float x, float y) const
@@ -140,6 +141,7 @@ void RegisterImage(kaguya::State& lua)
         // [Method] CompressedLevel GetCompressedLevel(unsigned index) const
         .addFunction("GetCompressedLevel", &Image::GetCompressedLevel)
 
+        // [Method] SharedPtr<Image> GetSubimage(const IntRect& rect) const
         .addStaticFunction("GetSubimage", &ImageGetSubimage)
 
         // [Property(ReadOnly)] bool cubemap

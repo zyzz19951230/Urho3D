@@ -38,6 +38,7 @@ void RegisterScrollBar(kaguya::State& lua)
 
     // [Class] ScrollBar : BorderImage
     lua["ScrollBar"].setClass(UserdataMetatable<ScrollBar, BorderImage>()
+        // [Constructor] ScrollBar()
         .addStaticFunction("new", &CreateObject<ScrollBar>)
 
         // [Method] void SetOrientation(Orientation orientation)

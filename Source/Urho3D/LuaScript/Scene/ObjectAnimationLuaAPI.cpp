@@ -39,12 +39,16 @@ void RegisterObjectAnimation(kaguya::State& lua)
 
     // [Class] ObjectAnimation : Resource
     lua["ObjectAnimation"].setClass(UserdataMetatable<ObjectAnimation, Resource>()
+        // [Constructor] ObjectAnimation()
         .addStaticFunction("new", &CreateObject<ObjectAnimation>)
 
+        // [Method] void AddAttributeAnimation(const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode = WM_LOOP, float speed = 1.0f)
         .addFunction("AddAttributeAnimation", ObjectAnimationAddAttributeAnimation())
 
         .addOverloadedFunctions("RemoveAttributeAnimation",
+            // [Method] void RemoveAttributeAnimation(const String& name)
             static_cast<void(ObjectAnimation::*)(const String&)>(&ObjectAnimation::RemoveAttributeAnimation),
+            // [Method] void RemoveAttributeAnimation(ValueAnimation* attributeAnimation)
             static_cast<void(ObjectAnimation::*)(ValueAnimation*)>(&ObjectAnimation::RemoveAttributeAnimation))
 
         // [Method] ValueAnimation* GetAttributeAnimation(const String& name) const

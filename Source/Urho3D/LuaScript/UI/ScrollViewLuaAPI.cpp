@@ -48,13 +48,16 @@ void RegisterScrollView(kaguya::State& lua)
 
     // [Class] ScrollView : UIElement
     lua["ScrollView"].setClass(UserdataMetatable<ScrollView, UIElement>()
+        // [Constructor] ScrollView()
         .addStaticFunction("new", &CreateObject<ScrollView>)
 
         // [Method] void SetContentElement(UIElement* element)
         .addFunction("SetContentElement", &ScrollView::SetContentElement)
 
         .addOverloadedFunctions("SetViewPosition",
+            // [Method] void SetViewPosition(const IntVector2& position)
             static_cast<void(ScrollView::*)(const IntVector2&)>(&ScrollView::SetViewPosition),
+            // [Method] void SetViewPosition(int x, int y)
             static_cast<void(ScrollView::*)(int, int)>(&ScrollView::SetViewPosition))
 
         // [Method] void SetScrollBarsVisible(bool horizontal, bool vertical)
@@ -77,6 +80,7 @@ void RegisterScrollView(kaguya::State& lua)
         // [Method] const IntVector2& GetViewPosition() const
         .addFunction("GetViewPosition", &ScrollView::GetViewPosition)
 
+        // [Method] SharedPtr<UIElement> GetContentElement() const
         .addStaticFunction("GetContentElement", &ScrollViewGetContentElement)
 
         // [Method] ScrollBar* GetHorizontalScrollBar() const
@@ -103,6 +107,7 @@ void RegisterScrollView(kaguya::State& lua)
         // [Property] const IntVector2& viewPosition
         .addProperty("viewPosition", &ScrollView::GetViewPosition, static_cast<void(ScrollView::*)(const IntVector2&)>(&ScrollView::SetViewPosition))
 
+        // [Property] UIElement* contentElement
         .addProperty("contentElement", &ScrollViewGetContentElement, &ScrollViewSetContentElement)
 
         // [Property(ReadOnly)] ScrollBar* horizontalScrollBar

@@ -38,6 +38,7 @@ void RegisterCollisionPolygon2D(kaguya::State& lua)
 
     // [Class] CollisionPolygon2D : CollisionShape2D
     lua["CollisionPolygon2D"].setClass(UserdataMetatable<CollisionPolygon2D, CollisionShape2D>()
+        // [Constructor] CollisionPolygon2D()
         .addStaticFunction("new", &CreateObject<CollisionPolygon2D>)
 
         // [Method] void SetVertexCount(unsigned count)

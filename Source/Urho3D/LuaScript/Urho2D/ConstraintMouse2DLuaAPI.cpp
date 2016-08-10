@@ -38,6 +38,7 @@ void RegisterConstraintMouse2D(kaguya::State& lua)
 
     // [Class] ConstraintMouse2D : Constraint2D
     lua["ConstraintMouse2D"].setClass(UserdataMetatable<ConstraintMouse2D, Constraint2D>()
+        // [Constructor] ConstraintMouse2D()
         .addStaticFunction("new", &CreateObject<ConstraintMouse2D>)
 
         // [Method] void SetTarget(const Vector2& target)

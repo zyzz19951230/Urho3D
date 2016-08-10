@@ -69,16 +69,22 @@ void RegisterPhysicsWorld2D(kaguya::State& lua)
 
     // [Class] PhysicsRaycastResult2D
     lua["PhysicsRaycastResult2D"].setClass(UserdataMetatable<PhysicsRaycastResult2D>()
+        // [Constructor] PhysicsRaycastResult2D()
         .setConstructors<PhysicsRaycastResult2D()>()
 
+        // [Field] Vector3 position
         .addProperty("position", &PhysicsRaycastResult2D::position_)
+        // [Field] Vector3 normal
         .addProperty("normal", &PhysicsRaycastResult2D::normal_)
+        // [Field] float distance
         .addProperty("distance", &PhysicsRaycastResult2D::distance_)
+        // [Field] RigidBody2D* body
         .addProperty("body", &PhysicsRaycastResult2D::body_)
     );
 
     // [Class] PhysicsWorld2D : Component
     lua["PhysicsWorld2D"].setClass(UserdataMetatable<PhysicsWorld2D, Component>()
+        // [Constructor] PhysicsWorld2D()
         .addStaticFunction("new", &CreateObject<PhysicsWorld2D>)
 
         // [Method] void DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
@@ -113,12 +119,19 @@ void RegisterPhysicsWorld2D(kaguya::State& lua)
         // [Method] void SetPositionIterations(int positionIterations)
         .addFunction("SetPositionIterations", &PhysicsWorld2D::SetPositionIterations)
 
+        // [Method] PODVector<PhysicsRaycastResult2D> Raycast(const Vector2& startPoint, const Vector2& endPoint, unsigned int collisionMask = M_MAX_UNSIGNED)
         .addStaticFunction("Raycast", PhysicsWorld2DRaycastOverloads())
 
+        // [Method] PhysicsRaycastResult2D RaycastSingle(const Vector2& startPoint, const Vector2& endPoint, unsigned int collisionMask = M_MAX_UNSIGNED)
         .addStaticFunction("RaycastSingle", PhysicsWorld2DRaycastSingleOverloads())
         
-        .addOverloadedFunctions("GetRigidBody", PhysicsWorld2DGetRigidBody0(), PhysicsWorld2DGetRigidBody1())
+        .addOverloadedFunctions("GetRigidBody", 
+            // [Method] RigidBody2D* GetRigidBody(const Vector2& point, unsigned collisionMask = M_MAX_UNSIGNED)
+            PhysicsWorld2DGetRigidBody0(), 
+            // [Method] RigidBody2D* GetRigidBody(int screenX, int screenY, unsigned collisionMask = M_MAX_UNSIGNED)
+            PhysicsWorld2DGetRigidBody1())
 
+        // [Method] PODVector<RigidBody2D*> GetRigidBodies(const Rect& aabb, unsigned int collisionMask = M_MAX_UNSIGNED)
         .addStaticFunction("GetRigidBodies", PhysicsWorld2DGetRigidBodiesOverloads())
 
         // [Method] bool IsUpdateEnabled() const

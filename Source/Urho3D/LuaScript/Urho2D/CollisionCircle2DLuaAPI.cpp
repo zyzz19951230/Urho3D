@@ -38,13 +38,16 @@ void RegisterCollisionCircle2D(kaguya::State& lua)
 
     // [Class] CollisionCircle2D : CollisionShape2D
     lua["CollisionCircle2D"].setClass(UserdataMetatable<CollisionCircle2D, CollisionShape2D>()
+        // [Constructor] CollisionCircle2D()
         .addStaticFunction("new", &CreateObject<CollisionCircle2D>)
 
         // [Method] void SetRadius(float radius)
         .addFunction("SetRadius", &CollisionCircle2D::SetRadius)
 
         .addOverloadedFunctions("SetCenter",
+            // [Method] void SetCenter(const Vector2& center)
             static_cast<void(CollisionCircle2D::*)(const Vector2&)>(&CollisionCircle2D::SetCenter),
+            // [Method] void SetCenter(float x, float y)
             static_cast<void(CollisionCircle2D::*)(float, float)>(&CollisionCircle2D::SetCenter))
 
         // [Method] float GetRadius() const

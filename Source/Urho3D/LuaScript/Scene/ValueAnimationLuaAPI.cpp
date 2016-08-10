@@ -37,15 +37,13 @@ void RegisterValueAnimation(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] InterpMethod
-    // [Variable] IM_NONE
     lua["IM_NONE"] = IM_NONE;
-    // [Variable] IM_LINEAR,
     lua["IM_LINEAR"] = IM_LINEAR;
-    // [Variable] IM_SPLINE,
     lua["IM_SPLINE"] = IM_SPLINE;
 
     // [Class] ValueAnimation : Resource
     lua["ValueAnimation"].setClass(UserdataMetatable<ValueAnimation, Resource>()
+        // [Constructor] ValueAnimation()
         .addStaticFunction("new", &CreateObject<ValueAnimation>)
 
         // [Method] void SetInterpolationMethod(InterpMethod method)

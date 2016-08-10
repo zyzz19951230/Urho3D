@@ -59,11 +59,15 @@ void RegisterSerializable(kaguya::State& lua)
     lua["Serializable"].setClass(UserdataMetatable<Serializable, Object>()
 
         .addOverloadedFunctions("Load", 
+            // [Method] bool Load(const String& fileName, bool setInstanceDefault = false)
             SerializableLoadOverloads0(),
+            // [Method] bool Load(Deserializer& source, bool setInstanceDefault = false)
             SerializableLoad1())
 
         .addOverloadedFunctions("Save", 
+            // [Method] bool Save(const String& fileName)
             &SerializableSave, 
+            // [Method] bool Save(Serializer& dest) const
             &Serializable::Save)
 
         // [Method] bool LoadXML(const XMLElement& source, bool setInstanceDefault = false)
@@ -77,15 +81,21 @@ void RegisterSerializable(kaguya::State& lua)
         .addFunction("SaveJSON", &Serializable::SaveJSON)
 
         .addOverloadedFunctions("SetAttribute",
+            // [Method] bool SetAttribute(unsigned index, const Variant& value)
             static_cast<bool(Serializable::*)(unsigned, const Variant&)>(&Serializable::SetAttribute),
+            // [Method] bool SetAttribute(const String& name, const Variant& value)
             static_cast<bool(Serializable::*)(const String&, const Variant&)>(&Serializable::SetAttribute))
 
         .addOverloadedFunctions("GetAttribute",
+            // [Method] Variant GetAttribute(unsigned index) const
             static_cast<Variant(Serializable::*)(unsigned) const>(&Serializable::GetAttribute),
+            // [Method] Variant GetAttribute(const String& name) const
             static_cast<Variant(Serializable::*)(const String&) const>(&Serializable::GetAttribute))
 
         .addOverloadedFunctions("GetAttributeDefault",
+            // [Method] Variant GetAttributeDefault(unsigned index) const
             static_cast<Variant(Serializable::*)(unsigned) const>(&Serializable::GetAttributeDefault),
+            // [Method] Variant GetAttributeDefault(const String& name) const
             static_cast<Variant(Serializable::*)(const String&) const>(&Serializable::GetAttributeDefault))
 
         // [Method] unsigned GetNumAttributes() const

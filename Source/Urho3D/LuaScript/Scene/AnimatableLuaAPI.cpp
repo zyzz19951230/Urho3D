@@ -48,6 +48,7 @@ void RegisterAnimatable(kaguya::State& lua)
         // [Method] void SetObjectAnimation(ObjectAnimation* objectAnimation)
         .addFunction("SetObjectAnimation", &Animatable::SetObjectAnimation)
 
+        // [Method] void SetAttributeAnimation(const String& name, ValueAnimation* attributeAnimation, WrapMode wrapMode = WM_LOOP, float speed = 1.0f)
         .addFunction("SetAttributeAnimation", AnimatableSetAttributeAnimation())
 
         // [Method] void SetAttributeAnimationWrapMode(const String& name, WrapMode wrapMode)

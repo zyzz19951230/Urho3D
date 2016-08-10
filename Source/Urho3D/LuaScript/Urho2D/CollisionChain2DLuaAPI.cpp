@@ -38,6 +38,7 @@ void RegisterCollisionChain2D(kaguya::State& lua)
 
     // [Class] CollisionChain2D : CollisionShape2D
     lua["CollisionChain2D"].setClass(UserdataMetatable<CollisionChain2D, CollisionShape2D>()
+        // [Constructor] CollisionChain2D()
         .addStaticFunction("new", &CreateObject<CollisionChain2D>)
 
         // [Method] void SetLoop(bool loop)

@@ -48,6 +48,7 @@ void RegisterTileMap2D(kaguya::State& lua)
 
     // [Class] TileMap2D : Component
     lua["TileMap2D"].setClass(UserdataMetatable<TileMap2D, Component>()
+        // [Constructor] TileMap2D()
         .addStaticFunction("new", &CreateObject<TileMap2D>)
 
         // [Method] void DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
@@ -66,6 +67,7 @@ void RegisterTileMap2D(kaguya::State& lua)
         // [Method] Vector2 TileIndexToPosition(int x, int y) const
         .addFunction("TileIndexToPosition", &TileMap2D::TileIndexToPosition)
 
+        // [Method] tuple<bool success, int x, int y> PositionToTileIndex(const TileMap2D* self, const Vector2& position)
         .addStaticFunction("PositionToTileIndex", &TileMap2DPositionToTileIndex)
         
         // [Property] TmxFile2D* tmxFile

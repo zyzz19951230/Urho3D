@@ -45,14 +45,18 @@ void RegisterXMLElement(kaguya::State& lua)
 
     // [Class] XMLElement
     lua["XMLElement"].setClass(UserdataMetatable<XMLElement>()
+        // [Constructor] XMLElement()
         .setConstructors<XMLElement(),
+        // [Constructor] XMLElement(const XMLElement& element)
         XMLElement(const XMLElement&)>()
 
         // [Method] XMLElement CreateChild(const String& name)
         .addFunction("CreateChild", static_cast<XMLElement(XMLElement::*)(const String&)>(&XMLElement::CreateChild))
 
         .addOverloadedFunctions("RemoveChild",
+            // [Method] bool RemoveChild(const XMLElement& element)
             static_cast<bool(XMLElement::*)(const XMLElement&)>(&XMLElement::RemoveChild),
+            // [Method] bool RemoveChild(const String& name)
             static_cast<bool(XMLElement::*)(const String&)>(&XMLElement::RemoveChild))
 
         // [Method] bool RemoveChildren(const String& name = String::EMPTY)
@@ -69,7 +73,9 @@ void RegisterXMLElement(kaguya::State& lua)
         .addFunction("SetValue", static_cast<bool(XMLElement::*)(const String&)>(&XMLElement::SetValue))
 
         .addOverloadedFunctions("SetAttribute",
+            // [Method] bool SetAttribute(const String& name, const String& value)
             static_cast<bool(XMLElement::*)(const String&, const String&)>(&XMLElement::SetAttribute),
+            // [Method] bool SetAttribute(const String& value)
             static_cast<bool(XMLElement::*)(const String&)>(&XMLElement::SetAttribute))
 
         // [Method] bool SetBool(const String& name, bool value)
@@ -227,14 +233,18 @@ void RegisterXMLElement(kaguya::State& lua)
         // [Property(ReadOnly)] String value
         .addProperty("value", &XMLElement::GetValue)
 
+        // [StaticConstant] XMLElement EMPTY
         .addStaticField("EMPTY", &XMLElement::EMPTY)
     );
 
     // [Class] XPathResultSet
     lua["XPathResultSet"].setClass(UserdataMetatable<XPathResultSet>()
+        // [Constructor] XPathResultSet()
         .setConstructors<XPathResultSet(),
+        // [Constructor] XPathResultSet(const XPathResultSet& rhs)
         XPathResultSet(const XPathResultSet&)>()
 
+        // [Method] XMLElement operator [](unsigned index) const
         .addFunction("__index", &XPathResultSet::operator[])
 
         // [Method] XMLElement FirstResult()
@@ -247,16 +257,22 @@ void RegisterXMLElement(kaguya::State& lua)
 
     // [Class] XPathQuery
     lua["XPathQuery"].setClass(UserdataMetatable<XPathQuery>()
+        // [Constructor] XPathQuery()
         .setConstructors<XPathQuery(),
+        // [Constructor] XPathQuery(const String& queryString, const String& variableString = String::EMPTY)
         XPathQuery(const String&, const String&)>()
 
         // [Method] void Bind()
         .addFunction("Bind", &XPathQuery::Bind)
 
         .addOverloadedFunctions("SetVariable",
+            // [Method] bool SetVariable(const String& name, bool value)
             static_cast<bool(XPathQuery::*)(const String&, bool)>(&XPathQuery::SetVariable),
+            // [Method] bool SetVariable(const String& name, float value)
             static_cast<bool(XPathQuery::*)(const String&, float)>(&XPathQuery::SetVariable),
-            static_cast<bool(XPathQuery::*)(const char*, const char*)>(&XPathQuery::SetVariable),
+            // [Method] bool SetVariable(const String& name, const String& value)
+            static_cast<bool(XPathQuery::*)(const String&, const String&)>(&XPathQuery::SetVariable),
+            // [Method] bool SetVariable(const String& name, const XPathResultSet& value)
             static_cast<bool(XPathQuery::*)(const String&, const XPathResultSet&)>(&XPathQuery::SetVariable))
 
         // [Method] bool SetQuery(const String& queryString, const String& variableString = String::EMPTY, bool bind = true)

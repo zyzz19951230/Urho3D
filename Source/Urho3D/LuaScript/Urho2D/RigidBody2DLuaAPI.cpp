@@ -37,15 +37,13 @@ void RegisterRigidBody2D(kaguya::State& lua)
     using namespace kaguya;
 
     // [Enum] BodyType2D
-    // [Variable] BT_STATIC
     lua["BT_STATIC"] = BT_STATIC;
-    // [Variable] BT_KINEMATIC
     lua["BT_KINEMATIC"] = BT_KINEMATIC;
-    // [Variable] BT_DYNAMIC
     lua["BT_DYNAMIC"] = BT_DYNAMIC;
 
     // [Class] RigidBody2D : Component
     lua["RigidBody2D"].setClass(UserdataMetatable<RigidBody2D, Component>()
+        // [Constructor] RigidBody2D()
         .addStaticFunction("new", &CreateObject<RigidBody2D>)
 
         // [Method] void SetBodyType(BodyType2D bodyType)
