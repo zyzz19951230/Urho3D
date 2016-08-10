@@ -36,11 +36,11 @@ void RegisterMatrix2(kaguya::State& lua)
 
     // [Class] Matrix2
     lua["Matrix2"].setClass(UserdataMetatable<Matrix2>()
-        // [Construct] Matrix2()
+        // [Constructor] Matrix2()
         .setConstructors<Matrix2(),
-        // [Construct] Matrix2(const Matrix2& matrix)
+        // [Constructor] Matrix2(const Matrix2& matrix)
         Matrix2(const Matrix2&),
-        // [Construct] Matrix2(float v00, float v01, float v10, float v11)
+        // [Constructor] Matrix2(float v00, float v01, float v10, float v11)
         Matrix2(float, float, float, float)>()
 
         // [Method] bool operator ==(const Matrix2& rhs) const
