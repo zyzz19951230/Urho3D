@@ -67,11 +67,11 @@ void RegisterLocalization(kaguya::State& lua)
         // [Method] void LoadJSONFile(const String& name)
         .addFunction("LoadJSONFile", &Localization::LoadJSONFile)
 
-        // [Property(ReadOnly)] int numLanguages
+        // [Property(Readonly)] int numLanguages
         .addProperty("numLanguages", &Localization::GetNumLanguages)
-        // [Property(ReadOnly)] int languageIndex
+        // [Property(Readonly)] int languageIndex
 		.addProperty("languageIndex", static_cast<int(Localization::*)() const>(&Localization::GetLanguageIndex))
-        // [Property(ReadOnly)] String language
+        // [Property(Readonly)] String language
 		.addProperty("language", static_cast<String(Localization::*)()>(&Localization::GetLanguage))
     );
 }

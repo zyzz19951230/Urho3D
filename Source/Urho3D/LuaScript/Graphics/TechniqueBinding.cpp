@@ -100,9 +100,9 @@ void RegisterTechnique(kaguya::State& lua)
         // [Method] const String& GetPixelShaderDefines() const
         .addFunction("GetPixelShaderDefines", &Pass::GetPixelShaderDefines)
 
-        // [Property(ReadOnly)] const String& name
+        // [Property(Readonly)] const String& name
         .addProperty("name", &Pass::GetName)
-        // [Property(ReadOnly)] unsigned index
+        // [Property(Readonly)] unsigned index
         .addProperty("index", &Pass::GetIndex)
         // [Property] BlendMode blendMode
         .addProperty("blendMode", &Pass::GetBlendMode, &Pass::SetBlendMode)
@@ -112,13 +112,13 @@ void RegisterTechnique(kaguya::State& lua)
         .addProperty("depthTestMode", &Pass::GetDepthTestMode, &Pass::SetDepthTestMode)
         // [Property] PassLightingMode lightingMode
         .addProperty("lightingMode", &Pass::GetLightingMode, &Pass::SetLightingMode)
-        // [Property(ReadOnly)] unsigned shadersLoadedFrameNumber
+        // [Property(Readonly)] unsigned shadersLoadedFrameNumber
         .addProperty("shadersLoadedFrameNumber", &Pass::GetShadersLoadedFrameNumber)
         // [Property] bool depthWrite
         .addProperty("depthWrite", &Pass::GetDepthWrite, &Pass::SetDepthWrite)
         // [Property] bool alphaMask
         .addProperty("alphaMask", &Pass::GetAlphaMask, &Pass::SetAlphaMask)
-        // [Property(ReadOnly)] bool desktop
+        // [Property(Readonly)] bool desktop
         .addProperty("desktop", &Pass::IsDesktop)
         // [Property] const String& vertexShader
         .addProperty("vertexShader", &Pass::GetVertexShader, &Pass::SetVertexShader)
@@ -179,11 +179,11 @@ void RegisterTechnique(kaguya::State& lua)
         // [Method] PODVector<Pass*> GetPasses() const
         .addFunction("GetPasses", &Technique::GetPasses)
 
-        // [Property(ReadOnly)] bool desktop
+        // [Property(Readonly)] bool desktop
         .addProperty("desktop", &Technique::IsDesktop)
-        // [Property(ReadOnly)] bool supported
+        // [Property(Readonly)] bool supported
         .addProperty("supported", &Technique::IsSupported)
-        // [Property(ReadOnly)] unsigned numPasses
+        // [Property(Readonly)] unsigned numPasses
         .addProperty("numPasses", &Technique::GetNumPasses)        
     );
 }

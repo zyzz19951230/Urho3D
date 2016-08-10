@@ -51,7 +51,7 @@ void RegisterTexture2D(kaguya::State& lua)
         // [Method] RenderSurface* GetRenderSurface() const
         .addFunction("GetRenderSurface", &Texture2D::GetRenderSurface)
 
-        // [Property(ReadOnly)] RenderSurface* renderSurface
+        // [Property(Readonly)] RenderSurface* renderSurface
         .addProperty("renderSurface", &Texture2D::GetRenderSurface)
     );
 }

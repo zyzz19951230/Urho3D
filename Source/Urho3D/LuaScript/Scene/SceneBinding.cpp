@@ -254,15 +254,15 @@ void RegisterScene(kaguya::State& lua)
 
         // [Property] bool updateEnabled
         .addProperty("updateEnabled", &Scene::IsUpdateEnabled, &Scene::SetUpdateEnabled)
-        // [Property(ReadOnly)] bool asyncLoading
+        // [Property(Readonly)] bool asyncLoading
         .addProperty("asyncLoading", &Scene::IsAsyncLoading)
-        // [Property(ReadOnly)] float asyncProgress
+        // [Property(Readonly)] float asyncProgress
         .addProperty("asyncProgress", &Scene::GetAsyncProgress)
-        // [Property(ReadOnly)] LoadMode asyncLoadMode
+        // [Property(Readonly)] LoadMode asyncLoadMode
         .addProperty("asyncLoadMode", &Scene::GetAsyncLoadMode)
-        // [Property(ReadOnly)] const String& fileName
+        // [Property(Readonly)] const String& fileName
         .addProperty("fileName", &Scene::GetFileName)
-        // [Property(ReadOnly)] unsigned checksum
+        // [Property(Readonly)] unsigned checksum
         .addProperty("checksum", &Scene::GetChecksum)
         // [Property] float timeScale
         .addProperty("timeScale", &Scene::GetTimeScale, &Scene::SetTimeScale)

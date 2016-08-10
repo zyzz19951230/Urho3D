@@ -85,7 +85,7 @@ void RegisterPolyhedron(kaguya::State& lua)
         // [Method] bool Empty() const
         .addFunction("Empty", &Polyhedron::Empty)
 
-        // [Property(ReadOnly)] bool empty
+        // [Property(Readonly)] bool empty
         .addProperty("empty", &Polyhedron::Empty)
         );
 }

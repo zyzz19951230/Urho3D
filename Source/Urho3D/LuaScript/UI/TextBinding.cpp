@@ -140,7 +140,7 @@ void RegisterText(kaguya::State& lua)
         // [Method] float GetEffectDepthBias() const
         .addFunction("GetEffectDepthBias", &Text::GetEffectDepthBias)
 
-        // [Property(ReadOnly)] Font* font
+        // [Property(Readonly)] Font* font
         .addProperty("font", &Text::GetFont)
         // [Property] int fontSize
         .addProperty("fontSize", &Text::GetFontSize, &Text::SetFontSize)
@@ -154,9 +154,9 @@ void RegisterText(kaguya::State& lua)
         .addProperty("wordwrap", &Text::GetWordwrap, &Text::SetWordwrap)
         // [Property] bool autoLocalizable
         .addProperty("autoLocalizable", &Text::GetAutoLocalizable, &Text::SetAutoLocalizable)
-        // [Property(ReadOnly)] unsigned selectionStart
+        // [Property(Readonly)] unsigned selectionStart
         .addProperty("selectionStart", &Text::GetSelectionStart)
-        // [Property(ReadOnly)] unsigned selectionLength
+        // [Property(Readonly)] unsigned selectionLength
         .addProperty("selectionLength", &Text::GetSelectionLength)
         // [Property] const Color& selectionColor
         .addProperty("selectionColor", &Text::GetSelectionColor, &Text::SetSelectionColor)
@@ -172,11 +172,11 @@ void RegisterText(kaguya::State& lua)
         .addProperty("effectRoundStroke", &Text::GetEffectRoundStroke, &Text::SetEffectRoundStroke)
         // [Property] const Color& effectColor
         .addProperty("effectColor", &Text::GetEffectColor, &Text::SetEffectColor)
-        // [Property(ReadOnly)] int rowHeight
+        // [Property(Readonly)] int rowHeight
         .addProperty("rowHeight", &Text::GetRowHeight)
-        // [Property(ReadOnly)] unsigned numRows
+        // [Property(Readonly)] unsigned numRows
         .addProperty("numRows", &Text::GetNumRows)
-        // [Property(ReadOnly)] unsigned numChars
+        // [Property(Readonly)] unsigned numChars
         .addProperty("numChars", &Text::GetNumChars)
         // [Property] float effectDepthBias
         .addProperty("effectDepthBias", &Text::GetEffectDepthBias, &Text::SetEffectDepthBias)

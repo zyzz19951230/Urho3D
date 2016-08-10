@@ -76,7 +76,7 @@ void RegisterSmoothedTransform(kaguya::State& lua)
         // [Property] Quaternion targetWorldRotation
         .addProperty("targetWorldRotation", &SmoothedTransform::GetTargetWorldRotation, &SmoothedTransform::SetTargetWorldRotation)
 
-        // [Property(ReadOnly)] bool inProgress
+        // [Property(Readonly)] bool inProgress
         .addProperty("inProgress", &SmoothedTransform::IsInProgress)
         );
 }

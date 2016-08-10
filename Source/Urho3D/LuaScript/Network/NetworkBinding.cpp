@@ -124,9 +124,9 @@ void RegisterNetwork(kaguya::State& lua)
         .addProperty("simulatedLatency", &Network::GetSimulatedLatency, &Network::SetSimulatedLatency)
         // [Property] float simulatedPacketLoss
         .addProperty("simulatedPacketLoss", &Network::GetSimulatedPacketLoss, &Network::SetSimulatedPacketLoss)
-        // [Property(ReadOnly)] Connection* serverConnection
+        // [Property(Readonly)] Connection* serverConnection
         .addProperty("serverConnection", &Network::GetServerConnection)
-        // [Property(ReadOnly)] bool serverRunning
+        // [Property(Readonly)] bool serverRunning
         .addProperty("serverRunning", &Network::IsServerRunning)
         // [Property] const String& packageCacheDir
         .addProperty("packageCacheDir", &Network::GetPackageCacheDir, &Network::SetPackageCacheDir)

@@ -105,11 +105,11 @@ void RegisterDebugRenderer(kaguya::State& lua)
         // [Method] bool IsInside(const BoundingBox& box) const
         .addFunction("IsInside", &DebugRenderer::IsInside)
 
-        // [Property(ReadOnly)] const Matrix3x4& view
+        // [Property(Readonly)] const Matrix3x4& view
         .addProperty("view", &DebugRenderer::GetView)
-        // [Property(ReadOnly)] const Matrix4& projection
+        // [Property(Readonly)] const Matrix4& projection
         .addProperty("projection", &DebugRenderer::GetProjection)
-        // [Property(ReadOnly)] const Frustum& frustum
+        // [Property(Readonly)] const Frustum& frustum
         .addProperty("frustum", &DebugRenderer::GetFrustum)
     );
 }

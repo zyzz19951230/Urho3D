@@ -148,7 +148,7 @@ void RegisterListView(kaguya::State& lua)
         // [Method] int GetBaseIndent() const
         .addFunction("GetBaseIndent", &ListView::GetBaseIndent)
 
-        // [Property(ReadOnly)] unsigned numItems
+        // [Property(Readonly)] unsigned numItems
         .addProperty("numItems", &ListView::GetNumItems)
         // [Property] unsigned selection
         .addProperty("selection", &ListView::GetSelection, &ListView::SetSelection)

@@ -201,9 +201,9 @@ void RegisterLight(kaguya::State& lua)
         .addProperty("specularIntensity", &Light::GetSpecularIntensity, &Light::SetSpecularIntensity)
         // [Property] float brightness
         .addProperty("brightness", &Light::GetBrightness, &Light::SetBrightness)
-        // [Property(ReadOnly)] Color effectiveColor
+        // [Property(Readonly)] Color effectiveColor
         .addProperty("effectiveColor", &Light::GetEffectiveColor)
-        // [Property(ReadOnly)] float effectiveSpecularIntensity
+        // [Property(Readonly)] float effectiveSpecularIntensity
         .addProperty("effectiveSpecularIntensity", &Light::GetEffectiveSpecularIntensity)
         // [Property] float range
         .addProperty("range", &Light::GetRange, &Light::SetRange)
@@ -231,11 +231,11 @@ void RegisterLight(kaguya::State& lua)
         .addProperty("rampTexture", &Light::GetRampTexture, &Light::SetRampTexture)
         // [Property] Texture* shapeTexture
         .addProperty("shapeTexture", &Light::GetShapeTexture, &Light::SetShapeTexture)
-        // [Property(ReadOnly)] Frustum frustum
+        // [Property(Readonly)] Frustum frustum
         .addProperty("frustum", &Light::GetFrustum)
-        // [Property(ReadOnly)] int numShadowSplits
+        // [Property(Readonly)] int numShadowSplits
         .addProperty("numShadowSplits", &Light::GetNumShadowSplits)
-        // [Property(ReadOnly)] bool negative
+        // [Property(Readonly)] bool negative
         .addProperty("negative", &Light::IsNegative)
         );
 }

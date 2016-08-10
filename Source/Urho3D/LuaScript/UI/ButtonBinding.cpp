@@ -77,7 +77,7 @@ void RegisterButton(kaguya::State& lua)
         .addProperty("repeatDelay", &Button::GetRepeatDelay, &Button::SetRepeatDelay)
         // [Property] float repeatRate
         .addProperty("repeatRate", &Button::GetRepeatRate, &Button::SetRepeatRate)
-        // [Property(ReadOnly)] bool pressed
+        // [Property(Readonly)] bool pressed
         .addProperty("pressed", &Button::IsPressed)
         );
 }

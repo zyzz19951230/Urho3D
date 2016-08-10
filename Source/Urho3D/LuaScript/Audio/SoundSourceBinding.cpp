@@ -82,11 +82,11 @@ void RegisterSoundSource(kaguya::State& lua)
         // [Method] bool IsPlaying() const
         .addFunction("IsPlaying", &SoundSource::IsPlaying)
         
-        // [Property(ReadOnly)] Sound* sound
+        // [Property(Readonly)] Sound* sound
         .addProperty("sound", &SoundSource::GetSound)
         // [Property] String soundType
         .addProperty("soundType", &SoundSource::GetSoundType, &SoundSource::SetSoundType)
-        // [Property(ReadOnly)] float timePosition
+        // [Property(Readonly)] float timePosition
         .addProperty("timePosition", &SoundSource::GetTimePosition)
         // [Property] float frequency
         .addProperty("frequency", &SoundSource::GetFrequency, &SoundSource::SetFrequency)
@@ -96,7 +96,7 @@ void RegisterSoundSource(kaguya::State& lua)
         .addProperty("attenuation", &SoundSource::GetAttenuation, &SoundSource::SetAttenuation)
         // [Property] float panning
         .addProperty("panning", &SoundSource::GetPanning, &SoundSource::SetPanning)
-        // [Property(ReadOnly)] bool playing
+        // [Property(Readonly)] bool playing
         .addProperty("playing", &SoundSource::IsPlaying)
         );
 }

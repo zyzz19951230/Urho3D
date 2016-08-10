@@ -141,11 +141,11 @@ void RegisterBoundingBox(kaguya::State& lua)
         // [Field] Vector3 max
         .addProperty("max", &BoundingBox::max_)
 
-        // [Property(ReadOnly)] Vector3 center
+        // [Property(Readonly)] Vector3 center
         .addProperty("center", &BoundingBox::Center)
-        // [Property(ReadOnly)] Vector3 size
+        // [Property(Readonly)] Vector3 size
         .addProperty("size", &BoundingBox::Size)
-        // [Property(ReadOnly)] Vector3 halfSize
+        // [Property(Readonly)] Vector3 halfSize
         .addProperty("halfSize", &BoundingBox::HalfSize)
         );
 }

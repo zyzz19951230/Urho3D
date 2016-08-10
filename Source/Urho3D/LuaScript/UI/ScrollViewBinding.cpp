@@ -110,11 +110,11 @@ void RegisterScrollView(kaguya::State& lua)
         // [Property] UIElement* contentElement
         .addProperty("contentElement", &ScrollViewGetContentElement, &ScrollViewSetContentElement)
 
-        // [Property(ReadOnly)] ScrollBar* horizontalScrollBar
+        // [Property(Readonly)] ScrollBar* horizontalScrollBar
         .addProperty("horizontalScrollBar", &ScrollView::GetHorizontalScrollBar)
-        // [Property(ReadOnly)] ScrollBar* verticalScrollBar
+        // [Property(Readonly)] ScrollBar* verticalScrollBar
         .addProperty("verticalScrollBar", &ScrollView::GetVerticalScrollBar)
-        // [Property(ReadOnly)] BorderImage* scrollPanel
+        // [Property(Readonly)] BorderImage* scrollPanel
         .addProperty("scrollPanel", &ScrollView::GetScrollPanel)
         // [Property] bool scrollBarsAutoVisible
         .addProperty("scrollBarsAutoVisible", &ScrollView::GetScrollBarsAutoVisible, &ScrollView::SetScrollBarsAutoVisible)

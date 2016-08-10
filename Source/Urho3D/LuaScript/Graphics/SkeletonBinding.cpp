@@ -89,9 +89,9 @@ void RegisterSkeleton(kaguya::State& lua)
             // [Method] Bone* GetBone(StringHash nameHash)
             static_cast<Bone*(Skeleton::*)(StringHash)>(&Skeleton::GetBone))
 
-        // [Property(ReadOnly)] unsigned numBones
+        // [Property(Readonly)] unsigned numBones
         .addProperty("numBones", &Skeleton::GetNumBones)
-        // [Property(ReadOnly)] Bone* rootBone
+        // [Property(Readonly)] Bone* rootBone
         .addProperty("rootBone", &Skeleton::GetRootBone)
         );
 }

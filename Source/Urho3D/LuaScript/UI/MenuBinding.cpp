@@ -73,11 +73,11 @@ void RegisterMenu(kaguya::State& lua)
         .addProperty("popup", &MenuGetPopup)
         // [Property] const IntVector2& popupOffset
         .addProperty("popupOffset", &Menu::GetPopupOffset, static_cast<void(Menu::*)(const IntVector2&)>(&Menu::SetPopupOffset))
-        // [Property(ReadOnly)] bool showPopup
+        // [Property(Readonly)] bool showPopup
         .addProperty("showPopup", &Menu::GetShowPopup)
-        // [Property(ReadOnly)] int acceleratorKey
+        // [Property(Readonly)] int acceleratorKey
         .addProperty("acceleratorKey", &Menu::GetAcceleratorKey)
-        // [Property(ReadOnly)] int acceleratorQualifiers
+        // [Property(Readonly)] int acceleratorQualifiers
         .addProperty("acceleratorQualifiers", &Menu::GetAcceleratorQualifiers)
         );
 }

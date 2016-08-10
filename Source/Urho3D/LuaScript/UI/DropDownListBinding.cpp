@@ -97,12 +97,12 @@ void RegisterDropDownList(kaguya::State& lua)
         // [Method] bool GetResizePopup() const
         .addFunction("GetResizePopup", &DropDownList::GetResizePopup)
 
-        // [Property(ReadOnly)] unsigned numItems
+        // [Property(Readonly)] unsigned numItems
         .addProperty("numItems", &DropDownList::GetNumItems)
         // [Property] unsigned selection
         .addProperty("selection", &DropDownList::GetSelection, &DropDownList::SetSelection)
         .addProperty("selectedItem", &DropDownListGetSelectedItem)
-        // [Property(ReadOnly)] ListView* listView
+        // [Property(Readonly)] ListView* listView
         .addProperty("listView", &DropDownList::GetListView)
         .addProperty("placeholder", &DropDownListGetPlaceholder)
         // [Property] const String& placeholderText

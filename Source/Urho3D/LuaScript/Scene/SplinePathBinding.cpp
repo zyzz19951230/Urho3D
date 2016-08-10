@@ -82,13 +82,13 @@ void RegisterSplinePath(kaguya::State& lua)
         .addProperty("interpolationMode", &SplinePath::GetInterpolationMode, &SplinePath::SetInterpolationMode)
         // [Property] float speed
         .addProperty("speed", &SplinePath::GetSpeed, &SplinePath::SetSpeed)
-        // [Property(ReadOnly)] float length
+        // [Property(Readonly)] float length
         .addProperty("length", &SplinePath::GetLength)
         // [Property] Vector3 position
         .addProperty("position", &SplinePath::GetPosition, &SplinePath::SetPosition)
         // [Property] Node* controlledNode
         .addProperty("controlledNode", &SplinePath::GetControlledNode, &SplinePath::SetControlledNode)
-        // [Property(ReadOnly)] bool finished
+        // [Property(Readonly)] bool finished
         .addProperty("finished", &SplinePath::IsFinished)
         );
 }

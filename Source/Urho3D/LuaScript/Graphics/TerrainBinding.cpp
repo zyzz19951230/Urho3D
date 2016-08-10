@@ -130,9 +130,9 @@ void RegisterTerrain(kaguya::State& lua)
         .addProperty("patchSize", &Terrain::GetPatchSize, &Terrain::SetPatchSize)
         // [Property] const Vector3& spacing
         .addProperty("spacing", &Terrain::GetSpacing, &Terrain::SetSpacing)
-        // [Property(ReadOnly)] const IntVector2& numVertices
+        // [Property(Readonly)] const IntVector2& numVertices
         .addProperty("numVertices", &Terrain::GetNumVertices)
-        // [Property(ReadOnly)] const IntVector2& numPatches
+        // [Property(Readonly)] const IntVector2& numPatches
         .addProperty("numPatches", &Terrain::GetNumPatches)
         // [Property] unsigned maxLodLevels
         .addProperty("maxLodLevels", &Terrain::GetMaxLodLevels, &Terrain::SetMaxLodLevels)
@@ -144,27 +144,27 @@ void RegisterTerrain(kaguya::State& lua)
         .addProperty("heightMap", &TerrainGetHeightMap, &TerrainSetHeightMap)
         // [Property] Material* material
         .addProperty("material", &Terrain::GetMaterial, &Terrain::SetMaterial)
-        // [Property(WriteOnly)] float drawDistance
+        // [Property(Writeonly)] float drawDistance
         .addProperty("drawDistance", &Terrain::SetDrawDistance)
-        // [Property(WriteOnly)] float shadowDistance
+        // [Property(Writeonly)] float shadowDistance
         .addProperty("shadowDistance", &Terrain::SetShadowDistance)
-        // [Property(WriteOnly)] float lodBias
+        // [Property(Writeonly)] float lodBias
         .addProperty("lodBias", &Terrain::SetLodBias)
-        // [Property(WriteOnly)] unsigned viewMask
+        // [Property(Writeonly)] unsigned viewMask
         .addProperty("viewMask", &Terrain::SetViewMask)
-        // [Property(WriteOnly)] unsigned lightMask
+        // [Property(Writeonly)] unsigned lightMask
         .addProperty("lightMask", &Terrain::SetLightMask)
-        // [Property(WriteOnly)] unsigned shadowMask
+        // [Property(Writeonly)] unsigned shadowMask
         .addProperty("shadowMask", &Terrain::SetShadowMask)
-        // [Property(WriteOnly)] unsigned zoneMask
+        // [Property(Writeonly)] unsigned zoneMask
         .addProperty("zoneMask", &Terrain::SetZoneMask)
-        // [Property(WriteOnly)] unsigned maxLights
+        // [Property(Writeonly)] unsigned maxLights
         .addProperty("maxLights", &Terrain::SetMaxLights)
-        // [Property(WriteOnly)] void castShadows
+        // [Property(Writeonly)] void castShadows
         .addProperty("castShadows", &Terrain::SetCastShadows)
-        // [Property(WriteOnly)] bool occluder
+        // [Property(Writeonly)] bool occluder
         .addProperty("occluder", &Terrain::SetOccluder)
-        // [Property(WriteOnly)] bool occludee
+        // [Property(Writeonly)] bool occludee
         .addProperty("occludee", &Terrain::SetOccludee)
         );
 }

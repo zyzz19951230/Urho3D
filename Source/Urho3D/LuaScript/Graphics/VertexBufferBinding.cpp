@@ -126,13 +126,13 @@ void RegisterVertexBuffer(kaguya::State& lua)
 
         // [Property] bool shadowed
         .addProperty("shadowed", &VertexBuffer::IsShadowed, &VertexBuffer::SetShadowed)
-        // [Property(ReadOnly)] bool dynamic
+        // [Property(Readonly)] bool dynamic
         .addProperty("dynamic", &VertexBuffer::IsDynamic)
-        // [Property(ReadOnly)] unsigned vertexCount
+        // [Property(Readonly)] unsigned vertexCount
         .addProperty("vertexCount", &VertexBuffer::GetVertexCount)
-        // [Property(ReadOnly)] unsigned vertexSize
+        // [Property(Readonly)] unsigned vertexSize
         .addProperty("vertexSize", static_cast<unsigned(VertexBuffer::*)()const>(&VertexBuffer::GetVertexSize))
-        // [Property(ReadOnly)] unsigned elementMask
+        // [Property(Readonly)] unsigned elementMask
         .addProperty("elementMask", &VertexBuffer::GetElementMask)
     );
 }

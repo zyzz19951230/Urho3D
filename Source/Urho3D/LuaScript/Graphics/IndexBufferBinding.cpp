@@ -96,11 +96,11 @@ void RegisterIndexBuffer(kaguya::State& lua)
                 
         // [Property] bool shadowed
         .addProperty("shadowed", &IndexBuffer::IsShadowed, &IndexBuffer::SetShadowed)
-        // [Property(ReadOnly)] bool dynamic
+        // [Property(Readonly)] bool dynamic
         .addProperty("dynamic", &IndexBuffer::IsDynamic)
-        // [Property(ReadOnly)] unsigned indexCount
+        // [Property(Readonly)] unsigned indexCount
         .addProperty("indexCount", &IndexBuffer::GetIndexCount)
-        // [Property(ReadOnly)] unsigned indexSize
+        // [Property(Readonly)] unsigned indexSize
         .addProperty("indexSize", &IndexBuffer::GetIndexSize)
     );
 }

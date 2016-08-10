@@ -90,11 +90,11 @@ void RegisterRect(kaguya::State& lua)
         .addProperty("min", &Rect::min_)
         .addProperty("max", &Rect::max_)
 
-        // [Property(ReadOnly)] Vector2 center
+        // [Property(Readonly)] Vector2 center
         .addProperty("center", &Rect::Center)
-        // [Property(ReadOnly)] Vector2 size
+        // [Property(Readonly)] Vector2 size
         .addProperty("size", &Rect::Size)
-        // [Property(ReadOnly)] Vector2 halfSize
+        // [Property(Readonly)] Vector2 halfSize
         .addProperty("halfSize", &Rect::HalfSize)
 
         // [StaticConstant] Rect FULL
@@ -136,11 +136,11 @@ void RegisterRect(kaguya::State& lua)
         // [Field] float bottom
         .addProperty("bottom", &IntRect::bottom_)
 
-        // [Property(ReadOnly)] Vector2 size
+        // [Property(Readonly)] Vector2 size
         .addProperty("size", &IntRect::Size)
-        // [Property(ReadOnly)] int width
+        // [Property(Readonly)] int width
         .addProperty("width", &IntRect::Width)
-        // [Property(ReadOnly)] IntVector2 Size() cons height
+        // [Property(Readonly)] IntVector2 Size() cons height
         .addProperty("height", &IntRect::Height)
 
         // [StaticConstant] IntRect ZERO

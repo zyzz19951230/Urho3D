@@ -104,7 +104,7 @@ void RegisterSprite(kaguya::State& lua)
         // [Property] BlendMode blendMode
         .addProperty("blendMode", &Sprite::GetBlendMode, &Sprite::SetBlendMode)
 
-        // [Property(ReadOnly)] const Matrix3x4& transform
+        // [Property(Readonly)] const Matrix3x4& transform
         .addProperty("transform", &Sprite::GetTransform)
         );
 }

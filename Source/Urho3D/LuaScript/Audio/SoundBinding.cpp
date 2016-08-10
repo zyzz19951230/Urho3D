@@ -114,23 +114,23 @@ void RegisterSound(kaguya::State& lua)
         // [Method] void FixInterpolation()
         .addFunction("FixInterpolation", &Sound::FixInterpolation)
 
-        // [Property(ReadOnly)] float length
+        // [Property(Readonly)] float length
         .addProperty("length", &Sound::GetLength)
-        // [Property(ReadOnly)] unsigned dataSize
+        // [Property(Readonly)] unsigned dataSize
         .addProperty("dataSize", &Sound::GetDataSize)
-        // [Property(ReadOnly)] unsigned sampleSize
+        // [Property(Readonly)] unsigned sampleSize
         .addProperty("sampleSize", &Sound::GetSampleSize)
-        // [Property(ReadOnly)] float frequency
+        // [Property(Readonly)] float frequency
         .addProperty("frequency", &Sound::GetFrequency)
-        // [Property(ReadOnly)] unsigned intFrequency
+        // [Property(Readonly)] unsigned intFrequency
         .addProperty("intFrequency", &Sound::GetIntFrequency)
         // [Property] bool looped
         .addProperty("looped", &Sound::IsLooped, &Sound::SetLooped)
-        // [Property(ReadOnly)] bool sixteenBit
+        // [Property(Readonly)] bool sixteenBit
         .addProperty("sixteenBit", &Sound::IsSixteenBit)
-        // [Property(ReadOnly)] bool stereo
+        // [Property(Readonly)] bool stereo
         .addProperty("stereo", &Sound::IsStereo)
-        // [Property(ReadOnly)] bool compressed
+        // [Property(Readonly)] bool compressed
         .addProperty("compressed", &Sound::IsCompressed)
         );
 }

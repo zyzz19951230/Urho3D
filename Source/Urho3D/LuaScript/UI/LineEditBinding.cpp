@@ -94,9 +94,9 @@ void RegisterLineEdit(kaguya::State& lua)
         .addProperty("textSelectable", &LineEdit::IsTextSelectable, &LineEdit::SetTextSelectable)
         // [Property] bool textCopyable
         .addProperty("textCopyable", &LineEdit::IsTextCopyable, &LineEdit::SetTextCopyable)
-        // [Property(ReadOnly)] Text* textElement
+        // [Property(Readonly)] Text* textElement
         .addProperty("textElement", &LineEdit::GetTextElement)
-        // [Property(ReadOnly)] BorderImage* cursor
+        // [Property(Readonly)] BorderImage* cursor
         .addProperty("cursor", &LineEdit::GetCursor)
         );
 }

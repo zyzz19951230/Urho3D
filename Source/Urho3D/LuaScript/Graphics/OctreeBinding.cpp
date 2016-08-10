@@ -99,7 +99,7 @@ void RegisterOctree(kaguya::State& lua)
         // [Method] void QueueUpdate(Drawable* drawable)
         .addFunction("QueueUpdate", &Octree::QueueUpdate)
         
-        // [Property(ReadOnly)] unsigned numLevels
+        // [Property(Readonly)] unsigned numLevels
         .addProperty("numLevels", &Octree::GetNumLevels)
         );
 }

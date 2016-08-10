@@ -64,7 +64,7 @@ void RegisterStringHash(kaguya::State& lua)
         // [StaticMethod] static unsigned Calculate(const char* str)
         .addStaticFunction("Calculate", &StringHash::Calculate)
 
-        // [Property(ReadOnly)] unsigned value
+        // [Property(Readonly)] unsigned value
         .addProperty("value", &StringHash::Value)
 
         // [StaticConstant] StringHash ZERO

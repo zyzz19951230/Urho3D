@@ -202,13 +202,13 @@ void RegisterCamera(kaguya::State& lua)
         .addProperty("orthographic", &Camera::IsOrthographic, &Camera::SetOrthographic)
         // [Property] bool autoAspectRatio
         .addProperty("autoAspectRatio", &Camera::GetAutoAspectRatio, &Camera::SetAutoAspectRatio)
-        // [Property(ReadOnly)] const Frustum& frustum
+        // [Property(Readonly)] const Frustum& frustum
         .addProperty("frustum", &Camera::GetFrustum)
-        // [Property(ReadOnly)] const Matrix3x4& view
+        // [Property(Readonly)] const Matrix3x4& view
         .addProperty("view", &Camera::GetView)
-        // [Property(ReadOnly)] float halfViewSize
+        // [Property(Readonly)] float halfViewSize
         .addProperty("halfViewSize", &Camera::GetHalfViewSize)
-        // [Property(ReadOnly)] Frustum viewSpaceFrustum
+        // [Property(Readonly)] Frustum viewSpaceFrustum
         .addProperty("viewSpaceFrustum", &Camera::GetViewSpaceFrustum)
         // [Property] const Vector2& projectionOffset
         .addProperty("projectionOffset", &Camera::GetProjectionOffset, &Camera::SetProjectionOffset)
@@ -222,7 +222,7 @@ void RegisterCamera(kaguya::State& lua)
         .addProperty("clipPlane", &Camera::GetClipPlane, &Camera::SetClipPlane)
         // [Property] bool flipVertical
         .addProperty("flipVertical", &Camera::GetFlipVertical, &Camera::SetFlipVertical)
-        // [Property(ReadOnly)] bool projectionValid
+        // [Property(Readonly)] bool projectionValid
         .addProperty("projectionValid", &Camera::IsProjectionValid)
     );
 }

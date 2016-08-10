@@ -82,24 +82,24 @@ void RegisterGeometry(kaguya::State& lua)
         // [Method] bool IsEmpty() const
         .addFunction("IsEmpty", &Geometry::IsEmpty)
 
-        // [Property(ReadOnly)] unsigned numVertexBuffers
+        // [Property(Readonly)] unsigned numVertexBuffers
         .addProperty("numVertexBuffers", &Geometry::GetNumVertexBuffers)
 
         // [Property] IndexBuffer* indexBuffer
         .addProperty("indexBuffer", &Geometry::GetIndexBuffer, &Geometry::SetIndexBuffer)
-        // [Property(ReadOnly)] PrimitiveType primitiveType
+        // [Property(Readonly)] PrimitiveType primitiveType
         .addProperty("primitiveType", &Geometry::GetPrimitiveType)
-        // [Property(ReadOnly)] unsigned indexStart
+        // [Property(Readonly)] unsigned indexStart
         .addProperty("indexStart", &Geometry::GetIndexStart)
-        // [Property(ReadOnly)] unsigned indexCount
+        // [Property(Readonly)] unsigned indexCount
         .addProperty("indexCount", &Geometry::GetIndexCount)
-        // [Property(ReadOnly)] unsigned vertexStart
+        // [Property(Readonly)] unsigned vertexStart
         .addProperty("vertexStart", &Geometry::GetVertexStart)
-        // [Property(ReadOnly)] unsigned vertexCount
+        // [Property(Readonly)] unsigned vertexCount
         .addProperty("vertexCount", &Geometry::GetVertexCount)
         // [Property] float lodDistance
         .addProperty("lodDistance", &Geometry::GetLodDistance, &Geometry::SetLodDistance)
-        // [Property(ReadOnly)] bool empty
+        // [Property(Readonly)] bool empty
         .addProperty("empty", &Geometry::IsEmpty)
     );
 }

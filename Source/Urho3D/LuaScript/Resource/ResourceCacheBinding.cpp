@@ -186,7 +186,7 @@ void RegisterResourceCache(kaguya::State& lua)
         // [Method] String PrintMemoryUsage() const
         .addFunction("PrintMemoryUsage", &ResourceCache::PrintMemoryUsage)
 
-        // [Property(ReadOnly)] unsigned long long totalMemoryUse
+        // [Property(Readonly)] unsigned long long totalMemoryUse
         .addProperty("totalMemoryUse", &ResourceCache::GetTotalMemoryUse)
         // [Property] bool autoReloadResources
         .addProperty("autoReloadResources", &ResourceCache::GetAutoReloadResources, &ResourceCache::SetAutoReloadResources)

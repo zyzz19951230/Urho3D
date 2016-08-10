@@ -90,7 +90,7 @@ void RegisterStaticModel(kaguya::State& lua)
         // [Property] Material* material
         .addProperty("material", &StaticModelMaterialGetter, &StaticModelMaterialSetter)
 
-        // [Property(ReadOnly)] unsigned numGeometries
+        // [Property(Readonly)] unsigned numGeometries
         .addProperty("numGeometries", &StaticModel::GetNumGeometries)
         // [Property] unsigned occlusionLodLevel
         .addProperty("occlusionLodLevel", &StaticModel::GetOcclusionLodLevel, &StaticModel::SetOcclusionLodLevel)

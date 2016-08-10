@@ -58,7 +58,7 @@ void RegisterNavArea(kaguya::State& lua)
         .addProperty("areaID", &NavArea::GetAreaID, &NavArea::SetAreaID)
         // [Property] BoundingBox boundingBox
         .addProperty("boundingBox", &NavArea::GetBoundingBox, &NavArea::SetBoundingBox)
-        // [Property(ReadOnly)] BoundingBox worldBoundingBox
+        // [Property(Readonly)] BoundingBox worldBoundingBox
         .addProperty("worldBoundingBox", &NavArea::GetWorldBoundingBox)
         );
 }

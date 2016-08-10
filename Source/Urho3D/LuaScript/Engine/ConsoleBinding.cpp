@@ -93,11 +93,11 @@ void RegisterConsole(kaguya::State& lua)
 
         // [Property] XMLFile* defaultStyle
         .addProperty("defaultStyle", &Console::GetDefaultStyle, &Console::SetDefaultStyle)
-        // [Property(ReadOnly)] BorderImage* background
+        // [Property(Readonly)] BorderImage* background
         .addProperty("background", &Console::GetBackground)
-        // [Property(ReadOnly)] LineEdit* lineEdit
+        // [Property(Readonly)] LineEdit* lineEdit
         .addProperty("lineEdit", &Console::GetLineEdit)
-        // [Property(ReadOnly)] Button* closeButton
+        // [Property(Readonly)] Button* closeButton
         .addProperty("closeButton", &Console::GetCloseButton)
         // [Property] bool visible
         .addProperty("visible", &Console::IsVisible, &Console::SetVisible)
@@ -111,7 +111,7 @@ void RegisterConsole(kaguya::State& lua)
         .addProperty("numRows", &Console::GetNumRows, &Console::SetNumRows)
         // [Property] unsigned numHistoryRows
         .addProperty("numHistoryRows", &Console::GetNumHistoryRows, &Console::SetNumHistoryRows)
-        // [Property(ReadOnly)] unsigned historyPosition
+        // [Property(Readonly)] unsigned historyPosition
         .addProperty("historyPosition", &Console::GetHistoryPosition)
         // [Property] bool focusOnShow
         .addProperty("focusOnShow", &Console::GetFocusOnShow, &Console::SetFocusOnShow)

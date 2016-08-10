@@ -73,17 +73,17 @@ void RegisterHttpRequest(kaguya::State& lua)
         // [Method] VectorBuffer Read(unsigned size)
         .addStaticFunction("Read", &HttpRequestRead)
 
-        // [Property(ReadOnly)] const String& URL
+        // [Property(Readonly)] const String& URL
         .addProperty("URL", &HttpRequest::GetURL)
-        // [Property(ReadOnly)] const String& verb
+        // [Property(Readonly)] const String& verb
         .addProperty("verb", &HttpRequest::GetVerb)
-        // [Property(ReadOnly)] String error
+        // [Property(Readonly)] String error
         .addProperty("error", &HttpRequest::GetError)
-        // [Property(ReadOnly)] HttpRequestState state
+        // [Property(Readonly)] HttpRequestState state
         .addProperty("state", &HttpRequest::GetState)
-        // [Property(ReadOnly)] unsigned availableSize
+        // [Property(Readonly)] unsigned availableSize
         .addProperty("availableSize", &HttpRequest::GetAvailableSize)
-        // [Property(ReadOnly)] bool open
+        // [Property(Readonly)] bool open
         .addProperty("open", &HttpRequest::IsOpen)
         );
 }

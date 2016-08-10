@@ -139,21 +139,21 @@ void RegisterCrowdAgent(kaguya::State& lua)
         // [Method] bool IsInCrowd() const
         .addFunction("IsInCrowd", &CrowdAgent::IsInCrowd)
 
-        // [Property(ReadOnly)] Vector3 position
+        // [Property(Readonly)] Vector3 position
         .addProperty("position", &CrowdAgent::GetPosition)
-        // [Property(ReadOnly)] Vector3 desiredVelocity
+        // [Property(Readonly)] Vector3 desiredVelocity
         .addProperty("desiredVelocity", &CrowdAgent::GetDesiredVelocity)
-        // [Property(ReadOnly)] Vector3 actualVelocity
+        // [Property(Readonly)] Vector3 actualVelocity
         .addProperty("actualVelocity", &CrowdAgent::GetActualVelocity)
         // [Property] const Vector3& targetPosition
         .addProperty("targetPosition", &CrowdAgent::GetTargetPosition, &CrowdAgent::SetTargetPosition)
         // [Property] const Vector3& targetVelocity
         .addProperty("targetVelocity", &CrowdAgent::GetTargetVelocity, &CrowdAgent::SetTargetVelocity)
-        // [Property(ReadOnly)] CrowdAgentRequestedTarget requestedTargetType
+        // [Property(Readonly)] CrowdAgentRequestedTarget requestedTargetType
         .addProperty("requestedTargetType", &CrowdAgent::GetRequestedTargetType)
-        // [Property(ReadOnly)] CrowdAgentState agentState
+        // [Property(Readonly)] CrowdAgentState agentState
         .addProperty("agentState", &CrowdAgent::GetAgentState)
-        // [Property(ReadOnly)] CrowdAgentTargetState targetState
+        // [Property(Readonly)] CrowdAgentTargetState targetState
         .addProperty("targetState", &CrowdAgent::GetTargetState)
         // [Property] bool updateNodePosition
         .addProperty("updateNodePosition", &CrowdAgent::GetUpdateNodePosition, &CrowdAgent::SetUpdateNodePosition)
@@ -173,7 +173,7 @@ void RegisterCrowdAgent(kaguya::State& lua)
         .addProperty("navigationQuality", &CrowdAgent::GetNavigationQuality, &CrowdAgent::SetNavigationQuality)
         // [Property] NavigationPushiness navigationPushiness
         .addProperty("navigationPushiness", &CrowdAgent::GetNavigationPushiness, &CrowdAgent::SetNavigationPushiness)
-        // [Property(ReadOnly)] bool inCrowd
+        // [Property(Readonly)] bool inCrowd
         .addProperty("inCrowd", &CrowdAgent::IsInCrowd)
         );
 }

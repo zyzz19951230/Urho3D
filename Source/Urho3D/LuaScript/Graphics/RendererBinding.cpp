@@ -250,19 +250,19 @@ void RegisterRenderer(kaguya::State& lua)
         // [Property] float mobileNormalOffsetMul
         .addProperty("mobileNormalOffsetMul", &Renderer::GetMobileNormalOffsetMul, &Renderer::SetMobileNormalOffsetMul)
         
-        // [Property(ReadOnly)] unsigned numViews
+        // [Property(Readonly)] unsigned numViews
         .addProperty("numViews", &Renderer::GetNumViews)
-        // [Property(ReadOnly)] unsigned numPrimitives
+        // [Property(Readonly)] unsigned numPrimitives
         .addProperty("numPrimitives", &Renderer::GetNumPrimitives)
-        // [Property(ReadOnly)] unsigned numBatches
+        // [Property(Readonly)] unsigned numBatches
         .addProperty("numBatches", &Renderer::GetNumBatches)
-        // [Property(ReadOnly)] Zone* defaultZone
+        // [Property(Readonly)] Zone* defaultZone
         .addProperty("defaultZone", &Renderer::GetDefaultZone)
-        // [Property(ReadOnly)] Material* defaultMaterial
+        // [Property(Readonly)] Material* defaultMaterial
         .addProperty("defaultMaterial", &Renderer::GetDefaultMaterial)
-        // [Property(ReadOnly)] Texture2D* defaultLightRamp
+        // [Property(Readonly)] Texture2D* defaultLightRamp
         .addProperty("defaultLightRamp", &Renderer::GetDefaultLightRamp)
-        // [Property(ReadOnly)] Texture2D* defaultLightSpot
+        // [Property(Readonly)] Texture2D* defaultLightSpot
         .addProperty("defaultLightSpot", &Renderer::GetDefaultLightSpot)        
     );
 }

@@ -54,7 +54,7 @@ void RegisterConstraint2D(kaguya::State& lua)
         // [Method] bool GetCollideConnected() const
         .addFunction("GetCollideConnected", &Constraint2D::GetCollideConnected)
         
-        // [Property(ReadOnly)] RigidBody2D* ownerBody
+        // [Property(Readonly)] RigidBody2D* ownerBody
         .addProperty("ownerBody", &Constraint2D::GetOwnerBody)
         // [Property] RigidBody2D* otherBody
         .addProperty("otherBody", &Constraint2D::GetOtherBody, &Constraint2D::SetOtherBody)

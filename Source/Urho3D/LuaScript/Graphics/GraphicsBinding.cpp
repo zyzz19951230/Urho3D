@@ -185,32 +185,32 @@ void RegisterGraphics(kaguya::State& lua)
             // [StaticMethod] unsigned GetMaxBones()
             .addStaticFunction("GetMaxBones", &Graphics::GetMaxBones)
         
-        // [Property(ReadOnly)] bool initialized
+        // [Property(Readonly)] bool initialized
         .addProperty("initialized", &Graphics::IsInitialized)
         // [Property] const String& windowTitle
         .addProperty("windowTitle", &Graphics::GetWindowTitle, &Graphics::SetWindowTitle)
-        // [Property(ReadOnly)] const String& apiName
+        // [Property(Readonly)] const String& apiName
         .addProperty("apiName", &Graphics::GetApiName)
         // [Property] IntVector2 windowPosition
         .addProperty("windowPosition", &Graphics::GetWindowPosition, static_cast<void(Graphics::*)(const IntVector2&)>(&Graphics::SetWindowPosition))
-        // [Property(ReadOnly)] int width
+        // [Property(Readonly)] int width
         .addProperty("width", &Graphics::GetWidth)
-        // [Property(ReadOnly)] int height
+        // [Property(Readonly)] int height
         .addProperty("height", &Graphics::GetHeight)
-        // [Property(ReadOnly)] int multiSample
+        // [Property(Readonly)] int multiSample
         .addProperty("multiSample", &Graphics::GetMultiSample)
 
-        // [Property(ReadOnly)] bool fullscreen
+        // [Property(Readonly)] bool fullscreen
         .addProperty("fullscreen", &Graphics::GetFullscreen)
-        // [Property(ReadOnly)] bool borderless
+        // [Property(Readonly)] bool borderless
         .addProperty("borderless", &Graphics::GetBorderless)
-        // [Property(ReadOnly)] bool resizable
+        // [Property(Readonly)] bool resizable
         .addProperty("resizable", &Graphics::GetResizable)
 
         // .addProperty("highDPI", &Graphics::GetHighDPI)
-        // [Property(ReadOnly)] bool vSync
+        // [Property(Readonly)] bool vSync
         .addProperty("vSync", &Graphics::GetVSync)
-        // [Property(ReadOnly)] bool tripleBuffer
+        // [Property(Readonly)] bool tripleBuffer
         .addProperty("tripleBuffer", &Graphics::GetTripleBuffer)
         // [Property] bool sRGB
         .addProperty("sRGB", &Graphics::GetSRGB, &Graphics::SetSRGB)
@@ -221,34 +221,34 @@ void RegisterGraphics(kaguya::State& lua)
         // [Property] const String& orientations
         .addProperty("orientations", &Graphics::GetOrientations, &Graphics::SetOrientations)
 
-        // [Property(ReadOnly)] bool deviceLost
+        // [Property(Readonly)] bool deviceLost
         .addProperty("deviceLost", &Graphics::IsDeviceLost)
 
-        // [Property(ReadOnly)] unsigned numPrimitives
+        // [Property(Readonly)] unsigned numPrimitives
         .addProperty("numPrimitives", &Graphics::GetNumPrimitives)
-        // [Property(ReadOnly)] unsigned numBatches
+        // [Property(Readonly)] unsigned numBatches
         .addProperty("numBatches", &Graphics::GetNumBatches)
-        // [Property(ReadOnly)] unsigned dummyColorFormat
+        // [Property(Readonly)] unsigned dummyColorFormat
         .addProperty("dummyColorFormat", &Graphics::GetDummyColorFormat)
-        // [Property(ReadOnly)] unsigned shadowMapFormat
+        // [Property(Readonly)] unsigned shadowMapFormat
         .addProperty("shadowMapFormat", &Graphics::GetShadowMapFormat)
-        // [Property(ReadOnly)] unsigned hiresShadowMapFormat
+        // [Property(Readonly)] unsigned hiresShadowMapFormat
         .addProperty("hiresShadowMapFormat", &Graphics::GetHiresShadowMapFormat)
-        // [Property(ReadOnly)] bool instancingSupport
+        // [Property(Readonly)] bool instancingSupport
         .addProperty("instancingSupport", &Graphics::GetInstancingSupport)
-        // [Property(ReadOnly)] bool lightPrepassSupport
+        // [Property(Readonly)] bool lightPrepassSupport
         .addProperty("lightPrepassSupport", &Graphics::GetLightPrepassSupport)
-        // [Property(ReadOnly)] bool deferredSupport
+        // [Property(Readonly)] bool deferredSupport
         .addProperty("deferredSupport", &Graphics::GetDeferredSupport)
-        // [Property(ReadOnly)] bool hardwareShadowSupport
+        // [Property(Readonly)] bool hardwareShadowSupport
         .addProperty("hardwareShadowSupport", &Graphics::GetHardwareShadowSupport)
-        // [Property(ReadOnly)] bool readableDepthSupport
+        // [Property(Readonly)] bool readableDepthSupport
         .addProperty("readableDepthSupport", &Graphics::GetReadableDepthSupport)
-        // [Property(ReadOnly)] bool sRGBSupport
+        // [Property(Readonly)] bool sRGBSupport
         .addProperty("sRGBSupport", &Graphics::GetSRGBSupport)
-        // [Property(ReadOnly)] bool sRGBWriteSupport
+        // [Property(Readonly)] bool sRGBWriteSupport
         .addProperty("sRGBWriteSupport", &Graphics::GetSRGBWriteSupport)
-        // [Property(ReadOnly)] IntVector2 desktopResolution
+        // [Property(Readonly)] IntVector2 desktopResolution
         .addProperty("desktopResolution", &Graphics::GetDesktopResolution)
     );
 }

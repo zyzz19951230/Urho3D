@@ -77,7 +77,7 @@ void RegisterAnimatedSprite2D(kaguya::State& lua)
         .addProperty("animationSet", &AnimatedSprite2D::GetAnimationSet, &AnimatedSprite2D::SetAnimationSet)
         // [Property] const String& entity
         .addProperty("entity", &AnimatedSprite2D::GetEntity, &AnimatedSprite2D::SetEntity)
-        // [Property(ReadOnly)] const String& animation
+        // [Property(Readonly)] const String& animation
         .addProperty("animation", &AnimatedSprite2D::GetAnimation)
         // [Property] LoopMode2D loopMode
         .addProperty("loopMode", &AnimatedSprite2D::GetLoopMode, &AnimatedSprite2D::SetLoopMode)

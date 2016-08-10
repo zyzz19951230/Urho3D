@@ -56,11 +56,11 @@ void RegisterObject(kaguya::State& lua)
             // [Method] bool HasSubscribedToEvent(Object* sender, StringHash eventType) const
 			static_cast<bool(Object::*)(Object*, StringHash)const>(&Object::HasSubscribedToEvent))
 
-        // [Property(ReadOnly)] StringHash type
+        // [Property(Readonly)] StringHash type
         .addProperty("type", &Object::GetType)
-        // [Property(ReadOnly)] const String& typeName
+        // [Property(Readonly)] const String& typeName
         .addProperty("typeName", &Object::GetTypeName)
-        // [Property(ReadOnly)] const String& category
+        // [Property(Readonly)] const String& category
         .addProperty("category", &Object::GetCategory)
     );
 }

@@ -205,11 +205,11 @@ void RegisterRigidBody(kaguya::State& lua)
         // [Method] PODVector<RigidBody*> GetCollidingBodies()
         .addStaticFunction("GetCollidingBodies", &RigidBodyGetCollidingBodies)
         
-        // [Property(ReadOnly)] PhysicsWorld* physicsWorld
+        // [Property(Readonly)] PhysicsWorld* physicsWorld
         .addProperty("physicsWorld", &RigidBody::GetPhysicsWorld)
-        // [Property(ReadOnly)] btRigidBody* body
+        // [Property(Readonly)] btRigidBody* body
         .addProperty("body", &RigidBody::GetBody)
-        // [Property(ReadOnly)] btCompoundShape* compoundShape
+        // [Property(Readonly)] btCompoundShape* compoundShape
         .addProperty("compoundShape", &RigidBody::GetCompoundShape)
         // [Property] float mass
         .addProperty("mass", &RigidBody::GetMass, &RigidBody::SetMass)
@@ -251,13 +251,13 @@ void RegisterRigidBody(kaguya::State& lua)
         .addProperty("useGravity", &RigidBody::GetUseGravity, &RigidBody::SetUseGravity)
         // [Property] const Vector3& gravityOverride
         .addProperty("gravityOverride", &RigidBody::GetGravityOverride, &RigidBody::SetGravityOverride)
-        // [Property(ReadOnly)] const Vector3& centerOfMass
+        // [Property(Readonly)] const Vector3& centerOfMass
         .addProperty("centerOfMass", &RigidBody::GetCenterOfMass)
         // [Property] bool kinematic
         .addProperty("kinematic", &RigidBody::IsKinematic, &RigidBody::SetKinematic)
         // [Property] bool trigger
         .addProperty("trigger", &RigidBody::IsTrigger, &RigidBody::SetTrigger)
-        // [Property(ReadOnly)] bool active
+        // [Property(Readonly)] bool active
         .addProperty("active", &RigidBody::IsActive)
         // [Property] unsigned collisionLayer
         .addProperty("collisionLayer", &RigidBody::GetCollisionLayer, &RigidBody::SetCollisionLayer)

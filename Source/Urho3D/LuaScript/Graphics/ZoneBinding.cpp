@@ -96,13 +96,13 @@ void RegisterZone(kaguya::State& lua)
         // [Method] bool IsInside(const Vector3& point) const
         .addFunction("IsInside", &Zone::IsInside)
 
-        // [Property(ReadOnly)] const Matrix3x4& inverseWorldTransform
+        // [Property(Readonly)] const Matrix3x4& inverseWorldTransform
         .addProperty("inverseWorldTransform", &Zone::GetInverseWorldTransform)
         // [Property] const Color& ambientColor
         .addProperty("ambientColor", &Zone::GetAmbientColor, &Zone::SetAmbientColor)
-        // [Property(ReadOnly)] const Color& ambientStartColor
+        // [Property(Readonly)] const Color& ambientStartColor
         .addProperty("ambientStartColor", &Zone::GetAmbientStartColor)
-        // [Property(ReadOnly)] const Color& ambientEndColor
+        // [Property(Readonly)] const Color& ambientEndColor
         .addProperty("ambientEndColor", &Zone::GetAmbientEndColor)
         // [Property] const Color& fogColor
         .addProperty("fogColor", &Zone::GetFogColor, &Zone::SetFogColor)
@@ -124,7 +124,7 @@ void RegisterZone(kaguya::State& lua)
         .addProperty("ambientGradient", &Zone::GetAmbientGradient, &Zone::SetAmbientGradient)
         // [Property] Texture* zoneTexture
         .addProperty("zoneTexture", &Zone::GetZoneTexture, &Zone::SetZoneTexture)
-        // [Property(WriteOnly)] void boundingBox
+        // [Property(Writeonly)] void boundingBox
         .addProperty("boundingBox", &Zone::SetBoundingBox)
         );
 }

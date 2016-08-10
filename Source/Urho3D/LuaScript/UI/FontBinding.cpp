@@ -53,7 +53,7 @@ void RegisterFont(kaguya::State& lua)
         // [Method] IntVector2 GetTotalGlyphOffset(int pointSize) const
         .addFunction("GetTotalGlyphOffset", &Font::GetTotalGlyphOffset)
 
-        // [Property(ReadOnly)] bool sdfFont
+        // [Property(Readonly)] bool sdfFont
         .addProperty("sdfFont", &Font::IsSDFFont)
         // [Property] const IntVector2& absoluteGlyphOffset
         .addProperty("absoluteGlyphOffset", &Font::GetAbsoluteGlyphOffset, &Font::SetAbsoluteGlyphOffset)

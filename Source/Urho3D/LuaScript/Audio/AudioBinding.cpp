@@ -90,17 +90,17 @@ void RegisterAudio(kaguya::State& lua)
         // [Method] void RemoveSoundSource(SoundSource* soundSource)
         .addFunction("RemoveSoundSource", &Audio::RemoveSoundSource)        
         
-        // [Property(ReadOnly)] unsigned sampleSize
+        // [Property(Readonly)] unsigned sampleSize
         .addProperty("sampleSize", &Audio::GetSampleSize)
-        // [Property(ReadOnly)] int mixRate
+        // [Property(Readonly)] int mixRate
         .addProperty("mixRate", &Audio::GetMixRate)
-        // [Property(ReadOnly)] bool interpolation
+        // [Property(Readonly)] bool interpolation
         .addProperty("interpolation", &Audio::GetInterpolation)
-        // [Property(ReadOnly)] bool stereo
+        // [Property(Readonly)] bool stereo
         .addProperty("stereo", &Audio::IsStereo)
-        // [Property(ReadOnly)] bool playing
+        // [Property(Readonly)] bool playing
         .addProperty("playing", &Audio::IsPlaying)
-        // [Property(ReadOnly)] bool initialized
+        // [Property(Readonly)] bool initialized
         .addProperty("initialized", &Audio::IsInitialized)
         // [Property] SoundListener* listener
         .addProperty("listener", &Audio::GetListener, &Audio::SetListener)        

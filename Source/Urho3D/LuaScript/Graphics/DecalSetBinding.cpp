@@ -92,11 +92,11 @@ void RegisterDecalSet(kaguya::State& lua)
 
         // [Property] Material* material
         .addProperty("material", &DecalSet::GetMaterial, &DecalSet::SetMaterial)
-        // [Property(WriteOnly)] unsigned numDecals
+        // [Property(Writeonly)] unsigned numDecals
         .addProperty("numDecals", &DecalSet::GetNumDecals)
-        // [Property(WriteOnly)] unsigned numVertices
+        // [Property(Writeonly)] unsigned numVertices
         .addProperty("numVertices", &DecalSet::GetNumVertices)
-        // [Property(WriteOnly)] unsigned numIndices
+        // [Property(Writeonly)] unsigned numIndices
         .addProperty("numIndices", &DecalSet::GetNumIndices)
         // [Property] unsigned maxVertices
         .addProperty("maxVertices", &DecalSet::GetMaxVertices, &DecalSet::SetMaxVertices)

@@ -55,13 +55,13 @@ void RegisterTimer(kaguya::State& lua)
         // [StaticMethod] void Sleep(unsigned mSec)
         .addStaticFunction("Sleep", &Time::Sleep)
 
-        // [Property(ReadOnly)] unsigned frameNumber
+        // [Property(Readonly)] unsigned frameNumber
         .addProperty("frameNumber", &Time::GetFrameNumber)
-        // [Property(ReadOnly)] float timeStep
+        // [Property(Readonly)] float timeStep
         .addProperty("timeStep", &Time::GetTimeStep)
-        // [Property(ReadOnly)] unsigned timerPeriod
+        // [Property(Readonly)] unsigned timerPeriod
         .addProperty("timerPeriod", &Time::GetTimerPeriod)
-        // [Property(ReadOnly)] float elapsedTime
+        // [Property(Readonly)] float elapsedTime
         .addProperty("elapsedTime", &Time::GetElapsedTime)
     );
 }

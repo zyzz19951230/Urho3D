@@ -59,7 +59,7 @@ void RegisterTexture2DArray(kaguya::State& lua)
 
         // [Property] unsigned layers
         .addProperty("layers", &Texture2DArray::GetLayers, &Texture2DArray::SetLayers)
-        // [Property(ReadOnly)] RenderSurface* renderSurface
+        // [Property(Readonly)] RenderSurface* renderSurface
         .addProperty("renderSurface", &Texture2DArray::GetRenderSurface)
     );
 }

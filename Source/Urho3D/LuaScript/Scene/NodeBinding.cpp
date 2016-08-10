@@ -565,11 +565,11 @@ void RegisterNode(kaguya::State& lua)
         // [Method] const VariantMap& GetVars() const
         .addFunction("GetVars", &Node::GetVars)
 
-        // [Property(ReadOnly)] unsigned id
+        // [Property(Readonly)] unsigned id
         .addProperty("id", &Node::GetID)
         // [Property] const String& name
         .addProperty("name", &Node::GetName, &Node::SetName)
-        // [Property(ReadOnly)] StringHash nameHash
+        // [Property(Readonly)] StringHash nameHash
         .addProperty("nameHash", &Node::GetNameHash)
         // [Property] const StringVector& tags
         .addProperty("tags", &Node::GetTags, &Node::SetTags)
@@ -577,11 +577,11 @@ void RegisterNode(kaguya::State& lua)
         // [Property] Node* parent
         .addProperty("parent", &Node::GetParent, &Node::SetParent)
 
-        // [Property(ReadOnly)] Scene* scene
+        // [Property(Readonly)] Scene* scene
         .addProperty("scene", &Node::GetScene)
         // [Property] bool enabled
         .addProperty("enabled", &Node::IsEnabled, static_cast<void(Node::*)(bool)>(&Node::SetEnabled))
-        // [Property(ReadOnly)] bool enabledSelf
+        // [Property(Readonly)] bool enabledSelf
         .addProperty("enabledSelf", &Node::IsEnabledSelf)
 
         // .addProperty("owner", &Node::GetOwner, &Node::SetOwner)
@@ -595,15 +595,15 @@ void RegisterNode(kaguya::State& lua)
         .addProperty("rotation2D", &Node::GetRotation2D, &Node::SetRotation2D)
         // [Property] Vector3 direction
         .addProperty("direction", &Node::GetDirection, &Node::SetDirection)
-        // [Property(ReadOnly)] Vector3 up
+        // [Property(Readonly)] Vector3 up
         .addProperty("up", &Node::GetUp)
-        // [Property(ReadOnly)] Vector3 right
+        // [Property(Readonly)] Vector3 right
         .addProperty("right", &Node::GetRight)
         // [Property] const Vector3& scale
         .addProperty("scale", &Node::GetScale, static_cast<void(Node::*)(const Vector3&)>(&Node::SetScale))
         // [Property] Vector2 scale2D
         .addProperty("scale2D", &Node::GetScale2D, static_cast<void(Node::*)(const Vector2&)>(&Node::SetScale2D))
-        // [Property(ReadOnly)] Matrix3x4 transform
+        // [Property(Readonly)] Matrix3x4 transform
         .addProperty("transform", &Node::GetTransform)
         // [Property] Vector3 worldPosition
         .addProperty("worldPosition", &Node::GetWorldPosition, &Node::SetWorldPosition)
@@ -615,21 +615,21 @@ void RegisterNode(kaguya::State& lua)
         .addProperty("worldRotation2D", &Node::GetWorldRotation2D, &Node::SetWorldRotation2D)
         // [Property] Vector3 worldDirection
         .addProperty("worldDirection", &Node::GetWorldDirection, &Node::SetWorldDirection)
-        // [Property(ReadOnly)] Vector3 worldUp
+        // [Property(Readonly)] Vector3 worldUp
         .addProperty("worldUp", &Node::GetWorldUp)
-        // [Property(ReadOnly)] Vector3 worldRight
+        // [Property(Readonly)] Vector3 worldRight
         .addProperty("worldRight", &Node::GetWorldRight)
-        // [Property(ReadOnly)] Vector3 worldScale
+        // [Property(Readonly)] Vector3 worldScale
         .addProperty("worldScale", &Node::GetWorldScale)
-        // [Property(ReadOnly)] Vector2 worldScale2D
+        // [Property(Readonly)] Vector2 worldScale2D
         .addProperty("worldScale2D", &Node::GetWorldScale2D)
-        // [Property(ReadOnly)] const Matrix3x4& worldTransform
+        // [Property(Readonly)] const Matrix3x4& worldTransform
         .addProperty("worldTransform", &Node::GetWorldTransform)
-        // [Property(ReadOnly)] bool dirty
+        // [Property(Readonly)] bool dirty
         .addProperty("dirty", &Node::IsDirty)
-        // [Property(ReadOnly)] unsigned numComponents
+        // [Property(Readonly)] unsigned numComponents
         .addProperty("numComponents", &Node::GetNumComponents)
-        // [Property(ReadOnly)] unsigned numNetworkComponents
+        // [Property(Readonly)] unsigned numNetworkComponents
         .addProperty("numNetworkComponents", &Node::GetNumNetworkComponents)
         );
 }

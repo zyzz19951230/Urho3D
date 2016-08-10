@@ -96,13 +96,13 @@ void RegisterFile(kaguya::State& lua)
         // [Method] bool IsPackaged() const
         .addFunction("IsPackaged", &File::IsPackaged)
 
-        // [Property(ReadOnly)] FileMode mode
+        // [Property(Readonly)] FileMode mode
         .addProperty("mode", &File::GetMode)
-        // [Property(ReadOnly)] bool open
+        // [Property(Readonly)] bool open
         .addProperty("open", &File::IsOpen)
-        // [Property(ReadOnly)] void* handle
+        // [Property(Readonly)] void* handle
         .addProperty("handle", &File::GetHandle)
-        // [Property(ReadOnly)] bool packaged
+        // [Property(Readonly)] bool packaged
         .addProperty("packaged", &File::IsPackaged)
         );
 }

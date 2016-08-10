@@ -140,49 +140,49 @@ void RegisterConnection(kaguya::State& lua)
         // [Method] void SendPackageToClient(PackageFile* package)
         .addFunction("SendPackageToClient", &Connection::SendPackageToClient)
         
-        // [Property(ReadOnly)] VariantMap& identity
+        // [Property(Readonly)] VariantMap& identity
         .addProperty("identity", &Connection::GetIdentity)
         // [Property] Scene* scene
         .addProperty("scene", &Connection::GetScene, &Connection::SetScene)
         // [Property] const Controls& controls
         .addProperty("controls", &Connection::GetControls, &Connection::SetControls)
-        // [Property(ReadOnly)] unsigned char timeStamp
+        // [Property(Readonly)] unsigned char timeStamp
         .addProperty("timeStamp", &Connection::GetTimeStamp)
         // [Property] const Vector3& position
         .addProperty("position", &Connection::GetPosition, &Connection::SetPosition)
         // [Property] const Quaternion& rotation
         .addProperty("rotation", &Connection::GetRotation, &Connection::SetRotation)
-        // [Property(ReadOnly)] bool client
+        // [Property(Readonly)] bool client
         .addProperty("client", &Connection::IsClient)
-        // [Property(ReadOnly)] bool connected
+        // [Property(Readonly)] bool connected
         .addProperty("connected", &Connection::IsConnected)
         // [Property] bool connectPending
         .addProperty("connectPending", &Connection::IsConnectPending, &Connection::SetConnectPending)
-        // [Property(ReadOnly)] bool sceneLoaded
+        // [Property(Readonly)] bool sceneLoaded
         .addProperty("sceneLoaded", &Connection::IsSceneLoaded)
         // [Property] bool logStatistics
         .addProperty("logStatistics", &Connection::GetLogStatistics, &Connection::SetLogStatistics)
-        // [Property(ReadOnly)] String address
+        // [Property(Readonly)] String address
         .addProperty("address", &Connection::GetAddress)
-        // [Property(ReadOnly)] unsigned short port
+        // [Property(Readonly)] unsigned short port
         .addProperty("port", &Connection::GetPort)
-        // [Property(ReadOnly)] float roundTripTime
+        // [Property(Readonly)] float roundTripTime
         .addProperty("roundTripTime", &Connection::GetRoundTripTime)
-        // [Property(ReadOnly)] float lastHeardTime
+        // [Property(Readonly)] float lastHeardTime
         .addProperty("lastHeardTime", &Connection::GetLastHeardTime)
-        // [Property(ReadOnly)] float bytesInPerSec
+        // [Property(Readonly)] float bytesInPerSec
         .addProperty("bytesInPerSec", &Connection::GetBytesInPerSec)
-        // [Property(ReadOnly)] float bytesOutPerSec
+        // [Property(Readonly)] float bytesOutPerSec
         .addProperty("bytesOutPerSec", &Connection::GetBytesOutPerSec)
-        // [Property(ReadOnly)] float packetsInPerSec
+        // [Property(Readonly)] float packetsInPerSec
         .addProperty("packetsInPerSec", &Connection::GetPacketsInPerSec)
-        // [Property(ReadOnly)] float packetsOutPerSec
+        // [Property(Readonly)] float packetsOutPerSec
         .addProperty("packetsOutPerSec", &Connection::GetPacketsOutPerSec)
-        // [Property(ReadOnly)] unsigned numDownloads
+        // [Property(Readonly)] unsigned numDownloads
         .addProperty("numDownloads", &Connection::GetNumDownloads)
-        // [Property(ReadOnly)] const String& downloadName
+        // [Property(Readonly)] const String& downloadName
         .addProperty("downloadName", &Connection::GetDownloadName)
-        // [Property(ReadOnly)] float downloadProgress
+        // [Property(Readonly)] float downloadProgress
         .addProperty("downloadProgress", &Connection::GetDownloadProgress)
         );
 }

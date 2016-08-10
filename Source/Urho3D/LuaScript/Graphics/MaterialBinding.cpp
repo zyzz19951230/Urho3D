@@ -144,9 +144,9 @@ void RegisterMaterial(kaguya::State& lua)
         .addProperty("depthBias", &Material::GetDepthBias, &Material::SetDepthBias)
         // [Property] unsigned char renderOrder
         .addProperty("renderOrder", &Material::GetRenderOrder, &Material::SetRenderOrder)
-        // [Property(ReadOnly)] bool occlusion
+        // [Property(Readonly)] bool occlusion
         .addProperty("occlusion", &Material::GetOcclusion)
-        // [Property(ReadOnly)] bool specular
+        // [Property(Readonly)] bool specular
         .addProperty("specular", &Material::GetSpecular)
         // [Property] Scene* scene
         .addProperty("scene", &Material::GetScene, &Material::SetScene)

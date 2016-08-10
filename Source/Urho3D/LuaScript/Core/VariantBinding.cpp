@@ -247,13 +247,13 @@ void RegisterVariant(kaguya::State& lua)
         // [Method] bool IsEmpty() const
         .addFunction("IsEmpty", &Variant::IsEmpty)
 
-        // [Property(ReadOnly)] VariantType type
+        // [Property(Readonly)] VariantType type
         .addProperty("type", &Variant::GetType)
-        // [Property(ReadOnly)] String typeName
+        // [Property(Readonly)] String typeName
         .addProperty("typeName", static_cast<String(Variant::*)() const>(&Variant::GetTypeName))
-        // [Property(ReadOnly)] bool zero
+        // [Property(Readonly)] bool zero
         .addProperty("zero", &Variant::IsZero)
-        // [Property(ReadOnly)] bool empty
+        // [Property(Readonly)] bool empty
         .addProperty("empty", &Variant::IsEmpty)
     );
 }

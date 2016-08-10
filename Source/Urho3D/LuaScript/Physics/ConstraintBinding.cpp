@@ -111,11 +111,11 @@ void RegisterConstraint(kaguya::State& lua)
         // [Method] bool GetDisableCollision() const
         .addFunction("GetDisableCollision", &Constraint::GetDisableCollision)
         
-        // [Property(ReadOnly)] PhysicsWorld* physicsWorld
+        // [Property(Readonly)] PhysicsWorld* physicsWorld
         .addProperty("physicsWorld", &Constraint::GetPhysicsWorld)
         // [Property] ConstraintType constraintType
         .addProperty("constraintType", &Constraint::GetConstraintType, &Constraint::SetConstraintType)
-        // [Property(ReadOnly)] RigidBody* ownBody
+        // [Property(Readonly)] RigidBody* ownBody
         .addProperty("ownBody", &Constraint::GetOwnBody)
         // [Property] RigidBody* otherBody
         .addProperty("otherBody", &Constraint::GetOtherBody, &Constraint::SetOtherBody)
@@ -124,7 +124,7 @@ void RegisterConstraint(kaguya::State& lua)
         // [Property] const Quaternion& rotation
         .addProperty("rotation", &Constraint::GetRotation, &Constraint::SetRotation)
 
-        // [Property(WriteOnly)] const Vector3& axis
+        // [Property(Writeonly)] const Vector3& axis
         .addProperty("axis", &Constraint::SetAxis)
 
         // [Property] const Vector3& otherPosition
@@ -133,7 +133,7 @@ void RegisterConstraint(kaguya::State& lua)
         .addProperty("otherRotation", &Constraint::GetOtherRotation, &Constraint::SetOtherRotation)
 
         // Write only property
-        // [Property(WriteOnly)] const Vector3& otherAxis
+        // [Property(Writeonly)] const Vector3& otherAxis
         .addProperty("otherAxis", &Constraint::SetOtherAxis)
 
         // [Property] Vector3 worldPosition

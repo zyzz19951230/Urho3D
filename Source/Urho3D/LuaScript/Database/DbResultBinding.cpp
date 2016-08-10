@@ -46,11 +46,11 @@ void RegisterDbResult(kaguya::State& lua)
         // [Method] long GetNumAffectedRows() const
         .addFunction("GetNumAffectedRows", &DbResult::GetNumAffectedRows)
 
-        // [Property(ReadOnly)] unsigned numColumns
+        // [Property(Readonly)] unsigned numColumns
         .addProperty("numColumns", &DbResult::GetNumColumns)
-        // [Property(ReadOnly)] unsigned numRows
+        // [Property(Readonly)] unsigned numRows
         .addProperty("numRows", &DbResult::GetNumRows)
-        // [Property(ReadOnly)] long numAffectedRows
+        // [Property(Readonly)] long numAffectedRows
         .addProperty("numAffectedRows", &DbResult::GetNumAffectedRows)
     );
 }

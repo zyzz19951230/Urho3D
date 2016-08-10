@@ -89,11 +89,11 @@ void RegisterCollisionShape2D(kaguya::State& lua)
         .addProperty("friction", &CollisionShape2D::GetFriction, &CollisionShape2D::SetFriction)
         // [Property] float restitution
         .addProperty("restitution", &CollisionShape2D::GetRestitution, &CollisionShape2D::SetRestitution)
-        // [Property(ReadOnly)] float mass
+        // [Property(Readonly)] float mass
         .addProperty("mass", &CollisionShape2D::GetMass)
-        // [Property(ReadOnly)] float inertia
+        // [Property(Readonly)] float inertia
         .addProperty("inertia", &CollisionShape2D::GetInertia)
-        // [Property(ReadOnly)] Vector2 massCenter
+        // [Property(Readonly)] Vector2 massCenter
         .addProperty("massCenter", &CollisionShape2D::GetMassCenter)
     );
 }

@@ -87,13 +87,13 @@ void RegisterScrollBar(kaguya::State& lua)
         .addProperty("scrollStep", &ScrollBar::GetScrollStep, &ScrollBar::SetScrollStep)
         // [Property] float stepFactor
         .addProperty("stepFactor", &ScrollBar::GetStepFactor, &ScrollBar::SetStepFactor)
-        // [Property(ReadOnly)] float effectiveScrollStep
+        // [Property(Readonly)] float effectiveScrollStep
         .addProperty("effectiveScrollStep", &ScrollBar::GetEffectiveScrollStep)
-        // [Property(ReadOnly)] Button* backButton
+        // [Property(Readonly)] Button* backButton
         .addProperty("backButton", &ScrollBar::GetBackButton)
-        // [Property(ReadOnly)] Button* forwardButton
+        // [Property(Readonly)] Button* forwardButton
         .addProperty("forwardButton", &ScrollBar::GetForwardButton)
-        // [Property(ReadOnly)] Slider* slider
+        // [Property(Readonly)] Slider* slider
         .addProperty("slider", &ScrollBar::GetSlider)
         );
 }

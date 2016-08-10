@@ -98,17 +98,17 @@ void RegisterTexture(kaguya::State& lua)
         // [Method] unsigned GetComponents() const
         .addFunction("GetComponents", &Texture::GetComponents)
 
-        // [Property(ReadOnly)] unsigned format
+        // [Property(Readonly)] unsigned format
         .addProperty("format", &Texture::GetFormat)
-        // [Property(ReadOnly)] bool compressed
+        // [Property(Readonly)] bool compressed
         .addProperty("compressed", &Texture::IsCompressed)
-        // [Property(ReadOnly)] unsigned levels
+        // [Property(Readonly)] unsigned levels
         .addProperty("levels", &Texture::GetLevels)
-        // [Property(ReadOnly)] int width
+        // [Property(Readonly)] int width
         .addProperty("width", &Texture::GetWidth)
-        // [Property(ReadOnly)] int height
+        // [Property(Readonly)] int height
         .addProperty("height", &Texture::GetHeight)
-        // [Property(ReadOnly)] int depth
+        // [Property(Readonly)] int depth
         .addProperty("depth", &Texture::GetDepth)
         // [Property] TextureFilterMode filterMode
         .addProperty("filterMode", &Texture::GetFilterMode, &Texture::SetFilterMode)
@@ -118,9 +118,9 @@ void RegisterTexture(kaguya::State& lua)
         .addProperty("sRGB", &Texture::GetSRGB, &Texture::SetSRGB)
         // [Property] Texture* backupTexture
         .addProperty("backupTexture", &Texture::GetBackupTexture, &Texture::SetBackupTexture)
-        // [Property(ReadOnly)] TextureUsage usage
+        // [Property(Readonly)] TextureUsage usage
         .addProperty("usage", &Texture::GetUsage)
-        // [Property(ReadOnly)] unsigned components
+        // [Property(Readonly)] unsigned components
         .addProperty("components", &Texture::GetComponents)
     );
 }

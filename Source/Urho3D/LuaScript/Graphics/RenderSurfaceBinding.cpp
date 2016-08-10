@@ -74,13 +74,13 @@ void RegisterRenderSurface(kaguya::State& lua)
         // [Method] RenderSurface* GetLinkedDepthStencil() const
         .addFunction("GetLinkedDepthStencil", &RenderSurface::GetLinkedDepthStencil)
         
-        // [Property(ReadOnly)] Texture* parentTexture
+        // [Property(Readonly)] Texture* parentTexture
         .addProperty("parentTexture", &RenderSurface::GetParentTexture)
-        // [Property(ReadOnly)] int width
+        // [Property(Readonly)] int width
         .addProperty("width", &RenderSurface::GetWidth)
-        // [Property(ReadOnly)] int height
+        // [Property(Readonly)] int height
         .addProperty("height", &RenderSurface::GetHeight)
-        // [Property(ReadOnly)] TextureUsage usage
+        // [Property(Readonly)] TextureUsage usage
         .addProperty("usage", &RenderSurface::GetUsage)
         // [Property] unsigned numViewports
         .addProperty("numViewports", &RenderSurface::GetNumViewports, &RenderSurface::SetNumViewports)

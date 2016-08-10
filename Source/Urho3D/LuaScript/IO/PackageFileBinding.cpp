@@ -94,19 +94,19 @@ void RegisterPackageFile(kaguya::State& lua)
         // [Method] bool IsCompressed() const
         .addFunction("IsCompressed", &PackageFile::IsCompressed)
 
-        // [Property(ReadOnly)] const String& name
+        // [Property(Readonly)] const String& name
         .addProperty("name", &PackageFile::GetName)
-        // [Property(ReadOnly)] StringHash nameHash
+        // [Property(Readonly)] StringHash nameHash
         .addProperty("nameHash", &PackageFile::GetNameHash)
-        // [Property(ReadOnly)] unsigned numFiles
+        // [Property(Readonly)] unsigned numFiles
         .addProperty("numFiles", &PackageFile::GetNumFiles)
-        // [Property(ReadOnly)] unsigned totalSize
+        // [Property(Readonly)] unsigned totalSize
         .addProperty("totalSize", &PackageFile::GetTotalSize)
-        // [Property(ReadOnly)] unsigned totalDataSize
+        // [Property(Readonly)] unsigned totalDataSize
         .addProperty("totalDataSize", &PackageFile::GetTotalDataSize)
-        // [Property(ReadOnly)] unsigned checksum
+        // [Property(Readonly)] unsigned checksum
         .addProperty("checksum", &PackageFile::GetChecksum)
-        // [Property(ReadOnly)] bool compressed
+        // [Property(Readonly)] bool compressed
         .addProperty("compressed", &PackageFile::IsCompressed)
         );
 }

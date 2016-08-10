@@ -94,11 +94,11 @@ void RegisterModel(kaguya::State& lua)
 
         // [Property] const BoundingBox& boundingBox
         .addProperty("boundingBox", &Model::GetBoundingBox, &Model::SetBoundingBox)
-        // [Property(ReadOnly)] Skeleton& skeleton
+        // [Property(Readonly)] Skeleton& skeleton
         .addProperty("skeleton", &Model::GetSkeleton)
         // [Property] unsigned numGeometries
         .addProperty("numGeometries", &Model::GetNumGeometries, &Model::SetNumGeometries)
-        // [Property(ReadOnly)] unsigned numMorphs
+        // [Property(Readonly)] unsigned numMorphs
         .addProperty("numMorphs", &Model::GetNumMorphs)
         );
 }

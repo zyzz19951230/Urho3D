@@ -106,15 +106,15 @@ void RegisterAnimationState(kaguya::State& lua)
         // [Method] void Apply()
         .addFunction("Apply", &AnimationState::Apply)
 
-        // [Property(ReadOnly)] Animation* animation
+        // [Property(Readonly)] Animation* animation
         .addProperty("animation", &AnimationState::GetAnimation)
-        // [Property(ReadOnly)] AnimatedModel* model
+        // [Property(Readonly)] AnimatedModel* model
         .addProperty("model", &AnimationState::GetModel)
-        // [Property(ReadOnly)] Node* node
+        // [Property(Readonly)] Node* node
         .addProperty("node", &AnimationState::GetNode)
         // [Property] Bone* startBone
         .addProperty("startBone", &AnimationState::GetStartBone, &AnimationState::SetStartBone)
-        // [Property(ReadOnly)] bool enabled
+        // [Property(Readonly)] bool enabled
         .addProperty("enabled", &AnimationState::IsEnabled)
         // [Property] bool looped
         .addProperty("looped", &AnimationState::IsLooped, &AnimationState::SetLooped)
@@ -124,7 +124,7 @@ void RegisterAnimationState(kaguya::State& lua)
         .addProperty("blendMode", &AnimationState::GetBlendMode, &AnimationState::SetBlendMode)
         // [Property] float time
         .addProperty("time", &AnimationState::GetTime, &AnimationState::SetTime)
-        // [Property(ReadOnly)] float length
+        // [Property(Readonly)] float length
         .addProperty("length", &AnimationState::GetLength)
         // [Property] unsigned char layer
         .addProperty("layer", &AnimationState::GetLayer, &AnimationState::SetLayer)

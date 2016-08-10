@@ -220,13 +220,13 @@ void RegisterNavigationMesh(kaguya::State& lua)
         .addProperty("detailSampleMaxError", &NavigationMesh::GetDetailSampleMaxError, &NavigationMesh::SetDetailSampleMaxError)
         // [Property] const Vector3& padding
         .addProperty("padding", &NavigationMesh::GetPadding, &NavigationMesh::SetPadding)
-        // [Property(ReadOnly)] bool initialized
+        // [Property(Readonly)] bool initialized
         .addProperty("initialized", &NavigationMesh::IsInitialized)
-        // [Property(ReadOnly)] const BoundingBox& boundingBox
+        // [Property(Readonly)] const BoundingBox& boundingBox
         .addProperty("boundingBox", &NavigationMesh::GetBoundingBox)
-        // [Property(ReadOnly)] BoundingBox worldBoundingBox
+        // [Property(Readonly)] BoundingBox worldBoundingBox
         .addProperty("worldBoundingBox", &NavigationMesh::GetWorldBoundingBox)
-        // [Property(ReadOnly)] IntVector2 numTiles
+        // [Property(Readonly)] IntVector2 numTiles
         .addProperty("numTiles", &NavigationMesh::GetNumTiles)
         // [Property] NavmeshPartitionType partitionType
         .addProperty("partitionType", &NavigationMesh::GetPartitionType, &NavigationMesh::SetPartitionType)

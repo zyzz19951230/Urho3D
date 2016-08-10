@@ -101,11 +101,11 @@ void RegisterDebugHud(kaguya::State& lua)
 
         // [Property] XMLFile* defaultStyle
         .addProperty("defaultStyle", &DebugHud::GetDefaultStyle, &DebugHud::SetDefaultStyle)
-        // [Property(ReadOnly)] Text* statsText
+        // [Property(Readonly)] Text* statsText
         .addProperty("statsText", &DebugHud::GetStatsText)
-        // [Property(ReadOnly)] Text* modeText
+        // [Property(Readonly)] Text* modeText
         .addProperty("modeText", &DebugHud::GetModeText)
-        // [Property(ReadOnly)] Text* profilerText
+        // [Property(Readonly)] Text* profilerText
         .addProperty("profilerText", &DebugHud::GetProfilerText)
         // [Property] unsigned mode
         .addProperty("mode", &DebugHud::GetMode, &DebugHud::SetMode)

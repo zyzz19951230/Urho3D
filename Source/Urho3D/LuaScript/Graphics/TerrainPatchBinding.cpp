@@ -81,27 +81,27 @@ void RegisterTerrainPatch(kaguya::State& lua)
         // [Method] unsigned GetLodLevel() const
         .addFunction("GetLodLevel", &TerrainPatch::GetLodLevel)
 
-        // [Property(ReadOnly)] Geometry* geometry
+        // [Property(Readonly)] Geometry* geometry
         .addProperty("geometry", &TerrainPatch::GetGeometry)
-        // [Property(ReadOnly)] Geometry* maxLodGeometry
+        // [Property(Readonly)] Geometry* maxLodGeometry
         .addProperty("maxLodGeometry", &TerrainPatch::GetMaxLodGeometry)
-        // [Property(ReadOnly)] Geometry* occlusionGeometry
+        // [Property(Readonly)] Geometry* occlusionGeometry
         .addProperty("occlusionGeometry", &TerrainPatch::GetOcclusionGeometry)
         // [Property] Terrain* owner
         .addProperty("owner", &TerrainPatch::GetOwner, &TerrainPatch::SetOwner)
-        // [Property(ReadOnly)] TerrainPatch* northPatch
+        // [Property(Readonly)] TerrainPatch* northPatch
         .addProperty("northPatch", &TerrainPatch::GetNorthPatch)
-        // [Property(ReadOnly)] TerrainPatch* southPatch
+        // [Property(Readonly)] TerrainPatch* southPatch
         .addProperty("southPatch", &TerrainPatch::GetSouthPatch)
-        // [Property(ReadOnly)] TerrainPatch* westPatch
+        // [Property(Readonly)] TerrainPatch* westPatch
         .addProperty("westPatch", &TerrainPatch::GetWestPatch)
-        // [Property(ReadOnly)] TerrainPatch* eastPatch
+        // [Property(Readonly)] TerrainPatch* eastPatch
         .addProperty("eastPatch", &TerrainPatch::GetEastPatch)
         // [Property] const IntVector2& coordinates
         .addProperty("coordinates", &TerrainPatch::GetCoordinates, &TerrainPatch::SetCoordinates)
-        // [Property(ReadOnly)] unsigned lodLevel
+        // [Property(Readonly)] unsigned lodLevel
         .addProperty("lodLevel", &TerrainPatch::GetLodLevel)
-        // [Property(WriteOnly)] void boundingBox
+        // [Property(Writeonly)] void boundingBox
         .addProperty("boundingBox", &TerrainPatch::SetBoundingBox)
         );
 }

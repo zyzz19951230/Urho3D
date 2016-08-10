@@ -126,7 +126,7 @@ void RegisterCollisionShape(kaguya::State& lua)
         // [Method] BoundingBox GetWorldBoundingBox() const
         .addFunction("GetWorldBoundingBox", &CollisionShape::GetWorldBoundingBox)
 
-        // [Property(ReadOnly)] PhysicsWorld* physicsWorld
+        // [Property(Readonly)] PhysicsWorld* physicsWorld
         .addProperty("physicsWorld", &CollisionShape::GetPhysicsWorld)
         // [Property] ShapeType shapeType
         .addProperty("shapeType", &CollisionShape::GetShapeType, &CollisionShape::SetShapeType)
@@ -142,9 +142,9 @@ void RegisterCollisionShape(kaguya::State& lua)
         .addProperty("model", &CollisionShape::GetModel, &CollisionShape::SetModel)
         // [Property] unsigned lodLevel
         .addProperty("lodLevel", &CollisionShape::GetLodLevel, &CollisionShape::SetLodLevel)
-        // [Property(ReadOnly)] BoundingBox worldBoundingBox
+        // [Property(Readonly)] BoundingBox worldBoundingBox
         .addProperty("worldBoundingBox", &CollisionShape::GetWorldBoundingBox)
-        // [Property(WriteOnly)] unsigned terrain
+        // [Property(Writeonly)] unsigned terrain
         .addProperty("terrain", &CollisionShape::SetTerrain)
         );
 }

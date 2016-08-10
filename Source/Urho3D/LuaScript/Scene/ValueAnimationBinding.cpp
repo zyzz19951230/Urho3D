@@ -75,7 +75,7 @@ void RegisterValueAnimation(kaguya::State& lua)
         // [Method] bool HasEventFrames() const
         .addFunction("HasEventFrames", &ValueAnimation::HasEventFrames)
 
-        // [Property(ReadOnly)] bool valid
+        // [Property(Readonly)] bool valid
         .addProperty("valid", &ValueAnimation::IsValid)
         // [Property] InterpMethod interpolationMethod
         .addProperty("interpolationMethod", &ValueAnimation::GetInterpolationMethod, &ValueAnimation::SetInterpolationMethod)

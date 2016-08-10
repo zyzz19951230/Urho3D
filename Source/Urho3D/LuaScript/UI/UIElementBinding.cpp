@@ -522,7 +522,7 @@ void RegisterUIElement(kaguya::State& lua)
         // [Method] int GetIndentWidth() const
         .addFunction("GetIndentWidth", &UIElement::GetIndentWidth)
 
-        // [Property(ReadOnly)] const IntVector2& screenPosition
+        // [Property(Readonly)] const IntVector2& screenPosition
         .addProperty("screenPosition", &UIElement::GetScreenPosition)
         // [Property] const String& name
         .addProperty("name", &UIElement::GetName, &UIElement::SetName)
@@ -568,7 +568,7 @@ void RegisterUIElement(kaguya::State& lua)
 
         // [Property] float opacity
         .addProperty("opacity", &UIElement::GetOpacity, &UIElement::SetOpacity)
-        // [Property(ReadOnly)] float derivedOpacity
+        // [Property(Readonly)] float derivedOpacity
         .addProperty("derivedOpacity", &UIElement::GetDerivedOpacity)
         // [Property] bool bringToFront
         .addProperty("bringToFront", &UIElement::GetBringToFront, &UIElement::SetBringToFront)
@@ -582,7 +582,7 @@ void RegisterUIElement(kaguya::State& lua)
         .addProperty("useDerivedOpacity", &UIElement::GetUseDerivedOpacity, &UIElement::SetUseDerivedOpacity)
         // [Property] bool enabled
         .addProperty("enabled", &UIElement::IsEnabled, &UIElement::SetEnabled)
-        // [Property(ReadOnly)] bool enabledSelf
+        // [Property(Readonly)] bool enabledSelf
         .addProperty("enabledSelf", &UIElement::IsEnabledSelf)
         // [Property] bool editable
         .addProperty("editable", &UIElement::IsEditable, &UIElement::SetEditable)
@@ -590,7 +590,7 @@ void RegisterUIElement(kaguya::State& lua)
         .addProperty("selected", &UIElement::IsSelected, &UIElement::SetSelected)
         // [Property] bool visible
         .addProperty("visible", &UIElement::IsVisible, &UIElement::SetVisible)
-        // [Property(ReadOnly)] bool visibleEffective
+        // [Property(Readonly)] bool visibleEffective
         .addProperty("visibleEffective", &UIElement::IsVisibleEffective)
         // [Property] bool hovering
         .addProperty("hovering", &UIElement::IsHovering, &UIElement::SetHovering)
@@ -600,7 +600,7 @@ void RegisterUIElement(kaguya::State& lua)
         .addProperty("focusMode", &UIElement::GetFocusMode, &UIElement::SetFocusMode)
         // [Property] unsigned dragDropMode
         .addProperty("dragDropMode", &UIElement::GetDragDropMode, &UIElement::SetDragDropMode)
-        // [Property(ReadOnly)] const String& appliedStyle
+        // [Property(Readonly)] const String& appliedStyle
         .addProperty("appliedStyle", &UIElement::GetAppliedStyle)
 
         // [Property] XMLFile* defaultStyle
@@ -614,25 +614,25 @@ void RegisterUIElement(kaguya::State& lua)
         .addProperty("layoutBorder", &UIElement::GetLayoutBorder, &UIElement::SetLayoutBorder)
         // [Property] const Vector2& layoutFlexScale
         .addProperty("layoutFlexScale", &UIElement::GetLayoutFlexScale, &UIElement::SetLayoutFlexScale)
-        // [Property(ReadOnly)] UIElement* parent
+        // [Property(Readonly)] UIElement* parent
         .addProperty("parent", &UIElement::GetParent)
-        // [Property(ReadOnly)] UIElement* root
+        // [Property(Readonly)] UIElement* root
         .addProperty("root", &UIElement::GetRoot)
-        // [Property(ReadOnly)] const Color& derivedColor
+        // [Property(Readonly)] const Color& derivedColor
         .addProperty("derivedColor", &UIElement::GetDerivedColor)
-        // [Property(ReadOnly)] int dragButtonCombo
+        // [Property(Readonly)] int dragButtonCombo
         .addProperty("dragButtonCombo", &UIElement::GetDragButtonCombo)
-        // [Property(ReadOnly)] unsigned dragButtonCount
+        // [Property(Readonly)] unsigned dragButtonCount
         .addProperty("dragButtonCount", &UIElement::GetDragButtonCount)
-        // [Property(ReadOnly)] IntRect combinedScreenRect
+        // [Property(Readonly)] IntRect combinedScreenRect
         .addProperty("combinedScreenRect", &UIElement::GetCombinedScreenRect)
-        // [Property(ReadOnly)] int layoutElementMaxSize
+        // [Property(Readonly)] int layoutElementMaxSize
         .addProperty("layoutElementMaxSize", &UIElement::GetLayoutElementMaxSize)
         // [Property] int indent
         .addProperty("indent", &UIElement::GetIndent, &UIElement::SetIndent)
         // [Property] int indentSpacing
         .addProperty("indentSpacing", &UIElement::GetIndentSpacing, &UIElement::SetIndentSpacing)
-        // [Property(ReadOnly)] int indentWidth
+        // [Property(Readonly)] int indentWidth
         .addProperty("indentWidth", &UIElement::GetIndentWidth)
         );
 }

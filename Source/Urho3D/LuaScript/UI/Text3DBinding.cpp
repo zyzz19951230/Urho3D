@@ -160,7 +160,7 @@ void RegisterText3D(kaguya::State& lua)
         // [Method] FaceCameraMode GetFaceCameraMode() const
         .addFunction("GetFaceCameraMode", &Text3D::GetFaceCameraMode)
 
-        // [Property(ReadOnly)] Font* font
+        // [Property(Readonly)] Font* font
         .addProperty("font", &Text3D::GetFont)
         // [Property] int fontSize
         .addProperty("fontSize", &Text3D::GetFontSize, &Text3D::SetFontSize)
@@ -192,11 +192,11 @@ void RegisterText3D(kaguya::State& lua)
         .addProperty("effectDepthBias", &Text3D::GetEffectDepthBias, &Text3D::SetEffectDepthBias)
         // [Property] int width
         .addProperty("width", &Text3D::GetWidth, &Text3D::SetWidth)
-        // [Property(ReadOnly)] int rowHeight
+        // [Property(Readonly)] int rowHeight
         .addProperty("rowHeight", &Text3D::GetRowHeight)
-        // [Property(ReadOnly)] unsigned numRows
+        // [Property(Readonly)] unsigned numRows
         .addProperty("numRows", &Text3D::GetNumRows)
-        // [Property(ReadOnly)] unsigned numChars
+        // [Property(Readonly)] unsigned numChars
         .addProperty("numChars", &Text3D::GetNumChars)
         .addProperty("color", &Text3DGetColor, &Text3DSetColor)
         // [Property] float opacity

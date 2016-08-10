@@ -56,9 +56,9 @@ void RegisterTileMapDefs2D(kaguya::State& lua)
         // [Method] bool PositionToTileIndex(int& x, int& y, const Vector2& positon) const
         .addFunction("PositionToTileIndex", &TileMapInfo2D::PositionToTileIndex)
 
-        // [Property(ReadOnly)] float mapWidth
+        // [Property(Readonly)] float mapWidth
         .addProperty("mapWidth", &TileMapInfo2D::GetMapWidth)
-        // [Property(ReadOnly)] float mapHeight
+        // [Property(Readonly)] float mapHeight
         .addProperty("mapHeight", &TileMapInfo2D::GetMapHeight)
 
         // [Field] Orientation2D orientation
@@ -111,9 +111,9 @@ void RegisterTileMapDefs2D(kaguya::State& lua)
         // [Method] const String& GetProperty(const String& name) const
         .addFunction("GetProperty", &Tile2D::GetProperty)
 
-        // [Property(ReadOnly)] int gid
+        // [Property(Readonly)] int gid
         .addProperty("gid", &Tile2D::GetGid)
-        // [Property(ReadOnly)] Sprite2D* sprite
+        // [Property(Readonly)] Sprite2D* sprite
         .addProperty("sprite", &Tile2D::GetSprite)
     );
 
@@ -145,21 +145,21 @@ void RegisterTileMapDefs2D(kaguya::State& lua)
         // [Method] const String& GetProperty(const String& name) const
         .addFunction("GetProperty", &TileMapObject2D::GetProperty)
 
-        // [Property(ReadOnly)] TileMapObjectType2D objectType
+        // [Property(Readonly)] TileMapObjectType2D objectType
         .addProperty("objectType", &TileMapObject2D::GetObjectType)
-        // [Property(ReadOnly)] const String& name
+        // [Property(Readonly)] const String& name
         .addProperty("name", &TileMapObject2D::GetName)
-        // [Property(ReadOnly)] const String& type
+        // [Property(Readonly)] const String& type
         .addProperty("type", &TileMapObject2D::GetType)
-        // [Property(ReadOnly)] const Vector2& position
+        // [Property(Readonly)] const Vector2& position
         .addProperty("position", &TileMapObject2D::GetPosition)
-        // [Property(ReadOnly)] const Vector2& size
+        // [Property(Readonly)] const Vector2& size
         .addProperty("size", &TileMapObject2D::GetSize)
-        // [Property(ReadOnly)] unsigned numPoints
+        // [Property(Readonly)] unsigned numPoints
         .addProperty("numPoints", &TileMapObject2D::GetNumPoints)
-        // [Property(ReadOnly)] int tileGid
+        // [Property(Readonly)] int tileGid
         .addProperty("tileGid", &TileMapObject2D::GetTileGid)
-        // [Property(ReadOnly)] Sprite2D* tileSprite
+        // [Property(Readonly)] Sprite2D* tileSprite
         .addProperty("tileSprite", &TileMapObject2D::GetTileSprite)
     );
 }

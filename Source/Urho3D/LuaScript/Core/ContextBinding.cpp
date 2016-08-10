@@ -56,9 +56,9 @@ void RegisterContext(kaguya::State& lua)
         // [Method] const String& GetTypeName(StringHash objectType) const
         .addFunction("GetTypeName", &Context::GetTypeName)
 
-        // [Property(ReadOnly)] Object* eventSender
+        // [Property(Readonly)] Object* eventSender
         .addProperty("eventSender", &Context::GetEventSender)
-        // [Property(ReadOnly)] EventHandler* eventHandler
+        // [Property(Readonly)] EventHandler* eventHandler
         .addProperty("eventHandler", &Context::GetEventHandler)
     );
 

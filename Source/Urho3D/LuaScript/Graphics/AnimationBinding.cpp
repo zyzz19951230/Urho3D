@@ -82,7 +82,7 @@ void RegisterAnimation(kaguya::State& lua)
     	.addProperty("channelMask", &AnimationTrack::channelMask_)
         // [Field] Vector<AnimationKeyFrame> keyFrames
     	.addProperty("keyFrames", &AnimationTrack::keyFrames_)
-        // [Property(ReadOnly)] unsigned numKeyFrames
+        // [Property(Readonly)] unsigned numKeyFrames
     	.addProperty("numKeyFrames", &AnimationTrack::GetNumKeyFrames)
     	);
 
@@ -151,11 +151,11 @@ void RegisterAnimation(kaguya::State& lua)
         
         // [Property] const String& animationName
         .addProperty("animationName", &Animation::GetAnimationName, &Animation::SetAnimationName)
-        // [Property(ReadOnly)] StringHash animationNameHash
+        // [Property(Readonly)] StringHash animationNameHash
         .addProperty("animationNameHash", &Animation::GetAnimationNameHash)
         // [Property] float length
         .addProperty("length", &Animation::GetLength, &Animation::SetLength)
-        // [Property(ReadOnly)] unsigned numTracks
+        // [Property(Readonly)] unsigned numTracks
         .addProperty("numTracks", &Animation::GetNumTracks)
         // [Property] unsigned numTriggers
         .addProperty("numTriggers", &Animation::GetNumTriggers, &Animation::SetNumTriggers)

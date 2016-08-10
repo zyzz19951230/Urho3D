@@ -201,22 +201,22 @@ void RegisterJSONValue(kaguya::State& lua)
         // [Method] void Clear()
         .addFunction("Clear", &JSONValue::Clear)
 
-        // [Property(ReadOnly)] JSONValueType valueType
+        // [Property(Readonly)] JSONValueType valueType
         .addProperty("valueType", &JSONValue::GetValueType)
-        // [Property(ReadOnly)] JSONNumberType numberType
+        // [Property(Readonly)] JSONNumberType numberType
         .addProperty("numberType", &JSONValue::GetNumberType)
 
-        // [Property(ReadOnly)] bool isNull
+        // [Property(Readonly)] bool isNull
         .addProperty("isNull", &JSONValue::IsNull)
-        // [Property(ReadOnly)] bool isBool
+        // [Property(Readonly)] bool isBool
         .addProperty("isBool", &JSONValue::IsBool)
-        // [Property(ReadOnly)] bool isNumber
+        // [Property(Readonly)] bool isNumber
         .addProperty("isNumber", &JSONValue::IsNumber)
-        // [Property(ReadOnly)] bool isString
+        // [Property(Readonly)] bool isString
         .addProperty("isString", &JSONValue::IsString)
-        // [Property(ReadOnly)] bool isArray
+        // [Property(Readonly)] bool isArray
         .addProperty("isArray", &JSONValue::IsArray)
-        // [Property(ReadOnly)] bool isObject
+        // [Property(Readonly)] bool isObject
         .addProperty("isObject", &JSONValue::IsObject)
 
         // [StaticConstant] JSONValue EMPTY

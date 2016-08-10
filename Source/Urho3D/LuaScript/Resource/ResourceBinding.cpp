@@ -97,11 +97,11 @@ void RegisterResource(kaguya::State& lua)
 
         // [Property] const String& name
         .addProperty("name", &Resource::GetName, &Resource::SetName)
-        // [Property(ReadOnly)] StringHash nameHash
+        // [Property(Readonly)] StringHash nameHash
         .addProperty("nameHash", &Resource::GetNameHash)
         // [Property] unsigned memoryUse
         .addProperty("memoryUse", &Resource::GetMemoryUse, &Resource::SetMemoryUse)
-        // [Property(ReadOnly)] unsigned useTimer
+        // [Property(Readonly)] unsigned useTimer
         .addProperty("useTimer", &Resource::GetUseTimer)
         // [Property] AsyncLoadState asyncLoadState
         .addProperty("asyncLoadState", &Resource::GetAsyncLoadState, &Resource::SetAsyncLoadState)

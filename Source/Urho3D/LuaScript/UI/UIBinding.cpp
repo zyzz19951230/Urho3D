@@ -211,20 +211,20 @@ void RegisterUI(kaguya::State& lua)
         // [Method] float GetScale() const
         .addFunction("GetScale", &UI::GetScale)
 
-        // [Property(ReadOnly)] SharedPtr<UIElement> root
+        // [Property(Readonly)] SharedPtr<UIElement> root
         .addProperty("root", &UIGetRoot)
-        // [Property(ReadOnly)] SharedPtr<UIElement> rootModalElement
+        // [Property(Readonly)] SharedPtr<UIElement> rootModalElement
         .addProperty("rootModalElement", &UIGetRootModalElement)
         // [Property] Cursor* cursor
         .addProperty("cursor", &UI::GetCursor, &UI::SetCursor)
-        // [Property(ReadOnly)] IntVector2 cursorPosition
+        // [Property(Readonly)] IntVector2 cursorPosition
         .addProperty("cursorPosition", &UI::GetCursorPosition)
-        // [Property(ReadOnly)] SharedPtr<UIElement> focusElement
+        // [Property(Readonly)] SharedPtr<UIElement> focusElement
         .addProperty("focusElement", &UIGetFocusElement)
-        // [Property(ReadOnly)] SharedPtr<UIElement> frontElement
+        // [Property(Readonly)] SharedPtr<UIElement> frontElement
         .addProperty("frontElement", &UIGetFrontElement)
 
-        // [Property(ReadOnly)] unsigned numDragElements
+        // [Property(Readonly)] unsigned numDragElements
         .addProperty("numDragElements", &UI::GetNumDragElements)
 
         // [Property] const String& clipboardText
@@ -249,9 +249,9 @@ void RegisterUI(kaguya::State& lua)
         .addProperty("useMutableGlyphs", &UI::GetUseMutableGlyphs, &UI::SetUseMutableGlyphs)
         // [Property] bool forceAutoHint
         .addProperty("forceAutoHint", &UI::GetForceAutoHint, &UI::SetForceAutoHint)
-        // [Property(ReadOnly)] bool hasModalElement
+        // [Property(Readonly)] bool hasModalElement
         .addProperty("hasModalElement", &UI::HasModalElement)
-        // [Property(ReadOnly)] bool dragging
+        // [Property(Readonly)] bool dragging
         .addProperty("dragging", &UI::IsDragging)
         // [Property] float scale
         .addProperty("scale", &UI::GetScale, &UI::SetScale)

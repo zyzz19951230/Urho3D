@@ -67,7 +67,7 @@ void RegisterSlider(kaguya::State& lua)
         .addProperty("range", &Slider::GetRange, &Slider::SetRange)
         // [Property] float value
         .addProperty("value", &Slider::GetValue, &Slider::SetValue)
-        // [Property(ReadOnly)] BorderImage* knob
+        // [Property(Readonly)] BorderImage* knob
         .addProperty("knob", &Slider::GetKnob)
         // [Property] float repeatRate
         .addProperty("repeatRate", &Slider::GetRepeatRate, &Slider::SetRepeatRate)

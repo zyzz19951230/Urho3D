@@ -107,23 +107,23 @@ void RegisterFileSelector(kaguya::State& lua)
 
         // [Property] XMLFile* defaultStyle
         .addProperty("defaultStyle", &FileSelector::GetDefaultStyle, &FileSelector::SetDefaultStyle)
-        // [Property(ReadOnly)] Window* window
+        // [Property(Readonly)] Window* window
         .addProperty("window", &FileSelector::GetWindow)
-        // [Property(ReadOnly)] Text* titleText
+        // [Property(Readonly)] Text* titleText
         .addProperty("titleText", &FileSelector::GetTitleText)
-        // [Property(ReadOnly)] ListView* fileList
+        // [Property(Readonly)] ListView* fileList
         .addProperty("fileList", &FileSelector::GetFileList)
-        // [Property(ReadOnly)] LineEdit* pathEdit
+        // [Property(Readonly)] LineEdit* pathEdit
         .addProperty("pathEdit", &FileSelector::GetPathEdit)
-        // [Property(ReadOnly)] LineEdit* fileNameEdit
+        // [Property(Readonly)] LineEdit* fileNameEdit
         .addProperty("fileNameEdit", &FileSelector::GetFileNameEdit)
-        // [Property(ReadOnly)] DropDownList* filterList
+        // [Property(Readonly)] DropDownList* filterList
         .addProperty("filterList", &FileSelector::GetFilterList)
-        // [Property(ReadOnly)] Button* OKButton
+        // [Property(Readonly)] Button* OKButton
         .addProperty("OKButton", &FileSelector::GetOKButton)
-        // [Property(ReadOnly)] Button* cancelButton
+        // [Property(Readonly)] Button* cancelButton
         .addProperty("cancelButton", &FileSelector::GetCancelButton)
-        // [Property(ReadOnly)] Button* closeButton
+        // [Property(Readonly)] Button* closeButton
         .addProperty("closeButton", &FileSelector::GetCloseButton)
         // [Property] const String& title
         .addProperty("title", &FileSelector::GetTitle, &FileSelector::SetTitle)
@@ -131,9 +131,9 @@ void RegisterFileSelector(kaguya::State& lua)
         .addProperty("path", &FileSelector::GetPath, &FileSelector::SetPath)
         // [Property] const String& fileName
         .addProperty("fileName", &FileSelector::GetFileName, &FileSelector::SetFileName)
-        // [Property(ReadOnly)] const String& filter
+        // [Property(Readonly)] const String& filter
         .addProperty("filter", &FileSelector::GetFilter)
-        // [Property(ReadOnly)] unsigned filterIndex
+        // [Property(Readonly)] unsigned filterIndex
         .addProperty("filterIndex", &FileSelector::GetFilterIndex)
         // [Property] bool directoryMode
         .addProperty("directoryMode", &FileSelector::GetDirectoryMode, &FileSelector::SetDirectoryMode)

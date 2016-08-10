@@ -60,7 +60,7 @@ void RegisterDatabase(kaguya::State& lua)
         // [Method] void SetPoolSize(unsigned poolSize)
         .addFunction("SetPoolSize", &Database::SetPoolSize)
 
-        // [Property(ReadOnly)] bool pooling
+        // [Property(Readonly)] bool pooling
         .addProperty("pooling", &Database::IsPooling)
         // [Property] unsigned poolSize
         .addProperty("poolSize", &Database::GetPoolSize, &Database::SetPoolSize)

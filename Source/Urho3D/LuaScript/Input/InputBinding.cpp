@@ -102,7 +102,7 @@ void RegisterInput(kaguya::State& lua)
         .addProperty("delta", &TouchState::delta_)
         // [Field] float pressure
         .addProperty("pressure", &TouchState::pressure_)
-        // [Property(ReadOnly)] UIElement* touchedElement
+        // [Property(Readonly)] UIElement* touchedElement
         .addProperty("touchedElement", &TouchState::GetTouchedElement)
     );
 
@@ -129,13 +129,13 @@ void RegisterInput(kaguya::State& lua)
         .addProperty("name", &JoystickState::name_)
         // [Field] int joystickID
         .addProperty("joystickID", &JoystickState::joystickID_)
-        // [Property(ReadOnly)] bool controller
+        // [Property(Readonly)] bool controller
         .addProperty("controller", &JoystickState::IsController)
-        // [Property(ReadOnly)] unsigned numButtons
+        // [Property(Readonly)] unsigned numButtons
         .addProperty("numButtons", &JoystickState::GetNumButtons)
-        // [Property(ReadOnly)] unsigned numAxes
+        // [Property(Readonly)] unsigned numAxes
         .addProperty("numAxes", &JoystickState::GetNumAxes)
-        // [Property(ReadOnly)] unsigned numHats
+        // [Property(Readonly)] unsigned numHats
         .addProperty("numHats", &JoystickState::GetNumHats)
         );    
 
@@ -258,26 +258,26 @@ void RegisterInput(kaguya::State& lua)
         // [Method] bool IsMinimized() const
         .addFunction("IsMinimized", &Input::IsMinimized)
 
-        // [Property(ReadOnly)] int qualifiers
+        // [Property(Readonly)] int qualifiers
         .addProperty("qualifiers", &Input::GetQualifiers)
-        // [Property(ReadOnly)] IntVector2 mousePosition
+        // [Property(Readonly)] IntVector2 mousePosition
         .addProperty("mousePosition", &Input::GetMousePosition)
-        // [Property(ReadOnly)] const IntVector2& mouseMove
+        // [Property(Readonly)] const IntVector2& mouseMove
         .addProperty("mouseMove", &Input::GetMouseMove)
-        // [Property(ReadOnly)] int mouseMoveX
+        // [Property(Readonly)] int mouseMoveX
         .addProperty("mouseMoveX", &Input::GetMouseMoveX)
-        // [Property(ReadOnly)] int mouseMoveY
+        // [Property(Readonly)] int mouseMoveY
         .addProperty("mouseMoveY", &Input::GetMouseMoveY)
-        // [Property(ReadOnly)] int mouseMoveWheel
+        // [Property(Readonly)] int mouseMoveWheel
         .addProperty("mouseMoveWheel", &Input::GetMouseMoveWheel)
 
-        // [Property(ReadOnly)] unsigned numTouches
+        // [Property(Readonly)] unsigned numTouches
         .addProperty("numTouches", &Input::GetNumTouches)
-        // [Property(ReadOnly)] unsigned numJoysticks
+        // [Property(Readonly)] unsigned numJoysticks
         .addProperty("numJoysticks", &Input::GetNumJoysticks)
         // [Property] bool toggleFullscreen
         .addProperty("toggleFullscreen", &Input::GetToggleFullscreen, &Input::SetToggleFullscreen)
-        // [Property(ReadOnly)] bool screenKeyboardSupport
+        // [Property(Readonly)] bool screenKeyboardSupport
         .addProperty("screenKeyboardSupport", &Input::GetScreenKeyboardSupport)
         // [Property] bool screenKeyboardVisible
         .addProperty("screenKeyboardVisible", &Input::IsScreenKeyboardVisible, &Input::SetScreenKeyboardVisible)
@@ -287,15 +287,15 @@ void RegisterInput(kaguya::State& lua)
         // [Property] bool mouseVisible
         .addProperty("mouseVisible", &InputMouseVisibleGetter, &InputMouseVisibleSetter)
 
-        // [Property(ReadOnly)] bool mouseGrabbed
+        // [Property(Readonly)] bool mouseGrabbed
         .addProperty("mouseGrabbed", &Input::IsMouseGrabbed)
-        // [Property(ReadOnly)] bool mouseLocked
+        // [Property(Readonly)] bool mouseLocked
         .addProperty("mouseLocked", &Input::IsMouseLocked)
-        // [Property(ReadOnly)] MouseMode mouseMode
+        // [Property(Readonly)] MouseMode mouseMode
         .addProperty("mouseMode", &Input::GetMouseMode)
-        // [Property(ReadOnly)] bool focus
+        // [Property(Readonly)] bool focus
         .addFunction("focus", &Input::HasFocus)
-        // [Property(ReadOnly)] bool minimized
+        // [Property(Readonly)] bool minimized
         .addProperty("minimized", &Input::IsMinimized)
         );
 }

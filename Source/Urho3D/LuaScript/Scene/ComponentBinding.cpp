@@ -79,15 +79,15 @@ void RegisterComponent(kaguya::State& lua)
         .addFunction("PrepareNetworkUpdate", &Component::PrepareNetworkUpdate)
         // .addFunction("CleanupConnection", &Component::CleanupConnection)
 
-        // [Property(ReadOnly)] unsigned id
+        // [Property(Readonly)] unsigned id
         .addProperty("id", &Component::GetID)
-        // [Property(ReadOnly)] Node* node
+        // [Property(Readonly)] Node* node
         .addProperty("node", &Component::GetNode)
-        // [Property(ReadOnly)] Scene* scene
+        // [Property(Readonly)] Scene* scene
         .addProperty("scene", &Component::GetScene)
         // [Property] bool enabled
         .addProperty("enabled", &Component::IsEnabled, &Component::SetEnabled)
-        // [Property(ReadOnly)] bool enabledEffective
+        // [Property(Readonly)] bool enabledEffective
         .addProperty("enabledEffective", &Component::IsEnabledEffective)
         );
 }

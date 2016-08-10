@@ -222,15 +222,15 @@ void RegisterXMLElement(kaguya::State& lua)
         // [Method] XMLFile* GetFile() const
         .addFunction("GetFile", &XMLElement::GetFile)
 
-        // [Property(ReadOnly)] bool null
+        // [Property(Readonly)] bool null
         .addProperty("null", &XMLElement::IsNull)
-        // [Property(ReadOnly)] String name
+        // [Property(Readonly)] String name
         .addProperty("name", &XMLElement::GetName)
-        // [Property(ReadOnly)] XMLElement parent
+        // [Property(Readonly)] XMLElement parent
         .addProperty("parent", &XMLElement::GetParent)
-        // [Property(ReadOnly)] unsigned numAttributes
+        // [Property(Readonly)] unsigned numAttributes
         .addProperty("numAttributes", &XMLElement::GetNumAttributes)
-        // [Property(ReadOnly)] String value
+        // [Property(Readonly)] String value
         .addProperty("value", &XMLElement::GetValue)
 
         // [StaticConstant] XMLElement EMPTY
@@ -291,7 +291,7 @@ void RegisterXMLElement(kaguya::State& lua)
         // [Method] String GetQuery() const
         .addFunction("GetQuery", &XPathQuery::GetQuery)
 
-        // [Property(ReadOnly)] String query
+        // [Property(Readonly)] String query
         .addProperty("query", &XPathQuery::GetQuery)
     );
 }

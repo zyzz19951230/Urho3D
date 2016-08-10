@@ -77,21 +77,21 @@ void RegisterTileMapLayer2D(kaguya::State& lua)
         // [Method] Node* GetImageNode() const
         .addFunction("GetImageNode", &TileMapLayer2D::GetImageNode)
 
-        // [Property(ReadOnly)] TileMap2D* tileMap
+        // [Property(Readonly)] TileMap2D* tileMap
         .addProperty("tileMap", &TileMapLayer2D::GetTileMap)
         // [Property] int drawOrder
         .addProperty("drawOrder", &TileMapLayer2D::GetDrawOrder, &TileMapLayer2D::SetDrawOrder)
         // [Property] bool visible
         .addProperty("visible", &TileMapLayer2D::IsVisible, &TileMapLayer2D::SetVisible)
-        // [Property(ReadOnly)] TileMapLayerType2D layerType
+        // [Property(Readonly)] TileMapLayerType2D layerType
         .addProperty("layerType", &TileMapLayer2D::GetLayerType)
-        // [Property(ReadOnly)] int width
+        // [Property(Readonly)] int width
         .addProperty("width", &TileMapLayer2D::GetWidth)
-        // [Property(ReadOnly)] int height
+        // [Property(Readonly)] int height
         .addProperty("height", &TileMapLayer2D::GetHeight)
-        // [Property(ReadOnly)] unsigned numObjects
+        // [Property(Readonly)] unsigned numObjects
         .addProperty("numObjects", &TileMapLayer2D::GetNumObjects)
-        // [Property(ReadOnly)] Node* imageNode
+        // [Property(Readonly)] Node* imageNode
         .addProperty("imageNode", &TileMapLayer2D::GetImageNode)
     );
 }

@@ -150,15 +150,15 @@ void RegisterDeserializer(kaguya::State& lua)
         // [Method] String ReadLine()
         .addFunction("ReadLine", &Deserializer::ReadLine)
 
-        // [Property(ReadOnly)] const String& name
+        // [Property(Readonly)] const String& name
         .addProperty("name", &Deserializer::GetName)
-        // [Property(ReadOnly)] unsigned checksum
+        // [Property(Readonly)] unsigned checksum
         .addProperty("checksum", &Deserializer::GetChecksum)
-        // [Property(ReadOnly)] bool eof
+        // [Property(Readonly)] bool eof
         .addProperty("eof", &Deserializer::IsEof)
-        // [Property(ReadOnly)] unsigned position
+        // [Property(Readonly)] unsigned position
         .addProperty("position", &Deserializer::GetPosition)
-        // [Property(ReadOnly)] unsigned size
+        // [Property(Readonly)] unsigned size
         .addProperty("size", &Deserializer::GetSize)
         );
 }

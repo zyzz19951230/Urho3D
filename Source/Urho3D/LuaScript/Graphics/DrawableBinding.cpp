@@ -125,9 +125,9 @@ void RegisterDrawable(kaguya::State& lua)
             // [Method] bool IsInView(Camera* camera) const
             static_cast<bool(Drawable::*)(Camera*) const>(&Drawable::IsInView))
 
-        // [Property(ReadOnly)] const BoundingBox& boundingBox
+        // [Property(Readonly)] const BoundingBox& boundingBox
         .addProperty("boundingBox", &Drawable::GetBoundingBox)
-        // [Property(ReadOnly)] unsigned char drawableFlags
+        // [Property(Readonly)] unsigned char drawableFlags
         .addProperty("drawableFlags", &Drawable::GetDrawableFlags)
         // [Property] float drawDistance
         .addProperty("drawDistance", &Drawable::GetDrawDistance, &Drawable::SetDrawDistance)
@@ -154,7 +154,7 @@ void RegisterDrawable(kaguya::State& lua)
 
         // [Property] bool inView
         .addProperty("inView", static_cast<bool(Drawable::*)() const>(&Drawable::IsInView))
-        // [Property(ReadOnly)] Zone* zone
+        // [Property(Readonly)] Zone* zone
         .addProperty("zone", &Drawable::GetZone)
         );
 }

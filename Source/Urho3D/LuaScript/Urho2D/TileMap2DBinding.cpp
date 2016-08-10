@@ -72,9 +72,9 @@ void RegisterTileMap2D(kaguya::State& lua)
         
         // [Property] TmxFile2D* tmxFile
         .addProperty("tmxFile", &TileMap2D::GetTmxFile, &TileMap2D::SetTmxFile)
-        // [Property(ReadOnly)] const TileMapInfo2D& info
+        // [Property(Readonly)] const TileMapInfo2D& info
         .addProperty("info", &TileMap2D::GetInfo)
-        // [Property(ReadOnly)] unsigned numLayers
+        // [Property(Readonly)] unsigned numLayers
         .addProperty("numLayers", &TileMap2D::GetNumLayers)
     );
 }

@@ -52,7 +52,7 @@ void RegisterStaticModelGroup(kaguya::State& lua)
         // [Method] Node* GetInstanceNode(unsigned index) const
         .addFunction("GetInstanceNode", &StaticModelGroup::GetInstanceNode)
 
-        // [Property(ReadOnly)] unsigned numInstanceNodes
+        // [Property(Readonly)] unsigned numInstanceNodes
         .addProperty("numInstanceNodes", &StaticModelGroup::GetNumInstanceNodes)
         );
 }

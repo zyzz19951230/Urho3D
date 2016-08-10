@@ -144,31 +144,31 @@ void RegisterImage(kaguya::State& lua)
         // [Method] SharedPtr<Image> GetSubimage(const IntRect& rect) const
         .addStaticFunction("GetSubimage", &ImageGetSubimage)
 
-        // [Property(ReadOnly)] bool cubemap
+        // [Property(Readonly)] bool cubemap
         .addProperty("cubemap", &Image::IsCubemap)
-        // [Property(ReadOnly)] bool array
+        // [Property(Readonly)] bool array
         .addProperty("array", &Image::IsArray)
-        // [Property(ReadOnly)] bool SRGB
+        // [Property(Readonly)] bool SRGB
         .addProperty("SRGB", &Image::IsSRGB)
-        // [Property(ReadOnly)] int width
+        // [Property(Readonly)] int width
         .addProperty("width", &Image::GetWidth)
-        // [Property(ReadOnly)] int height
+        // [Property(Readonly)] int height
         .addProperty("height", &Image::GetHeight)
-        // [Property(ReadOnly)] int depth
+        // [Property(Readonly)] int depth
         .addProperty("depth", &Image::GetDepth)
-        // [Property(ReadOnly)] unsigned components
+        // [Property(Readonly)] unsigned components
         .addProperty("components", &Image::GetComponents)
         // [Property] unsigned char* data
         .addProperty("data", &Image::GetData, &Image::SetData)
-        // [Property(ReadOnly)] bool compressed
+        // [Property(Readonly)] bool compressed
         .addProperty("compressed", &Image::IsCompressed)
-        // [Property(ReadOnly)] CompressedFormat compressedFormat
+        // [Property(Readonly)] CompressedFormat compressedFormat
         .addProperty("compressedFormat", &Image::GetCompressedFormat)
-        // [Property(ReadOnly)] unsigned numCompressedLevels
+        // [Property(Readonly)] unsigned numCompressedLevels
         .addProperty("numCompressedLevels", &Image::GetNumCompressedLevels)
-        // [Property(ReadOnly)] SharedPtr<Image> nextLevel
+        // [Property(Readonly)] SharedPtr<Image> nextLevel
         .addProperty("nextLevel", &Image::GetNextLevel)
-        // [Property(ReadOnly)] SharedPtr<Image> nextSibling
+        // [Property(Readonly)] SharedPtr<Image> nextSibling
         .addProperty("nextSibling", &Image::GetNextSibling)
     );
 }

@@ -131,19 +131,19 @@ void RegisterAnimatedModel(kaguya::State& lua)
         // [Property] Model* model
         .addProperty("model", &AnimatedModelModelGetter, &AnimatedModelModelSetter)
 
-        // [Property(ReadOnly)] UpdateGeometryType updateGeometryType
+        // [Property(Readonly)] UpdateGeometryType updateGeometryType
         .addProperty("updateGeometryType", &AnimatedModel::GetUpdateGeometryType)
-        // [Property(ReadOnly)] Skeleton& skeleton
+        // [Property(Readonly)] Skeleton& skeleton
         .addProperty("skeleton", &AnimatedModel::GetSkeleton)
-        // [Property(ReadOnly)] unsigned numAnimationStates
+        // [Property(Readonly)] unsigned numAnimationStates
         .addProperty("numAnimationStates", &AnimatedModel::GetNumAnimationStates)
         // [Property] float animationLodBias
         .addProperty("animationLodBias", &AnimatedModel::GetAnimationLodBias, &AnimatedModel::SetAnimationLodBias)
         // [Property] bool updateInvisible
         .addProperty("updateInvisible", &AnimatedModel::GetUpdateInvisible, &AnimatedModel::SetUpdateInvisible)
-        // [Property(ReadOnly)] unsigned numMorphs
+        // [Property(Readonly)] unsigned numMorphs
         .addProperty("numMorphs", &AnimatedModel::GetNumMorphs)
-        // [Property(ReadOnly)] bool master
+        // [Property(Readonly)] bool master
         .addProperty("master", &AnimatedModel::IsMaster)
         );
 }

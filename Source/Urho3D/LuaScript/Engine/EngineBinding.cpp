@@ -128,11 +128,11 @@ void RegisterEngine(kaguya::State& lua)
         .addProperty("pauseMinimized", &Engine::GetPauseMinimized, &Engine::SetPauseMinimized)
         // [Property] bool autoExit
         .addProperty("autoExit", &Engine::GetAutoExit, &Engine::SetAutoExit)
-        // [Property(ReadOnly)] bool initialized
+        // [Property(Readonly)] bool initialized
         .addProperty("initialized", &Engine::IsInitialized)
-        // [Property(ReadOnly)] bool exiting
+        // [Property(Readonly)] bool exiting
         .addProperty("exiting", &Engine::IsExiting)
-        // [Property(ReadOnly)] bool headless
+        // [Property(Readonly)] bool headless
         .addProperty("headless", &Engine::IsHeadless)
         );
 }

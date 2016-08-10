@@ -57,7 +57,7 @@ void RegisterLogicComponent(kaguya::State& lua)
 
         // [Property] unsigned char updateEventMask
         .addProperty("updateEventMask", &LogicComponent::GetUpdateEventMask, &LogicComponent::SetUpdateEventMask)
-        // [Property(ReadOnly)] bool delayedStartCalled
+        // [Property(Readonly)] bool delayedStartCalled
         .addProperty("delayedStartCalled", &LogicComponent::IsDelayedStartCalled)
         );
 }
