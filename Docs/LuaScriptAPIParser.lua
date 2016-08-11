@@ -157,3 +157,33 @@ function parseModule(moduleName)
 		parseFile(fileName)
 	end
 end
+
+function parseLuaScriptAPI()
+	parseModule('Audio')
+	parseModule('Core')
+	parseModule('Database')
+	parseModule('Engine')
+	parseModule('Graphics')
+	parseModule('Input')
+	parseModule('IO')
+	parseModule('Math')
+	parseModule('Navigation')
+	parseModule('Network')
+	parseModule('Physics')
+	parseModule('Resource')
+	parseModule('Scene')
+	parseModule('UI')
+	parseModule('Urho2D')
+
+	parseFile(luaScriptDir .. 'LuaScriptLuaAPI.cpp')
+
+	function compareByName(a, b)
+		return a.name < b.name
+	end
+
+	table.sort(classes, compareByName)
+	table.sort(enums, compareByName)
+	table.sort(functions, compareByName)
+	table.sort(constants, compareByName)
+	table.sort(variables, compareByName)
+end
