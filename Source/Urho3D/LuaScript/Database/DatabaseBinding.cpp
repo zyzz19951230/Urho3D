@@ -65,6 +65,11 @@ void RegisterDatabase(kaguya::State& lua)
         // [Property] unsigned poolSize
         .addProperty("poolSize", &Database::GetPoolSize, &Database::SetPoolSize)
     );
+
+    // [Variable] Database* database
+    lua["database"] = GetSubsystem<Database>();
+    // [Function] Database* GetDatabase()
+    lua["GetDatabase"] = static_cast<Database*(*)()>(&GetSubsystem<Database>);
 }
 }
 

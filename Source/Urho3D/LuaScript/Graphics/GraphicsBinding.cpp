@@ -251,6 +251,12 @@ void RegisterGraphics(kaguya::State& lua)
         // [Property(Readonly)] IntVector2 desktopResolution
         .addProperty("desktopResolution", &Graphics::GetDesktopResolution)
     );
+
+    // [Variable] Graphics* graphics
+    lua["graphics"] = GetSubsystem<Graphics>();
+    // [Function] Graphics* GetGraphics()
+    lua["GetGraphics"] = static_cast<Graphics*(*)()>(&GetSubsystem<Graphics>);
+
 }
 }
 

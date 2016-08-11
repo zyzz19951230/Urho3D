@@ -22,10 +22,6 @@
 
 #include "../Precompiled.h"
 
-#include "../Resource/Localization.h"
-#include "../Resource/ResourceCache.h"
-#include "../LuaScript/LuaScriptUtils.h"
-
 #include <kaguya.hpp>
 
 namespace Urho3D
@@ -53,11 +49,5 @@ void RegisterResourceLuaAPI(kaguya::State& lua)
     RegisterResourceCache(lua);
     RegisterXMLElement(lua);
     RegisterXMLFile(lua);
-
-    lua["cache"] = GetSubsystem<ResourceCache>();
-    lua["GetCache"] = static_cast<ResourceCache*(*)()>(&GetSubsystem<ResourceCache>);
-
-    lua["localization"] = GetSubsystem<Localization>();
-    lua["GetLocalization"] = static_cast<Localization*(*)()>(&GetSubsystem<Localization>);
 }
 }

@@ -287,11 +287,11 @@ void RegisterInputEvents(kaguya::State& lua)
     lua["SCANCODE_ALT"] = SCANCODE_ALT;
     // [Constant] int SCANCODE_GUI
     lua["SCANCODE_GUI"] = SCANCODE_GUI;
-    // [Constant] int SCANCODE_ALT
+    // [Constant] int SCANCODE_A
     lua["SCANCODE_A"] = SCANCODE_A;
     // [Constant] int SCANCODE_B
     lua["SCANCODE_B"] = SCANCODE_B;
-    // [Constant] int SCANCODE_CTRL
+    // [Constant] int SCANCODE_C
     lua["SCANCODE_C"] = SCANCODE_C;
     // [Constant] int SCANCODE_D
     lua["SCANCODE_D"] = SCANCODE_D;
@@ -299,7 +299,7 @@ void RegisterInputEvents(kaguya::State& lua)
     lua["SCANCODE_E"] = SCANCODE_E;
     // [Constant] int SCANCODE_F
     lua["SCANCODE_F"] = SCANCODE_F;
-    // [Constant] int SCANCODE_GUI
+    // [Constant] int SCANCODE_G
     lua["SCANCODE_G"] = SCANCODE_G;
     // [Constant] int SCANCODE_H
     lua["SCANCODE_H"] = SCANCODE_H;
@@ -309,7 +309,7 @@ void RegisterInputEvents(kaguya::State& lua)
     lua["SCANCODE_J"] = SCANCODE_J;
     // [Constant] int SCANCODE_K
     lua["SCANCODE_K"] = SCANCODE_K;
-    // [Constant] int SCANCODE_CTRL
+    // [Constant] int SCANCODE_L
     lua["SCANCODE_L"] = SCANCODE_L;
     // [Constant] int SCANCODE_M
     lua["SCANCODE_M"] = SCANCODE_M;
@@ -323,11 +323,11 @@ void RegisterInputEvents(kaguya::State& lua)
     lua["SCANCODE_Q"] = SCANCODE_Q;
     // [Constant] int SCANCODE_R
     lua["SCANCODE_R"] = SCANCODE_R;
-    // [Constant] int SCANCODE_SHIFT
+    // [Constant] int SCANCODE_S
     lua["SCANCODE_S"] = SCANCODE_S;
     // [Constant] int SCANCODE_T
     lua["SCANCODE_T"] = SCANCODE_T;
-    // [Constant] int SCANCODE_UNKNOWN
+    // [Constant] int SCANCODE_U
     lua["SCANCODE_U"] = SCANCODE_U;
     // [Constant] int SCANCODE_V
     lua["SCANCODE_V"] = SCANCODE_V;
@@ -437,9 +437,9 @@ void RegisterInputEvents(kaguya::State& lua)
     lua["SCANCODE_END"] = SCANCODE_END;
     // [Constant] int SCANCODE_PAGEDOWN
     lua["SCANCODE_PAGEDOWN"] = SCANCODE_PAGEDOWN;
-    // [Constant] int SCANCODE_RIGHTBRACKET
+    // [Constant] int SCANCODE_RIGHT
     lua["SCANCODE_RIGHT"] = SCANCODE_RIGHT;
-    // [Constant] int SCANCODE_LEFTBRACKET
+    // [Constant] int SCANCODE_LEFT
     lua["SCANCODE_LEFT"] = SCANCODE_LEFT;
     // [Constant] int SCANCODE_DOWN
     lua["SCANCODE_DOWN"] = SCANCODE_DOWN;
@@ -629,13 +629,13 @@ void RegisterInputEvents(kaguya::State& lua)
     lua["SCANCODE_KP_BACKSPACE"] = SCANCODE_KP_BACKSPACE;
     // [Constant] int SCANCODE_KP_A
     lua["SCANCODE_KP_A"] = SCANCODE_KP_A;
-    // [Constant] int SCANCODE_KP_BACKSPACE
+    // [Constant] int SCANCODE_KP_B
     lua["SCANCODE_KP_B"] = SCANCODE_KP_B;
-    // [Constant] int SCANCODE_KP_COMMA
+    // [Constant] int SCANCODE_KP_C
     lua["SCANCODE_KP_C"] = SCANCODE_KP_C;
-    // [Constant] int SCANCODE_KP_DIVIDE
+    // [Constant] int SCANCODE_KP_D
     lua["SCANCODE_KP_D"] = SCANCODE_KP_D;
-    // [Constant] int SCANCODE_KP_ENTER
+    // [Constant] int SCANCODE_KP_E
     lua["SCANCODE_KP_E"] = SCANCODE_KP_E;
     // [Constant] int SCANCODE_KP_F
     lua["SCANCODE_KP_F"] = SCANCODE_KP_F;
@@ -695,13 +695,13 @@ void RegisterInputEvents(kaguya::State& lua)
     lua["SCANCODE_KP_DECIMAL"] = SCANCODE_KP_DECIMAL;
     // [Constant] int SCANCODE_KP_HEXADECIMAL
     lua["SCANCODE_KP_HEXADECIMAL"] = SCANCODE_KP_HEXADECIMAL;
-    // [Constant] int SCANCODE_CTRL
+    // [Constant] int SCANCODE_LCTRL
     lua["SCANCODE_LCTRL"] = SCANCODE_LCTRL;
-    // [Constant] int SCANCODE_SHIFT
+    // [Constant] int SCANCODE_LSHIFT
     lua["SCANCODE_LSHIFT"] = SCANCODE_LSHIFT;
-    // [Constant] int SCANCODE_ALT
+    // [Constant] int SCANCODE_LALT
     lua["SCANCODE_LALT"] = SCANCODE_LALT;
-    // [Constant] int SCANCODE_GUI
+    // [Constant] int SCANCODE_LGUI
     lua["SCANCODE_LGUI"] = SCANCODE_LGUI;
     // [Constant] int SCANCODE_RCTRL
     lua["SCANCODE_RCTRL"] = SCANCODE_RCTRL;

@@ -265,6 +265,11 @@ void RegisterRenderer(kaguya::State& lua)
         // [Property(Readonly)] Texture2D* defaultLightSpot
         .addProperty("defaultLightSpot", &Renderer::GetDefaultLightSpot)        
     );
+    
+    // [Variable] Renderer* renderer
+    lua["renderer"] = GetSubsystem<Renderer>();
+    // [Function] Renderer* GetRenderer()
+    lua["GetRenderer"] = static_cast<Renderer*(*)()>(&GetSubsystem<Renderer>);
 }
 }
 

@@ -74,6 +74,11 @@ void RegisterLocalization(kaguya::State& lua)
         // [Property(Readonly)] String language
 		.addProperty("language", static_cast<String(Localization::*)()>(&Localization::GetLanguage))
     );
+
+    // [Variable] Localization* localization
+    lua["localization"] = GetSubsystem<Localization>();
+    // [Function] Localization* GetLocalization()
+    lua["GetLocalization"] = static_cast<Localization*(*)()>(&GetSubsystem<Localization>);
 }
 }
 

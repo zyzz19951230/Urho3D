@@ -34,6 +34,11 @@ namespace Urho3D
 
 static void RegisterCoroutine(kaguya::State& lua)
 {
+    // [Function] void coroutine.start(LuaFunction function)
+    // [Function] void coroutine.sleep(float time)
+    // [Function] void coroutine.waitevent(StringHash eventType)
+    // [Function] void coroutine.sendevent(StringHash eventType)
+
     lua.dostring(
         "local totalTime_ = 0                                                \n"
         "local sleepedCoroutines_ = {}                                       \n"
@@ -191,34 +196,71 @@ void RegisterLuaScript(kaguya::State &lua)
 {
     using namespace kaguya;
 
-    lua["SubscribeToEvent"] = overload(&LuaScriptAddEventHandler0,
-            &LuaScriptAddEventHandler1,
-            &LuaScriptAddEventHandler2,
-            &LuaScriptAddEventHandler3);
+    lua["SubscribeToEvent"] = overload(
+        // [Function] void SubscribeToEvent(StringHash eventType, const String& functionName)
+        &LuaScriptAddEventHandler0,
+        // [Function] void SubscribeToEvent(Object* sender, StringHash eventType, const String& functionName)
+        &LuaScriptAddEventHandler1,
+        // [Function] void SubscribeToEvent(StringHash eventType, const kaguya::LuaFunction& function)
+        &LuaScriptAddEventHandler2,
+        // [Function] void SubscribeToEvent(Object* sender, StringHash eventType, const kaguya::LuaFunction& function)
+        &LuaScriptAddEventHandler3);
 
-    lua["UnsubscribeFromEvent"] = overload(&LuaScriptRemoveEventHandler0,
+    lua["UnsubscribeFromEvent"] = overload(
+        // [Function] void UnsubscribeFromEvent(StringHash eventType)
+        &LuaScriptRemoveEventHandler0,
+        // [Function] void UnsubscribeFromEvent(Object* sender, StringHash eventType)
         &LuaScriptRemoveEventHandler1);
 
+    // [Function] void UnsubscribeFromEvents(Object* sender)
     lua["UnsubscribeFromEvents"] = function(LuaScriptRemoveEventHandlers);
+    // [Function] void UnsubscribeFromAllEvents()
     lua["UnsubscribeFromAllEvents"] = function(LuaScriptRemoveAllEventHandlers);
+    // [Function] void UnsubscribeFromAllEventsExcept(const PODVector<StringHash>& exceptionTypes)
     lua["UnsubscribeFromAllEventsExcept"] = function(LuaScriptRemoveEventHandlersExcept);
 
-    lua["HasSubscribedToEvent"] = overload(&LuaScriptHasSubscribedToEvent0,
+    lua["HasSubscribedToEvent"] = overload(
+        // [Function] bool HasSubscribedToEvent(StringHash eventType)
+        &LuaScriptHasSubscribedToEvent0,
+        // [Function] bool HasSubscribedToEvent(Object* sender, StringHash eventType)
         &LuaScriptHasSubscribedToEvent1);
     
+    // [Function] void SendEvent(StringHash eventType, VariantMap& eventData)
     lua["SendEvent"] = function(LuaScriptSendEvent);
+    // [Function] void SetExecuteConsoleCommands(bool enable)
     lua["SetExecuteConsoleCommands"] = function(LuaScriptSetExecuteConsoleCommands);
+    // [Function] bool GetExecuteConsoleCommands()
     lua["GetExecuteConsoleCommands"] = function(LuaScriptGetExecuteConsoleCommands);
+    // [Function] void SetGlobalVar(const String& key, Variant value)
     lua["SetGlobalVar"] = function(LuaScriptSetGlobalVar);
+    // [Function] Variant GetGlobalVar(const String& key)
     lua["GetGlobalVar"] = function(LuaScriptGetGlobalVar);
+    // [Function] const VariantMap& GetGlobalVars()
     lua["GetGlobalVars"] = function(LuaScriptGetGlobalVars);
 
+    // [Function] void RegisterEventName()
     lua["RegisterEventName"] = function(RegisterEventName);
 }
 
 static void RegisterLuaScriptInstance(kaguya::State &lua)
 {
     using namespace kaguya;
+
+    // [Class] ScriptObject
+    // [Constructor] ScriptObject()
+    // [Method] Node* GetNode()
+    // [Method] void SubscribeToEvent(StringHash eventType, const String& luaFunctionName)
+    // [Method] void SubscribeToEvent(StringHash eventType, LuaFunction luaFunction)
+    // [Method] void SubscribeToEvent(Object* sender, StringHash eventType, const String& luaFunctionName)
+    // [Method] void SubscribeToEvent(Object* sender, StringHash eventType, LuaFunction luaFunction)
+    // [Method] void UnsubscribeFromEvent(StringHash eventType)
+    // [Method] void UnsubscribeFromEvent(Object* sender, StringHash eventType)
+    // [Method] void UnsubscribeFromEvents(Object* sender)
+    // [Method] void UnsubscribeFromAllEvents()
+    // [Method] void UnsubscribeFromAllEventsExcept(const PODVector<StringHash>& eventTypes)
+    // [Method] bool HasSubscribedToEvent(StringHash eventType)
+    // [Method] bool HasSubscribedToEvent(Object* sender, StringHash eventType)
+    // [ClassEnd]
 
     lua.dostring(
         "LuaScriptObject = {}                                                \n"
@@ -265,12 +307,12 @@ static void RegisterLuaScriptInstance(kaguya::State &lua)
         "    end                                                             \n"
         "    instance:UnsubscribeFromAllEvents()                             \n"
         "end                                                                 \n"
-        "function LuaScriptObject:UnsubscribeFromAllEventsExcept()           \n"
+        "function LuaScriptObject:UnsubscribeFromAllEventsExcept(eventTypes) \n"
         "    local instance = self.instance                                  \n"
         "    if instance == nil then                                         \n"
         "        return                                                      \n"
         "    end                                                             \n"
-        "    instance:UnsubscribeFromAllEventsExcept()                       \n"
+        "    instance:UnsubscribeFromAllEventsExcept(eventTypes)             \n"
         "end                                                                 \n"
         "function LuaScriptObject:HasSubscribedToEvent(param1, param2)       \n"
         "    local instance = self.instance                                  \n"
@@ -311,37 +353,57 @@ static void RegisterLuaScriptInstance(kaguya::State &lua)
         "end                                                                 \n"
     );
 
+    // [Class] LuaScriptInstance : Component
     lua["LuaScriptInstance"].setClass(UserdataMetatable<LuaScriptInstance, Component>()
 
         .addOverloadedFunctions("CreateObject", 
+            // [Method] bool CreateObject(const String& scriptObjectType)
             static_cast<bool (LuaScriptInstance::*)(const String&)>(&LuaScriptInstance::CreateObject),
+            // [Method] bool CreateObject(LuaFile* scriptFile, const String& scriptObjectType)
             static_cast<bool (LuaScriptInstance::*)(LuaFile*, const String&)>(&LuaScriptInstance::CreateObject))
 
+        // [Method] void SetScriptFile(LuaFile* scriptFile)
         .addFunction("SetScriptFile", &LuaScriptInstance::SetScriptFile)
+        // [Method] void SetScriptObjectType(const String& scriptObjectType)
         .addFunction("SetScriptObjectType", &LuaScriptInstance::SetScriptObjectType)
         
         .addOverloadedFunctions("SubscribeToEvent",
+            // [Method] void SubscribeToEvent(StringHash eventType, int functionIndex)
             static_cast<void (LuaScriptInstance::*)(StringHash, int)>(&LuaScriptInstance::AddEventHandler),
+            // [Method] void SubscribeToEvent(StringHash eventType, const String& functionName)
             static_cast<void (LuaScriptInstance::*)(StringHash, const String&)>(&LuaScriptInstance::AddEventHandler),
+            // [Method] void SubscribeToEvent(Object* sender, StringHash eventType, int functionIndex)
             static_cast<void (LuaScriptInstance::*)(Object*, StringHash, int)>(&LuaScriptInstance::AddEventHandler),
+            // [Method] void SubscribeToEvent(Object* sender, StringHash eventType, const String& functionName)
             static_cast<void (LuaScriptInstance::*)(Object*, StringHash, const String&)>(&LuaScriptInstance::AddEventHandler))
 
         .addOverloadedFunctions("UnsubscribeFromEvent", 
+                // [Method] void UnsubscribeFromEvent(StringHash eventType)
                 static_cast<void (LuaScriptInstance::*)(StringHash)>(&LuaScriptInstance::RemoveEventHandler),
+                // [Method] void UnsubscribeFromEvent(Object* sender, StringHash eventType)
                 static_cast<void (LuaScriptInstance::*)(Object*, StringHash)>(&LuaScriptInstance::RemoveEventHandler))
 
+        // [Method] void RemoveEventHandlers(Object* sender)
         .addFunction("UnsubscribeFromEvents", &LuaScriptInstance::RemoveEventHandlers)
+        // [Method] void RemoveAllEventHandlers()
         .addFunction("UnsubscribeFromAllEvents", &LuaScriptInstance::RemoveAllEventHandlers)
+        // [Method] void RemoveEventHandlersExcept(const PODVector<StringHash>& exceptionTypes)
         .addFunction("UnsubscribeFromAllEventsExcept", &LuaScriptInstance::RemoveEventHandlersExcept)
 
         .addOverloadedFunctions("HasSubscribedToEvent", 
+            // [Method] bool HasEventHandler(StringHash eventType) const
             static_cast<bool (LuaScriptInstance::*)(StringHash) const>(&LuaScriptInstance::HasEventHandler),
+            // [Method] bool HasEventHandler(Object* sender, StringHash eventType) const
             static_cast<bool (LuaScriptInstance::*)(Object*, StringHash) const>(&LuaScriptInstance::HasEventHandler))
 
+        // [Method] LuaFile* GetScriptFile() const
         .addFunction("GetScriptFile", &LuaScriptInstance::GetScriptObjectType)
+        // [Method] const String& GetScriptObjectType() const
         .addFunction("GetScriptObjectType", &LuaScriptInstance::GetScriptObjectType)
 
+        // [Property(Readonly)] LuaFile* scriptFile
         .addProperty("scriptFile", &LuaScriptInstance::GetScriptObjectType)
+        // [Property(Readonly)] const String& scriptObjectType
         .addProperty("scriptObjectType", &LuaScriptInstance::GetScriptObjectType)
         );
 }

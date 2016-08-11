@@ -22,10 +22,6 @@
 
 #include "../Precompiled.h"
 
-#include "../IO/FileSystem.h"
-#include "../IO/Log.h"
-#include "../LuaScript/LuaScriptUtils.h"
-
 #include <kaguya.hpp>
 
 namespace Urho3D
@@ -52,12 +48,6 @@ void RegisterIOLuaAPI(kaguya::State& lua)
     RegisterNamedPipe(lua);
     RegisterPackageFile(lua);
     RegisterVectorBuffer(lua);
-
-    lua["fileSystem"] = GetSubsystem<FileSystem>();
-    lua["GetFileSystem"] = static_cast<FileSystem*(*)()>(&GetSubsystem<FileSystem>);
-
-    lua["log"] = GetSubsystem<Log>();
-    lua["GetLog"] = static_cast<Log*(*)()>(&GetSubsystem<Log>);
 }
 
 }

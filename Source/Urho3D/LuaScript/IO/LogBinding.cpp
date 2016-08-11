@@ -93,6 +93,11 @@ void RegisterLog(kaguya::State& lua)
         // [Property] bool quiet
         .addProperty("quiet", &Log::IsQuiet, &Log::SetQuiet)
         );
+
+    // [Variable] Log* log
+    lua["log"] = GetSubsystem<Log>();
+    // [Function] Log* GetLog()
+    lua["GetLog"] = static_cast<Log*(*)()>(&GetSubsystem<Log>);
 }
 }
 

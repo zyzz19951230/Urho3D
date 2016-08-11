@@ -24,9 +24,6 @@
 
 #include "../Precompiled.h"
 
-#include "../Database/Database.h"
-#include "../LuaScript/LuaScriptUtils.h"
-
 #include <kaguya.hpp>
 
 namespace Urho3D
@@ -41,9 +38,6 @@ void RegisterDatabaseLuaAPI(kaguya::State& lua)
     RegisterDbResult(lua);
     RegisterDbConnection(lua);
     RegisterDatabase(lua);
-
-    lua["database"] = GetSubsystem<Database>();
-    lua["GetDatabase"] = static_cast<Database*(*)()>(&GetSubsystem<Database>);
 }
 }
 

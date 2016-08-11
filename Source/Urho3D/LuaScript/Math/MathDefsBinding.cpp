@@ -67,11 +67,8 @@ void RegisterMathDefs(kaguya::State& lua)
     lua["M_RADTODEG"] = M_RADTODEG;
 
     // [Enum] Intersection
-    // [Variable] OUTSIDE,
     lua["OUTSIDE"] = OUTSIDE;
-    // [Variable] INTERSECTS,
     lua["INTERSECTS"] = INTERSECTS;
-    // [Variable] INSIDE
     lua["INSIDE"] = INSIDE;
 
     // [Function] bool Equals(float lhs, float rhs)

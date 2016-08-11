@@ -22,11 +22,6 @@
 
 #include "../Precompiled.h"
 
-#include "../Engine/Console.h"
-#include "../Engine/DebugHud.h"
-#include "../Engine/Engine.h"
-#include "../LuaScript/LuaScriptUtils.h"
-
 #include <kaguya.hpp>
 
 namespace Urho3D
@@ -41,20 +36,5 @@ void RegisterEngineLuaAPI(kaguya::State& lua)
     RegisterConsole(lua);
     RegisterDebugHud(lua);
     RegisterEngine(lua);
-
-    lua["engine"] = GetSubsystem<Engine>();
-    lua["GetEngine"] = static_cast<Engine*(*)()>(&GetSubsystem<Engine>);
-
-    Console* console = GetSubsystem<Console>();
-    if (console)
-        lua["console"] = console;
-    
-    lua["GetConsole"] = static_cast<Console*(*)()>(&GetSubsystem<Console>);
-
-    DebugHud* debugHud = GetSubsystem<DebugHud>();
-    if (debugHud)
-        lua["debugHud"] = debugHud;
-
-    lua["GetDebugHud"] = static_cast<DebugHud*(*)()>(&GetSubsystem<DebugHud>);
 }
 }

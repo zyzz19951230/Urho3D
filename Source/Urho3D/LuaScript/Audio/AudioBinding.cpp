@@ -105,6 +105,11 @@ void RegisterAudio(kaguya::State& lua)
         // [Property] SoundListener* listener
         .addProperty("listener", &Audio::GetListener, &Audio::SetListener)        
         );
+
+    // [Variable] Audio* audio
+    lua["audio"] = GetSubsystem<Audio>();
+    // [Function] Audio* GetAudio()
+    lua["GetAudio"] = static_cast<Audio*(*)()>(&GetSubsystem<Audio>);
 }
 }
 

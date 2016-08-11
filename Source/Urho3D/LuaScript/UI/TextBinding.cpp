@@ -39,7 +39,7 @@ void RegisterText(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // [Constant] bool SetFont(String& fontName, int size
+    // [Constant] const int DEFAULT_FONT_SIZE
     lua["DEFAULT_FONT_SIZE"] = DEFAULT_FONT_SIZE;
 
     // [Enum] TextEffect

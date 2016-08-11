@@ -256,6 +256,11 @@ void RegisterUI(kaguya::State& lua)
         // [Property] float scale
         .addProperty("scale", &UI::GetScale, &UI::SetScale)
         );
+
+    // [Variable] UI* ui
+    lua["ui"] = GetSubsystem<UI>();
+    // [Function] UI* GetUI()
+    lua["GetUI"] = static_cast<UI*(*)()>(&GetSubsystem<UI>);
 }
 }
 

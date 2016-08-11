@@ -131,6 +131,11 @@ void RegisterNetwork(kaguya::State& lua)
         // [Property] const String& packageCacheDir
         .addProperty("packageCacheDir", &Network::GetPackageCacheDir, &Network::SetPackageCacheDir)
         );
+
+    // [Variable] Network* network
+    lua["network"] = GetSubsystem<Network>();
+    // [Function] Network* GetNetwork()
+    lua["GetNetwork"] = static_cast<Network*(*)()>(&GetSubsystem<Network>);
 }
 }
 

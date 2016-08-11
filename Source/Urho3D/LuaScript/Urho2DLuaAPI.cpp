@@ -24,8 +24,6 @@
 
 #include "../Precompiled.h"
 
-#include "../LuaScript/LuaScriptUtils.h"
-
 #include <kaguya.hpp>
 
 namespace Urho3D

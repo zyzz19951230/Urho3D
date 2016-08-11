@@ -24,11 +24,7 @@
 
 #include "../Precompiled.h"
 
-#include "../Network/Network.h"
-#include "../LuaScript/LuaScriptUtils.h"
-
 #include <kaguya.hpp>
-#include <kNet/kNet.h>
 
 namespace Urho3D
 {
@@ -44,9 +40,6 @@ void RegisterNetworkLuaAPI(kaguya::State& lua)
     RegisterHttpRequest(lua);
     RegisterNetwork(lua);
     RegisterNetworkPriority(lua);
-
-    lua["network"] = GetSubsystem<Network>();
-    lua["GetNetwork"] = static_cast<Network*(*)()>(&GetSubsystem<Network>);
 }
 }
 

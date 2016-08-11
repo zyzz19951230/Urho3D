@@ -64,6 +64,11 @@ void RegisterTimer(kaguya::State& lua)
         // [Property(Readonly)] float elapsedTime
         .addProperty("elapsedTime", &Time::GetElapsedTime)
     );
+
+    // [Variable] Time* time
+    lua["time"] = GetSubsystem<Time>();
+    // [Function] Time* GetTime()
+    lua["GetTime"] = static_cast<Time*(*)()>(&GetSubsystem<Time>);
 }
 }
 

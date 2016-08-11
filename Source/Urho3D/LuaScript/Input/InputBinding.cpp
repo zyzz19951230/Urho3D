@@ -298,6 +298,11 @@ void RegisterInput(kaguya::State& lua)
         // [Property(Readonly)] bool minimized
         .addProperty("minimized", &Input::IsMinimized)
         );
+
+    // [Variable] Input* input
+    lua["input"] = GetSubsystem<Input>();
+    // [Function] Input* GetInput()
+    lua["GetInput"] = static_cast<Input*(*)()>(&GetSubsystem<Input>);
 }
 }
 

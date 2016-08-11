@@ -148,8 +148,8 @@ void RegisterImage(kaguya::State& lua)
         .addProperty("cubemap", &Image::IsCubemap)
         // [Property(Readonly)] bool array
         .addProperty("array", &Image::IsArray)
-        // [Property(Readonly)] bool SRGB
-        .addProperty("SRGB", &Image::IsSRGB)
+        // [Property(Readonly)] bool sRGB
+        .addProperty("sRGB", &Image::IsSRGB)
         // [Property(Readonly)] int width
         .addProperty("width", &Image::GetWidth)
         // [Property(Readonly)] int height

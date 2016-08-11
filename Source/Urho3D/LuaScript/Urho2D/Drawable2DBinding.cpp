@@ -36,7 +36,7 @@ void RegisterDrawable2D(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // [Constant] extern float PIXEL_SIZE
+    // [Constant] float PIXEL_SIZE
     lua["PIXEL_SIZE"] = PIXEL_SIZE;
 
     // [Class] Drawable2D : Drawable

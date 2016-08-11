@@ -22,10 +22,6 @@
 
 #include "../Precompiled.h"
 
-#include "../UI/UI.h"
-
-#include "../LuaScript/LuaScriptUtils.h"
-
 #include <kaguya.hpp>
 
 namespace Urho3D
@@ -85,8 +81,5 @@ void RegisterUILuaAPI(kaguya::State& lua)
 
     RegisterWindow(lua);
     RegisterView3D(lua);
-
-    lua["ui"] = GetSubsystem<UI>();
-    lua["GetUI"] = static_cast<UI*(*)()>(&GetSubsystem<UI>);
 }
 }

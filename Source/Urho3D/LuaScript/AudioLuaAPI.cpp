@@ -21,10 +21,6 @@
 //
 
 #include "../../Precompiled.h"
-
-#include "../Audio/Audio.h"
-#include "../LuaScript/LuaScriptUtils.h"
-
 #include <kaguya.hpp>
 
 namespace Urho3D
@@ -43,8 +39,5 @@ void RegisterAudioLuaAPI(kaguya::State& lua)
     RegisterSoundListener(lua);
     RegisterSoundSource(lua);
     RegisterSoundSource3D(lua);
-
-    lua["audio"] = GetSubsystem<Audio>();
-    lua["GetAudio"] = static_cast<Audio*(*)()>(&GetSubsystem<Audio>);
 }
 }

@@ -78,7 +78,7 @@ void RegisterResourceCache(kaguya::State& lua)
 {
     using namespace kaguya;
 
-    // [Constant] bool AddResourceDir(String& pathName, unsigned priority
+    // [Constant] const unsigned PRIORITY_LAST
     lua["PRIORITY_LAST"] = PRIORITY_LAST;
 
     // [Enum] ResourceRequest
@@ -195,6 +195,11 @@ void RegisterResourceCache(kaguya::State& lua)
         // [Property] bool searchPackagesFirst
         .addProperty("searchPackagesFirst", &ResourceCache::GetSearchPackagesFirst, &ResourceCache::SetSearchPackagesFirst)
     );
+
+    // [Variable] ResourceCache* cache
+    lua["cache"] = GetSubsystem<ResourceCache>();
+    // [Function] ResourceCache* GetCache()
+    lua["GetCache"] = static_cast<ResourceCache*(*)()>(&GetSubsystem<ResourceCache>);
 }
 }
 

@@ -22,7 +22,6 @@
 
 #include "../Precompiled.h"
 
-#include "../Core/Timer.h"
 #include "../LuaScript/LuaScriptUtils.h"
 
 #include <kaguya.hpp>
@@ -49,8 +48,5 @@ void RegisterCoreLuaAPI(kaguya::State& lua)
     RegisterTimer(lua);
     RegisterVariant(lua);
     RegisterVariantMap(lua);
-
-    lua["time"] = GetSubsystem<Time>();
-    lua["GetTime"] = static_cast<Time*(*)()>(&GetSubsystem<Time>);
 }
 }

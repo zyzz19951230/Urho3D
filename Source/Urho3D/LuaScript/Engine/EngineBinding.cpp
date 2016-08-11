@@ -135,6 +135,28 @@ void RegisterEngine(kaguya::State& lua)
         // [Property(Readonly)] bool headless
         .addProperty("headless", &Engine::IsHeadless)
         );
+
+
+    // [Variable] Engine* engine
+    lua["engine"] = GetSubsystem<Engine>();
+    // [Function] Engine* GetEngine()
+    lua["GetEngine"] = static_cast<Engine*(*)()>(&GetSubsystem<Engine>);
+
+    Console* console = GetSubsystem<Console>();
+    if (console)
+        // [Variable] Console* console
+        lua["console"] = console;
+    
+    // [Function] Console* GetConsole()
+    lua["GetConsole"] = static_cast<Console*(*)()>(&GetSubsystem<Console>);
+
+    DebugHud* debugHud = GetSubsystem<DebugHud>();
+    if (debugHud)
+        // [Variable] DebugHud* debugHud
+        lua["debugHud"] = debugHud;
+
+    // [Function] DebugHud* GetDebugHud()
+    lua["GetDebugHud"] = static_cast<DebugHud*(*)()>(&GetSubsystem<DebugHud>);
 }
 }
 

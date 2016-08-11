@@ -22,10 +22,6 @@
 
 #include "../Precompiled.h"
 
-#include "../Graphics/Graphics.h"
-#include "../Graphics/Renderer.h"
-#include "../LuaScript/LuaScriptUtils.h"
-
 #include <kaguya.hpp>
 
 namespace Urho3D
@@ -117,11 +113,5 @@ void RegisterGraphicsLuaAPI(kaguya::State& lua)
     RegisterStaticModelGroup(lua);
     RegisterTerrainPatch(lua);
     RegisterZone(lua);
-
-    lua["graphics"] = GetSubsystem<Graphics>();
-    lua["GetGraphics"] = static_cast<Graphics*(*)()>(&GetSubsystem<Graphics>);
-
-    lua["renderer"] = GetSubsystem<Renderer>();
-    lua["GetRenderer"] = static_cast<Renderer*(*)()>(&GetSubsystem<Renderer>);
 }
 }

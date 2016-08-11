@@ -22,9 +22,6 @@
 
 #include "../Precompiled.h"
 
-#include "../Input/Input.h"
-#include "../LuaScript/LuaScriptUtils.h"
-
 #include <kaguya.hpp>
 
 namespace Urho3D
@@ -38,9 +35,6 @@ void RegisterInputLuaAPI(kaguya::State& lua)
 {
     RegisterControls(lua);
     RegisterInput(lua);
-    RegisterInputEvents(lua);
-
-    lua["input"] = GetSubsystem<Input>();
-    lua["GetInput"] = static_cast<Input*(*)()>(&GetSubsystem<Input>);
+    RegisterInputEvents(lua);    
 }
 }
