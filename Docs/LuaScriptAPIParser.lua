@@ -2,12 +2,17 @@
 
 luaScriptDir = '../Source/Urho3D/LuaScript/'
 
+-- All enums
 enums = {}
+-- All classes
 classes = {}
 
-constants = {}
-variables = {}
+-- All global functions
 functions = {}
+-- All global variables
+variables = {}
+-- All global constants
+constants = {}
 
 -- Parse line then return type and value
 function parseLine(line)
@@ -110,22 +115,6 @@ function parseFile(fileName)
                 }
                 table.insert(classes, current_class)
 
-            elseif type == 'Constant' then
-                local name = getName(value)
-                constant = {
-                    name = name,
-                    signature = value
-                }
-                table.insert(constants, constant)
-
-            elseif type == 'Variable' then
-                local name = getName(value)
-                variable = {
-                    name = name,
-                    signature = value
-                }
-                table.insert(variables, variable)
-
             elseif type == 'Function' then
                 local name = ''
                 for n in value:gmatch('%S+%(') do
@@ -136,6 +125,23 @@ function parseFile(fileName)
                     signature = value
                 }
                 table.insert(functions, func)
+
+			elseif type == 'Variable' then
+                local name = getName(value)
+                variable = {
+                    name = name,
+                    signature = value
+                }
+                table.insert(variables, variable)
+
+            elseif type == 'Constant' then
+                local name = getName(value)
+                constant = {
+                    name = name,
+                    signature = value
+                }
+                table.insert(constants, constant)
+                                                
             end
         end
     end
@@ -143,6 +149,7 @@ function parseFile(fileName)
     file:close()
 end
 
+-- Parse module
 function parseModule(moduleName)
     local moduleFileName = luaScriptDir .. moduleName .. 'LuaAPI.cpp'
     -- print('Parse module ' .. moduleFileName)
@@ -164,6 +171,7 @@ function parseModule(moduleName)
     end
 end
 
+-- Parser Lua script API
 function parseLuaScriptAPI()
     parseModule('Audio')
     parseModule('Core')
@@ -181,12 +189,14 @@ function parseLuaScriptAPI()
     parseModule('UI')
     parseModule('Urho2D')
 
+    -- LuaScriptLuaAPI.cpp includes some binding code
     parseFile(luaScriptDir .. 'LuaScriptLuaAPI.cpp')
 
     function compareByName(a, b)
         return a.name < b.name
     end
 
+    -- Sort by name
     table.sort(classes, compareByName)
     table.sort(enums, compareByName)
     table.sort(functions, compareByName)

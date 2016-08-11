@@ -1,4 +1,4 @@
--- Script use to generate LuaScriptAPI.dox file
+-- LuaScriptAPI.dox Generator
 
 require('LuaScriptAPIParser')
 
@@ -57,8 +57,7 @@ function writeClasses(output)
                 output:write('- ' .. item .. '\n')
             end
         end
-
-
+        
         output:write('\n')
     end
 end
@@ -126,13 +125,17 @@ namespace Urho3D
     writeGlobalFunctons(output)
     writeGlobalProperties(output)
 
-    output:write('*/\n\n}\n')
+    output:write(
+[[*/
+
+}
+]])
 
     output:close()
 end
 
--- Parse Lua Script API
+-- Parse Lua script API
 parseLuaScriptAPI()
 
--- Output dox file
+-- Write dox file
 writeDoxFile('LuaScriptAPI.dox')
