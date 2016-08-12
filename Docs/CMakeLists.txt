@@ -87,21 +87,11 @@ if (DOXYGEN_FOUND)
             COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/AngelScriptAPI.h ${CMAKE_CURRENT_BINARY_DIR}/generated/AngelScriptAPI.h
             DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/ScriptAPI.dox ${CMAKE_CURRENT_SOURCE_DIR}/AngelScriptAPI.h)
     endif ()
-    if (TARGET tolua++ AND NOT CMAKE_CROSSCOMPILING)
-        file (GLOB PKGS RELATIVE ${CMAKE_SOURCE_DIR}/Source/Urho3D/LuaScript/pkgs ${CMAKE_SOURCE_DIR}/Source/Urho3D/LuaScript/pkgs/*.pkg)
-        list (SORT PKGS)
-        set (PKGLIST "// This is a generated file. DO NOT EDIT!\n\n")
-        foreach (PKG ${PKGS})
-            set (PKGLIST "${PKGLIST}$pfile \"${PKG}\"\n")
-        endforeach ()
-        file (WRITE ${CMAKE_CURRENT_BINARY_DIR}/generated/LuaPkgToDox.txt.new ${PKGLIST})
-        execute_process (COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/generated/LuaPkgToDox.txt.new ${CMAKE_CURRENT_BINARY_DIR}/generated/LuaPkgToDox.txt)
-        execute_process (COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/generated/LuaPkgToDox.txt.new)
-        file (GLOB_RECURSE API_PKG_FILES ${CMAKE_SOURCE_DIR}/Source/Urho3D/LuaScript/pkgs/*.pkg)
+
+    if (TARGET lua_interpreter AND NOT CMAKE_CROSSCOMPILING)
         add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/generated/LuaScriptAPI.dox
-            COMMAND ${CMAKE_BINARY_DIR}/bin/tool/tolua++ -L ToDoxHook.lua -P -o ${CMAKE_CURRENT_BINARY_DIR}/generated/LuaScriptAPI.dox ${CMAKE_CURRENT_BINARY_DIR}/generated/LuaPkgToDox.txt
-            DEPENDS tolua++ ${API_PKG_FILES} ${CMAKE_CURRENT_BINARY_DIR}/generated/LuaPkgToDox.txt ${CMAKE_SOURCE_DIR}/Source/Urho3D/LuaScript/pkgs/ToDoxHook.lua
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Source/Urho3D/LuaScript/pkgs
+            COMMAND ${CMAKE_BINARY_DIR}/bin/lua ${CMAKE_SOURCE_DIR}/Source/Urho3D/LuaScript/LuaScriptAPIToDox.lua ${CMAKE_CURRENT_BINARY_DIR}/generated/LuaScriptAPI.dox
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Source/Urho3D/LuaScript
             COMMENT "Dumping LuaScript API to LuaScriptAPI.dox")
     else ()
         add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/generated/LuaScriptAPI.dox

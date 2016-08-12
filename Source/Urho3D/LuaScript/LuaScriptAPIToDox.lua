@@ -1,4 +1,4 @@
--- LuaScriptAPI.dox Generator
+-- Lua script API to dox file
 
 require('LuaScriptAPIParser')
 
@@ -126,7 +126,8 @@ namespace Urho3D
     writeGlobalProperties(output)
 
     output:write(
-[[*/
+[[
+*/
 
 }
 ]])
@@ -134,8 +135,10 @@ namespace Urho3D
     output:close()
 end
 
+doxFileName = arg[1] or 'LuaScriptAPI.dox'
+
 -- Parse Lua script API
 parseLuaScriptAPI()
 
 -- Write dox file
-writeDoxFile('LuaScriptAPI.dox')
+writeDoxFile(doxFileName)

@@ -1,6 +1,4 @@
--- Lua script API Parser
-
-luaScriptDir = '../Source/Urho3D/LuaScript/'
+-- Lua script API parser
 
 -- All enums
 enums = {}
@@ -151,7 +149,7 @@ end
 
 -- Parse module
 function parseModule(moduleName)
-    local moduleFileName = luaScriptDir .. moduleName .. 'LuaAPI.cpp'
+    local moduleFileName = moduleName .. 'LuaAPI.cpp'
     -- print('Parse module ' .. moduleFileName)
 
     moduleFile = io.open(moduleFileName, 'rt')
@@ -160,7 +158,7 @@ function parseModule(moduleName)
     for line in moduleFile:lines() do
         name = line:match('extern void Register(%w+)')
         if name ~= nil then
-            local fileName = luaScriptDir .. moduleName .. '/' .. name .. 'Binding.cpp'
+            local fileName = moduleName .. '/' .. name .. 'Binding.cpp'
             table.insert(fileNames, fileName)
         end
     end
@@ -190,7 +188,7 @@ function parseLuaScriptAPI()
     parseModule('Urho2D')
 
     -- LuaScriptLuaAPI.cpp includes some binding code
-    parseFile(luaScriptDir .. 'LuaScriptLuaAPI.cpp')
+    parseFile('LuaScriptLuaAPI.cpp')
 
     function compareByName(a, b)
         return a.name < b.name
