@@ -139,6 +139,7 @@ Urho3D uses the following third-party libraries:
 - FreeType 2.5.0 (https://www.freetype.org)
 - GLEW 1.13.0 (http://glew.sourceforge.net)
 - jo_jpeg 1.52 (http://www.jonolick.com/uploads/7/9/2/1/7921194/jo_jpeg.cpp)
+- kaguya (https://github.com/satoren/kaguya)
 - kNet (https://github.com/juj/kNet)
 - libcpuid 0.2.2 (https://github.com/anrieff/libcpuid)
 - Lua 5.1 (https://www.lua.org)
@@ -158,7 +159,6 @@ Urho3D uses the following third-party libraries:
 - stb_image_write 1.02 (https://nothings.org)
 - stb_rect_pack 0.08 (https://nothings.org)
 - stb_vorbis 1.09 (https://nothings.org)
-- tolua++ 1.0.93 (defunct - http://www.codenix.com/~tolua)
 
 DXT / ETC1 / PVRTC decompression code based on the Squish library and the Oolong
 Engine.
