@@ -87,7 +87,9 @@ void RegisterRect(kaguya::State& lua)
         // [Method] String ToString() const
         .addFunction("ToString", &Rect::ToString)
 
+        // [Field] Vector3 min
         .addProperty("min", &Rect::min_)
+        // [Field] Vector3 max
         .addProperty("max", &Rect::max_)
 
         // [Property(Readonly)] Vector2 center

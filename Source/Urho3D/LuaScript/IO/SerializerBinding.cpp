@@ -47,9 +47,10 @@ void RegisterSerializer(kaguya::State& lua)
 
     // [Class] Serializer
     lua["Serializer"].setClass(UserdataMetatable<Serializer>()
+        
         // [Method] unsigned Write(const VectorBuffer& buffer)
         .addStaticFunction("Write", &SerializerWrite)
-
+                
         // [Method] bool WriteInt(int value)
         .addFunction("WriteInt", &Serializer::WriteInt)
         // [Method] bool WriteInt64(long long value)

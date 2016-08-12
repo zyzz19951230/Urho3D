@@ -106,9 +106,13 @@ void RegisterMathDefs(kaguya::State& lua)
     // [Function] float Atan2(float y, float x)
     lua["Atan2"] = static_cast<float(*)(float, float)>(&Atan2);
 
+    // [Function] int MinInt(int lhs, int rhs)
     lua["MinInt"] = static_cast<int(*)(int, int)>(&Min);
+    // [Function] int MaxInt(int lhs, int rhs)
     lua["MaxInt"] = static_cast<int(*)(int, int)>(&Max);
+    // [Function] int AbsInt(int value)
     lua["AbsInt"] = static_cast<int(*)(int)>(&Abs);
+    // [Function] int ClampInt(int value, int min, int max)
     lua["ClampInt"] = static_cast<int(*)(int, int, int)>(&Clamp);
 
     // [Function] bool IsPowerOfTwo(unsigned value)

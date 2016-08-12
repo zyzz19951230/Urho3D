@@ -52,6 +52,7 @@ void RegisterPackageFile(kaguya::State& lua)
     using namespace kaguya;
     // [Class] PackageEntry
     lua["PackageEntry"].setClass(UserdataMetatable<PackageEntry>()
+        
         // [Field] unsigned offset
         .addProperty("offset", &PackageEntry::offset_)
         // [Field] unsigned size

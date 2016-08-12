@@ -41,7 +41,6 @@ void RegisterParticleEffect(kaguya::State& lua)
     lua["EMITTER_SPHERE"] = EMITTER_SPHERE;
     lua["EMITTER_BOX"] = EMITTER_BOX;
 
-
     // [Class] ColorFrame
     lua["ColorFrame"].setClass(UserdataMetatable<ColorFrame>()
         // [Constructor] ColorFrame()

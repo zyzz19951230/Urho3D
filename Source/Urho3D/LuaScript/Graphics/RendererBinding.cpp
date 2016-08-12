@@ -39,8 +39,6 @@ KAGUYA_MEMBER_FUNCTION_OVERLOADS(RendererGetNumGeometries, Renderer, GetNumGeome
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(RendererGetNumLights, Renderer, GetNumLights, 0, 1);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(RendererGetNumShadowMaps, Renderer, GetNumShadowMaps, 0, 1);
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(RendererGetNumOccluders, Renderer, GetNumOccluders, 0, 1);
-// KAGUYA_MEMBER_FUNCTION_OVERLOADS(RendererGetScreenBuffer, Renderer, GetScreenBuffer, 6, 7);
-// KAGUYA_MEMBER_FUNCTION_OVERLOADS(RendererSetBatchShaders, Renderer, SetBatchShaders, 2, 3);
 
 void RegisterRenderer(kaguya::State& lua)
 {

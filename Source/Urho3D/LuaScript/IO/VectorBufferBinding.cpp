@@ -39,7 +39,7 @@ void RegisterVectorBuffer(kaguya::State& lua)
         // [Constructor] VectorBuffer()
         .setConstructors<VectorBuffer()>()
 
-        // [Method] void SetData(const PODVector<unsigned char>& data)
+        // [Method] void SetData((Deserializer& source, unsigned size)
         .addFunction("SetData", static_cast<void(VectorBuffer::*)(Deserializer&, unsigned)>(&VectorBuffer::SetData))
         // [Method] void Clear()
         .addFunction("Clear", &VectorBuffer::Clear)

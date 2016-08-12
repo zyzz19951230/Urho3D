@@ -139,6 +139,7 @@ void RegisterMatrix4(kaguya::State& lua)
         .addProperty("m32", &Matrix4::m32_)
         // [Field] float m33
         .addProperty("m33", &Matrix4::m33_)
+        
         // [StaticConstant] Matrix4 ZERO
         .addStaticField("ZERO", &Matrix4::ZERO)
         // [StaticConstant] Matrix4 IDENTITY

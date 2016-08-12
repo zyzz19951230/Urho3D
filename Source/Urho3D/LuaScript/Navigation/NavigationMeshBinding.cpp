@@ -68,6 +68,7 @@ void RegisterNavigationMesh(kaguya::State& lua)
 
     // [Class] NavigationGeometryInfo
     lua["NavigationGeometryInfo"].setClass(UserdataMetatable<NavigationGeometryInfo>()
+        
         // [Field] Component* component
         .addProperty("component", &NavigationGeometryInfo::component_)
         // [Field] unsigned lodLevel

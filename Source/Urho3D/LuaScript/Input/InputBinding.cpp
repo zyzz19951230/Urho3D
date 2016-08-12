@@ -89,6 +89,7 @@ void RegisterInput(kaguya::State& lua)
 
     // [Class] TouchState
     lua["TouchState"].setClass(UserdataMetatable<TouchState>()
+        
         // [Method] SharedPtr<UIElement> GetTouchedElement()
         .addStaticFunction("GetTouchedElement", &TouchStateGetTouchedElement)
 
@@ -108,6 +109,7 @@ void RegisterInput(kaguya::State& lua)
 
     // [Class] JoystickState
     lua["JoystickState"].setClass(UserdataMetatable<JoystickState>()
+        
         // [Method] bool IsController() const
         .addFunction("IsController", &JoystickState::IsController)
         // [Method] unsigned GetNumButtons() const

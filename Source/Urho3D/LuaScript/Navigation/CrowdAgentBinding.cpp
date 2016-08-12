@@ -67,6 +67,7 @@ void RegisterCrowdAgent(kaguya::State& lua)
 
     // [Class] CrowdAgent : Component
     lua["CrowdAgent"].setClass(UserdataMetatable<CrowdAgent, Component>()
+        // [Constructor] CrowdAgent()
         .addStaticFunction("new", &CreateObject<CrowdAgent>)
 
         // [Method] void DrawDebugGeometry(bool)

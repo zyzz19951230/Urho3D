@@ -71,8 +71,7 @@ void RegisterIndexBuffer(kaguya::State& lua)
     // [Class] IndexBuffer : Object
     lua["IndexBuffer"].setClass(UserdataMetatable<IndexBuffer, Object>()
         // [Constructor] IndexBuffer(bool forceHeadless = false)
-        .addStaticFunction("new", 
-            CreateIndexBufferOverloads())
+        .addStaticFunction("new", CreateIndexBufferOverloads())
         
         // [Method] void SetShadowed(bool enable)
         .addFunction("SetShadowed", &IndexBuffer::SetShadowed)

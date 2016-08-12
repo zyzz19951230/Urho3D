@@ -124,6 +124,7 @@ void RegisterDeserializer(kaguya::State& lua)
         // [Method] StringHash ReadStringHash()
         .addFunction("ReadStringHash", &Deserializer::ReadStringHash)
         
+        // [Method] VectorBuffer DeserializerReadBuffer()
         .addStaticFunction("ReadBuffer", &DeserializerReadBuffer)
 
         // [Method] ResourceRef ReadResourceRef()

@@ -31,26 +31,6 @@
 namespace Urho3D
 {
 
-//static bool DecalSetAddDecal0(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV)
-//{
-//    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV);
-//}
-//
-//static bool DecalSetAddDecal1(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive)
-//{
-//    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive);
-//}
-//
-//static bool DecalSetAddDecal2(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive, float normalCutoff)
-//{
-//    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive, normalCutoff);
-//}
-//
-//static bool DecalSetAddDecal3(DecalSet* self, Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive, float normalCutoff, unsigned int subGeometry)
-//{
-//    return self->AddDecal(target, worldPosition, worldRotation, size, aspectRatio, depth, topLeftUV, bottomRightUV, timeToLive, normalCutoff, subGeometry);
-//}
-
 KAGUYA_MEMBER_FUNCTION_OVERLOADS(DecalSetAddDecal, DecalSet, AddDecal, 8, 11);
 
 void RegisterDecalSet(kaguya::State& lua)
@@ -70,7 +50,7 @@ void RegisterDecalSet(kaguya::State& lua)
         .addFunction("SetMaxIndices", &DecalSet::SetMaxIndices)
         
         // [Method]  bool AddDecal(Drawable* target, const Vector3& worldPosition, const Quaternion& worldRotation, float size, float aspectRatio, float depth, const Vector2& topLeftUV, const Vector2& bottomRightUV, float timeToLive = 0.0f, float normalCutoff = 0.1f, unsigned subGeometry = M_MAX_UNSIGNED)
-        // .addFunction("AddDecal", DecalSetAddDecal())
+        .addFunction("AddDecal", DecalSetAddDecal())
 
         // [Method] void RemoveDecals(unsigned num)
         .addFunction("RemoveDecals", &DecalSet::RemoveDecals)

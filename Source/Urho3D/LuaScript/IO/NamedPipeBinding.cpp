@@ -43,6 +43,9 @@ void RegisterNamedPipe(kaguya::State& lua)
         .addFunction("Close", &NamedPipe::Close)
         // [Method] bool IsOpen() const
         .addFunction("IsOpen", &NamedPipe::IsOpen)
+
+        // [Property(Readonly)] bool open
+        .addProperty("open", &NamedPipe::IsOpen)
         );
 }
 }

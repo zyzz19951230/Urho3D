@@ -222,6 +222,7 @@ void RegisterGraphicsDefs(kaguya::State& lua)
     lua["TU_SPECULAR"] = TU_SPECULAR;
     lua["TU_EMISSIVE"] = TU_EMISSIVE;
     lua["TU_ENVIRONMENT"] = TU_ENVIRONMENT;
+        
     // lua["TU_VOLUMEMAP"] = TU_VOLUMEMAP;
     // lua["TU_CUSTOM1"] = TU_CUSTOM1;
     // lua["TU_CUSTOM2"] = TU_CUSTOM2;

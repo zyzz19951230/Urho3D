@@ -207,7 +207,6 @@ void RegisterGraphics(kaguya::State& lua)
         // [Property(Readonly)] bool resizable
         .addProperty("resizable", &Graphics::GetResizable)
 
-        // .addProperty("highDPI", &Graphics::GetHighDPI)
         // [Property(Readonly)] bool vSync
         .addProperty("vSync", &Graphics::GetVSync)
         // [Property(Readonly)] bool tripleBuffer

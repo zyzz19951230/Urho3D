@@ -46,6 +46,71 @@ static Variant VariantFromDouble(double value)
     return Variant(value);
 }
 
+static Variant VariantFromVectorBuffer(const VectorBuffer& value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromResourceRef(const ResourceRef& value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromResourceRefList(const ResourceRefList& value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromVariantVector(const VariantVector& value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromVariantMap(const VariantMap& value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromStringVector(const StringVector& value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromIntRect(const IntRect& value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromIntVector2(const IntVector2& value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromRefCounted(RefCounted* value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromMatrix3(const Matrix3& value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromMatrix3x4(const Matrix3x4& value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromMatrix4(const Matrix4& value)
+{
+    return Variant(value);
+}
+
+static Variant VariantFromVariant(const Variant& value)
+{
+    return Variant(value);
+}
+
 static SharedPtr<RefCounted> VariantGetPtr(const Variant* self)
 {
     return SharedPtr<RefCounted>(self->GetPtr());
@@ -118,15 +183,12 @@ void RegisterVariant(kaguya::State& lua)
 
     // [Class] Variant
     lua["Variant"].setClass(UserdataMetatable<Variant>()
-        .setConstructors<
         // [Constructor] Variant(const StringHash& value)
-        Variant(const StringHash&),
+        .setConstructors<Variant(const StringHash&),
         // [Constructor] Variant(bool value)
         Variant(bool),
         // [Constructor] Variant(float value)
         Variant(float),
-        // [Constructor] Variant(double value)
-        Variant(double),
         // [Constructor] Variant(const Vector2& value)
         Variant(const Vector2&),
         // [Constructor] Variant(const Vector3& value)
@@ -138,29 +200,7 @@ void RegisterVariant(kaguya::State& lua)
         // [Constructor] Variant(const Color& value)
         Variant(const Color&),
         // [Constructor] Variant(const String& value)
-        Variant(const String&),
-        // [Constructor] Variant(const ResourceRef& value)
-        Variant(const ResourceRef&),
-        // [Constructor] Variant(const ResourceRefList& value)
-        Variant(const ResourceRefList&),
-        // [Constructor] Variant(const VariantVector& value)
-        Variant(const VariantVector&),
-        // [Constructor] Variant(const VariantMap& value)
-        Variant(const VariantMap&),
-        // [Constructor] Variant(const StringVector& value)
-        Variant(const StringVector&),
-        // [Constructor] Variant(const IntRect& value)
-        Variant(const IntRect&),
-        // [Constructor] Variant(const IntVector2& value)
-        Variant(const IntVector2&),
-        // [Constructor] Variant(RefCounted* value)
-        Variant(RefCounted*),
-        // [Constructor] Variant(const Matrix3& value)
-        Variant(const Matrix3&),
-        // [Constructor] Variant(const Matrix3x4& value)
-        Variant(const Matrix3x4&),
-        // [Constructor] Variant(const Matrix4& value)
-        Variant(const Matrix4&)> ()
+        Variant(const String&)>()
 
         // [StaticMethod] Variant FromInt(int value)
         .addStaticFunction("FromInt", &VariantFromInt)
@@ -168,6 +208,33 @@ void RegisterVariant(kaguya::State& lua)
         .addStaticFunction("FromFloat", &VariantFromFloat)
         // [StaticMethod] Variant FromDouble(double value)
         .addStaticFunction("FromDouble", &VariantFromDouble)
+
+        // [StaticMethod] Variant FromVectorBuffer(const VectorBuffer& value)
+        .addStaticFunction("FromVectorBuffer", &VariantFromVectorBuffer)
+        // [StaticMethod] Variant FromResourceRef(const ResourceRef& value)
+        .addStaticFunction("FromResourceRef", &VariantFromResourceRef)
+        // [StaticMethod] Variant FromResourceRefList(const ResourceRefList& value)
+        .addStaticFunction("FromResourceRefList", &VariantFromResourceRefList)
+        // [StaticMethod] Variant FromVariantVector(const VariantVector& value)
+        .addStaticFunction("FromVariantVector", &VariantFromVariantVector)
+        // [StaticMethod] Variant FromVariantMap(const VariantMap& value)
+        .addStaticFunction("FromVariantMap", &VariantFromVariantMap)
+        // [StaticMethod] Variant FromStringVector(const StringVector& value)
+        .addStaticFunction("FromStringVector", &VariantFromStringVector)
+        // [StaticMethod] Variant FromIntRect(const IntRect& value)
+        .addStaticFunction("FromIntRect", &VariantFromIntRect)
+        // [StaticMethod] Variant FromIntVector2(const IntVector2& value)
+        .addStaticFunction("FromIntVector2", &VariantFromIntVector2)
+        // [StaticMethod] Variant FromeRefCounted(RefCounted* value)
+        .addStaticFunction("FromeRefCounted", &VariantFromRefCounted)
+        // [StaticMethod] Variant FromMatrix3(const Matrix3& value)
+        .addStaticFunction("FromMatrix3", &VariantFromMatrix3)
+        // [StaticMethod] Variant FromMatrix3x4(const Matrix3x4& value)
+        .addStaticFunction("FromMatrix3x4", &VariantFromMatrix3x4)
+        // [StaticMethod] Variant FromMatrix4(const Matrix4& value)
+        .addStaticFunction("FromMatrix4", &VariantFromMatrix4)
+        // [StaticMethod] Variant FromVariant(const Variant& value)
+        .addStaticFunction("FromVariant", &VariantFromVariant)
 
         // [Method] void Clear()
         .addFunction("Clear", &Variant::Clear)

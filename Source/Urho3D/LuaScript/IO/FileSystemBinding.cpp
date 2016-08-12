@@ -114,11 +114,6 @@ void RegisterFileSystem(kaguya::State& lua)
         .addFunction("GetAppPreferencesDir", &FileSystem::GetAppPreferencesDir)
         );
 
-    // [Variable] FileSyste* fileSyste
-    lua["fileSystem"] = GetSubsystem<FileSystem>();
-    // [Function] FileSyste* GetFileSyste()
-    lua["GetFileSystem"] = static_cast<FileSystem*(*)()>(&GetSubsystem<FileSystem>);
-
     // [Function] String GetPath(const String& fullPath)
     lua["GetPath"] = function(&GetPath);
     // [Function] String GetFileName(const String& fullPath)
@@ -146,6 +141,12 @@ void RegisterFileSystem(kaguya::State& lua)
     lua["IsAbsolutePath"] = function(&IsAbsolutePath);
     // [Function] String GetFileSizeString(unsigned long long memorySize)
     lua["GetFileSizeString"] = function(&GetFileSizeString);
+
+    // [Variable] FileSyste* fileSyste
+    lua["fileSystem"] = GetSubsystem<FileSystem>();
+    // [Function] FileSyste* GetFileSyste()
+    lua["GetFileSystem"] = static_cast<FileSystem*(*)()>(&GetSubsystem<FileSystem>);
+
 }
 }
 
