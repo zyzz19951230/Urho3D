@@ -52,11 +52,11 @@ void RegisterColor(kaguya::State& lua)
         // [Constructor] Color(float r, float g, float b, float a)
         Color(float, float, float, float)>()
 
-        // [Method] bool operator ==(const Color& rhs)
+        // [Method] bool operator==(const Color& rhs)
         .addFunction("__eq", &Color::operator==)
-        // [Method] Color operator *(float rhs) const
+        // [Method] Color operator*(float rhs) const
         .addFunction("__mul", &Color::operator*)
-        // [Method] Color operator +(const Color& rhs)
+        // [Method] Color operator+(const Color& rhs)
         .addFunction("__add", &Color::operator+)
 
         // [Method] unsigned ToUInt() const

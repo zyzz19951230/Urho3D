@@ -52,19 +52,19 @@ void RegisterMatrix4(kaguya::State& lua)
         // [Constructor] Matrix4(const Matrix3& matrix)
          Matrix4(const Matrix3&)>()
 
-        // [Method] bool operator ==(const Matrix4& rhs) const
+        // [Method] bool operator==(const Matrix4& rhs) const
         .addFunction("__eq", &Matrix4::operator==)
 
         .addOverloadedFunctions("__mul",
-            // [Method] Vector3 operator *(const Vector3& rhs) const
+            // [Method] Vector3 operator*(const Vector3& rhs) const
             static_cast<Vector3(Matrix4::*)(const Vector3&) const>(&Matrix4::operator*),
-            // [Method] Vector4 operator *(const Vector4& rhs) const
+            // [Method] Vector4 operator*(const Vector4& rhs) const
             static_cast<Vector4(Matrix4::*)(const Vector4&) const>(&Matrix4::operator*),
-            // [Method] Matrix4 operator *(float rhs) const
+            // [Method] Matrix4 operator*(float rhs) const
             static_cast<Matrix4(Matrix4::*)(float) const>(&Matrix4::operator*),
-            // [Method] Matrix4 operator *(const Matrix4& rhs) const
+            // [Method] Matrix4 operator*(const Matrix4& rhs) const
             static_cast<Matrix4(Matrix4::*)(const Matrix4&) const>(&Matrix4::operator*),
-            // [Method] Matrix4 operator *(const Matrix3x4& rhs) const;
+            // [Method] Matrix4 operator*(const Matrix3x4& rhs) const;
             static_cast<Matrix4(Matrix4::*)(const Matrix3x4&) const>(&Matrix4::operator*))
 
         // [Method] 

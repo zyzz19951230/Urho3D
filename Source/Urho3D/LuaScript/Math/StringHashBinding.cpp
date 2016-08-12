@@ -45,12 +45,12 @@ void RegisterStringHash(kaguya::State& lua)
         // [Constructor] StringHash(const char* str)
         StringHash(const char*)>()
 
-        // [Method] StringHash operator +(const StringHash& rhs) const
+        // [Method] StringHash operator+(const StringHash& rhs) const
         .addFunction("__add", &StringHash::operator+)
-        // [Method] bool operator ==(const StringHash& rhs) const
+        // [Method] bool operator==(const StringHash& rhs) const
         .addFunction("__eq", &StringHash::operator==)
 
-        // [Method] bool operator <(const StringHash& rhs) const
+        // [Method] bool operator<(const StringHash& rhs) const
         .addFunction("__less", &StringHash::operator<)
 
         // [Method] unsigned Value() const

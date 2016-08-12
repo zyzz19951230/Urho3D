@@ -58,24 +58,24 @@ void RegisterQuaternion(kaguya::State& lua)
         // [Constructor] Quaternion(const Matrix3& matrix)
         Quaternion(const Matrix3&)>()
 
-        // [Method] bool operator ==(const Quaternion& rhs) const
+        // [Method] bool operator==(const Quaternion& rhs) const
         .addFunction("__eq", &Quaternion::operator==)
 
         .addOverloadedFunctions("__mul",
-            // [Method] Quaternion operator *(float rhs) const
+            // [Method] Quaternion operator*(float rhs) const
             static_cast<Quaternion(Quaternion::*)(float) const>(&Quaternion::operator*),
-            // [Method] Quaternion operator *(const Quaternion& rhs) const
+            // [Method] Quaternion operator*(const Quaternion& rhs) const
             static_cast<Quaternion(Quaternion::*)(const Quaternion&) const>(&Quaternion::operator*),
-            // [Method] Vector3 operator *(const Vector3& rhs) const
+            // [Method] Vector3 operator*(const Vector3& rhs) const
             static_cast<Vector3(Quaternion::*)(const Vector3&) const>(&Quaternion::operator*))
 
         .addOverloadedFunctions("__sub",
-            // [Method] Quaternion operator -() const
+            // [Method] Quaternion operator-() const
             static_cast<Quaternion(Quaternion::*)() const>(&Quaternion::operator-),
-            // [Method] Quaternion operator -(const Quaternion& rhs) const
+            // [Method] Quaternion operator-(const Quaternion& rhs) const
             static_cast<Quaternion(Quaternion::*)(const Quaternion&) const>(&Quaternion::operator-))
 
-        // [Method] Quaternion operator +(const Quaternion& rhs) const
+        // [Method] Quaternion operator+(const Quaternion& rhs) const
         .addFunction("__add", &Quaternion::operator+)
 
         // [Method] void FromAngleAxis(float angle, const Vector3& axis)

@@ -244,7 +244,7 @@ void RegisterXMLElement(kaguya::State& lua)
         // [Constructor] XPathResultSet(const XPathResultSet& rhs)
         XPathResultSet(const XPathResultSet&)>()
 
-        // [Method] XMLElement operator [](unsigned index) const
+        // [Method] XMLElement operator[](unsigned index) const
         .addFunction("__index", &XPathResultSet::operator[])
 
         // [Method] XMLElement FirstResult()

@@ -47,7 +47,7 @@ void RegisterSpline(kaguya::State& lua)
         // [Constructor] Spline(InterpolationMode mode)
         Spline(InterpolationMode)>()
 
-        // [Method] bool ==(const Spline& rhs) const
+        // [Method] bool operator==(const Spline& rhs) const
         .addFunction("__eq", &Spline::operator==)
 
         // [Method] void SetInterpolationMode(InterpolationMode interpolationMode)
@@ -66,6 +66,7 @@ void RegisterSpline(kaguya::State& lua)
             static_cast<void(Spline::*)()>(&Spline::RemoveKnot),
             // [Method] void RemoveKnot(unsigned index)
             static_cast<void(Spline::*)(unsigned)>(&Spline::RemoveKnot))
+        
         // [Method] void Clear()
         .addFunction("Clear", &Spline::Clear)
 

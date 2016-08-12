@@ -58,7 +58,7 @@ void RegisterRay(kaguya::State& lua)
         // [Constructor] Ray(const Ray& ray)
         Ray(const Ray&)>()
 
-        // [Method] bool operator ==(const Ray& rhs) const
+        // [Method] bool operator==(const Ray& rhs) const
         .addFunction("__eq", &Ray::operator==)
 
         // [Method] void Define(const Vector3& origin, const Vector3& direction)

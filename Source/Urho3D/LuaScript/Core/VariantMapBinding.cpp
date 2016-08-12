@@ -53,9 +53,9 @@ void RegisterVariantMap(kaguya::State& lua)
         // [Constructor] VariantMap()
         .setConstructors<VariantMap()>()
 
-        // [Method] const Variant& __index(StringHash key)
+        // [Method] const Variant& operator[](StringHash key)
         .addStaticFunction("__index", &VariantMapGetVariant)
-        // [Method] void __newindex(StringHash key, const Variant& value)
+        // [Method] void operator[](StringHash key, const Variant& value)
         .addStaticFunction("__newindex", &VariantMapSetVariant)
         );
 }

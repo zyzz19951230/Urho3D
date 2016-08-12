@@ -43,6 +43,7 @@ void RegisterAudio(kaguya::State& lua)
 
     // [Class] Audio : Object
     lua["Audio"].setClass(UserdataMetatable<Audio, Object>()
+        
         // [Method] bool SetMode(int bufferLengthMSec, int mixRate, bool stereo, bool interpolation = true)
         .addFunction("SetMode", AudioSetMode())
 

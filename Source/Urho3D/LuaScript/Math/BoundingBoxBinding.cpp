@@ -56,7 +56,7 @@ void RegisterBoundingBox(kaguya::State& lua)
 		// [Constructor] BoundingBox(const Sphere& sphere)
 		BoundingBox(const Sphere&)>()
 
-		// [Method] bool ==(const BoundingBox& rhs) const
+		// [Method] bool operator==(const BoundingBox& rhs) const
         .addFunction("__eq", &BoundingBox::operator==)
 
         .addOverloadedFunctions("Define",

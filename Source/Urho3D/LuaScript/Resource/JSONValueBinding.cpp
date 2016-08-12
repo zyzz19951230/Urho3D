@@ -162,15 +162,15 @@ void RegisterJSONValue(kaguya::State& lua)
         .addFunction("GetObject", &JSONValue::GetObject)
 
         .addOverloadedFunctions("__index",
-            // [Method] const JSONValue& __index(unsigned index) const
+            // [Method] const JSONValue& operator[](unsigned index) const
             static_cast<const JSONValue&(JSONValue::*)(unsigned) const>(&JSONValue::operator[]),
-            // [Method] const JSONValue& __index(const String& key) const
+            // [Method] const JSONValue& operator[](const String& key) const
             static_cast<const JSONValue&(JSONValue::*)(const String&) const>(&JSONValue::operator[]))
 
         .addOverloadedFunctions("__newindex",
-            // [Method] JSONValue& __newindex(unsigned index)
+            // [Method] JSONValue& operator[](unsigned index)
             static_cast<JSONValue&(JSONValue::*)(unsigned)>(&JSONValue::operator[]),
-            // [Method] JSONValue& __newindex(const String& key)
+            // [Method] JSONValue& operator[](const String& key)
             static_cast<JSONValue&(JSONValue::*)(const String&)>(&JSONValue::operator[]))
 
         // [Method] void Push(const JSONValue& value)

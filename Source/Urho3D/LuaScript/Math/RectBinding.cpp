@@ -47,7 +47,7 @@ void RegisterRect(kaguya::State& lua)
         // [Constructor] Rect(const Rect& rect)
         Rect(const Rect&)>()
 
-        // [Method] bool operator ==(const Rect& rhs) const
+        // [Method] bool operator==(const Rect& rhs) const
         .addFunction("__eq", &Rect::operator==)
 
         .addOverloadedFunctions("Define",
@@ -112,7 +112,7 @@ void RegisterRect(kaguya::State& lua)
         // [Constructor] IntRect(int left, int top, int right, int bottom)
         IntRect(int, int, int, int)>()
 
-        // [Method] bool operator ==(const IntRect& rhs) const
+        // [Method] bool operator==(const IntRect& rhs) const
         .addFunction("__eq", &IntRect::operator==)
 
         // [Method] Vector2 Size() const

@@ -40,25 +40,25 @@ void RegisterProcessUtils(kaguya::State& lua)
     // [Function] void ErrorDialog(const String& title, const String& message)
     lua["ErrorDialog"] = function(&ErrorDialog);
 
-    
+    // [Function] void ErrorExit(const String& message = String::EMPTY, int exitCode = EXIT_FAILURE)
     lua["ErrorExit"] = ErrorExitOverloads();
+
     // [Function] void OpenConsoleWindow()
     lua["OpenConsoleWindow"] = function(&OpenConsoleWindow);
+
+    // [Function] void PrintLine(const String& str, bool error = false)
     lua["PrintLine"] = PrintLineOverloads();
 
     // [Function] const Vector<String>& GetArguments()
     lua["GetArguments"] = function(&GetArguments);
-
     // [Function] String GetConsoleInput()
     lua["GetConsoleInput"] = function(&GetConsoleInput);
     // [Function] String GetPlatform()
     lua["GetPlatform"] = function(&GetPlatform);
-
     // [Function] unsigned GetNumPhysicalCPUs()
     lua["GetNumPhysicalCPUs"] = function(&GetNumPhysicalCPUs);
     // [Function] unsigned GetNumLogicalCPUs()
     lua["GetNumLogicalCPUs"] = function(&GetNumLogicalCPUs);
-
     // [Function] void SetMiniDumpDir(const String& pathName)
     lua["SetMiniDumpDir"] = function(&SetMiniDumpDir);
     // [Function] String GetMiniDumpDir()

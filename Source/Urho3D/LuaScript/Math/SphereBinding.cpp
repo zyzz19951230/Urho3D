@@ -51,7 +51,7 @@ void RegisterSphere(kaguya::State& lua)
         // [Constructor] Sphere(const Polyhedron& poly)
         Sphere(const Polyhedron&)>()
 
-        // [Method] 
+        // [Method] bool operator==(const Sphere& rhs) const
         .addFunction("__eq", &Sphere::operator==)
 
         .addOverloadedFunctions("Define",

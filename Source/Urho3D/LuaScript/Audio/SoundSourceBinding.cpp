@@ -65,6 +65,7 @@ void RegisterSoundSource(kaguya::State& lua)
         .addFunction("SetAttenuation", &SoundSource::SetAttenuation)
         // [Method] void SetPanning(float panning)
         .addFunction("SetPanning", &SoundSource::SetPanning)
+        
         // [Method] Sound* GetSound() const
         .addFunction("GetSound", &SoundSource::GetSound)
         // [Method] String GetSoundType() const

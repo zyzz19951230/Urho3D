@@ -147,7 +147,7 @@ void RegisterGraphicsDefs(kaguya::State& lua)
         VertexElement(VertexElementType, VertexElementSemantic, unsigned char), 
         VertexElement(VertexElementType, VertexElementSemantic, unsigned char, bool)>()
 
-        // [Method] bool ==(const VertexElement& rhs) const
+        // [Method] bool operator==(const VertexElement& rhs) const
         .addFunction("__eq", &VertexElement::operator==)
 
         // [Field] VertexElementType type

@@ -93,7 +93,7 @@ void RegisterVariant(kaguya::State& lua)
         // [Constructor] ResourceRef(const char* type, const char* name)
         ResourceRef(const char*, const char*)>()
 
-        // [Method] bool ==(const ResourceRef& rhs) const
+        // [Method] bool operator==(const ResourceRef& rhs) const
         .addFunction("__eq", &ResourceRef::operator==)
 
         // [Field] StringHash type
@@ -109,7 +109,7 @@ void RegisterVariant(kaguya::State& lua)
         // [Constructor] ResourceRefList(StringHash type)
         ResourceRefList(StringHash)>()
 
-        // [Method] bool ==(const ResourceRefList& rhs) const
+        // [Method] bool operator==(const ResourceRefList& rhs) const
         .addFunction("__eq", &ResourceRefList::operator==)
 
         // [Field] StringHash type
@@ -119,9 +119,6 @@ void RegisterVariant(kaguya::State& lua)
     // [Class] Variant
     lua["Variant"].setClass(UserdataMetatable<Variant>()
         .setConstructors<
-        // Variant(),
-        // Variant(int), 
-        // Variant(unsigned),
         // [Constructor] Variant(const StringHash& value)
         Variant(const StringHash&),
         // [Constructor] Variant(bool value)
@@ -175,7 +172,7 @@ void RegisterVariant(kaguya::State& lua)
         // [Method] void Clear()
         .addFunction("Clear", &Variant::Clear)
 
-        // [Method] bool ==(const Variant& rhs) const
+        // [Method] bool operator==(const Variant& rhs) const
         .addFunction("__eq", static_cast<bool(Variant::*)(const Variant&) const>(&Variant::operator==))
 
         // [Method] int GetInt() const

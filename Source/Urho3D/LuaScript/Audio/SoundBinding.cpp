@@ -67,7 +67,7 @@ void RegisterSound(kaguya::State& lua)
         .addOverloadedFunctions("LoadRaw", 
             // [Method] bool LoadRaw(Deserializer& source)
             &Sound::LoadRaw,
-            // [Method] bool LoadRaw(Deserializer& source)
+            // [Method] bool LoadRaw(const String& fileName)
             &SoundLoadRaw)
 
         .addOverloadedFunctions("LoadWav", 

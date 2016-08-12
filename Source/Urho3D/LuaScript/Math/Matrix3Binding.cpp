@@ -43,20 +43,20 @@ void RegisterMatrix3(kaguya::State& lua)
         // [Constructor] Matrix3(float, float, float, float, float, float, float, float, float)
         Matrix3(float, float, float, float, float, float, float, float, float)>()
 
-        // [Method] bool operator ==(const Matrix3& rhs) const
+        // [Method] bool operator==(const Matrix3& rhs) const
         .addFunction("__eq", &Matrix3::operator==)
 
         .addOverloadedFunctions("__mul",
-            // [Method] Vector3 operator *(const Vector3& rhs) const
+            // [Method] Vector3 operator*(const Vector3& rhs) const
             static_cast<Vector3(Matrix3::*)(const Vector3&) const>(&Matrix3::operator*),
-            // [Method] Matrix3 operator *(float rhs) const
+            // [Method] Matrix3 operator*(float rhs) const
             static_cast<Matrix3(Matrix3::*)(float) const>(&Matrix3::operator*),
-            // [Method] Matrix3 operator *(const Matrix3& rhs) const
+            // [Method] Matrix3 operator*(const Matrix3& rhs) const
             static_cast<Matrix3(Matrix3::*)(const Matrix3&) const>(&Matrix3::operator*))
 
-        // [Method] Matrix3 operator +(const Matrix3& rhs) const
+        // [Method] Matrix3 operator+(const Matrix3& rhs) const
         .addFunction("__add", &Matrix3::operator+)
-        // [Method] Matrix3 operator -(const Matrix3& rhs) const
+        // [Method] Matrix3 operator-(const Matrix3& rhs) const
         .addFunction("__sub", &Matrix3::operator-)
 
         .addOverloadedFunctions("SetScale",

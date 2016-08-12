@@ -58,24 +58,24 @@ void RegisterMatrix3x4(kaguya::State& lua)
         // [Constructor] Matrix3x4(const Vector3& translation, const Quaternion& rotation, const Vector3& scale)
         Matrix3x4(const Vector3&, const Quaternion&, const Vector3&)>()
 
-        // [Method] bool operator ==(const Matrix3x4& rhs) const
+        // [Method] bool operator==(const Matrix3x4& rhs) const
         .addFunction("__eq", &Matrix3x4::operator==)
 
         .addOverloadedFunctions("__mul",
-            // [Method] Vector3 operator *(const Vector3& rhs) const
+            // [Method] Vector3 operator*(const Vector3& rhs) const
             static_cast<Vector3(Matrix3x4::*)(const Vector3&) const>(&Matrix3x4::operator*),
-            // [Method] Vector3 operator *(const Vector4& rhs) const
+            // [Method] Vector3 operator*(const Vector4& rhs) const
             static_cast<Vector3(Matrix3x4::*)(const Vector4&) const>(&Matrix3x4::operator*),
-            // [Method] Matrix3x4 operator *(float rhs) const
+            // [Method] Matrix3x4 operator*(float rhs) const
             static_cast<Matrix3x4(Matrix3x4::*)(float) const>(&Matrix3x4::operator*),
-            // [Method] Matrix3x4 operator *(const Matrix3x4& rhs) const
+            // [Method] Matrix3x4 operator*(const Matrix3x4& rhs) const
             static_cast<Matrix3x4(Matrix3x4::*)(const Matrix3x4&) const>(&Matrix3x4::operator*),
-            // [Method] Matrix4 operator *(const Matrix4& rhs) const
+            // [Method] Matrix4 operator*(const Matrix4& rhs) const
             static_cast<Matrix4(Matrix3x4::*)(const Matrix4&) const>(&Matrix3x4::operator*))
 
-        // [Method] Matrix3x4 operator +(const Matrix3x4& rhs) const
+        // [Method] Matrix3x4 operator+(const Matrix3x4& rhs) const
         .addFunction("__add", &Matrix3x4::operator+)
-        // [Method] Matrix3x4 operator -(const Matrix3x4& rhs) const
+        // [Method] Matrix3x4 operator-(const Matrix3x4& rhs) const
         .addFunction("__sub", &Matrix3x4::operator-)
 
         // [Method] void SetTranslation(const Vector3& translation)
