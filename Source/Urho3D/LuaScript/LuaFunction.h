@@ -62,24 +62,24 @@ public:
     void PushFloat(float value);
     /// Push string to stack.
     void PushString(const String& string);
-	/// Push StringHash to stack.
-	void PushStringHash(StringHash stringHash);
+    /// Push StringHash to stack.
+    void PushStringHash(StringHash stringHash);
 
-	/// Push Vector2 to stack.
-	void PushVector2(const Vector2& vector);
-	/// Push Vector3 to stack.
-	void PushVector3(const Vector3& vector);
-	/// Push Vector4 to stack.
-	void PushVector4(const Vector4& vector);
-	/// Push Quaternion to stack.
-	void PushQuaternion(const Quaternion& quaternion);
+    /// Push Vector2 to stack.
+    void PushVector2(const Vector2& vector);
+    /// Push Vector3 to stack.
+    void PushVector3(const Vector3& vector);
+    /// Push Vector4 to stack.
+    void PushVector4(const Vector4& vector);
+    /// Push Quaternion to stack.
+    void PushQuaternion(const Quaternion& quaternion);
 
-	/// Push Variant to stack.
-	void PushVariant(const Variant& variant);
-	/// Push VariantMap to stack.
-	void PushVariantMap(const VariantMap& variantMap);
+    /// Push Variant to stack.
+    void PushVariant(const Variant& variant);
+    /// Push VariantMap to stack.
+    void PushVariantMap(const VariantMap& variantMap);
 
-	/// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.
+    /// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.
     void PushLuaTable(const char* tableName);
     /// Push Lua table to stack. When the specified table is not found then a nil is pushed instead.
     void PushLuaTable(const String& tableName) { PushLuaTable(tableName.CString()); }
@@ -91,7 +91,7 @@ public:
     /// Push LuaScriptInstance to stack.
     void PushLuaScriptInstance(LuaScriptInstance* instance);
 
-	/// Return lua state.
+    /// Return lua state.
     lua_State* GetLuaState() const { return luaState_; }
     /// Return function ref.
     int GetFunctionRef() const { return functionRef_; }

@@ -39,28 +39,28 @@ void RegisterBoundingBox(kaguya::State& lua)
 
     // [Class] BoundingBox
     lua["BoundingBox"].setClass(UserdataMetatable<BoundingBox>()
-    	// [Constructor] BoundingBox()
-		.setConstructors<BoundingBox(),
-		// [Constructor] BoundingBox(const BoundingBox& box)
-		BoundingBox(const BoundingBox&),
-		// [Constructor] BoundingBox(const Rect& rect)
-		BoundingBox(const Rect&),
-		// [Constructor] BoundingBox(const Vector3& min, const Vector3& max)
-		BoundingBox(const Vector3&, const Vector3&),
-		// [Constructor] BoundingBox(float min, float max)
-		BoundingBox(float, float),
-		// [Constructor] BoundingBox(const Frustum& frustum)
-		BoundingBox(const Frustum&),
-		// [Constructor] BoundingBox(const Polyhedron& poly)
-		BoundingBox(const Polyhedron&),
-		// [Constructor] BoundingBox(const Sphere& sphere)
-		BoundingBox(const Sphere&)>()
+        // [Constructor] BoundingBox()
+        .setConstructors<BoundingBox(),
+        // [Constructor] BoundingBox(const BoundingBox& box)
+        BoundingBox(const BoundingBox&),
+        // [Constructor] BoundingBox(const Rect& rect)
+        BoundingBox(const Rect&),
+        // [Constructor] BoundingBox(const Vector3& min, const Vector3& max)
+        BoundingBox(const Vector3&, const Vector3&),
+        // [Constructor] BoundingBox(float min, float max)
+        BoundingBox(float, float),
+        // [Constructor] BoundingBox(const Frustum& frustum)
+        BoundingBox(const Frustum&),
+        // [Constructor] BoundingBox(const Polyhedron& poly)
+        BoundingBox(const Polyhedron&),
+        // [Constructor] BoundingBox(const Sphere& sphere)
+        BoundingBox(const Sphere&)>()
 
-		// [Method] bool operator==(const BoundingBox& rhs) const
+        // [Method] bool operator==(const BoundingBox& rhs) const
         .addFunction("__eq", &BoundingBox::operator==)
 
         .addOverloadedFunctions("Define",
-        	// [Method] void Define(const BoundingBox& box)
+            // [Method] void Define(const BoundingBox& box)
             static_cast<void(BoundingBox::*)(const BoundingBox&)>(&BoundingBox::Define),
             // [Method] void Define(const Rect& rect)
             static_cast<void(BoundingBox::*)(const Rect&)>(&BoundingBox::Define),
@@ -78,15 +78,15 @@ void RegisterBoundingBox(kaguya::State& lua)
             static_cast<void(BoundingBox::*)(const Sphere&)>(&BoundingBox::Define))
 
         .addOverloadedFunctions("Merge",
-        	// [Method] void Merge(const Vector3& point)
+            // [Method] void Merge(const Vector3& point)
             static_cast<void(BoundingBox::*)(const Vector3&)>(&BoundingBox::Merge),
             // [Method] void Merge(const BoundingBox& box)
             static_cast<void(BoundingBox::*)(const BoundingBox&)>(&BoundingBox::Merge),
             // [Method] void Merge(const Frustum& frustum);
             static_cast<void(BoundingBox::*)(const Frustum&)>(&BoundingBox::Merge),
-			// [Method] void Merge(const Polyhedron& poly);
+            // [Method] void Merge(const Polyhedron& poly);
             static_cast<void(BoundingBox::*)(const Polyhedron&)>(&BoundingBox::Merge),
-			// [Method] void Merge(const Sphere& sphere);
+            // [Method] void Merge(const Sphere& sphere);
             static_cast<void(BoundingBox::*)(const Sphere&)>(&BoundingBox::Merge))
 
         // [Method] void Clip(const BoundingBox& box)

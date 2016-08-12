@@ -179,7 +179,7 @@ void RegisterRenderPath(kaguya::State& lua)
         .addFunction("Clone", &RenderPath::Clone)
 
         // [Method] void Load(const XMLElement& element)
-		.addFunction("Load", &RenderPath::Load)
+        .addFunction("Load", &RenderPath::Load)
         // [Method] bool Append(XMLFile* file)
         .addFunction("Append", &RenderPath::Append)
         

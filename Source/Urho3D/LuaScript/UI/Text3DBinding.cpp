@@ -60,7 +60,7 @@ void RegisterText3D(kaguya::State& lua)
         .addOverloadedFunctions("SetFont", Text3DSetFont0(), Text3DSetFont1())
 
         // [Method] bool SetFontSize(int size)
-		.addFunction("SetFontSize", &Text3D::SetFontSize)
+        .addFunction("SetFontSize", &Text3D::SetFontSize)
 
         // [Method] void SetMaterial(Material* material)
         .addFunction("SetMaterial", &Text3D::SetMaterial)

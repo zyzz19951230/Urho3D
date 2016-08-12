@@ -70,9 +70,9 @@ void RegisterLocalization(kaguya::State& lua)
         // [Property(Readonly)] int numLanguages
         .addProperty("numLanguages", &Localization::GetNumLanguages)
         // [Property(Readonly)] int languageIndex
-		.addProperty("languageIndex", static_cast<int(Localization::*)() const>(&Localization::GetLanguageIndex))
+        .addProperty("languageIndex", static_cast<int(Localization::*)() const>(&Localization::GetLanguageIndex))
         // [Property(Readonly)] String language
-		.addProperty("language", static_cast<String(Localization::*)()>(&Localization::GetLanguage))
+        .addProperty("language", static_cast<String(Localization::*)()>(&Localization::GetLanguage))
     );
 
     // [Variable] Localization* localization

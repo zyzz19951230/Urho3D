@@ -123,51 +123,51 @@ void LuaFunction::PushString(const String& string)
 
 void LuaFunction::PushStringHash(StringHash stringHash)
 {
-	assert(numArguments_ >= 0);
-	++numArguments_;
-	kaguya::util::push_args(luaState_, stringHash);
+    assert(numArguments_ >= 0);
+    ++numArguments_;
+    kaguya::util::push_args(luaState_, stringHash);
 }
 
 void LuaFunction::PushVector2(const Vector2& vector)
 {
-	assert(numArguments_ >= 0);
-	++numArguments_;
-	kaguya::util::push_args(luaState_, vector);
+    assert(numArguments_ >= 0);
+    ++numArguments_;
+    kaguya::util::push_args(luaState_, vector);
 }
 
 void LuaFunction::PushVector3(const Vector3& vector)
 {
-	assert(numArguments_ >= 0);
-	++numArguments_;
-	kaguya::util::push_args(luaState_, vector);
+    assert(numArguments_ >= 0);
+    ++numArguments_;
+    kaguya::util::push_args(luaState_, vector);
 }
 
 void LuaFunction::PushVector4(const Vector4& vector)
 {
-	assert(numArguments_ >= 0);
-	++numArguments_;
-	kaguya::util::push_args(luaState_, vector);
+    assert(numArguments_ >= 0);
+    ++numArguments_;
+    kaguya::util::push_args(luaState_, vector);
 }
 
 void LuaFunction::PushQuaternion(const Quaternion& quaternion)
 {
-	assert(numArguments_ >= 0);
-	++numArguments_;
-	kaguya::util::push_args(luaState_, quaternion);
+    assert(numArguments_ >= 0);
+    ++numArguments_;
+    kaguya::util::push_args(luaState_, quaternion);
 }
 
 void LuaFunction::PushVariant(const Variant& variant)
 {
-	assert(numArguments_ >= 0);
-	++numArguments_;
-	kaguya::util::push_args(luaState_, variant);
+    assert(numArguments_ >= 0);
+    ++numArguments_;
+    kaguya::util::push_args(luaState_, variant);
 }
 
 void LuaFunction::PushVariantMap(const VariantMap& variantMap)
 {
-	assert(numArguments_ >= 0);
-	++numArguments_;
-	kaguya::util::push_args(luaState_, variantMap);
+    assert(numArguments_ >= 0);
+    ++numArguments_;
+    kaguya::util::push_args(luaState_, variantMap);
 }
 
 void LuaFunction::PushLuaTable(const char* tableName)

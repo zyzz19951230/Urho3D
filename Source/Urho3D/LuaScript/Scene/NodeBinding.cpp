@@ -70,7 +70,7 @@ KAGUYA_MEMBER_FUNCTION_OVERLOADS(NodeLookAt, Node, LookAt, 1, 3);
 
 static SharedPtr<Node> NodeCreateChild(Node* self, const String& name = String::EMPTY, CreateMode mode = REPLICATED, unsigned id = 0)
 {
-	return SharedPtr<Node>(self->CreateChild(name, mode, id));
+    return SharedPtr<Node>(self->CreateChild(name, mode, id));
 }
 
 KAGUYA_FUNCTION_OVERLOADS(NodeCreateChildOverloads, NodeCreateChild, 1, 4);
@@ -411,13 +411,13 @@ void RegisterNode(kaguya::State& lua)
         .addOverloadedFunctions("RemoveComponent",
             // [Method] void RemoveComponent(Component* component)
             static_cast<void(Node::*)(Component*)>(&Node::RemoveComponent),
-			// [Method] void RemoveComponent(StringHash type)
+            // [Method] void RemoveComponent(StringHash type)
             static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponent))
 
         .addOverloadedFunctions("RemoveComponents",
             // [Method] void RemoveComponents(bool removeReplicated, bool removeLocal)
             static_cast<void(Node::*)(bool, bool)>(&Node::RemoveComponents),
-			// [Method] void RemoveComponents(StringHash type)
+            // [Method] void RemoveComponents(StringHash type)
             static_cast<void(Node::*)(StringHash)>(&Node::RemoveComponents))
 
         // [Method] void RemoveAllComponents()
@@ -558,7 +558,7 @@ void RegisterNode(kaguya::State& lua)
 
         .addFunction("HasComponent", 
             // [Method] bool HasComponent(StringHash type) const
-			static_cast<bool(Node::*)(StringHash)const>(&Node::HasComponent))
+            static_cast<bool(Node::*)(StringHash)const>(&Node::HasComponent))
 
         // [Method] const Variant& GetVar(StringHash key) const
         .addFunction("GetVar", &Node::GetVar)

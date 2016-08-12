@@ -38,7 +38,7 @@ void RegisterTmxFile2D(kaguya::State& lua)
 
     // [Class] TmxFile2D : Resource
     lua["TmxFile2D"].setClass(UserdataMetatable<TmxFile2D, Resource>()
-    	// [Constructor] TmxFile2D()
+        // [Constructor] TmxFile2D()
         .addStaticFunction("new", &CreateObject<TmxFile2D>)
     );
 }

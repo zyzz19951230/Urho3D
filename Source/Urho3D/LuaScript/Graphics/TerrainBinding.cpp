@@ -140,7 +140,7 @@ void RegisterTerrain(kaguya::State& lua)
         .addProperty("occlusionLodLevel", &Terrain::GetOcclusionLodLevel, &Terrain::SetOcclusionLodLevel)
         // [Property] bool smoothing
         .addProperty("smoothing", &Terrain::GetSmoothing, &Terrain::SetSmoothing)
-		// [Property] Image* heightMap
+        // [Property] Image* heightMap
         .addProperty("heightMap", &TerrainGetHeightMap, &TerrainSetHeightMap)
         // [Property] Material* material
         .addProperty("material", &Terrain::GetMaterial, &Terrain::SetMaterial)

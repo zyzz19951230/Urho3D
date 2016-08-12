@@ -44,31 +44,31 @@ void RegisterParticleEffect(kaguya::State& lua)
     // [Class] ColorFrame
     lua["ColorFrame"].setClass(UserdataMetatable<ColorFrame>()
         // [Constructor] ColorFrame()
-    	.setConstructors<ColorFrame(),
+        .setConstructors<ColorFrame(),
             // [Constructor] ColorFrame(const Color& color)
-    		ColorFrame(const Color&),
+            ColorFrame(const Color&),
             // [Constructor] ColorFrame(const Color& color, float time)
-    		ColorFrame(const Color&, float)>()
+            ColorFrame(const Color&, float)>()
 
         // [Method] Color Interpolate(const ColorFrame& next, float time) const
-		.addFunction("Interpolate", &ColorFrame::Interpolate)
+        .addFunction("Interpolate", &ColorFrame::Interpolate)
 
         // [Field] Color color
-    	.addProperty("color", &ColorFrame::color_)
+        .addProperty("color", &ColorFrame::color_)
         // [Field] float time
-    	.addProperty("time", &ColorFrame::time_)
-    	);
+        .addProperty("time", &ColorFrame::time_)
+        );
 
     // [Class] TextureFrame
-	lua["TextureFrame"].setClass(UserdataMetatable<TextureFrame>()
+    lua["TextureFrame"].setClass(UserdataMetatable<TextureFrame>()
         // [Constructor] TextureFrame()
         .setConstructors<TextureFrame()>()
 
         // [Field] Vector2 uv
-		.addProperty("uv", &TextureFrame::uv_)
+        .addProperty("uv", &TextureFrame::uv_)
         // [Field] float time
-		.addProperty("time", &TextureFrame::time_)
-		);
+        .addProperty("time", &TextureFrame::time_)
+        );
 
     // [Class] ParticleEffect : Resource
     lua["ParticleEffect"].setClass(UserdataMetatable<ParticleEffect, Resource>()

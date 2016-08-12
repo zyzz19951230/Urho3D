@@ -45,57 +45,57 @@ void RegisterAnimation(kaguya::State& lua)
 
     // [Class] AnimationKeyFrame
     lua["AnimationKeyFrame"].setClass(UserdataMetatable<AnimationKeyFrame>()
-    	
+        
         // [Field] float time
         .addProperty("time", &AnimationKeyFrame::time_)
         // [Field] Vector3 position
-    	.addProperty("position", &AnimationKeyFrame::position_)
+        .addProperty("position", &AnimationKeyFrame::position_)
         // [Field] Quaternion rotation
-    	.addProperty("rotation", &AnimationKeyFrame::rotation_)
+        .addProperty("rotation", &AnimationKeyFrame::rotation_)
         // [Field] Vector3 scale
-    	.addProperty("scale", &AnimationKeyFrame::scale_)
-    	);
+        .addProperty("scale", &AnimationKeyFrame::scale_)
+        );
 
     // [Class] AnimationTrack
-	lua["AnimationTrack"].setClass(UserdataMetatable<AnimationTrack>()
-    	
+    lua["AnimationTrack"].setClass(UserdataMetatable<AnimationTrack>()
+        
         // [Method] void SetKeyFrame(unsigned index, const AnimationKeyFrame& command)
         .addFunction("SetKeyFrame", &AnimationTrack::SetKeyFrame)
         // [Method] void AddKeyFrame(const AnimationKeyFrame& keyFrame)
-    	.addFunction("AddKeyFrame", &AnimationTrack::AddKeyFrame)
+        .addFunction("AddKeyFrame", &AnimationTrack::AddKeyFrame)
         // [Method] void InsertKeyFrame(unsigned index, const AnimationKeyFrame& keyFrame)
-    	.addFunction("InsertKeyFrame", &AnimationTrack::InsertKeyFrame)
+        .addFunction("InsertKeyFrame", &AnimationTrack::InsertKeyFrame)
         // [Method] void RemoveKeyFrame(unsigned index)
-    	.addFunction("RemoveKeyFrame", &AnimationTrack::RemoveKeyFrame)
+        .addFunction("RemoveKeyFrame", &AnimationTrack::RemoveKeyFrame)
         // [Method] void RemoveAllKeyFrames()
-    	.addFunction("RemoveAllKeyFrames", &AnimationTrack::RemoveAllKeyFrames)
+        .addFunction("RemoveAllKeyFrames", &AnimationTrack::RemoveAllKeyFrames)
         // [Method] AnimationKeyFrame* GetKeyFrame(unsigned index)
-    	.addFunction("GetKeyFrame", &AnimationTrack::GetKeyFrame)
+        .addFunction("GetKeyFrame", &AnimationTrack::GetKeyFrame)
         // [Method] unsigned GetNumKeyFrames() const
-    	.addFunction("GetNumKeyFrames", &AnimationTrack::GetNumKeyFrames)
+        .addFunction("GetNumKeyFrames", &AnimationTrack::GetNumKeyFrames)
 
         // [Field] String name
-    	.addProperty("name", &AnimationTrack::name_)
+        .addProperty("name", &AnimationTrack::name_)
         // [Field] StringHash nameHash
-    	.addProperty("nameHash", &AnimationTrack::nameHash_)
+        .addProperty("nameHash", &AnimationTrack::nameHash_)
         // [Field] unsigned char channelMask
-    	.addProperty("channelMask", &AnimationTrack::channelMask_)
+        .addProperty("channelMask", &AnimationTrack::channelMask_)
         // [Field] Vector<AnimationKeyFrame> keyFrames
-    	.addProperty("keyFrames", &AnimationTrack::keyFrames_)
+        .addProperty("keyFrames", &AnimationTrack::keyFrames_)
         // [Property(Readonly)] unsigned numKeyFrames
-    	.addProperty("numKeyFrames", &AnimationTrack::GetNumKeyFrames)
-    	);
+        .addProperty("numKeyFrames", &AnimationTrack::GetNumKeyFrames)
+        );
 
     // [Class] AnimationTriggerPoint
-	lua["AnimationTriggerPoint"].setClass(UserdataMetatable<AnimationTriggerPoint>()
+    lua["AnimationTriggerPoint"].setClass(UserdataMetatable<AnimationTriggerPoint>()
         // [Constructor] AnimationTriggerPoint()
-		.setConstructors<AnimationTriggerPoint()>()
+        .setConstructors<AnimationTriggerPoint()>()
 
         // [Field] float time
-		.addProperty("time", &AnimationTriggerPoint::time_)
+        .addProperty("time", &AnimationTriggerPoint::time_)
         // [Field] Variant data
-    	.addProperty("data", &AnimationTriggerPoint::data_)
-    	);
+        .addProperty("data", &AnimationTriggerPoint::data_)
+        );
 
     // [Class] Animation : Resource
     lua["Animation"].setClass(UserdataMetatable<Animation, Resource>()
@@ -115,13 +115,13 @@ void RegisterAnimation(kaguya::State& lua)
         .addFunction("RemoveAllTracks", &Animation::RemoveAllTracks)
 
         // [Method] void SetTrigger(unsigned index, const AnimationTriggerPoint& trigger)
-		.addFunction("SetTrigger", &Animation::SetTrigger)
+        .addFunction("SetTrigger", &Animation::SetTrigger)
 
         .addOverloadedFunctions("AddTrigger", 
             // [Method] void AddTrigger(const AnimationTriggerPoint& trigger)
-        	static_cast<void(Animation::*)(const AnimationTriggerPoint&)>(&Animation::AddTrigger),
+            static_cast<void(Animation::*)(const AnimationTriggerPoint&)>(&Animation::AddTrigger),
             // [Method] void void AddTrigger(float time, bool timeIsNormalized, const Variant& data)
-        	static_cast<void(Animation::*)(float, bool, const Variant&)>(&Animation::AddTrigger))
+            static_cast<void(Animation::*)(float, bool, const Variant&)>(&Animation::AddTrigger))
         
         // [Method] void RemoveTrigger(unsigned index)
         .addFunction("RemoveTrigger", &Animation::RemoveTrigger)

@@ -69,8 +69,8 @@ void LuaScriptEventInvoker::HandleLuaScriptEvent(StringHash eventType, VariantMa
     SharedPtr<LuaScriptInstance> instance(instance_);
     if (function->BeginCall(instance))
     {
-		function->PushStringHash(eventType);
-		function->PushVariantMap(eventData);        
+        function->PushStringHash(eventType);
+        function->PushVariantMap(eventData);        
         function->EndCall();
     }
 }

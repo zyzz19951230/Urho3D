@@ -109,8 +109,8 @@ namespace kaguya
                 Urho3D::Object* object = dynamic_cast<Urho3D::Object*>(o);
                 if (object)
                 {
-					// Convert abstract object to concrete object
-					// For example convert Resource to Image
+                    // Convert abstract object to concrete object
+                    // For example convert Resource to Image
                     class_userdata::setmetatable(l, object->GetStdTypeInfo());
                 }
                 else
@@ -228,40 +228,40 @@ namespace kaguya
         }
     };
 
-	// Urho3D::StringHash type traits.
-	template<>
-	struct lua_type_traits<Urho3D::StringHash>
-	{
-		typedef void Registerable;
-		typedef Urho3D::StringHash get_type;
-		typedef const Urho3D::StringHash& push_type;
+    // Urho3D::StringHash type traits.
+    template<>
+    struct lua_type_traits<Urho3D::StringHash>
+    {
+        typedef void Registerable;
+        typedef Urho3D::StringHash get_type;
+        typedef const Urho3D::StringHash& push_type;
 
-		static bool strictCheckType(lua_State* l, int index)
-		{
-			return lua_type(l, index) == LUA_TSTRING || object_wrapper<Urho3D::StringHash>(l, index) != 0;
-		}
-		static bool checkType(lua_State* l, int index)
-		{
-			return lua_isstring(l, index) != 0 || object_wrapper<Urho3D::StringHash>(l , index) != 0;
-		}
-		static get_type get(lua_State* l, int index)
-		{
-			const char* str = lua_tostring(l, index);
-			if (str)
-				return Urho3D::StringHash(str);
+        static bool strictCheckType(lua_State* l, int index)
+        {
+            return lua_type(l, index) == LUA_TSTRING || object_wrapper<Urho3D::StringHash>(l, index) != 0;
+        }
+        static bool checkType(lua_State* l, int index)
+        {
+            return lua_isstring(l, index) != 0 || object_wrapper<Urho3D::StringHash>(l , index) != 0;
+        }
+        static get_type get(lua_State* l, int index)
+        {
+            const char* str = lua_tostring(l, index);
+            if (str)
+                return Urho3D::StringHash(str);
 
-			const Urho3D::StringHash* pointer = get_const_pointer(l, index, types::typetag<Urho3D::StringHash>());
-			if (pointer)
-				return *pointer;
+            const Urho3D::StringHash* pointer = get_const_pointer(l, index, types::typetag<Urho3D::StringHash>());
+            if (pointer)
+                return *pointer;
 
-			throw LuaTypeMismatch("type mismatch!!");
-		}
-		static int push(lua_State* l, push_type s)
-		{
-			void *storage = lua_newuserdata(l, sizeof(ObjectWrapper<Urho3D::StringHash>));
-			new(storage) ObjectWrapper<Urho3D::StringHash>(s);
-			class_userdata::setmetatable<Urho3D::StringHash>(l);
-			return 1;
-		}
-	};
+            throw LuaTypeMismatch("type mismatch!!");
+        }
+        static int push(lua_State* l, push_type s)
+        {
+            void *storage = lua_newuserdata(l, sizeof(ObjectWrapper<Urho3D::StringHash>));
+            new(storage) ObjectWrapper<Urho3D::StringHash>(s);
+            class_userdata::setmetatable<Urho3D::StringHash>(l);
+            return 1;
+        }
+    };
 }

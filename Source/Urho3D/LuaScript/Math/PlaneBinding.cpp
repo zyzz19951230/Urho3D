@@ -33,7 +33,7 @@ namespace Urho3D
 void RegisterPlane(kaguya::State& lua)
 {
     using namespace kaguya;
-	
+    
     // [Class] Plane
     lua["Plane"].setClass(UserdataMetatable<Plane>()
         // [Constructor] Plane()

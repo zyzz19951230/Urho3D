@@ -64,7 +64,7 @@ void RegisterCollisionShape(kaguya::State& lua)
     
     // [Class] CollisionShape : Component
     lua["CollisionShape"].setClass(UserdataMetatable<CollisionShape, Component>()
-    	// [Constructor] CollisionShape()
+        // [Constructor] CollisionShape()
         .addStaticFunction("new", &CreateObject<CollisionShape>)
 
         // [Method] void SetBox(const Vector3& size, const Vector3& position = Vector3::ZERO, const Quaternion& rotation = Quaternion::IDENTITY)

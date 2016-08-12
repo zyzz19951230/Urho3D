@@ -35,26 +35,26 @@ void RegisterObject(kaguya::State& lua)
     using namespace kaguya;
 
     // [Class] Object : RefCounted
-	lua["Object"].setClass(UserdataMetatable<Object, RefCounted>()
+    lua["Object"].setClass(UserdataMetatable<Object, RefCounted>()
 
         // [Method] StringHash GetType() const
-		.addFunction("GetType", &Object::GetType)
+        .addFunction("GetType", &Object::GetType)
         // [Method] const String& GetTypeName() const
-		.addFunction("GetTypeName", &Object::GetTypeName)
+        .addFunction("GetTypeName", &Object::GetTypeName)
         // [Method] const String& GetCategory() const
-		.addFunction("GetCategory", &Object::GetCategory)
+        .addFunction("GetCategory", &Object::GetCategory)
 
-		.addOverloadedFunctions("SendEvent",
+        .addOverloadedFunctions("SendEvent",
             // [Method] void SendEvent(StringHash eventType)
-			static_cast<void(Object::*)(StringHash)>(&Object::SendEvent),
+            static_cast<void(Object::*)(StringHash)>(&Object::SendEvent),
             // [Method] void SendEvent(StringHash eventType, VariantMap& eventData)
-			static_cast<void(Object::*)(StringHash, VariantMap&)>(&Object::SendEvent))
+            static_cast<void(Object::*)(StringHash, VariantMap&)>(&Object::SendEvent))
 
-		.addOverloadedFunctions("HasSubscribedToEvent",
+        .addOverloadedFunctions("HasSubscribedToEvent",
             // [Method] bool HasSubscribedToEvent(StringHash eventType) const
-			static_cast<bool(Object::*)(StringHash)const>(&Object::HasSubscribedToEvent),
+            static_cast<bool(Object::*)(StringHash)const>(&Object::HasSubscribedToEvent),
             // [Method] bool HasSubscribedToEvent(Object* sender, StringHash eventType) const
-			static_cast<bool(Object::*)(Object*, StringHash)const>(&Object::HasSubscribedToEvent))
+            static_cast<bool(Object::*)(Object*, StringHash)const>(&Object::HasSubscribedToEvent))
 
         // [Property(Readonly)] StringHash type
         .addProperty("type", &Object::GetType)

@@ -42,9 +42,9 @@ void RegisterSkeleton(kaguya::State& lua)
     lua["BONECOLLISION_BOX"] = BONECOLLISION_BOX;
 
     // [Class] Bone
-	lua["Bone"].setClass(UserdataMetatable<Bone>()
+    lua["Bone"].setClass(UserdataMetatable<Bone>()
         // [Constructor] Bone()
-		.setConstructors<Bone()>()
+        .setConstructors<Bone()>()
         
         // [Field] String name
         .addProperty("name", &Bone::name_)
@@ -70,7 +70,7 @@ void RegisterSkeleton(kaguya::State& lua)
         .addProperty("boundingBox", &Bone::boundingBox_)
         // [Field] WeakPtr<Node> node
         .addProperty("node", &Bone::node_)
-		);
+        );
 
     // [Class] Skeleton
     lua["Skeleton"].setClass(UserdataMetatable<Skeleton>()

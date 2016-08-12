@@ -124,7 +124,7 @@ function parseFile(fileName)
                 }
                 table.insert(functions, func)
 
-			elseif type == 'Variable' then
+            elseif type == 'Variable' then
                 local name = getName(value)
                 variable = {
                     name = name,

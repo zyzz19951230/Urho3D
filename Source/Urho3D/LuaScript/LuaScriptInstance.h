@@ -82,7 +82,7 @@ public:
 
     /// Add a scripted event handler by function.
     virtual void AddEventHandler(StringHash eventType, int functionIndex);
-	/// Add a scripted event handler by function name.
+    /// Add a scripted event handler by function name.
     virtual void AddEventHandler(StringHash eventType, const String& functionName);
     /// Add a scripted event handler by function for a specific sender.
     virtual void AddEventHandler(Object* sender, StringHash eventType, int functionIndex);
