@@ -43,7 +43,7 @@ function CreateUI()
     for i, v in ipairs(soundNames) do
         local button = CreateButton((i - 1) * 140 + 20, 20, 120, 40, v)
         -- Store the sound effect resource name as a custom variable into the button
-        button:SetVar(StringHash("SoundResource"), Variant(soundResourceNames[i]))
+        button:SetVar(StringHash("SoundResource"), StringToVariant(soundResourceNames[i]))
         SubscribeToEvent(button, "Pressed", "HandlePlaySound")
     end
 

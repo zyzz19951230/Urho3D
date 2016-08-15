@@ -57,7 +57,7 @@ function CreateSprites()
         ui.root:AddChild(sprite)
 
         -- Store sprite's velocity as a custom variable
-        sprite:SetVar(VAR_VELOCITY, Variant(Vector2(Random(200.0) - 100.0, Random(200.0) - 100.0)))
+        sprite:SetVar(VAR_VELOCITY, Vector2ToVariant(Random(200.0) - 100.0, Random(200.0) - 100.0))
 
         table.insert(sprites, sprite)
     end

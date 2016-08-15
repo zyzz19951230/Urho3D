@@ -125,13 +125,13 @@ end
 
 function HandleRoughnessSliderChanged(eventType, eventData)
     local newValue = eventData["Value"]:GetFloat()
-    dynamicMaterial:SetShaderParameter("Roughness", Variant(newValue))
+    dynamicMaterial:SetShaderParameter("Roughness", FloatToVariant(newValue))
     roughnessLabel.text = "Roughness: " .. newValue
 end
 
 function HandleMetallicSliderChanged(eventType, eventData)
     local newValue = eventData["Value"]:GetFloat()
-    dynamicMaterial:SetShaderParameter("Metallic", Variant(newValue))
+    dynamicMaterial:SetShaderParameter("Metallic", FloatToVariant(newValue))
     metallicLabel.text = "Metallic: " .. newValue
 end
 

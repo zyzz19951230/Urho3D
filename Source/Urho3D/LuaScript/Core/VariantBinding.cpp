@@ -126,12 +126,32 @@ static Variant VectorBufferToVariant(const VectorBuffer& value)
     return Variant(value);
 }
 
-static Variant ResourceRefToVariant(const ResourceRef& value)
+static Variant ResourceRefToVariant0(StringHash type)
+{
+    return Variant(ResourceRef(type));
+}
+
+static Variant ResourceRefToVariant1(StringHash type, const String& name)
+{
+    return Variant(ResourceRef(type, name));
+}
+
+static Variant ResourceRefToVariant2(const ResourceRef& value)
 {
     return Variant(value);
 }
 
-static Variant ResourceRefListToVariant(const ResourceRefList& value)
+static Variant ResourceRefListToVariant0(StringHash type)
+{
+    return Variant(ResourceRefList(type));
+}
+
+static Variant ResourceRefListToVariant1(StringHash type, const StringVector& names)
+{
+    return Variant(ResourceRefList(type, names));
+}
+
+static Variant ResourceRefListToVariant2(const ResourceRefList& value)
 {
     return Variant(value);
 }
@@ -373,33 +393,38 @@ void RegisterVariant(kaguya::State& lua)
         
         // [Function] Variant Vector2ToVariant0(float x, float y)
         // [Function] Variant Vector2ToVariant1(const Vector2& value)
-        lua["Vector2ToVariant1"] = overload(Vector2ToVariant0, Vector2ToVariant1);
+        lua["Vector2ToVariant"] = overload(Vector2ToVariant0, Vector2ToVariant1);
 
         // [Function] Variant Vector3ToVariant0(float x, float y, float z)
         // [Function] Variant Vector3ToVariant1(const Vector3& value)
-        lua["Vector3ToVariant1"] = overload(Vector3ToVariant0, Vector3ToVariant1);
+        lua["Vector3ToVariant"] = overload(Vector3ToVariant0, Vector3ToVariant1);
         
         // [Function] Variant Vector4ToVariant0(float x, float y, float z, float w)
         // [Function] Variant Vector4ToVariant1(const Vector4& value)
-        lua["Vector4ToVariant1"] = overload(Vector4ToVariant0, Vector4ToVariant1);
+        lua["Vector4ToVariant"] = overload(Vector4ToVariant0, Vector4ToVariant1);
 
         // [Function] Variant QuaternionToVariant0(float w, float x, float y, float z)
         // [Function] Variant QuaternionToVariant1(const Quaternion& value)
-        lua["QuaternionToVariant1"] = overload(QuaternionToVariant0, QuaternionToVariant1);
+        lua["QuaternionToVariant"] = overload(QuaternionToVariant0, QuaternionToVariant1);
 
         // [Function] Variant ColorToVariant0(float r, float g, float b)
         // [Function] Variant ColorToVariant1(float r, float g, float b, float a)
         // [Function] Variant ColorToVariant2(const Color& value)
-        lua["ColorToVariant1"] = overload(ColorToVariant0, ColorToVariant1, ColorToVariant2);
+        lua["ColorToVariant"] = overload(ColorToVariant0, ColorToVariant1, ColorToVariant2);
 
         // [Function] Variant StringToVariant(const String& value)
         lua["StringToVariant"] = function(StringToVariant);
         // [Function] Variant VectorBufferToVariant(const VectorBuffer& value)
         lua["VectorBufferToVariant"] = function(VectorBufferToVariant);
+        
+        // [Function] Variant ResourceRefToVariant(StringHash type)        
         // [Function] Variant ResourceRefToVariant(const ResourceRef& value)
-        lua["ResourceRefToVariant"] = function(ResourceRefToVariant);
+        lua["ResourceRefToVariant"] = overload(ResourceRefToVariant0, ResourceRefToVariant1, ResourceRefToVariant2);
+
+        // [Function] Variant ResourceRefListToVariant(StringHash type)
         // [Function] Variant ResourceRefListToVariant(const ResourceRefList& value)
-        lua["ResourceRefListToVariant"] = function(ResourceRefListToVariant);
+        lua["ResourceRefListToVariant"] = overload(ResourceRefListToVariant0, ResourceRefListToVariant1, ResourceRefListToVariant2);
+
         // [Function] Variant VariantVectorToVariant(const VariantVector& value)
         lua["VariantVectorToVariant"] = function(VariantVectorToVariant);
         // [Function] Variant VariantMapToVariant(const VariantMap& value)
@@ -419,7 +444,7 @@ void RegisterVariant(kaguya::State& lua)
         
         // [Function] Variant Matrix3ToVariant0(float v00, float v01, float v02, float v10, float v11, float v12, float v20, float v21, float v22)
         // [Function] Variant Matrix3ToVariant1(const Matrix3& value)
-        lua["Matrix3ToVariant1"] = overload(Matrix3ToVariant0, Matrix3ToVariant1);
+        lua["Matrix3ToVariant"] = overload(Matrix3ToVariant0, Matrix3ToVariant1);
 
         // [Function] Variant Matrix3x4ToVariant(const Matrix3x4& value)
         lua["Matrix3x4ToVariant"] = function(Matrix3x4ToVariant);

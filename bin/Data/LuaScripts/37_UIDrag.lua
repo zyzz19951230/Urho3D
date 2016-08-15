@@ -109,11 +109,11 @@ function HandleDragBegin(eventType, eventData)
     local ly = eventData["Y"]:GetInt()
 
     local p = element.position
-    element:SetVar(VAR_START, Variant(p))
-    element:SetVar(VAR_DELTA, Variant(Vector2(p.x - lx, p.y - ly)))
+    element:SetVar(VAR_START, IntVector2ToVariant(p))
+    element:SetVar(VAR_DELTA, Vector2ToVariant(p.x - lx, p.y - ly))
 
     local buttons = eventData["Buttons"]:GetInt()
-    element:SetVar(VAR_BUTTONS, Variant(buttons))
+    element:SetVar(VAR_BUTTONS, IntToVariant(buttons))
 
     local t = element:GetChild("Text")
     t:SetText("Drag Begin Buttons: " .. buttons)

@@ -70,9 +70,9 @@ function CreateScene()
         staticSprite.sprite = sprite
 
         -- Set move speed
-        spriteNode:SetVar(VAR_MOVE_SPEED, Variant(Vector3(Random(-2.0, 2.0), Random(-2.0, 2.0), 0.0)))
+        spriteNode:SetVar(VAR_MOVE_SPEED, Vector3ToVariant(Random(-2.0, 2.0), Random(-2.0, 2.0), 0.0))
         -- Set rotate speed
-        spriteNode:SetVar(VAR_ROTATE_SPEED, Variant(Random(-90.0, 90.0)))
+        spriteNode:SetVar(VAR_ROTATE_SPEED, FloatToVariant(Random(-90.0, 90.0)))
 
         table.insert(spriteNodes, spriteNode)
     end

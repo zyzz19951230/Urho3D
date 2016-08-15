@@ -59,10 +59,11 @@ function CreateScene()
     local mushroomMat = cache:GetResource("Material", "Materials/Mushroom.xml")
     -- Apply shader parameter animation to material
     local specColorAnimation = ValueAnimation()
-    specColorAnimation:SetKeyFrame(0.0, Variant(Color(0.1, 0.1, 0.1, 16.0)))
-    specColorAnimation:SetKeyFrame(1.0, Variant(Color(1.0, 0.0, 0.0, 2.0)))
-    specColorAnimation:SetKeyFrame(2.0, Variant(Color(1.0, 1.0, 0.0, 2.0)))
-    specColorAnimation:SetKeyFrame(3.0, Variant(Color(0.1, 0.1, 0.1, 16.0)))
+    specColorAnimation:SetKeyFrame(0.0, ColorToVariant(0.1, 0.1, 0.1, 16.0))
+    specColorAnimation:SetKeyFrame(1.0, ColorToVariant(1.0, 0.0, 0.0, 2.0))
+    specColorAnimation:SetKeyFrame(2.0, ColorToVariant(1.0, 1.0, 0.0, 2.0))
+    specColorAnimation:SetKeyFrame(3.0, ColorToVariant(0.1, 0.1, 0.1, 16.0))
+
     -- Optionally associate material with scene to make sure shader parameter animation respects scene time scale
     mushroomMat.scene = scene_;
     mushroomMat:SetShaderParameterAnimation("MatSpecColor", specColorAnimation)

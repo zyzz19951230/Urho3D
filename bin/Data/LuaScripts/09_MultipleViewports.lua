@@ -143,7 +143,7 @@ function SetupViewports()
     effectRenderPath:Append(cache:GetResource("XMLFile", "PostProcess/Bloom.xml"))
     effectRenderPath:Append(cache:GetResource("XMLFile", "PostProcess/FXAA2.xml"))
     -- Make the bloom mixing parameter more pronounced
-    effectRenderPath:SetShaderParameter("BloomMix", Variant(Vector2(0.9, 0.6)))
+    effectRenderPath:SetShaderParameter("BloomMix", Vector2ToVariant(0.9, 0.6))
     effectRenderPath:SetEnabled("Bloom", false)
     effectRenderPath:SetEnabled("FXAA2", false)
     viewport:SetRenderPath(effectRenderPath)

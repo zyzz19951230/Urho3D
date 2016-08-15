@@ -454,7 +454,7 @@ function HandleCrowdAgentFormation(eventType, eventData)
     if index > 0 then
         local crowdManager = GetEventSender()
         local agent = eventData["CrowdAgent"]:GetPtr("CrowdAgent")
-        eventData["Position"] = Variant(crowdManager:GetRandomPointInCircle(position, agent.radius, agent.queryFilterType))
+        eventData["Position"] = Vector3ToVariant(crowdManager:GetRandomPointInCircle(position, agent.radius, agent.queryFilterType))
     end
 end
 
