@@ -31,82 +31,167 @@
 namespace Urho3D
 {
 
-static Variant VariantFromInt(int value)
+static Variant IntToVariant(int value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromFloat(float value)
+static Variant UIntToVariant(unsigned value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromDouble(double value)
+static Variant StringHashToVariant(const StringHash& value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromVectorBuffer(const VectorBuffer& value)
+static Variant BoolToVariant(bool value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromResourceRef(const ResourceRef& value)
+static Variant FloatToVariant(float value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromResourceRefList(const ResourceRefList& value)
+static Variant DoubleToVariant(double value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromVariantVector(const VariantVector& value)
+static Variant Vector2ToVariant0(float x, float y)
+{
+    return Variant(Vector2(x, y));
+}
+
+static Variant Vector2ToVariant1(const Vector2& value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromVariantMap(const VariantMap& value)
+static Variant Vector3ToVariant0(float x, float y, float z)
+{
+    return Variant(Vector3(x, y, z));
+}
+
+static Variant Vector3ToVariant1(const Vector3& value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromStringVector(const StringVector& value)
+static Variant Vector4ToVariant0(float x, float y, float z, float w)
+{
+    return Variant(Vector4(x, y, z, w));
+}
+
+static Variant Vector4ToVariant1(const Vector4& value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromIntRect(const IntRect& value)
+static Variant QuaternionToVariant0(float w, float x, float y, float z)
+{
+    return Variant(Quaternion(w, x, y, z));
+}
+
+static Variant QuaternionToVariant1(const Quaternion& value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromIntVector2(const IntVector2& value)
+static Variant ColorToVariant0(float r, float g, float b)
+{
+    return Variant(Color(r, g, b));
+}
+
+static Variant ColorToVariant1(float r, float g, float b, float a)
+{
+    return Variant(Color(r, g, b, a));
+}
+
+static Variant ColorToVariant2(const Color& value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromRefCounted(RefCounted* value)
+static Variant StringToVariant(const String& value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromMatrix3(const Matrix3& value)
+static Variant VectorBufferToVariant(const VectorBuffer& value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromMatrix3x4(const Matrix3x4& value)
+static Variant ResourceRefToVariant(const ResourceRef& value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromMatrix4(const Matrix4& value)
+static Variant ResourceRefListToVariant(const ResourceRefList& value)
 {
     return Variant(value);
 }
 
-static Variant VariantFromVariant(const Variant& value)
+static Variant VariantVectorToVariant(const VariantVector& value)
+{
+    return Variant(value);
+}
+
+static Variant VariantMapToVariant(const VariantMap& value)
+{
+    return Variant(value);
+}
+
+static Variant StringVectorToVariant(const StringVector& value)
+{
+    return Variant(value);
+}
+
+static Variant IntRectToVariant0(int left, int top, int right, int bottom)
+{
+    return Variant(IntRect(left, top, right, bottom));
+}
+
+static Variant IntRectToVariant1(const IntRect& value)
+{
+    return Variant(value);
+}
+
+static Variant IntVector2ToVariant0(int x, int y)
+{
+    return Variant(IntVector2(x, y));
+}
+
+static Variant IntVector2ToVariant1(const IntVector2& value)
+{
+    return Variant(value);
+}
+
+static Variant PtrToVariant(RefCounted* value)
+{
+    return Variant(value);
+}
+
+static Variant Matrix3ToVariant0(float v00, float v01, float v02, float v10, float v11, float v12, float v20, float v21, float v22)
+{
+    return Variant(Matrix3(v00, v01, v02, v10, v11, v12, v20, v21, v22));
+}
+
+static Variant Matrix3ToVariant1(const Matrix3& value)
+{
+    return Variant(value);
+}
+
+static Variant Matrix3x4ToVariant(const Matrix3x4& value)
+{
+    return Variant(value);
+}
+
+static Variant Matrix4ToVariant(const Matrix4& value)
 {
     return Variant(value);
 }
@@ -165,7 +250,7 @@ void RegisterVariant(kaguya::State& lua)
         .addProperty("type", &ResourceRef::type_)
         // [Field] String name
         .addProperty("name", &ResourceRef::name_)
-    );
+        );
 
     // [Class] ResourceRefList
     lua["ResourceRefList"].setClass(UserdataMetatable<ResourceRefList>()
@@ -179,62 +264,14 @@ void RegisterVariant(kaguya::State& lua)
 
         // [Field] StringHash type
         .addProperty("type", &ResourceRefList::type_)
-    );
+        );
 
     // [Class] Variant
     lua["Variant"].setClass(UserdataMetatable<Variant>()
-        // [Constructor] Variant(const StringHash& value)
-        .setConstructors<Variant(const StringHash&),
-        // [Constructor] Variant(bool value)
-        Variant(bool),
-        // [Constructor] Variant(float value)
-        Variant(float),
-        // [Constructor] Variant(const Vector2& value)
-        Variant(const Vector2&),
-        // [Constructor] Variant(const Vector3& value)
-        Variant(const Vector3&),
-        // [Constructor] Variant(const Vector4& value)
-        Variant(const Vector4&),
-        // [Constructor] Variant(const Quaternion& value)
-        Variant(const Quaternion&),
-        // [Constructor] Variant(const Color& value)
-        Variant(const Color&),
-        // [Constructor] Variant(const String& value)
-        Variant(const String&)>()
-
-        // [StaticMethod] Variant FromInt(int value)
-        .addStaticFunction("FromInt", &VariantFromInt)
-        // [StaticMethod] Variant FromFloat(float value)
-        .addStaticFunction("FromFloat", &VariantFromFloat)
-        // [StaticMethod] Variant FromDouble(double value)
-        .addStaticFunction("FromDouble", &VariantFromDouble)
-
-        // [StaticMethod] Variant FromVectorBuffer(const VectorBuffer& value)
-        .addStaticFunction("FromVectorBuffer", &VariantFromVectorBuffer)
-        // [StaticMethod] Variant FromResourceRef(const ResourceRef& value)
-        .addStaticFunction("FromResourceRef", &VariantFromResourceRef)
-        // [StaticMethod] Variant FromResourceRefList(const ResourceRefList& value)
-        .addStaticFunction("FromResourceRefList", &VariantFromResourceRefList)
-        // [StaticMethod] Variant FromVariantVector(const VariantVector& value)
-        .addStaticFunction("FromVariantVector", &VariantFromVariantVector)
-        // [StaticMethod] Variant FromVariantMap(const VariantMap& value)
-        .addStaticFunction("FromVariantMap", &VariantFromVariantMap)
-        // [StaticMethod] Variant FromStringVector(const StringVector& value)
-        .addStaticFunction("FromStringVector", &VariantFromStringVector)
-        // [StaticMethod] Variant FromIntRect(const IntRect& value)
-        .addStaticFunction("FromIntRect", &VariantFromIntRect)
-        // [StaticMethod] Variant FromIntVector2(const IntVector2& value)
-        .addStaticFunction("FromIntVector2", &VariantFromIntVector2)
-        // [StaticMethod] Variant FromeRefCounted(RefCounted* value)
-        .addStaticFunction("FromeRefCounted", &VariantFromRefCounted)
-        // [StaticMethod] Variant FromMatrix3(const Matrix3& value)
-        .addStaticFunction("FromMatrix3", &VariantFromMatrix3)
-        // [StaticMethod] Variant FromMatrix3x4(const Matrix3x4& value)
-        .addStaticFunction("FromMatrix3x4", &VariantFromMatrix3x4)
-        // [StaticMethod] Variant FromMatrix4(const Matrix4& value)
-        .addStaticFunction("FromMatrix4", &VariantFromMatrix4)
-        // [StaticMethod] Variant FromVariant(const Variant& value)
-        .addStaticFunction("FromVariant", &VariantFromVariant)
+        // [Constructor] Variant()
+        .setConstructors<Variant(),
+        // [Constructor] Variant(const Variant& rhs)
+        Variant(const Variant&)>()
 
         // [Method] void Clear()
         .addFunction("Clear", &Variant::Clear)
@@ -254,7 +291,7 @@ void RegisterVariant(kaguya::State& lua)
         .addFunction("GetFloat", &Variant::GetFloat)
         // [Method] double GetDouble() const
         .addFunction("GetDouble", &Variant::GetDouble)
-        
+
         // [Method] const Vector2& GetVector2() const
         .addFunction("GetVector2", &Variant::GetVector2)
         // [Method] const Vector3& GetVector3() const
@@ -289,7 +326,7 @@ void RegisterVariant(kaguya::State& lua)
         .addFunction("GetIntRect", &Variant::GetIntRect)
         // [Method] const IntVector2& GetIntVector2() const
         .addFunction("GetIntVector2", &Variant::GetIntVector2)
-        
+
         // [Method] SharedPtr<RefCounted> GetPtr() const
         .addStaticFunction("GetPtr", &VariantGetPtr)
 
@@ -319,7 +356,75 @@ void RegisterVariant(kaguya::State& lua)
         .addProperty("zero", &Variant::IsZero)
         // [Property(Readonly)] bool empty
         .addProperty("empty", &Variant::IsEmpty)
-    );
+        );
+
+        // [Function] Variant IntToVariant(int value)
+        lua["IntToVariant"] = function(IntToVariant);
+        // [Function] Variant UIntToVariant(unsigned value)
+        lua["UIntToVariant"] = function(UIntToVariant);
+        // [Function] Variant StringHashToVariant(const StringHash& value)
+        lua["StringHashToVariant"] = function(StringHashToVariant);
+        // [Function] Variant BoolToVariant(bool value)
+        lua["BoolToVariant"] = function(BoolToVariant);
+        // [Function] Variant FloatToVariant(float value)
+        lua["FloatToVariant"] = function(FloatToVariant);
+        // [Function] Variant DoubleToVariant(double value)
+        lua["DoubleToVariant"] = function(DoubleToVariant);
+        
+        // [Function] Variant Vector2ToVariant0(float x, float y)
+        // [Function] Variant Vector2ToVariant1(const Vector2& value)
+        lua["Vector2ToVariant1"] = overload(Vector2ToVariant0, Vector2ToVariant1);
+
+        // [Function] Variant Vector3ToVariant0(float x, float y, float z)
+        // [Function] Variant Vector3ToVariant1(const Vector3& value)
+        lua["Vector3ToVariant1"] = overload(Vector3ToVariant0, Vector3ToVariant1);
+        
+        // [Function] Variant Vector4ToVariant0(float x, float y, float z, float w)
+        // [Function] Variant Vector4ToVariant1(const Vector4& value)
+        lua["Vector4ToVariant1"] = overload(Vector4ToVariant0, Vector4ToVariant1);
+
+        // [Function] Variant QuaternionToVariant0(float w, float x, float y, float z)
+        // [Function] Variant QuaternionToVariant1(const Quaternion& value)
+        lua["QuaternionToVariant1"] = overload(QuaternionToVariant0, QuaternionToVariant1);
+
+        // [Function] Variant ColorToVariant0(float r, float g, float b)
+        // [Function] Variant ColorToVariant1(float r, float g, float b, float a)
+        // [Function] Variant ColorToVariant2(const Color& value)
+        lua["ColorToVariant1"] = overload(ColorToVariant0, ColorToVariant1, ColorToVariant2);
+
+        // [Function] Variant StringToVariant(const String& value)
+        lua["StringToVariant"] = function(StringToVariant);
+        // [Function] Variant VectorBufferToVariant(const VectorBuffer& value)
+        lua["VectorBufferToVariant"] = function(VectorBufferToVariant);
+        // [Function] Variant ResourceRefToVariant(const ResourceRef& value)
+        lua["ResourceRefToVariant"] = function(ResourceRefToVariant);
+        // [Function] Variant ResourceRefListToVariant(const ResourceRefList& value)
+        lua["ResourceRefListToVariant"] = function(ResourceRefListToVariant);
+        // [Function] Variant VariantVectorToVariant(const VariantVector& value)
+        lua["VariantVectorToVariant"] = function(VariantVectorToVariant);
+        // [Function] Variant VariantMapToVariant(const VariantMap& value)
+        lua["VariantMapToVariant"] = function(VariantMapToVariant);
+        // [Function] Variant StringVectorToVariant(const StringVector& value)
+        lua["StringVectorToVariant"] = function(StringVectorToVariant);
+        // [Function] Variant IntRectToVariant0(int left, int top, int right, int bottom)
+        lua["IntRectToVariant0"] = function(IntRectToVariant0);
+        // [Function] Variant IntRectToVariant1(const IntRect& value)
+        lua["IntRectToVariant1"] = function(IntRectToVariant1);
+        // [Function] Variant IntVector2ToVariant0(int x, int y)
+        lua["IntVector2ToVariant0"] = function(IntVector2ToVariant0);
+        // [Function] Variant IntVector2ToVariant1(const IntVector2& value)
+        lua["IntVector2ToVariant1"] = function(IntVector2ToVariant1);
+        // [Function] Variant PtrToVariant(RefCounted* value)
+        lua["PtrToVariant"] = function(PtrToVariant);
+        
+        // [Function] Variant Matrix3ToVariant0(float v00, float v01, float v02, float v10, float v11, float v12, float v20, float v21, float v22)
+        // [Function] Variant Matrix3ToVariant1(const Matrix3& value)
+        lua["Matrix3ToVariant1"] = overload(Matrix3ToVariant0, Matrix3ToVariant1);
+
+        // [Function] Variant Matrix3x4ToVariant(const Matrix3x4& value)
+        lua["Matrix3x4ToVariant"] = function(Matrix3x4ToVariant);
+        // [Function] Variant Matrix4ToVariant(const Matrix4& value)
+        lua["Matrix4ToVariant"] = function(Matrix4ToVariant);
 }
 }
 
